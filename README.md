@@ -1,266 +1,243 @@
-# SourceGit - Opensource Git GUI client.
+# Komorebi
 
-[![stars](https://img.shields.io/github/stars/sourcegit-scm/sourcegit.svg)](https://github.com/sourcegit-scm/sourcegit/stargazers)
-[![forks](https://img.shields.io/github/forks/sourcegit-scm/sourcegit.svg)](https://github.com/sourcegit-scm/sourcegit/forks)
-[![license](https://img.shields.io/github/license/sourcegit-scm/sourcegit.svg)](LICENSE)
-[![latest](https://img.shields.io/github/v/release/sourcegit-scm/sourcegit.svg)](https://github.com/sourcegit-scm/sourcegit/releases/latest)
-[![downloads](https://img.shields.io/github/downloads/sourcegit-scm/sourcegit/total)](https://github.com/sourcegit-scm/sourcegit/releases)
+[![license](https://img.shields.io/github/license/1llum1n4t1s/Komorebi.svg)](LICENSE)
+[![latest](https://img.shields.io/github/v/release/1llum1n4t1s/Komorebi.svg)](https://github.com/1llum1n4t1s/Komorebi/releases/latest)
+[![downloads](https://img.shields.io/github/downloads/1llum1n4t1s/Komorebi/total)](https://github.com/1llum1n4t1s/Komorebi/releases)
 
-## Screenshots
-
-* Dark Theme
-
-  ![Theme Dark](./screenshots/theme_dark.png)
-
-* Light Theme
-
-  ![Theme Light](./screenshots/theme_light.png)
-
-* Custom
-
-  You can find custom themes from [sourcegit-theme](https://github.com/sourcegit-scm/sourcegit-theme.git). And welcome to share your own themes.
-
-## Highlights
-
-* Supports Windows/macOS/Linux
-* Opensource/Free
-* Fast
-* Deutsch/English/Español/Bahasa Indonesia/Français/Italiano/Português/Русский/Українська/简体中文/繁體中文/日本語/தமிழ் (Tamil)/한국어
-* Built-in light/dark themes
-* Customize theme
-* Visual commit graph
-* Supports SSH access with each remote
-* GIT commands with GUI
-  * Clone/Fetch/Pull/Push...
-  * Merge/Rebase/Reset/Revert/Cherry-pick...
-  * Amend/Reword/Squash
-  * Interactive rebase
-  * Branches
-  * Remotes
-  * Tags
-  * Stashes
-  * Submodules
-  * Worktrees
-  * Archive
-  * Diff
-  * Save as patch/apply
-  * File histories
-  * Blame
-  * Revision Diffs
-  * Branch Diff
-  * Image Diff - Side-By-Side/Swipe/Blend
-* Git command logs
-* Search commits
-* GitFlow
-* Git LFS
-* Bisect
-* Issue Link
-* Workspace
-* Custom Action
-* Create PR on GitHub/Gitlab/Gitea/Gitee/Bitbucket...
-* Using AI to generate commit message (C# port of [anjerodev/commitollama](https://github.com/anjerodev/commitollama))
-* Built-in conventional commit message helper.
-
-> [!WARNING]
-> **Linux** only tested on **Debian 12** on both **X11** & **Wayland**.
-
-## How to Use
-
-**To use this tool, you need to install Git(>=2.25.1) first.**
-
-You can download the latest stable from [Releases](https://github.com/sourcegit-scm/sourcegit/releases/latest) or download workflow artifacts from [GitHub Actions](https://github.com/sourcegit-scm/sourcegit/actions) to try this app based on latest commits.
-
-This software creates a folder, which is platform-dependent, to store user settings, downloaded avatars and crash logs.
-
-| OS      | PATH                                      |
-|---------|-------------------------------------------|
-| Windows | `%APPDATA%\SourceGit`                     |
-| Linux   | `~/.sourcegit`                            |
-| macOS   | `~/Library/Application Support/SourceGit` |
-
-> [!TIP]
-> * You can open this data storage directory from the main menu `Open Data Storage Directory`.
-> * You can create a `data` folder next to the `SourceGit` executable to force this app to store data (user settings, downloaded avatars and crash logs) into it (Portable-Mode). Only works with Windows packages and Linux AppImages.
-
-For **Windows** users:
-
-* **MSYS Git is NOT supported**. Please use official [Git for Windows](https://git-scm.com/download/win) instead.
-* You can install the latest stable by `scoop` with follow commands:
-  ```shell
-  scoop bucket add extras
-  scoop install sourcegit
-  ```
-* Pre-built binaries can be found in [Releases](https://github.com/sourcegit-scm/sourcegit/releases/latest)
+C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム対応のオープンソース Git GUI クライアントです。Git CLI をラップし、日常の Git 操作をビジュアルに行えます。
 
 > [!NOTE]
-> `git-flow` is no longer shipped with **Git for Windows** since `2.51.1`. You can use it by following these steps:
->  * Download [git-flow-next](https://github.com/gittower/git-flow-next/releases)
->  * Unzip & Rename the `git-flow-next` to `git-flow`
->  * Copy to `$GIT_INSTALL_DIR/cmd` or just add its path to you `PATH` directly
+> 本プロジェクトは [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォークです。オリジナルの開発者および全コントリビューターに感謝いたします。
 
-For **macOS** users:
+## スクリーンショット
 
-* Thanks [@ybeapps](https://github.com/ybeapps) for making `SourceGit` available on `Homebrew`:
-  ```shell
-  brew install --cask sourcegit
-  ```
-* If you want to install `SourceGit.app` from GitHub Release manually, you need run following command to make sure it works:
+| ダークテーマ | ライトテーマ |
+|:---:|:---:|
+| ![ダークテーマ](./screenshots/theme_dark.png) | ![ライトテーマ](./screenshots/theme_light.png) |
+
+## 動作環境
+
+| OS | アーキテクチャ | 備考 |
+|----|------------|------|
+| Windows 10 以降 | x64, arm64 | |
+| macOS 13.0 以降 | x64 (Intel), arm64 (Apple Silicon) | |
+| Linux | x64, arm64 | Debian 12 (X11 / Wayland) で動作確認済み |
+
+**前提条件**: Git 2.25.1 以上
+
+## インストール
+
+[Releases](https://github.com/1llum1n4t1s/Komorebi/releases/latest) から各プラットフォーム向けのバイナリをダウンロードできます。Velopack による自動アップデートに対応しており、起動時に新しいバージョンがあれば通知されます。
+
+### データ保存先
+
+| OS | パス |
+|----|------|
+| Windows | `%APPDATA%\SourceGit` |
+| macOS | `~/Library/Application Support/SourceGit` |
+| Linux | `~/.sourcegit` |
+
+> [!TIP]
+> 実行ファイルと同じディレクトリに `data` フォルダを作成すると、ポータブルモードとして動作します（Windows / Linux AppImage のみ）。
+
+### Windows
+
+* **MSYS Git は非対応** — 公式の [Git for Windows](https://git-scm.com/download/win) をご利用ください。
+
+### macOS
+
+* GitHub Release から手動インストールする場合:
   ```shell
   sudo xattr -cr /Applications/SourceGit.app
   ```
-> [!NOTE]
-> macOS packages in the `Release` page of this project are all unsigned. If you are worried about potential security issues with the above command, you can download the signed package from the [distribution repository](https://github.com/ybeapps/homebrew-sourcegit/releases) provided by [@ybeapps](https://github.com/ybeapps) (there is no need to execute the above command while installing `SourceGit`).
+* [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) が必要です。
+* カスタム PATH を設定する場合: `echo $PATH > ~/Library/Application\ Support/SourceGit/PATH`
 
-* Make sure [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) is installed on your mac.
-* You can run `echo $PATH > ~/Library/Application\ Support/SourceGit/PATH` to generate a custom PATH env file to introduce `PATH` env to SourceGit.
+### Linux
 
-For **Linux** users:
+* `xdg-open`（`xdg-utils`）が必要です。
+* [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) または [git-credential-libsecret](https://pkgs.org/search/?q=git-credential-libsecret) が必要です。
+* HiDPI 環境では `AVALONIA_SCREEN_SCALE_FACTORS` の設定が必要な場合があります。
+* アクセント付き文字を入力できない場合は `AVALONIA_IM_MODULE=none` を設定してください。
 
-* Thanks [@aikawayataro](https://github.com/aikawayataro) for providing `rpm` and `deb` repositories, hosted on [Codeberg](https://codeberg.org/yataro/-/packages).
+---
 
-  `deb` how to:
-  ```shell
-  curl https://codeberg.org/api/packages/yataro/debian/repository.key | sudo tee /etc/apt/keyrings/sourcegit.asc
-  echo "deb [signed-by=/etc/apt/keyrings/sourcegit.asc, arch=amd64,arm64] https://codeberg.org/api/packages/yataro/debian generic main" | sudo tee /etc/apt/sources.list.d/sourcegit.list
-  sudo apt update
-  sudo apt install sourcegit
-  ```
+## 機能一覧
 
-  `rpm` how to:
-  ```shell
-  curl https://codeberg.org/api/packages/yataro/rpm.repo | sed -e 's/gpgcheck=1/gpgcheck=0/' > sourcegit.repo
+### Git 操作
 
-  # Fedora 41 and newer
-  sudo dnf config-manager addrepo --from-repofile=./sourcegit.repo
-  # Fedora 40 and earlier
-  sudo dnf config-manager --add-repo ./sourcegit.repo
+| カテゴリ | 対応操作 |
+|---------|---------|
+| **基本操作** | Clone / Fetch / Pull / Push / Archive |
+| **ブランチ** | 作成 / リネーム / 削除（一括削除対応）/ チェックアウト / 上流設定 / 説明文編集 / フォルダ階層によるグループ表示 |
+| **マージ** | Fast-forward only / No fast-forward / Squash / Don't commit / 複数ブランチの一括マージ（Octopus 戦略対応） |
+| **リベース** | 通常リベース / インタラクティブリベース（Pick / Edit / Reword / Squash / Fixup / Drop） |
+| **タグ** | 注釈付き・軽量タグの作成 / GPG 署名 / リモートへの Push・削除 / リスト・ツリー表示 |
+| **スタッシュ** | 保存（未追跡ファイル含む・ステージ済みのみ）/ Apply / Pop / Drop / Clear |
+| **リセット** | Soft / Mixed / Merge / Keep / Hard |
+| **その他** | Cherry-pick / Revert / Reword / Amend / Bisect（GUI サポート）/ Reflog |
+| **ワークツリー** | 作成 / 削除 / Prune / サイドバーにグループ表示 |
+| **サブモジュール** | 追加 / 削除 / 移動 / Init / Deinit / Update / ブランチ設定 / ツリー・フラット表示 |
+| **GitFlow** | Feature / Release / Hotfix の開始・完了 / Squash / Push / ブランチ保持オプション |
+| **Git LFS** | Track / Fetch / Pull / Push / Prune / ロック管理（一括解除対応） |
 
-  sudo dnf install sourcegit
-  ```
+### コミット
 
-  If your distribution isn't using `dnf`, please refer to the documentation of your distribution on how to add an `rpm` repository.
-* `AppImage` files can be found on [AppImage hub](https://appimage.github.io/SourceGit/), `xdg-open` (`xdg-utils`) must be installed to support open native file manager.
-* Make sure [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) or [git-credential-libsecret](https://pkgs.org/search/?q=git-credential-libsecret) is installed on your Linux.
-* Maybe you need to set environment variable `AVALONIA_SCREEN_SCALE_FACTORS`. See https://github.com/AvaloniaUI/Avalonia/wiki/Configuring-X11-per-monitor-DPI.
-* If you can NOT type accented characters, such as `ê`, `ó`, try to set the environment variable `AVALONIA_IM_MODULE` to `none`.
+* **Sign-off** / **No-verify** オプション
+* **GPG / SSH / X.509 署名**（リポジトリ単位で設定可能）
+* **コミットメッセージ履歴**（リポジトリごとに直近 10 件を保存）
+* **コミットテンプレート** — 変数展開対応（`${branch_name}`, `${files}`, `${files_num}` など、正規表現による変換もサポート）
+* **Conventional Commit ヘルパー** — 12 種類のデフォルトタイプ（feat / fix / wip / revert / refactor / perf / build / ci / docs / style / test / chore）、リポジトリごとに JSON でカスタマイズ可能
 
-## Commandline arguments
+### 差分表示
 
-Users can also launcher `SourceGit` from commandline. Usage:
+| 種別 | 機能 |
+|------|------|
+| **テキスト差分** | インライン（Unified）/ サイドバイサイド / 全文表示 / 空白無視 / ワードラップ / 非表示文字の表示 / TextMate 文法によるシンタックスハイライト / 文字レベルのハイライト |
+| **画像差分** | 左右並列 / オーバーレイ / スワイプ / スケール比較。PNG / JPG / GIF / BMP / ICO / WebP / TGA / DDS / TIFF 対応 |
+| **バイナリ差分** | 新旧サイズ表示 |
+| **サブモジュール差分** | コミット範囲の表示 |
+| **パッチ** | 保存 / 適用（空白処理モード: No Warn / Warn / Error / Error All） |
+
+### 履歴・グラフ
+
+* **ビジュアルコミットグラフ** — 10 色のカラーパレット（カスタマイズ可能）、ベジェ曲線で描画、未マージコミットの透過表示
+* **表示オプション** — 日付順・トポロジカル順 / 著者・SHA・日時カラムの表示切替 / 1 カラム・2 カラムレイアウト / 相対時間表示 / タグ表示 / First-parent-only モード
+* **フィルタリング** — ローカルブランチ・リモートブランチ・タグによる Include / Exclude フィルタ
+* **コミット検索** — SHA / 著者 / コミッター / メッセージ / パス / 内容で検索
+* **ブックマーク** — 7 色でコミットやブランチにマーク可能
+* **署名検証** — 署名のステータスを色分け表示（有効: 緑 / 期限切れ: オレンジ / 不正: 赤）
+* **コミットリンク** — GitHub / GitLab / Gitee / Bitbucket / Codeberg / Gitea / sourcehut / GitCode への自動リンク生成
+
+### AI コミットメッセージ生成
+
+OpenAI または OpenAI 互換 API（Azure OpenAI 含む）を利用してコミットメッセージを自動生成できます。
+
+* **2 段階生成** — ファイルごとの差分分析 → 最終メッセージ生成
+* **プロンプトのカスタマイズ** — 分析プロンプト・生成プロンプトをそれぞれ変更可能
+* **複数 AI サービスの登録** — グローバル設定で複数サービスを管理、リポジトリごとに使い分け
+* **環境変数からの API キー取得** に対応
+* **ストリーミング応答** / **Chain-of-thought タグの自動除去**
+
+### Issue トラッカー連携
+
+コミットメッセージ内の正規表現パターンにマッチする文字列を Issue リンクに変換します。URL テンプレートにキャプチャグループ（`$1`, `$2` 等）を埋め込み可能。リポジトリごとに複数のトラッカーを設定できます。
+
+### カスタムアクション
+
+リポジトリ / コミット / ブランチ / タグ / リモート / ファイルのスコープごとに独自のアクションを定義し、コンテキストメニューから実行できます。コントロール種別: テキストボックス / パスセレクタ / チェックボックス / コンボボックス。
+
+### ワークスペース
+
+名前付きワークスペースに複数のリポジトリをグループ化して管理できます。色分け・デフォルト Clone ディレクトリの設定・起動時の復元に対応しています。
+
+### 統計
+
+LiveChartsCore による貢献統計グラフを表示します。全期間（月次）/ 今月（日次）/ 今週（日次）の 3 つのビューで、著者ごとのフィルタリングが可能です。
+
+---
+
+## 外部ツール連携
+
+### コードエディタ
+
+VS Code / VS Code Insiders / VSCodium / Cursor / Sublime Text / Zed / Visual Studio（Windows のみ）に加え、JetBrains Toolbox 経由で CLion / GoLand / Rider / WebStorm / PyCharm / RustRover 等を自動検出します。`external_editors.json` でカスタムパス指定や除外設定も可能です。
+
+### マージ・差分ツール
+
+| ツール | Windows | macOS | Linux |
+|-------|:-------:|:-----:|:-----:|
+| VS Code / VS Code Insiders | ✔ | ✔ | ✔ |
+| KDiff3 | ✔ | ✔ | ✔ |
+| Beyond Compare | ✔ | ✔ | ✔ |
+| P4Merge | ✔ | ✔ | ✔ |
+| Meld | ✔ | — | ✔ |
+| VSCodium / Cursor | ✔ | ✔ | ✔ |
+| TortoiseMerge / WinMerge | ✔ | — | — |
+| Visual Studio / Plastic SCM | ✔ | — | — |
+| Xcode FileMerge | — | ✔ | — |
+
+### ターミナル
+
+| OS | 対応ターミナル |
+|----|-------------|
+| Windows | Git Bash / PowerShell / CMD / Windows Terminal |
+| macOS | Terminal.app / iTerm2 / Warp / Ghostty / kitty |
+| Linux | GNOME Terminal / Konsole / XFCE4 Terminal / Foot / WezTerm / Ghostty / kitty 等 |
+
+---
+
+## カスタマイズ
+
+### テーマ
+
+ライト / ダーク / システム連動の 3 モード。JSON ファイルによるテーマオーバーライドで、基本カラー・グラフカラーパレット・グラフ線の太さ・未マージコミットの透明度を細かく調整できます。
+
+### フォント・表示
+
+* デフォルトフォント / 等幅フォントの個別設定
+* フォントサイズ / エディタのタブ幅
+* UI ズームレベル
+* スクロールバーの自動非表示
+
+### リポジトリ設定
+
+リポジトリごとにユーザー名・メール / デフォルトリモート / マージモード / GPG 署名 / HTTP プロキシ / 自動 Fetch（間隔設定可能）/ サブモジュール自動更新の確認 / コミットテンプレート / Issue トラッカー / AI サービス / カスタムアクション / Conventional Commit タイプ を個別に設定できます。
+
+---
+
+## 多言語対応
+
+14 言語をサポートしています:
+
+Deutsch · English · Español · Français · Bahasa Indonesia · Italiano · 日本語 · 한국어 · Português (Brasil) · Русский · தமிழ் · Українська · 简体中文 · 繁體中文
+
+---
+
+## コマンドライン
 
 ```
-<SOURCEGIT_EXEC> <DIR>                       // Open repository in existing `SourceGit` instance or a new one
-<SOURCEGIT_EXEC> --file-history <FILE_PATH>  // Launch `SourceGit` to see the history of a file
-<SOURCEGIT_EXEC> --blame <FILE_PATH>         // Launch `SourceGit` to blame a file (HEAD version only) 
+komorebi <DIR>                       # リポジトリを開く
+komorebi --file-history <FILE_PATH>  # ファイル履歴を表示
+komorebi --blame <FILE_PATH>         # Blame を表示（HEAD）
 ```
 
-## OpenAI
+---
 
-This software supports using OpenAI or other AI service that has an OpenAI compatible HTTP API to generate commit message. You need configurate the service in `Preference` window.
+## ビルド
 
-For `OpenAI`:
-
-* `Server` must be `https://api.openai.com/v1`
-
-For other AI service:
-
-* The `Server` should fill in a URL equivalent to OpenAI's `https://api.openai.com/v1`. For example, when using `Ollama`, it should be `http://localhost:11434/v1` instead of `http://localhost:11434/api/generate`
-* The `API Key` is optional that depends on the service
-
-## External Tools
-
-This app supports open repository in external tools listed in the table below.
-
-| Tool                          | Windows | macOS | Linux |
-|-------------------------------|---------|-------|-------|
-| Visual Studio Code            | YES     | YES   | YES   |
-| Visual Studio Code - Insiders | YES     | YES   | YES   |
-| VSCodium                      | YES     | YES   | YES   |
-| Cursor                        | YES     | YES   | YES   |
-| Sublime Text                  | YES     | YES   | YES   |
-| Zed                           | YES     | YES   | YES   |
-| Visual Studio                 | YES     | NO    | NO    |
-
-> [!NOTE]
-> This app will try to find those tools based on some pre-defined or expected locations automatically. If you are using one portable version of these tools, it will not be detected by this app.  
-> To solve this problem you can add a file named `external_editors.json` in app data storage directory and provide the path directly.  
-> User can also exclude some editors by using `external_editors.json`.
-
-The format of `external_editors.json`:
-```json
-{
-    "tools": {
-        "Visual Studio Code": "D:\\VSCode\\Code.exe"
-    },
-    "excludes": [
-        "Visual Studio Community 2019"
-    ]
-}
-```
-
-> [!NOTE]
-> This app also supports a lot of `JetBrains` IDEs, installing `JetBrains Toolbox` will help this app to find them.
-
-## Conventional Commit Helper
-
-You can define your own conventional commit types (per-repository) by following steps:
-
-1. Create a json file with your own conventional commit type definitions. For example:
-```json
-[
-  {
-    "Name": "New Feature",
-    "Type": "Feature",
-    "Description": "Adding a new feature",
-    "PrefillShortDesc": "this is a test"
-  },
-  {
-    "Name": "Bug Fixes",
-    "Type": "Fix",
-    "Description": "Fixing a bug"
-  }
-]
-```
-2. Configure the `Conventional Commit Types` in repository configuration window.  
-
-## Contributing
-
-Everyone is welcome to submit a PR. Please make sure your PR is based on the latest `develop` branch and the target branch of PR is `develop`.
-
-In short, here are the commands to get started once [.NET tools are installed](https://dotnet.microsoft.com/en-us/download):
-
-```sh
-dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+```bash
 dotnet restore
 dotnet build
 dotnet run --project src/SourceGit.csproj
 ```
 
-Thanks to all the people who contribute.
-
-[![Contributors](https://contrib.rocks/image?repo=sourcegit-scm/sourcegit&columns=20)](https://github.com/sourcegit-scm/sourcegit/graphs/contributors)
-
-## Translation Status
-
-You can find the current translation status in [TRANSLATION.md](https://github.com/sourcegit-scm/sourcegit/blob/develop/TRANSLATION.md)
-
-### Translate Utility Script
-
-A script that assists with translations by reading the target language, comparing it with the base language, and going through missing keys one by one, so the translator can provide the translations interactively without needing to check each key manually.
-
-#### Usage
-
-Check for a given language (e.g., `pt_BR`) and optionally check for missing translations:
+リリースビルド（AOT、プラットフォーム別）:
 
 ```bash
-python translate_helper.py pt_BR [--check]
+dotnet publish src/SourceGit.csproj -c Release -o publish -r win-x64
 ```
 
-- `pt_BR` is the target language code (change as needed), it should correspond to a file named `pt_BR.axaml` in the `src/Resources/Locales/` directory, so you can replace it with any other language code you want to translate, e.g., `de_DE`, `es_ES`, etc.
-- `--check` is an optional flag used to only check for missing keys without prompting for translations, useful for getting a list of missing translations.
+> AOT を無効化する場合は `-p:DisableAOT=true`、自動アップデート検出を無効化する場合は `-p:DisableUpdateDetection=true` を追加してください。
 
-The script will read the base language file (`en_US.axaml`) and the target language file (e.g., `pt_BR.axaml`), identify missing keys, and prompt you to provide translations for those keys. If the `--check` flag is used, it will only list the missing keys without prompting for translations.
+---
 
-## Third-Party Components
+## 主要な依存パッケージ
 
-For detailed license information, see [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md).
+| パッケージ | 用途 |
+|-----------|------|
+| [Avalonia](https://avaloniaui.net/) 11.3.x | クロスプラットフォーム XAML UI |
+| [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) | MVVM ソースジェネレータ |
+| [Velopack](https://velopack.io/) | 自動アップデート |
+| [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) | 差分・Blame 用テキストエディタ（サブモジュール） |
+| [OpenAI / Azure.AI.OpenAI](https://github.com/openai/openai-dotnet) | AI コミットメッセージ生成 |
+| [LiveChartsCore](https://livecharts.dev/) | 貢献統計グラフ |
+| [Pfim](https://github.com/nickbabcock/Pfim) / [LibTiff.NET](https://bitmiracle.com/libtiff/) | TGA・DDS・TIFF 画像デコード |
+
+---
+
+## ライセンス
+
+[MIT License](LICENSE)
+
+サードパーティライセンスの詳細は [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) を参照してください。
