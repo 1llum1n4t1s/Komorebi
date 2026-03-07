@@ -820,6 +820,7 @@
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">New version of this software is available: </x:String>
   <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">Current Version: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Check for updates failed!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Download &amp; Install</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Download</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Skip This Version</x:String>
   <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">New Version Release Date: </x:String>

@@ -824,6 +824,7 @@
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">检测到软件有版本更新: </x:String>
   <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">当前版本 ：</x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">获取最新版本信息失败！</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">下载并安装</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">下    载</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">忽略此版本</x:String>
   <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">新版发布时间 ：</x:String>

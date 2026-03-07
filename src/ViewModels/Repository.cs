@@ -1807,7 +1807,7 @@ namespace SourceGit.ViewModels
                 }
                 else
                 {
-                    var remote = string.IsNullOrEmpty(_settings.DefaultRemote) ?
+                    var remote = !string.IsNullOrEmpty(_settings.DefaultRemote) ?
                         remotes.Find(x => x.Equals(_settings.DefaultRemote, StringComparison.Ordinal)) :
                         remotes[0];
 

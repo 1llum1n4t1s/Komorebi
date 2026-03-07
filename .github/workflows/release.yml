@@ -12,20 +12,32 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
+      semver: ${{ steps.version.outputs.semver }}
     steps:
       - name: Output version string
         id: version
         env:
           TAG: ${{ github.ref_name }}
-        run: echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+        run: |
+          version="${TAG#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          IFS='.' read -r major minor <<< "$version"
+          minor=$((10#$minor))
+          echo "semver=${major}.${minor}.0" >> "$GITHUB_OUTPUT"
   package:
     needs: [build, version]
     name: Package
     uses: ./.github/workflows/package.yml
     with:
       version: ${{ needs.version.outputs.version }}
+  velopack:
+    needs: [build, version]
+    name: Velopack
+    uses: ./.github/workflows/velopack.yml
+    with:
+      version: ${{ needs.version.outputs.semver }}
   release:
-    needs: [package, version]
+    needs: [package, velopack, version]
     name: Release
     runs-on: ubuntu-latest
     permissions:
@@ -39,14 +51,22 @@ jobs:
           TAG: ${{ github.ref_name }}
           VERSION: ${{ needs.version.outputs.version }}
         run: gh release create "$TAG" -t "$VERSION" --notes-from-tag
-      - name: Download artifacts
+      - name: Download package artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: package.*
           path: packages
           merge-multiple: true
+      - name: Download Velopack artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: velopack.*
+          path: velopack-packages
+          merge-multiple: true
       - name: Upload assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.ref_name }}
-        run: gh release upload "$TAG" packages/*
+        run: |
+          gh release upload "$TAG" packages/*
+          gh release upload "$TAG" velopack-packages/*

@@ -21,6 +21,9 @@ using Avalonia.Media.Fonts;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
+using Velopack;
+using Velopack.Sources;
+
 namespace SourceGit
 {
     public partial class App : Application
@@ -29,6 +32,8 @@ namespace SourceGit
         [STAThread]
         public static void Main(string[] args)
         {
+            VelopackApp.Build().Run();
+
             Native.OS.SetupDataDir();
 
             AppDomain.CurrentDomain.UnhandledException += (_, e) =>
@@ -712,17 +717,18 @@ namespace SourceGit
             {
                 try
                 {
-                    // Fetch latest release information.
-                    using var client = new HttpClient();
-                    client.Timeout = TimeSpan.FromSeconds(5);
+                    var source = new GithubSource("https://github.com/1llum1n4t1s/Komorebi", string.Empty, false);
+                    var mgr = new UpdateManager(source);
 
-                    var data = await client.GetStringAsync("https://sourcegit-scm.github.io/data/version.json");
-                    var ver = JsonSerializer.Deserialize(data, JsonCodeGen.Default.Version);
-                    if (ver == null)
+                    if (!mgr.IsInstalled)
+                    {
+                        if (manually)
+                            ShowSelfUpdateResult(new Models.AlreadyUpToDate());
                         return;
+                    }
 
-                    // Check if already up-to-date.
-                    if (!ver.IsNewVersion)
+                    var newVersion = await mgr.CheckForUpdatesAsync();
+                    if (newVersion == null)
                     {
                         if (manually)
                             ShowSelfUpdateResult(new Models.AlreadyUpToDate());
@@ -733,11 +739,12 @@ namespace SourceGit
                     if (!manually)
                     {
                         var pref = ViewModels.Preferences.Instance;
-                        if (ver.TagName == pref.IgnoreUpdateTag)
+                        var newTag = $"v{newVersion.TargetFullRelease.Version}";
+                        if (newTag == pref.IgnoreUpdateTag)
                             return;
                     }
 
-                    ShowSelfUpdateResult(ver);
+                    ShowSelfUpdateResult(new Models.VelopackUpdate(mgr, newVersion));
                 }
                 catch (Exception e)
                 {

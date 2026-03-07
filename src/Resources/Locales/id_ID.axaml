@@ -744,6 +744,7 @@
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">Periksa Pembaruan...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">Versi baru dari perangkat lunak ini tersedia: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Pemeriksaan pembaruan gagal!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Unduh &amp; Instal</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Unduh</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Lewati Versi Ini</x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">Pembaruan Perangkat Lunak</x:String>

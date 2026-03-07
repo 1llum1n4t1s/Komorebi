@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 
+using Velopack;
+
 namespace SourceGit.Models
 {
     public class Version
@@ -34,6 +36,20 @@ namespace SourceGit.Models
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
             CurrentVersion = assembly.Version ?? new System.Version();
+        }
+    }
+
+    public class VelopackUpdate
+    {
+        public UpdateManager Manager { get; }
+        public UpdateInfo UpdateInfo { get; }
+        public string TagName => $"v{UpdateInfo.TargetFullRelease.Version}";
+        public string VersionString => UpdateInfo.TargetFullRelease.Version.ToString();
+
+        public VelopackUpdate(UpdateManager manager, UpdateInfo updateInfo)
+        {
+            Manager = manager;
+            UpdateInfo = updateInfo;
         }
     }
 

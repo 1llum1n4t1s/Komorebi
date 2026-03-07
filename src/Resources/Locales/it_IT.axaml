@@ -816,6 +816,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">Controlla Aggiornamenti...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">È disponibile una nuova versione del software:</x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Errore durante il controllo degli aggiornamenti!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Scarica e installa</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Scarica</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Salta questa versione</x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">Aggiornamento Software</x:String>

@@ -1,0 +1,56 @@
+name: Velopack
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+jobs:
+  velopack:
+    strategy:
+      matrix:
+        include:
+          - runtime: win-x64
+            os: windows-2022
+            mainExe: SourceGit.exe
+          - runtime: win-arm64
+            os: windows-2022
+            mainExe: SourceGit.exe
+          - runtime: osx-x64
+            os: macos-latest
+            mainExe: SourceGit
+          - runtime: osx-arm64
+            os: macos-latest
+            mainExe: SourceGit
+          - runtime: linux-x64
+            os: ubuntu-latest
+            mainExe: sourcegit
+          - runtime: linux-arm64
+            os: ubuntu-latest
+            mainExe: sourcegit
+    name: Velopack ${{ matrix.runtime }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: sourcegit.${{ matrix.runtime }}
+          path: publish
+      - name: Extract tar
+        if: ${{ !startsWith(matrix.runtime, 'win-') }}
+        run: |
+          tar -xf publish/sourcegit.${{ matrix.runtime }}.tar -C publish
+          rm publish/sourcegit.${{ matrix.runtime }}.tar
+      - name: Install Velopack CLI
+        run: dotnet tool install --global vpk
+      - name: Create Velopack package
+        run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.runtime }}
+      - name: Upload Velopack artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: velopack.${{ matrix.runtime }}
+          path: artifacts/*

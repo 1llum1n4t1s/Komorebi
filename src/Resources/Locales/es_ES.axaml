@@ -822,6 +822,7 @@
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">Nueva versión de este software disponible: </x:String>
   <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">Versión Actual: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">¡Error al buscar actualizaciones!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Descargar e instalar</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Descargar</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Omitir Esta Versión</x:String>
   <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">Fecha de Release de la Nueva Versión: </x:String>

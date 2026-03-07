@@ -577,6 +577,7 @@
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">Verificar atualizações...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">Nova versão deste software disponível: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Falha ao verificar atualizações!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Baixar e instalar</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Baixar</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Ignorar esta versão</x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">Atualização de Software</x:String>

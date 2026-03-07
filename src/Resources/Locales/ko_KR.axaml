@@ -745,6 +745,7 @@
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">업데이트 확인...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">이 소프트웨어의 새 버전을 사용할 수 있습니다: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">업데이트 확인 실패!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">다운로드 및 설치</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">다운로드</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">이 버전 건너뛰기</x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">소프트웨어 업데이트</x:String>

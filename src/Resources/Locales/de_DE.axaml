@@ -821,6 +821,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">Eine neue Version dieses Programms ist verfügbar: </x:String>
   <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">Derzeitige Version: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Suche nach Aktualisierungen fehlgeschlagen!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Herunterladen &amp; Installieren</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Herunterladen</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Diese Version überspringen</x:String>
   <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">Veröffentlichungsdatum neue Version: </x:String>

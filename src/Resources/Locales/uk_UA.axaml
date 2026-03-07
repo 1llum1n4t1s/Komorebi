@@ -595,6 +595,7 @@
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">Перевірити оновлення...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">Доступна нова версія програми: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Не вдалося перевірити оновлення!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Завантажити та встановити</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Завантажити</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Пропустити цю версію</x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">Оновлення програми</x:String>

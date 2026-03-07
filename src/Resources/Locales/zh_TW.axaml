@@ -824,6 +824,7 @@
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">軟體有版本更新:</x:String>
   <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">目前版本: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">取得最新版本資訊失敗!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">下載並安裝</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">下載</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">忽略此版本</x:String>
   <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">新版本發行日期: </x:String>

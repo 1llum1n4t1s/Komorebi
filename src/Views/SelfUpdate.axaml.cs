@@ -89,5 +89,25 @@ namespace SourceGit.Views
             Close();
             e.Handled = true;
         }
+
+        private void DownloadAndInstall(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button { DataContext: Models.VelopackUpdate update } &&
+                DataContext is ViewModels.SelfUpdate vm)
+            {
+                vm.DownloadAndApplyUpdate(update);
+            }
+
+            e.Handled = true;
+        }
+
+        private void IgnoreThisVelopackVersion(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button { DataContext: Models.VelopackUpdate update })
+                ViewModels.Preferences.Instance.IgnoreUpdateTag = update.TagName;
+
+            Close();
+            e.Handled = true;
+        }
     }
 }

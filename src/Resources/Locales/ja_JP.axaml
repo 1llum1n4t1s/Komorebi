@@ -824,6 +824,7 @@
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">このソフトウェアの新しいバージョンが利用できます: </x:String>
   <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">現在のバージョン: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">更新の確認に失敗しました！</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">ダウンロード＆インストール</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">ダウンロード</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">このバージョンをスキップ</x:String>
   <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">新しいバージョンのリリース日: </x:String>
