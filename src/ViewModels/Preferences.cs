@@ -630,6 +630,42 @@ namespace Komorebi.ViewModels
             }
         }
 
+        private static string DetectDefaultLocale()
+        {
+            var supported = new HashSet<string>(StringComparer.Ordinal)
+            {
+                "de_DE", "en_US", "es_ES", "fr_FR", "id_ID", "it_IT", "ja_JP",
+                "ko_KR", "pt_BR", "ru_RU", "ta_IN", "uk_UA", "zh_CN", "zh_TW",
+            };
+
+            var culture = System.Globalization.CultureInfo.CurrentUICulture;
+
+            // Try exact match: "ja-JP" → "ja_JP"
+            var exact = culture.Name.Replace('-', '_');
+            if (supported.Contains(exact))
+                return exact;
+
+            var lang = culture.TwoLetterISOLanguageName;
+
+            // Chinese variants need special handling
+            if (lang == "zh")
+            {
+                var name = culture.Name;
+                if (name.Contains("Hant") || name.Contains("TW") || name.Contains("HK") || name.Contains("MO"))
+                    return "zh_TW";
+                return "zh_CN";
+            }
+
+            // Find first locale matching the language code
+            foreach (var locale in supported)
+            {
+                if (locale.StartsWith(lang + "_", StringComparison.Ordinal))
+                    return locale;
+            }
+
+            return "en_US";
+        }
+
         private void PrepareGit()
         {
             var path = Native.OS.GitExecutable;
@@ -756,7 +792,7 @@ namespace Komorebi.ViewModels
 
         private bool _isLoading = true;
         private bool _isReadonly = true;
-        private string _locale = "en_US";
+        private string _locale = DetectDefaultLocale();
         private string _theme = "Default";
         private string _themeOverrides = string.Empty;
         private string _defaultFontFamily = string.Empty;
