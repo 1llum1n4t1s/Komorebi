@@ -15,11 +15,16 @@ namespace Komorebi.Tests.Models
         [InlineData("https://github.com/user/repo.git", false)]
         [InlineData("http://github.com/user/repo", false)]
         [InlineData("", false)]
-        [InlineData(null, false)]
         [InlineData("   ", false)]
         public void IsSSH_DetectsSSHUrls(string url, bool expected)
         {
             Assert.Equal(expected, Remote.IsSSH(url));
+        }
+
+        [Fact]
+        public void IsSSH_NullUrl_ReturnsFalse()
+        {
+            Assert.False(Remote.IsSSH(null!));
         }
 
         #endregion
@@ -34,11 +39,16 @@ namespace Komorebi.Tests.Models
         [InlineData("ssh://git@github.com/user/repo.git", true)]
         [InlineData("git://github.com/user/repo", true)]
         [InlineData("", false)]
-        [InlineData(null, false)]
         [InlineData("   ", false)]
         public void IsValidURL_ValidatesCorrectly(string url, bool expected)
         {
             Assert.Equal(expected, Remote.IsValidURL(url));
+        }
+
+        [Fact]
+        public void IsValidURL_NullUrl_ReturnsFalse()
+        {
+            Assert.False(Remote.IsValidURL(null!));
         }
 
         [Fact]

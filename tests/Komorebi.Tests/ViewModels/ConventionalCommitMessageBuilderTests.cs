@@ -10,9 +10,9 @@ namespace Komorebi.Tests.ViewModels
         /// Creates a builder with default types (no file override) and captures the
         /// generated message via the onApply callback.
         /// </summary>
-        private static (Komorebi.ViewModels.ConventionalCommitMessageBuilder Builder, Func<string> GetResult) CreateBuilder()
+        private static (Komorebi.ViewModels.ConventionalCommitMessageBuilder Builder, Func<string?> GetResult) CreateBuilder()
         {
-            string captured = null;
+            string? captured = null;
             var builder = new Komorebi.ViewModels.ConventionalCommitMessageBuilder(
                 conventionalTypesOverride: null,
                 onApply: msg => captured = msg);
@@ -96,7 +96,7 @@ namespace Komorebi.Tests.ViewModels
         [Fact]
         public void Apply_ReturnsFalse_WhenSelectedTypeIsNull()
         {
-            string captured = null;
+            string? captured = null;
             var builder = new Komorebi.ViewModels.ConventionalCommitMessageBuilder(
                 conventionalTypesOverride: null,
                 onApply: msg => captured = msg);
@@ -188,6 +188,7 @@ namespace Komorebi.Tests.ViewModels
             builder.Apply();
 
             var msg = getResult();
+            Assert.NotNull(msg);
             Assert.StartsWith("feat: minor fix", msg);
             Assert.DoesNotContain("!", msg.Split('\n')[0]);
             Assert.DoesNotContain("BREAKING CHANGE", msg);
@@ -220,6 +221,7 @@ namespace Komorebi.Tests.ViewModels
             builder.Apply();
 
             var msg = getResult();
+            Assert.NotNull(msg);
             // The message should not contain empty body artifacts beyond the required newlines
             var lines = msg.Split('\n');
             // First line is "feat: add feature", followed by blank lines
@@ -335,6 +337,7 @@ namespace Komorebi.Tests.ViewModels
             builder.Apply();
 
             var msg = getResult();
+            Assert.NotNull(msg);
             var headerIdx = msg.IndexOf("feat: add feature");
             var bodyIdx = msg.IndexOf("BODY_CONTENT");
             var breakIdx = msg.IndexOf("BREAKING CHANGE: BREAK_CONTENT");

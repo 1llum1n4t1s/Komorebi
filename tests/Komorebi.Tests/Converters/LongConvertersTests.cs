@@ -96,7 +96,7 @@ namespace Komorebi.Tests.Converters
         [Fact]
         public void ToFileSize_1023Bytes_ShowsBytes()
         {
-            var result = (string)LongConverters.ToFileSize.Convert(1023L, typeof(string), null, CultureInfo.InvariantCulture);
+            var result = Assert.IsType<string>(LongConverters.ToFileSize.Convert(1023L, typeof(string), null, CultureInfo.InvariantCulture));
             Assert.Contains("B", result);
             Assert.DoesNotContain("KB", result);
         }
@@ -104,35 +104,35 @@ namespace Komorebi.Tests.Converters
         [Fact]
         public void ToFileSize_1024Bytes_ShowsKB()
         {
-            var result = (string)LongConverters.ToFileSize.Convert(1024L, typeof(string), null, CultureInfo.InvariantCulture);
+            var result = Assert.IsType<string>(LongConverters.ToFileSize.Convert(1024L, typeof(string), null, CultureInfo.InvariantCulture));
             Assert.Contains("KB", result);
         }
 
         [Fact]
         public void ToFileSize_OneBelowMB_ShowsKB()
         {
-            var result = (string)LongConverters.ToFileSize.Convert(1024L * 1024L - 1, typeof(string), null, CultureInfo.InvariantCulture);
+            var result = Assert.IsType<string>(LongConverters.ToFileSize.Convert(1024L * 1024L - 1, typeof(string), null, CultureInfo.InvariantCulture));
             Assert.Contains("KB", result);
         }
 
         [Fact]
         public void ToFileSize_ExactlyMB_ShowsMB()
         {
-            var result = (string)LongConverters.ToFileSize.Convert(1024L * 1024L, typeof(string), null, CultureInfo.InvariantCulture);
+            var result = Assert.IsType<string>(LongConverters.ToFileSize.Convert(1024L * 1024L, typeof(string), null, CultureInfo.InvariantCulture));
             Assert.Contains("MB", result);
         }
 
         [Fact]
         public void ToFileSize_OneBelowGB_ShowsMB()
         {
-            var result = (string)LongConverters.ToFileSize.Convert(1024L * 1024L * 1024L - 1, typeof(string), null, CultureInfo.InvariantCulture);
+            var result = Assert.IsType<string>(LongConverters.ToFileSize.Convert(1024L * 1024L * 1024L - 1, typeof(string), null, CultureInfo.InvariantCulture));
             Assert.Contains("MB", result);
         }
 
         [Fact]
         public void ToFileSize_ExactlyGB_ShowsGB()
         {
-            var result = (string)LongConverters.ToFileSize.Convert(1024L * 1024L * 1024L, typeof(string), null, CultureInfo.InvariantCulture);
+            var result = Assert.IsType<string>(LongConverters.ToFileSize.Convert(1024L * 1024L * 1024L, typeof(string), null, CultureInfo.InvariantCulture));
             Assert.Contains("GB", result);
         }
 

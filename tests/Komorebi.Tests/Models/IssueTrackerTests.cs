@@ -217,7 +217,7 @@ namespace Komorebi.Tests.Models
         {
             var tracker = new IssueTracker();
             var changedProps = new List<string>();
-            tracker.PropertyChanged += (s, e) => changedProps.Add(e.PropertyName);
+            tracker.PropertyChanged += (s, e) => changedProps.Add(e.PropertyName ?? string.Empty);
 
             tracker.RegexString = @"#(\d+)";
 

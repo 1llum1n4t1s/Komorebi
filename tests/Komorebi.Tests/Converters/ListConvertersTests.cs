@@ -182,8 +182,8 @@ namespace Komorebi.Tests.Converters
             var list = new List<Change>();
             for (int i = 0; i < 200; i++)
                 list.Add(new Change());
-            var result = (List<Change>)ListConverters.Top100Changes.Convert(list, typeof(List<Change>), null, CultureInfo.InvariantCulture);
-            Assert.NotNull(result);
+            var resultObj = ListConverters.Top100Changes.Convert(list, typeof(List<Change>), null, CultureInfo.InvariantCulture);
+            var result = Assert.IsType<List<Change>>(resultObj);
             Assert.Equal(100, result.Count);
             Assert.NotSame(list, result);
         }
