@@ -66,20 +66,11 @@ namespace Komorebi.Commands
                 var findHead = false;
                 while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
                 {
-                    var parts = line.Split('\0');
-                    if (parts.Length != 8)
+                    var commit = ParseCommitLine(line);
+                    if (commit == null)
                         continue;
 
-                    var commit = new Models.Commit() { SHA = parts[0] };
-                    commit.ParseParents(parts[1]);
-                    commit.ParseDecorators(parts[2]);
-                    commit.Author = Models.User.FindOrAdd(parts[3]);
-                    commit.AuthorTime = ulong.Parse(parts[4]);
-                    commit.Committer = Models.User.FindOrAdd(parts[5]);
-                    commit.CommitterTime = ulong.Parse(parts[6]);
-                    commit.Subject = parts[7];
                     commits.Add(commit);
-
                     findHead |= commit.IsMerged;
                 }
 
@@ -107,6 +98,24 @@ namespace Komorebi.Commands
             }
 
             return commits;
+        }
+
+        internal static Models.Commit ParseCommitLine(string line)
+        {
+            var parts = line.Split('\0');
+            if (parts.Length != 8)
+                return null;
+
+            var commit = new Models.Commit() { SHA = parts[0] };
+            commit.ParseParents(parts[1]);
+            commit.ParseDecorators(parts[2]);
+            commit.Author = Models.User.FindOrAdd(parts[3]);
+            commit.AuthorTime = ulong.Parse(parts[4]);
+            commit.Committer = Models.User.FindOrAdd(parts[5]);
+            commit.CommitterTime = ulong.Parse(parts[6]);
+            commit.Subject = parts[7];
+
+            return commit;
         }
 
         private bool _markMerged = false;

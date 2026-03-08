@@ -29,73 +29,70 @@ namespace Komorebi.Commands
         {
             var rs = await ReadToEndAsync().ConfigureAwait(false);
             if (!rs.IsSuccess)
-                return _result;
+                return new Models.BlameData();
 
-            var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+            return ParseBlameOutput(rs.StdOut);
+        }
+
+        internal static Models.BlameData ParseBlameOutput(string output)
+        {
+            var result = new Models.BlameData();
+            var content = new StringBuilder();
+            var lastSHA = string.Empty;
+            var needUnifyCommitSHA = false;
+            var minSHALen = 64;
+
+            var lines = output.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                ParseLine(line);
-
-                if (_result.IsBinary)
-                    break;
-            }
-
-            if (_needUnifyCommitSHA)
-            {
-                foreach (var line in _result.LineInfos)
+                if (line.Contains('\0'))
                 {
-                    if (line.CommitSHA.Length > _minSHALen)
-                        line.CommitSHA = line.CommitSHA.Substring(0, _minSHALen);
+                    result.IsBinary = true;
+                    result.LineInfos.Clear();
+                    break;
+                }
+
+                var match = REG_FORMAT().Match(line);
+                if (!match.Success)
+                    continue;
+
+                content.AppendLine(match.Groups[5].Value);
+
+                var commit = match.Groups[1].Value;
+                var file = match.Groups[2].Value.Trim();
+                var author = match.Groups[3].Value;
+                var timestamp = ulong.Parse(match.Groups[4].Value);
+
+                var info = new Models.BlameLineInfo()
+                {
+                    IsFirstInGroup = commit != lastSHA,
+                    CommitSHA = commit,
+                    File = file,
+                    Author = author,
+                    Timestamp = timestamp,
+                };
+
+                result.LineInfos.Add(info);
+                lastSHA = commit;
+
+                if (line[0] == '^')
+                {
+                    needUnifyCommitSHA = true;
+                    minSHALen = Math.Min(minSHALen, commit.Length);
                 }
             }
 
-            _result.Content = _content.ToString();
-            return _result;
-        }
-
-        private void ParseLine(string line)
-        {
-            if (line.Contains('\0'))
+            if (needUnifyCommitSHA)
             {
-                _result.IsBinary = true;
-                _result.LineInfos.Clear();
-                return;
+                foreach (var line in result.LineInfos)
+                {
+                    if (line.CommitSHA.Length > minSHALen)
+                        line.CommitSHA = line.CommitSHA.Substring(0, minSHALen);
+                }
             }
 
-            var match = REG_FORMAT().Match(line);
-            if (!match.Success)
-                return;
-
-            _content.AppendLine(match.Groups[5].Value);
-
-            var commit = match.Groups[1].Value;
-            var file = match.Groups[2].Value.Trim();
-            var author = match.Groups[3].Value;
-            var timestamp = ulong.Parse(match.Groups[4].Value);
-
-            var info = new Models.BlameLineInfo()
-            {
-                IsFirstInGroup = commit != _lastSHA,
-                CommitSHA = commit,
-                File = file,
-                Author = author,
-                Timestamp = timestamp,
-            };
-
-            _result.LineInfos.Add(info);
-            _lastSHA = commit;
-
-            if (line[0] == '^')
-            {
-                _needUnifyCommitSHA = true;
-                _minSHALen = Math.Min(_minSHALen, commit.Length);
-            }
+            result.Content = content.ToString();
+            return result;
         }
-
-        private readonly Models.BlameData _result = new Models.BlameData();
-        private readonly StringBuilder _content = new StringBuilder();
-        private string _lastSHA = string.Empty;
-        private bool _needUnifyCommitSHA = false;
-        private int _minSHALen = 64;
     }
 }

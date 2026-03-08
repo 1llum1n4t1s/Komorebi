@@ -79,8 +79,6 @@ namespace Komorebi
     [JsonSerializable(typeof(Models.ExternalToolCustomization))]
     [JsonSerializable(typeof(Models.InteractiveRebaseJobCollection))]
     [JsonSerializable(typeof(Models.JetBrainsState))]
-    [JsonSerializable(typeof(Models.ThemeOverrides))]
-
     [JsonSerializable(typeof(Models.RepositorySettings))]
     [JsonSerializable(typeof(Models.RepositoryUIStates))]
     [JsonSerializable(typeof(List<Models.ConventionalCommitType>))]

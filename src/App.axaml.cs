@@ -252,70 +252,42 @@ namespace Komorebi
             app._activeLocale = targetLocale;
         }
 
-        public static void SetTheme(string theme, string themeOverridesFile)
+        public static void SetTheme(string theme)
         {
             if (Current is not App app)
                 return;
 
-            var isActipro = theme.StartsWith("Actipro", StringComparison.OrdinalIgnoreCase);
+            // During initialization (_launcher is null), apply synchronously.
+            // At runtime (e.g. ComboBox selection), defer to avoid reentrancy.
+            if (app._launcher != null)
+                Dispatcher.UIThread.Post(() => ApplyThemeCore(app, theme), DispatcherPriority.Background);
+            else
+                ApplyThemeCore(app, theme);
+        }
 
-            if (isActipro)
+        private static void ApplyThemeCore(App app, string theme)
+        {
+            if (theme.Equals(Models.ThemeOption.ActiproLightKey, StringComparison.OrdinalIgnoreCase) ||
+                theme.Equals(Models.ThemeOption.ActiproDarkKey, StringComparison.OrdinalIgnoreCase))
             {
-                app.RequestedThemeVariant = theme.Equals("ActiproLight", StringComparison.OrdinalIgnoreCase)
+                app.RequestedThemeVariant = theme.Equals(Models.ThemeOption.ActiproLightKey, StringComparison.OrdinalIgnoreCase)
                     ? ThemeVariant.Light
                     : ThemeVariant.Dark;
                 app.ApplyActiproTheme();
             }
             else
             {
-                if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
+                if (theme.Equals(Models.ThemeOption.LightKey, StringComparison.OrdinalIgnoreCase))
                     app.RequestedThemeVariant = ThemeVariant.Light;
-                else if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
+                else if (theme.Equals(Models.ThemeOption.DarkKey, StringComparison.OrdinalIgnoreCase))
                     app.RequestedThemeVariant = ThemeVariant.Dark;
                 else
                     app.RequestedThemeVariant = ThemeVariant.Default;
 
-                app.ApplyFluentTheme();
+                app.RemoveActiproTheme();
             }
 
-            if (app._themeOverrides != null)
-            {
-                app.Resources.MergedDictionaries.Remove(app._themeOverrides);
-                app._themeOverrides = null;
-            }
-
-            if (!string.IsNullOrEmpty(themeOverridesFile) && File.Exists(themeOverridesFile))
-            {
-                try
-                {
-                    var resDic = new ResourceDictionary();
-                    using var stream = File.OpenRead(themeOverridesFile);
-                    var overrides = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ThemeOverrides);
-                    foreach (var kv in overrides.BasicColors)
-                    {
-                        if (kv.Key.Equals("SystemAccentColor", StringComparison.Ordinal))
-                            resDic["SystemAccentColor"] = kv.Value;
-                        else
-                            resDic[$"Color.{kv.Key}"] = kv.Value;
-                    }
-
-                    if (overrides.GraphColors.Count > 0)
-                        Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
-                    else
-                        Models.CommitGraph.SetDefaultPens(overrides.GraphPenThickness);
-
-                    app.Resources.MergedDictionaries.Add(resDic);
-                    app._themeOverrides = resDic;
-                }
-                catch
-                {
-                    // ignore
-                }
-            }
-            else
-            {
-                Models.CommitGraph.SetDefaultPens();
-            }
+            Models.CommitGraph.SetDefaultPens();
         }
 
         public static void SetFonts(string defaultFont, string monospaceFont)
@@ -426,7 +398,7 @@ namespace Komorebi
             pref.PropertyChanged += (_, _) => pref.Save();
 
             SetLocale(pref.Locale);
-            SetTheme(pref.Theme, pref.ThemeOverrides);
+            SetTheme(pref.Theme);
             SetFonts(pref.DefaultFontFamily, pref.MonospaceFontFamily);
         }
 
@@ -856,45 +828,29 @@ namespace Komorebi
 
         private void ApplyActiproTheme()
         {
-            if (_isActiproActive)
+            if (_actiproTheme != null)
                 return;
 
-            // Remove FluentTheme (index 0) and Fluent DataGrid style (index 1)
-            if (Styles.Count >= 2 && Styles[0] is Avalonia.Themes.Fluent.FluentTheme)
-            {
-                Styles.RemoveAt(1); // Fluent DataGrid
-                Styles.RemoveAt(0); // FluentTheme
-            }
-
-            // Insert Actipro ModernTheme at index 0
-            Styles.Insert(0, new ActiproSoftware.UI.Avalonia.Themes.ModernTheme());
-            _isActiproActive = true;
+            // Insert ModernTheme at index 0 so it takes priority.
+            // FluentTheme stays in place as a fallback for resources
+            // that ModernTheme does not define (e.g. SystemControlTransparentBrush).
+            _actiproTheme = new ActiproSoftware.UI.Avalonia.Themes.ModernTheme();
+            Styles.Insert(0, _actiproTheme);
         }
 
-        private void ApplyFluentTheme()
+        private void RemoveActiproTheme()
         {
-            if (!_isActiproActive)
+            if (_actiproTheme == null)
                 return;
 
-            // Remove Actipro ModernTheme (index 0)
-            if (Styles.Count > 0 && Styles[0] is ActiproSoftware.UI.Avalonia.Themes.ModernTheme)
-                Styles.RemoveAt(0);
-
-            // Re-insert FluentTheme and Fluent DataGrid style
-            var fluentDataGrid = new Avalonia.Markup.Xaml.Styling.StyleInclude(new Uri("avares://Komorebi"))
-            {
-                Source = new Uri("avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml")
-            };
-            Styles.Insert(0, fluentDataGrid);
-            Styles.Insert(0, new Avalonia.Themes.Fluent.FluentTheme());
-            _isActiproActive = false;
+            Styles.Remove(_actiproTheme);
+            _actiproTheme = null;
         }
 
         private Models.IpcChannel _ipcChannel = null;
         private ViewModels.Launcher _launcher = null;
         private ResourceDictionary _activeLocale = null;
-        private ResourceDictionary _themeOverrides = null;
         private ResourceDictionary _fontsOverrides = null;
-        private bool _isActiproActive = false;
+        private ActiproSoftware.UI.Avalonia.Themes.ModernTheme _actiproTheme = null;
     }
 }

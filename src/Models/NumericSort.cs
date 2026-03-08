@@ -6,6 +6,13 @@ namespace Komorebi.Models
     {
         public static int Compare(string s1, string s2)
         {
+            if (ReferenceEquals(s1, s2))
+                return 0;
+            if (s1 is null)
+                return -1;
+            if (s2 is null)
+                return 1;
+
             var comparer = StringComparer.InvariantCultureIgnoreCase;
 
             int len1 = s1.Length;

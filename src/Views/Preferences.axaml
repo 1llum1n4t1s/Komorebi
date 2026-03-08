@@ -188,7 +188,7 @@
                       MinHeight="28"
                       Padding="8,0"
                       HorizontalAlignment="Stretch"
-                      ItemsSource="{x:Static m:ThemeOption.Supported}"
+                      ItemsSource="{Binding Source={x:Static m:ThemeOption.Supported}}"
                       DisplayMemberBinding="{Binding Name, x:DataType=m:ThemeOption}"
                       SelectedItem="{Binding Theme, Mode=TwoWay, Converter={x:Static c:StringConverters.ToTheme}}"/>
 
@@ -262,22 +262,7 @@
                              Value="{Binding EditorTabWidth, Mode=TwoWay}"/>
             </Grid>
 
-            <TextBlock Grid.Row="5" Grid.Column="0"
-                       Text="{DynamicResource Text.Preferences.Appearance.ThemeOverrides}"
-                       HorizontalAlignment="Right"
-                       Margin="0,0,16,0"/>
-            <TextBox Grid.Row="5" Grid.Column="1"
-                     Height="28"
-                     CornerRadius="3"
-                     Text="{Binding ThemeOverrides, Mode=TwoWay}">
-              <TextBox.InnerRightContent>
-                <Button Classes="icon_button" Width="30" Height="30" Click="SelectThemeOverrideFile">
-                  <Path Data="{StaticResource Icons.Folder.Open}" Fill="{DynamicResource Brush.FG1}"/>
-                </Button>
-              </TextBox.InnerRightContent>
-            </TextBox>
-
-            <CheckBox Grid.Row="6" Grid.Column="1"
+            <CheckBox Grid.Row="5" Grid.Column="1"
                       Height="32"
                       Content="{DynamicResource Text.Preferences.Appearance.UseFixedTabWidth}"
                       IsChecked="{Binding UseFixedTabWidth, Mode=TwoWay}"/>

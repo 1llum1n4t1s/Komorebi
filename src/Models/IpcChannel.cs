@@ -64,6 +64,8 @@ namespace Komorebi.Models
         public void Dispose()
         {
             _cancellationTokenSource?.Cancel();
+            _server?.Dispose();
+            _cancellationTokenSource?.Dispose();
             _singletonLock?.Dispose();
         }
 

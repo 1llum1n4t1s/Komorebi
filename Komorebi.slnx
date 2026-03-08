@@ -55,6 +55,10 @@
 		<Project Path="src/Komorebi.csproj" />
 	</Folder>
 
+	<Folder Name="/tests/">
+		<Project Path="tests/Komorebi.Tests/Komorebi.Tests.csproj" />
+	</Folder>
+
 	<Folder Name="/files/">
 		<File Path=".editorconfig"/>
 		<File Path=".gitattributes"/>

@@ -60,7 +60,7 @@ namespace Komorebi.Commands
             return branches;
         }
 
-        private Models.Branch ParseLine(string line, HashSet<string> mismatched)
+        internal static Models.Branch ParseLine(string line, HashSet<string> mismatched)
         {
             var parts = line.Split('\0');
             if (parts.Length != 7)

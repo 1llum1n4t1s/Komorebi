@@ -208,28 +208,6 @@ namespace Komorebi.Views
             ViewModels.Preferences.Instance.Save();
         }
 
-        private async void SelectThemeOverrideFile(object _, RoutedEventArgs e)
-        {
-            var options = new FilePickerOpenOptions()
-            {
-                FileTypeFilter = [new FilePickerFileType("Theme Overrides File") { Patterns = ["*.json"] }],
-                AllowMultiple = false,
-            };
-
-            try
-            {
-                var selected = await StorageProvider.OpenFilePickerAsync(options);
-                if (selected is { Count: 1 })
-                    ViewModels.Preferences.Instance.ThemeOverrides = selected[0].Path.LocalPath;
-            }
-            catch (Exception ex)
-            {
-                App.RaiseException(string.Empty, $"Failed to select theme: {ex.Message}");
-            }
-
-            e.Handled = true;
-        }
-
         private async void SelectGitExecutable(object _, RoutedEventArgs e)
         {
             var pattern = OperatingSystem.IsWindows() ? "git.exe" : "git";

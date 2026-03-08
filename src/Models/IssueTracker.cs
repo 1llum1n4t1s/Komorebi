@@ -24,13 +24,20 @@ namespace Komorebi.Models
             {
                 if (SetProperty(ref _regexString, value))
                 {
-                    try
-                    {
-                        _regex = new Regex(_regexString, RegexOptions.Multiline);
-                    }
-                    catch
+                    if (string.IsNullOrWhiteSpace(_regexString))
                     {
                         _regex = null;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            _regex = new Regex(_regexString, RegexOptions.Multiline);
+                        }
+                        catch
+                        {
+                            _regex = null;
+                        }
                     }
                 }
 

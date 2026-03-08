@@ -72,7 +72,7 @@
                 }
             }
 
-            if (Path[0] == '"')
+            if (Path.Length > 0 && Path[0] == '"')
                 Path = Path.Substring(1, Path.Length - 2);
 
             if (!string.IsNullOrEmpty(OriginalPath) && OriginalPath[0] == '"')
