@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class CRLFMode(string name, string value, string desc)
     {

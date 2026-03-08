@@ -24,7 +24,7 @@ using Avalonia.Threading;
 using Velopack;
 using Velopack.Sources;
 
-namespace SourceGit
+namespace Komorebi
 {
     public partial class App : Application
     {
@@ -74,8 +74,8 @@ namespace SourceGit
             builder.ConfigureFonts(manager =>
             {
                 var monospace = new EmbeddedFontCollection(
-                    new Uri("fonts:SourceGit", UriKind.Absolute),
-                    new Uri("avares://SourceGit/Resources/Fonts", UriKind.Absolute));
+                    new Uri("fonts:Komorebi", UriKind.Absolute),
+                    new Uri("avares://Komorebi/Resources/Fonts", UriKind.Absolute));
                 manager.AddFontCollection(monospace);
             });
 
@@ -326,7 +326,7 @@ namespace SourceGit
             {
                 if (!string.IsNullOrEmpty(defaultFont))
                 {
-                    monospaceFont = $"fonts:SourceGit#JetBrains Mono,{defaultFont}";
+                    monospaceFont = $"fonts:Komorebi#JetBrains Mono,{defaultFont}";
                     resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
                 }
             }
@@ -484,7 +484,7 @@ namespace SourceGit
             if (!dirInfo.Exists || !dirInfo.Name.Equals("rebase-merge", StringComparison.Ordinal))
                 return true;
 
-            var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "sourcegit.interactive_rebase");
+            var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "komorebi.interactive_rebase");
             if (!File.Exists(jobsFile))
                 return true;
 
@@ -529,7 +529,7 @@ namespace SourceGit
             var origHeadFile = Path.Combine(gitDir, "rebase-merge", "orig-head");
             var ontoFile = Path.Combine(gitDir, "rebase-merge", "onto");
             var doneFile = Path.Combine(gitDir, "rebase-merge", "done");
-            var jobsFile = Path.Combine(gitDir, "sourcegit.interactive_rebase");
+            var jobsFile = Path.Combine(gitDir, "komorebi.interactive_rebase");
             if (!File.Exists(ontoFile) || !File.Exists(origHeadFile) || !File.Exists(doneFile) || !File.Exists(jobsFile))
                 return true;
 
@@ -756,17 +756,17 @@ namespace SourceGit
 
         private void ShowSelfUpdateResult(object data)
         {
-            try
+            Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                Dispatcher.UIThread.Invoke(async () =>
+                try
                 {
                     await ShowDialog(new ViewModels.SelfUpdate { Data = data });
-                });
-            }
-            catch
-            {
-                // Ignore exceptions.
-            }
+                }
+                catch
+                {
+                    // Ignore exceptions (e.g. window already closed).
+                }
+            });
         }
 
         private string FixFontFamilyName(string input)

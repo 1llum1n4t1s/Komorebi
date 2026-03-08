@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class Count : IDisposable
     {

@@ -1,4 +1,4 @@
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public partial class ConfigureCustomActionControls : ChromelessWindow
     {

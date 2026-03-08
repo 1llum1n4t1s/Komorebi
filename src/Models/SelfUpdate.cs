@@ -1,56 +1,34 @@
-﻿using System;
-using System.Reflection;
-using System.Text.Json.Serialization;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Velopack;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
-    public class Version
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-
-        [JsonPropertyName("tag_name")]
-        public string TagName { get; set; }
-
-        [JsonPropertyName("published_at")]
-        public DateTime PublishedAt { get; set; }
-
-        [JsonPropertyName("body")]
-        public string Body { get; set; }
-
-        [JsonIgnore]
-        public System.Version CurrentVersion { get; }
-
-        [JsonIgnore]
-        public string CurrentVersionStr => $"v{CurrentVersion.Major}.{CurrentVersion.Minor:D2}";
-
-        [JsonIgnore]
-        public bool IsNewVersion => CurrentVersion.CompareTo(new System.Version(TagName.Substring(1))) < 0;
-
-        [JsonIgnore]
-        public string ReleaseDateStr => PublishedAt.ToString(DateTimeFormat.Active.DateOnly);
-
-        public Version()
-        {
-            var assembly = Assembly.GetExecutingAssembly().GetName();
-            CurrentVersion = assembly.Version ?? new System.Version();
-        }
-    }
-
     public class VelopackUpdate
     {
-        public UpdateManager Manager { get; }
-        public UpdateInfo UpdateInfo { get; }
-        public string TagName => $"v{UpdateInfo.TargetFullRelease.Version}";
-        public string VersionString => UpdateInfo.TargetFullRelease.Version.ToString();
+        public string TagName => $"v{_updateInfo.TargetFullRelease.Version}";
+        public string VersionString => _updateInfo.TargetFullRelease.Version.ToString();
 
         public VelopackUpdate(UpdateManager manager, UpdateInfo updateInfo)
         {
-            Manager = manager;
-            UpdateInfo = updateInfo;
+            _manager = manager;
+            _updateInfo = updateInfo;
         }
+
+        public async Task DownloadAsync(Action<int> onProgress, CancellationToken token)
+        {
+            await _manager.DownloadUpdatesAsync(_updateInfo, onProgress, cancelToken: token);
+        }
+
+        public void ApplyAndRestart()
+        {
+            _manager.ApplyUpdatesAndRestart(_updateInfo);
+        }
+
+        private readonly UpdateManager _manager;
+        private readonly UpdateInfo _updateInfo;
     }
 
     public class AlreadyUpToDate;

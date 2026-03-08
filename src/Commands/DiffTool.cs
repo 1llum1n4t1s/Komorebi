@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 
-namespace SourceGit.Commands
+namespace Komorebi.Commands
 {
     public class DiffTool : Command
     {
@@ -31,7 +31,7 @@ namespace SourceGit.Commands
             else
             {
                 var cmd = $"{tool.Exec.Quoted()} {tool.Cmd}";
-                Args = $"-c difftool.sourcegit.cmd={cmd.Quoted()} difftool --tool=sourcegit --no-prompt {_option}";
+                Args = $"-c difftool.komorebi.cmd={cmd.Quoted()} difftool --tool=komorebi --no-prompt {_option}";
             }
 
             try

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SourceGit
+namespace Komorebi
 {
     public static class StringExtensions
     {

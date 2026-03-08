@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l \"class Version\")",
+      "Bash(xargs grep -l \"ShouldCheck4UpdateOnStartup\\\\|IgnoreUpdateTag\")",
+      "WebFetch(domain:docs.velopack.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.nuget.org)",
+      "Bash(rtk git remote -v)"
+    ]
+  }
+}

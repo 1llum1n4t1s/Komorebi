@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace SourceGit.Native
+namespace Komorebi.Native
 {
     public static partial class OS
     {

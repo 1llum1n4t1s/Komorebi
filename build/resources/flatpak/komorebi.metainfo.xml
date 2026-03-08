@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>io.github.sourcegit_scm.sourcegit</id>
+    <id>io.github.1llum1n4t1s.komorebi</id>
     <metadata_license>MIT</metadata_license>
     <project_license>MIT</project_license>
-    <name>SourceGit</name>
+    <name>Komorebi</name>
     <summary>Open-source and Free Git GUI Client</summary>
     <description>
         <p>Highlights</p>
@@ -47,27 +47,17 @@
             <li>Using AI to generate commit message using commitollama</li>
         </ul>
     </description>
-    <url type="bugtracker">https://github.com/sourcegit-scm/sourcegit/issues</url>
-    <url type="help">https://github.com/sourcegit-scm/sourcegit/issues</url>
-    <url type="homepage">https://sourcegit-scm.github.io</url>
-    <url type="vcs-browser">https://github.com/sourcegit-scm/sourcegit</url>
-    <launchable type="desktop-id">io.github.sourcegit_scm.sourcegit.desktop</launchable>
+    <url type="bugtracker">https://github.com/1llum1n4t1s/Komorebi/issues</url>
+    <url type="help">https://github.com/1llum1n4t1s/Komorebi/issues</url>
+    <url type="homepage">https://github.com/1llum1n4t1s/Komorebi</url>
+    <url type="vcs-browser">https://github.com/1llum1n4t1s/Komorebi</url>
+    <launchable type="desktop-id">io.github.1llum1n4t1s.komorebi.desktop</launchable>
     <developer id="io.github">
-        <name>sourcegit-scm</name>
+        <name>1llum1n4t1s</name>
     </developer>
     <branding>
         <color type="primary" scheme_preference="light">#f15336</color>
         <color type="primary" scheme_preference="dark">#f15336</color>
     </branding>
-    <screenshots>
-        <screenshot type="default">
-            <image>https://sourcegit-scm.github.io/images/theme_dark.png</image>
-            <caption>Dark Theme</caption>
-        </screenshot>
-        <screenshot>
-            <image>https://sourcegit-scm.github.io/images/theme_light.png</image>
-            <caption>Light Theme</caption>
-        </screenshot>
-    </screenshots>
     <content_rating type="oars-1.1" />
 </component>

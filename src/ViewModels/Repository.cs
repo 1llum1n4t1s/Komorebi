@@ -10,7 +10,7 @@ using Avalonia.Threading;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class Repository : ObservableObject, Models.IRepository
     {
@@ -488,16 +488,16 @@ namespace SourceGit.ViewModels
 
             _uiStates.Unload(_workingCopy.CommitMessage);
 
-            if (_cancellationRefreshBranches is { IsCancellationRequested: false })
-                _cancellationRefreshBranches.Cancel();
-            if (_cancellationRefreshTags is { IsCancellationRequested: false })
-                _cancellationRefreshTags.Cancel();
-            if (_cancellationRefreshWorkingCopyChanges is { IsCancellationRequested: false })
-                _cancellationRefreshWorkingCopyChanges.Cancel();
-            if (_cancellationRefreshCommits is { IsCancellationRequested: false })
-                _cancellationRefreshCommits.Cancel();
-            if (_cancellationRefreshStashes is { IsCancellationRequested: false })
-                _cancellationRefreshStashes.Cancel();
+            _cancellationRefreshBranches?.Cancel();
+            _cancellationRefreshBranches?.Dispose();
+            _cancellationRefreshTags?.Cancel();
+            _cancellationRefreshTags?.Dispose();
+            _cancellationRefreshWorkingCopyChanges?.Cancel();
+            _cancellationRefreshWorkingCopyChanges?.Dispose();
+            _cancellationRefreshCommits?.Cancel();
+            _cancellationRefreshCommits?.Dispose();
+            _cancellationRefreshStashes?.Cancel();
+            _cancellationRefreshStashes?.Dispose();
 
             _autoFetchTimer.Dispose();
             _autoFetchTimer = null;
@@ -1034,6 +1034,7 @@ namespace SourceGit.ViewModels
             if (_cancellationRefreshBranches is { IsCancellationRequested: false })
                 _cancellationRefreshBranches.Cancel();
 
+            _cancellationRefreshBranches?.Dispose();
             _cancellationRefreshBranches = new CancellationTokenSource();
             var token = _cancellationRefreshBranches.Token;
 
@@ -1086,6 +1087,7 @@ namespace SourceGit.ViewModels
             if (_cancellationRefreshTags is { IsCancellationRequested: false })
                 _cancellationRefreshTags.Cancel();
 
+            _cancellationRefreshTags?.Dispose();
             _cancellationRefreshTags = new CancellationTokenSource();
             var token = _cancellationRefreshTags.Token;
 
@@ -1108,6 +1110,7 @@ namespace SourceGit.ViewModels
             if (_cancellationRefreshCommits is { IsCancellationRequested: false })
                 _cancellationRefreshCommits.Cancel();
 
+            _cancellationRefreshCommits?.Dispose();
             _cancellationRefreshCommits = new CancellationTokenSource();
             var token = _cancellationRefreshCommits.Token;
 
@@ -1209,6 +1212,7 @@ namespace SourceGit.ViewModels
             if (_cancellationRefreshWorkingCopyChanges is { IsCancellationRequested: false })
                 _cancellationRefreshWorkingCopyChanges.Cancel();
 
+            _cancellationRefreshWorkingCopyChanges?.Dispose();
             _cancellationRefreshWorkingCopyChanges = new CancellationTokenSource();
             var token = _cancellationRefreshWorkingCopyChanges.Token;
             var noOptionalLocks = Interlocked.Add(ref _queryLocalChangesTimes, 1) > 1;
@@ -1245,6 +1249,7 @@ namespace SourceGit.ViewModels
             if (_cancellationRefreshStashes is { IsCancellationRequested: false })
                 _cancellationRefreshStashes.Cancel();
 
+            _cancellationRefreshStashes?.Dispose();
             _cancellationRefreshStashes = new CancellationTokenSource();
             var token = _cancellationRefreshStashes.Token;
 

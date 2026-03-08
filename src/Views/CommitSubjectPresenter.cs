@@ -10,7 +10,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public partial class CommitSubjectPresenter : Control
     {

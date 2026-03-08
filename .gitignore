@@ -33,13 +33,13 @@ package-lock.json
 !build/resources/flatpak
 
 build/resources/
-build/SourceGit/
-build/SourceGit.app/
+build/Komorebi/
+build/Komorebi.app/
 build/*.zip
 build/*.tar.gz
 build/*.deb
 build/*.rpm
 build/*.AppImage
-SourceGit.app/
+Komorebi.app/
 build.command
 src/Properties/launchSettings.json

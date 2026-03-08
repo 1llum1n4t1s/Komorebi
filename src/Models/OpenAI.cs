@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using OpenAI;
 using OpenAI.Chat;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public partial class OpenAIResponse
     {

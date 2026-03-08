@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class Stash
     {

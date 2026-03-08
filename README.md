@@ -33,9 +33,9 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 
 | OS | パス |
 |----|------|
-| Windows | `%APPDATA%\SourceGit` |
-| macOS | `~/Library/Application Support/SourceGit` |
-| Linux | `~/.sourcegit` |
+| Windows | `%APPDATA%\Komorebi` |
+| macOS | `~/Library/Application Support/Komorebi` |
+| Linux | `~/.komorebi` |
 
 > [!TIP]
 > 実行ファイルと同じディレクトリに `data` フォルダを作成すると、ポータブルモードとして動作します（Windows / Linux AppImage のみ）。
@@ -48,10 +48,10 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 
 * GitHub Release から手動インストールする場合:
   ```shell
-  sudo xattr -cr /Applications/SourceGit.app
+  sudo xattr -cr /Applications/Komorebi.app
   ```
 * [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) が必要です。
-* カスタム PATH を設定する場合: `echo $PATH > ~/Library/Application\ Support/SourceGit/PATH`
+* カスタム PATH を設定する場合: `echo $PATH > ~/Library/Application\ Support/Komorebi/PATH`
 
 ### Linux
 
@@ -209,13 +209,13 @@ komorebi --blame <FILE_PATH>         # Blame を表示（HEAD）
 ```bash
 dotnet restore
 dotnet build
-dotnet run --project src/SourceGit.csproj
+dotnet run --project src/Komorebi.csproj
 ```
 
 リリースビルド（AOT、プラットフォーム別）:
 
 ```bash
-dotnet publish src/SourceGit.csproj -c Release -o publish -r win-x64
+dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64
 ```
 
 > AOT を無効化する場合は `-p:DisableAOT=true`、自動アップデート検出を無効化する場合は `-p:DisableUpdateDetection=true` を追加してください。

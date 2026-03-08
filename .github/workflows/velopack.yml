@@ -12,22 +12,22 @@ jobs:
         include:
           - runtime: win-x64
             os: windows-2022
-            mainExe: SourceGit.exe
+            mainExe: Komorebi.exe
           - runtime: win-arm64
             os: windows-2022
-            mainExe: SourceGit.exe
+            mainExe: Komorebi.exe
           - runtime: osx-x64
             os: macos-latest
-            mainExe: SourceGit
+            mainExe: Komorebi
           - runtime: osx-arm64
             os: macos-latest
-            mainExe: SourceGit
+            mainExe: Komorebi
           - runtime: linux-x64
             os: ubuntu-latest
-            mainExe: sourcegit
+            mainExe: komorebi
           - runtime: linux-arm64
             os: ubuntu-latest
-            mainExe: sourcegit
+            mainExe: komorebi
     name: Velopack ${{ matrix.runtime }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -38,13 +38,13 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: sourcegit.${{ matrix.runtime }}
+          name: komorebi.${{ matrix.runtime }}
           path: publish
       - name: Extract tar
         if: ${{ !startsWith(matrix.runtime, 'win-') }}
         run: |
-          tar -xf publish/sourcegit.${{ matrix.runtime }}.tar -C publish
-          rm publish/sourcegit.${{ matrix.runtime }}.tar
+          tar -xf publish/komorebi.${{ matrix.runtime }}.tar -C publish
+          rm publish/komorebi.${{ matrix.runtime }}.tar
       - name: Install Velopack CLI
         run: dotnet tool install --global vpk
       - name: Create Velopack package

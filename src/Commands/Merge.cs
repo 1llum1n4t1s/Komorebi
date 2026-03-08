@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace SourceGit.Commands
+namespace Komorebi.Commands
 {
     public class Merge : Command
     {

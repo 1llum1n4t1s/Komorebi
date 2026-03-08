@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SourceGit.Commands
+namespace Komorebi.Commands
 {
     /// <summary>
     ///     A C# version of https://github.com/anjerodev/commitollama

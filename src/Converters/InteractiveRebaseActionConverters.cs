@@ -1,7 +1,7 @@
 ﻿using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace SourceGit.Converters
+namespace Komorebi.Converters
 {
     public static class InteractiveRebaseActionConverters
     {

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Data.Converters;
 
-namespace SourceGit.Converters
+namespace Komorebi.Converters
 {
     public static class LongConverters
     {

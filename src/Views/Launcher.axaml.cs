@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public partial class Launcher : ChromelessWindow
     {

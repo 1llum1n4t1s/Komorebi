@@ -4,9 +4,9 @@ Generate Komorebi app icon in all required formats.
 Design: Modern 木漏れ日 (komorebi / sunlight filtering through leaves)
 
 Usage:
-  Step 1: python generate-icon.py svg     → Creates Canvas-based HTML preview
-  Step 2: (open HTML in browser → auto-downloads 1024x1024 PNG)
-  Step 3: python generate-icon.py pack <png_path>  → Creates .ico, .icns, project PNGs
+  Step 1: python generate-icon.py svg     ↁECreates Canvas-based HTML preview
+  Step 2: (open HTML in browser ↁEauto-downloads 1024x1024 PNG)
+  Step 3: python generate-icon.py pack <png_path>  ↁECreates .ico, .icns, project PNGs
 """
 
 import io
@@ -378,7 +378,7 @@ function render(){
       const i=(y*S+x)*4;
       if(px[i+3]<10) continue; // skip transparent (outside rounded rect)
       const bright=(px[i]+px[i+1]+px[i+2])/3;
-      // (a) Perlin noise texture — stronger in dark canopy areas
+      // (a) Perlin noise texture  Estronger in dark canopy areas
       const nStr=bright<80?.10:(bright<160?.05:.025);
       const nv1=fbm(n3,x*.008,y*.008,4)*nStr;
       const nv2=fbm(n1,x*.022,y*.022,3)*nStr*.4;
@@ -521,7 +521,7 @@ def cmd_pack(png_path: str):
     print(f"  [OK] ICO: {ico_path}")
 
     # Linux PNG
-    png_out = PROJECT_ROOT / 'build' / 'resources' / '_common' / 'icons' / 'sourcegit.png'
+    png_out = PROJECT_ROOT / 'build' / 'resources' / '_common' / 'icons' / 'komorebi.png'
     images[256].save(png_out, format='PNG')
     print(f"  [OK] PNG: {png_out}")
 

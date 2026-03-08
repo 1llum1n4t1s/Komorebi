@@ -1,4 +1,4 @@
-﻿namespace SourceGit.Models
+﻿namespace Komorebi.Models
 {
     public static class Bookmarks
     {

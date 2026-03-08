@@ -20,7 +20,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Output version string
         id: version
-        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+        run: |
+          version=$(grep -oP '(?<=<Version>)[^<]+' Directory.Build.props)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
   package:
     needs: [build, version]
     name: Package

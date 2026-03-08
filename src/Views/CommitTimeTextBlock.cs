@@ -6,7 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class CommitTimeTextBlock : TextBlock
     {

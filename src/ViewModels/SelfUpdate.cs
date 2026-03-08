@@ -1,9 +1,10 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class SelfUpdate : ObservableObject
     {
@@ -30,6 +31,10 @@ namespace SourceGit.ViewModels
             if (_isDownloading)
                 return;
 
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
+            var token = _cts.Token;
+
             IsDownloading = true;
             DownloadProgress = 0;
 
@@ -37,11 +42,15 @@ namespace SourceGit.ViewModels
             {
                 try
                 {
-                    await update.Manager.DownloadUpdatesAsync(
-                        update.UpdateInfo,
-                        p => Avalonia.Threading.Dispatcher.UIThread.Post(() => DownloadProgress = p));
+                    await update.DownloadAsync(
+                        p => Avalonia.Threading.Dispatcher.UIThread.Post(() => DownloadProgress = p),
+                        token);
 
-                    update.Manager.ApplyUpdatesAndRestart(update.UpdateInfo);
+                    update.ApplyAndRestart();
+                }
+                catch (OperationCanceledException)
+                {
+                    Avalonia.Threading.Dispatcher.UIThread.Post(() => IsDownloading = false);
                 }
                 catch (Exception e)
                 {
@@ -54,8 +63,14 @@ namespace SourceGit.ViewModels
             });
         }
 
+        public void CancelDownload()
+        {
+            _cts?.Cancel();
+        }
+
         private object _data = null;
         private bool _isDownloading = false;
         private int _downloadProgress = 0;
+        private CancellationTokenSource _cts;
     }
 }

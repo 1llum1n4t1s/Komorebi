@@ -12,18 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
-      semver: ${{ steps.version.outputs.semver }}
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
       - name: Output version string
         id: version
-        env:
-          TAG: ${{ github.ref_name }}
         run: |
-          version="${TAG#v}"
+          version=$(grep -oP '(?<=<Version>)[^<]+' Directory.Build.props)
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          IFS='.' read -r major minor <<< "$version"
-          minor=$((10#$minor))
-          echo "semver=${major}.${minor}.0" >> "$GITHUB_OUTPUT"
   package:
     needs: [build, version]
     name: Package
@@ -35,7 +31,7 @@ jobs:
     name: Velopack
     uses: ./.github/workflows/velopack.yml
     with:
-      version: ${{ needs.version.outputs.semver }}
+      version: ${{ needs.version.outputs.version }}
   release:
     needs: [package, velopack, version]
     name: Release

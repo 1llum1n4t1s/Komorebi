@@ -9,7 +9,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 
 using SkiaSharp;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public enum StatisticsMode
     {

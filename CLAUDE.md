@@ -16,16 +16,16 @@ dotnet restore
 dotnet build
 
 # Run
-dotnet run --project src/SourceGit.csproj
+dotnet run --project src/Komorebi.csproj
 
 # Format check (CI enforced)
-dotnet format --verify-no-changes src/SourceGit.csproj
+dotnet format --verify-no-changes src/Komorebi.csproj
 
 # Release publish (platform-specific, AOT by default)
-dotnet publish src/SourceGit.csproj -c Release -o publish -r win-x64
+dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64
 
 # Build without AOT (faster for local testing)
-dotnet publish src/SourceGit.csproj -c Release -o publish -r win-x64 -p:DisableAOT=true
+dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64 -p:DisableAOT=true
 
 # Build without update detection
 dotnet build -p:DisableUpdateDetection=true
@@ -35,8 +35,8 @@ No test project exists in this codebase.
 
 ## Solution Structure
 
-`SourceGit.slnx` (XML-based solution file):
-- `src/SourceGit.csproj` — main application
+`Komorebi.slnx` (XML-based solution file):
+- `src/Komorebi.csproj` — main application
 - `depends/AvaloniaEdit/` — git submodule (text editor for diff/blame views)
 - `.github/workflows/` — CI/CD workflows
 - `build/` — packaging scripts and resources
@@ -102,7 +102,7 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **release.yml** — triggered by `v*` tags: builds → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
 - **velopack.yml** — reusable workflow creating Velopack packages for 6 RIDs (win-x64, win-arm64, osx-x64, osx-arm64, linux-x64, linux-arm64)
 
-Version format: `VERSION` file stores `YYYY.MM` (e.g., `2026.05`). CI converts to semver `YYYY.M.0` for Velopack.
+Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.0`). CI reads it directly for both packaging and Velopack.
 
 ## Key Dependencies
 

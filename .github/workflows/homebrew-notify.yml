@@ -17,6 +17,6 @@ jobs:
           curl -X POST \
             -H "Authorization: token $HOMEBREW_TAP_REPO_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/ybeapps/homebrew-sourcegit/dispatches \
-            -d "{\"event_type\":\"new-sourcegit-release\",\"client_payload\":{\"version\":\"$TAG\"}}"
-          echo "✅ Homebrew tap notified successfully"
+            https://api.github.com/repos/1llum1n4t1s/homebrew-komorebi/dispatches \
+            -d "{\"event_type\":\"new-komorebi-release\",\"client_payload\":{\"version\":\"$TAG\"}}"
+          echo "✁EHomebrew tap notified successfully"

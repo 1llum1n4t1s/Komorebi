@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     [Flags]
     public enum HistoryShowFlags

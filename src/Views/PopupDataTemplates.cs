@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class PopupDataTemplates : IDataTemplate
     {

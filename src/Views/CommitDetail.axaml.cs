@@ -8,7 +8,7 @@ using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public partial class CommitDetail : UserControl
     {

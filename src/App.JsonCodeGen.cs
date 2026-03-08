@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace SourceGit
+namespace Komorebi
 {
     public class DateTimeConverter : JsonConverter<DateTime>
     {
@@ -80,7 +80,7 @@ namespace SourceGit
     [JsonSerializable(typeof(Models.InteractiveRebaseJobCollection))]
     [JsonSerializable(typeof(Models.JetBrainsState))]
     [JsonSerializable(typeof(Models.ThemeOverrides))]
-    [JsonSerializable(typeof(Models.Version))]
+
     [JsonSerializable(typeof(Models.RepositorySettings))]
     [JsonSerializable(typeof(Models.RepositoryUIStates))]
     [JsonSerializable(typeof(List<Models.ConventionalCommitType>))]
