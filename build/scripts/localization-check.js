@@ -5,7 +5,7 @@ const xml2js = require('xml2js');
 const repoRoot = path.join(__dirname, '../../');
 const localesDir = path.join(repoRoot, 'src/Resources/Locales');
 const enUSFile = path.join(localesDir, 'en_US.axaml');
-const outputFile = path.join(repoRoot, 'TRANSLATION.md');
+const outputFile = path.join(repoRoot, 'docs/TRANSLATION.md');
 
 const parser = new xml2js.Parser();
 

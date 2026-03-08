@@ -31,7 +31,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           if [ -n "$(git status --porcelain)" ]; then
-            git add TRANSLATION.md src/Resources/Locales/*.axaml
+            git add docs/TRANSLATION.md src/Resources/Locales/*.axaml
             git commit -m 'doc: Update translation status and sort locale files'
             git push
           else

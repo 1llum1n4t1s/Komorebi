@@ -13,7 +13,7 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 
 | ダークテーマ | ライトテーマ |
 |:---:|:---:|
-| ![ダークテーマ](./screenshots/theme_dark.png) | ![ライトテーマ](./screenshots/theme_light.png) |
+| ![ダークテーマ](./docs/screenshots/theme_dark.png) | ![ライトテーマ](./docs/screenshots/theme_light.png) |
 
 ## 動作環境
 
@@ -240,4 +240,4 @@ dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64
 
 [MIT License](LICENSE)
 
-サードパーティライセンスの詳細は [THIRD-PARTY-LICENSES.md](THIRD-PARTY-LICENSES.md) を参照してください。
+サードパーティライセンスの詳細は [THIRD-PARTY-LICENSES.md](docs/THIRD-PARTY-LICENSES.md) を参照してください。
