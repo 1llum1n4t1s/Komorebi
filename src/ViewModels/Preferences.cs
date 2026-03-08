@@ -19,6 +19,17 @@ namespace Komorebi.ViewModels
                     return _instance;
 
                 _instance = Load();
+
+                // Migrate font defaults for Japanese locale users upgrading from older versions.
+                // Only overwrite fonts that are still at the generic defaults.
+                if (_instance._locale == "ja_JP")
+                {
+                    if (_instance._defaultFontFamily == "Inter")
+                        _instance._defaultFontFamily = "Yu Gothic UI";
+                    if (_instance._monospaceFontFamily == "JetBrains Mono")
+                        _instance._monospaceFontFamily = "UDEV Gothic JPDOC";
+                }
+
                 _instance._isLoading = false;
 
                 _instance.PrepareGit();
@@ -793,7 +804,7 @@ namespace Komorebi.ViewModels
         private bool _isReadonly = true;
         private string _locale = "en_US";
         private string _theme = "Default";
-        private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "IBM Plex Sans JP" : "Inter";
+        private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "Yu Gothic UI" : "Inter";
         private string _monospaceFontFamily = s_detectedLocale == "ja_JP" ? "UDEV Gothic JPDOC" : "JetBrains Mono";
         private double _defaultFontSize = 13;
         private double _editorFontSize = 13;
