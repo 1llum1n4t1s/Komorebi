@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     tags:
-      - v*
+      - '[0-9]*'
     branches:
       - 'release/**'
 jobs:
@@ -26,7 +26,7 @@ jobs:
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             echo "tag=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
           else
-            echo "tag=v$version" >> "$GITHUB_OUTPUT"
+            echo "tag=$version" >> "$GITHUB_OUTPUT"
           fi
   package:
     needs: [build, version]
