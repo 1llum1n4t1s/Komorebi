@@ -8,12 +8,12 @@ namespace Komorebi.Models
     public static class InstalledFont
     {
         /// <summary>
-        /// All font family names (system + bundled), with empty string at index 0 for "default".
+        /// All font family names (system + bundled).
         /// </summary>
         public static List<string> All { get; }
 
         /// <summary>
-        /// Monospace-only font family names (system + bundled), with empty string at index 0 for "default".
+        /// Monospace-only font family names (system + bundled).
         /// </summary>
         public static List<string> Monospace { get; }
 
@@ -63,11 +63,8 @@ namespace Komorebi.Models
             foreach (var name in s_bundledMono)
                 monoNames.Add(name);
 
-            All = new List<string>(allNames.Count + 1) { string.Empty };
-            All.AddRange(allNames);
-
-            Monospace = new List<string>(monoNames.Count + 1) { string.Empty };
-            Monospace.AddRange(monoNames);
+            All = new List<string>(allNames);
+            Monospace = new List<string>(monoNames);
         }
     }
 }

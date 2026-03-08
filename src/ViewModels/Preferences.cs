@@ -65,6 +65,9 @@ namespace Komorebi.ViewModels
             get => _defaultFontFamily;
             set
             {
+                if (string.IsNullOrEmpty(value))
+                    value = "Inter";
+
                 if (SetProperty(ref _defaultFontFamily, value) && !_isLoading)
                     App.SetFonts(value, _monospaceFontFamily);
             }
@@ -75,6 +78,9 @@ namespace Komorebi.ViewModels
             get => _monospaceFontFamily;
             set
             {
+                if (string.IsNullOrEmpty(value))
+                    value = "JetBrains Mono";
+
                 if (SetProperty(ref _monospaceFontFamily, value) && !_isLoading)
                     App.SetFonts(_defaultFontFamily, value);
             }
@@ -796,8 +802,8 @@ namespace Komorebi.ViewModels
         private string _locale = s_detectedLocale;
         private string _theme = "Default";
         private string _themeOverrides = string.Empty;
-        private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "IBM Plex Sans JP" : string.Empty;
-        private string _monospaceFontFamily = s_detectedLocale == "ja_JP" ? "UDEV Gothic JPDOC" : string.Empty;
+        private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "IBM Plex Sans JP" : "Inter";
+        private string _monospaceFontFamily = s_detectedLocale == "ja_JP" ? "UDEV Gothic JPDOC" : "JetBrains Mono";
         private double _defaultFontSize = 13;
         private double _editorFontSize = 13;
         private int _editorTabWidth = 4;
