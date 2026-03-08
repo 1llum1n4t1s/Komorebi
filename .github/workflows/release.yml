@@ -1,8 +1,6 @@
 name: Release
 on:
   push:
-    tags:
-      - '[0-9]*'
     branches:
       - 'release/**'
 jobs:
@@ -23,11 +21,7 @@ jobs:
         run: |
           version=$(grep -oP '(?<=<Version>)[^<]+' Directory.Build.props)
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            echo "tag=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "tag=$version" >> "$GITHUB_OUTPUT"
-          fi
+          echo "tag=$version" >> "$GITHUB_OUTPUT"
   package:
     needs: [build, version]
     name: Package
@@ -50,7 +44,6 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
       - name: Delete existing release
-        if: startsWith(github.ref, 'refs/heads/release/')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ needs.version.outputs.tag }}
@@ -63,12 +56,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ needs.version.outputs.tag }}
           VERSION: ${{ needs.version.outputs.version }}
-        run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            gh release create "$TAG" -t "$VERSION" --notes-from-tag
-          else
-            gh release create "$TAG" -t "$VERSION" --generate-notes
-          fi
+        run: gh release create "$TAG" -t "$VERSION" --generate-notes
       - name: Download package artifacts
         uses: actions/download-artifact@v4
         with:
