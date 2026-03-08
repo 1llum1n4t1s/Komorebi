@@ -3,7 +3,6 @@ using System.Globalization;
 
 using Avalonia.Data.Converters;
 using Avalonia.Input;
-using Avalonia.Styling;
 
 namespace Komorebi.Converters
 {
@@ -28,22 +27,13 @@ namespace Komorebi.Converters
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                var theme = (string)value;
-                if (string.IsNullOrEmpty(theme))
-                    return ThemeVariant.Default;
-
-                if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
-                    return ThemeVariant.Light;
-
-                if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
-                    return ThemeVariant.Dark;
-
-                return ThemeVariant.Default;
+                return Models.ThemeOption.Supported.Find(x => x.Key == value as string)
+                       ?? Models.ThemeOption.Supported[0];
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                return (value as ThemeVariant)?.Key;
+                return (value as Models.ThemeOption)?.Key;
             }
         }
 

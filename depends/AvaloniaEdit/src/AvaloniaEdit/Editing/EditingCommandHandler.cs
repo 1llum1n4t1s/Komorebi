@@ -23,6 +23,7 @@ using System.Linq;
 using Avalonia;
 using AvaloniaEdit.Document;
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using AvaloniaEdit.Utils;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -421,7 +422,7 @@ namespace AvaloniaEdit.Editing
             return true;
         }
 
-        public static bool ConfirmDataFormat(TextArea textArea, DataObject dataObject, string format)
+        public static bool ConfirmDataFormat(TextArea textArea, DataTransfer dataObject, DataFormat format)
         {
             return true;
             ////var e = new DataObjectSettingDataEventArgs(dataObject, format);
@@ -504,7 +505,9 @@ namespace AvaloniaEdit.Editing
                 string text = null;
                 try
                 {
-                    text = await TopLevel.GetTopLevel(textArea)?.Clipboard?.GetTextAsync();
+                    var clipboard = TopLevel.GetTopLevel(textArea)?.Clipboard;
+                    if (clipboard != null)
+                        text = await clipboard.TryGetTextAsync();
                 }
                 catch (Exception)
                 {
@@ -535,11 +538,11 @@ namespace AvaloniaEdit.Editing
             }
         }
 
-        internal static string GetTextToPaste(IDataObject dataObject, TextArea textArea)
+        internal static string GetTextToPaste(IDataTransfer dataObject, TextArea textArea)
         {
-            if (dataObject.Contains(DataFormats.Text))
+            if (dataObject.Contains(DataFormat.Text))
             {
-                return GetTextToPaste((string)dataObject.Get(DataFormats.Text), textArea);
+                return GetTextToPaste(dataObject.TryGetText(), textArea);
             }
 
             return null;

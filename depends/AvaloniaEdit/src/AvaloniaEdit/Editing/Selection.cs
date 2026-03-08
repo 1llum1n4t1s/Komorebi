@@ -266,17 +266,17 @@ namespace AvaloniaEdit.Editing
         /// <summary>
         /// Creates a data object containing the selection's text.
         /// </summary>
-        public virtual DataObject CreateDataObject(TextArea textArea)
+        public virtual DataTransfer CreateDataObject(TextArea textArea)
         {
-            DataObject data = new DataObject();
+            DataTransfer data = new DataTransfer();
 
             // Ensure we use the appropriate newline sequence for the OS
             string text = TextUtilities.NormalizeNewLines(GetText(), Environment.NewLine);
 
             // Enable drag/drop to Word, Notepad++ and others
-            if (EditingCommandHandler.ConfirmDataFormat(textArea, data, DataFormats.Text))
+            if (EditingCommandHandler.ConfirmDataFormat(textArea, data, DataFormat.Text))
             {
-                data.Set(DataFormats.Text, text);
+                data.Add(DataTransferItem.Create(DataFormat.Text, text));
             }
 
             // Enable drag/drop to SciTe:

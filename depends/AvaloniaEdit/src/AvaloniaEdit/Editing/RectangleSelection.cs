@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Avalonia;
+using Avalonia.Input;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Utils;
 
@@ -389,15 +390,16 @@ namespace AvaloniaEdit.Editing
         /// </summary>
         public const string RectangularSelectionDataType = "AvalonEditRectangularSelection";
 
-        public override Avalonia.Input.DataObject CreateDataObject(TextArea textArea)
+        internal static readonly DataFormat<string> RectangularSelectionDataFormat =
+            DataFormat.CreateStringApplicationFormat(RectangularSelectionDataType);
+
+        public override DataTransfer CreateDataObject(TextArea textArea)
         {
             var data = base.CreateDataObject(textArea);
 
-            if (EditingCommandHandler.ConfirmDataFormat(textArea, data, RectangularSelectionDataType))
+            if (EditingCommandHandler.ConfirmDataFormat(textArea, data, RectangularSelectionDataFormat))
             {
-                MemoryStream isRectangle = new MemoryStream(1);
-                isRectangle.WriteByte(1);
-                data.Set(RectangularSelectionDataType, isRectangle);
+                data.Add(DataTransferItem.Create(RectangularSelectionDataFormat, "1"));
             }
             return data;
         }

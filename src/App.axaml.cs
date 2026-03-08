@@ -257,12 +257,26 @@ namespace Komorebi
             if (Current is not App app)
                 return;
 
-            if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Light;
-            else if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Dark;
+            var isActipro = theme.StartsWith("Actipro", StringComparison.OrdinalIgnoreCase);
+
+            if (isActipro)
+            {
+                app.RequestedThemeVariant = theme.Equals("ActiproLight", StringComparison.OrdinalIgnoreCase)
+                    ? ThemeVariant.Light
+                    : ThemeVariant.Dark;
+                app.ApplyActiproTheme();
+            }
             else
-                app.RequestedThemeVariant = ThemeVariant.Default;
+            {
+                if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
+                    app.RequestedThemeVariant = ThemeVariant.Light;
+                else if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
+                    app.RequestedThemeVariant = ThemeVariant.Dark;
+                else
+                    app.RequestedThemeVariant = ThemeVariant.Default;
+
+                app.ApplyFluentTheme();
+            }
 
             if (app._themeOverrides != null)
             {
@@ -840,10 +854,47 @@ namespace Komorebi
         [GeneratedRegex(@"^[a-z]+\s+([a-fA-F0-9]{4,40})(\s+.*)?$")]
         private static partial Regex REG_REBASE_TODO();
 
+        private void ApplyActiproTheme()
+        {
+            if (_isActiproActive)
+                return;
+
+            // Remove FluentTheme (index 0) and Fluent DataGrid style (index 1)
+            if (Styles.Count >= 2 && Styles[0] is Avalonia.Themes.Fluent.FluentTheme)
+            {
+                Styles.RemoveAt(1); // Fluent DataGrid
+                Styles.RemoveAt(0); // FluentTheme
+            }
+
+            // Insert Actipro ModernTheme at index 0
+            Styles.Insert(0, new ActiproSoftware.UI.Avalonia.Themes.ModernTheme());
+            _isActiproActive = true;
+        }
+
+        private void ApplyFluentTheme()
+        {
+            if (!_isActiproActive)
+                return;
+
+            // Remove Actipro ModernTheme (index 0)
+            if (Styles.Count > 0 && Styles[0] is ActiproSoftware.UI.Avalonia.Themes.ModernTheme)
+                Styles.RemoveAt(0);
+
+            // Re-insert FluentTheme and Fluent DataGrid style
+            var fluentDataGrid = new Avalonia.Markup.Xaml.Styling.StyleInclude(new Uri("avares://Komorebi"))
+            {
+                Source = new Uri("avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml")
+            };
+            Styles.Insert(0, fluentDataGrid);
+            Styles.Insert(0, new Avalonia.Themes.Fluent.FluentTheme());
+            _isActiproActive = false;
+        }
+
         private Models.IpcChannel _ipcChannel = null;
         private ViewModels.Launcher _launcher = null;
         private ResourceDictionary _activeLocale = null;
         private ResourceDictionary _themeOverrides = null;
         private ResourceDictionary _fontsOverrides = null;
+        private bool _isActiproActive = false;
     }
 }
