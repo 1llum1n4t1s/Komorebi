@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:m="using:Komorebi.Models"
+             xmlns:c="using:Komorebi.Converters"
+             xmlns:vm="using:Komorebi.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="200"
+             x:Class="Komorebi.Views.InitSetup"
+             x:DataType="vm:InitSetup">
+  <StackPanel Orientation="Vertical" Margin="8,0,0,0">
+    <StackPanel Orientation="Horizontal">
+      <Path Width="16" Height="16"
+            Data="{StaticResource Icons.Init}"/>
+
+      <TextBlock FontSize="18"
+                 Margin="8,0,0,0"
+                 Classes="bold"
+                 Text="{DynamicResource Text.InitSetup}"/>
+    </StackPanel>
+
+    <TextBlock Margin="0,16,8,0"
+               Foreground="{DynamicResource Brush.FG2}"
+               Text="{DynamicResource Text.InitSetup.Message}"
+               TextWrapping="Wrap"/>
+
+    <Grid Margin="0,16,8,0" ColumnDefinitions="100,*">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Row="0" Grid.Column="0"
+                 Text="{DynamicResource Text.Preferences.General.Locale}"
+                 HorizontalAlignment="Right" VerticalAlignment="Center"
+                 Margin="0,0,8,0"/>
+      <ComboBox Grid.Row="0" Grid.Column="1"
+                MinHeight="28"
+                Padding="8,0"
+                HorizontalAlignment="Stretch"
+                ItemsSource="{Binding Source={x:Static m:Locale.Supported}}"
+                DisplayMemberBinding="{Binding Name, x:DataType=m:Locale}"
+                SelectedItem="{Binding SelectedLocale, Mode=TwoWay, Converter={x:Static c:StringConverters.ToLocale}}"/>
+
+      <TextBlock Grid.Row="1" Grid.Column="0"
+                 Text="{DynamicResource Text.InitSetup.Dir}"
+                 HorizontalAlignment="Right" VerticalAlignment="Center"
+                 Margin="0,0,8,0"/>
+      <TextBox Grid.Row="1" Grid.Column="1"
+               x:Name="TxtDefaultCloneDir"
+               Height="28"
+               CornerRadius="3"
+               Text="{Binding DefaultCloneDir, Mode=TwoWay}">
+        <TextBox.InnerRightContent>
+          <Button Classes="icon_button" Width="30" Height="30" Click="SelectDefaultCloneDir">
+            <Path Data="{StaticResource Icons.Folder.Open}" Fill="{DynamicResource Brush.FG1}"/>
+          </Button>
+        </TextBox.InnerRightContent>
+      </TextBox>
+    </Grid>
+  </StackPanel>
+</UserControl>

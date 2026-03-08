@@ -640,7 +640,7 @@ namespace Komorebi.ViewModels
         {
             var supported = new HashSet<string>(StringComparer.Ordinal)
             {
-                "de_DE", "en_US", "es_ES", "fr_FR", "id_ID", "it_IT", "ja_JP",
+                "de_DE", "en_US", "es_ES", "fil_PH", "fr_FR", "id_ID", "it_IT", "ja_JP",
                 "ko_KR", "pt_BR", "ru_RU", "ta_IN", "uk_UA", "zh_CN", "zh_TW",
             };
 
@@ -797,9 +797,11 @@ namespace Komorebi.ViewModels
         private static Preferences _instance = null;
         private static readonly string s_detectedLocale = DetectDefaultLocale();
 
+        internal static string DetectedLocale => s_detectedLocale;
+
         private bool _isLoading = true;
         private bool _isReadonly = true;
-        private string _locale = s_detectedLocale;
+        private string _locale = "en_US";
         private string _theme = "Default";
         private string _themeOverrides = string.Empty;
         private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "IBM Plex Sans JP" : "Inter";

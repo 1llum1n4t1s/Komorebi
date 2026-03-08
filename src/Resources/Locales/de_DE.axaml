@@ -191,6 +191,7 @@
   <x:String x:Key="Text.CommitDetail.Info.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.CommitDetail.Info.Signer" xml:space="preserve">Unterzeichner:</x:String>
   <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">Im Browser öffnen</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.Column" xml:space="preserve">SPL</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">Commit-Nachricht eingeben. Leerzeile zum Trennen von Betreff und Beschreibung verwenden!</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">BETREFF</x:String>
   <x:String x:Key="Text.Compare" xml:space="preserve">Vergleichen</x:String>
@@ -472,6 +473,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.GitLFS.Remote" xml:space="preserve">Remote:</x:String>
   <x:String x:Key="Text.GitLFS.Track" xml:space="preserve">Verfolge alle ‚{0}‘ Dateien</x:String>
   <x:String x:Key="Text.GitLFS.TrackByExtension" xml:space="preserve">Verfolge alle *{0} Dateien</x:String>
+  <x:String x:Key="Text.GotoRevisionSelector" xml:space="preserve">Commit auswählen</x:String>
   <x:String x:Key="Text.Histories" xml:space="preserve">VERLAUF</x:String>
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">AUTOR</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">AUTOR-ZEITPUNKT</x:String>
@@ -501,6 +503,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">Alle Änderungen stagen und committen</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Fetch, wird direkt ausgeführt</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Dashboard-Modus (Standard)</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">Zum Kind-Commit wechseln</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToParent" xml:space="preserve">Springe zum Vorgänger des ausgewählten Commits</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.OpenCommandPalette" xml:space="preserve">Befehlspalette öffnen</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.OpenSearchCommits" xml:space="preserve">Commit-Suchmodus</x:String>
@@ -521,6 +524,9 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">Unstagen</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">Initialisiere Repository</x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Pfad:</x:String>
+  <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Bitte wählen Sie Ihre bevorzugte Sprache und das Standardverzeichnis zum Klonen von Repositories.</x:String>
+  <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">Klon-Verz.</x:String>
+  <x:String x:Key="Text.InitSetup" xml:space="preserve">Ersteinrichtung</x:String>
   <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">Cherry-Pick wird durchgeführt.</x:String>
   <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">Verarbeite Commit</x:String>
   <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">Merge Request wird durchgeführt.</x:String>
@@ -853,6 +859,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Stash.TipForSelectedFiles" xml:space="preserve">Gestagte und ungestagte Änderungen der ausgewählten Datei(en) werden gestasht!!!</x:String>
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Lokale Änderungen stashen</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Anwenden</x:String>
+  <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Änderungen anwenden</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Kopiere Nachricht</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Entfernen</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Als Patch speichern…</x:String>
@@ -970,9 +977,12 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Workspace" xml:space="preserve">ARBEITSUMGEBUNG: </x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Arbeitsumgebungen konfigurieren…</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
+  <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Pfad kopieren</x:String>
+  <x:String x:Key="Text.Worktree.Head" xml:space="preserve">HEAD</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">Sperren</x:String>
   <x:String x:Key="Text.Worktree.Open" xml:space="preserve">Öffnen</x:String>
+  <x:String x:Key="Text.Worktree.Path" xml:space="preserve">PFAD</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Entfernen</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Entsperren</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">JA</x:String>

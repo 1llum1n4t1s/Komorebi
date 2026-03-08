@@ -13,6 +13,7 @@ namespace Komorebi.Models
             new Locale("Español", "es_ES"),
             new Locale("Français", "fr_FR"),
             new Locale("Bahasa Indonesia", "id_ID"),
+            new Locale("Filipino (Tagalog)", "fil_PH"),
             new Locale("Italiano", "it_IT"),
             new Locale("Português (Brasil)", "pt_BR"),
             new Locale("Українська", "uk_UA"),

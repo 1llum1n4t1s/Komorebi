@@ -100,6 +100,7 @@
   <x:String x:Key="Text.ChangeCM.GenerateCommitMessage" xml:space="preserve">Genera messaggio di commit</x:String>
   <x:String x:Key="Text.ChangeCM.Merge" xml:space="preserve">Merge (Integrato)</x:String>
   <x:String x:Key="Text.ChangeCM.MergeExternal" xml:space="preserve">Merge (Esterno)</x:String>
+  <x:String x:Key="Text.ChangeCM.ResetFileTo" xml:space="preserve">Ripristina file a ${0}$</x:String>
   <x:String x:Key="Text.ChangeDisplayMode" xml:space="preserve">CAMBIA MODALITÀ DI VISUALIZZAZIONE</x:String>
   <x:String x:Key="Text.ChangeDisplayMode.Grid" xml:space="preserve">Mostra come elenco di file e cartelle</x:String>
   <x:String x:Key="Text.ChangeDisplayMode.List" xml:space="preserve">Mostra come elenco di percorsi</x:String>
@@ -190,6 +191,7 @@
   <x:String x:Key="Text.CommitDetail.Info.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.CommitDetail.Info.Signer" xml:space="preserve">Firmatario:</x:String>
   <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">Apri nel Browser</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.Column" xml:space="preserve">COL</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">Inserisci il messaggio di commit. Usa una riga vuota per separare oggetto e descrizione!</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">OGGETTO</x:String>
   <x:String x:Key="Text.Compare" xml:space="preserve">Confronto</x:String>
@@ -471,13 +473,16 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.GitLFS.Remote" xml:space="preserve">Remoto:</x:String>
   <x:String x:Key="Text.GitLFS.Track" xml:space="preserve">Traccia file con nome '{0}'</x:String>
   <x:String x:Key="Text.GitLFS.TrackByExtension" xml:space="preserve">Traccia tutti i file *{0}</x:String>
+  <x:String x:Key="Text.GotoRevisionSelector" xml:space="preserve">Seleziona Commit</x:String>
   <x:String x:Key="Text.Histories" xml:space="preserve">STORICO</x:String>
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">AUTORE</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">ORA AUTORE</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">ORA COMMIT</x:String>
+  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">DATA E ORA</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">GRAFICO E OGGETTO</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.Histories.Selected" xml:space="preserve">{0} COMMIT SELEZIONATI</x:String>
+  <x:String x:Key="Text.Histories.ShowColumns" xml:space="preserve">MOSTRA COLONNE</x:String>
   <x:String x:Key="Text.Histories.Tips" xml:space="preserve">Tieni premuto 'Ctrl' o 'Shift' per selezionare più commit.</x:String>
   <x:String x:Key="Text.Histories.Tips.MacOS" xml:space="preserve">Tieni premuto ⌘ o ⇧ per selezionare più commit.</x:String>
   <x:String x:Key="Text.Histories.Tips.Prefix" xml:space="preserve">SUGGERIMENTI:</x:String>
@@ -498,6 +503,8 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">Fai lo stage di tutte le modifiche e committa</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Recupera, avvia direttamente</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Modalità Dashboard (Predefinita)</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">Vai al commit figlio selezionato</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoToParent" xml:space="preserve">Vai al commit genitore selezionato</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.OpenCommandPalette" xml:space="preserve">Apri tavolozza comandi</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.OpenSearchCommits" xml:space="preserve">Modalità ricerca commit</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Pull" xml:space="preserve">Scarica, avvia direttamente</x:String>
@@ -517,6 +524,9 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">Rimuovi</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">Inizializza Repository</x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Percorso:</x:String>
+  <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Seleziona la lingua preferita e la directory predefinita per clonare i repository.</x:String>
+  <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">Dir. Clone</x:String>
+  <x:String x:Key="Text.InitSetup" xml:space="preserve">Configurazione Iniziale</x:String>
   <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">Cherry-Pick in corso.</x:String>
   <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">Elaborando il commit</x:String>
   <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">Unione in corso.</x:String>
@@ -815,10 +825,12 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.ScanRepositories.UseCustomDir" xml:space="preserve">Scansiona un'altra cartella personalizzata</x:String>
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">Controlla Aggiornamenti...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">È disponibile una nuova versione del software:</x:String>
+  <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">Versione attuale: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Errore durante il controllo degli aggiornamenti!</x:String>
   <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Scarica e installa</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Scarica</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Salta questa versione</x:String>
+  <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">Data di rilascio della nuova versione: </x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">Aggiornamento Software</x:String>
   <x:String x:Key="Text.SelfUpdate.UpToDate" xml:space="preserve">Non ci sono aggiornamenti disponibili.</x:String>
   <x:String x:Key="Text.SetSubmoduleBranch" xml:space="preserve">Imposta Branch del Sottomodulo</x:String>
@@ -847,6 +859,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Stash.TipForSelectedFiles" xml:space="preserve">Sia le modifiche in stage che quelle non in stage dei file selezionati saranno stashate!!!</x:String>
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Stasha Modifiche Locali</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Applica</x:String>
+  <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Applica Modifiche</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Copia Messaggio</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Elimina</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Salva come Patch...</x:String>
@@ -964,9 +977,12 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Workspace" xml:space="preserve">WORKSPACE:</x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Configura Workspaces...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
+  <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">RAMO</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Copia Percorso</x:String>
+  <x:String x:Key="Text.Worktree.Head" xml:space="preserve">HEAD</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">Blocca</x:String>
   <x:String x:Key="Text.Worktree.Open" xml:space="preserve">Apri</x:String>
+  <x:String x:Key="Text.Worktree.Path" xml:space="preserve">PERCORSO</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Rimuovi</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Sblocca</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">SÌ</x:String>

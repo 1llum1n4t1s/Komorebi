@@ -677,6 +677,12 @@ namespace Komorebi
             desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
             desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
+            if (string.IsNullOrEmpty(pref.GitDefaultCloneDir))
+            {
+                SetLocale(ViewModels.Preferences.DetectedLocale);
+                _launcher.ActivePage.Popup = new ViewModels.InitSetup();
+            }
+
 #if !DISABLE_UPDATE_DETECTION
             if (pref.ShouldCheck4UpdateOnStartup())
                 Check4Update();

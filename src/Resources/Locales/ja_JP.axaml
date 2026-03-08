@@ -524,6 +524,9 @@
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">ステージから降ろす</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">リポジトリを初期化</x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">パス:</x:String>
+  <x:String x:Key="Text.InitSetup" xml:space="preserve">初期設定</x:String>
+  <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">使用する言語と、リポジトリのクローン先となるフォルダを選択してください。</x:String>
+  <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">クローン先</x:String>
   <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">取り込み作業が進行中です。</x:String>
   <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">取り込み対象のコミット:</x:String>
   <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">マージ作業が進行中です。</x:String>
@@ -974,9 +977,12 @@
   <x:String x:Key="Text.Workspace" xml:space="preserve">ワークスペース: </x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">ワークスペースの設定...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">作業ツリー</x:String>
+  <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">ブランチ</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">パスをコピー</x:String>
+  <x:String x:Key="Text.Worktree.Head" xml:space="preserve">HEAD</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">ロック</x:String>
   <x:String x:Key="Text.Worktree.Open" xml:space="preserve">開く</x:String>
+  <x:String x:Key="Text.Worktree.Path" xml:space="preserve">パス</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">ロックを解除</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">はい</x:String>

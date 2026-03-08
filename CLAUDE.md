@@ -44,9 +44,9 @@ No test project exists in this codebase.
 ## Architecture
 
 ### MVVM Pattern
-- **ViewModels** (`src/ViewModels/`, ~85 files) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class.
-- **Views** (`src/Views/`, ~295 files) — Avalonia XAML (`.axaml`) with compiled bindings (`x:DataType`)
-- **Models** (`src/Models/`, ~73 files) — plain data classes for git objects and app state
+- **ViewModels** (`src/ViewModels/`, ~128 files) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class.
+- **Views** (`src/Views/`, ~272 files) — Avalonia XAML (`.axaml`) + code-behind (`.axaml.cs`) with compiled bindings (`x:DataType`)
+- **Models** (`src/Models/`, ~74 files) — plain data classes for git objects and app state
 - **Converters** (`src/Converters/`) — IValueConverters for XAML bindings
 
 ### Git Command Layer
@@ -60,7 +60,9 @@ No test project exists in this codebase.
 - `Repository.cs` — central VM for an open repo (branches, tags, history, working copy)
 - `Histories.cs` — commit graph and log
 - `WorkingCopy.cs` — staging/unstaging, diff, committing
-- `Popup.cs` — base class for all dialog VMs
+- `Popup.cs` — base class for all dialog VMs (`Sure()` = confirm action, `[Required]` validation)
+- `Preferences.cs` — singleton app settings (serialized to `preference.json`)
+- `InitSetup.cs` — first-launch popup for language + default clone directory selection
 - `SelfUpdate.cs` — handles Velopack download progress and apply
 
 ### Platform Abstraction
@@ -77,13 +79,24 @@ No test project exists in this codebase.
 - Compile flag `DISABLE_UPDATE_DETECTION` skips update checks entirely
 
 ### Localization
-- XAML resource dictionaries in `src/Resources/Locales/` (14 languages)
-- `en_US.axaml` is the reference locale
-- `build/scripts/localization-check.js` validates translations
-- Keys follow `Text.Category.Name` convention
+- XAML resource dictionaries in `src/Resources/Locales/` (15 languages, 967 keys each)
+- Supported: de_DE, en_US, es_ES, fil_PH, fr_FR, id_ID, it_IT, ja_JP, ko_KR, pt_BR, ru_RU, ta_IN, uk_UA, zh_CN, zh_TW
+- `en_US.axaml` is the reference locale — all other locales must match its key set
+- `build/scripts/localization-check.js` validates translations in CI
+- Keys follow `Text.Category.Name` convention (e.g., `Text.InitSetup.Message`)
+- `Models/Locales.cs` defines the `Locale.Supported` list used in UI dropdowns
+- `App.SetLocale()` swaps the active `ResourceDictionary` at runtime
+- Each locale must be registered in `App.axaml` as `<ResourceInclude x:Key="xx_YY">`
+- First-launch: `InitSetup` popup lets user choose language + clone directory (bypasses OS auto-detection)
 
 ### Application Entry Point
 `App.axaml.cs` contains `Main()`. The app can also launch as a rebase editor (invoked by git during interactive rebase). `App.axaml.cs` is split across partial classes: `App.Commands.cs`, `App.Extensions.cs`, `App.JsonCodeGen.cs`.
+
+### Adding a New Popup Dialog
+1. Create `src/ViewModels/MyDialog.cs` inheriting `Popup`, override `Sure()` for confirm logic
+2. Create `src/Views/MyDialog.axaml` + `.axaml.cs` with `x:DataType="vm:MyDialog"`
+3. View is auto-resolved by naming convention (`ViewModels.MyDialog` → `Views.MyDialog`) via `PopupDataTemplates.cs`
+4. Show via `_launcher.ActivePage.Popup = new ViewModels.MyDialog();`
 
 ## Code Style
 
@@ -102,7 +115,7 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **release.yml** — triggered by `v*` tags: builds → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
 - **velopack.yml** — reusable workflow creating Velopack packages for 6 RIDs (win-x64, win-arm64, osx-x64, osx-arm64, linux-x64, linux-arm64)
 
-Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.0`). CI reads it directly for both packaging and Velopack.
+Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.4`). CI reads it directly for both packaging and Velopack.
 
 ## Key Dependencies
 
