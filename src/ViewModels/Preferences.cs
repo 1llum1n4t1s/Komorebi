@@ -789,14 +789,15 @@ namespace Komorebi.ViewModels
         }
 
         private static Preferences _instance = null;
+        private static readonly string s_detectedLocale = DetectDefaultLocale();
 
         private bool _isLoading = true;
         private bool _isReadonly = true;
-        private string _locale = DetectDefaultLocale();
+        private string _locale = s_detectedLocale;
         private string _theme = "Default";
         private string _themeOverrides = string.Empty;
-        private string _defaultFontFamily = string.Empty;
-        private string _monospaceFontFamily = string.Empty;
+        private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "IBM Plex Sans JP" : string.Empty;
+        private string _monospaceFontFamily = s_detectedLocale == "ja_JP" ? "UDEV Gothic JPDOC" : string.Empty;
         private double _defaultFontSize = 13;
         private double _editorFontSize = 13;
         private int _editorTabWidth = 4;
