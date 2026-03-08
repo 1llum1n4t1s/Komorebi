@@ -795,15 +795,36 @@ namespace Komorebi
                 }
 
                 var name = sb.ToString();
+                var added = false;
+
                 try
                 {
                     var fontFamily = FontFamily.Parse(name);
                     if (fontFamily.FamilyTypefaces.Count > 0)
+                    {
                         trimmed.Add(name);
+                        added = true;
+                    }
                 }
                 catch
                 {
                     // Ignore exceptions.
+                }
+
+                // Fallback: try as bundled font with fonts:Komorebi# prefix
+                if (!added && !name.StartsWith("fonts:", StringComparison.Ordinal))
+                {
+                    try
+                    {
+                        var bundledName = $"fonts:Komorebi#{name}";
+                        var fontFamily = FontFamily.Parse(bundledName);
+                        if (fontFamily.FamilyTypefaces.Count > 0)
+                            trimmed.Add(bundledName);
+                    }
+                    catch
+                    {
+                        // Ignore exceptions.
+                    }
                 }
             }
 

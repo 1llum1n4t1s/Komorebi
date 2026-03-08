@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Avalonia.Media;
 
@@ -8,31 +8,66 @@ namespace Komorebi.Models
     public static class InstalledFont
     {
         /// <summary>
-        /// All installed font family names (with empty string at index 0 for "default").
+        /// All font family names (system + bundled), with empty string at index 0 for "default".
         /// </summary>
         public static List<string> All { get; }
 
         /// <summary>
-        /// Monospace-only font family names (with empty string at index 0 for "default").
+        /// Monospace-only font family names (system + bundled), with empty string at index 0 for "default".
         /// </summary>
         public static List<string> Monospace { get; }
 
+        /// <summary>
+        /// Bundled font families included in src/Resources/Fonts/.
+        /// </summary>
+        private static readonly HashSet<string> s_bundledAll = new(StringComparer.Ordinal)
+        {
+            "IBM Plex Sans JP",
+            "JetBrains Mono",
+            "M PLUS 2",
+            "Moralerspace Neon JPDOC",
+            "Murecho",
+            "Noto Sans JP",
+            "PlemolJP",
+            "UDEV Gothic JPDOC",
+            "Zen Kaku Gothic New",
+        };
+
+        /// <summary>
+        /// Bundled monospace font families.
+        /// </summary>
+        private static readonly HashSet<string> s_bundledMono = new(StringComparer.Ordinal)
+        {
+            "JetBrains Mono",
+            "PlemolJP",
+            "UDEV Gothic JPDOC",
+        };
+
         static InstalledFont()
         {
-            var all = new List<string> { string.Empty };
-            var mono = new List<string> { string.Empty };
+            var allNames = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+            var monoNames = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var font in FontManager.Current.SystemFonts.OrderBy(f => f.Name))
+            foreach (var font in FontManager.Current.SystemFonts)
             {
-                all.Add(font.Name);
+                allNames.Add(font.Name);
 
                 if (FontManager.Current.TryGetGlyphTypeface(
                         new Typeface(font), out var glyph) && glyph.Metrics.IsFixedPitch)
-                    mono.Add(font.Name);
+                    monoNames.Add(font.Name);
             }
 
-            All = all;
-            Monospace = mono;
+            foreach (var name in s_bundledAll)
+                allNames.Add(name);
+
+            foreach (var name in s_bundledMono)
+                monoNames.Add(name);
+
+            All = new List<string>(allNames.Count + 1) { string.Empty };
+            All.AddRange(allNames);
+
+            Monospace = new List<string>(monoNames.Count + 1) { string.Empty };
+            Monospace.AddRange(monoNames);
         }
     }
 }
