@@ -57,7 +57,17 @@ namespace Komorebi.ViewModels
             set
             {
                 if (SetProperty(ref _theme, value) && !_isLoading)
-                    App.SetTheme(_theme);
+                    App.SetTheme(_theme, _themeOverrides);
+            }
+        }
+
+        public string ThemeOverrides
+        {
+            get => _themeOverrides;
+            set
+            {
+                if (SetProperty(ref _themeOverrides, value) && !_isLoading)
+                    App.SetTheme(_theme, value);
             }
         }
 
@@ -804,6 +814,7 @@ namespace Komorebi.ViewModels
         private bool _isReadonly = true;
         private string _locale = "en_US";
         private string _theme = "Default";
+        private string _themeOverrides = string.Empty;
         private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "Yu Gothic UI" : "Inter";
         private string _monospaceFontFamily = s_detectedLocale == "ja_JP" ? "UDEV Gothic JPDOC" : "JetBrains Mono";
         private double _defaultFontSize = 13;

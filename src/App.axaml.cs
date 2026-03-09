@@ -252,42 +252,65 @@ namespace Komorebi
             app._activeLocale = targetLocale;
         }
 
-        public static void SetTheme(string theme)
+        public static void SetTheme(string theme, string themeOverridesFile)
         {
             if (Current is not App app)
                 return;
 
-            // During initialization (_launcher is null), apply synchronously.
-            // At runtime (e.g. ComboBox selection), defer to avoid reentrancy.
-            if (app._launcher != null)
-                Dispatcher.UIThread.Post(() => ApplyThemeCore(app, theme), DispatcherPriority.Background);
+            app.RequestedThemeVariant = ParseThemeVariant(theme);
+
+            if (app._themeOverrides != null)
+            {
+                app.Resources.MergedDictionaries.Remove(app._themeOverrides);
+                app._themeOverrides = null;
+            }
+
+            if (!string.IsNullOrEmpty(themeOverridesFile))
+            {
+                try
+                {
+                    var resDic = new ResourceDictionary();
+                    using var stream = File.OpenRead(themeOverridesFile);
+                    var overrides = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ThemeOverrides);
+                    if (overrides == null)
+                        throw new JsonException("Failed to deserialize theme overrides");
+
+                    foreach (var kv in overrides.BasicColors)
+                    {
+                        if (kv.Key.Equals("SystemAccentColor", StringComparison.Ordinal))
+                            resDic["SystemAccentColor"] = kv.Value;
+                        else
+                            resDic[$"Color.{kv.Key}"] = kv.Value;
+                    }
+
+                    if (overrides.GraphColors.Count > 0)
+                        Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
+                    else
+                        Models.CommitGraph.SetDefaultPens(overrides.GraphPenThickness);
+
+                    app.Resources.MergedDictionaries.Add(resDic);
+                    app._themeOverrides = resDic;
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
             else
-                ApplyThemeCore(app, theme);
+            {
+                Models.CommitGraph.SetDefaultPens();
+            }
         }
 
-        private static void ApplyThemeCore(App app, string theme)
+        public static ThemeVariant ParseThemeVariant(string theme)
         {
-            if (theme.Equals(Models.ThemeOption.ActiproLightKey, StringComparison.OrdinalIgnoreCase) ||
-                theme.Equals(Models.ThemeOption.ActiproDarkKey, StringComparison.OrdinalIgnoreCase))
-            {
-                app.RequestedThemeVariant = theme.Equals(Models.ThemeOption.ActiproLightKey, StringComparison.OrdinalIgnoreCase)
-                    ? ThemeVariant.Light
-                    : ThemeVariant.Dark;
-                app.ApplyActiproTheme();
-            }
-            else
-            {
-                if (theme.Equals(Models.ThemeOption.LightKey, StringComparison.OrdinalIgnoreCase))
-                    app.RequestedThemeVariant = ThemeVariant.Light;
-                else if (theme.Equals(Models.ThemeOption.DarkKey, StringComparison.OrdinalIgnoreCase))
-                    app.RequestedThemeVariant = ThemeVariant.Dark;
-                else
-                    app.RequestedThemeVariant = ThemeVariant.Default;
-
-                app.RemoveActiproTheme();
-            }
-
-            Models.CommitGraph.SetDefaultPens();
+            if (string.IsNullOrEmpty(theme))
+                return ThemeVariant.Default;
+            if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
+                return ThemeVariant.Light;
+            if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
+                return ThemeVariant.Dark;
+            return ThemeVariant.Default;
         }
 
         public static void SetFonts(string defaultFont, string monospaceFont)
@@ -398,7 +421,7 @@ namespace Komorebi
             pref.PropertyChanged += (_, _) => pref.Save();
 
             SetLocale(pref.Locale);
-            SetTheme(pref.Theme);
+            SetTheme(pref.Theme, pref.ThemeOverrides);
             SetFonts(pref.DefaultFontFamily, pref.MonospaceFontFamily);
         }
 
@@ -826,31 +849,10 @@ namespace Komorebi
         [GeneratedRegex(@"^[a-z]+\s+([a-fA-F0-9]{4,40})(\s+.*)?$")]
         private static partial Regex REG_REBASE_TODO();
 
-        private void ApplyActiproTheme()
-        {
-            if (_actiproTheme != null)
-                return;
-
-            // Insert ModernTheme at index 0 so it takes priority.
-            // FluentTheme stays in place as a fallback for resources
-            // that ModernTheme does not define (e.g. SystemControlTransparentBrush).
-            _actiproTheme = new ActiproSoftware.UI.Avalonia.Themes.ModernTheme();
-            Styles.Insert(0, _actiproTheme);
-        }
-
-        private void RemoveActiproTheme()
-        {
-            if (_actiproTheme == null)
-                return;
-
-            Styles.Remove(_actiproTheme);
-            _actiproTheme = null;
-        }
-
         private Models.IpcChannel _ipcChannel = null;
         private ViewModels.Launcher _launcher = null;
         private ResourceDictionary _activeLocale = null;
+        private ResourceDictionary _themeOverrides = null;
         private ResourceDictionary _fontsOverrides = null;
-        private ActiproSoftware.UI.Avalonia.Themes.ModernTheme _actiproTheme = null;
     }
 }

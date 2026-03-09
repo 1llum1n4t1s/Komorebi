@@ -251,6 +251,51 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
+        public void SecondInstance_SendDoesNotThrow()
+        {
+            var pipe = UniquePipeName();
+            var lockFile = LockPath();
+
+            using var first = new IpcChannel(pipe, lockFile);
+            Assert.True(first.IsFirstInstance);
+
+            using var second = new IpcChannel(pipe, lockFile);
+            Assert.False(second.IsFirstInstance);
+
+            // SendToFirstInstance must not throw even when this is not the first instance.
+            var ex = Record.Exception(() => second.SendToFirstInstance("test"));
+            Assert.Null(ex);
+        }
+
+        [Fact]
+        public void SecondInstance_DisposeDoesNotThrow()
+        {
+            var pipe = UniquePipeName();
+            var lockFile = LockPath();
+
+            using var first = new IpcChannel(pipe, lockFile);
+            var second = new IpcChannel(pipe, lockFile);
+            Assert.False(second.IsFirstInstance);
+
+            var ex = Record.Exception(() => second.Dispose());
+            Assert.Null(ex);
+        }
+
+        [Fact]
+        public void LockFileDirectoryDoesNotExist_DoesNotThrow()
+        {
+            var pipe = UniquePipeName();
+            var lockFile = Path.Combine(_tempDir, "nonexistent", "subdir", "process.lock");
+
+            var ex = Record.Exception(() =>
+            {
+                using var ipc = new IpcChannel(pipe, lockFile);
+                Assert.True(ipc.IsFirstInstance);
+            });
+            Assert.Null(ex);
+        }
+
+        [Fact]
         public async Task Dispose_NoInvalidOperationException()
         {
             // Specifically tests that Dispose does not throw InvalidOperationException
@@ -295,6 +340,108 @@ namespace Komorebi.Tests.Models
             {
                 TaskScheduler.UnobservedTaskException -= handler;
             }
+        }
+
+        // --- Edge-case construction tests ---
+
+        [Fact]
+        public void InvalidLockFilePath_IsNotFirstInstance()
+        {
+            var pipe = UniquePipeName();
+            using var ipc = new IpcChannel(pipe, "invalid\0path");
+            Assert.False(ipc.IsFirstInstance);
+        }
+
+        [Fact]
+        public void EmptyLockFilePath_IsNotFirstInstance()
+        {
+            var pipe = UniquePipeName();
+            using var ipc = new IpcChannel(pipe, "");
+            Assert.False(ipc.IsFirstInstance);
+        }
+
+        [Fact]
+        public void NullLockFilePath_IsNotFirstInstance()
+        {
+            var pipe = UniquePipeName();
+            using var ipc = new IpcChannel(pipe, null);
+            Assert.False(ipc.IsFirstInstance);
+        }
+
+        [Fact]
+        public void LockFileAlreadyHeld_IsNotFirstInstance()
+        {
+            var pipe = UniquePipeName();
+            var lockFile = LockPath();
+
+            // Simulate lock held by another process (e.g., zombie from previous run).
+            using var hold = File.Open(lockFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+            using var ipc = new IpcChannel(pipe, lockFile);
+            Assert.False(ipc.IsFirstInstance);
+        }
+
+        // --- Failed-construction lifecycle safety ---
+
+        [Fact]
+        public void FailedConstruction_AllOperationsSafe()
+        {
+            var pipe = UniquePipeName();
+            var lockFile = LockPath();
+
+            // Hold the lock externally to force construction failure.
+            using var hold = File.Open(lockFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+            var ipc = new IpcChannel(pipe, lockFile);
+            Assert.False(ipc.IsFirstInstance);
+
+            // Send and multiple Dispose must be no-ops, not throw.
+            var sendEx = Record.Exception(() => ipc.SendToFirstInstance("test"));
+            Assert.Null(sendEx);
+
+            var disposeEx = Record.Exception(() =>
+            {
+                ipc.Dispose();
+                ipc.Dispose();
+            });
+            Assert.Null(disposeEx);
+        }
+
+        // --- Recovery & lock-release tests ---
+
+        [Fact]
+        public void StaleLockFile_RecoveryAfterRelease()
+        {
+            var lockFile = LockPath();
+
+            // Simulate a stale lock from a crashed/zombie process.
+            var stale = File.Open(lockFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+
+            using var failed = new IpcChannel(UniquePipeName(), lockFile);
+            Assert.False(failed.IsFirstInstance);
+
+            // "Kill" the zombie — release the stale lock.
+            stale.Dispose();
+
+            // A new instance should now be able to acquire the lock.
+            using var recovered = new IpcChannel(UniquePipeName(), lockFile);
+            Assert.True(recovered.IsFirstInstance);
+        }
+
+        [Fact]
+        public void PartialConstruction_ReleasesLock()
+        {
+            var lockFile = LockPath();
+
+            // null pipe name: File.Open succeeds (lock acquired), but
+            // NamedPipeServerStream(null) throws ArgumentNullException.
+            // The catch block MUST release the acquired lock, otherwise
+            // no future instance can ever start.
+            var ipc = new IpcChannel(null, lockFile);
+            Assert.False(ipc.IsFirstInstance);
+
+            // If the catch block didn't release the lock, this would fail
+            // with IsFirstInstance = false (IOException on File.Open).
+            using var newIpc = new IpcChannel(UniquePipeName(), lockFile);
+            Assert.True(newIpc.IsFirstInstance);
         }
     }
 }

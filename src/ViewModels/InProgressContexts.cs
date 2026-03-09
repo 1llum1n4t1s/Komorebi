@@ -167,9 +167,9 @@ namespace Komorebi.ViewModels
 
             HeadName = File.ReadAllText(Path.Combine(repo.GitDir, "rebase-merge", "head-name")).Trim();
             if (HeadName.StartsWith("refs/heads/"))
-                HeadName = HeadName.Substring(11);
+                HeadName = HeadName.Substring("refs/heads/".Length);
             else if (HeadName.StartsWith("refs/tags/"))
-                HeadName = HeadName.Substring(10);
+                HeadName = HeadName.Substring("refs/tags/".Length);
 
             var stoppedSHAPath = Path.Combine(repo.GitDir, "rebase-merge", "stopped-sha");
             var stoppedSHA = File.Exists(stoppedSHAPath)

@@ -304,7 +304,7 @@ namespace Komorebi.ViewModels
                 {
                     if (a.IsConflicted != b.IsConflicted)
                         return a.IsConflicted ? -1 : 1;
-                    return string.Compare(a.Path, b.Path, System.StringComparison.Ordinal);
+                    return Models.NumericSort.Compare(a.Path, b.Path);
                 });
             }
 

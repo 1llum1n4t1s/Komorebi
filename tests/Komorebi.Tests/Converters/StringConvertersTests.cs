@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
 
+using Avalonia.Styling;
+
 using Komorebi.Converters;
 using Komorebi.Models;
 
@@ -313,55 +315,50 @@ namespace Komorebi.Tests.Converters
         #region ToTheme
 
         [Fact]
-        public void ToTheme_Convert_ValidKey_ReturnsMatchingTheme()
+        public void ToTheme_Convert_Dark_ReturnsDarkVariant()
         {
             var converter = StringConverters.ToTheme;
-            var result = converter.Convert("Dark", typeof(ThemeOption), null, CultureInfo.InvariantCulture);
-            Assert.NotNull(result);
-            Assert.IsType<ThemeOption>(result);
-            Assert.Equal("Dark", ((ThemeOption)result).Key);
+            var result = converter.Convert("Dark", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+            Assert.Equal(ThemeVariant.Dark, result);
         }
 
         [Fact]
-        public void ToTheme_Convert_InvalidKey_ReturnsFirstSupported()
+        public void ToTheme_Convert_Light_ReturnsLightVariant()
         {
             var converter = StringConverters.ToTheme;
-            var result = converter.Convert("nonexistent", typeof(ThemeOption), null, CultureInfo.InvariantCulture);
-            Assert.NotNull(result);
-            Assert.IsType<ThemeOption>(result);
-            Assert.Equal(ThemeOption.Supported[0].Key, ((ThemeOption)result).Key);
+            var result = converter.Convert("Light", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+            Assert.Equal(ThemeVariant.Light, result);
         }
 
         [Fact]
-        public void ToTheme_Convert_NullValue_ReturnsFirstSupported()
+        public void ToTheme_Convert_NullValue_ReturnsDefault()
         {
             var converter = StringConverters.ToTheme;
-            var result = converter.Convert(null, typeof(ThemeOption), null, CultureInfo.InvariantCulture);
-            Assert.NotNull(result);
-            Assert.IsType<ThemeOption>(result);
-            Assert.Equal(ThemeOption.Supported[0].Key, ((ThemeOption)result).Key);
-        }
-
-        [Theory]
-        [InlineData("Default")]
-        [InlineData("Dark")]
-        [InlineData("Light")]
-        [InlineData("ActiproLight")]
-        [InlineData("ActiproDark")]
-        public void ToTheme_Convert_AllSupportedKeys_ReturnsCorrectTheme(string key)
-        {
-            var converter = StringConverters.ToTheme;
-            var result = converter.Convert(key, typeof(ThemeOption), null, CultureInfo.InvariantCulture);
-            Assert.NotNull(result);
-            Assert.Equal(key, ((ThemeOption)result).Key);
+            var result = converter.Convert(null, typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+            Assert.Equal(ThemeVariant.Default, result);
         }
 
         [Fact]
-        public void ToTheme_ConvertBack_ValidTheme_ReturnsKey()
+        public void ToTheme_Convert_EmptyValue_ReturnsDefault()
         {
             var converter = StringConverters.ToTheme;
-            var theme = new ThemeOption("Dark", "Dark");
-            var result = converter.ConvertBack(theme, typeof(string), null, CultureInfo.InvariantCulture);
+            var result = converter.Convert("", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+            Assert.Equal(ThemeVariant.Default, result);
+        }
+
+        [Fact]
+        public void ToTheme_Convert_UnknownValue_ReturnsDefault()
+        {
+            var converter = StringConverters.ToTheme;
+            var result = converter.Convert("nonexistent", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+            Assert.Equal(ThemeVariant.Default, result);
+        }
+
+        [Fact]
+        public void ToTheme_ConvertBack_DarkVariant_ReturnsDark()
+        {
+            var converter = StringConverters.ToTheme;
+            var result = converter.ConvertBack(ThemeVariant.Dark, typeof(string), null, CultureInfo.InvariantCulture);
             Assert.Equal("Dark", result);
         }
 
@@ -370,14 +367,6 @@ namespace Komorebi.Tests.Converters
         {
             var converter = StringConverters.ToTheme;
             var result = converter.ConvertBack(null, typeof(string), null, CultureInfo.InvariantCulture);
-            Assert.Null(result);
-        }
-
-        [Fact]
-        public void ToTheme_ConvertBack_NonThemeType_ReturnsNull()
-        {
-            var converter = StringConverters.ToTheme;
-            var result = converter.ConvertBack("not a theme", typeof(string), null, CultureInfo.InvariantCulture);
             Assert.Null(result);
         }
 
