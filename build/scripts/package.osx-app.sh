@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
-set -o
-set -u
-set pipefail
+set -euo pipefail
 
 cd build
 
