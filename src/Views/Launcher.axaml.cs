@@ -157,6 +157,11 @@ namespace Komorebi.Views
                 // ウィンドウ状態を設定に保存する
                 ViewModels.Preferences.Instance.Layout.LauncherWindowState = state;
             }
+            else if (change.Property == IsActiveProperty)
+            {
+                if (!IsActive && DataContext is ViewModels.Launcher { CommandPalette: { } } vm)
+                    vm.CommandPalette = null;
+            }
         }
 
         /// <summary>
@@ -238,6 +243,14 @@ namespace Komorebi.Views
                         vm.AddNewTab();
 
                     ViewModels.Welcome.Instance.Clone();
+                    e.Handled = true;
+                    return;
+                }
+
+                if (e.Key == Key.T)
+                {
+                    // Ctrl+T → 新しいタブを追加する
+                    vm.AddNewTab();
                     e.Handled = true;
                     return;
                 }
@@ -379,6 +392,9 @@ namespace Komorebi.Views
         {
             if (sender is Button btn && DataContext is ViewModels.Launcher launcher)
             {
+                if (launcher.CommandPalette != null)
+                    launcher.CommandPalette = null;
+
                 var pref = ViewModels.Preferences.Instance;
                 var menu = new ContextMenu();
                 menu.Placement = PlacementMode.BottomEdgeAlignedLeft;
@@ -453,6 +469,23 @@ namespace Komorebi.Views
         {
             if (e.Source == sender && DataContext is ViewModels.Launcher vm)
                 vm.CommandPalette = null;
+            e.Handled = true;
+        }
+
+        private void OnCommandPaletteKeyDown(object sender, KeyEventArgs e)
+        {
+            if (DataContext is ViewModels.Launcher { CommandPalette: { } } vm)
+            {
+                if (e.Key == Key.Escape)
+                    vm.CommandPalette = null;
+
+                e.Route = RoutingStrategies.Direct;
+                e.Handled = true;
+            }
+        }
+
+        private void OnCommandPaletteKeyUp(object sender, KeyEventArgs e)
+        {
             e.Handled = true;
         }
 
