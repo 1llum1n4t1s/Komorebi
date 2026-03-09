@@ -225,6 +225,14 @@ namespace Komorebi.Views
                 }
             }
 
+            // コマンドパレット表示中はホットキーをブロックする
+            if (vm.CommandPalette != null)
+            {
+                if (e.Key == Key.Escape)
+                    vm.CommandPalette = null;
+                return;
+            }
+
             // Ctrl（macOSではCmd）キーとの組み合わせ
             if (e.KeyModifiers.HasFlag(OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
             {
@@ -469,23 +477,6 @@ namespace Komorebi.Views
         {
             if (e.Source == sender && DataContext is ViewModels.Launcher vm)
                 vm.CommandPalette = null;
-            e.Handled = true;
-        }
-
-        private void OnCommandPaletteKeyDown(object sender, KeyEventArgs e)
-        {
-            if (DataContext is ViewModels.Launcher { CommandPalette: { } } vm)
-            {
-                if (e.Key == Key.Escape)
-                    vm.CommandPalette = null;
-
-                e.Route = RoutingStrategies.Direct;
-                e.Handled = true;
-            }
-        }
-
-        private void OnCommandPaletteKeyUp(object sender, KeyEventArgs e)
-        {
             e.Handled = true;
         }
 
