@@ -363,6 +363,14 @@ namespace Komorebi.Tests.Converters
         }
 
         [Fact]
+        public void ToTheme_Convert_White_ReturnsLightVariant()
+        {
+            var converter = StringConverters.ToTheme;
+            var result = converter.Convert("White", typeof(ThemeVariant), null, CultureInfo.InvariantCulture);
+            Assert.Equal(ThemeVariant.Light, result);
+        }
+
+        [Fact]
         public void ToTheme_ConvertBack_NullValue_ReturnsNull()
         {
             var converter = StringConverters.ToTheme;

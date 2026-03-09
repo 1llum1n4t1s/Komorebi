@@ -259,6 +259,34 @@ namespace Komorebi
 
             app.RequestedThemeVariant = ParseThemeVariant(theme);
 
+            if (app._whiteThemeColors != null)
+            {
+                app.Resources.MergedDictionaries.Remove(app._whiteThemeColors);
+                app._whiteThemeColors = null;
+            }
+
+            if (theme.Equals("White", StringComparison.OrdinalIgnoreCase))
+            {
+                var resDic = new ResourceDictionary();
+                resDic["Color.Window"] = Color.Parse("#FFFFFFFF");
+                resDic["Color.WindowBorder"] = Color.Parse("#FFB0B0B0");
+                resDic["Color.TitleBar"] = Color.Parse("#FFF0F0F0");
+                resDic["Color.ToolBar"] = Color.Parse("#FFF8F8F8");
+                resDic["Color.Popup"] = Color.Parse("#FFFFFFFF");
+                resDic["Color.Contents"] = Color.Parse("#FFFFFFFF");
+                resDic["Color.Badge"] = Color.Parse("#FFE0E0E0");
+                resDic["Color.Border0"] = Color.Parse("#FFE0E0E0");
+                resDic["Color.Border1"] = Color.Parse("#FFA0A0A0");
+                resDic["Color.Border2"] = Color.Parse("#FFE0E0E0");
+                resDic["Color.FlatButton.Background"] = Color.Parse("#FFFFFFFF");
+                resDic["Color.FlatButton.BackgroundHovered"] = Color.Parse("#FFF0F0F0");
+                resDic["Color.FlatButton.FloatingBorder"] = Color.Parse("#FFA0A0A0");
+                resDic["Color.InlineCode"] = Color.Parse("#FFF0F0F0");
+                resDic["Color.DataGridHeaderBG"] = Color.Parse("#FFF5F5F5");
+                app.Resources.MergedDictionaries.Add(resDic);
+                app._whiteThemeColors = resDic;
+            }
+
             if (app._themeOverrides != null)
             {
                 app.Resources.MergedDictionaries.Remove(app._themeOverrides);
@@ -310,6 +338,8 @@ namespace Komorebi
                 return ThemeVariant.Light;
             if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
                 return ThemeVariant.Dark;
+            if (theme.Equals("White", StringComparison.OrdinalIgnoreCase))
+                return ThemeVariant.Light;
             return ThemeVariant.Default;
         }
 
@@ -852,6 +882,7 @@ namespace Komorebi
         private Models.IpcChannel _ipcChannel = null;
         private ViewModels.Launcher _launcher = null;
         private ResourceDictionary _activeLocale = null;
+        private ResourceDictionary _whiteThemeColors = null;
         private ResourceDictionary _themeOverrides = null;
         private ResourceDictionary _fontsOverrides = null;
     }

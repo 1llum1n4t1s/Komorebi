@@ -188,12 +188,12 @@
                       MinHeight="28"
                       Padding="8,0"
                       HorizontalAlignment="Stretch"
-                      DisplayMemberBinding="{Binding Key, x:DataType=ThemeVariant}"
-                      SelectedItem="{Binding Theme, Mode=TwoWay, Converter={x:Static c:StringConverters.ToTheme}}">
+                      SelectedItem="{Binding Theme, Mode=TwoWay}">
               <ComboBox.Items>
-                <ThemeVariant>Default</ThemeVariant>
-                <ThemeVariant>Dark</ThemeVariant>
-                <ThemeVariant>Light</ThemeVariant>
+                <x:String>Default</x:String>
+                <x:String>Dark</x:String>
+                <x:String>Light</x:String>
+                <x:String>White</x:String>
               </ComboBox.Items>
             </ComboBox>
 
