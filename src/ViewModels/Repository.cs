@@ -778,6 +778,12 @@ namespace Komorebi.ViewModels
                 await ShowAndStartPopupAsync(new Cleanup(this));
         }
 
+        public async Task ClearIndexCacheAsync()
+        {
+            if (CanCreatePopup())
+                await ShowAndStartPopupAsync(new ClearIndexCache(this));
+        }
+
         public void ClearFilter()
         {
             Filter = string.Empty;

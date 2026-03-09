@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Komorebi
-Comment=Open-source & Free Git GUI Client
-Exec=/opt/komorebi/komorebi
-Icon=/usr/share/icons/komorebi.png
-Terminal=false
-Type=Application
-Categories=Development
-MimeType=inode/directory;

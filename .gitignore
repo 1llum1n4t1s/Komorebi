@@ -43,3 +43,4 @@ build/*.AppImage
 Komorebi.app/
 build.command
 src/Properties/launchSettings.json
+__pycache__/

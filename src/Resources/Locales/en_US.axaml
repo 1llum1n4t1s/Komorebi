@@ -737,6 +737,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">By Name</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Cleanup (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Run `git gc` command for this repository.</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Clear Index Cache</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Run `git rm -r --cached .` and `git add .` to rebuild the index.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Clear all</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Clear</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Configure this repository</x:String>

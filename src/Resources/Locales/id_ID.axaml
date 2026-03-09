@@ -741,6 +741,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Berdasarkan Nama</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Bersihkan (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Jalankan perintah `git gc` untuk repositori ini.</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Bersihkan Cache Indeks</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Jalankan `git rm -r --cached .` dan `git add .` untuk membangun ulang indeks.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Bersihkan semua</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Bersihkan</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Konfigurasikan repositori ini</x:String>

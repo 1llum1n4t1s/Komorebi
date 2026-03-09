@@ -298,6 +298,16 @@ namespace Komorebi.ViewModels
                 }
             }
 
+            if (hasConflict)
+            {
+                unstaged.Sort((a, b) =>
+                {
+                    if (a.IsConflicted != b.IsConflicted)
+                        return a.IsConflicted ? -1 : 1;
+                    return string.Compare(a.Path, b.Path, System.StringComparison.Ordinal);
+                });
+            }
+
             var visibleUnstaged = GetVisibleChanges(unstaged);
             var selectedUnstaged = new List<Models.Change>();
             foreach (var c in visibleUnstaged)

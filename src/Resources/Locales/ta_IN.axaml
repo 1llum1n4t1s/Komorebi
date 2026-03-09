@@ -741,6 +741,8 @@
   <x:String x:Key="Text.Repository.BranchSort" xml:space="preserve">வரிசைப்படுத்து</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">சுத்தப்படுத்தல்(சீசி &amp; கத்தரித்தல்)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">இந்த களஞ்சியத்திற்கு `அறிவிலி சீசி` கட்டளையை இயக்கு.</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">குறியீட்டு தற்காலிக சேமிப்பை அழி</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">`git rm -r --cached .` மற்றும் `git add .` இயக்கி குறியீட்டை மீளமைக்கவும்.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">அனைத்தையும் அழி</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">அழி</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">இந்த களஞ்சியத்தை உள்ளமை</x:String>

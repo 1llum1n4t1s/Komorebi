@@ -11,6 +11,9 @@ namespace Komorebi.ViewModels
             protected set;
         }
 
+        public virtual string ProgressText => string.Empty;
+        public virtual bool HasProgress => false;
+
         public async Task ContinueAsync(CommandLog log)
         {
             if (_continueCmd != null)
@@ -99,6 +102,19 @@ namespace Komorebi.ViewModels
             get;
         }
 
+        public int CurrentStep
+        {
+            get;
+        }
+
+        public int TotalSteps
+        {
+            get;
+        }
+
+        public override string ProgressText => TotalSteps > 0 ? $"({CurrentStep}/{TotalSteps})" : string.Empty;
+        public override bool HasProgress => TotalSteps > 0;
+
         public RebaseInProgress(Repository repo)
         {
             Name = "Rebase";
@@ -124,6 +140,30 @@ namespace Komorebi.ViewModels
                 Context = repo.FullPath,
                 Args = "rebase --abort",
             };
+
+            var rebaseMergeDir = Path.Combine(repo.GitDir, "rebase-merge");
+            var rebaseApplyDir = Path.Combine(repo.GitDir, "rebase-apply");
+
+            if (Directory.Exists(rebaseMergeDir))
+            {
+                var msgnumPath = Path.Combine(rebaseMergeDir, "msgnum");
+                var endPath = Path.Combine(rebaseMergeDir, "end");
+
+                if (File.Exists(msgnumPath) && int.TryParse(File.ReadAllText(msgnumPath).Trim(), out var msgnum))
+                    CurrentStep = msgnum;
+                if (File.Exists(endPath) && int.TryParse(File.ReadAllText(endPath).Trim(), out var end))
+                    TotalSteps = end;
+            }
+            else if (Directory.Exists(rebaseApplyDir))
+            {
+                var nextPath = Path.Combine(rebaseApplyDir, "next");
+                var lastPath = Path.Combine(rebaseApplyDir, "last");
+
+                if (File.Exists(nextPath) && int.TryParse(File.ReadAllText(nextPath).Trim(), out var next))
+                    CurrentStep = next;
+                if (File.Exists(lastPath) && int.TryParse(File.ReadAllText(lastPath).Trim(), out var last))
+                    TotalSteps = last;
+            }
 
             HeadName = File.ReadAllText(Path.Combine(repo.GitDir, "rebase-merge", "head-name")).Trim();
             if (HeadName.StartsWith("refs/heads/"))

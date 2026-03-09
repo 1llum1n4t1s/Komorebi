@@ -154,7 +154,18 @@ namespace Komorebi.ViewModels
             nodes.Sort((l, r) =>
             {
                 if (l.IsFolder == r.IsFolder)
+                {
+                    if (!l.IsFolder)
+                    {
+                        var lConflict = l.Change?.IsConflicted ?? false;
+                        var rConflict = r.Change?.IsConflicted ?? false;
+                        if (lConflict != rConflict)
+                            return lConflict ? -1 : 1;
+                    }
+
                     return Models.NumericSort.Compare(l.DisplayName, r.DisplayName);
+                }
+
                 return l.IsFolder ? -1 : 1;
             });
         }

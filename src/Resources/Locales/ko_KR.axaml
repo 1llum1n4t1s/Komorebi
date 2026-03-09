@@ -731,6 +731,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">이름 순</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">정리 (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">이 저장소에 대해 `git gc` 명령을 실행합니다.</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">인덱스 캐시 지우기</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">`git rm -r --cached .`와 `git add .`를 실행하여 인덱스를 재구축합니다.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">모두 지우기</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">지우기</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">이 저장소 설정</x:String>

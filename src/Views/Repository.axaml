@@ -728,6 +728,9 @@
               <Grid ColumnDefinitions="*,Auto">
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                   <TextBlock FontWeight="Bold" Foreground="{DynamicResource Brush.Conflict.Foreground}" Text="{DynamicResource Text.InProgress.Rebase}"/>
+                  <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="DarkOrange"
+                             Text="{Binding ProgressText}"
+                             IsVisible="{Binding HasProgress}"/>
                   <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="{DynamicResource Brush.Conflict.Foreground}"
                              Text="{DynamicResource Text.InProgress.Rebase.StoppedAt}"
                              IsVisible="{Binding StoppedAt, Converter={x:Static ObjectConverters.IsNotNull}}" />

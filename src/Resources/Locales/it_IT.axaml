@@ -741,6 +741,8 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Per nome</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Pulizia (GC e Potatura)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Esegui il comando `git gc` per questo repository.</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Svuota cache indice</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Esegui `git rm -r --cached .` e `git add .` per ricostruire l'indice.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Cancella tutto</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Cancella</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Configura questo repository</x:String>

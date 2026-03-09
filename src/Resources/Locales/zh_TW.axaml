@@ -741,6 +741,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">依名稱升序</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">清理本存放庫 (GC)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">本操作將執行 `git gc` 指令。</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">清除索引快取</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">執行 `git rm -r --cached .` 和 `git add .` 以重建索引。</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">清空篩選規則</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">清空</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">設定本存放庫</x:String>

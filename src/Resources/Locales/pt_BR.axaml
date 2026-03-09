@@ -741,6 +741,8 @@
   <x:String x:Key="Text.Repository.BranchSort" xml:space="preserve">Ordenar</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Limpar (GC &amp; Podar)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Execute o comando `git gc` para este repositório.</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Limpar Cache do Índice</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Execute `git rm -r --cached .` e `git add .` para reconstruir o índice.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Limpar tudo</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Limpar</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Configurar este repositório</x:String>
