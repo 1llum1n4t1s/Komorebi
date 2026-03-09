@@ -27,11 +27,15 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _defaultCloneDir, value, true);
         }
 
-        public override Task<bool> Sure()
+        public override async Task<bool> Sure()
         {
             Preferences.Instance.Locale = _selectedLocale;
             Preferences.Instance.GitDefaultCloneDir = _defaultCloneDir;
-            return Task.FromResult(true);
+
+            if (!string.IsNullOrEmpty(_defaultCloneDir))
+                await ScanRepositories.ScanDirectoryAsync(_defaultCloneDir);
+
+            return true;
         }
 
         private string _selectedLocale;

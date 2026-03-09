@@ -275,6 +275,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Les variables intégrées ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, et ${TAG} restent disponibles ici</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Type :</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Espaces de travail</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Répertoire de clonage</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Utilise le paramètre global si vide</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Couleur</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nom</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Restaurer les onglets au démarrage</x:String>

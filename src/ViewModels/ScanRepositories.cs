@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -49,6 +49,41 @@ namespace Komorebi.ViewModels
             GetManagedRepositories(Preferences.Instance.RepositoryNodes, _managed);
         }
 
+        /// <summary>
+        /// Scan a specific directory for git repositories and add them to the repository tree.
+        /// This method runs without showing a popup dialog.
+        /// </summary>
+        public static async Task ScanDirectoryAsync(string rootDir)
+        {
+            if (string.IsNullOrEmpty(rootDir) || !Directory.Exists(rootDir))
+                return;
+
+            if (!Preferences.Instance.IsGitConfigured())
+                return;
+
+            try
+            {
+                var managed = new HashSet<string>();
+                GetManagedRepositories(Preferences.Instance.RepositoryNodes, managed);
+
+                var rootDirInfo = new DirectoryInfo(rootDir);
+                var found = new List<string>();
+
+                await GetUnmanagedRepositoriesAsync(rootDirInfo, found, managed, new EnumerationOptions()
+                {
+                    AttributesToSkip = FileAttributes.Hidden | FileAttributes.System,
+                    IgnoreInaccessible = true,
+                });
+
+                if (found.Count > 0)
+                    await AddFoundRepositories(rootDirInfo, found);
+            }
+            catch (Exception ex)
+            {
+                App.RaiseException(null, $"Failed to scan repositories: {ex.Message}");
+            }
+        }
+
         public override async Task<bool> Sure()
         {
             string selectedDir;
@@ -82,15 +117,75 @@ namespace Komorebi.ViewModels
             var rootDir = new DirectoryInfo(selectedDir);
             var found = new List<string>();
 
-            await GetUnmanagedRepositoriesAsync(rootDir, found, new EnumerationOptions()
+            await GetUnmanagedRepositoriesAsync(rootDir, found, _managed, new EnumerationOptions()
             {
                 AttributesToSkip = FileAttributes.Hidden | FileAttributes.System,
                 IgnoreInaccessible = true,
-            });
+            }, desc => ProgressDescription = desc);
 
             // Make sure this task takes at least 0.5s to avoid the popup panel disappearing too quickly.
             await minDelay;
 
+            if (found.Count > 0)
+                await AddFoundRepositories(rootDir, found);
+
+            return true;
+        }
+
+        private static void GetManagedRepositories(List<RepositoryNode> group, HashSet<string> repos)
+        {
+            foreach (var node in group)
+            {
+                if (node.IsRepository)
+                    repos.Add(node.Id);
+                else
+                    GetManagedRepositories(node.SubNodes, repos);
+            }
+        }
+
+        private static async Task GetUnmanagedRepositoriesAsync(DirectoryInfo dir, List<string> outs, HashSet<string> managed, EnumerationOptions opts, Action<string> onProgress = null, int depth = 0)
+        {
+            var subdirs = dir.GetDirectories("*", opts);
+            foreach (var subdir in subdirs)
+            {
+                if (subdir.Name.StartsWith(".", StringComparison.Ordinal) ||
+                    subdir.Name.Equals("node_modules", StringComparison.Ordinal))
+                    continue;
+
+                onProgress?.Invoke($"Scanning {subdir.FullName}...");
+
+                var normalizedSelf = subdir.FullName.Replace('\\', '/').TrimEnd('/');
+                if (managed.Contains(normalizedSelf))
+                    continue;
+
+                var gitDir = Path.Combine(subdir.FullName, ".git");
+                if (Directory.Exists(gitDir) || File.Exists(gitDir))
+                {
+                    var test = await new Commands.QueryRepositoryRootPath(subdir.FullName).GetResultAsync();
+                    if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
+                    {
+                        var normalized = test.StdOut.Trim().Replace('\\', '/').TrimEnd('/');
+                        if (!managed.Contains(normalized))
+                            outs.Add(normalized);
+                    }
+
+                    continue;
+                }
+
+                var isBare = await new Commands.IsBareRepository(subdir.FullName).GetResultAsync();
+                if (isBare)
+                {
+                    outs.Add(normalizedSelf);
+                    continue;
+                }
+
+                if (depth < 5)
+                    await GetUnmanagedRepositoriesAsync(subdir, outs, managed, opts, onProgress, depth + 1);
+            }
+        }
+
+        private static async Task AddFoundRepositories(DirectoryInfo rootDir, List<string> found)
+        {
             var normalizedRoot = rootDir.FullName.Replace('\\', '/').TrimEnd('/');
             foreach (var f in found)
             {
@@ -112,62 +207,9 @@ namespace Komorebi.ViewModels
             Preferences.Instance.AutoRemoveInvalidNode();
             Preferences.Instance.Save();
             Welcome.Instance.Refresh();
-            return true;
         }
 
-        private void GetManagedRepositories(List<RepositoryNode> group, HashSet<string> repos)
-        {
-            foreach (var node in group)
-            {
-                if (node.IsRepository)
-                    repos.Add(node.Id);
-                else
-                    GetManagedRepositories(node.SubNodes, repos);
-            }
-        }
-
-        private async Task GetUnmanagedRepositoriesAsync(DirectoryInfo dir, List<string> outs, EnumerationOptions opts, int depth = 0)
-        {
-            var subdirs = dir.GetDirectories("*", opts);
-            foreach (var subdir in subdirs)
-            {
-                if (subdir.Name.StartsWith(".", StringComparison.Ordinal) ||
-                    subdir.Name.Equals("node_modules", StringComparison.Ordinal))
-                    continue;
-
-                ProgressDescription = $"Scanning {subdir.FullName}...";
-
-                var normalizedSelf = subdir.FullName.Replace('\\', '/').TrimEnd('/');
-                if (_managed.Contains(normalizedSelf))
-                    continue;
-
-                var gitDir = Path.Combine(subdir.FullName, ".git");
-                if (Directory.Exists(gitDir) || File.Exists(gitDir))
-                {
-                    var test = await new Commands.QueryRepositoryRootPath(subdir.FullName).GetResultAsync();
-                    if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
-                    {
-                        var normalized = test.StdOut.Trim().Replace('\\', '/').TrimEnd('/');
-                        if (!_managed.Contains(normalized))
-                            outs.Add(normalized);
-                    }
-
-                    continue;
-                }
-
-                var isBare = await new Commands.IsBareRepository(subdir.FullName).GetResultAsync();
-                if (isBare)
-                {
-                    outs.Add(normalizedSelf);
-                    continue;
-                }
-
-                if (depth < 5)
-                    await GetUnmanagedRepositoriesAsync(subdir, outs, opts, depth + 1);
-            }
-        }
-
-        private RepositoryNode FindOrCreateGroupRecursive(List<RepositoryNode> collection, string path)
+        private static RepositoryNode FindOrCreateGroupRecursive(List<RepositoryNode> collection, string path)
         {
             RepositoryNode node = null;
             foreach (var name in path.Split('/'))
@@ -179,7 +221,7 @@ namespace Komorebi.ViewModels
             return node;
         }
 
-        private RepositoryNode FindOrCreateGroup(List<RepositoryNode> collection, string name)
+        private static RepositoryNode FindOrCreateGroup(List<RepositoryNode> collection, string name)
         {
             foreach (var node in collection)
             {

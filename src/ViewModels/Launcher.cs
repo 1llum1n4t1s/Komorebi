@@ -160,6 +160,12 @@ namespace Komorebi.ViewModels
             PostActivePageChanged();
             Preferences.Instance.Save();
             GC.Collect();
+
+            var cloneDir = to.DefaultCloneDir;
+            if (string.IsNullOrEmpty(cloneDir))
+                cloneDir = Preferences.Instance.GitDefaultCloneDir;
+            if (!string.IsNullOrEmpty(cloneDir))
+                _ = ScanRepositories.ScanDirectoryAsync(cloneDir);
         }
 
         public void AddNewTab()

@@ -265,6 +265,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">내장 변수 ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, ${TAG}를 여기에서 사용할 수 있습니다</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">유형:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">작업 공간</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">복제 디렉터리</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">비어 있으면 전역 설정 사용</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">색상</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">이름</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">시작 시 탭 복원</x:String>

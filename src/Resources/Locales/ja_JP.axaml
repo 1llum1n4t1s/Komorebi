@@ -275,6 +275,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">ここでも組み込みの変数 ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, ${TAG} がそのまま利用できます</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">種類:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">ワークスペース</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">クローンディレクトリ</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">空の場合はグローバル設定を使用</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">色</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">名前</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">起動時にタブを復元</x:String>

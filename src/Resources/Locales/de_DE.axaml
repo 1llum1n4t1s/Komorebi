@@ -275,6 +275,8 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Die vordefinierten Parameter ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE} und ${TAG} bleiben hier verwendbar</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Typ:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Arbeitsumgebungen</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Klon-Ordner</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Verwendet globale Einstellung, wenn leer</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Farbe</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Offene Registerkarten beim Programmstart wiederherstellen</x:String>

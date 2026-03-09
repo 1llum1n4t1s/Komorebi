@@ -275,6 +275,8 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Le variabili integrate ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE} e ${TAG} rimangono disponibili qui</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Tipo:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Spazi di Lavoro</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Cartella per cloni</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Usa l'impostazione globale se vuoto</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Colore</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nome</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Ripristina schede all'avvio</x:String>

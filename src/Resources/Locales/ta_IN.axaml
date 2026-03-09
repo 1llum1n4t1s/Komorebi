@@ -275,6 +275,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.CheckedValue" xml:space="preserve">தேர்ந்த மதிப்பு:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls" xml:space="preserve">தனிப்பயன் செயல் கட்டுப்பாடுகளை திருத்து</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">பணியிடங்கள்</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">நகலி அடைவு</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">காலியாக இருந்தால் உலகளாவிய அமைப்பைப் பயன்படுத்தும்</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">நிறம்</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">பெயர்</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">தாவல்களை மீட்டமை</x:String>

@@ -245,6 +245,9 @@ namespace Komorebi.Views
                     var folder = selected[0];
                     var folderPath = folder is { Path: { IsAbsoluteUri: true } path } ? path.LocalPath : folder?.Path.ToString();
                     ViewModels.Preferences.Instance.GitDefaultCloneDir = folderPath;
+
+                    if (!string.IsNullOrEmpty(folderPath))
+                        await ViewModels.ScanRepositories.ScanDirectoryAsync(folderPath);
                 }
             }
             catch (Exception ex)

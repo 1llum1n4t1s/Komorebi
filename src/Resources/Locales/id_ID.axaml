@@ -275,6 +275,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Variabel bawaan ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, dan ${TAG} tetap tersedia di sini</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Jenis:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Workspace</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Direktori Clone</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Menggunakan pengaturan global jika kosong</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Warna</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nama</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Pulihkan tab saat startup</x:String>

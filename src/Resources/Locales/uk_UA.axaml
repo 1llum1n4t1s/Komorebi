@@ -275,6 +275,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.CheckedValue" xml:space="preserve">Значення при позначці:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls" xml:space="preserve">Редагувати елементи керування дії</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Робочі простори</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Тека клонування</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Використовує глобальне налаштування, якщо порожньо</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Колір</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Назва</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Відновлювати вкладки при запуску</x:String>

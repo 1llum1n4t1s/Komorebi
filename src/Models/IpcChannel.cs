@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.IO.Pipes;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Komorebi.Models
@@ -13,18 +12,23 @@ namespace Komorebi.Models
         public event Action<string> MessageReceived;
 
         public IpcChannel()
+            : this("KomorebiIPCChannel" + Environment.UserName, Path.Combine(Native.OS.DataDir, "process.lock"))
+        {
+        }
+
+        internal IpcChannel(string pipeName, string lockFilePath)
         {
             try
             {
-                _singletonLock = File.Open(Path.Combine(Native.OS.DataDir, "process.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                _singletonLock = File.Open(lockFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
                 IsFirstInstance = true;
+                _pipeName = pipeName;
                 _server = new NamedPipeServerStream(
-                    "KomorebiIPCChannel" + Environment.UserName,
+                    _pipeName,
                     PipeDirection.In,
                     -1,
                     PipeTransmissionMode.Byte,
                     PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
-                _cancellationTokenSource = new CancellationTokenSource();
                 Task.Run(StartServer);
             }
             catch
@@ -37,7 +41,7 @@ namespace Komorebi.Models
         {
             try
             {
-                using (var client = new NamedPipeClientStream(".", "KomorebiIPCChannel" + Environment.UserName, PipeDirection.Out, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly))
+                using (var client = new NamedPipeClientStream(".", _pipeName, PipeDirection.Out, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly))
                 {
                     client.Connect(1000);
                     if (!client.IsConnected)
@@ -52,7 +56,7 @@ namespace Komorebi.Models
                     if (OperatingSystem.IsWindows())
                         client.WaitForPipeDrain();
                     else
-                        Thread.Sleep(1000);
+                        System.Threading.Thread.Sleep(1000);
                 }
             }
             catch
@@ -63,40 +67,57 @@ namespace Komorebi.Models
 
         public void Dispose()
         {
-            _cancellationTokenSource?.Cancel();
-            _server?.Dispose();
-            _cancellationTokenSource?.Dispose();
-            _singletonLock?.Dispose();
+            _disposed = true;
+
+            // Connect a dummy client to unblock WaitForConnectionAsync cleanly.
+            // This avoids IOException/OperationCanceledException leaking through
+            // .NET's internal ValueTask-to-Task adapter on the thread pool.
+            try
+            {
+                using var dummy = new NamedPipeClientStream(".", _pipeName, PipeDirection.Out);
+                dummy.Connect(500);
+            }
+            catch { /* pipe already closed or timeout */ }
+
+            try { _server?.Dispose(); }
+            catch { /* already disposed */ }
+
+            try { _singletonLock?.Dispose(); }
+            catch { /* already disposed */ }
         }
 
         private async void StartServer()
         {
-            using var reader = new StreamReader(_server);
-
-            while (!_cancellationTokenSource.IsCancellationRequested)
+            while (!_disposed)
             {
                 try
                 {
-                    await _server.WaitForConnectionAsync(_cancellationTokenSource.Token);
+                    await _server.WaitForConnectionAsync();
 
-                    if (!_cancellationTokenSource.IsCancellationRequested)
+                    if (_disposed)
                     {
-                        var line = await reader.ReadToEndAsync(_cancellationTokenSource.Token);
-                        MessageReceived?.Invoke(line.Trim());
+                        try { _server.Disconnect(); }
+                        catch { /* shutting down */ }
+                        break;
                     }
+
+                    using var reader = new StreamReader(_server, leaveOpen: true);
+                    var line = await reader.ReadToEndAsync();
+                    MessageReceived?.Invoke(line.Trim());
 
                     _server.Disconnect();
                 }
                 catch
                 {
-                    if (!_cancellationTokenSource.IsCancellationRequested && _server.IsConnected)
-                        _server.Disconnect();
+                    // Transient pipe error. If _disposed is set the loop
+                    // exits naturally; otherwise we retry the next connection.
                 }
             }
         }
 
-        private FileStream _singletonLock = null;
-        private NamedPipeServerStream _server = null;
-        private CancellationTokenSource _cancellationTokenSource = null;
+        private volatile bool _disposed;
+        private readonly string _pipeName;
+        private FileStream _singletonLock;
+        private NamedPipeServerStream _server;
     }
 }

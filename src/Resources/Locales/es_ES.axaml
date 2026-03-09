@@ -275,6 +275,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">La variables incorporadas ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, y ${TAG} permanecen disponibles aquí</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Tipo:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Espacios de Trabajo</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Directorio de clonado</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Usa la configuración global si está vacío</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Color</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nombre</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Restaurar pestañas al iniciar</x:String>

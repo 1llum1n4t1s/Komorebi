@@ -271,6 +271,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Ang mga built-in na variable na ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, at ${TAG} ay magagamit pa rin dito</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Uri:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Mga Workspace</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Clone Dir</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Gagamitin ang global na setting kung walang laman</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Kulay</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Pangalan</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Ibalik ang mga tab sa pagsisimula</x:String>

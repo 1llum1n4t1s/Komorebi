@@ -1040,7 +1040,7 @@
     <Style.Resources>
       <Thickness x:Key="ComboBoxDropdownBorderPadding">4,0</Thickness>
       <Thickness x:Key="ComboBoxItemThemePadding">6,4</Thickness>
-      <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{DynamicResource Color.Contents}"/>
+      <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{DynamicResource SystemAltHighColor}"/>
       <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource SystemAccentColor}"/>
     </Style.Resources>
 
@@ -1072,7 +1072,7 @@
       <ControlTemplate>
         <Grid Background="Transparent" ColumnDefinitions="Auto,*">
           <Border x:Name="Border" Grid.Column="0" Width="16" Height="16" VerticalAlignment="Center" BorderBrush="{DynamicResource Brush.Border1}" BorderThickness="1" Background="Transparent" CornerRadius="2">
-            <Path x:Name="Icon" Height="12" Width="12" Data="{DynamicResource Icons.Check}" Fill="{DynamicResource Brush.Accent}" IsVisible="False" Margin="0,2,0,0"/>
+            <Path x:Name="Icon" Height="12" Width="12" Data="{DynamicResource Icons.Check}" Fill="{DynamicResource Brush.Accent}" Margin="0,2,0,0"/>
           </Border>
 
           <ContentPresenter x:Name="ContentPresenter"
@@ -1086,6 +1086,9 @@
       </ControlTemplate>
     </Setter>
 
+    <Style Selector="^ /template/ Path#Icon">
+      <Setter Property="IsVisible" Value="False"/>
+    </Style>
     <Style Selector="^:pointerover /template/ Border#Border">
       <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
     </Style>
@@ -1111,8 +1114,6 @@
             <Ellipse x:Name="Dot"
                      Width="10"
                      Height="10"
-                     Fill="Transparent"
-                     Stroke="Transparent"
                      StrokeThickness="1"
                      UseLayoutRounding="False" />
           </Grid>
@@ -1130,6 +1131,10 @@
       </ControlTemplate>
     </Setter>
 
+    <Style Selector="^ /template/ Ellipse#Dot">
+      <Setter Property="Fill" Value="Transparent"/>
+      <Setter Property="Stroke" Value="Transparent"/>
+    </Style>
     <Style Selector="^:pointerover /template/ Ellipse#Border">
       <Setter Property="Stroke" Value="{DynamicResource Brush.Accent}"/>
     </Style>

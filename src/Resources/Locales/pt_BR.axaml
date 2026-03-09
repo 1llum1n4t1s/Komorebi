@@ -275,6 +275,8 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.CheckedValue" xml:space="preserve">Valor Marcado:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls" xml:space="preserve">Editar Controles de Ação Personalizada</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Workspaces</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Diretório de Clone</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Usa a configuração global se vazio</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Cor</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nome</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Restaurar abas ao inicializar</x:String>
