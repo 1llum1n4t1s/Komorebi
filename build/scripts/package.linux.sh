@@ -61,6 +61,8 @@ sed -i -e "s/^Version:.*/Version: $VERSION/" \
     -e "s/^Architecture:.*/Architecture: $arch/" \
     -e "s/^Installed-Size:.*/Installed-Size: $installed_size/" \
     resources/deb/DEBIAN/control
+# Ensure maintainer scripts are executable (required by dpkg-deb)
+chmod 0755 resources/deb/DEBIAN/preinst resources/deb/DEBIAN/prerm
 # Build deb package with gzip compression
 dpkg-deb -Zgzip --root-owner-group --build resources/deb "komorebi_$VERSION-1_$arch.deb"
 
