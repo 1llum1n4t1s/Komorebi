@@ -95,11 +95,7 @@ namespace Komorebi.Models
                     await _server.WaitForConnectionAsync();
 
                     if (_disposed)
-                    {
-                        try { _server.Disconnect(); }
-                        catch { /* shutting down */ }
                         break;
-                    }
 
                     using var reader = new StreamReader(_server, leaveOpen: true);
                     var line = await reader.ReadToEndAsync();
