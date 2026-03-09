@@ -12,17 +12,30 @@ using OpenAI.Chat;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     OpenAIストリーミングレスポンスのハンドラ。
+    ///     CoT（Chain of Thought）タグのフィルタリングと受信テキストの整形を行う。
+    /// </summary>
     public partial class OpenAIResponse
     {
+        /// <summary>
+        ///     レスポンスハンドラを初期化する
+        /// </summary>
+        /// <param name="onUpdate">テキスト受信時のコールバック</param>
         public OpenAIResponse(Action<string> onUpdate)
         {
             _onUpdate = onUpdate;
         }
 
+        /// <summary>
+        ///     ストリーミングテキストを追加処理する。CoTタグをフィルタリングしつつテキストを蓄積する。
+        /// </summary>
+        /// <param name="text">受信したテキスト断片</param>
         public void Append(string text)
         {
             var buffer = text;
 
+            // 前回の未処理タグ断片があれば先頭に結合
             if (_thinkTail.Length > 0)
             {
                 _thinkTail.Append(buffer);
@@ -65,6 +78,9 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     ストリーミング終了処理。未処理の残りテキストがあれば出力する。
+        /// </summary>
         public void End()
         {
             if (_thinkTail.Length > 0)
@@ -74,6 +90,9 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     テキスト受信時の内部処理。先頭の空白を除去してからコールバックを呼ぶ。
+        /// </summary>
         private void OnReceive(string text)
         {
             if (!_hasTrimmedStart)
@@ -88,59 +107,76 @@ namespace Komorebi.Models
             _onUpdate?.Invoke(text);
         }
 
+        /// <summary>CoT（Chain of Thought）タグを除去する正規表現</summary>
         [GeneratedRegex(@"<(think|thought|thinking|thought_chain)>.*?</\1>", RegexOptions.Singleline)]
         private static partial Regex REG_COT();
 
+        /// <summary>テキスト更新コールバック</summary>
         private Action<string> _onUpdate = null;
+        /// <summary>未完了のタグ断片バッファ</summary>
         private StringBuilder _thinkTail = new StringBuilder();
+        /// <summary>フィルタ対象のCoTタグ名セット</summary>
         private HashSet<string> _thinkTags = ["think", "thought", "thinking", "thought_chain"];
+        /// <summary>先頭空白のトリムが完了したかどうか</summary>
         private bool _hasTrimmedStart = false;
     }
 
+    /// <summary>
+    ///     OpenAI/Azure OpenAIサービスの設定と通信を管理するクラス。
+    ///     git diffの解析やコミットメッセージの生成プロンプトを保持する。
+    /// </summary>
     public class OpenAIService : ObservableObject
     {
+        /// <summary>サービス表示名</summary>
         public string Name
         {
             get => _name;
             set => SetProperty(ref _name, value);
         }
 
+        /// <summary>APIエンドポイントURL</summary>
         public string Server
         {
             get => _server;
             set => SetProperty(ref _server, value);
         }
 
+        /// <summary>APIキー（または環境変数名）</summary>
         public string ApiKey
         {
             get => _apiKey;
             set => SetProperty(ref _apiKey, value);
         }
 
+        /// <summary>APIキーを環境変数から読み取るかどうか</summary>
         public bool ReadApiKeyFromEnv
         {
             get => _readApiKeyFromEnv;
             set => SetProperty(ref _readApiKeyFromEnv, value);
         }
 
+        /// <summary>使用するAIモデル名</summary>
         public string Model
         {
             get => _model;
             set => SetProperty(ref _model, value);
         }
 
+        /// <summary>ストリーミングモードを使用するかどうか</summary>
         public bool Streaming
         {
             get => _streaming;
             set => SetProperty(ref _streaming, value);
         }
 
+        /// <summary>git diffを解析するためのシステムプロンプト</summary>
         public string AnalyzeDiffPrompt
         {
             get => _analyzeDiffPrompt;
             set => SetProperty(ref _analyzeDiffPrompt, value);
         }
 
+        /// <summary>コミットメッセージ件名を生成するためのシステムプロンプト</summary>
         public string GenerateSubjectPrompt
         {
             get => _generateSubjectPrompt;
@@ -180,11 +216,20 @@ namespace Komorebi.Models
                 """;
         }
 
+        /// <summary>
+        ///     AIサービスにチャットリクエストを送信し、レスポンスをストリーミングまたは一括で受信する
+        /// </summary>
+        /// <param name="prompt">システムプロンプト</param>
+        /// <param name="question">ユーザーの質問（diff内容など）</param>
+        /// <param name="cancellation">キャンセルトークン</param>
+        /// <param name="onUpdate">テキスト受信時のコールバック</param>
         public async Task ChatAsync(string prompt, string question, CancellationToken cancellation, Action<string> onUpdate)
         {
             var key = _readApiKeyFromEnv ? Environment.GetEnvironmentVariable(_apiKey) : _apiKey;
             var endPoint = new Uri(_server);
             var credential = new ApiKeyCredential(key);
+
+            // Azure OpenAIと標準OpenAIでクライアントを切り替え
             var client = _server.Contains("openai.azure.com/", StringComparison.Ordinal)
                 ? new AzureOpenAIClient(endPoint, credential)
                 : new OpenAIClient(credential, new() { Endpoint = endPoint });

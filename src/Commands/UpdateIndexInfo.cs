@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
+    /// <summary>
+    ///     git update-index --index-info を使用してインデックスを更新するクラス。
+    ///     amend時にステージング情報を復元するために使用する。
+    /// </summary>
     public class UpdateIndexInfo
     {
+        /// <summary>
+        ///     コンストラクタ。変更リストからインデックス更新用のパッチデータを構築する。
+        /// </summary>
+        /// <param name="repo">リポジトリのパス</param>
+        /// <param name="changes">インデックスに反映する変更リスト</param>
         public UpdateIndexInfo(string repo, List<Models.Change> changes)
         {
             _repo = repo;
@@ -16,6 +25,7 @@ namespace Komorebi.Commands
             {
                 if (c.Index == Models.ChangeState.Renamed)
                 {
+                    // リネーム: 新パスを削除（ゼロハッシュ）し、元パスを復元
                     _patchBuilder.Append("0 0000000000000000000000000000000000000000\t");
                     _patchBuilder.Append(c.Path);
                     _patchBuilder.Append("\n100644 ");
@@ -25,11 +35,13 @@ namespace Komorebi.Commands
                 }
                 else if (c.Index == Models.ChangeState.Added)
                 {
+                    // 追加: ゼロハッシュでインデックスから削除（追加を取り消す）
                     _patchBuilder.Append("0 0000000000000000000000000000000000000000\t");
                     _patchBuilder.Append(c.Path);
                 }
                 else if (c.Index == Models.ChangeState.Deleted)
                 {
+                    // 削除: 元のオブジェクトハッシュでインデックスに復元
                     _patchBuilder.Append("100644 ");
                     _patchBuilder.Append(c.DataForAmend.ObjectHash);
                     _patchBuilder.Append("\t");
@@ -37,6 +49,7 @@ namespace Komorebi.Commands
                 }
                 else
                 {
+                    // 変更・タイプ変更等: 元のファイルモードとオブジェクトハッシュで復元
                     _patchBuilder.Append(c.DataForAmend.FileMode);
                     _patchBuilder.Append(" ");
                     _patchBuilder.Append(c.DataForAmend.ObjectHash);
@@ -48,6 +61,10 @@ namespace Komorebi.Commands
             }
         }
 
+        /// <summary>
+        ///     パッチデータを標準入力経由で git update-index に渡して実行する。
+        /// </summary>
+        /// <returns>成功時true</returns>
         public async Task<bool> ExecAsync()
         {
             var starter = new ProcessStartInfo();
@@ -85,7 +102,9 @@ namespace Komorebi.Commands
             }
         }
 
+        /// <summary>リポジトリのパス</summary>
         private readonly string _repo;
+        /// <summary>update-index に渡すパッチデータのビルダー</summary>
         private readonly StringBuilder _patchBuilder = new();
     }
 }

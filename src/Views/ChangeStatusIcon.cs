@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 using Avalonia;
@@ -8,6 +8,9 @@ using Avalonia.Styling;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ファイル変更ステータス（追加/変更/削除/名前変更等）のアイコンコントロール。
+    /// </summary>
     public class ChangeStatusIcon : Control
     {
         private static readonly string[] INDICATOR = ["?", "±", "T", "+", "−", "➜", "❏", "★", "!"];
@@ -42,6 +45,9 @@ namespace Komorebi.Views
             set => SetValue(ChangeProperty, value);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             if (Change == null || Bounds.Width <= 0)
@@ -78,6 +84,9 @@ namespace Komorebi.Views
             context.DrawText(txt, textOrigin);
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);

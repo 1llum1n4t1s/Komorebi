@@ -4,8 +4,17 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
+    /// <summary>
+    ///     指定コミットを含むすべての参照（ブランチ、タグ）を取得するクラス。
+    ///     git for-each-ref --contains を使用する。
+    /// </summary>
     public class QueryRefsContainsCommit : Command
     {
+        /// <summary>
+        ///     コンストラクタ。指定コミットを含む参照を検索するコマンドを設定する。
+        /// </summary>
+        /// <param name="repo">リポジトリのパス</param>
+        /// <param name="commit">対象コミットのSHA</param>
         public QueryRefsContainsCommit(string repo, string commit)
         {
             WorkingDirectory = repo;
@@ -13,6 +22,10 @@ namespace Komorebi.Commands
             Args = $"for-each-ref --format=\"%(refname)\" --contains {commit}";
         }
 
+        /// <summary>
+        ///     コマンドを非同期で実行し、参照（ブランチ・タグ）のデコレータリストを返す。
+        /// </summary>
+        /// <returns>デコレータモデルのリスト</returns>
         public async Task<List<Models.Decorator>> GetResultAsync()
         {
             var outs = new List<Models.Decorator>();

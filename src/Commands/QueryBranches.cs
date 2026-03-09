@@ -4,20 +4,37 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
+    /// <summary>
+    ///     git branchコマンドを実行して、ローカルブランチとリモートブランチの一覧を取得するクラス。
+    /// </summary>
     public class QueryBranches : Command
     {
+        /// <summary>ローカルブランチ参照のプレフィックス</summary>
         private const string PREFIX_LOCAL = "refs/heads/";
+        /// <summary>リモートブランチ参照のプレフィックス</summary>
         private const string PREFIX_REMOTE = "refs/remotes/";
+        /// <summary>デタッチドHEAD（at）のプレフィックス</summary>
         private const string PREFIX_DETACHED_AT = "(HEAD detached at";
+        /// <summary>デタッチドHEAD（from）のプレフィックス</summary>
         private const string PREFIX_DETACHED_FROM = "(HEAD detached from";
 
+        /// <summary>
+        ///     コンストラクタ。カスタムフォーマットでブランチ情報を取得するコマンドを設定する。
+        /// </summary>
+        /// <param name="repo">リポジトリのパス</param>
         public QueryBranches(string repo)
         {
             WorkingDirectory = repo;
             Context = repo;
+            // NULL区切りでrefname、コミット日時、SHA、HEADフラグ、upstream、追跡状態、ワークツリーパスを取得
             Args = "branch -l --all -v --format=\"%(refname)%00%(committerdate:unix)%00%(objectname)%00%(HEAD)%00%(upstream)%00%(upstream:trackshort)%00%(worktreepath)\"";
         }
 
+        /// <summary>
+        ///     コマンドを非同期で実行し、ブランチ一覧を返す。
+        ///     ローカルブランチとリモートブランチの追跡状態も解決する。
+        /// </summary>
+        /// <returns>ブランチモデルのリスト</returns>
         public async Task<List<Models.Branch>> GetResultAsync()
         {
             var branches = new List<Models.Branch>();
@@ -26,8 +43,8 @@ namespace Komorebi.Commands
                 return branches;
 
             var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-            var mismatched = new HashSet<string>();
-            var remotes = new Dictionary<string, Models.Branch>();
+            var mismatched = new HashSet<string>(); // 追跡状態が不一致のブランチ
+            var remotes = new Dictionary<string, Models.Branch>(); // リモートブランチのルックアップ用
             foreach (var line in lines)
             {
                 var b = ParseLine(line, mismatched);
@@ -39,6 +56,7 @@ namespace Komorebi.Commands
                 }
             }
 
+            // ローカルブランチのupstream追跡状態を解決
             foreach (var b in branches)
             {
                 if (b.IsLocal && !string.IsNullOrEmpty(b.Upstream))
@@ -47,11 +65,13 @@ namespace Komorebi.Commands
                     {
                         b.IsUpstreamGone = false;
 
+                        // 追跡状態が不一致の場合、詳細な追跡情報を取得
                         if (mismatched.Contains(b.FullName))
                             await new QueryTrackStatus(WorkingDirectory).GetResultAsync(b, upstream).ConfigureAwait(false);
                     }
                     else
                     {
+                        // 対応するリモートブランチが見つからない場合、削除済みとマーク
                         b.IsUpstreamGone = true;
                     }
                 }
@@ -60,6 +80,12 @@ namespace Komorebi.Commands
             return branches;
         }
 
+        /// <summary>
+        ///     ブランチ情報の1行を解析してBranchモデルを生成する。
+        /// </summary>
+        /// <param name="line">NULL区切りのブランチ情報行</param>
+        /// <param name="mismatched">追跡状態が不一致のブランチ名を記録するセット</param>
+        /// <returns>解析されたブランチモデル。無効な行の場合はnull</returns>
         internal static Models.Branch ParseLine(string line, HashSet<string> mismatched)
         {
             var parts = line.Split('\0');
@@ -68,6 +94,7 @@ namespace Komorebi.Commands
 
             var branch = new Models.Branch();
             var refName = parts[0];
+            // リモートのHEAD参照はスキップ
             if (refName.EndsWith("/HEAD", StringComparison.Ordinal))
                 return null;
 

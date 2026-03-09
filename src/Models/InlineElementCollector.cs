@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     インライン要素のコレクション。コミットメッセージ内のリンクやSHA参照を管理する。
+    /// </summary>
     public class InlineElementCollector
     {
         public int Count => _implementation.Count;

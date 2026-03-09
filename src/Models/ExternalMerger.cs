@@ -7,14 +7,30 @@ using Avalonia.Platform;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     外部マージ/diffツールの定義。プラットフォームごとにサポートするツールのリストを保持する。
+    /// </summary>
+    /// <param name="icon">アイコンリソース名</param>
+    /// <param name="name">ツールの表示名</param>
+    /// <param name="finder">実行ファイルの検索パターン</param>
+    /// <param name="mergeCmd">マージ時のコマンドテンプレート</param>
+    /// <param name="diffCmd">diff時のコマンドテンプレート</param>
     public class ExternalMerger(string icon, string name, string finder, string mergeCmd, string diffCmd)
     {
+        /// <summary>アイコンリソース名</summary>
         public string Icon { get; } = icon;
+        /// <summary>ツールの表示名</summary>
         public string Name { get; } = name;
+        /// <summary>実行ファイルの検索パターン（セミコロン区切り可）</summary>
         public string Finder { get; } = finder;
+        /// <summary>マージコマンドのテンプレート（$LOCAL, $REMOTE, $BASE, $MERGED変数使用）</summary>
         public string MergeCmd { get; } = mergeCmd;
+        /// <summary>diffコマンドのテンプレート（$LOCAL, $REMOTE変数使用）</summary>
         public string DiffCmd { get; } = diffCmd;
 
+        /// <summary>
+        ///     ツールのアイコン画像（埋め込みリソースから読み込み）
+        /// </summary>
         public Bitmap IconImage
         {
             get
@@ -24,6 +40,9 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     プラットフォーム別のサポート対象マージツールリスト
+        /// </summary>
         public static readonly List<ExternalMerger> Supported;
 
         static ExternalMerger()
@@ -82,6 +101,11 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     実行ファイルを検索するためのパターン配列を取得する。
+        ///     Windowsではセミコロン区切りで複数パターン、他OSではファイル名のみ。
+        /// </summary>
+        /// <returns>検索パターンの配列</returns>
         public string[] GetPatternsToFindExecFile()
         {
             if (OperatingSystem.IsWindows())
@@ -91,6 +115,9 @@ namespace Komorebi.Models
         }
     }
 
+    /// <summary>
+    ///     diff/マージツールの実行ファイルとコマンドテンプレートを保持するクラス
+    /// </summary>
     public class DiffMergeTool(string exec, string cmd)
     {
         public string Exec { get; } = exec;

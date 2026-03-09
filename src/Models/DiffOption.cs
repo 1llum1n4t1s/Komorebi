@@ -3,10 +3,14 @@ using System.Text;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     git diffコマンドのオプションを構築するクラス。
+    ///     ワーキングコピーの変更、コミット間の差分、リビジョン比較など各種diffに対応する。
+    /// </summary>
     public class DiffOption
     {
         /// <summary>
-        ///     Enable `--ignore-cr-at-eol` by default?
+        ///     デフォルトで `--ignore-cr-at-eol` を有効にするかどうか
         /// </summary>
         public static bool IgnoreCRAtEOL
         {
@@ -14,17 +18,22 @@ namespace Komorebi.Models
             set;
         } = true;
 
+        /// <summary>ワーキングコピーの変更情報</summary>
         public Change WorkingCopyChange => _workingCopyChange;
+        /// <summary>ステージングされていない変更かどうか</summary>
         public bool IsUnstaged => _isUnstaged;
+        /// <summary>比較対象のリビジョンリスト</summary>
         public List<string> Revisions => _revisions;
+        /// <summary>対象ファイルパス</summary>
         public string Path => _path;
+        /// <summary>リネーム前の元ファイルパス</summary>
         public string OrgPath => _orgPath;
 
         /// <summary>
-        ///     Only used for working copy changes
+        ///     ワーキングコピーの変更用コンストラクタ
         /// </summary>
-        /// <param name="change"></param>
-        /// <param name="isUnstaged"></param>
+        /// <param name="change">変更情報</param>
+        /// <param name="isUnstaged">ステージされていない変更かどうか</param>
         public DiffOption(Change change, bool isUnstaged)
         {
             _workingCopyChange = change;
@@ -53,10 +62,10 @@ namespace Komorebi.Models
         }
 
         /// <summary>
-        ///     Only used for commit changes.
+        ///     コミットの変更用コンストラクタ
         /// </summary>
-        /// <param name="commit"></param>
-        /// <param name="change"></param>
+        /// <param name="commit">対象コミット</param>
+        /// <param name="change">変更情報</param>
         public DiffOption(Commit commit, Change change)
         {
             var baseRevision = commit.Parents.Count == 0 ? Commit.EmptyTreeSHA1 : $"{commit.SHA}^";
@@ -67,10 +76,10 @@ namespace Komorebi.Models
         }
 
         /// <summary>
-        ///     Diff with filepath. Used by FileHistories
+        ///     ファイルパス指定のdiffコンストラクタ。FileHistories（ファイル履歴）で使用。
         /// </summary>
-        /// <param name="commit"></param>
-        /// <param name="file"></param>
+        /// <param name="commit">対象コミット</param>
+        /// <param name="file">ファイルパス</param>
         public DiffOption(Commit commit, string file)
         {
             var baseRevision = commit.Parents.Count == 0 ? Commit.EmptyTreeSHA1 : $"{commit.SHA}^";
@@ -80,11 +89,11 @@ namespace Komorebi.Models
         }
 
         /// <summary>
-        ///     Used to show differences between two revisions.
+        ///     2つのリビジョン間の差分を表示するためのコンストラクタ
         /// </summary>
-        /// <param name="baseRevision"></param>
-        /// <param name="targetRevision"></param>
-        /// <param name="change"></param>
+        /// <param name="baseRevision">基準リビジョン</param>
+        /// <param name="targetRevision">比較先リビジョン</param>
+        /// <param name="change">変更情報</param>
         public DiffOption(string baseRevision, string targetRevision, Change change)
         {
             _revisions.Add(string.IsNullOrEmpty(baseRevision) ? "-R" : baseRevision);
@@ -94,7 +103,7 @@ namespace Komorebi.Models
         }
 
         /// <summary>
-        ///     Converts to diff command arguments.
+        ///     diffコマンドの引数文字列に変換する
         /// </summary>
         public override string ToString()
         {

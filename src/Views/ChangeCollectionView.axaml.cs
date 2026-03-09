@@ -12,10 +12,16 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ChangeTreeNodeToggleButtonクラス。
+    /// </summary>
     public class ChangeTreeNodeToggleButton : ToggleButton
     {
         protected override Type StyleKeyOverride => typeof(ToggleButton);
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
@@ -29,10 +35,16 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     ChangeCollectionContainerクラス。
+    /// </summary>
     public class ChangeCollectionContainer : ListBox
     {
         protected override Type StyleKeyOverride => typeof(ListBox);
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (SelectedItems is [ViewModels.ChangeTreeNode node])
@@ -50,6 +62,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     変更ファイルコレクションビューのコードビハインド。
+    /// </summary>
     public partial class ChangeCollectionView : UserControl
     {
         public static readonly StyledProperty<bool> IsUnstagedChangeProperty =
@@ -106,11 +121,17 @@ namespace Komorebi.Views
             remove { RemoveHandler(ChangeDoubleTappedEvent, value); }
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public ChangeCollectionView()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ToggleNodeIsExpandedの処理を行う。
+        /// </summary>
         public void ToggleNodeIsExpanded(ViewModels.ChangeTreeNode node)
         {
             if (Content is ViewModels.ChangeCollectionAsTree tree && node.IsFolder)
@@ -145,6 +166,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     GetNextChangeWithoutSelectionの処理を行う。
+        /// </summary>
         public Models.Change GetNextChangeWithoutSelection()
         {
             var selected = SelectedChanges;
@@ -207,6 +231,9 @@ namespace Komorebi.Views
             return null;
         }
 
+        /// <summary>
+        ///     TakeFocusの処理を行う。
+        /// </summary>
         public void TakeFocus()
         {
             var container = this.FindDescendantOfType<ChangeCollectionContainer>();
@@ -214,6 +241,9 @@ namespace Komorebi.Views
                 container.Focus();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -229,6 +259,9 @@ namespace Komorebi.Views
                 UpdateDataSource(true);
         }
 
+        /// <summary>
+        ///     RowDataContextChangedイベントのハンドラ。
+        /// </summary>
         private void OnRowDataContextChanged(object sender, EventArgs e)
         {
             if (sender is not Control control)
@@ -251,6 +284,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     RowDoubleTappedイベントのハンドラ。
+        /// </summary>
         private void OnRowDoubleTapped(object sender, TappedEventArgs e)
         {
             var grid = sender as Grid;
@@ -275,6 +311,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     RowSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnRowSelectionChanged(object sender, SelectionChangedEventArgs _)
         {
             if (_disableSelectionChangingEvent)
@@ -318,6 +357,9 @@ namespace Komorebi.Views
             _disableSelectionChangingEvent = false;
         }
 
+        /// <summary>
+        ///     MakeTreeRowsの処理を行う。
+        /// </summary>
         private void MakeTreeRows(List<ViewModels.ChangeTreeNode> rows, List<ViewModels.ChangeTreeNode> nodes)
         {
             foreach (var node in nodes)
@@ -331,6 +373,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UpdateDataSourceの処理を行う。
+        /// </summary>
         private void UpdateDataSource(bool onlyViewModeChange)
         {
             _disableSelectionChangingEvent = !onlyViewModeChange;
@@ -400,6 +445,9 @@ namespace Komorebi.Views
             _disableSelectionChangingEvent = false;
         }
 
+        /// <summary>
+        ///     UpdateSelectionの処理を行う。
+        /// </summary>
         private void UpdateSelection()
         {
             if (_disableSelectionChangingEvent)
@@ -442,6 +490,9 @@ namespace Komorebi.Views
             _disableSelectionChangingEvent = false;
         }
 
+        /// <summary>
+        ///     CollectChangesInNodeの処理を行う。
+        /// </summary>
         private void CollectChangesInNode(List<Models.Change> outs, ViewModels.ChangeTreeNode node)
         {
             if (node.IsFolder)
@@ -455,6 +506,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UpdateRowTipsの処理を行う。
+        /// </summary>
         private void UpdateRowTips(Control control, Models.Change change)
         {
             var tip = new TextBlock() { TextWrapping = TextWrapping.Wrap };

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -10,13 +10,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミット詳細表示パネルのコードビハインド。
+    /// </summary>
     public partial class CommitDetail : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CommitDetail()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     CreateChangeContextMenuByFolderの処理を行う。
+        /// </summary>
         public ContextMenu CreateChangeContextMenuByFolder(ViewModels.ChangeTreeNode node, List<Models.Change> changes)
         {
             if (DataContext is not ViewModels.CommitDetail { Repository: { } repo, Commit: { } commit } vm)
@@ -105,6 +114,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CreateMultipleChangesContextMenuの処理を行う。
+        /// </summary>
         public ContextMenu CreateMultipleChangesContextMenu(List<Models.Change> changes)
         {
             if (DataContext is not ViewModels.CommitDetail { Repository: { } repo, Commit: { } commit } vm)
@@ -204,6 +216,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CreateChangeContextMenuの処理を行う。
+        /// </summary>
         public ContextMenu CreateChangeContextMenu(Models.Change change)
         {
             if (DataContext is not ViewModels.CommitDetail { Repository: { } repo, Commit: { } commit } vm)
@@ -472,6 +487,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CommitListKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnCommitListKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.CommitDetail vm)
@@ -501,6 +519,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ChangeDoubleTappedイベントのハンドラ。
+        /// </summary>
         private void OnChangeDoubleTapped(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.CommitDetail detail && sender is Grid { DataContext: Models.Change change })
@@ -515,6 +536,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ChangeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is Grid { DataContext: Models.Change change } grid)

@@ -3,18 +3,31 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     HEADコミットのSquashまたはFixup操作を行うポップアップダイアログのViewModel。
+    ///     対象コミットまでソフトリセットし、新しいメッセージでコミットし直す。
+    /// </summary>
     public class SquashOrFixupHead : Popup
     {
+        /// <summary>
+        ///     Fixupモードかどうか。falseの場合はSquashモード。
+        /// </summary>
         public bool IsFixupMode
         {
             get;
         }
 
+        /// <summary>
+        ///     Squash/Fixup対象のコミット。
+        /// </summary>
         public Models.Commit Target
         {
             get;
         }
 
+        /// <summary>
+        ///     新しいコミットメッセージ。
+        /// </summary>
         [Required(ErrorMessage = "Commit message is required!!!")]
         public string Message
         {
@@ -22,6 +35,9 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _message, value, true);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリ、対象コミット、メッセージ、モードを受け取る。
+        /// </summary>
         public SquashOrFixupHead(Repository repo, Models.Commit target, string message, bool fixup)
         {
             IsFixupMode = fixup;
@@ -31,6 +47,10 @@ namespace Komorebi.ViewModels
             _message = message;
         }
 
+        /// <summary>
+        ///     Squash/Fixup操作を実行する。
+        ///     ステージされた変更がある場合は自動スタッシュし、ソフトリセット後にamendコミットを行う。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();

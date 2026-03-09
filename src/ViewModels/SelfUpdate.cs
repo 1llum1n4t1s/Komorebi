@@ -6,26 +6,43 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     アプリケーションの自動アップデートを管理するViewModel。
+    ///     Velopackフレームワークを使用してアップデートのダウンロードと適用を行う。
+    /// </summary>
     public class SelfUpdate : ObservableObject
     {
+        /// <summary>
+        ///     アップデート関連のデータ。更新情報やエラー情報を保持する。
+        /// </summary>
         public object Data
         {
             get => _data;
             set => SetProperty(ref _data, value);
         }
 
+        /// <summary>
+        ///     アップデートのダウンロード中かどうか。
+        /// </summary>
         public bool IsDownloading
         {
             get => _isDownloading;
             set => SetProperty(ref _isDownloading, value);
         }
 
+        /// <summary>
+        ///     ダウンロードの進捗率（0-100）。
+        /// </summary>
         public int DownloadProgress
         {
             get => _downloadProgress;
             set => SetProperty(ref _downloadProgress, value);
         }
 
+        /// <summary>
+        ///     アップデートをダウンロードして適用する。ダウンロード完了後にアプリを再起動する。
+        ///     既にダウンロード中の場合は何もしない。
+        /// </summary>
         public void DownloadAndApplyUpdate(Models.VelopackUpdate update)
         {
             if (_isDownloading)
@@ -63,6 +80,9 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     進行中のダウンロードをキャンセルする。
+        /// </summary>
         public void CancelDownload()
         {
             _cts?.Cancel();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 using Avalonia.Controls;
@@ -9,13 +9,22 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ワーキングコピー（ステージング・コミット）ビューのコードビハインド。
+    /// </summary>
     public partial class WorkingCopy : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public WorkingCopy()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     MainLayoutSizeChangedイベントのハンドラ。
+        /// </summary>
         private void OnMainLayoutSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (sender is not Grid grid)
@@ -29,6 +38,9 @@ namespace Komorebi.Views
                 layout.WorkingCopyLeftWidth = new GridLength(maxLeft, GridUnitType.Pixel);
         }
 
+        /// <summary>
+        ///     OpenAssumeUnchangedイベントのハンドラ。
+        /// </summary>
         private async void OnOpenAssumeUnchanged(object sender, RoutedEventArgs e)
         {
             var repoView = this.FindAncestorOfType<Repository>();
@@ -38,6 +50,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     UnstagedContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnUnstagedContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm && sender is Control control)
@@ -53,6 +68,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     StagedContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnStagedContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm && sender is Control control)
@@ -68,6 +86,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UnstagedChangeDoubleTappedイベントのハンドラ。
+        /// </summary>
         private async void OnUnstagedChangeDoubleTapped(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -79,6 +100,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     StagedChangeDoubleTappedイベントのハンドラ。
+        /// </summary>
         private async void OnStagedChangeDoubleTapped(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -90,6 +114,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UnstagedKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnUnstagedKeyDown(object _, KeyEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -134,6 +161,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     StagedKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnStagedKeyDown(object _, KeyEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -173,6 +203,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     StageSelectedButtonClickedイベントのハンドラ。
+        /// </summary>
         private async void OnStageSelectedButtonClicked(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -185,6 +218,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     StageAllButtonClickedイベントのハンドラ。
+        /// </summary>
         private async void OnStageAllButtonClicked(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -193,6 +229,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     UnstageSelectedButtonClickedイベントのハンドラ。
+        /// </summary>
         private async void OnUnstageSelectedButtonClicked(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -205,6 +244,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     UnstageAllButtonClickedイベントのハンドラ。
+        /// </summary>
         private async void OnUnstageAllButtonClicked(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -213,6 +255,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenExternalMergeToolAllConflictsイベントのハンドラ。
+        /// </summary>
         private async void OnOpenExternalMergeToolAllConflicts(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -221,6 +266,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     Continueイベントのハンドラ。
+        /// </summary>
         private async void OnContinue(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -229,6 +277,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     Commitイベントのハンドラ。
+        /// </summary>
         private async void OnCommit(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -237,6 +288,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CommitWithAutoStageイベントのハンドラ。
+        /// </summary>
         private async void OnCommitWithAutoStage(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -245,6 +299,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CommitWithPushイベントのハンドラ。
+        /// </summary>
         private async void OnCommitWithPush(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm)
@@ -253,6 +310,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CreateContextMenuForUnstagedChangesの処理を行う。
+        /// </summary>
         private ContextMenu CreateContextMenuForUnstagedChanges(ViewModels.WorkingCopy vm, string selectedSingleFolder)
         {
             var repo = vm.Repository;
@@ -899,6 +959,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CreateContextMenuForStagedChangesの処理を行う。
+        /// </summary>
         public ContextMenu CreateContextMenuForStagedChanges(ViewModels.WorkingCopy vm, string selectedSingleFolder)
         {
             var repo = vm.Repository;
@@ -1288,6 +1351,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     TryAddOpenFileToContextMenuの処理を行う。
+        /// </summary>
         private void TryAddOpenFileToContextMenu(ContextMenu menu, string fullpath)
         {
             var openWith = new MenuItem();
@@ -1331,6 +1397,9 @@ namespace Komorebi.Views
             menu.Items.Add(openWith);
         }
 
+        /// <summary>
+        ///     TryToAddCustomActionsToContextMenuの処理を行う。
+        /// </summary>
         private void TryToAddCustomActionsToContextMenu(ViewModels.Repository repo, ContextMenu menu, string path)
         {
             var actions = repo.GetCustomActions(Models.CustomActionScope.File);

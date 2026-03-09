@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
@@ -8,13 +8,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     スタッシュ一覧ページのコードビハインド。
+    /// </summary>
     public partial class StashesPage : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public StashesPage()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     MainLayoutSizeChangedイベントのハンドラ。
+        /// </summary>
         private void OnMainLayoutSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (sender is not Grid grid)
@@ -28,6 +37,9 @@ namespace Komorebi.Views
                 layout.StashesLeftWidth = new GridLength(maxLeft, GridUnitType.Pixel);
         }
 
+        /// <summary>
+        ///     StashListKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnStashListKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is ViewModels.StashesPage { SelectedStash: { } stash } vm)
@@ -45,6 +57,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     StashContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnStashContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (DataContext is ViewModels.StashesPage vm &&
@@ -120,6 +135,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     StashDoubleTappedイベントのハンドラ。
+        /// </summary>
         private void OnStashDoubleTapped(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.StashesPage vm &&
@@ -129,6 +147,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ChangeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (DataContext is ViewModels.StashesPage { SelectedChanges: { Count: > 0 } selected } vm &&
@@ -239,6 +260,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.StashesPage vm)

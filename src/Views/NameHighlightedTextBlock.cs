@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -6,6 +6,9 @@ using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     検索キーワードのマッチ部分をハイライト表示するテキストブロック。
+    /// </summary>
     public class NameHighlightedTextBlock : Control
     {
         public static readonly StyledProperty<string> TextProperty =
@@ -44,11 +47,17 @@ namespace Komorebi.Views
             set => SetValue(ForegroundProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static NameHighlightedTextBlock()
         {
             AffectsMeasure<NameHighlightedTextBlock>(TextProperty);
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             var text = Text;
@@ -68,6 +77,9 @@ namespace Komorebi.Views
             return new Size(formatted.Width, formatted.Height);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             var text = Text;

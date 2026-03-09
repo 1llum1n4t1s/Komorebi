@@ -6,6 +6,9 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミットメッセージエディタのコードビハインド。
+    /// </summary>
     public partial class CommitMessageEditor : ChromelessWindow
     {
         public string ConventionalTypesOverride
@@ -14,11 +17,17 @@ namespace Komorebi.Views
             private set;
         } = string.Empty;
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CommitMessageEditor()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     AsStandaloneの処理を行う。
+        /// </summary>
         public void AsStandalone(string file)
         {
             var gitDir = new Commands.QueryGitDir(Path.GetDirectoryName(file)).GetResult();
@@ -46,6 +55,9 @@ namespace Komorebi.Views
             Editor.CommitMessage = File.ReadAllText(file).ReplaceLineEndings("\n").Trim();
         }
 
+        /// <summary>
+        ///     AsBuiltinの処理を行う。
+        /// </summary>
         public void AsBuiltin(string conventionalTypesOverride, string msg, Action<string> onSave)
         {
             ConventionalTypesOverride = conventionalTypesOverride;
@@ -56,6 +68,9 @@ namespace Komorebi.Views
             Editor.CommitMessage = msg;
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられた後の処理。
+        /// </summary>
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -64,12 +79,18 @@ namespace Komorebi.Views
                 App.Quit(_exitCode);
         }
 
+        /// <summary>
+        ///     SaveAndCloseの処理を行う。
+        /// </summary>
         private void SaveAndClose(object _1, RoutedEventArgs _2)
         {
             _onSave?.Invoke(Editor.CommitMessage);
             Close();
         }
 
+        /// <summary>
+        ///     CancelAndCloseの処理を行う。
+        /// </summary>
         private void CancelAndClose(object _1, RoutedEventArgs _2)
         {
             _exitCode = -1;

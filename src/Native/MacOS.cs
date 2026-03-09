@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,23 +10,33 @@ using Avalonia.Platform;
 
 namespace Komorebi.Native
 {
+    /// <summary>
+    ///     macOS固有のバックエンド実装。
+    ///     Homebrewのパス修正、macOS標準コマンド（open等）を使用する。
+    /// </summary>
     [SupportedOSPlatform("macOS")]
     internal class MacOS : OS.IBackend
     {
+        /// <summary>
+        ///     AvaloniaアプリケーションビルダーにmacOS固有の設定を適用する。
+        ///     デフォルトメニュー項目を無効化し、PATH環境変数を修正する。
+        /// </summary>
         public void SetupApp(AppBuilder builder)
         {
+            // macOSのデフォルトアプリケーションメニューを無効化する
             builder.With(new MacOSPlatformOptions()
             {
                 DisableDefaultApplicationMenuItems = true,
             });
 
-            // Fix `PATH` env on macOS.
+            // macOSのPATH環境変数を修正してHomebrewパスを含める
             var path = Environment.GetEnvironmentVariable("PATH");
             if (string.IsNullOrEmpty(path))
                 path = "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin";
             else if (!path.Contains("/opt/homebrew/", StringComparison.Ordinal))
                 path = "/opt/homebrew/bin:/opt/homebrew/sbin:" + path;
 
+            // カスタムPATHファイルが存在する場合はその内容で上書きする
             var customPathFile = Path.Combine(OS.DataDir, "PATH");
             if (File.Exists(customPathFile))
             {
@@ -38,12 +48,20 @@ namespace Komorebi.Native
             Environment.SetEnvironmentVariable("PATH", path);
         }
 
+        /// <summary>
+        ///     ウィンドウにmacOS固有のクロム設定を適用する。
+        ///     システムクロム（信号機ボタン）を使用する。
+        /// </summary>
         public void SetupWindow(Window window)
         {
             window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.SystemChrome;
             window.ExtendClientAreaToDecorationsHint = true;
         }
 
+        /// <summary>
+        ///     macOSのアプリケーションデータディレクトリパスを返す。
+        ///     ~/Library/Application Support/Komorebi を使用する。
+        /// </summary>
         public string GetDataDir()
         {
             return Path.Combine(
@@ -51,8 +69,13 @@ namespace Komorebi.Native
                 "Komorebi");
         }
 
+        /// <summary>
+        ///     macOSの一般的なパスからgit実行ファイルを検索する。
+        ///     /usr/bin、/usr/local/bin、Homebrewのパスを順に確認する。
+        /// </summary>
         public string FindGitExecutable()
         {
+            // macOSでgitが存在する可能性のあるパスを順に確認する
             var gitPathVariants = new List<string>() {
                 "/usr/bin/git",
                 "/usr/local/bin/git",
@@ -67,15 +90,23 @@ namespace Komorebi.Native
             return string.Empty;
         }
 
+        /// <summary>
+        ///     macOSのターミナルアプリの実行パスを返す。
+        /// </summary>
         public string FindTerminal(Models.ShellOrTerminal shell)
         {
             return shell.Exec;
         }
 
+        /// <summary>
+        ///     macOSにインストールされている外部エディタ/IDEを検出する。
+        ///     /Applications 配下のアプリケーションバンドルを確認する。
+        /// </summary>
         public List<Models.ExternalTool> FindExternalTools()
         {
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var finder = new Models.ExternalToolsFinder();
+            // 各エディタのmacOS標準インストールパスを確認する
             finder.VSCode(() => "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code");
             finder.VSCodeInsiders(() => "/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code");
             finder.VSCodium(() => "/Applications/VSCodium.app/Contents/Resources/app/bin/codium");
@@ -86,11 +117,18 @@ namespace Komorebi.Native
             return finder.Tools;
         }
 
+        /// <summary>
+        ///     macOSのopenコマンドでデフォルトブラウザを開く。
+        /// </summary>
         public void OpenBrowser(string url)
         {
             Process.Start("open", url);
         }
 
+        /// <summary>
+        ///     macOSのopenコマンドでFinderを開く。
+        ///     ファイルの場合は -R オプションで親フォルダ内のファイルを選択表示する。
+        /// </summary>
         public void OpenInFileManager(string path)
         {
             if (Directory.Exists(path))
@@ -99,13 +137,20 @@ namespace Komorebi.Native
                 Process.Start("open", $"{path.Quoted()} -R");
         }
 
+        /// <summary>
+        ///     macOSのopenコマンドで指定ターミナルアプリを起動する。
+        /// </summary>
         public void OpenTerminal(string workdir, string _)
         {
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var dir = string.IsNullOrEmpty(workdir) ? home : workdir;
+            // -a オプションでアプリケーション名を指定して起動する
             Process.Start("open", $"-a {OS.ShellOrTerminal} {dir.Quoted()}");
         }
 
+        /// <summary>
+        ///     macOSのopenコマンドでデフォルトアプリケーションでファイルを開く。
+        /// </summary>
         public void OpenWithDefaultEditor(string file)
         {
             Process.Start("open", file.Quoted());

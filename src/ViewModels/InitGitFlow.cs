@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     Git Flowの初期化ダイアログのViewModel。
+    ///     master/develop/feature/release/hotfix/tagの各プレフィックスを設定してGit Flowを構成する。
+    /// </summary>
     public partial class InitGitFlow : Popup
     {
+        /// <summary>タグプレフィックスのバリデーション用正規表現。</summary>
         [GeneratedRegex(@"^[\w\-/\.]+$")]
         private static partial Regex REG_TAG_PREFIX();
 
+        /// <summary>masterブランチ名。バリデーション付き。</summary>
         [Required(ErrorMessage = "Master branch name is required!!!")]
         [RegularExpression(@"^[\w\-/\.]+$", ErrorMessage = "Bad branch name format!")]
         [CustomValidation(typeof(InitGitFlow), nameof(ValidateBaseBranch))]
@@ -20,6 +26,7 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _master, value, true);
         }
 
+        /// <summary>developブランチ名。バリデーション付き。</summary>
         [Required(ErrorMessage = "Develop branch name is required!!!")]
         [RegularExpression(@"^[\w\-/\.]+$", ErrorMessage = "Bad branch name format!")]
         [CustomValidation(typeof(InitGitFlow), nameof(ValidateBaseBranch))]
@@ -29,6 +36,7 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _develop, value, true);
         }
 
+        /// <summary>featureブランチのプレフィックス（例: "feature/"）。</summary>
         [Required(ErrorMessage = "Feature prefix is required!!!")]
         [RegularExpression(@"^[\w\-\.]+/$", ErrorMessage = "Bad feature prefix format!")]
         public string FeaturePrefix
@@ -37,6 +45,7 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _featurePrefix, value, true);
         }
 
+        /// <summary>releaseブランチのプレフィックス（例: "release/"）。</summary>
         [Required(ErrorMessage = "Release prefix is required!!!")]
         [RegularExpression(@"^[\w\-\.]+/$", ErrorMessage = "Bad release prefix format!")]
         public string ReleasePrefix
@@ -45,6 +54,7 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _releasePrefix, value, true);
         }
 
+        /// <summary>hotfixブランチのプレフィックス（例: "hotfix/"）。</summary>
         [Required(ErrorMessage = "Hotfix prefix is required!!!")]
         [RegularExpression(@"^[\w\-\.]+/$", ErrorMessage = "Bad hotfix prefix format!")]
         public string HotfixPrefix
@@ -53,6 +63,7 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _hotfixPrefix, value, true);
         }
 
+        /// <summary>タグのプレフィックス（任意）。</summary>
         [CustomValidation(typeof(InitGitFlow), nameof(ValidateTagPrefix))]
         public string TagPrefix
         {
@@ -60,6 +71,9 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _tagPrefix, value, true);
         }
 
+        /// <summary>
+        ///     コンストラクタ。ローカルブランチからmasterブランチ名の初期値を自動判定する。
+        /// </summary>
         public InitGitFlow(Repository repo)
         {
             _repo = repo;
@@ -81,6 +95,9 @@ namespace Komorebi.ViewModels
                 _master = "master";
         }
 
+        /// <summary>
+        ///     master/developブランチ名の重複チェックバリデーション。
+        /// </summary>
         public static ValidationResult ValidateBaseBranch(string _, ValidationContext ctx)
         {
             if (ctx.ObjectInstance is InitGitFlow initializer)
@@ -92,6 +109,9 @@ namespace Komorebi.ViewModels
             return ValidationResult.Success;
         }
 
+        /// <summary>
+        ///     タグプレフィックスの形式チェックバリデーション（空の場合は許可）。
+        /// </summary>
         public static ValidationResult ValidateTagPrefix(string tagPrefix, ValidationContext ctx)
         {
             if (!string.IsNullOrWhiteSpace(tagPrefix) && !REG_TAG_PREFIX().IsMatch(tagPrefix))
@@ -100,6 +120,9 @@ namespace Komorebi.ViewModels
             return ValidationResult.Success;
         }
 
+        /// <summary>
+        ///     確認ボタン押下時の処理。必要なブランチを作成してからGit Flowを初期化する。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -111,6 +134,7 @@ namespace Komorebi.ViewModels
             bool succ;
             var current = _repo.CurrentBranch;
 
+            // masterブランチが存在しなければ現在のHEADから作成
             var masterBranch = _repo.Branches.Find(x => x.IsLocal && x.Name.Equals(_master, StringComparison.Ordinal));
             if (masterBranch == null)
             {
@@ -124,6 +148,7 @@ namespace Komorebi.ViewModels
                 }
             }
 
+            // developブランチが存在しなければ現在のHEADから作成
             var developBranch = _repo.Branches.Find(x => x.IsLocal && x.Name.Equals(_develop, StringComparison.Ordinal));
             if (developBranch == null)
             {

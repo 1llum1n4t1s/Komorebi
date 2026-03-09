@@ -10,8 +10,14 @@ using Avalonia.Platform;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     外部エディタ/IDEツールを表すクラス。リポジトリを外部ツールで開く機能を提供する。
+    /// </summary>
     public class ExternalTool
     {
+        /// <summary>
+        ///     外部ツールの起動オプション（ワークスペースファイル選択など）
+        /// </summary>
         public class LaunchOption
         {
             public string Title { get; set; }
@@ -24,10 +30,20 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>ツールの表示名</summary>
         public string Name { get; }
+        /// <summary>実行ファイルのパス</summary>
         public string ExecFile { get; }
+        /// <summary>ツールのアイコン画像</summary>
         public Bitmap IconImage { get; }
 
+        /// <summary>
+        ///     外部ツールのコンストラクタ
+        /// </summary>
+        /// <param name="name">表示名</param>
+        /// <param name="icon">アイコンリソース名</param>
+        /// <param name="execFile">実行ファイルパス</param>
+        /// <param name="optionsGenerator">起動オプション生成関数（省略可）</param>
         public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator = null)
         {
             Name = name;
@@ -47,11 +63,20 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     指定リポジトリに対する起動オプションのリストを生成する
+        /// </summary>
+        /// <param name="repo">リポジトリパス</param>
+        /// <returns>起動オプションのリスト（ない場合はnull）</returns>
         public List<LaunchOption> MakeLaunchOptions(string repo)
         {
             return _optionsGenerator?.Invoke(repo);
         }
 
+        /// <summary>
+        ///     外部ツールを指定した引数で起動する
+        /// </summary>
+        /// <param name="args">コマンドライン引数</param>
         public void Launch(string args)
         {
             if (File.Exists(ExecFile))
@@ -68,6 +93,9 @@ namespace Komorebi.Models
         private Func<string, List<LaunchOption>> _optionsGenerator = null;
     }
 
+    /// <summary>
+    ///     Visual Studioのインストール済みインスタンス情報
+    /// </summary>
     public class VisualStudioInstance
     {
         [JsonPropertyName("displayName")]
@@ -80,6 +108,9 @@ namespace Komorebi.Models
         public bool IsPrerelease { get; set; } = false;
     }
 
+    /// <summary>
+    ///     JetBrains Toolboxの状態情報（state.jsonのデシリアライズ用）
+    /// </summary>
     public class JetBrainsState
     {
         [JsonPropertyName("version")]
@@ -90,6 +121,9 @@ namespace Komorebi.Models
         public List<JetBrainsTool> Tools { get; set; } = new List<JetBrainsTool>();
     }
 
+    /// <summary>
+    ///     JetBrains Toolboxの個別ツール情報
+    /// </summary>
     public class JetBrainsTool
     {
         [JsonPropertyName("channelId")]
@@ -112,6 +146,9 @@ namespace Komorebi.Models
         public string LaunchCommand { get; set; }
     }
 
+    /// <summary>
+    ///     外部ツールのカスタマイズ設定（external_editors.jsonから読み込み）
+    /// </summary>
     public class ExternalToolCustomization
     {
         [JsonPropertyName("tools")]
@@ -120,6 +157,10 @@ namespace Komorebi.Models
         public List<string> Excludes { get; set; } = new List<string>();
     }
 
+    /// <summary>
+    ///     インストール済みの外部エディタ/IDEを自動検出するクラス。
+    ///     VS Code、JetBrains、Sublime Text等をサポートする。
+    /// </summary>
     public class ExternalToolsFinder
     {
         public List<ExternalTool> Tools

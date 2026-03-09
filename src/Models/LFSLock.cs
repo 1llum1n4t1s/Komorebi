@@ -2,12 +2,18 @@
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     Git LFSロックの所有者情報
+    /// </summary>
     public class LFSLockOwner
     {
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    ///     Git LFSロック情報。ファイルのロック状態を表す。
+    /// </summary>
     public class LFSLock
     {
         [JsonPropertyName("id")]

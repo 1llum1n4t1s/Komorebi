@@ -5,31 +5,50 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     ディレクトリ内のGitリポジトリを自動スキャンするポップアップダイアログのViewModel。
+    ///     指定ディレクトリ配下を再帰的に探索し、未管理のリポジトリを発見してツリーに追加する。
+    /// </summary>
     public class ScanRepositories : Popup
     {
+        /// <summary>
+        ///     カスタムディレクトリを使用するかどうか。falseの場合はプリセットから選択。
+        /// </summary>
         public bool UseCustomDir
         {
             get => _useCustomDir;
             set => SetProperty(ref _useCustomDir, value);
         }
 
+        /// <summary>
+        ///     ユーザーが指定したカスタムスキャンディレクトリのパス。
+        /// </summary>
         public string CustomDir
         {
             get => _customDir;
             set => SetProperty(ref _customDir, value);
         }
 
+        /// <summary>
+        ///     スキャン対象ディレクトリの選択肢リスト（ワークスペース/グローバル設定から取得）。
+        /// </summary>
         public List<Models.ScanDir> ScanDirs
         {
             get;
         }
 
+        /// <summary>
+        ///     選択されたスキャンディレクトリ。
+        /// </summary>
         public Models.ScanDir Selected
         {
             get => _selected;
             set => SetProperty(ref _selected, value, true);
         }
 
+        /// <summary>
+        ///     コンストラクタ。ワークスペースとグローバル設定からスキャンディレクトリ候補を初期化する。
+        /// </summary>
         public ScanRepositories()
         {
             ScanDirs = new List<Models.ScanDir>();
@@ -50,8 +69,8 @@ namespace Komorebi.ViewModels
         }
 
         /// <summary>
-        /// Scan a specific directory for git repositories and add them to the repository tree.
-        /// This method runs without showing a popup dialog.
+        ///     指定ディレクトリ内のGitリポジトリをスキャンしてツリーに追加する。
+        ///     ポップアップダイアログなしで直接実行されるスタティックメソッド。
         /// </summary>
         public static async Task ScanDirectoryAsync(string rootDir)
         {
@@ -84,6 +103,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     スキャン操作を実行する。選択またはカスタム指定されたディレクトリを再帰的に探索する。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             string selectedDir;
@@ -123,7 +145,7 @@ namespace Komorebi.ViewModels
                 IgnoreInaccessible = true,
             }, desc => ProgressDescription = desc);
 
-            // Make sure this task takes at least 0.5s to avoid the popup panel disappearing too quickly.
+            // ポップアップが一瞬で消えないよう最低0.5秒の待機を保証
             await minDelay;
 
             if (found.Count > 0)
@@ -132,6 +154,9 @@ namespace Komorebi.ViewModels
             return true;
         }
 
+        /// <summary>
+        ///     既に管理されているリポジトリのIDセットを再帰的に収集する。
+        /// </summary>
         private static void GetManagedRepositories(List<RepositoryNode> group, HashSet<string> repos)
         {
             foreach (var node in group)
@@ -143,6 +168,10 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     未管理のGitリポジトリを再帰的に検出する。最大深度5まで探索する。
+        ///     隠しディレクトリやnode_modulesはスキップする。
+        /// </summary>
         private static async Task GetUnmanagedRepositoriesAsync(DirectoryInfo dir, List<string> outs, HashSet<string> managed, EnumerationOptions opts, Action<string> onProgress = null, int depth = 0)
         {
             var subdirs = dir.GetDirectories("*", opts);
@@ -184,6 +213,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     発見されたリポジトリをツリーに追加する。ディレクトリ構造に基づいてグループを自動作成する。
+        /// </summary>
         private static async Task AddFoundRepositories(DirectoryInfo rootDir, List<string> found)
         {
             var normalizedRoot = rootDir.FullName.Replace('\\', '/').TrimEnd('/');
@@ -209,6 +241,9 @@ namespace Komorebi.ViewModels
             Welcome.Instance.Refresh();
         }
 
+        /// <summary>
+        ///     パスに基づいてグループノードを再帰的に検索または作成する。
+        /// </summary>
         private static RepositoryNode FindOrCreateGroupRecursive(List<RepositoryNode> collection, string path)
         {
             RepositoryNode node = null;
@@ -221,6 +256,9 @@ namespace Komorebi.ViewModels
             return node;
         }
 
+        /// <summary>
+        ///     指定名のグループノードを検索し、存在しなければ新規作成する。
+        /// </summary>
         private static RepositoryNode FindOrCreateGroup(List<RepositoryNode> collection, string name)
         {
             foreach (var node in collection)

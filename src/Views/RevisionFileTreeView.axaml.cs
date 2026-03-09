@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,10 +16,16 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     RevisionFileTreeNodeToggleButtonクラス。
+    /// </summary>
     public class RevisionFileTreeNodeToggleButton : ToggleButton
     {
         protected override Type StyleKeyOverride => typeof(ToggleButton);
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override async void OnPointerPressed(PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
@@ -34,6 +40,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     RevisionTreeNodeIconクラス。
+    /// </summary>
     public class RevisionTreeNodeIcon : UserControl
     {
         public static readonly StyledProperty<ViewModels.RevisionFileTreeNode> NodeProperty =
@@ -54,12 +63,18 @@ namespace Komorebi.Views
             set => SetValue(IsExpandedProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static RevisionTreeNodeIcon()
         {
             NodeProperty.Changed.AddClassHandler<RevisionTreeNodeIcon>((icon, _) => icon.UpdateContent());
             IsExpandedProperty.Changed.AddClassHandler<RevisionTreeNodeIcon>((icon, _) => icon.UpdateContent());
         }
 
+        /// <summary>
+        ///     UpdateContentの処理を行う。
+        /// </summary>
         private void UpdateContent()
         {
             var node = Node;
@@ -84,6 +99,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CreateContentの処理を行う。
+        /// </summary>
         private void CreateContent(string iconKey, Thickness margin, IBrush fill = null)
         {
             if (this.FindResource(iconKey) is not StreamGeometry geo)
@@ -107,10 +125,16 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     RevisionFileRowsListBoxクラス。
+    /// </summary>
     public class RevisionFileRowsListBox : ListBox
     {
         protected override Type StyleKeyOverride => typeof(ListBox);
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override async void OnKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.F && e.KeyModifiers == (OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
@@ -184,6 +208,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     リビジョンのファイルツリービューのコードビハインド。
+    /// </summary>
     public partial class RevisionFileTreeView : UserControl
     {
         public static readonly StyledProperty<string> RevisionProperty =
@@ -206,11 +233,17 @@ namespace Komorebi.Views
             remove { RemoveHandler(SearchRequestedEvent, value); }
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public RevisionFileTreeView()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     SetSearchResultAsyncの処理を行う。
+        /// </summary>
         public async Task SetSearchResultAsync(string file)
         {
             Rows.Clear();
@@ -273,6 +306,9 @@ namespace Komorebi.Views
             GC.Collect();
         }
 
+        /// <summary>
+        ///     ToggleNodeIsExpandedAsyncの処理を行う。
+        /// </summary>
         public async Task ToggleNodeIsExpandedAsync(ViewModels.RevisionFileTreeNode node)
         {
             _disableSelectionChangingEvent = true;
@@ -310,6 +346,9 @@ namespace Komorebi.Views
             _disableSelectionChangingEvent = false;
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override async void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -326,6 +365,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override async void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -334,6 +376,9 @@ namespace Komorebi.Views
                 await ReloadTreeData(vm);
         }
 
+        /// <summary>
+        ///     TreeNodeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (DataContext is ViewModels.CommitDetail { Repository: { } repo, Commit: { } commit } vm &&
@@ -350,6 +395,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     TreeNodeDoubleTappedイベントのハンドラ。
+        /// </summary>
         private async void OnTreeNodeDoubleTapped(object sender, TappedEventArgs e)
         {
             if (sender is Grid { DataContext: ViewModels.RevisionFileTreeNode { IsFolder: true } node })
@@ -362,6 +410,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     RowsSelectionChangedイベントのハンドラ。
+        /// </summary>
         private async void OnRowsSelectionChanged(object sender, SelectionChangedEventArgs _)
         {
             if (_disableSelectionChangingEvent || DataContext is not ViewModels.CommitDetail vm)
@@ -373,6 +424,9 @@ namespace Komorebi.Views
                 await vm.ViewRevisionFileAsync(null);
         }
 
+        /// <summary>
+        ///     Taskの処理を行う。
+        /// </summary>
         private async Task<List<ViewModels.RevisionFileTreeNode>> GetChildrenOfTreeNodeAsync(ViewModels.RevisionFileTreeNode node)
         {
             if (!node.IsFolder)
@@ -395,6 +449,9 @@ namespace Komorebi.Views
             return node.Children;
         }
 
+        /// <summary>
+        ///     MakeRowsの処理を行う。
+        /// </summary>
         private void MakeRows(List<ViewModels.RevisionFileTreeNode> rows, List<ViewModels.RevisionFileTreeNode> nodes, int depth)
         {
             foreach (var node in nodes)
@@ -409,6 +466,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     SortNodesの処理を行う。
+        /// </summary>
         private void SortNodes(List<ViewModels.RevisionFileTreeNode> nodes)
         {
             nodes.Sort((l, r) =>
@@ -419,6 +479,9 @@ namespace Komorebi.Views
             });
         }
 
+        /// <summary>
+        ///     ReloadTreeDataの処理を行う。
+        /// </summary>
         private async Task ReloadTreeData(ViewModels.CommitDetail vm)
         {
             if (_isReloadingTreeData)
@@ -454,6 +517,9 @@ namespace Komorebi.Views
             _isReloadingTreeData = false;
         }
 
+        /// <summary>
+        ///     CreateRevisionFileContextMenuByFolderの処理を行う。
+        /// </summary>
         private ContextMenu CreateRevisionFileContextMenuByFolder(ViewModels.Repository repo, ViewModels.CommitDetail vm, Models.Commit commit, string path)
         {
             var fullPath = Native.OS.GetAbsPath(repo.FullPath, path);
@@ -506,6 +572,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CreateRevisionFileContextMenuの処理を行う。
+        /// </summary>
         private ContextMenu CreateRevisionFileContextMenu(ViewModels.Repository repo, ViewModels.CommitDetail vm, Models.Commit commit, Models.Object file)
         {
             var fullPath = Native.OS.GetAbsPath(repo.FullPath, file.Path);

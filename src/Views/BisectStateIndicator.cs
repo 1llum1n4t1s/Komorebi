@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -6,6 +6,9 @@ using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     git bisect状態を示すインジケータコントロール。
+    /// </summary>
     public class BisectStateIndicator : Control
     {
         public static readonly StyledProperty<IBrush> BackgroundProperty =
@@ -35,12 +38,18 @@ namespace Komorebi.Views
             set => SetValue(BisectProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static BisectStateIndicator()
         {
             AffectsMeasure<BisectStateIndicator>(BisectProperty);
             AffectsRender<BisectStateIndicator>(BackgroundProperty, ForegroundProperty);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             if (_flags == Models.BisectCommitFlag.None)
@@ -65,12 +74,18 @@ namespace Komorebi.Views
                 RenderImpl(context, Brushes.Red, _bad, x);
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             InvalidateMeasure();
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             var desiredFlags = Models.BisectCommitFlag.None;
@@ -100,6 +115,9 @@ namespace Komorebi.Views
             return new Size(desiredWidth, desiredWidth > 0 ? 16 : 0);
         }
 
+        /// <summary>
+        ///     LoadIconの処理を行う。
+        /// </summary>
         private Geometry LoadIcon(string key)
         {
             var geo = this.FindResource(key) as StreamGeometry;
@@ -116,6 +134,9 @@ namespace Komorebi.Views
             return drawGeo;
         }
 
+        /// <summary>
+        ///     RenderImplの処理を行う。
+        /// </summary>
         private void RenderImpl(DrawingContext context, IBrush brush, Geometry icon, double x)
         {
             var entireRect = new RoundedRect(new Rect(x, 0, 32, 16), new CornerRadius(2));

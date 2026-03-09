@@ -2,20 +2,35 @@
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     Gitユーザー情報（名前とメールアドレス）を保持するクラス。
+    ///     スレッドセーフなキャッシュにより、同一ユーザーの重複インスタンスを防止する。
+    /// </summary>
     public class User
     {
+        /// <summary>無効なユーザーを表すシングルトンインスタンス</summary>
         public static readonly User Invalid = new User();
 
+        /// <summary>ユーザー名</summary>
         public string Name { get; set; } = string.Empty;
+        /// <summary>メールアドレス</summary>
         public string Email { get; set; } = string.Empty;
 
+        /// <summary>
+        ///     デフォルトコンストラクタ（User.Invalid専用）
+        /// </summary>
         public User()
         {
-            // Only used by User.Invalid
+            // User.Invalid専用
         }
 
+        /// <summary>
+        ///     「名前±メールアドレス」形式の文字列からユーザーを生成する
+        /// </summary>
+        /// <param name="data">「名前±メールアドレス」形式の文字列</param>
         public User(string data)
         {
+            // 「±」区切りで名前とメールアドレスを分離
             var parts = data.Split('±', 2);
             if (parts.Length < 2)
                 parts = [string.Empty, data];
@@ -35,6 +50,11 @@ namespace Komorebi.Models
             return _hash;
         }
 
+        /// <summary>
+        ///     キャッシュからユーザーを検索するか、新規作成して追加する（スレッドセーフ）
+        /// </summary>
+        /// <param name="data">「名前±メールアドレス」形式の文字列</param>
+        /// <returns>対応するUserインスタンス</returns>
         public static User FindOrAdd(string data)
         {
             return _caches.GetOrAdd(data, key => new User(key));
@@ -45,7 +65,9 @@ namespace Komorebi.Models
             return $"{Name} <{Email}>";
         }
 
+        /// <summary>ユーザーインスタンスのスレッドセーフなキャッシュ</summary>
         private static ConcurrentDictionary<string, User> _caches = new ConcurrentDictionary<string, User>();
+        /// <summary>事前計算されたハッシュコード</summary>
         private readonly int _hash;
     }
 }

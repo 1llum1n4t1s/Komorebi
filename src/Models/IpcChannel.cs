@@ -5,10 +5,16 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     名前付きパイプによるプロセス間通信チャネル。
+    ///     アプリケーションの多重起動防止と、既存インスタンスへのメッセージ送信を行う。
+    /// </summary>
     public class IpcChannel : IDisposable
     {
+        /// <summary>最初のインスタンス（サーバー側）かどうか</summary>
         public bool IsFirstInstance { get; }
 
+        /// <summary>他のインスタンスからメッセージを受信した際のイベント</summary>
         public event Action<string> MessageReceived;
 
         public IpcChannel()
@@ -49,6 +55,10 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     最初のインスタンス（サーバー）にコマンドメッセージを送信する
+        /// </summary>
+        /// <param name="cmd">送信するコマンド文字列</param>
         public void SendToFirstInstance(string cmd)
         {
             try

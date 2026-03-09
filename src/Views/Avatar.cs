@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -15,6 +15,9 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ユーザーアバター画像（Gravatar/GitHub風/フォールバック）を描画するカスタムコントロール。
+    /// </summary>
     public class Avatar : Control, Models.IAvatarHost
     {
         public static readonly StyledProperty<Models.User> UserProperty =
@@ -35,10 +38,15 @@ namespace Komorebi.Views
             set => SetValue(UseGitHubStyleAvatarProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Avatar()
         {
+            // 高品質なビットマップ補間モードを設定する
             RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
+            // 設定のGitHubスタイルアバター使用フラグにバインドする
             this.Bind(UseGitHubStyleAvatarProperty, new Binding()
             {
                 Mode = BindingMode.OneWay,
@@ -47,21 +55,27 @@ namespace Komorebi.Views
             });
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             if (User == null)
                 return;
 
+            // 角丸の半径を計算し、クリップ領域を設定する
             var corner = (float)Math.Max(2, Bounds.Width / 16);
             var rect = new Rect(0, 0, Bounds.Width, Bounds.Height);
             var clip = context.PushClip(new RoundedRect(rect, corner));
 
             if (_img != null)
             {
+                // アバター画像が取得済みの場合はそのまま描画する
                 context.DrawImage(_img, rect);
             }
             else if (!UseGitHubStyleAvatar)
             {
+                // フォールバック: イニシャル文字をグラデーション背景に描画する
                 var fallback = GetFallbackString(User.Name);
                 var typeface = new Typeface("fonts:Komorebi#JetBrains Mono");
                 var label = new FormattedText(
@@ -72,6 +86,7 @@ namespace Komorebi.Views
                     Math.Max(Bounds.Width * 0.65, 10),
                     Brushes.White);
 
+                // 文字コードの合計値からグラデーション色を決定する
                 var chars = fallback.ToCharArray();
                 var sum = 0;
                 foreach (var c in chars)
@@ -84,20 +99,24 @@ namespace Komorebi.Views
                     EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
                 };
 
+                // テキストを中央に配置して描画する
                 Point textOrigin = new Point((Bounds.Width - label.Width) * 0.5, (Bounds.Height - label.Height) * 0.5);
                 context.DrawRectangle(bg, null, new Rect(0, 0, Bounds.Width, Bounds.Height), corner, corner);
                 context.DrawText(label, textOrigin);
             }
             else
             {
+                // GitHub風アバター: メールアドレスのMD5ハッシュから5x5のピクセルパターンを生成する
                 context.DrawRectangle(Brushes.White, new Pen(new SolidColorBrush(Colors.Black, 0.3f), 0.65f), rect, corner, corner);
 
+                // グリッドのオフセットとステップサイズを計算する
                 var offsetX = Bounds.Width / 10.0;
                 var offsetY = Bounds.Height / 10.0;
 
                 var stepX = (Bounds.Width - offsetX * 2) / 5.0;
                 var stepY = (Bounds.Height - offsetY * 2) / 5.0;
 
+                // メールアドレスのMD5ハッシュから色とパターンを決定する
                 var user = User;
                 var lowered = user.Email.ToLower(CultureInfo.CurrentCulture).Trim();
                 var hash = MD5.HashData(Encoding.Default.GetBytes(lowered));
@@ -107,6 +126,7 @@ namespace Komorebi.Views
                 for (int i = 0; i < switches.Length; i++)
                     switches[i] = hash[i + 1] % 2 == 1;
 
+                // 右半分（中央列含む）のパターンを描画する
                 for (int row = 0; row < 5; row++)
                 {
                     var x = offsetX + stepX * 2;
@@ -123,6 +143,7 @@ namespace Komorebi.Views
                         context.FillRectangle(brush, new Rect(x + stepX * 2, y, stepX, stepY));
                 }
 
+                // 左半分のパターンを描画する（右側と対称）
                 for (int row = 0; row < 5; row++)
                 {
                     var x = offsetX;
@@ -140,8 +161,12 @@ namespace Komorebi.Views
             clip.Dispose();
         }
 
+        /// <summary>
+        ///     アバターリソース変更時のコールバック。対象ユーザーの場合は画像を更新する。
+        /// </summary>
         public void OnAvatarResourceChanged(string email, Bitmap image)
         {
+            // 現在のユーザーのメールアドレスと一致する場合のみ画像を更新する
             if (email.Equals(User?.Email, StringComparison.Ordinal))
             {
                 _img = image;
@@ -149,26 +174,38 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
+            // アバターマネージャーに購読登録し、コンテキストメニューのハンドラを設定する
             Models.AvatarManager.Instance.Subscribe(this);
             ContextRequested += OnContextRequested;
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
+            // コンテキストメニューのハンドラを解除し、アバターマネージャーから購読解除する
             ContextRequested -= OnContextRequested;
             Models.AvatarManager.Instance.Unsubscribe(this);
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
 
             if (change.Property == UserProperty)
             {
+                // ユーザーが変更された場合、新しいアバター画像をリクエストして再描画する
                 var user = User;
                 if (user == null)
                     return;
@@ -178,11 +215,16 @@ namespace Komorebi.Views
             }
             else if (change.Property == UseGitHubStyleAvatarProperty)
             {
+                // アバタースタイル設定が変更され、画像がない場合はフォールバック描画を更新する
                 if (_img == null)
                     InvalidateVisual();
             }
         }
 
+        /// <summary>
+        ///     右クリック時のコンテキストメニューを構築して表示する。
+        ///     再取得・ローカルファイル読み込み・名前を付けて保存のメニュー項目を含む。
+        /// </summary>
         private void OnContextRequested(object sender, ContextRequestedEventArgs e)
         {
             var toplevel = TopLevel.GetTopLevel(this);
@@ -192,6 +234,7 @@ namespace Komorebi.Views
                 return;
             }
 
+            // 「再取得」メニュー項目: Gravatarからアバターを再取得する
             var refetch = new MenuItem();
             refetch.Icon = App.CreateMenuIcon("Icons.Loading");
             refetch.Header = App.Text("Avatar.Refetch");
@@ -203,6 +246,7 @@ namespace Komorebi.Views
                 ev.Handled = true;
             };
 
+            // 「読み込み」メニュー項目: ローカルのPNGファイルをアバターとして設定する
             var load = new MenuItem();
             load.Icon = App.CreateMenuIcon("Icons.Folder.Open");
             load.Header = App.Text("Avatar.Load");
@@ -224,6 +268,7 @@ namespace Komorebi.Views
                 ev.Handled = true;
             };
 
+            // 「名前を付けて保存」メニュー項目: アバター画像をPNGファイルとして保存する
             var saveAs = new MenuItem();
             saveAs.Icon = App.CreateMenuIcon("Icons.Save");
             saveAs.Header = App.Text("SaveAs");
@@ -242,10 +287,12 @@ namespace Komorebi.Views
                     {
                         if (_img != null)
                         {
+                            // 取得済み画像がある場合はそのまま保存する
                             _img.Save(writer);
                         }
                         else
                         {
+                            // 画像がない場合はフォールバック描画をレンダリングして保存する
                             var pixelSize = new PixelSize((int)Bounds.Width, (int)Bounds.Height);
                             var dpi = new Vector(96, 96);
 
@@ -262,6 +309,7 @@ namespace Komorebi.Views
                 ev.Handled = true;
             };
 
+            // コンテキストメニューを組み立てて表示する
             var menu = new ContextMenu();
             menu.Items.Add(refetch);
             menu.Items.Add(load);
@@ -271,22 +319,31 @@ namespace Komorebi.Views
             menu.Open(this);
         }
 
+        /// <summary>
+        ///     ユーザー名からフォールバック表示用のイニシャル文字列を生成する。
+        /// </summary>
         private string GetFallbackString(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return "?";
 
+            // 名前をスペースで分割して各パートの先頭文字を取得する
             var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var chars = new List<char>();
             foreach (var part in parts)
                 chars.Add(part[0]);
 
+            // 2文字以上かつASCII文字の場合は先頭と末尾のイニシャルを返す
             if (chars.Count >= 2 && char.IsAsciiLetterOrDigit(chars[0]) && char.IsAsciiLetterOrDigit(chars[^1]))
                 return string.Format("{0}{1}", chars[0], chars[^1]);
 
+            // それ以外は名前の最初の1文字を返す
             return name.Substring(0, 1);
         }
 
+        /// <summary>
+        ///     フォールバックアバターで使用するグラデーション色の配列。
+        /// </summary>
         private static readonly GradientStops[] FALLBACK_GRADIENTS = [
             new GradientStops() { new GradientStop(Colors.Orange, 0), new GradientStop(Color.FromRgb(255, 213, 134), 1) },
             new GradientStops() { new GradientStop(Colors.DodgerBlue, 0), new GradientStop(Colors.LightSkyBlue, 1) },

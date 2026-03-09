@@ -5,23 +5,33 @@ using System.Web;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     Gitリモートリポジトリの情報を保持するクラス。
+    ///     URLの検証、訪問URL・PR作成URLの生成を行う。
+    /// </summary>
     public partial class Remote
     {
+        /// <summary>HTTPS形式のURL検証正規表現</summary>
         [GeneratedRegex(@"^https?://[^/]+/.+[^/\.]$")]
         private static partial Regex REG_HTTPS();
 
+        /// <summary>git://プロトコル形式のURL検証正規表現</summary>
         [GeneratedRegex(@"^git://[^/]+/.+[^/\.]$")]
         private static partial Regex REG_GIT();
 
+        /// <summary>SSH形式（user@host:path）のURL検証正規表現</summary>
         [GeneratedRegex(@"^[\w\-]+@[\w\.\-]+(\:[0-9]+)?:([a-zA-z0-9~%][\w\-\./~%]*)?[a-zA-Z0-9](\.git)?$")]
         private static partial Regex REG_SSH1();
 
+        /// <summary>SSH形式（ssh://）のURL検証正規表現</summary>
         [GeneratedRegex(@"^ssh://([\w\-]+@)?[\w\.\-]+(\:[0-9]+)?/([a-zA-z0-9~%][\w\-\./~%]*)?[a-zA-Z0-9](\.git)?$")]
         private static partial Regex REG_SSH2();
 
+        /// <summary>git@形式からホストとパスを抽出する正規表現</summary>
         [GeneratedRegex(@"^git@([\w\.\-]+):([\w\.\-/~%]+/[\w\-\.%]+)\.git$")]
         private static partial Regex REG_TO_VISIT_URL_CAPTURE();
 
+        /// <summary>サポートするURL形式の正規表現一覧</summary>
         private static readonly Regex[] URL_FORMATS = [
             REG_HTTPS(),
             REG_GIT(),
@@ -29,9 +39,16 @@ namespace Komorebi.Models
             REG_SSH2(),
         ];
 
+        /// <summary>リモート名</summary>
         public string Name { get; set; }
+        /// <summary>リモートURL</summary>
         public string URL { get; set; }
 
+        /// <summary>
+        ///     指定URLがSSH形式かどうかを判定する
+        /// </summary>
+        /// <param name="url">検証対象のURL</param>
+        /// <returns>SSH形式の場合true</returns>
         public static bool IsSSH(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -43,6 +60,11 @@ namespace Komorebi.Models
             return REG_SSH2().IsMatch(url);
         }
 
+        /// <summary>
+        ///     指定URLが有効なGitリモートURL形式かどうかを判定する
+        /// </summary>
+        /// <param name="url">検証対象のURL</param>
+        /// <returns>有効なURL形式の場合true</returns>
         public static bool IsValidURL(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -60,6 +82,11 @@ namespace Komorebi.Models
                 Directory.Exists(url);
         }
 
+        /// <summary>
+        ///     リモートURLからブラウザで訪問可能なHTTP(S) URLを生成する
+        /// </summary>
+        /// <param name="url">生成された訪問URL</param>
+        /// <returns>URL生成に成功した場合true</returns>
         public bool TryGetVisitURL(out string url)
         {
             url = null;
@@ -88,6 +115,13 @@ namespace Komorebi.Models
             return false;
         }
 
+        /// <summary>
+        ///     各ホスティングサービスに応じたPR作成URLを生成する。
+        ///     GitHub、GitLab、Gitee、Bitbucket、Gitea、Azure DevOpsに対応。
+        /// </summary>
+        /// <param name="url">生成されたPR作成URL</param>
+        /// <param name="mergeBranch">マージ元のブランチ名</param>
+        /// <returns>URL生成に成功した場合true</returns>
         public bool TryGetCreatePullRequestURL(out string url, string mergeBranch)
         {
             url = null;

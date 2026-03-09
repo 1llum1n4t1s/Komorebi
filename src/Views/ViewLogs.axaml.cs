@@ -3,14 +3,23 @@ using Avalonia.Input;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     Gitコマンドログ表示ビューのコードビハインド。
+    /// </summary>
     public partial class ViewLogs : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public ViewLogs()
         {
             CloseOnESC = true;
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     LogContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnLogContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is not Grid { DataContext: ViewModels.CommandLog log } grid || DataContext is not ViewModels.ViewLogs vm)
@@ -42,6 +51,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     LogKeyDownイベントのハンドラ。
+        /// </summary>
         private void OnLogKeyDown(object _, KeyEventArgs e)
         {
             if (e.Key is not (Key.Delete or Key.Back))

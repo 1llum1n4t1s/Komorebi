@@ -23,10 +23,19 @@ using AvaloniaEdit.Utils;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     MergeConflictTextPresenterクラス。
+    /// </summary>
     public class MergeConflictTextPresenter : TextEditor
     {
+        /// <summary>
+        ///     LineNumberMarginクラス。
+        /// </summary>
         public class LineNumberMargin : AbstractMargin
         {
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public LineNumberMargin(MergeConflictTextPresenter presenter)
             {
                 _presenter = presenter;
@@ -34,6 +43,9 @@ namespace Komorebi.Views
                 ClipToBounds = true;
             }
 
+            /// <summary>
+            ///     コントロールの描画処理を行う。
+            /// </summary>
             public override void Render(DrawingContext context)
             {
                 var lines = _presenter.Lines;
@@ -70,6 +82,9 @@ namespace Komorebi.Views
                 }
             }
 
+            /// <summary>
+            ///     コントロールの測定処理をオーバーライドする。
+            /// </summary>
             protected override Size MeasureOverride(Size availableSize)
             {
                 var maxLine = _presenter.MaxLineNumber;
@@ -90,27 +105,45 @@ namespace Komorebi.Views
             private readonly MergeConflictTextPresenter _presenter;
         }
 
+        /// <summary>
+        ///     VerticalSeparatorMarginクラス。
+        /// </summary>
         public class VerticalSeparatorMargin : AbstractMargin
         {
+            /// <summary>
+            ///     コントロールの描画処理を行う。
+            /// </summary>
             public override void Render(DrawingContext context)
             {
                 var pen = new Pen(Brushes.DarkGray);
                 context.DrawLine(pen, new Point(0.5, 0), new Point(0.5, Bounds.Height));
             }
 
+            /// <summary>
+            ///     コントロールの測定処理をオーバーライドする。
+            /// </summary>
             protected override Size MeasureOverride(Size availableSize)
             {
                 return new Size(1, 0);
             }
         }
 
+        /// <summary>
+        ///     ConflictMarkerTransformerクラス。
+        /// </summary>
         public class ConflictMarkerTransformer : DocumentColorizingTransformer
         {
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public ConflictMarkerTransformer(MergeConflictTextPresenter presenter)
             {
                 _presenter = presenter;
             }
 
+            /// <summary>
+            ///     ColorizeLineの処理を行う。
+            /// </summary>
             protected override void ColorizeLine(DocumentLine line)
             {
                 var lines = _presenter.Lines;
@@ -131,15 +164,24 @@ namespace Komorebi.Views
             private readonly MergeConflictTextPresenter _presenter;
         }
 
+        /// <summary>
+        ///     LineBackgroundRendererクラス。
+        /// </summary>
         public class LineBackgroundRenderer : IBackgroundRenderer
         {
             public KnownLayer Layer => KnownLayer.Background;
 
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public LineBackgroundRenderer(MergeConflictTextPresenter presenter)
             {
                 _presenter = presenter;
             }
 
+            /// <summary>
+            ///     Drawの処理を行う。
+            /// </summary>
             public void Draw(TextView textView, DrawingContext drawingContext)
             {
                 var lines = _presenter.Lines;
@@ -276,6 +318,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
 
+        /// <summary>
+        ///     MergeConflictTextPresenterの処理を行う。
+        /// </summary>
         public MergeConflictTextPresenter() : base(new TextArea(), new TextDocument())
         {
             IsReadOnly = true;
@@ -292,6 +337,9 @@ namespace Komorebi.Views
             TextArea.TextView.BackgroundRenderers.Add(new LineBackgroundRenderer(this));
         }
 
+        /// <summary>
+        ///     テンプレート適用時の処理を行う。
+        /// </summary>
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             base.OnApplyTemplate(e);
@@ -304,6 +352,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -322,6 +373,9 @@ namespace Komorebi.Views
             OnTextViewVisualLinesChanged(null, null);
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             TextArea.TextView.ContextRequested -= OnTextViewContextRequested;
@@ -339,6 +393,9 @@ namespace Komorebi.Views
             base.OnUnloaded(e);
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -355,6 +412,9 @@ namespace Komorebi.Views
                 TextArea.LeftMargins[0].InvalidateMeasure();
         }
 
+        /// <summary>
+        ///     UpdateContentの処理を行う。
+        /// </summary>
         private void UpdateContent()
         {
             var lines = Lines;
@@ -383,6 +443,9 @@ namespace Komorebi.Views
             Text = builder.ToString();
         }
 
+        /// <summary>
+        ///     TextViewContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
         {
             var selected = SelectedText;
@@ -405,6 +468,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     TextViewPointerChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewPointerChanged(object sender, PointerEventArgs e)
         {
             if (DataContext is not ViewModels.MergeConflictEditor vm)
@@ -416,6 +482,9 @@ namespace Komorebi.Views
             UpdateSelectedChunkPosition(vm, e.GetPosition(view).Y + view.VerticalOffset);
         }
 
+        /// <summary>
+        ///     TextViewPointerWheelChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewPointerWheelChanged(object sender, PointerWheelEventArgs e)
         {
             if (DataContext is not ViewModels.MergeConflictEditor vm)
@@ -428,6 +497,9 @@ namespace Komorebi.Views
             Dispatcher.UIThread.Post(() => UpdateSelectedChunkPosition(vm, y));
         }
 
+        /// <summary>
+        ///     TextViewVisualLinesChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
         {
             if (Design.IsDesignMode)
@@ -459,6 +531,9 @@ namespace Komorebi.Views
             SetCurrentValue(DisplayRangeProperty, new ViewModels.TextLineRange(start, start + count));
         }
 
+        /// <summary>
+        ///     TextViewScrollChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (_scrollViewer == null || DataContext is not ViewModels.MergeConflictEditor vm)
@@ -476,6 +551,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UpdateSelectedChunkPositionの処理を行う。
+        /// </summary>
         private void UpdateSelectedChunkPosition(ViewModels.MergeConflictEditor vm, double y)
         {
             var lines = Lines;
@@ -541,6 +619,9 @@ namespace Komorebi.Views
         private ScrollViewer _scrollViewer;
     }
 
+    /// <summary>
+    ///     MergeConflictMinimapクラス。
+    /// </summary>
     public class MergeConflictMinimap : Control
     {
         public static readonly StyledProperty<ViewModels.TextLineRange> DisplayRangeProperty =
@@ -561,6 +642,9 @@ namespace Komorebi.Views
             set => SetValue(UnsolvedCountProperty, value);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             context.DrawRectangle(Brushes.Transparent, null, new Rect(0, 0, Bounds.Width, Bounds.Height));
@@ -596,6 +680,9 @@ namespace Komorebi.Views
             context.DrawLine(pen, rect.BottomLeft, rect.BottomRight);
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -606,6 +693,9 @@ namespace Komorebi.Views
                 InvalidateVisual();
         }
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -632,13 +722,22 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     マージコンフリクトエディタのコードビハインド。
+    /// </summary>
     public partial class MergeConflictEditor : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public MergeConflictEditor()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -647,6 +746,9 @@ namespace Komorebi.Views
                 vm.PropertyChanged += OnViewModelPropertyChanged;
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられる際の処理。
+        /// </summary>
         protected override async void OnClosing(WindowClosingEventArgs e)
         {
             base.OnClosing(e);
@@ -673,18 +775,27 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられた後の処理。
+        /// </summary>
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
             GC.Collect();
         }
 
+        /// <summary>
+        ///     ViewModelPropertyChangedイベントのハンドラ。
+        /// </summary>
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ViewModels.MergeConflictEditor.SelectedChunk))
                 UpdatePopupVisibility();
         }
 
+        /// <summary>
+        ///     GotoPrevConflictイベントのハンドラ。
+        /// </summary>
         private void OnGotoPrevConflict(object sender, RoutedEventArgs e)
         {
             if (IsLoaded && DataContext is ViewModels.MergeConflictEditor vm && vm.UnsolvedCount > 0)
@@ -728,6 +839,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     GotoNextConflictイベントのハンドラ。
+        /// </summary>
         private void OnGotoNextConflict(object sender, RoutedEventArgs e)
         {
             if (IsLoaded && DataContext is ViewModels.MergeConflictEditor vm && vm.UnsolvedCount > 0)
@@ -771,6 +885,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SaveAndStageイベントのハンドラ。
+        /// </summary>
         private async void OnSaveAndStage(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.MergeConflictEditor vm)
@@ -784,6 +901,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UpdatePopupVisibilityの処理を行う。
+        /// </summary>
         private void UpdatePopupVisibility()
         {
             // Hide all popups first

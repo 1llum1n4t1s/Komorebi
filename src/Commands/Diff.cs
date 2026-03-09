@@ -7,24 +7,44 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
+    /// <summary>
+    ///     git diffコマンドを実行し、テキスト差分・バイナリ差分・LFS差分を解析するクラス。
+    /// </summary>
     public partial class Diff : Command
     {
+        /// <summary>
+        ///     差分のハンクヘッダー（@@ -old,count +new,count @@）を解析する正規表現。
+        /// </summary>
         [GeneratedRegex(@"^@@ \-(\d+),?\d* \+(\d+),?\d* @@")]
         private static partial Regex REG_INDICATOR();
 
+        /// <summary>
+        ///     indexヘッダー（旧ハッシュ..新ハッシュ）を解析する正規表現。
+        /// </summary>
         [GeneratedRegex(@"^index\s([0-9a-f]{6,40})\.\.([0-9a-f]{6,40})(\s[1-9]{6})?")]
         private static partial Regex REG_HASH_CHANGE();
 
+        /// <summary>LFS新規ファイルのプレフィックス</summary>
         private const string PREFIX_LFS_NEW = "+version https://git-lfs.github.com/spec/";
+        /// <summary>LFS削除ファイルのプレフィックス</summary>
         private const string PREFIX_LFS_DEL = "-version https://git-lfs.github.com/spec/";
+        /// <summary>LFS変更ファイルのプレフィックス</summary>
         private const string PREFIX_LFS_MODIFY = " version https://git-lfs.github.com/spec/";
 
+        /// <summary>
+        ///     Diffコマンドのコンストラクタ。
+        /// </summary>
+        /// <param name="repo">リポジトリのパス</param>
+        /// <param name="opt">差分オプション（比較対象の指定）</param>
+        /// <param name="unified">コンテキスト行数</param>
+        /// <param name="ignoreWhitespace">空白の変更を無視するかどうか</param>
         public Diff(string repo, Models.DiffOption opt, int unified, bool ignoreWhitespace)
         {
             WorkingDirectory = repo;
             Context = repo;
 
             var builder = new StringBuilder(256);
+            // 色なし・外部diffツールなし・パッチ形式で出力
             builder.Append("diff --no-color --no-ext-diff --patch ");
             if (Models.DiffOption.IgnoreCRAtEOL)
                 builder.Append("--ignore-cr-at-eol ");
@@ -36,6 +56,10 @@ namespace Komorebi.Commands
             Args = builder.ToString();
         }
 
+        /// <summary>
+        ///     diffコマンドを非同期で実行し、差分結果を返す。
+        /// </summary>
+        /// <returns>差分解析結果</returns>
         public async Task<Models.DiffResult> ReadAsync()
         {
             var result = new Models.DiffResult() { TextDiff = new Models.TextDiff() };
@@ -46,6 +70,7 @@ namespace Komorebi.Commands
                 proc.StartInfo = CreateGitStartInfo(true);
                 proc.Start();
 
+                // 標準出力を全て読み取ってから解析する
                 var text = await proc.StandardOutput.ReadToEndAsync().ConfigureAwait(false);
                 result = ParseDiffOutput(text);
 
@@ -53,12 +78,17 @@ namespace Komorebi.Commands
             }
             catch
             {
-                // Ignore exceptions.
+                // 例外は無視する
             }
 
             return result;
         }
 
+        /// <summary>
+        ///     diff出力文字列を解析して、DiffResultモデルに変換する。
+        /// </summary>
+        /// <param name="text">git diffの標準出力</param>
+        /// <returns>解析された差分結果</returns>
         internal static Models.DiffResult ParseDiffOutput(string text)
         {
             var result = new Models.DiffResult() { TextDiff = new Models.TextDiff() };
@@ -95,6 +125,16 @@ namespace Komorebi.Commands
             return result;
         }
 
+        /// <summary>
+        ///     diff出力の1行を解析し、結果モデルに追加する。
+        /// </summary>
+        /// <param name="line">diff出力の1行</param>
+        /// <param name="result">解析結果の蓄積先</param>
+        /// <param name="deleted">削除行のバッファ（インラインハイライト用）</param>
+        /// <param name="added">追加行のバッファ（インラインハイライト用）</param>
+        /// <param name="last">直前に処理した差分行</param>
+        /// <param name="oldLine">旧ファイルの現在の行番号</param>
+        /// <param name="newLine">新ファイルの現在の行番号</param>
         private static void ParseLine(
             string line,
             Models.DiffResult result,
@@ -107,6 +147,7 @@ namespace Komorebi.Commands
             if (result.IsBinary)
                 return;
 
+            // ファイルモードの変更を検出
             if (line.StartsWith("old mode ", StringComparison.Ordinal))
             {
                 result.OldMode = line.Substring(9);
@@ -131,6 +172,7 @@ namespace Komorebi.Commands
                 return;
             }
 
+            // LFSファイルの差分を解析
             if (result.IsLFS)
             {
                 var ch = line[0];
@@ -264,6 +306,13 @@ namespace Komorebi.Commands
             }
         }
 
+        /// <summary>
+        ///     バッファに蓄積された削除行と追加行のインラインハイライトを計算し、結果に追加する。
+        ///     削除行と追加行が同数の場合、対応する行同士でインライン差分を検出する。
+        /// </summary>
+        /// <param name="result">差分結果の蓄積先</param>
+        /// <param name="deleted">蓄積された削除行</param>
+        /// <param name="added">蓄積された追加行</param>
         private static void FlushInlineHighlights(
             Models.DiffResult result,
             List<Models.TextDiffLine> deleted,

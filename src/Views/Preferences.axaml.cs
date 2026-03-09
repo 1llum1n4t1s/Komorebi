@@ -9,6 +9,9 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     環境設定画面のコードビハインド。
+    /// </summary>
     public partial class Preferences : ChromelessWindow
     {
         public string DefaultUser
@@ -113,6 +116,9 @@ namespace Komorebi.Views
             set => SetValue(SelectedCustomActionProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Preferences()
         {
             var pref = ViewModels.Preferences.Instance;
@@ -155,6 +161,9 @@ namespace Komorebi.Views
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override async void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -169,6 +178,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられる際の処理。
+        /// </summary>
         protected override async void OnClosing(WindowClosingEventArgs e)
         {
             base.OnClosing(e);
@@ -208,6 +220,9 @@ namespace Komorebi.Views
             ViewModels.Preferences.Instance.Save();
         }
 
+        /// <summary>
+        ///     GitExecutableの選択処理を行う。
+        /// </summary>
         private async void SelectGitExecutable(object _, RoutedEventArgs e)
         {
             var pattern = OperatingSystem.IsWindows() ? "git.exe" : "git";
@@ -234,6 +249,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     DefaultCloneDirの選択処理を行う。
+        /// </summary>
         private async void SelectDefaultCloneDir(object _, RoutedEventArgs e)
         {
             var options = new FolderPickerOpenOptions() { AllowMultiple = false };
@@ -258,6 +276,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     GPGExecutableの選択処理を行う。
+        /// </summary>
         private async void SelectGPGExecutable(object _, RoutedEventArgs e)
         {
             var patterns = new List<string>();
@@ -286,6 +307,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ShellOrTerminalの選択処理を行う。
+        /// </summary>
         private async void SelectShellOrTerminal(object _, RoutedEventArgs e)
         {
             var type = ViewModels.Preferences.Instance.ShellOrTerminalType;
@@ -317,6 +341,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ExternalMergeToolの選択処理を行う。
+        /// </summary>
         private async void SelectExternalMergeTool(object _, RoutedEventArgs e)
         {
             var type = ViewModels.Preferences.Instance.ExternalMergeToolType;
@@ -348,6 +375,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SetIfChangedAsyncの処理を行う。
+        /// </summary>
         private static async Task SetIfChangedAsync(Dictionary<string, string> cached, string key, string value, string defValue)
         {
             bool changed = false;
@@ -360,6 +390,9 @@ namespace Komorebi.Views
                 await new Commands.Config(null).SetAsync(key, value);
         }
 
+        /// <summary>
+        ///     UseNativeWindowFrameChangedイベントのハンドラ。
+        /// </summary>
         private async void OnUseNativeWindowFrameChanged(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox box)
@@ -371,11 +404,17 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     GitInstallPathChangedイベントのハンドラ。
+        /// </summary>
         private void OnGitInstallPathChanged(object sender, TextChangedEventArgs e)
         {
             UpdateGitVersion();
         }
 
+        /// <summary>
+        ///     AddOpenAIServiceイベントのハンドラ。
+        /// </summary>
         private void OnAddOpenAIService(object sender, RoutedEventArgs e)
         {
             var service = new Models.OpenAIService() { Name = "Unnamed Service" };
@@ -385,6 +424,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     RemoveSelectedOpenAIServiceイベントのハンドラ。
+        /// </summary>
         private void OnRemoveSelectedOpenAIService(object sender, RoutedEventArgs e)
         {
             if (SelectedOpenAIService == null)
@@ -395,6 +437,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddCustomActionイベントのハンドラ。
+        /// </summary>
         private void OnAddCustomAction(object sender, RoutedEventArgs e)
         {
             var action = new Models.CustomAction() { Name = "Unnamed Action (Global)" };
@@ -404,6 +449,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ExecutableForCustomActionの選択処理を行う。
+        /// </summary>
         private async void SelectExecutableForCustomAction(object sender, RoutedEventArgs e)
         {
             var options = new FilePickerOpenOptions()
@@ -426,6 +474,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     RemoveSelectedCustomActionイベントのハンドラ。
+        /// </summary>
         private void OnRemoveSelectedCustomAction(object sender, RoutedEventArgs e)
         {
             if (SelectedCustomAction == null)
@@ -436,6 +487,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     MoveSelectedCustomActionUpイベントのハンドラ。
+        /// </summary>
         private void OnMoveSelectedCustomActionUp(object sender, RoutedEventArgs e)
         {
             if (SelectedCustomAction == null)
@@ -448,6 +502,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     MoveSelectedCustomActionDownイベントのハンドラ。
+        /// </summary>
         private void OnMoveSelectedCustomActionDown(object sender, RoutedEventArgs e)
         {
             if (SelectedCustomAction == null)
@@ -460,6 +517,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     EditCustomActionControlsの処理を行う。
+        /// </summary>
         private async void EditCustomActionControls(object sender, RoutedEventArgs e)
         {
             if (sender is not Button { DataContext: Models.CustomAction act })
@@ -474,6 +534,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     UpdateGitVersionの処理を行う。
+        /// </summary>
         private void UpdateGitVersion()
         {
             GitVersion = Native.OS.GitVersionString;

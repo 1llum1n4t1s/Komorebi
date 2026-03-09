@@ -4,13 +4,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     アーカイブ作成ダイアログのコードビハインド。
+    /// </summary>
     public partial class Archive : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Archive()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     OutputFileの選択処理を行う。
+        /// </summary>
         private async void SelectOutputFile(object _, RoutedEventArgs e)
         {
             var toplevel = TopLevel.GetTopLevel(this);

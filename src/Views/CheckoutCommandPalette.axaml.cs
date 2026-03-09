@@ -3,13 +3,22 @@ using Avalonia.Input;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     チェックアウトコマンドパレットのコードビハインド。
+    /// </summary>
     public partial class CheckoutCommandPalette : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CheckoutCommandPalette()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override async void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -51,6 +60,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ItemTappedイベントのハンドラ。
+        /// </summary>
         private async void OnItemTapped(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.CheckoutCommandPalette vm)

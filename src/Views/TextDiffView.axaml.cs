@@ -25,10 +25,19 @@ using AvaloniaEdit.Utils;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ThemedTextDiffPresenterクラス。
+    /// </summary>
     public class ThemedTextDiffPresenter : TextEditor
     {
+        /// <summary>
+        ///     VerticalSeparatorMarginクラス。
+        /// </summary>
         public class VerticalSeparatorMargin : AbstractMargin
         {
+            /// <summary>
+            ///     コントロールの描画処理を行う。
+            /// </summary>
             public override void Render(DrawingContext context)
             {
                 var presenter = this.FindAncestorOfType<ThemedTextDiffPresenter>();
@@ -39,14 +48,23 @@ namespace Komorebi.Views
                 }
             }
 
+            /// <summary>
+            ///     コントロールの測定処理をオーバーライドする。
+            /// </summary>
             protected override Size MeasureOverride(Size availableSize)
             {
                 return new Size(1, 0);
             }
         }
 
+        /// <summary>
+        ///     LineNumberMarginクラス。
+        /// </summary>
         public class LineNumberMargin : AbstractMargin
         {
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public LineNumberMargin(bool usePresenter, bool isOld)
             {
                 _usePresenter = usePresenter;
@@ -56,6 +74,9 @@ namespace Komorebi.Views
                 ClipToBounds = true;
             }
 
+            /// <summary>
+            ///     コントロールの描画処理を行う。
+            /// </summary>
             public override void Render(DrawingContext context)
             {
                 var presenter = this.FindAncestorOfType<ThemedTextDiffPresenter>();
@@ -102,14 +123,23 @@ namespace Komorebi.Views
             private readonly bool _isOld;
         }
 
+        /// <summary>
+        ///     LineModifyTypeMarginクラス。
+        /// </summary>
         public class LineModifyTypeMargin : AbstractMargin
         {
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public LineModifyTypeMargin()
             {
                 Margin = new Thickness(1, 0);
                 ClipToBounds = true;
             }
 
+            /// <summary>
+            ///     コントロールの描画処理を行う。
+            /// </summary>
             public override void Render(DrawingContext context)
             {
                 var presenter = this.FindAncestorOfType<ThemedTextDiffPresenter>();
@@ -160,6 +190,9 @@ namespace Komorebi.Views
                 }
             }
 
+            /// <summary>
+            ///     コントロールの測定処理をオーバーライドする。
+            /// </summary>
             protected override Size MeasureOverride(Size availableSize)
             {
                 var presenter = this.FindAncestorOfType<ThemedTextDiffPresenter>();
@@ -177,6 +210,9 @@ namespace Komorebi.Views
                 return new Size(test.Width, 0);
             }
 
+            /// <summary>
+            ///     データコンテキストが変更された際の処理。
+            /// </summary>
             protected override void OnDataContextChanged(EventArgs e)
             {
                 base.OnDataContextChanged(e);
@@ -184,15 +220,24 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     LineBackgroundRendererクラス。
+        /// </summary>
         public class LineBackgroundRenderer : IBackgroundRenderer
         {
             public KnownLayer Layer => KnownLayer.Background;
 
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public LineBackgroundRenderer(ThemedTextDiffPresenter presenter)
             {
                 _presenter = presenter;
             }
 
+            /// <summary>
+            ///     Drawの処理を行う。
+            /// </summary>
             public void Draw(TextView textView, DrawingContext drawingContext)
             {
                 if (_presenter.Document == null || !textView.VisualLinesValid)
@@ -279,6 +324,9 @@ namespace Komorebi.Views
                 }
             }
 
+            /// <summary>
+            ///     GetBrushByLineTypeの処理を行う。
+            /// </summary>
             private IBrush GetBrushByLineType(Models.TextDiffLineType type)
             {
                 return type switch
@@ -293,8 +341,14 @@ namespace Komorebi.Views
             private readonly ThemedTextDiffPresenter _presenter;
         }
 
+        /// <summary>
+        ///     LineStyleTransformerクラス。
+        /// </summary>
         public class LineStyleTransformer(ThemedTextDiffPresenter presenter) : DocumentColorizingTransformer
         {
+            /// <summary>
+            ///     ColorizeLineの処理を行う。
+            /// </summary>
             protected override void ColorizeLine(DocumentLine line)
             {
                 var lines = presenter.GetLines();
@@ -451,6 +505,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
 
+        /// <summary>
+        ///     ThemedTextDiffPresenterの処理を行う。
+        /// </summary>
         public ThemedTextDiffPresenter(TextArea area, TextDocument doc) : base(area, doc)
         {
             IsReadOnly = true;
@@ -470,6 +527,9 @@ namespace Komorebi.Views
             TextArea.TextView.LineTransformers.Add(_lineStyleTransformer);
         }
 
+        /// <summary>
+        ///     GotoChangeの処理を行う。
+        /// </summary>
         public void GotoChange(ViewModels.BlockNavigationDirection direction)
         {
             if (DataContext is not ViewModels.TextDiffContext)
@@ -483,6 +543,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -502,6 +565,9 @@ namespace Komorebi.Views
             context.DrawLine(pen, aligned.BottomLeft, aligned.BottomRight);
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -519,6 +585,9 @@ namespace Komorebi.Views
             OnTextViewVisualLinesChanged(null, null);
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
@@ -539,6 +608,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -575,6 +647,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -604,6 +679,9 @@ namespace Komorebi.Views
             AutoScrollToFirstChange();
         }
 
+        /// <summary>
+        ///     サイズが変更された際の処理。
+        /// </summary>
         protected override void OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
@@ -615,10 +693,16 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UpdateSelectedChunkの処理を行う。
+        /// </summary>
         protected virtual void UpdateSelectedChunk(double y)
         {
         }
 
+        /// <summary>
+        ///     TextAreaKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnTextAreaKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyModifiers.Equals(OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
@@ -634,11 +718,17 @@ namespace Komorebi.Views
                 base.OnKeyDown(e);
         }
 
+        /// <summary>
+        ///     TextAreaCaretPositionChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextAreaCaretPositionChanged(object sender, EventArgs e)
         {
             BlockNavigation.UpdateByCaretPosition(TextArea?.Caret?.Line ?? 0);
         }
 
+        /// <summary>
+        ///     TextViewContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
         {
             var selection = TextArea.Selection;
@@ -661,6 +751,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     TextViewPointerChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewPointerChanged(object sender, PointerEventArgs e)
         {
             if (DataContext is not ViewModels.TextDiffContext { Option: { WorkingCopyChange: { } } })
@@ -704,6 +797,9 @@ namespace Komorebi.Views
                 UpdateSelectedChunk(e.GetPosition(view).Y + view.VerticalOffset);
         }
 
+        /// <summary>
+        ///     TextViewPointerWheelChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewPointerWheelChanged(object sender, PointerWheelEventArgs e)
         {
             if (DataContext is not ViewModels.TextDiffContext { Option: { WorkingCopyChange: { } } })
@@ -716,6 +812,9 @@ namespace Komorebi.Views
             Dispatcher.UIThread.Post(() => UpdateSelectedChunk(y));
         }
 
+        /// <summary>
+        ///     TextViewVisualLinesChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
         {
             if (DataContext is not ViewModels.TextDiffContext ctx)
@@ -750,12 +849,18 @@ namespace Komorebi.Views
             ctx.DisplayRange = new ViewModels.TextLineRange(start, start + count);
         }
 
+        /// <summary>
+        ///     TrySetChunkの処理を行う。
+        /// </summary>
         protected void TrySetChunk(ViewModels.TextDiffSelectedChunk chunk)
         {
             if (ViewModels.TextDiffSelectedChunk.IsChanged(SelectedChunk, chunk))
                 SetCurrentValue(SelectedChunkProperty, chunk);
         }
 
+        /// <summary>
+        ///     Listの処理を行う。
+        /// </summary>
         private List<Models.TextDiffLine> GetLines()
         {
             if (DataContext is ViewModels.CombinedTextDiff combined)
@@ -767,6 +872,9 @@ namespace Komorebi.Views
             return [];
         }
 
+        /// <summary>
+        ///     UpdateTextMateの処理を行う。
+        /// </summary>
         private void UpdateTextMate()
         {
             if (UseSyntaxHighlighting)
@@ -792,6 +900,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     AutoScrollToFirstChangeの処理を行う。
+        /// </summary>
         private void AutoScrollToFirstChange()
         {
             if (Bounds.Height < 0.1)
@@ -818,6 +929,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CopyWithoutIndicatorsAsyncの処理を行う。
+        /// </summary>
         private async Task CopyWithoutIndicatorsAsync()
         {
             var selection = TextArea.Selection;
@@ -893,8 +1007,14 @@ namespace Komorebi.Views
         private LineStyleTransformer _lineStyleTransformer;
     }
 
+    /// <summary>
+    ///     CombinedTextDiffPresenterクラス。
+    /// </summary>
     public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CombinedTextDiffPresenter() : base(new TextArea(), new TextDocument())
         {
             TextArea.LeftMargins.Add(new LineNumberMargin(false, true));
@@ -904,6 +1024,9 @@ namespace Komorebi.Views
             TextArea.LeftMargins.Add(new LineModifyTypeMargin());
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -916,6 +1039,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             if (_scrollViewer != null)
@@ -924,6 +1050,9 @@ namespace Komorebi.Views
             base.OnUnloaded(e);
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -959,6 +1088,9 @@ namespace Komorebi.Views
             GC.Collect();
         }
 
+        /// <summary>
+        ///     UpdateSelectedChunkの処理を行う。
+        /// </summary>
         protected override void UpdateSelectedChunk(double y)
         {
             if (DataContext is not ViewModels.CombinedTextDiff { Data: { } diff } combined)
@@ -1058,6 +1190,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     TextViewScrollChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (!TextArea.TextView.IsPointerOver)
@@ -1067,8 +1202,14 @@ namespace Komorebi.Views
         private ScrollViewer _scrollViewer;
     }
 
+    /// <summary>
+    ///     SingleSideTextDiffPresenterクラス。
+    /// </summary>
     public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public SingleSideTextDiffPresenter() : base(new TextArea(), new TextDocument())
         {
             TextArea.LeftMargins.Add(new LineNumberMargin(true, false));
@@ -1076,6 +1217,9 @@ namespace Komorebi.Views
             TextArea.LeftMargins.Add(new LineModifyTypeMargin());
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -1089,6 +1233,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -1101,6 +1248,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             if (_scrollViewer != null)
@@ -1113,6 +1263,9 @@ namespace Komorebi.Views
             GC.Collect();
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -1147,6 +1300,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UpdateSelectedChunkの処理を行う。
+        /// </summary>
         protected override void UpdateSelectedChunk(double y)
         {
             if (DataContext is not ViewModels.TwoSideTextDiff diff)
@@ -1249,6 +1405,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     TextViewScrollChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (_scrollViewer == null || DataContext is not ViewModels.TwoSideTextDiff diff)
@@ -1266,6 +1425,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     BlockNavigationPropertyChangedイベントのハンドラ。
+        /// </summary>
         private void OnBlockNavigationPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if ("Indicator".Equals(e.PropertyName, StringComparison.Ordinal))
@@ -1275,6 +1437,9 @@ namespace Komorebi.Views
         private ScrollViewer _scrollViewer;
     }
 
+    /// <summary>
+    ///     TextDiffViewMinimapクラス。
+    /// </summary>
     public class TextDiffViewMinimap : Control
     {
         public static readonly StyledProperty<IBrush> AddedLineBrushProperty =
@@ -1313,6 +1478,9 @@ namespace Komorebi.Views
             set => SetValue(DisplayRangeColorProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static TextDiffViewMinimap()
         {
             AffectsRender<TextDiffViewMinimap>(
@@ -1322,6 +1490,9 @@ namespace Komorebi.Views
                 DisplayRangeColorProperty);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             context.DrawRectangle(Brushes.Transparent, null, new Rect(0, 0, Bounds.Width, Bounds.Height));
@@ -1357,12 +1528,18 @@ namespace Komorebi.Views
             context.DrawLine(pen, rect.BottomLeft, rect.BottomRight);
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             InvalidateVisual();
         }
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -1400,6 +1577,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     RenderSingleSideの処理を行う。
+        /// </summary>
         private void RenderSingleSide(DrawingContext context, List<Models.TextDiffLine> lines, double x, double width)
         {
             var total = lines.Count;
@@ -1421,6 +1601,9 @@ namespace Komorebi.Views
             RenderBlock(context, lastLineType, lastLineTypeStart, total - lastLineTypeStart, total, x, width);
         }
 
+        /// <summary>
+        ///     RenderBlockの処理を行う。
+        /// </summary>
         private void RenderBlock(DrawingContext context, Models.TextDiffLineType type, int start, int count, int total, double x, double width)
         {
             if (type == Models.TextDiffLineType.Added || type == Models.TextDiffLineType.Deleted)
@@ -1433,6 +1616,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     テキスト差分ビューのコードビハインド。
+    /// </summary>
     public partial class TextDiffView : UserControl
     {
         public static readonly StyledProperty<ViewModels.TextDiffSelectedChunk> SelectedChunkProperty =
@@ -1444,11 +1630,17 @@ namespace Komorebi.Views
             set => SetValue(SelectedChunkProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public TextDiffView()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -1469,6 +1661,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     PointerExitedイベントのハンドラ。
+        /// </summary>
         protected override void OnPointerExited(PointerEventArgs e)
         {
             base.OnPointerExited(e);
@@ -1477,6 +1672,9 @@ namespace Komorebi.Views
                 ctx.SelectedChunk = null;
         }
 
+        /// <summary>
+        ///     StageChunkイベントのハンドラ。
+        /// </summary>
         private async void OnStageChunk(object _1, RoutedEventArgs _2)
         {
             if (DataContext is not ViewModels.TextDiffContext { SelectedChunk: { } chunk, Data: { } diff, Option: { IsUnstaged: true, WorkingCopyChange: { } change } } vm)
@@ -1515,6 +1713,9 @@ namespace Komorebi.Views
             repo.MarkWorkingCopyDirtyManually();
         }
 
+        /// <summary>
+        ///     UnstageChunkイベントのハンドラ。
+        /// </summary>
         private async void OnUnstageChunk(object _1, RoutedEventArgs _2)
         {
             if (DataContext is not ViewModels.TextDiffContext { SelectedChunk: { } chunk, Data: { } diff, Option: { IsUnstaged: false, WorkingCopyChange: { } change } } vm)
@@ -1546,6 +1747,9 @@ namespace Komorebi.Views
             repo.MarkWorkingCopyDirtyManually();
         }
 
+        /// <summary>
+        ///     DiscardChunkイベントのハンドラ。
+        /// </summary>
         private async void OnDiscardChunk(object _1, RoutedEventArgs _2)
         {
             if (DataContext is not ViewModels.TextDiffContext { SelectedChunk: { } chunk, Data: { } diff, Option: { IsUnstaged: true, WorkingCopyChange: { } change } } vm)

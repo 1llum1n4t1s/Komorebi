@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Avalonia;
@@ -13,10 +13,19 @@ using AvaloniaEdit.TextMate;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     Gitコマンドログの内容をフォーマットして表示するプレゼンタ。
+    /// </summary>
     public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
     {
+        /// <summary>
+        ///     LineStyleTransformerクラス。
+        /// </summary>
         public class LineStyleTransformer : DocumentColorizingTransformer
         {
+            /// <summary>
+            ///     ColorizeLineの処理を行う。
+            /// </summary>
             protected override void ColorizeLine(DocumentLine line)
             {
                 var content = CurrentContext.Document.GetText(line);
@@ -81,6 +90,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
 
+        /// <summary>
+        ///     CommandLogContentPresenterの処理を行う。
+        /// </summary>
         public CommandLogContentPresenter() : base(new TextArea(), new TextDocument())
         {
             IsReadOnly = true;
@@ -93,6 +105,9 @@ namespace Komorebi.Views
             TextArea.TextView.Options.AllowScrollBelowDocument = false;
         }
 
+        /// <summary>
+        ///     ReceiveCommandLogイベントのハンドラ。
+        /// </summary>
         public void OnReceiveCommandLog(string line)
         {
             AppendText("\n");
@@ -100,6 +115,9 @@ namespace Komorebi.Views
             ScrollToEnd();
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -112,6 +130,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
@@ -125,6 +146,9 @@ namespace Komorebi.Views
             GC.Collect();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);

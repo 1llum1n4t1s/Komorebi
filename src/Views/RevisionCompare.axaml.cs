@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
@@ -9,13 +9,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     リビジョン比較ビューのコードビハインド。
+    /// </summary>
     public partial class RevisionCompare : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public RevisionCompare()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ChangeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (DataContext is ViewModels.RevisionCompare { SelectedChanges: { Count: > 0 } selected } vm &&
@@ -197,6 +206,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     PressedSHAイベントのハンドラ。
+        /// </summary>
         private void OnPressedSHA(object sender, PointerPressedEventArgs e)
         {
             if (DataContext is ViewModels.RevisionCompare vm && sender is TextBlock block)
@@ -205,6 +217,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SaveAsPatchイベントのハンドラ。
+        /// </summary>
         private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
         {
             var storage = TopLevel.GetTopLevel(this)?.StorageProvider;
@@ -233,6 +248,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.RevisionCompare vm)

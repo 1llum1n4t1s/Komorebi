@@ -7,31 +7,49 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     リポジトリメインビュー（ブランチ・履歴・ワーキングコピー）のコードビハインド。
+    /// </summary>
     public partial class Repository : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Repository()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
             UpdateLeftSidebarLayout();
         }
 
+        /// <summary>
+        ///     ToggleFilterイベントのハンドラ。
+        /// </summary>
         private void OnToggleFilter(object _, RoutedEventArgs e)
         {
             FilterBox.Focus();
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SearchCommitPanelPropertyChangedイベントのハンドラ。
+        /// </summary>
         private void OnSearchCommitPanelPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
         {
             if (e.Property == IsVisibleProperty && sender is Grid { IsVisible: true })
                 TxtSearchCommitsBox.Focus();
         }
 
+        /// <summary>
+        ///     SearchKeyDownイベントのハンドラ。
+        /// </summary>
         private void OnSearchKeyDown(object _, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.Repository repo)
@@ -59,6 +77,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ClearSearchCommitFilterイベントのハンドラ。
+        /// </summary>
         private void OnClearSearchCommitFilter(object _, RoutedEventArgs e)
         {
             if (DataContext is not ViewModels.Repository repo)
@@ -68,24 +89,36 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     LocalBranchTreeSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnLocalBranchTreeSelectionChanged(object _1, RoutedEventArgs _2)
         {
             RemoteBranchTree.UnselectAll();
             TagsList.UnselectAll();
         }
 
+        /// <summary>
+        ///     RemoteBranchTreeSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnRemoteBranchTreeSelectionChanged(object _1, RoutedEventArgs _2)
         {
             LocalBranchTree.UnselectAll();
             TagsList.UnselectAll();
         }
 
+        /// <summary>
+        ///     TagsSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnTagsSelectionChanged(object _1, RoutedEventArgs _2)
         {
             LocalBranchTree.UnselectAll();
             RemoteBranchTree.UnselectAll();
         }
 
+        /// <summary>
+        ///     WorktreeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnWorktreeContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is Control { DataContext: ViewModels.Worktree worktree } ctrl && DataContext is ViewModels.Repository repo)
@@ -157,6 +190,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     WorktreeDoubleTappedイベントのハンドラ。
+        /// </summary>
         private void OnWorktreeDoubleTapped(object sender, TappedEventArgs e)
         {
             if (sender is Control { DataContext: ViewModels.Worktree worktree } && DataContext is ViewModels.Repository repo)
@@ -165,24 +201,36 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     WorktreeListPropertyChangedイベントのハンドラ。
+        /// </summary>
         private void OnWorktreeListPropertyChanged(object _, AvaloniaPropertyChangedEventArgs e)
         {
             if (e.Property == ItemsControl.ItemsSourceProperty || e.Property == IsVisibleProperty)
                 UpdateLeftSidebarLayout();
         }
 
+        /// <summary>
+        ///     LeftSidebarRowsChangedイベントのハンドラ。
+        /// </summary>
         private void OnLeftSidebarRowsChanged(object _, RoutedEventArgs e)
         {
             UpdateLeftSidebarLayout();
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     LeftSidebarSizeChangedイベントのハンドラ。
+        /// </summary>
         private void OnLeftSidebarSizeChanged(object _, SizeChangedEventArgs e)
         {
             if (e.HeightChanged)
                 UpdateLeftSidebarLayout();
         }
 
+        /// <summary>
+        ///     UpdateLeftSidebarLayoutの処理を行う。
+        /// </summary>
         private void UpdateLeftSidebarLayout()
         {
             var vm = DataContext as ViewModels.Repository;
@@ -306,6 +354,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     SearchSuggestionBoxKeyDownイベントのハンドラ。
+        /// </summary>
         private void OnSearchSuggestionBoxKeyDown(object _, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.Repository repo)
@@ -325,6 +376,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     SearchSuggestionDoubleTappedイベントのハンドラ。
+        /// </summary>
         private void OnSearchSuggestionDoubleTapped(object sender, TappedEventArgs e)
         {
             if (DataContext is not ViewModels.Repository repo)
@@ -340,6 +394,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenAdvancedHistoriesOptionイベントのハンドラ。
+        /// </summary>
         private void OnOpenAdvancedHistoriesOption(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && DataContext is ViewModels.Repository repo)
@@ -454,6 +511,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenSortLocalBranchMenuイベントのハンドラ。
+        /// </summary>
         private void OnOpenSortLocalBranchMenu(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && DataContext is ViewModels.Repository repo)
@@ -491,6 +551,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenSortRemoteBranchMenuイベントのハンドラ。
+        /// </summary>
         private void OnOpenSortRemoteBranchMenu(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && DataContext is ViewModels.Repository repo)
@@ -528,6 +591,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenSortTagMenuイベントのハンドラ。
+        /// </summary>
         private void OnOpenSortTagMenu(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && DataContext is ViewModels.Repository repo)
@@ -565,6 +631,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     PruneWorktreesイベントのハンドラ。
+        /// </summary>
         private async void OnPruneWorktrees(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -573,6 +642,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SkipInProgressイベントのハンドラ。
+        /// </summary>
         private async void OnSkipInProgress(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -581,6 +653,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ResolveInProgressイベントのハンドラ。
+        /// </summary>
         private void OnResolveInProgress(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -589,6 +664,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AbortInProgressイベントのハンドラ。
+        /// </summary>
         private async void OnAbortInProgress(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -597,6 +675,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     RemoveSelectedHistoryFilterイベントのハンドラ。
+        /// </summary>
         private void OnRemoveSelectedHistoryFilter(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo && sender is Button { DataContext: Models.HistoryFilter filter })
@@ -605,6 +686,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     BisectCommandイベントのハンドラ。
+        /// </summary>
         private async void OnBisectCommand(object sender, RoutedEventArgs e)
         {
             if (sender is Button button &&

@@ -12,10 +12,16 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     TagTreeNodeToggleButtonクラス。
+    /// </summary>
     public class TagTreeNodeToggleButton : ToggleButton
     {
         protected override Type StyleKeyOverride => typeof(ToggleButton);
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
@@ -29,6 +35,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     TagTreeNodeIconクラス。
+    /// </summary>
     public class TagTreeNodeIcon : UserControl
     {
         public static readonly StyledProperty<bool> IsExpandedProperty =
@@ -40,12 +49,18 @@ namespace Komorebi.Views
             set => SetValue(IsExpandedProperty, value);
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             UpdateContent();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -54,6 +69,9 @@ namespace Komorebi.Views
                 UpdateContent();
         }
 
+        /// <summary>
+        ///     UpdateContentの処理を行う。
+        /// </summary>
         private void UpdateContent()
         {
             if (DataContext is not ViewModels.TagTreeNode node)
@@ -70,6 +88,9 @@ namespace Komorebi.Views
                 CreateContent(new Thickness(0, 2, 0, 0), "Icons.Folder", false);
         }
 
+        /// <summary>
+        ///     CreateContentの処理を行う。
+        /// </summary>
         private void CreateContent(Thickness margin, string iconKey, bool stroke)
         {
             if (this.FindResource(iconKey) is not StreamGeometry geo)
@@ -96,6 +117,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     タグ一覧ビューのコードビハインド。
+    /// </summary>
     public partial class TagsView : UserControl
     {
         public static readonly RoutedEvent<RoutedEventArgs> SelectionChangedEvent =
@@ -131,11 +155,17 @@ namespace Komorebi.Views
             private set;
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public TagsView()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     UnselectAllの処理を行う。
+        /// </summary>
         public void UnselectAll()
         {
             var list = this.FindDescendantOfType<ListBox>();
@@ -143,6 +173,9 @@ namespace Komorebi.Views
                 list.SelectedItem = null;
         }
 
+        /// <summary>
+        ///     ToggleNodeIsExpandedの処理を行う。
+        /// </summary>
         public void ToggleNodeIsExpanded(ViewModels.TagTreeNode node)
         {
             if (Content is ViewModels.TagCollectionAsTree tree)
@@ -153,6 +186,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -174,6 +210,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ItemDoubleTappedイベントのハンドラ。
+        /// </summary>
         private async void OnItemDoubleTapped(object sender, TappedEventArgs e)
         {
             if (sender is Control { DataContext: ViewModels.TagTreeNode node })
@@ -192,6 +231,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ItemPointerPressedイベントのハンドラ。
+        /// </summary>
         private void OnItemPointerPressed(object sender, PointerPressedEventArgs e)
         {
             var ctrl = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
@@ -214,6 +256,9 @@ namespace Komorebi.Views
                 repo.NavigateToCommit(nodeTag.SHA);
         }
 
+        /// <summary>
+        ///     TagsContextMenuRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTagsContextMenuRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is not ListBox { SelectedItems: { Count: > 0 } selectedItems } listBox)
@@ -279,6 +324,9 @@ namespace Komorebi.Views
                 compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWith.Click += (_, _) =>
                 {
+                    /// <summary>
+                    ///     CompareCommandPaletteの処理を行う。
+                    /// </summary>
                     new ViewModels.CompareCommandPalette(repo, tag).Open();
                 };
 
@@ -411,6 +459,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     選択項目が変更された際の処理。
+        /// </summary>
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs _)
         {
             if (sender is not ListBox listBox)
@@ -434,6 +485,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F && e.KeyModifiers == (OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
@@ -458,6 +512,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CollectTagsInNodeの処理を行う。
+        /// </summary>
         private void CollectTagsInNode(ViewModels.TagTreeNode node, List<Models.Tag> outs)
         {
             if (node.Tag is { } tag)

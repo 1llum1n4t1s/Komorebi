@@ -15,13 +15,28 @@ using Avalonia.Threading;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     アバター画像のリソース変更を通知するためのホストインターフェース
+    /// </summary>
     public interface IAvatarHost
     {
+        /// <summary>
+        ///     アバターリソースが変更された際に呼び出されるコールバック
+        /// </summary>
+        /// <param name="email">変更対象のメールアドレス</param>
+        /// <param name="image">新しいアバター画像（取得失敗時はnull）</param>
         void OnAvatarResourceChanged(string email, Bitmap image);
     }
 
+    /// <summary>
+    ///     ユーザーアバター画像の取得・キャッシュ・管理を行うシングルトンクラス。
+    ///     GravatarおよびGitHubアバターをサポートする。
+    /// </summary>
     public partial class AvatarManager
     {
+        /// <summary>
+        ///     シングルトンインスタンスを取得する
+        /// </summary>
         public static AvatarManager Instance
         {
             get
@@ -32,16 +47,28 @@ namespace Komorebi.Models
 
         private static AvatarManager _instance = null;
 
+        /// <summary>
+        ///     GitHubのnoreplyメールアドレスからユーザー名を抽出する正規表現
+        /// </summary>
         [GeneratedRegex(@"^(?:(\d+)\+)?(.+?)@.+\.github\.com$")]
         private static partial Regex REG_GITHUB_USER_EMAIL();
 
         private readonly Lock _synclock = new();
+        /// <summary>アバター画像のローカルキャッシュディレクトリパス</summary>
         private string _storePath;
+        /// <summary>アバター変更通知を受け取るホストのリスト</summary>
         private List<IAvatarHost> _avatars = new List<IAvatarHost>();
+        /// <summary>メールアドレスをキーとしたアバター画像のキャッシュ</summary>
         private Dictionary<string, Bitmap> _resources = new Dictionary<string, Bitmap>();
+        /// <summary>ダウンロードリクエスト待ちのメールアドレスセット</summary>
         private HashSet<string> _requesting = new HashSet<string>();
+        /// <summary>デフォルトアバターとして登録済みのメールアドレスセット</summary>
         private HashSet<string> _defaultAvatars = new HashSet<string>();
 
+        /// <summary>
+        ///     アバターマネージャーを開始し、バックグラウンドでアバター取得ループを起動する。
+        ///     デフォルトアバター（GitHub, Unreal）の読み込みも行う。
+        /// </summary>
         public void Start()
         {
             _storePath = Path.Combine(Native.OS.DataDir, "avatars");
@@ -128,16 +155,31 @@ namespace Komorebi.Models
             });
         }
 
+        /// <summary>
+        ///     アバターリソース変更の通知を受け取るホストを登録する
+        /// </summary>
+        /// <param name="host">登録するホスト</param>
         public void Subscribe(IAvatarHost host)
         {
             _avatars.Add(host);
         }
 
+        /// <summary>
+        ///     アバターリソース変更の通知登録を解除する
+        /// </summary>
+        /// <param name="host">解除するホスト</param>
         public void Unsubscribe(IAvatarHost host)
         {
             _avatars.Remove(host);
         }
 
+        /// <summary>
+        ///     指定メールアドレスのアバター画像をリクエストする。
+        ///     キャッシュにあればそれを返し、なければバックグラウンドでダウンロードをキューに入れる。
+        /// </summary>
+        /// <param name="email">対象のメールアドレス</param>
+        /// <param name="forceRefetch">trueの場合、キャッシュを削除して再取得する</param>
+        /// <returns>キャッシュ済みのアバター画像、またはnull（取得中の場合）</returns>
         public Bitmap Request(string email, bool forceRefetch)
         {
             if (forceRefetch)
@@ -185,6 +227,11 @@ namespace Komorebi.Models
             return null;
         }
 
+        /// <summary>
+        ///     ローカルファイルからアバター画像を設定する
+        /// </summary>
+        /// <param name="email">対象のメールアドレス</param>
+        /// <param name="file">ローカル画像ファイルパス</param>
         public void SetFromLocal(string email, string file)
         {
             try
@@ -213,6 +260,11 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     埋め込みリソースからデフォルトアバターを読み込む
+        /// </summary>
+        /// <param name="key">メールアドレスキー</param>
+        /// <param name="img">リソース画像ファイル名</param>
         private void LoadDefaultAvatar(string key, string img)
         {
             var icon = AssetLoader.Open(new Uri($"avares://Komorebi/Resources/Images/{img}", UriKind.RelativeOrAbsolute));
@@ -220,6 +272,11 @@ namespace Komorebi.Models
             _defaultAvatars.Add(key);
         }
 
+        /// <summary>
+        ///     メールアドレスのMD5ハッシュを計算する（Gravatar URL生成用）
+        /// </summary>
+        /// <param name="email">対象のメールアドレス</param>
+        /// <returns>MD5ハッシュの16進数文字列</returns>
         private string GetEmailHash(string email)
         {
             var lowered = email.ToLower(CultureInfo.CurrentCulture).Trim();
@@ -230,6 +287,11 @@ namespace Komorebi.Models
             return builder.ToString();
         }
 
+        /// <summary>
+        ///     全登録ホストにアバターリソース変更を通知する
+        /// </summary>
+        /// <param name="email">変更対象のメールアドレス</param>
+        /// <param name="image">新しいアバター画像</param>
         private void NotifyResourceChanged(string email, Bitmap image)
         {
             foreach (var avatar in _avatars)

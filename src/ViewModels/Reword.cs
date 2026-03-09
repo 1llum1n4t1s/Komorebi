@@ -4,13 +4,23 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     HEADコミットのメッセージを修正するポップアップダイアログのViewModel。
+    ///     git commit --amend を使用してコミットメッセージのみを変更する。
+    /// </summary>
     public class Reword : Popup
     {
+        /// <summary>
+        ///     修正対象のHEADコミット。
+        /// </summary>
         public Models.Commit Head
         {
             get;
         }
 
+        /// <summary>
+        ///     新しいコミットメッセージ。空文字は許可されない。
+        /// </summary>
         [Required(ErrorMessage = "Commit message is required!!!")]
         public string Message
         {
@@ -18,6 +28,9 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _message, value, true);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリ、対象コミット、元のメッセージを受け取る。
+        /// </summary>
         public Reword(Repository repo, Models.Commit head, string oldMessage)
         {
             _repo = repo;
@@ -26,8 +39,14 @@ namespace Komorebi.ViewModels
             Head = head;
         }
 
+        /// <summary>
+        ///     コミットメッセージの修正を実行する。
+        ///     メッセージが変更されていない場合は何もしない。
+        ///     ステージされた変更がある場合は自動スタッシュを行い、amend後にポップする。
+        /// </summary>
         public override async Task<bool> Sure()
         {
+            // メッセージが変更されていなければスキップ
             if (string.Compare(_message, _oldMessage, StringComparison.Ordinal) == 0)
                 return true;
 
@@ -43,6 +62,7 @@ namespace Komorebi.ViewModels
             var needAutoStash = false;
             var succ = false;
 
+            // ステージされた変更があるか確認（amend時に巻き込まれないようスタッシュが必要）
             foreach (var c in changes)
             {
                 if (c.Index != Models.ChangeState.None)
@@ -52,6 +72,7 @@ namespace Komorebi.ViewModels
                 }
             }
 
+            // 自動スタッシュでステージされた変更を退避
             if (needAutoStash)
             {
                 succ = await new Commands.Stash(_repo.FullPath)

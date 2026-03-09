@@ -6,8 +6,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     コミット検索機能のコンテキストを管理するViewModel。
+    ///     SHA、メッセージ、作者、ファイルパスなど複数の検索メソッドをサポートし、
+    ///     検索結果のリストと選択状態を管理する。
+    /// </summary>
     public class SearchCommitContext : ObservableObject, IDisposable
     {
+        /// <summary>
+        ///     検索メソッド（SHA、メッセージ、作者、ファイルパスなど）のインデックス。
+        /// </summary>
         public int Method
         {
             get => _method;
@@ -21,6 +29,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     検索フィルタ文字列。変更時にサジェストを更新する。
+        /// </summary>
         public string Filter
         {
             get => _filter;
@@ -31,6 +42,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     現在のブランチのみを検索対象にするかどうか。
+        /// </summary>
         public bool OnlySearchCurrentBranch
         {
             get => _onlySearchCurrentBranch;
@@ -41,24 +55,36 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     ファイルパス検索時のオートコンプリート候補リスト。
+        /// </summary>
         public List<string> Suggestions
         {
             get => _suggestions;
             private set => SetProperty(ref _suggestions, value);
         }
 
+        /// <summary>
+        ///     検索クエリの実行中かどうか。
+        /// </summary>
         public bool IsQuerying
         {
             get => _isQuerying;
             private set => SetProperty(ref _isQuerying, value);
         }
 
+        /// <summary>
+        ///     検索結果のコミットリスト。
+        /// </summary>
         public List<Models.Commit> Results
         {
             get => _results;
             private set => SetProperty(ref _results, value);
         }
 
+        /// <summary>
+        ///     選択されたコミット。選択時に履歴画面をそのコミットにナビゲートする。
+        /// </summary>
         public Models.Commit Selected
         {
             get => _selected;
@@ -69,11 +95,17 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     コンストラクタ。対象リポジトリを設定する。
+        /// </summary>
         public SearchCommitContext(Repository repo)
         {
             _repo = repo;
         }
 
+        /// <summary>
+        ///     リソースを解放する。
+        /// </summary>
         public void Dispose()
         {
             _repo = null;
@@ -82,6 +114,9 @@ namespace Komorebi.ViewModels
             _worktreeFiles?.Clear();
         }
 
+        /// <summary>
+        ///     検索フィルタと結果をクリアする。
+        /// </summary>
         public void ClearFilter()
         {
             Filter = string.Empty;
@@ -89,11 +124,17 @@ namespace Komorebi.ViewModels
             Results = null;
         }
 
+        /// <summary>
+        ///     サジェスト候補をクリアする。
+        /// </summary>
         public void ClearSuggestions()
         {
             Suggestions = null;
         }
 
+        /// <summary>
+        ///     検索を開始する。バックグラウンドスレッドでgitコマンドを実行し、結果をUIに反映する。
+        /// </summary>
         public void StartSearch()
         {
             Results = null;
@@ -166,6 +207,9 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     検索を終了してリソースを解放する。
+        /// </summary>
         public void EndSearch()
         {
             _worktreeFiles = null;
@@ -174,6 +218,10 @@ namespace Komorebi.ViewModels
             GC.Collect();
         }
 
+        /// <summary>
+        ///     ファイルパス検索時のサジェスト候補を更新する。
+        ///     ワークツリーのファイル一覧を遅延取得し、フィルタにマッチするファイルを提示する。
+        /// </summary>
         private void UpdateSuggestions()
         {
             if (_method != (int)Models.CommitSearchMethod.ByPath || _requestingWorktreeFiles)

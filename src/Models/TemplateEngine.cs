@@ -6,30 +6,40 @@ using System.Text.RegularExpressions;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     コミットメッセージテンプレートエンジン。
+    ///     ${branch_name}、${files}、${pure_files}、${files_num}などの変数置換、
+    ///     ${files:N}形式のスライス、${name/正規表現/置換}形式の正規表現置換をサポートする。
+    /// </summary>
     public class TemplateEngine
     {
+        /// <summary>テンプレート評価時のコンテキスト（ブランチと変更ファイルリスト）</summary>
         private class Context(Branch branch, IReadOnlyList<Change> changes)
         {
             public Branch branch = branch;
             public IReadOnlyList<Change> changes = changes;
         }
 
+        /// <summary>テキストリテラルトークン</summary>
         private class Text(string text)
         {
             public string text = text;
         }
 
+        /// <summary>変数トークン（${name}形式）</summary>
         private class Variable(string name)
         {
             public string name = name;
         }
 
+        /// <summary>スライス付き変数トークン（${name:N}形式）</summary>
         private class SlicedVariable(string name, int count)
         {
             public string name = name;
             public int count = count;
         }
 
+        /// <summary>正規表現置換付き変数トークン（${name/正規表現/置換}形式）</summary>
         private class RegexVariable(string name, Regex regex, string replacement)
         {
             public string name = name;
@@ -37,6 +47,7 @@ namespace Komorebi.Models
             public string replacement = replacement;
         }
 
+        // パーサー用の定数
         private const char ESCAPE = '\\';
         private const char VARIABLE_ANCHOR = '$';
         private const char VARIABLE_START = '{';
@@ -46,6 +57,13 @@ namespace Komorebi.Models
         private const char NEWLINE = '\n';
         private const RegexOptions REGEX_OPTIONS = RegexOptions.Singleline | RegexOptions.IgnoreCase;
 
+        /// <summary>
+        ///     テンプレート文字列を評価し、変数を展開した結果を返す
+        /// </summary>
+        /// <param name="text">テンプレート文字列</param>
+        /// <param name="branch">現在のブランチ</param>
+        /// <param name="changes">ステージされた変更ファイルリスト</param>
+        /// <returns>変数が展開された文字列</returns>
         public string Eval(string text, Branch branch, IReadOnlyList<Change> changes)
         {
             Reset();
@@ -78,6 +96,7 @@ namespace Komorebi.Models
             return sb.ToString();
         }
 
+        /// <summary>パーサーの状態をリセットする</summary>
         private void Reset()
         {
             _pos = 0;
@@ -85,6 +104,7 @@ namespace Komorebi.Models
             _tokens.Clear();
         }
 
+        /// <summary>次の文字を読み進めて返す。末尾の場合はnull。</summary>
         private char? Next()
         {
             var c = Peek();
@@ -93,11 +113,13 @@ namespace Komorebi.Models
             return c;
         }
 
+        /// <summary>次の文字を先読みする（位置は進めない）。末尾の場合はnull。</summary>
         private char? Peek()
         {
             return (_pos >= _chars.Length) ? null : _chars[_pos];
         }
 
+        /// <summary>現在位置から整数をパースする。数字がない場合はnull。</summary>
         private int? Integer()
         {
             var start = _pos;
@@ -112,9 +134,12 @@ namespace Komorebi.Models
             return int.Parse(chars);
         }
 
+        /// <summary>
+        ///     テンプレート文字列全体をパースし、テキストトークンと変数トークンのリストを構築する
+        /// </summary>
         private void Parse()
         {
-            // text token start
+            // テキストトークンの開始位置
             var tok = _pos;
             bool esc = false;
             while (Next() is { } c)
@@ -127,7 +152,7 @@ namespace Komorebi.Models
                 switch (c)
                 {
                     case ESCAPE:
-                        // allow to escape only \ and $
+                        // エスケープ対象は「\」と「$」のみ
                         if (Peek() is ESCAPE or VARIABLE_ANCHOR)
                         {
                             esc = true;
@@ -136,17 +161,17 @@ namespace Komorebi.Models
                         }
                         break;
                     case VARIABLE_ANCHOR:
-                        // backup the position
+                        // 位置をバックアップして変数のパースを試みる
                         var bak = _pos;
                         var variable = TryParseVariable();
                         if (variable is null)
                         {
-                            // no variable found, rollback
+                            // 変数が見つからなかった場合、位置をロールバック
                             _pos = bak;
                         }
                         else
                         {
-                            // variable found, flush a text token
+                            // 変数が見つかった場合、直前のテキストトークンをフラッシュ
                             FlushText(tok, bak - 1);
                             _tokens.Add(variable);
                             tok = _pos;
@@ -154,10 +179,11 @@ namespace Komorebi.Models
                         break;
                 }
             }
-            // flush text token
+            // 残りのテキストトークンをフラッシュ
             FlushText(tok, _pos);
         }
 
+        /// <summary>指定範囲のテキストをトークンリストに追加する</summary>
         private void FlushText(int start, int end)
         {
             int len = end - start;
@@ -167,6 +193,7 @@ namespace Komorebi.Models
             _tokens.Add(new Text(text));
         }
 
+        /// <summary>${...}形式の変数をパースする。失敗時はnullを返す。</summary>
         private object TryParseVariable()
         {
             if (Next() != VARIABLE_START)
@@ -186,11 +213,11 @@ namespace Komorebi.Models
 
                 return c switch
                 {
-                    // variable
+                    // 通常の変数 ${name}
                     VARIABLE_END => new Variable(name),
-                    // sliced variable
+                    // スライス付き変数 ${name:N}
                     VARIABLE_SLICE => TryParseSlicedVariable(name),
-                    // regex variable
+                    // 正規表現付き変数 ${name/regex/replacement}
                     VARIABLE_REGEX => TryParseRegexVariable(name),
                     _ => null,
                 };
@@ -199,6 +226,7 @@ namespace Komorebi.Models
             return null;
         }
 
+        /// <summary>スライス付き変数（${name:N}形式）をパースする</summary>
         private object TryParseSlicedVariable(string name)
         {
             int? n = Integer();
@@ -210,6 +238,7 @@ namespace Komorebi.Models
             return new SlicedVariable(name, (int)n);
         }
 
+        /// <summary>正規表現付き変数（${name/regex/replacement}形式）をパースする</summary>
         private object TryParseRegexVariable(string name)
         {
             var regex = ParseRegex();
@@ -222,6 +251,7 @@ namespace Komorebi.Models
             return new RegexVariable(name, regex, replacement);
         }
 
+        /// <summary>正規表現パターン部分をパースする。「/」で終端。</summary>
         private Regex ParseRegex()
         {
             var sb = new StringBuilder();
@@ -237,7 +267,7 @@ namespace Komorebi.Models
                 switch (c)
                 {
                     case ESCAPE:
-                        // allow to escape only / as \ and { used frequently in regexes
+                        // 正規表現内では「/」のみエスケープ可能（「\」や「{」は正規表現で頻用されるため）
                         if (Peek() == VARIABLE_REGEX)
                         {
                             esc = true;
@@ -249,7 +279,7 @@ namespace Komorebi.Models
                         // goto is fine
                         goto Loop_exit;
                     case NEWLINE:
-                        // no newlines allowed
+                        // 改行は許可されない
                         return null;
                 }
             }
@@ -271,6 +301,7 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>正規表現の置換文字列部分をパースする。「}」で終端。</summary>
         private string ParseReplacement()
         {
             var sb = new StringBuilder();
@@ -286,7 +317,7 @@ namespace Komorebi.Models
                 switch (c)
                 {
                     case ESCAPE:
-                        // allow to escape only right-brace
+                        // 閉じ波括弧のみエスケープ可能
                         if (Peek() == VARIABLE_END)
                         {
                             esc = true;
@@ -310,12 +341,13 @@ namespace Komorebi.Models
             return replacement;
         }
 
+        /// <summary>変数名に使用できる文字かどうかを判定する（英数字とアンダースコア）</summary>
         private static bool IsNameChar(char c)
         {
             return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_';
         }
 
-        // (?) notice or log if variable is not found
+        /// <summary>名前から変数を評価し結果文字列を返す</summary>
         private static string EvalVariable(Context context, string name)
         {
             if (!s_variables.TryGetValue(name, out var getter))
@@ -323,11 +355,13 @@ namespace Komorebi.Models
             return getter(context);
         }
 
+        /// <summary>通常変数トークンを評価する</summary>
         private static string EvalVariable(Context context, Variable variable)
         {
             return EvalVariable(context, variable.name);
         }
 
+        /// <summary>スライス付き変数トークンを評価する</summary>
         private static string EvalVariable(Context context, SlicedVariable variable)
         {
             if (!s_slicedVariables.TryGetValue(variable.name, out var getter))
@@ -335,6 +369,7 @@ namespace Komorebi.Models
             return getter(context, variable.count);
         }
 
+        /// <summary>正規表現付き変数トークンを評価する</summary>
         private static string EvalVariable(Context context, RegexVariable variable)
         {
             var str = EvalVariable(context, variable.name);
@@ -343,12 +378,17 @@ namespace Komorebi.Models
             return variable.regex.Replace(str, variable.replacement);
         }
 
+        /// <summary>現在のパーサー位置</summary>
         private int _pos = 0;
+        /// <summary>パース対象の文字配列</summary>
         private char[] _chars = [];
+        /// <summary>パース結果のトークンリスト</summary>
         private readonly List<object> _tokens = [];
 
+        /// <summary>コンテキストから変数値を取得するデリゲート</summary>
         private delegate string VariableGetter(Context context);
 
+        /// <summary>サポートされる変数名とゲッターのマップ</summary>
         private static readonly IReadOnlyDictionary<string, VariableGetter> s_variables = new Dictionary<string, VariableGetter>() {
             {"branch_name", GetBranchName},
             {"files_num", GetFilesCount},
@@ -356,16 +396,19 @@ namespace Komorebi.Models
             {"pure_files", GetPureFiles},
         };
 
+        /// <summary>現在のブランチ名を取得する</summary>
         private static string GetBranchName(Context context)
         {
             return context.branch.Name;
         }
 
+        /// <summary>変更ファイル数を文字列で取得する</summary>
         private static string GetFilesCount(Context context)
         {
             return context.changes.Count.ToString();
         }
 
+        /// <summary>変更ファイルのフルパスをカンマ区切りで取得する</summary>
         private static string GetFiles(Context context)
         {
             var paths = new List<string>();
@@ -374,6 +417,7 @@ namespace Komorebi.Models
             return string.Join(", ", paths);
         }
 
+        /// <summary>変更ファイルのファイル名のみをカンマ区切りで取得する</summary>
         private static string GetPureFiles(Context context)
         {
             var names = new List<string>();
@@ -382,13 +426,16 @@ namespace Komorebi.Models
             return string.Join(", ", names);
         }
 
+        /// <summary>スライス付き変数用のデリゲート</summary>
         private delegate string VariableSliceGetter(Context context, int count);
 
+        /// <summary>スライス対応変数名とゲッターのマップ</summary>
         private static readonly IReadOnlyDictionary<string, VariableSliceGetter> s_slicedVariables = new Dictionary<string, VariableSliceGetter>() {
             {"files", GetFilesSliced},
             {"pure_files", GetPureFilesSliced}
         };
 
+        /// <summary>変更ファイルのフルパスを指定件数まで取得し、残りは「and N other files」で表示</summary>
         private static string GetFilesSliced(Context context, int count)
         {
             var sb = new StringBuilder();
@@ -404,6 +451,7 @@ namespace Komorebi.Models
             return sb.ToString();
         }
 
+        /// <summary>変更ファイルのファイル名のみを指定件数まで取得し、残りは「and N other files」で表示</summary>
         private static string GetPureFilesSliced(Context context, int count)
         {
             var sb = new StringBuilder();

@@ -1,9 +1,12 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミットグラフ（ブランチの分岐・マージ線）を描画するカスタムコントロール。
+    /// </summary>
     public class CommitGraph : Control
     {
         public static readonly StyledProperty<Models.CommitGraph> GraphProperty =
@@ -42,8 +45,12 @@ namespace Komorebi.Views
             set => SetValue(LayoutProperty, value);
         }
 
+        /// <summary>
+        ///     静的コンストラクタ。描画に影響するプロパティを登録する。
+        /// </summary>
         static CommitGraph()
         {
+            // これらのプロパティが変更されたときに再描画をトリガーする
             AffectsRender<CommitGraph>(
                 GraphProperty,
                 DotBrushProperty,
@@ -51,6 +58,9 @@ namespace Komorebi.Views
                 LayoutProperty);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -58,20 +68,26 @@ namespace Komorebi.Views
             if (Graph is not { } graph || Layout is not { } layout)
                 return;
 
+            // 可視領域の上下端とクリップサイズを計算する
             var startY = layout.StartY;
             var clipWidth = layout.ClipWidth;
             var clipHeight = Bounds.Height;
             var rowHeight = layout.RowHeight;
             var endY = startY + clipHeight + 28;
 
+            // クリップ領域を設定し、スクロール位置に応じた座標変換を適用する
             using (context.PushClip(new Rect(0, 0, clipWidth, clipHeight)))
             using (context.PushTransform(Matrix.CreateTranslation(0, -startY)))
             {
+                // ブランチの分岐・マージ曲線を描画してからアンカードットを描画する
                 DrawCurves(context, graph, startY, endY, rowHeight);
                 DrawAnchors(context, graph, startY, endY, rowHeight);
             }
         }
 
+        /// <summary>
+        ///     DrawCurvesの処理を行う。
+        /// </summary>
         private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
         {
             var grayedPen = new Pen(new SolidColorBrush(Colors.Gray, 0.4), Models.CommitGraph.Pens[0].Thickness);
@@ -199,6 +215,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     DrawAnchorsの処理を行う。
+        /// </summary>
         private void DrawAnchors(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
         {
             var dotFill = DotBrush;

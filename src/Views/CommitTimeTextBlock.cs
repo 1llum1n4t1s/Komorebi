@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -8,6 +8,9 @@ using Avalonia.Threading;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミットのタイムスタンプを相対時間または絶対時間で表示するテキストブロック。
+    /// </summary>
     public class CommitTimeTextBlock : TextBlock
     {
         public static readonly StyledProperty<bool> ShowAsDateTimeProperty =
@@ -39,6 +42,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextBlock);
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -69,6 +75,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -77,18 +86,27 @@ namespace Komorebi.Views
                 StartTimer();
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
             StopTimer();
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             SetCurrentValue(TextProperty, GetDisplayText());
         }
 
+        /// <summary>
+        ///     StartTimerの処理を行う。
+        /// </summary>
         private void StartTimer()
         {
             if (_refreshTimer != null)
@@ -107,6 +125,9 @@ namespace Komorebi.Views
             }, TimeSpan.FromSeconds(10));
         }
 
+        /// <summary>
+        ///     StopTimerの処理を行う。
+        /// </summary>
         private void StopTimer()
         {
             if (_refreshTimer != null)
@@ -116,6 +137,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     GetDisplayTextの処理を行う。
+        /// </summary>
         private string GetDisplayText()
         {
             if (DataContext is not Models.Commit commit)

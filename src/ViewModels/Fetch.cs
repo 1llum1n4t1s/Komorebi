@@ -3,18 +3,31 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     git fetchを実行するダイアログViewModel。
+    ///     単一リモートまたは全リモートからのフェッチに対応し、タグ除外と強制フェッチのオプションを提供する。
+    /// </summary>
     public class Fetch : Popup
     {
+        /// <summary>
+        ///     リポジトリに設定されているリモート一覧。
+        /// </summary>
         public List<Models.Remote> Remotes
         {
             get => _repo.Remotes;
         }
 
+        /// <summary>
+        ///     「全リモートをフェッチ」オプションを表示するかどうか（リモートが2つ以上の場合）。
+        /// </summary>
         public bool IsFetchAllRemoteVisible
         {
             get;
         }
 
+        /// <summary>
+        ///     全リモートからフェッチするかどうか。UI状態に永続化される。
+        /// </summary>
         public bool FetchAllRemotes
         {
             get => _fetchAllRemotes;
@@ -25,24 +38,36 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     フェッチ対象として選択されたリモート。
+        /// </summary>
         public Models.Remote SelectedRemote
         {
             get;
             set;
         }
 
+        /// <summary>
+        ///     タグをフェッチしないかどうか。UI状態に永続化される。
+        /// </summary>
         public bool NoTags
         {
             get => _repo.UIStates.FetchWithoutTags;
             set => _repo.UIStates.FetchWithoutTags = value;
         }
 
+        /// <summary>
+        ///     強制フェッチを有効にするかどうか。UI状態に永続化される。
+        /// </summary>
         public bool Force
         {
             get => _repo.UIStates.EnableForceOnFetch;
             set => _repo.UIStates.EnableForceOnFetch = value;
         }
 
+        /// <summary>
+        ///     コンストラクタ。指定リモートまたはデフォルトリモートを初期選択する。
+        /// </summary>
         public Fetch(Repository repo, Models.Remote preferredRemote = null)
         {
             _repo = repo;
@@ -64,10 +89,15 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     フェッチを実行する確認アクション。
+        ///     フェッチ後、現在HEADを表示中の場合はアップストリームHEADへナビゲートする。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
 
+            // 現在のHEADコミットを表示中かどうかを記憶
             var navigateToUpstreamHEAD = _repo.SelectedView is Histories { SelectedCommit: { IsCurrentHead: true } };
             var notags = _repo.UIStates.FetchWithoutTags;
             var force = _repo.UIStates.EnableForceOnFetch;
@@ -90,6 +120,7 @@ namespace Komorebi.ViewModels
 
             log.Complete();
 
+            // フェッチ後、アップストリームHEADへ自動ナビゲート
             if (navigateToUpstreamHEAD)
             {
                 var upstream = _repo.CurrentBranch?.Upstream;

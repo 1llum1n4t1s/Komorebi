@@ -5,6 +5,9 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     アプリケーションの情報画面（バージョン、リリース日、著作権などを表示する）。
+    /// </summary>
     public partial class About : ChromelessWindow
     {
         public About()
@@ -13,10 +16,20 @@ namespace Komorebi.Views
             InitializeComponent();
 
             var assembly = Assembly.GetExecutingAssembly();
-            var ver = assembly.GetName().Version;
-            if (ver != null)
-                TxtVersion.Text = $"{ver.Major}.{ver.Minor:D2}";
 
+            // Directory.Build.props の Version をアセンブリ情報から取得して表示する。
+            // InformationalVersion にはビルド時に "+コミットハッシュ" が付与される場合があるため除去する。
+            var info = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            if (info != null)
+            {
+                var version = info.InformationalVersion;
+                var plusIndex = version.IndexOf('+');
+                if (plusIndex >= 0)
+                    version = version[..plusIndex];
+                TxtVersion.Text = version;
+            }
+
+            // アセンブリメタデータからビルド日時を取得して表示する
             var meta = assembly.GetCustomAttributes<AssemblyMetadataAttribute>();
             foreach (var attr in meta)
             {
@@ -27,23 +40,33 @@ namespace Komorebi.Views
                 }
             }
 
+            // 著作権情報を表示する
             var copyright = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>();
             if (copyright != null)
                 TxtCopyright.Text = copyright.Copyright;
         }
 
+        /// <summary>
+        ///     現在のバージョンに対応するGitHubリリースノートをブラウザで開く。
+        /// </summary>
         private void OnVisitReleaseNotes(object _, RoutedEventArgs e)
         {
             Native.OS.OpenBrowser($"https://github.com/1llum1n4t1s/Komorebi/releases/tag/v{TxtVersion.Text}");
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     プロジェクトのWebサイトをブラウザで開く。
+        /// </summary>
         private void OnVisitWebsite(object _, RoutedEventArgs e)
         {
             Native.OS.OpenBrowser("https://github.com/1llum1n4t1s/Komorebi");
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ソースコードリポジトリをブラウザで開く。
+        /// </summary>
         private void OnVisitSourceCode(object _, RoutedEventArgs e)
         {
             Native.OS.OpenBrowser("https://github.com/1llum1n4t1s/Komorebi");

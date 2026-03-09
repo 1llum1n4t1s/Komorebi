@@ -17,16 +17,28 @@ using AvaloniaEdit.Utils;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     BlameTextEditorクラス。
+    /// </summary>
     public class BlameTextEditor : TextEditor
     {
+        /// <summary>
+        ///     CommitInfoMarginクラス。
+        /// </summary>
         public class CommitInfoMargin : AbstractMargin
         {
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public CommitInfoMargin(BlameTextEditor editor)
             {
                 _editor = editor;
                 ClipToBounds = true;
             }
 
+            /// <summary>
+            ///     コントロールの描画処理を行う。
+            /// </summary>
             public override void Render(DrawingContext context)
             {
                 if (_editor.BlameData == null)
@@ -86,6 +98,9 @@ namespace Komorebi.Views
                 }
             }
 
+            /// <summary>
+            ///     コントロールの測定処理をオーバーライドする。
+            /// </summary>
             protected override Size MeasureOverride(Size availableSize)
             {
                 var view = TextView;
@@ -141,6 +156,9 @@ namespace Komorebi.Views
                 return new Size(maxWidth, 0);
             }
 
+            /// <summary>
+            ///     ポインターが移動した際のイベント処理。
+            /// </summary>
             protected override void OnPointerMoved(PointerEventArgs e)
             {
                 base.OnPointerMoved(e);
@@ -190,6 +208,9 @@ namespace Komorebi.Views
                 }
             }
 
+            /// <summary>
+            ///     ポインターが押された際のイベント処理。
+            /// </summary>
             protected override void OnPointerPressed(PointerPressedEventArgs e)
             {
                 base.OnPointerPressed(e);
@@ -235,19 +256,31 @@ namespace Komorebi.Views
             private readonly BlameTextEditor _editor = null;
         }
 
+        /// <summary>
+        ///     VerticalSeparatorMarginクラス。
+        /// </summary>
         public class VerticalSeparatorMargin : AbstractMargin
         {
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public VerticalSeparatorMargin(BlameTextEditor editor)
             {
                 _editor = editor;
             }
 
+            /// <summary>
+            ///     コントロールの描画処理を行う。
+            /// </summary>
             public override void Render(DrawingContext context)
             {
                 var pen = new Pen(_editor.BorderBrush);
                 context.DrawLine(pen, new Point(0.5, 0), new Point(0.5, Bounds.Height));
             }
 
+            /// <summary>
+            ///     コントロールの測定処理をオーバーライドする。
+            /// </summary>
             protected override Size MeasureOverride(Size availableSize)
             {
                 return new Size(1, 0);
@@ -256,15 +289,24 @@ namespace Komorebi.Views
             private readonly BlameTextEditor _editor = null;
         }
 
+        /// <summary>
+        ///     LineBackgroundRendererクラス。
+        /// </summary>
         public class LineBackgroundRenderer : IBackgroundRenderer
         {
             public KnownLayer Layer => KnownLayer.Background;
 
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public LineBackgroundRenderer(BlameTextEditor owner)
             {
                 _owner = owner;
             }
 
+            /// <summary>
+            ///     Drawの処理を行う。
+            /// </summary>
             public void Draw(TextView textView, DrawingContext drawingContext)
             {
                 if (!textView.VisualLinesValid)
@@ -333,6 +375,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
 
+        /// <summary>
+        ///     BlameTextEditorの処理を行う。
+        /// </summary>
         public BlameTextEditor() : base(new TextArea(), new TextDocument())
         {
             IsReadOnly = true;
@@ -356,6 +401,9 @@ namespace Komorebi.Views
             TextArea.TextView.Margin = new Thickness(4, 0);
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
@@ -372,6 +420,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -398,6 +449,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     TextAreaCaretPositionChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextAreaCaretPositionChanged(object sender, EventArgs e)
         {
             if (!TextArea.IsFocused)
@@ -410,6 +464,9 @@ namespace Komorebi.Views
             _highlight = BlameData.LineInfos[caret.Line - 1].CommitSHA;
         }
 
+        /// <summary>
+        ///     TextViewContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
         {
             var selected = SelectedText;
@@ -432,6 +489,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     TextViewVisualLinesChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
         {
             foreach (var margin in TextArea.LeftMargins)
@@ -448,19 +508,31 @@ namespace Komorebi.Views
         private string _highlight = string.Empty;
     }
 
+    /// <summary>
+    ///     Blame（各行の変更者表示）ビューのコードビハインド。
+    /// </summary>
     public partial class Blame : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Blame()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられた後の処理。
+        /// </summary>
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
             GC.Collect();
         }
 
+        /// <summary>
+        ///     ポインターが離された際のイベント処理。
+        /// </summary>
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
         {
             base.OnPointerReleased(e);

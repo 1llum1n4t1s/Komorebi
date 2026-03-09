@@ -5,8 +5,19 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
+    /// <summary>
+    ///     指定リビジョンにおけるファイル内容をストリームとして取得する静的クラス。
+    ///     通常ファイルとLFSファイルの両方をサポートする。
+    /// </summary>
     public static class QueryFileContent
     {
+        /// <summary>
+        ///     git show を使用して、指定リビジョンのファイル内容をストリームとして取得する。
+        /// </summary>
+        /// <param name="repo">リポジトリのパス</param>
+        /// <param name="revision">対象リビジョン</param>
+        /// <param name="file">対象ファイルのパス</param>
+        /// <returns>ファイル内容のストリーム</returns>
         public static async Task<Stream> RunAsync(string repo, string revision, string file)
         {
             var starter = new ProcessStartInfo();
@@ -34,6 +45,13 @@ namespace Komorebi.Commands
             return stream;
         }
 
+        /// <summary>
+        ///     git lfs smudge を使用して、LFSオブジェクトの実際のファイル内容をストリームとして取得する。
+        /// </summary>
+        /// <param name="repo">リポジトリのパス</param>
+        /// <param name="oid">LFSオブジェクトのSHA256 OID</param>
+        /// <param name="size">ファイルサイズ</param>
+        /// <returns>ファイル内容のストリーム</returns>
         public static async Task<Stream> FromLFSAsync(string repo, string oid, long size)
         {
             var starter = new ProcessStartInfo();

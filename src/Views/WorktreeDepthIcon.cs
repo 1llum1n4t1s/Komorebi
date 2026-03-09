@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -6,6 +6,9 @@ using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ワークツリーの深さレベルを示すアイコンコントロール。
+    /// </summary>
     public class WorktreeDepthIcon : Control
     {
         public static readonly StyledProperty<IBrush> BrushProperty =
@@ -17,6 +20,9 @@ namespace Komorebi.Views
             set => SetValue(BrushProperty, value);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             if (DataContext is ViewModels.Worktree wt)
@@ -37,12 +43,18 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             InvalidateMeasure();
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             if (DataContext is ViewModels.Worktree wt)

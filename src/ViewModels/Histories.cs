@@ -10,14 +10,24 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     コミット履歴の表示・操作を管理するViewModel。
+    ///     コミットグラフ、bisect、コミット選択、ナビゲーションなどを提供する。
+    /// </summary>
     public class Histories : ObservableObject, IDisposable
     {
+        /// <summary>
+        ///     履歴データの読み込み中かどうか。
+        /// </summary>
         public bool IsLoading
         {
             get => _isLoading;
             set => SetProperty(ref _isLoading, value);
         }
 
+        /// <summary>
+        ///     履歴グリッドで作者列を表示するかどうか。
+        /// </summary>
         public bool IsAuthorColumnVisible
         {
             get => _repo.UIStates.IsAuthorColumnVisibleInHistory;
@@ -31,6 +41,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     履歴グリッドでSHA列を表示するかどうか。
+        /// </summary>
         public bool IsSHAColumnVisible
         {
             get => _repo.UIStates.IsSHAColumnVisibleInHistory;
@@ -44,6 +57,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     履歴グリッドで日時列を表示するかどうか。
+        /// </summary>
         public bool IsDateTimeColumnVisible
         {
             get => _repo.UIStates.IsDateTimeColumnVisibleInHistory;
@@ -57,6 +73,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     表示対象のコミット一覧。変更時に選択状態を復元する。
+        /// </summary>
         public List<Models.Commit> Commits
         {
             get => _commits;
@@ -71,30 +90,45 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     コミットグラフの描画データ。
+        /// </summary>
         public Models.CommitGraph Graph
         {
             get => _graph;
             set => SetProperty(ref _graph, value);
         }
 
+        /// <summary>
+        ///     現在選択中のコミット。
+        /// </summary>
         public Models.Commit SelectedCommit
         {
             get => _selectedCommit;
             set => SetProperty(ref _selectedCommit, value);
         }
 
+        /// <summary>
+        ///     ナビゲーション操作のID。スクロール位置の同期に使用。
+        /// </summary>
         public long NavigationId
         {
             get => _navigationId;
             private set => SetProperty(ref _navigationId, value);
         }
 
+        /// <summary>
+        ///     詳細パネルに表示するコンテキスト（コミット詳細やリビジョン比較など）。
+        /// </summary>
         public IDisposable DetailContext
         {
             get => _detailContext;
             set => SetProperty(ref _detailContext, value);
         }
 
+        /// <summary>
+        ///     bisect操作の状態情報。bisect中でなければnull。
+        /// </summary>
         public Models.Bisect Bisect
         {
             get => _bisect;
@@ -125,12 +159,18 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _bottomArea, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリを指定して履歴VMを初期化する。
+        /// </summary>
         public Histories(Repository repo)
         {
             _repo = repo;
             _commitDetailSharedData = new CommitDetailSharedData();
         }
 
+        /// <summary>
+        ///     リソースを解放する。コミットリストやグラフデータをクリアする。
+        /// </summary>
         public void Dispose()
         {
             Commits = [];
@@ -141,6 +181,10 @@ namespace Komorebi.ViewModels
             _detailContext = null;
         }
 
+        /// <summary>
+        ///     bisect操作の状態を更新し、現在のbisect状態を返す。
+        ///     BISECT_STARTファイルの存在とrefs/bisect内の情報を確認する。
+        /// </summary>
         public Models.BisectState UpdateBisectInfo()
         {
             var test = Path.Combine(_repo.GitDir, "BISECT_START");
@@ -172,6 +216,10 @@ namespace Komorebi.ViewModels
                 return Models.BisectState.Detecting;
         }
 
+        /// <summary>
+        ///     指定されたSHAのコミットへナビゲーションする。
+        ///     表示中のコミットリストに存在しない場合は非同期で取得する。
+        /// </summary>
         public void NavigateTo(string commitSHA)
         {
             var commit = _commits.Find(x => x.SHA.StartsWith(commitSHA, StringComparison.Ordinal));
@@ -209,6 +257,10 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     コミットの選択状態を処理する。
+        ///     0件で詳細クリア、1件でコミット詳細表示、2件でリビジョン比較、3件以上でカウント表示。
+        /// </summary>
         public void Select(IList commits)
         {
             if (_ignoreSelectionChange)
@@ -261,6 +313,10 @@ namespace Komorebi.ViewModels
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     デコレータ（ブランチ参照）をクリックしてブランチをチェックアウトする。
+        ///     ローカル/リモートブランチの状態に応じて適切な操作を実行する。
+        /// </summary>
         public async Task<bool> CheckoutBranchByDecoratorAsync(Models.Decorator decorator)
         {
             if (decorator == null)
@@ -308,6 +364,10 @@ namespace Komorebi.ViewModels
             return false;
         }
 
+        /// <summary>
+        ///     コミットに関連するブランチをチェックアウトする。
+        ///     ローカルブランチ優先、なければリモートブランチから新規作成を提案する。
+        /// </summary>
         public async Task CheckoutBranchByCommitAsync(Models.Commit commit)
         {
             if (commit.IsCurrentHead)
@@ -353,6 +413,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     指定コミットをチェリーピックする。マージコミットの場合は親の選択が必要。
+        /// </summary>
         public async Task CherryPickAsync(Models.Commit commit)
         {
             if (_repo.CanCreatePopup())
@@ -379,6 +442,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     HEADコミットのメッセージを書き換える（reword）。
+        /// </summary>
         public async Task RewordHeadAsync(Models.Commit head)
         {
             if (_repo.CanCreatePopup())
@@ -388,6 +454,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     HEADコミットを親コミットにスカッシュまたはフィックスアップする。
+        /// </summary>
         public async Task SquashOrFixupHeadAsync(Models.Commit head, bool fixup)
         {
             if (head.Parents.Count == 1)
@@ -408,6 +477,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     HEADコミットを削除（drop）する。親コミットへのリセットを行う。
+        /// </summary>
         public async Task DropHeadAsync(Models.Commit head)
         {
             var parent = _commits.Find(x => x.SHA.Equals(head.Parents[0]));
@@ -418,6 +490,9 @@ namespace Komorebi.ViewModels
                 _repo.ShowPopup(new DropHead(_repo, head, parent));
         }
 
+        /// <summary>
+        ///     対話的リベース（interactive rebase）を開始する。指定コミットとアクションで事前設定する。
+        /// </summary>
         public async Task InteractiveRebaseAsync(Models.Commit commit, Models.InteractiveRebaseAction act)
         {
             var prefill = new InteractiveRebasePrefill(commit.SHA, act);
@@ -434,6 +509,9 @@ namespace Komorebi.ViewModels
                 await App.ShowDialog(new InteractiveRebase(_repo, on, prefill));
         }
 
+        /// <summary>
+        ///     コミットの完全なメッセージを非同期で取得する。
+        /// </summary>
         public async Task<string> GetCommitFullMessageAsync(Models.Commit commit)
         {
             return await new Commands.QueryCommitFullMessage(_repo.FullPath, commit.SHA)
@@ -441,6 +519,9 @@ namespace Komorebi.ViewModels
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     指定コミットをHEADと比較する。HEADが見つからない場合は非同期で取得する。
+        /// </summary>
         public async Task<Models.Commit> CompareWithHeadAsync(Models.Commit commit)
         {
             var head = _commits.Find(x => x.IsCurrentHead);
@@ -457,6 +538,9 @@ namespace Komorebi.ViewModels
             return head;
         }
 
+        /// <summary>
+        ///     指定コミットをワークツリー（作業ディレクトリ）と比較する。
+        /// </summary>
         public void CompareWithWorktree(Models.Commit commit)
         {
             DetailContext = new RevisionCompare(_repo, commit, null);

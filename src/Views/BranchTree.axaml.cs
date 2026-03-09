@@ -15,6 +15,9 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     BranchTreeNodeIconクラス。
+    /// </summary>
     public class BranchTreeNodeIcon : UserControl
     {
         public static readonly StyledProperty<bool> IsExpandedProperty =
@@ -26,12 +29,18 @@ namespace Komorebi.Views
             set => SetValue(IsExpandedProperty, value);
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             UpdateContent();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -40,6 +49,9 @@ namespace Komorebi.Views
                 UpdateContent();
         }
 
+        /// <summary>
+        ///     UpdateContentの処理を行う。
+        /// </summary>
         private void UpdateContent()
         {
             if (DataContext is not ViewModels.BranchTreeNode node)
@@ -70,6 +82,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CreateContentの処理を行う。
+        /// </summary>
         private void CreateContent(Thickness margin, string iconKey, IBrush fill = null)
         {
             if (this.FindResource(iconKey) is not StreamGeometry geo)
@@ -92,10 +107,16 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     BranchTreeNodeToggleButtonクラス。
+    /// </summary>
     public class BranchTreeNodeToggleButton : ToggleButton
     {
         protected override Type StyleKeyOverride => typeof(ToggleButton);
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
@@ -109,6 +130,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     BranchTreeNodeTrackStatusPresenterクラス。
+    /// </summary>
     public class BranchTreeNodeTrackStatusPresenter : Control
     {
         public static readonly StyledProperty<FontFamily> FontFamilyProperty =
@@ -147,6 +171,9 @@ namespace Komorebi.Views
             set => SetValue(BackgroundProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static BranchTreeNodeTrackStatusPresenter()
         {
             AffectsMeasure<BranchTreeNodeTrackStatusPresenter>(
@@ -159,6 +186,9 @@ namespace Komorebi.Views
                 BackgroundProperty);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -170,6 +200,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -177,6 +210,9 @@ namespace Komorebi.Views
             InvalidateVisual();
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             _label = null;
@@ -190,6 +226,9 @@ namespace Komorebi.Views
                         desc,
                         CultureInfo.CurrentCulture,
                         FlowDirection.LeftToRight,
+                        /// <summary>
+                        ///     Typefaceの処理を行う。
+                        /// </summary>
                         new Typeface(FontFamily),
                         FontSize,
                         Foreground);
@@ -202,10 +241,16 @@ namespace Komorebi.Views
         private FormattedText _label = null;
     }
 
+    /// <summary>
+    ///     BranchTreeNodeTrackStatusTooltipクラス。
+    /// </summary>
     public class BranchTreeNodeTrackStatusTooltip : TextBlock
     {
         protected override Type StyleKeyOverride => typeof(TextBlock);
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -229,15 +274,24 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     BranchTreeNodeDescriptionクラス。
+    /// </summary>
     public class BranchTreeNodeDescription : TextBlock
     {
         protected override Type StyleKeyOverride => typeof(TextBlock);
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public BranchTreeNodeDescription()
         {
             IsVisible = false;
         }
 
+        /// <summary>
+        ///     ビジュアルツリーにアタッチされた際の処理。
+        /// </summary>
         protected override async void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
             base.OnAttachedToVisualTree(e);
@@ -268,6 +322,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     ブランチツリービューのコードビハインド。
+    /// </summary>
     public partial class BranchTree : UserControl
     {
         public static readonly StyledProperty<List<ViewModels.BranchTreeNode>> NodesProperty =
@@ -312,11 +369,17 @@ namespace Komorebi.Views
             remove { RemoveHandler(SearchRequestedEvent, value); }
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public BranchTree()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     の選択処理を行う。
+        /// </summary>
         public void Select(Models.Branch branch)
         {
             if (branch == null)
@@ -352,11 +415,17 @@ namespace Komorebi.Views
                 RaiseEvent(new RoutedEventArgs(RowsChangedEvent));
         }
 
+        /// <summary>
+        ///     UnselectAllの処理を行う。
+        /// </summary>
         public void UnselectAll()
         {
             BranchesPresenter.SelectedItem = null;
         }
 
+        /// <summary>
+        ///     ToggleNodeIsExpandedの処理を行う。
+        /// </summary>
         public void ToggleNodeIsExpanded(ViewModels.BranchTreeNode node)
         {
             _disableSelectionChangingEvent = true;
@@ -396,6 +465,9 @@ namespace Komorebi.Views
             _disableSelectionChangingEvent = false;
         }
 
+        /// <summary>
+        ///     サイズが変更された際の処理。
+        /// </summary>
         protected override void OnSizeChanged(SizeChangedEventArgs e)
         {
             base.OnSizeChanged(e);
@@ -404,6 +476,9 @@ namespace Komorebi.Views
                 BranchesPresenter.Height = Bounds.Height;
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -427,6 +502,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     NodePointerPressedイベントのハンドラ。
+        /// </summary>
         private void OnNodePointerPressed(object sender, PointerPressedEventArgs e)
         {
             var ctrl = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
@@ -449,6 +527,9 @@ namespace Komorebi.Views
             repo.NavigateToCommit(branch.Head);
         }
 
+        /// <summary>
+        ///     NodesSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnNodesSelectionChanged(object _, SelectionChangedEventArgs e)
         {
             if (_disableSelectionChangingEvent)
@@ -497,6 +578,9 @@ namespace Komorebi.Views
             RaiseEvent(new RoutedEventArgs(SelectionChangedEvent));
         }
 
+        /// <summary>
+        ///     TreeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTreeContextRequested(object _1, ContextRequestedEventArgs _2)
         {
             var repo = DataContext as ViewModels.Repository;
@@ -573,6 +657,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     TreeKeyDownイベントのハンドラ。
+        /// </summary>
         private void OnTreeKeyDown(object _, KeyEventArgs e)
         {
             if (e.Key == Key.F && e.KeyModifiers == (OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
@@ -618,6 +705,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     DoubleTappedBranchNodeイベントのハンドラ。
+        /// </summary>
         private async void OnDoubleTappedBranchNode(object sender, TappedEventArgs _)
         {
             if (sender is Grid { DataContext: ViewModels.BranchTreeNode node })
@@ -637,6 +727,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     MakeRowsの処理を行う。
+        /// </summary>
         private void MakeRows(List<ViewModels.BranchTreeNode> rows, List<ViewModels.BranchTreeNode> nodes, int depth)
         {
             foreach (var node in nodes)
@@ -652,6 +745,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CollectBranchesInNodeの処理を行う。
+        /// </summary>
         private void CollectBranchesInNode(List<Models.Branch> outs, ViewModels.BranchTreeNode node)
         {
             if (node.Backend is Models.Branch branch && !outs.Contains(branch))
@@ -664,6 +760,9 @@ namespace Komorebi.Views
                 CollectBranchesInNode(outs, sub);
         }
 
+        /// <summary>
+        ///     FindTreePathの処理を行う。
+        /// </summary>
         private void FindTreePath(List<ViewModels.BranchTreeNode> outPath, List<ViewModels.BranchTreeNode> collection, string path, int start)
         {
             if (start >= path.Length - 1)
@@ -681,6 +780,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CreateContextMenuForLocalBranchの処理を行う。
+        /// </summary>
         private ContextMenu CreateContextMenuForLocalBranch(ViewModels.Repository repo, Models.Branch branch)
         {
             var current = repo.CurrentBranch;
@@ -738,6 +840,9 @@ namespace Komorebi.Views
                 compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWith.Click += (_, _) =>
                 {
+                    /// <summary>
+                    ///     CompareCommandPaletteの処理を行う。
+                    /// </summary>
                     new ViewModels.CompareCommandPalette(repo, branch).Open();
                 };
                 menu.Items.Add(new MenuItem() { Header = "-" });
@@ -861,6 +966,9 @@ namespace Komorebi.Views
                 compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWith.Click += (_, _) =>
                 {
+                    /// <summary>
+                    ///     CompareCommandPaletteの処理を行う。
+                    /// </summary>
                     new ViewModels.CompareCommandPalette(repo, branch).Open();
                 };
                 menu.Items.Add(new MenuItem() { Header = "-" });
@@ -1016,6 +1124,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CreateContextMenuForRemoteの処理を行う。
+        /// </summary>
         private ContextMenu CreateContextMenuForRemote(ViewModels.Repository repo, Models.Remote remote)
         {
             var menu = new ContextMenu();
@@ -1095,6 +1206,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CreateContextMenuForRemoteBranchの処理を行う。
+        /// </summary>
         public ContextMenu CreateContextMenuForRemoteBranch(ViewModels.Repository repo, Models.Branch branch)
         {
             var menu = new ContextMenu();
@@ -1167,6 +1281,9 @@ namespace Komorebi.Views
                 compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWith.Click += (_, _) =>
                 {
+                    /// <summary>
+                    ///     CompareCommandPaletteの処理を行う。
+                    /// </summary>
                     new ViewModels.CompareCommandPalette(repo, branch).Open();
                 };
 
@@ -1273,6 +1390,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     TryToAddCustomActionsToBranchContextMenuの処理を行う。
+        /// </summary>
         private void TryToAddCustomActionsToBranchContextMenu(ViewModels.Repository repo, ContextMenu menu, Models.Branch branch)
         {
             var actions = repo.GetCustomActions(Models.CustomActionScope.Branch);
@@ -1302,6 +1422,9 @@ namespace Komorebi.Views
             menu.Items.Add(new MenuItem() { Header = "-" });
         }
 
+        /// <summary>
+        ///     TryToAddCustomActionsToRemoteContextMenuの処理を行う。
+        /// </summary>
         private void TryToAddCustomActionsToRemoteContextMenu(ViewModels.Repository repo, ContextMenu menu, Models.Remote remote)
         {
             var actions = repo.GetCustomActions(Models.CustomActionScope.Remote);

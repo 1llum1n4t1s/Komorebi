@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -9,8 +9,14 @@ using Avalonia.Styling;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     画像コンテンツを表示するコンテナコントロール。
+    /// </summary>
     public class ImageContainer : Control
     {
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             if (_bgBrush == null)
@@ -20,7 +26,13 @@ namespace Komorebi.Views
                 {
                     Children =
                     {
+                        /// <summary>
+                        ///     GeometryDrawingの処理を行う。
+                        /// </summary>
                         new GeometryDrawing() { Brush = maskBrush, Geometry = new RectangleGeometry(new Rect(0, 0, 12, 12)) },
+                        /// <summary>
+                        ///     GeometryDrawingの処理を行う。
+                        /// </summary>
                         new GeometryDrawing() { Brush = maskBrush, Geometry = new RectangleGeometry(new Rect(12, 12, 12, 12)) },
                     }
                 };
@@ -38,6 +50,9 @@ namespace Komorebi.Views
             context.FillRectangle(_bgBrush, new Rect(Bounds.Size));
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -52,6 +67,9 @@ namespace Komorebi.Views
         private DrawingBrush _bgBrush = null;
     }
 
+    /// <summary>
+    ///     ImageViewクラス。
+    /// </summary>
     public class ImageView : ImageContainer
     {
         public static readonly StyledProperty<Bitmap> ImageProperty =
@@ -63,6 +81,9 @@ namespace Komorebi.Views
             set => SetValue(ImageProperty, value);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -71,6 +92,9 @@ namespace Komorebi.Views
                 context.DrawImage(image, new Rect(0, 0, Bounds.Width, Bounds.Height));
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -79,6 +103,9 @@ namespace Komorebi.Views
                 InvalidateMeasure();
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             if (Image is { } image)
@@ -94,6 +121,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     ImageSwipeControlクラス。
+    /// </summary>
     public class ImageSwipeControl : ImageContainer
     {
         public static readonly StyledProperty<double> AlphaProperty =
@@ -123,12 +153,18 @@ namespace Komorebi.Views
             set => SetValue(NewImageProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static ImageSwipeControl()
         {
             AffectsMeasure<ImageSwipeControl>(OldImageProperty, NewImageProperty);
             AffectsRender<ImageSwipeControl>(AlphaProperty);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -147,6 +183,9 @@ namespace Komorebi.Views
             context.DrawLine(new Pen(Brushes.DarkGreen, 2), new Point(x, 0), new Point(x, Bounds.Height));
         }
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -163,12 +202,18 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ポインターが離された際のイベント処理。
+        /// </summary>
         protected override void OnPointerReleased(PointerReleasedEventArgs e)
         {
             base.OnPointerReleased(e);
             _pressedOnSlider = false;
         }
 
+        /// <summary>
+        ///     ポインターが移動した際のイベント処理。
+        /// </summary>
         protected override void OnPointerMoved(PointerEventArgs e)
         {
             var w = Bounds.Width;
@@ -200,6 +245,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             var left = OldImage;
@@ -216,6 +264,9 @@ namespace Komorebi.Views
             return ls.Width > rs.Width ? ls : rs;
         }
 
+        /// <summary>
+        ///     GetDesiredSizeの処理を行う。
+        /// </summary>
         private Size GetDesiredSize(Size img, Size available)
         {
             var sw = available.Width / img.Width;
@@ -224,6 +275,9 @@ namespace Komorebi.Views
             return new Size(scale * img.Width, scale * img.Height);
         }
 
+        /// <summary>
+        ///     RenderSingleSideの処理を行う。
+        /// </summary>
         private void RenderSingleSide(DrawingContext context, Bitmap img, Rect clip)
         {
             var w = Bounds.Width;
@@ -247,6 +301,9 @@ namespace Komorebi.Views
         private bool _lastInSlider = false;
     }
 
+    /// <summary>
+    ///     ImageBlendControlクラス。
+    /// </summary>
     public class ImageBlendControl : ImageContainer
     {
         public static readonly StyledProperty<double> AlphaProperty =
@@ -276,12 +333,18 @@ namespace Komorebi.Views
             set => SetValue(NewImageProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static ImageBlendControl()
         {
             AffectsMeasure<ImageBlendControl>(OldImageProperty, NewImageProperty);
             AffectsRender<ImageBlendControl>(AlphaProperty);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -318,6 +381,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             var left = OldImage;
@@ -334,6 +400,9 @@ namespace Komorebi.Views
             return ls.Width > rs.Width ? ls : rs;
         }
 
+        /// <summary>
+        ///     GetDesiredSizeの処理を行う。
+        /// </summary>
         private Size GetDesiredSize(Size img, Size available)
         {
             var sw = available.Width / img.Width;
@@ -342,6 +411,9 @@ namespace Komorebi.Views
             return new Size(scale * img.Width, scale * img.Height);
         }
 
+        /// <summary>
+        ///     RenderSingleSideの処理を行う。
+        /// </summary>
         private void RenderSingleSide(DrawingContext context, Bitmap img, double w, double h, double alpha)
         {
             var imgW = img.Size.Width;
@@ -358,10 +430,19 @@ namespace Komorebi.Views
                 context.DrawImage(img, src, dst);
         }
 
+        /// <summary>
+        ///     RenderOptionsの処理を行う。
+        /// </summary>
         private static readonly RenderOptions RO_SRC = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Source, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
+        /// <summary>
+        ///     RenderOptionsの処理を行う。
+        /// </summary>
         private static readonly RenderOptions RO_DST = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Plus, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
     }
 
+    /// <summary>
+    ///     ImageDifferenceControlクラス。
+    /// </summary>
     public class ImageDifferenceControl : ImageContainer
     {
         public static readonly StyledProperty<double> AlphaProperty =
@@ -391,12 +472,18 @@ namespace Komorebi.Views
             set => SetValue(NewImageProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static ImageDifferenceControl()
         {
             AffectsMeasure<ImageDifferenceControl>(OldImageProperty, NewImageProperty);
             AffectsRender<ImageDifferenceControl>(AlphaProperty);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -433,6 +520,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             var left = OldImage;
@@ -449,6 +539,9 @@ namespace Komorebi.Views
             return ls.Width > rs.Width ? ls : rs;
         }
 
+        /// <summary>
+        ///     GetDesiredSizeの処理を行う。
+        /// </summary>
         private Size GetDesiredSize(Size img, Size available)
         {
             var sw = available.Width / img.Width;
@@ -457,6 +550,9 @@ namespace Komorebi.Views
             return new Size(scale * img.Width, scale * img.Height);
         }
 
+        /// <summary>
+        ///     RenderSingleSideの処理を行う。
+        /// </summary>
         private void RenderSingleSide(DrawingContext context, Bitmap img, double w, double h, double alpha)
         {
             var imgW = img.Size.Width;
@@ -473,7 +569,13 @@ namespace Komorebi.Views
                 context.DrawImage(img, src, dst);
         }
 
+        /// <summary>
+        ///     RenderOptionsの処理を行う。
+        /// </summary>
         private static readonly RenderOptions RO_SRC = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Source, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
+        /// <summary>
+        ///     RenderOptionsの処理を行う。
+        /// </summary>
         private static readonly RenderOptions RO_DST = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Difference, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
     }
 }

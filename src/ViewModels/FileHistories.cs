@@ -11,6 +11,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     リビジョンのファイル情報を保持するレコード。ファイルパス、表示コンテンツ、外部エディタで開けるかのフラグを持つ。
+    /// </summary>
     public class FileHistoriesRevisionFile(string path, object content = null, bool canOpenWithDefaultEditor = false)
     {
         public string Path { get; set; } = path;
@@ -18,8 +21,15 @@ namespace Komorebi.ViewModels
         public bool CanOpenWithDefaultEditor { get; set; } = canOpenWithDefaultEditor;
     }
 
+    /// <summary>
+    ///     単一リビジョンでのファイル表示ViewModel。
+    ///     差分モードとファイル内容表示モードの切り替えに対応する。
+    /// </summary>
     public class FileHistoriesSingleRevision : ObservableObject
     {
+        /// <summary>
+        ///     差分表示モードかどうか。切替時にコンテンツを再読み込みする。
+        /// </summary>
         public bool IsDiffMode
         {
             get => _isDiffMode;
@@ -30,12 +40,18 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     表示コンテンツ（差分表示またはファイル内容）。
+        /// </summary>
         public object ViewContent
         {
             get => _viewContent;
             set => SetProperty(ref _viewContent, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリパス、ファイル、リビジョン、前回の差分モード状態を指定する。
+        /// </summary>
         public FileHistoriesSingleRevision(string repo, string file, Models.Commit revision, bool prevIsDiffMode)
         {
             _repo = repo;
@@ -47,6 +63,9 @@ namespace Komorebi.ViewModels
             RefreshViewContent();
         }
 
+        /// <summary>
+        ///     選択リビジョンの状態にファイルをリセットする。
+        /// </summary>
         public async Task<bool> ResetToSelectedRevisionAsync()
         {
             return await new Commands.Checkout(_repo)
@@ -54,6 +73,9 @@ namespace Komorebi.ViewModels
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     リビジョンのファイルを一時ファイルに保存し、デフォルトエディタで開く。
+        /// </summary>
         public async Task OpenWithDefaultEditorAsync()
         {
             if (_viewContent is not FileHistoriesRevisionFile { CanOpenWithDefaultEditor: true })
@@ -71,6 +93,9 @@ namespace Komorebi.ViewModels
             Native.OS.OpenWithDefaultEditor(tmpFile);
         }
 
+        /// <summary>
+        ///     表示コンテンツを再読み込みする。差分モードか内容表示モードかで処理を分岐する。
+        /// </summary>
         private void RefreshViewContent()
         {
             if (_isDiffMode)
@@ -96,6 +121,10 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     リビジョンファイルの内容を非同期で取得する。
+        ///     Blob（テキスト/バイナリ/画像/LFS）とサブモジュールコミットに対応する。
+        /// </summary>
         private async Task<object> GetRevisionFileContentAsync(Models.Object obj)
         {
             if (obj.Type == Models.ObjectType.Blob)
@@ -153,6 +182,9 @@ namespace Komorebi.ViewModels
             return new FileHistoriesRevisionFile(_file);
         }
 
+        /// <summary>
+        ///     差分モードの表示コンテンツを設定する。
+        /// </summary>
         private void SetViewContentAsDiff()
         {
             var option = new Models.DiffOption(_revision, _file);
@@ -166,26 +198,41 @@ namespace Komorebi.ViewModels
         private object _viewContent = null;
     }
 
+    /// <summary>
+    ///     2つのリビジョン間でファイルを比較するViewModel。
+    /// </summary>
     public class FileHistoriesCompareRevisions : ObservableObject
     {
+        /// <summary>
+        ///     比較の開始リビジョン。
+        /// </summary>
         public Models.Commit StartPoint
         {
             get => _startPoint;
             set => SetProperty(ref _startPoint, value);
         }
 
+        /// <summary>
+        ///     比較の終了リビジョン。
+        /// </summary>
         public Models.Commit EndPoint
         {
             get => _endPoint;
             set => SetProperty(ref _endPoint, value);
         }
 
+        /// <summary>
+        ///     差分の表示コンテンツ。
+        /// </summary>
         public DiffContext ViewContent
         {
             get => _viewContent;
             set => SetProperty(ref _viewContent, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリパス、ファイル、開始・終了リビジョンを指定する。
+        /// </summary>
         public FileHistoriesCompareRevisions(string repo, string file, Models.Commit start, Models.Commit end)
         {
             _repo = repo;
@@ -195,12 +242,18 @@ namespace Komorebi.ViewModels
             RefreshViewContent();
         }
 
+        /// <summary>
+        ///     開始・終了リビジョンを入れ替えて差分を再表示する。
+        /// </summary>
         public void Swap()
         {
             (StartPoint, EndPoint) = (_endPoint, _startPoint);
             RefreshViewContent();
         }
 
+        /// <summary>
+        ///     差分をパッチファイルとして保存する。
+        /// </summary>
         public async Task<bool> SaveAsPatch(string saveTo)
         {
             return await Commands.SaveChangesAsPatch
@@ -208,6 +261,9 @@ namespace Komorebi.ViewModels
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     リビジョン間の差分コンテンツを非同期で再読み込みする。
+        /// </summary>
         private void RefreshViewContent()
         {
             Task.Run(async () =>
@@ -233,37 +289,60 @@ namespace Komorebi.ViewModels
         private DiffContext _viewContent = null;
     }
 
+    /// <summary>
+    ///     ファイルの履歴（コミット一覧）を表示するためのViewModel。
+    ///     単一リビジョン表示と2リビジョン比較の両モードに対応する。
+    /// </summary>
     public class FileHistories : ObservableObject
     {
+        /// <summary>
+        ///     表示タイトル（ファイルパスとオプションのコミット）。
+        /// </summary>
         public string Title
         {
             get;
         }
 
+        /// <summary>
+        ///     コミット履歴の読み込み中かどうか。
+        /// </summary>
         public bool IsLoading
         {
             get => _isLoading;
             private set => SetProperty(ref _isLoading, value);
         }
 
+        /// <summary>
+        ///     ファイルに関連するコミット一覧。
+        /// </summary>
         public List<Models.Commit> Commits
         {
             get => _commits;
             set => SetProperty(ref _commits, value);
         }
 
+        /// <summary>
+        ///     現在選択されているコミットのリスト（1つで単一表示、2つで比較表示）。
+        /// </summary>
         public AvaloniaList<Models.Commit> SelectedCommits
         {
             get;
             set;
         } = [];
 
+        /// <summary>
+        ///     選択状態に応じた表示コンテンツ（単一リビジョン/比較/選択数）。
+        /// </summary>
         public object ViewContent
         {
             get => _viewContent;
             private set => SetProperty(ref _viewContent, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリパス、ファイルパス、オプションのコミットSHAを指定する。
+        ///     非同期でコミット履歴を取得し、選択変更時のコンテンツ切替ハンドラを登録する。
+        /// </summary>
         public FileHistories(string repo, string file, string commit = null)
         {
             if (!string.IsNullOrEmpty(commit))
@@ -295,8 +374,10 @@ namespace Komorebi.ViewModels
                 });
             });
 
+            // 選択コミット変更時のハンドラ：選択数に応じて表示モードを切替
             SelectedCommits.CollectionChanged += (_, _) =>
             {
+                // 現在の差分モード状態を保持
                 if (_viewContent is FileHistoriesSingleRevision singleRevision)
                     _prevIsDiffMode = singleRevision.IsDiffMode;
 
@@ -309,6 +390,10 @@ namespace Komorebi.ViewModels
             };
         }
 
+        /// <summary>
+        ///     指定コミットをリポジトリの履歴ビューで表示する。
+        ///     ランチャーのページから対象リポジトリを検索してナビゲートする。
+        /// </summary>
         public void NavigateToCommit(Models.Commit commit)
         {
             var launcher = App.GetLauncher();
@@ -325,6 +410,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     コミットの完全なメッセージを取得する。キャッシュ済みの場合はキャッシュから返す。
+        /// </summary>
         public string GetCommitFullMessage(Models.Commit commit)
         {
             var sha = commit.SHA;
@@ -336,11 +424,11 @@ namespace Komorebi.ViewModels
             return msg;
         }
 
-        private readonly string _repo = null;
-        private bool _isLoading = true;
-        private bool _prevIsDiffMode = true;
-        private List<Models.Commit> _commits = null;
-        private Dictionary<string, string> _fullCommitMessages = new();
-        private object _viewContent = null;
+        private readonly string _repo = null; // リポジトリパス
+        private bool _isLoading = true; // 読み込み中フラグ
+        private bool _prevIsDiffMode = true; // 前回の差分モード状態
+        private List<Models.Commit> _commits = null; // コミット一覧
+        private Dictionary<string, string> _fullCommitMessages = new(); // コミットメッセージのキャッシュ
+        private object _viewContent = null; // 現在の表示コンテンツ
     }
 }

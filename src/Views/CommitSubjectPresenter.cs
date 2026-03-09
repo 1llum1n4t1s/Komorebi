@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -12,6 +12,9 @@ using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミットの件名行を表示するプレゼンタ。
+    /// </summary>
     public partial class CommitSubjectPresenter : Control
     {
         public static readonly StyledProperty<FontFamily> FontFamilyProperty =
@@ -104,6 +107,9 @@ namespace Komorebi.Views
             set => SetValue(IssueTrackersProperty, value);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             if (_needRebuildInlines)
@@ -151,6 +157,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -187,6 +196,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ポインターが移動した際のイベント処理。
+        /// </summary>
         protected override void OnPointerMoved(PointerEventArgs e)
         {
             base.OnPointerMoved(e);
@@ -210,6 +222,9 @@ namespace Komorebi.Views
             ClearHoveredIssueLink();
         }
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -218,12 +233,18 @@ namespace Komorebi.Views
                 Native.OS.OpenBrowser(_lastHover.Link);
         }
 
+        /// <summary>
+        ///     PointerExitedイベントのハンドラ。
+        /// </summary>
         protected override void OnPointerExited(PointerEventArgs e)
         {
             base.OnPointerExited(e);
             ClearHoveredIssueLink();
         }
 
+        /// <summary>
+        ///     IssueTrackersChangedイベントのハンドラ。
+        /// </summary>
         private void OnIssueTrackersChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             _needRebuildInlines = true;
@@ -231,6 +252,9 @@ namespace Komorebi.Views
             InvalidateVisual();
         }
 
+        /// <summary>
+        ///     GenerateInlineElementsの処理を行う。
+        /// </summary>
         private void GenerateInlineElements()
         {
             _elements.Clear();
@@ -285,6 +309,9 @@ namespace Komorebi.Views
             _elements.Sort();
         }
 
+        /// <summary>
+        ///     GenerateFormattedTextElementsの処理を行う。
+        /// </summary>
         private void GenerateFormattedTextElements()
         {
             _inlines.Clear();
@@ -325,6 +352,9 @@ namespace Komorebi.Views
                         subject.Substring(elem.Start, elem.Length),
                         CultureInfo.CurrentCulture,
                         FlowDirection.LeftToRight,
+                        /// <summary>
+                        ///     Typefaceの処理を行う。
+                        /// </summary>
                         new Typeface(fontFamily, FontStyle.Normal, FontWeight.Bold),
                         fontSize,
                         foreground);
@@ -373,6 +403,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ClearHoveredIssueLinkの処理を行う。
+        /// </summary>
         private void ClearHoveredIssueLink()
         {
             if (_lastHover != null)
@@ -384,14 +417,23 @@ namespace Komorebi.Views
         }
 
         [GeneratedRegex(@"`.*?`")]
+        /// <summary>
+        ///     REG_INLINECODE_FORMATの処理を行う。
+        /// </summary>
         private static partial Regex REG_INLINECODE_FORMAT();
 
+        /// <summary>
+        ///     Inlineクラス。
+        /// </summary>
         private class Inline
         {
             public double X { get; set; } = 0;
             public FormattedText Text { get; set; } = null;
             public Models.InlineElement Element { get; set; } = null;
 
+            /// <summary>
+            ///     コンストラクタ。コンポーネントを初期化する。
+            /// </summary>
             public Inline(double x, FormattedText text, Models.InlineElement elem)
             {
                 X = x;

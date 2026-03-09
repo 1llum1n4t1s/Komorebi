@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -8,8 +8,14 @@ using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミットの参照（ブランチタグ・リモートブランチ等）ラベルを表示するプレゼンタ。
+    /// </summary>
     public class CommitRefsPresenter : Control
     {
+        /// <summary>
+        ///     RenderItemクラス。
+        /// </summary>
         public class RenderItem
         {
             public Geometry Icon { get; set; } = null;
@@ -83,6 +89,9 @@ namespace Komorebi.Views
             set => SetValue(ShowTagsProperty, value);
         }
 
+        /// <summary>
+        ///     CommitRefsPresenterの処理を行う。
+        /// </summary>
         static CommitRefsPresenter()
         {
             AffectsMeasure<CommitRefsPresenter>(
@@ -94,6 +103,9 @@ namespace Komorebi.Views
                 ShowTagsProperty);
         }
 
+        /// <summary>
+        ///     DecoratorAtの処理を行う。
+        /// </summary>
         public Models.Decorator DecoratorAt(Point point)
         {
             var x = 0.0;
@@ -107,6 +119,9 @@ namespace Komorebi.Views
             return null;
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             if (_items.Count == 0)
@@ -164,12 +179,18 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             InvalidateMeasure();
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             _items.Clear();

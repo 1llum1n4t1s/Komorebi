@@ -8,8 +8,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     スタッシュ一覧ページのViewModel。
+    ///     スタッシュの検索、選択、変更内容の表示、適用、削除、ファイルのチェックアウトなどの操作を提供する。
+    /// </summary>
     public class StashesPage : ObservableObject, IDisposable
     {
+        /// <summary>
+        ///     全スタッシュのリスト。
+        /// </summary>
         public List<Models.Stash> Stashes
         {
             get => _stashes;
@@ -20,6 +27,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     フィルタ適用後の表示対象スタッシュリスト。
+        /// </summary>
         public List<Models.Stash> VisibleStashes
         {
             get => _visibleStashes;
@@ -30,6 +40,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     スタッシュメッセージの検索フィルタ。
+        /// </summary>
         public string SearchFilter
         {
             get => _searchFilter;
@@ -40,6 +53,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     選択されたスタッシュ。選択時にバックグラウンドで変更内容を読み込む。
+        /// </summary>
         public Models.Stash SelectedStash
         {
             get => _selectedStash;
@@ -87,6 +103,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     選択されたスタッシュの変更ファイルリスト。
+        /// </summary>
         public List<Models.Change> Changes
         {
             get => _changes;
@@ -97,6 +116,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     選択された変更ファイルリスト。1件選択時に差分コンテキストを作成する。
+        /// </summary>
         public List<Models.Change> SelectedChanges
         {
             get => _selectedChanges;
@@ -114,17 +136,26 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     差分表示コンテキスト。
+        /// </summary>
         public DiffContext DiffContext
         {
             get => _diffContext;
             private set => SetProperty(ref _diffContext, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。対象リポジトリを設定する。
+        /// </summary>
         public StashesPage(Repository repo)
         {
             _repo = repo;
         }
 
+        /// <summary>
+        ///     リソースを解放する。
+        /// </summary>
         public void Dispose()
         {
             _stashes?.Clear();
@@ -147,18 +178,27 @@ namespace Komorebi.ViewModels
             return Native.OS.GetAbsPath(_repo.FullPath, path);
         }
 
+        /// <summary>
+        ///     スタッシュを適用するダイアログを表示する。
+        /// </summary>
         public void Apply(Models.Stash stash)
         {
             if (_repo.CanCreatePopup())
                 _repo.ShowPopup(new ApplyStash(_repo, stash));
         }
 
+        /// <summary>
+        ///     スタッシュを削除するダイアログを表示する。
+        /// </summary>
         public void Drop(Models.Stash stash)
         {
             if (_repo.CanCreatePopup())
                 _repo.ShowPopup(new DropStash(_repo, stash));
         }
 
+        /// <summary>
+        ///     スタッシュの変更内容をパッチファイルとして保存する。
+        /// </summary>
         public async Task SaveStashAsPatchAsync(Models.Stash stash, string saveTo)
         {
             var opts = new List<Models.DiffOption>();
@@ -186,6 +226,9 @@ namespace Komorebi.ViewModels
                 App.SendNotification(_repo.FullPath, App.Text("SaveAsPatchSuccess"));
         }
 
+        /// <summary>
+        ///     外部差分ツールで変更ファイルを開く。
+        /// </summary>
         public void OpenChangeWithExternalDiffTool(Models.Change change)
         {
             Models.DiffOption opt;
@@ -197,6 +240,10 @@ namespace Komorebi.ViewModels
             new Commands.DiffTool(_repo.FullPath, opt).Open();
         }
 
+        /// <summary>
+        ///     スタッシュ内のファイルをワークツリーにチェックアウトする。
+        ///     未追跡、追加、変更の各種別に応じて適切な親コミットからチェックアウトする。
+        /// </summary>
         public async Task CheckoutFilesAsync(List<Models.Change> changes)
         {
             var untracked = new List<string>();
@@ -233,6 +280,9 @@ namespace Komorebi.ViewModels
             log.Complete();
         }
 
+        /// <summary>
+        ///     選択されたスタッシュ内の変更をパッチとして適用する。
+        /// </summary>
         public async Task ApplySelectedChanges(List<Models.Change> changes)
         {
             if (_selectedStash == null)
@@ -261,6 +311,9 @@ namespace Komorebi.ViewModels
             File.Delete(saveTo);
         }
 
+        /// <summary>
+        ///     検索フィルタに基づいて表示対象のスタッシュリストを更新する。
+        /// </summary>
         private void RefreshVisible()
         {
             if (string.IsNullOrEmpty(_searchFilter))

@@ -5,20 +5,33 @@ using Avalonia.Threading;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     ファイル履歴表示用のコマンドパレットViewModel。
+    ///     リポジトリ内のファイルをフィルタ検索し、選択ファイルの履歴を表示する。
+    /// </summary>
     public class FileHistoryCommandPalette : ICommandPalette
     {
+        /// <summary>
+        ///     ファイル一覧の読み込み中かどうか。
+        /// </summary>
         public bool IsLoading
         {
             get => _isLoading;
             private set => SetProperty(ref _isLoading, value);
         }
 
+        /// <summary>
+        ///     フィルタ適用後の表示ファイルリスト。
+        /// </summary>
         public List<string> VisibleFiles
         {
             get => _visibleFiles;
             private set => SetProperty(ref _visibleFiles, value);
         }
 
+        /// <summary>
+        ///     フィルタ文字列。変更時に表示ファイルリストを更新する。
+        /// </summary>
         public string Filter
         {
             get => _filter;
@@ -29,12 +42,18 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     現在選択されているファイルパス。
+        /// </summary>
         public string SelectedFile
         {
             get => _selectedFile;
             set => SetProperty(ref _selectedFile, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリパスを指定し、非同期でHEADリビジョンのファイル一覧を取得する。
+        /// </summary>
         public FileHistoryCommandPalette(string repo)
         {
             _repo = repo;
@@ -55,11 +74,17 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     フィルタをクリアする。
+        /// </summary>
         public void ClearFilter()
         {
             Filter = string.Empty;
         }
 
+        /// <summary>
+        ///     選択ファイルの履歴ウィンドウを開く。リソースをクリアしてパレットを閉じる。
+        /// </summary>
         public void Launch()
         {
             _repoFiles.Clear();
@@ -70,6 +95,9 @@ namespace Komorebi.ViewModels
                 App.ShowWindow(new FileHistories(_repo, _selectedFile));
         }
 
+        /// <summary>
+        ///     フィルタ文字列に基づいて表示ファイルリストと選択状態を更新する。
+        /// </summary>
         private void UpdateVisible()
         {
             if (_repoFiles is { Count: > 0 })
@@ -103,11 +131,11 @@ namespace Komorebi.ViewModels
             }
         }
 
-        private string _repo = null;
-        private bool _isLoading = false;
-        private List<string> _repoFiles = null;
-        private string _filter = string.Empty;
-        private List<string> _visibleFiles = [];
-        private string _selectedFile = null;
+        private string _repo = null; // リポジトリパス
+        private bool _isLoading = false; // 読み込み中フラグ
+        private List<string> _repoFiles = null; // リポジトリ内の全ファイル一覧
+        private string _filter = string.Empty; // フィルタ文字列
+        private List<string> _visibleFiles = []; // フィルタ適用後のファイル一覧
+        private string _selectedFile = null; // 現在選択中のファイル
     }
 }

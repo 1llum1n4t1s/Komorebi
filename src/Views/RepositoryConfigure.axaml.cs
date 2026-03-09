@@ -5,14 +5,23 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     リポジトリ設定（.git/config編集）ダイアログのコードビハインド。
+    /// </summary>
     public partial class RepositoryConfigure : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public RepositoryConfigure()
         {
             CloseOnESC = true;
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられる際の処理。
+        /// </summary>
         protected override async void OnClosing(WindowClosingEventArgs e)
         {
             base.OnClosing(e);
@@ -21,6 +30,9 @@ namespace Komorebi.Views
                 await configure.SaveAsync();
         }
 
+        /// <summary>
+        ///     ConventionalTypesFileの選択処理を行う。
+        /// </summary>
         private async void SelectConventionalTypesFile(object sender, RoutedEventArgs e)
         {
             var options = new FilePickerOpenOptions()
@@ -36,6 +48,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ExecutableForCustomActionの選択処理を行う。
+        /// </summary>
         private async void SelectExecutableForCustomAction(object sender, RoutedEventArgs e)
         {
             var options = new FilePickerOpenOptions()
@@ -51,6 +66,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     EditCustomActionControlsの処理を行う。
+        /// </summary>
         private async void EditCustomActionControls(object sender, RoutedEventArgs e)
         {
             if (sender is not Button { DataContext: Models.CustomAction act })
@@ -65,6 +83,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     NewCustomIssueTrackerイベントのハンドラ。
+        /// </summary>
         private void OnNewCustomIssueTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -73,6 +94,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddGitHubIssueTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddGitHubIssueTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -94,6 +118,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddJiraIssueTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddJiraIssueTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -107,6 +134,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddAzureWorkItemTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddAzureWorkItemTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -120,6 +150,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddGitLabIssueTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddGitLabIssueTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -138,6 +171,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddGitLabMergeRequestTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddGitLabMergeRequestTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -156,6 +192,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddGiteeIssueTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddGiteeIssueTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -177,6 +216,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddGiteePullRequestTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddGiteePullRequestTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -198,6 +240,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     AddGerritChangeIdTrackerイベントのハンドラ。
+        /// </summary>
         private void OnAddGerritChangeIdTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)
@@ -211,6 +256,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     RemoveIssueTrackerイベントのハンドラ。
+        /// </summary>
         private void OnRemoveIssueTracker(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryConfigure vm)

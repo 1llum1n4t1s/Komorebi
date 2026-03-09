@@ -252,19 +252,29 @@ namespace Komorebi
             app._activeLocale = targetLocale;
         }
 
+        /// <summary>
+        ///     アプリケーションのテーマを設定する。
+        ///     ベーステーマ（Light/Dark）を適用した上で、White/OneDark等のテーマ固有の色を上書きする。
+        ///     さらにユーザー定義のテーマオーバーライド（JSONファイル）があれば最後に適用する。
+        /// </summary>
+        /// <param name="theme">テーマ名（Default, Dark, OneDark, Light, White）</param>
+        /// <param name="themeOverridesFile">ユーザー定義テーマオーバーライドのJSONファイルパス（省略可）</param>
         public static void SetTheme(string theme, string themeOverridesFile)
         {
             if (Current is not App app)
                 return;
 
+            // ベーステーマ（Light/Dark）を適用する
             app.RequestedThemeVariant = ParseThemeVariant(theme);
 
-            if (app._whiteThemeColors != null)
+            // 前回適用したテーマ固有の色オーバーライドを除去する
+            if (app._themeColorOverrides != null)
             {
-                app.Resources.MergedDictionaries.Remove(app._whiteThemeColors);
-                app._whiteThemeColors = null;
+                app.Resources.MergedDictionaries.Remove(app._themeColorOverrides);
+                app._themeColorOverrides = null;
             }
 
+            // Whiteテーマ: Lightベースに白基調の色を上書きする
             if (theme.Equals("White", StringComparison.OrdinalIgnoreCase))
             {
                 var resDic = new ResourceDictionary();
@@ -284,15 +294,67 @@ namespace Komorebi
                 resDic["Color.InlineCode"] = Color.Parse("#FFF0F0F0");
                 resDic["Color.DataGridHeaderBG"] = Color.Parse("#FFF5F5F5");
                 app.Resources.MergedDictionaries.Add(resDic);
-                app._whiteThemeColors = resDic;
+                app._themeColorOverrides = resDic;
+            }
+            // OneDarkテーマ: Darkベースに Atom One Dark 風の配色を上書きする
+            else if (theme.Equals("OneDark", StringComparison.OrdinalIgnoreCase))
+            {
+                var resDic = new ResourceDictionary();
+
+                // ウィンドウ・レイアウト系
+                resDic["Color.Window"] = Color.Parse("#FF282C34");
+                resDic["Color.WindowBorder"] = Color.Parse("#FF4B5263");
+                resDic["Color.TitleBar"] = Color.Parse("#FF21252B");
+                resDic["Color.ToolBar"] = Color.Parse("#FF2C313A");
+                resDic["Color.Popup"] = Color.Parse("#FF2C313A");
+                resDic["Color.Contents"] = Color.Parse("#FF21252B");
+
+                // バッジ・コンフリクト系
+                resDic["Color.Badge"] = Color.Parse("#FF4B5263");
+                resDic["Color.BadgeFG"] = Color.Parse("#FFABB2BF");
+                resDic["Color.Conflict"] = Color.Parse("#FFE5C07B");
+                resDic["Color.Conflict.Foreground"] = Color.Parse("#FF282C34");
+
+                // ボーダー系
+                resDic["Color.Border0"] = Color.Parse("#FF1E2127");
+                resDic["Color.Border1"] = Color.Parse("#FF5C6370");
+                resDic["Color.Border2"] = Color.Parse("#FF3E4451");
+
+                // フラットボタン系
+                resDic["Color.FlatButton.Background"] = Color.Parse("#FF2C313A");
+                resDic["Color.FlatButton.BackgroundHovered"] = Color.Parse("#FF3E4451");
+                resDic["Color.FlatButton.FloatingBorder"] = Color.Parse("#FF4B5263");
+
+                // テキスト・前景色
+                resDic["Color.FG1"] = Color.Parse("#FFABB2BF");
+                resDic["Color.FG2"] = Color.Parse("#40ABB2BF");
+
+                // Diff表示色（緑=#98C379ベース、赤=#E06C75ベース、シアン=#56B6C2）
+                resDic["Color.Diff.EmptyBG"] = Color.Parse("#3C000000");
+                resDic["Color.Diff.AddedBG"] = Color.Parse("#C02D4A33");
+                resDic["Color.Diff.DeletedBG"] = Color.Parse("#C04D2C30");
+                resDic["Color.Diff.AddedHighlight"] = Color.Parse("#A0365C3B");
+                resDic["Color.Diff.DeletedHighlight"] = Color.Parse("#A06D3035");
+                resDic["Color.Diff.BlockBorderHighlight"] = Color.Parse("#FF56B6C2");
+
+                // リンク・インラインコード・ヘッダー
+                resDic["Color.Link"] = Color.Parse("#FF61AFEF");
+                resDic["Color.InlineCode"] = Color.Parse("#FF3E4451");
+                resDic["Color.InlineCodeFG"] = Color.Parse("#FFABB2BF");
+                resDic["Color.DataGridHeaderBG"] = Color.Parse("#FF2C313A");
+
+                app.Resources.MergedDictionaries.Add(resDic);
+                app._themeColorOverrides = resDic;
             }
 
+            // 前回適用したユーザー定義オーバーライドを除去する
             if (app._themeOverrides != null)
             {
                 app.Resources.MergedDictionaries.Remove(app._themeOverrides);
                 app._themeOverrides = null;
             }
 
+            // ユーザー定義テーマオーバーライド（JSONファイル）が指定されていれば適用する
             if (!string.IsNullOrEmpty(themeOverridesFile))
             {
                 try
@@ -303,6 +365,7 @@ namespace Komorebi
                     if (overrides == null)
                         throw new JsonException("Failed to deserialize theme overrides");
 
+                    // 各色定義をリソースに登録する
                     foreach (var kv in overrides.BasicColors)
                     {
                         if (kv.Key.Equals("SystemAccentColor", StringComparison.Ordinal))
@@ -311,6 +374,7 @@ namespace Komorebi
                             resDic[$"Color.{kv.Key}"] = kv.Value;
                     }
 
+                    // コミットグラフのペン色を設定する
                     if (overrides.GraphColors.Count > 0)
                         Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
                     else
@@ -321,7 +385,7 @@ namespace Komorebi
                 }
                 catch
                 {
-                    // ignore
+                    // テーマオーバーライドの読み込み失敗は無視する
                 }
             }
             else
@@ -330,13 +394,19 @@ namespace Komorebi
             }
         }
 
+        /// <summary>
+        ///     テーマ名からAvaloniaのThemeVariant（Light/Dark/Default）に変換する。
+        ///     Light系テーマ（Light, White）はThemeVariant.Lightに、
+        ///     Dark系テーマ（Dark, OneDark）はThemeVariant.Darkにマッピングされる。
+        /// </summary>
         public static ThemeVariant ParseThemeVariant(string theme)
         {
             if (string.IsNullOrEmpty(theme))
                 return ThemeVariant.Default;
             if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
                 return ThemeVariant.Light;
-            if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
+            if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase) ||
+                theme.Equals("OneDark", StringComparison.OrdinalIgnoreCase))
                 return ThemeVariant.Dark;
             if (theme.Equals("White", StringComparison.OrdinalIgnoreCase))
                 return ThemeVariant.Light;
@@ -663,12 +733,18 @@ namespace Komorebi
             return true;
         }
 
+        /// <summary>
+        ///     gitのcore.editorとして起動された場合の処理。
+        ///     対話的リベースなどでgitがコミットメッセージ編集を要求する際に呼ばれる。
+        /// </summary>
+        /// <returns>core.editorモードとして起動された場合はtrue</returns>
         private bool TryLaunchAsCoreEditor(IClassicDesktopStyleApplicationLifetime desktop)
         {
             var args = desktop.Args;
             if (args is not { Length: > 1 } || !args[0].Equals("--core-editor", StringComparison.Ordinal))
                 return false;
 
+            // 編集対象ファイルが存在しない場合はエラー終了する
             var file = args[1];
             if (!File.Exists(file))
             {
@@ -676,12 +752,18 @@ namespace Komorebi
                 return true;
             }
 
+            // コミットメッセージエディタをスタンドアロンモードで起動する
             var editor = new Views.CommitMessageEditor();
             editor.AsStandalone(file);
             desktop.MainWindow = editor;
             return true;
         }
 
+        /// <summary>
+        ///     gitのaskpass（認証情報入力）として起動された場合の処理。
+        ///     環境変数 SOURCEGIT_LAUNCH_AS_ASKPASS=TRUE が設定されている場合に有効。
+        /// </summary>
+        /// <returns>askpassモードとして起動された場合はtrue</returns>
         private bool TryLaunchAsAskpass(IClassicDesktopStyleApplicationLifetime desktop)
         {
             var launchAsAskpass = Environment.GetEnvironmentVariable("SOURCEGIT_LAUNCH_AS_ASKPASS");
@@ -700,15 +782,23 @@ namespace Komorebi
             return false;
         }
 
+        /// <summary>
+        ///     通常モード（メインGUI）としてアプリケーションを起動する。
+        ///     外部ツールの初期化、ランチャーウィンドウの生成、初回起動セットアップ、
+        ///     および起動時の更新チェックを行う。
+        /// </summary>
         private void TryLaunchAsNormal(IClassicDesktopStyleApplicationLifetime desktop)
         {
+            // 外部ツール（diffツール等）の検出とアバター取得を開始する
             Native.OS.SetupExternalTools();
             Models.AvatarManager.Instance.Start();
 
+            // 起動引数にリポジトリパスが指定されていれば初期表示に使用する
             string startupRepo = null;
             if (desktop.Args is { Length: 1 } && Directory.Exists(desktop.Args[0]))
                 startupRepo = desktop.Args[0];
 
+            // 設定を読み込み、ランチャーウィンドウを生成・表示する
             var pref = ViewModels.Preferences.Instance;
             pref.SetCanModify();
 
@@ -716,31 +806,40 @@ namespace Komorebi
             desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
             desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
+            // 初回起動時（デフォルトクローンディレクトリ未設定）はセットアップ画面を表示する
             if (string.IsNullOrEmpty(pref.GitDefaultCloneDir))
             {
                 SetLocale(ViewModels.Preferences.DetectedLocale);
                 _launcher.ActivePage.Popup = new ViewModels.InitSetup();
             }
 
+            // 起動時の自動更新チェック（1日1回、手動チェックと同じ挙動で実行する）
 #if !DISABLE_UPDATE_DETECTION
             if (pref.ShouldCheck4UpdateOnStartup())
-                Check4Update();
+                Check4Update(true);
 #endif
         }
 
+        /// <summary>
+        ///     指定されたパスのリポジトリをタブで開く。
+        ///     既にアプリが起動中のとき、二重起動防止の仕組みから呼ばれる。
+        /// </summary>
         private void TryOpenRepository(string repo)
         {
             if (!string.IsNullOrEmpty(repo) && Directory.Exists(repo))
             {
+                // gitリポジトリのルートパスを取得する
                 var test = new Commands.QueryRepositoryRootPath(repo).GetResult();
                 if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
                 {
                     Dispatcher.UIThread.Invoke(() =>
                     {
+                        // リポジトリノードを検索または追加し、タブで開く
                         var node = ViewModels.Preferences.Instance.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), null, false);
                         ViewModels.Welcome.Instance.Refresh();
                         _launcher?.OpenRepositoryInTab(node, null);
 
+                        // ウィンドウを最前面に移動する
                         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: Views.Launcher wnd })
                             wnd.BringToTop();
                     });
@@ -749,6 +848,7 @@ namespace Komorebi
                 }
             }
 
+            // リポジトリとして開けなかった場合でもウィンドウを最前面に移動する
             Dispatcher.UIThread.Invoke(() =>
             {
                 if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: Views.Launcher launcher })
@@ -756,15 +856,25 @@ namespace Komorebi
             });
         }
 
+        /// <summary>
+        ///     GitHubリリースから最新バージョンを確認し、更新がある場合はダイアログを表示する。
+        ///     バックグラウンドスレッドで非同期実行される。
+        /// </summary>
+        /// <param name="manually">
+        ///     true: 手動チェック（結果を常に表示、無視タグをスキップ）
+        ///     false: 自動チェック（更新がある場合のみ表示、無視タグを確認）
+        /// </param>
         private void Check4Update(bool manually = false)
         {
             Task.Run(async () =>
             {
                 try
                 {
+                    // VelopackのUpdateManagerを初期化する
                     var source = new GithubSource("https://github.com/1llum1n4t1s/Komorebi", string.Empty, false);
                     var mgr = new UpdateManager(source);
 
+                    // Velopackでインストールされていない場合（開発環境等）はチェックをスキップする
                     if (!mgr.IsInstalled)
                     {
                         if (manually)
@@ -772,6 +882,7 @@ namespace Komorebi
                         return;
                     }
 
+                    // 最新バージョンの有無を確認する
                     var newVersion = await mgr.CheckForUpdatesAsync();
                     if (newVersion == null)
                     {
@@ -780,7 +891,7 @@ namespace Komorebi
                         return;
                     }
 
-                    // Should not check ignored tag if this is called manually.
+                    // 自動チェック時はユーザーが無視指定したバージョンをスキップする
                     if (!manually)
                     {
                         var pref = ViewModels.Preferences.Instance;
@@ -789,16 +900,22 @@ namespace Komorebi
                             return;
                     }
 
+                    // 更新ダイアログを表示する
                     ShowSelfUpdateResult(new Models.VelopackUpdate(mgr, newVersion));
                 }
                 catch (Exception e)
                 {
+                    // 手動チェック時のみエラーを表示する
                     if (manually)
                         ShowSelfUpdateResult(new Models.SelfUpdateFailed(e));
                 }
             });
         }
 
+        /// <summary>
+        ///     更新チェック結果をUIスレッドでダイアログ表示する。
+        /// </summary>
+        /// <param name="data">表示データ（VelopackUpdate / AlreadyUpToDate / SelfUpdateFailed）</param>
         private void ShowSelfUpdateResult(object data)
         {
             Dispatcher.UIThread.InvokeAsync(async () =>
@@ -809,7 +926,7 @@ namespace Komorebi
                 }
                 catch
                 {
-                    // Ignore exceptions (e.g. window already closed).
+                    // ウィンドウが既に閉じられている場合などの例外は無視する
                 }
             });
         }
@@ -882,7 +999,7 @@ namespace Komorebi
         private Models.IpcChannel _ipcChannel = null;
         private ViewModels.Launcher _launcher = null;
         private ResourceDictionary _activeLocale = null;
-        private ResourceDictionary _whiteThemeColors = null;
+        private ResourceDictionary _themeColorOverrides = null;
         private ResourceDictionary _themeOverrides = null;
         private ResourceDictionary _fontsOverrides = null;
     }

@@ -3,19 +3,31 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     サブモジュールのトラッキングブランチを設定するポップアップダイアログのViewModel。
+    /// </summary>
     public class SetSubmoduleBranch : Popup
     {
+        /// <summary>
+        ///     設定対象のサブモジュール。
+        /// </summary>
         public Models.Submodule Submodule
         {
             get;
         }
 
+        /// <summary>
+        ///     変更先のブランチ名。
+        /// </summary>
         public string ChangeTo
         {
             get => _changeTo;
             set => SetProperty(ref _changeTo, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリとサブモジュールを受け取り、現在のブランチで初期化する。
+        /// </summary>
         public SetSubmoduleBranch(Repository repo, Models.Submodule submodule)
         {
             _repo = repo;
@@ -23,6 +35,9 @@ namespace Komorebi.ViewModels
             Submodule = submodule;
         }
 
+        /// <summary>
+        ///     ブランチ変更操作を実行する。変更がない場合はスキップする。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             ProgressDescription = "Set submodule's branch ...";

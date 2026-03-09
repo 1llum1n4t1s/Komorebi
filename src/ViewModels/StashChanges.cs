@@ -5,25 +5,41 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     変更をスタッシュに保存するポップアップダイアログのViewModel。
+    ///     全変更または選択された変更のみをスタッシュし、スタッシュ後の変更の扱い方を制御する。
+    /// </summary>
     public class StashChanges : Popup
     {
+        /// <summary>
+        ///     スタッシュに付けるメッセージ。
+        /// </summary>
         public string Message
         {
             get;
             set;
         }
 
+        /// <summary>
+        ///     個別のファイルが選択されているかどうか。
+        /// </summary>
         public bool HasSelectedFiles
         {
             get => _changes != null;
         }
 
+        /// <summary>
+        ///     未追跡ファイルをスタッシュに含めるかどうか。
+        /// </summary>
         public bool IncludeUntracked
         {
             get => _repo.UIStates.IncludeUntrackedWhenStash;
             set => _repo.UIStates.IncludeUntrackedWhenStash = value;
         }
 
+        /// <summary>
+        ///     ステージされた変更のみをスタッシュするかどうか。
+        /// </summary>
         public bool OnlyStaged
         {
             get => _repo.UIStates.OnlyStagedWhenStash;
@@ -37,18 +53,27 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     スタッシュ後の変更の扱い方（破棄/インデックス維持/全て維持）。
+        /// </summary>
         public int ChangesAfterStashing
         {
             get => _repo.UIStates.ChangesAfterStashing;
             set => _repo.UIStates.ChangesAfterStashing = value;
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリと選択された変更ファイルリストを受け取る。
+        /// </summary>
         public StashChanges(Repository repo, List<Models.Change> selectedChanges)
         {
             _repo = repo;
             _changes = selectedChanges;
         }
 
+        /// <summary>
+        ///     スタッシュ操作を実行する。選択ファイルの有無、OnlyStaged設定に応じて適切なスタッシュ方法を使用する。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -110,6 +135,10 @@ namespace Komorebi.ViewModels
             return succ;
         }
 
+        /// <summary>
+        ///     特定の変更ファイルのみをスタッシュする。
+        ///     Gitバージョンに応じてpathspecfileまたはバッチ処理を使い分ける。
+        /// </summary>
         private async Task<bool> StashWithChangesAsync(List<Models.Change> changes, bool keepIndex, CommandLog log)
         {
             if (changes.Count == 0)

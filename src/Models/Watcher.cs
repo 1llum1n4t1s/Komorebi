@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     FileSystemWatcherによるリポジトリ監視クラス。
+    ///     ワーキングコピーとgitディレクトリの変更を検出し、
+    ///     タイマーベースのデバウンスでブランチ・タグ・スタッシュ・サブモジュール・ワーキングコピーを更新する。
+    /// </summary>
     public class Watcher : IDisposable
     {
+        /// <summary>
+        ///     監視を一時停止するためのロックコンテキスト。
+        ///     usingパターンでスレッドセーフにロック・アンロックを行う。
+        /// </summary>
         public class LockContext : IDisposable
         {
             public LockContext(Watcher target)
@@ -24,6 +33,14 @@ namespace Komorebi.Models
             private Watcher _target;
         }
 
+        /// <summary>
+        ///     ファイル監視を初期化する。
+        ///     gitディレクトリがワーキングコピー内の場合は統合監視、
+        ///     分離している場合（ワークツリー等）は個別の監視を設定する。
+        /// </summary>
+        /// <param name="repo">監視対象のリポジトリ</param>
+        /// <param name="fullpath">リポジトリのルートパス</param>
+        /// <param name="gitDir">gitディレクトリのパス</param>
         public Watcher(IRepository repo, string fullpath, string gitDir)
         {
             _repo = repo;
@@ -32,6 +49,7 @@ namespace Komorebi.Models
 
             var testGitDir = new DirectoryInfo(Path.Combine(fullpath, ".git")).FullName;
             var desiredDir = new DirectoryInfo(gitDir).FullName;
+            // gitディレクトリがワーキングコピー内にある場合は統合ウォッチャーを使用
             if (testGitDir.Equals(desiredDir, StringComparison.Ordinal))
             {
                 var combined = new FileSystemWatcher();
@@ -47,6 +65,7 @@ namespace Komorebi.Models
 
                 _watchers.Add(combined);
             }
+            // gitディレクトリが分離している場合（ワークツリー等）は個別のウォッチャーを使用
             else
             {
                 var wc = new FileSystemWatcher();
@@ -77,7 +96,7 @@ namespace Komorebi.Models
 
             _timer = new Timer(Tick, null, 100, 100);
 
-            // Starts filesystem watchers in another thread to avoid UI blocking
+            // UIブロッキングを避けるため、別スレッドでファイルシステム監視を開始
             Task.Run(() =>
             {
                 try
@@ -87,42 +106,49 @@ namespace Komorebi.Models
                 }
                 catch
                 {
-                    // Ignore exceptions. This may occur while `Dispose` is called.
+                    // 例外を無視（Dispose呼び出し中に発生する可能性がある）
                 }
             });
         }
 
+        /// <summary>監視を一時停止するロックを取得する</summary>
         public IDisposable Lock()
         {
             return new LockContext(this);
         }
 
+        /// <summary>ブランチ更新の処理済みマークを付ける（ワーキングコピーも含む）</summary>
         public void MarkBranchUpdated()
         {
             Interlocked.Exchange(ref _updateBranch, 0);
             Interlocked.Exchange(ref _updateWC, 0);
         }
 
+        /// <summary>タグ更新の処理済みマークを付ける</summary>
         public void MarkTagUpdated()
         {
             Interlocked.Exchange(ref _updateTags, 0);
         }
 
+        /// <summary>ワーキングコピー更新の処理済みマークを付ける</summary>
         public void MarkWorkingCopyUpdated()
         {
             Interlocked.Exchange(ref _updateWC, 0);
         }
 
+        /// <summary>スタッシュ更新の処理済みマークを付ける</summary>
         public void MarkStashUpdated()
         {
             Interlocked.Exchange(ref _updateStashes, 0);
         }
 
+        /// <summary>サブモジュール更新の処理済みマークを付ける</summary>
         public void MarkSubmodulesUpdated()
         {
             Interlocked.Exchange(ref _updateSubmodules, 0);
         }
 
+        /// <summary>ファイル監視とタイマーを停止・破棄する</summary>
         public void Dispose()
         {
             foreach (var watcher in _watchers)
@@ -136,8 +162,13 @@ namespace Komorebi.Models
             _timer = null;
         }
 
+        /// <summary>
+        ///     タイマーのティック処理。デバウンスされた更新要求を確認し、
+        ///     期限が到来したものについてリポジトリの各要素を更新する。
+        /// </summary>
         private void Tick(object sender)
         {
+            // ロック中は更新をスキップ
             if (Interlocked.Read(ref _lockCount) > 0)
                 return;
 
@@ -225,6 +256,10 @@ namespace Komorebi.Models
                 _repo.RefreshCommits();
         }
 
+        /// <summary>
+        ///     統合ウォッチャーのイベントハンドラー。
+        ///     .gitディレクトリ内の変更とワーキングコピーの変更を振り分ける。
+        /// </summary>
         private void OnRepositoryChanged(object o, FileSystemEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Name) || e.Name.Equals(".git", StringComparison.Ordinal))
@@ -240,6 +275,7 @@ namespace Komorebi.Models
                 HandleWorkingCopyFileChanged(name, e.FullPath);
         }
 
+        /// <summary>gitディレクトリのファイル変更イベントハンドラー（分離ウォッチャー用）</summary>
         private void OnGitDirChanged(object o, FileSystemEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Name))
@@ -249,6 +285,7 @@ namespace Komorebi.Models
             HandleGitDirFileChanged(name);
         }
 
+        /// <summary>ワーキングコピーのファイル変更イベントハンドラー（分離ウォッチャー用）</summary>
         private void OnWorkingCopyChanged(object o, FileSystemEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Name))
@@ -263,6 +300,12 @@ namespace Komorebi.Models
             HandleWorkingCopyFileChanged(name, e.FullPath);
         }
 
+        /// <summary>
+        ///     gitディレクトリ内のファイル変更を処理する。
+        ///     変更されたファイルのパスに応じて、適切な更新フラグを設定する。
+        ///     HEAD、refs/heads/*, refs/tags/*, refs/stash, modules/*, reftable/*等を監視する。
+        /// </summary>
+        /// <param name="name">gitディレクトリからの相対パス</param>
         private void HandleGitDirFileChanged(string name)
         {
             if (name.Contains("fsmonitor--daemon/", StringComparison.Ordinal) ||
@@ -315,6 +358,13 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     ワーキングコピー内のファイル変更を処理する。
+        ///     .gitmodulesの変更はサブモジュール更新をトリガーし、
+        ///     サブモジュール内の変更はサブモジュール更新のみ行う。
+        /// </summary>
+        /// <param name="name">リポジトリルートからの相対パス</param>
+        /// <param name="fullpath">ファイルの絶対パス</param>
         private void HandleWorkingCopyFileChanged(string name, string fullpath)
         {
             if (name.StartsWith(".vs/", StringComparison.Ordinal))
@@ -338,6 +388,12 @@ namespace Komorebi.Models
             Interlocked.Exchange(ref _updateWC, DateTime.Now.AddSeconds(1).ToFileTime());
         }
 
+        /// <summary>
+        ///     指定フォルダがサブモジュール内にあるかどうかを再帰的に判定する。
+        ///     .gitファイル（ディレクトリではなくファイル）の存在でサブモジュールを検出する。
+        /// </summary>
+        /// <param name="folder">判定対象のフォルダパス</param>
+        /// <returns>サブモジュール内の場合true</returns>
         private bool IsInSubmodule(string folder)
         {
             if (string.IsNullOrEmpty(folder) || folder.Equals(_root, StringComparison.Ordinal))
@@ -349,16 +405,26 @@ namespace Komorebi.Models
             return IsInSubmodule(Path.GetDirectoryName(folder));
         }
 
+        /// <summary>監視対象のリポジトリ</summary>
         private readonly IRepository _repo;
+        /// <summary>リポジトリのルートパス</summary>
         private readonly string _root;
+        /// <summary>FileSystemWatcherのリスト</summary>
         private List<FileSystemWatcher> _watchers;
+        /// <summary>デバウンス用のタイマー（100msごとにTickを呼び出す）</summary>
         private Timer _timer;
 
+        /// <summary>ロックカウント（0より大きい場合は更新を抑制）</summary>
         private long _lockCount;
+        /// <summary>ワーキングコピー更新の予定時刻（FileTime形式）</summary>
         private long _updateWC;
+        /// <summary>ブランチ更新の予定時刻（FileTime形式）</summary>
         private long _updateBranch;
+        /// <summary>サブモジュール更新の予定時刻（FileTime形式）</summary>
         private long _updateSubmodules;
+        /// <summary>スタッシュ更新の予定時刻（FileTime形式）</summary>
         private long _updateStashes;
+        /// <summary>タグ更新の予定時刻（FileTime形式）</summary>
         private long _updateTags;
     }
 }

@@ -5,6 +5,9 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ウィンドウキャプションボタン（最小化・最大化・閉じる）のコードビハインド。
+    /// </summary>
     public partial class CaptionButtons : UserControl
     {
         public static readonly StyledProperty<bool> IsCloseButtonOnlyProperty =
@@ -16,11 +19,17 @@ namespace Komorebi.Views
             set => SetValue(IsCloseButtonOnlyProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CaptionButtons()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     MinimizeWindowの処理を行う。
+        /// </summary>
         private void MinimizeWindow(object _, RoutedEventArgs e)
         {
             var window = this.FindAncestorOfType<Window>();
@@ -30,6 +39,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ウィンドウの最大化と通常サイズを切り替える。
+        /// </summary>
         private void MaximizeOrRestoreWindow(object _, RoutedEventArgs e)
         {
             var window = this.FindAncestorOfType<Window>();
@@ -39,6 +51,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CloseWindowの処理を行う。
+        /// </summary>
         private void CloseWindow(object _, RoutedEventArgs e)
         {
             var window = this.FindAncestorOfType<Window>();

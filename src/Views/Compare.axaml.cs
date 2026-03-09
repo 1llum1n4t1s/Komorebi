@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
@@ -8,13 +8,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミット比較ダイアログのコードビハインド。
+    /// </summary>
     public partial class Compare : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Compare()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ChangeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (DataContext is ViewModels.Compare { SelectedChanges: { Count: > 0 } selected } vm &&
@@ -202,6 +211,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     PressedSHAイベントのハンドラ。
+        /// </summary>
         private void OnPressedSHA(object sender, PointerPressedEventArgs e)
         {
             if (DataContext is ViewModels.Compare vm && sender is TextBlock block)
@@ -210,6 +222,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.Compare vm)

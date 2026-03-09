@@ -8,11 +8,20 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     カスタムアクションのコントロールパラメータのインターフェース。
+    /// </summary>
     public interface ICustomActionControlParameter
     {
+        /// <summary>
+        ///     パラメータの値を取得する。
+        /// </summary>
         string GetValue();
     }
 
+    /// <summary>
+    ///     テキスト入力コントロールのパラメータ。
+    /// </summary>
     public class CustomActionControlTextBox : ICustomActionControlParameter
     {
         public string Label { get; set; }
@@ -29,6 +38,9 @@ namespace Komorebi.ViewModels
         public string GetValue() => Text;
     }
 
+    /// <summary>
+    ///     ファイル/フォルダパス選択コントロールのパラメータ。
+    /// </summary>
     public class CustomActionControlPathSelector : ObservableObject, ICustomActionControlParameter
     {
         public string Label { get; set; }
@@ -54,6 +66,9 @@ namespace Komorebi.ViewModels
         private string _path;
     }
 
+    /// <summary>
+    ///     チェックボックスコントロールのパラメータ。チェック時に指定値を返す。
+    /// </summary>
     public class CustomActionControlCheckBox : ICustomActionControlParameter
     {
         public string Label { get; set; }
@@ -72,6 +87,9 @@ namespace Komorebi.ViewModels
         public string GetValue() => IsChecked ? CheckedValue : string.Empty;
     }
 
+    /// <summary>
+    ///     ドロップダウン選択コントロールのパラメータ。パイプ区切りの選択肢リストを持つ。
+    /// </summary>
     public class CustomActionControlComboBox : ObservableObject, ICustomActionControlParameter
     {
         public string Label { get; set; }
@@ -102,23 +120,39 @@ namespace Komorebi.ViewModels
         private string _value = string.Empty;
     }
 
+    /// <summary>
+    ///     カスタムアクションを実行するダイアログViewModel。
+    ///     コントロールパラメータの値をプレースホルダーに置換してコマンドを実行する。
+    /// </summary>
     public class ExecuteCustomAction : Popup
     {
+        /// <summary>
+        ///     実行するカスタムアクションの定義。
+        /// </summary>
         public Models.CustomAction CustomAction
         {
             get;
         }
 
+        /// <summary>
+        ///     アクションのスコープ対象（ブランチ、コミット、タグ等）。
+        /// </summary>
         public object Target
         {
             get;
         }
 
+        /// <summary>
+        ///     UIコントロールパラメータのリスト（テキストボックス、パス選択等）。
+        /// </summary>
         public List<ICustomActionControlParameter> ControlParameters
         {
             get;
         } = [];
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリ、カスタムアクション定義、スコープ対象を指定する。
+        /// </summary>
         public ExecuteCustomAction(Repository repo, Models.CustomAction action, object scopeTarget)
         {
             _repo = repo;
@@ -127,11 +161,16 @@ namespace Komorebi.ViewModels
             PrepareControlParameters();
         }
 
+        /// <summary>
+        ///     カスタムアクション実行の確認アクション。
+        ///     プレースホルダーをターゲット値とコントロールパラメータ値で置換してコマンドを起動する。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
             ProgressDescription = "Run custom action ...";
 
+            // コマンドライン引数のプレースホルダーを実際の値に置換
             var cmdline = PrepareStringByTarget(CustomAction.Arguments);
             for (var i = ControlParameters.Count - 1; i >= 0; i--)
             {
@@ -153,6 +192,9 @@ namespace Komorebi.ViewModels
             return true;
         }
 
+        /// <summary>
+        ///     カスタムアクション定義のコントロール設定からUIパラメータオブジェクトを生成する。
+        /// </summary>
         private void PrepareControlParameters()
         {
             foreach (var ctl in CustomAction.Controls)
@@ -175,6 +217,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     文字列内のターゲット関連プレースホルダー（${REPO}, ${BRANCH}, ${SHA}等）を実際の値に置換する。
+        /// </summary>
         private string PrepareStringByTarget(string org)
         {
             org = org.Replace("${REPO}", GetWorkdir());
@@ -190,11 +235,17 @@ namespace Komorebi.ViewModels
             };
         }
 
+        /// <summary>
+        ///     作業ディレクトリのパスをOS形式で取得する。
+        /// </summary>
         private string GetWorkdir()
         {
             return OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
         }
 
+        /// <summary>
+        ///     外部プロセスをバックグラウンドで起動する（完了を待たない）。
+        /// </summary>
         private void Run(string args)
         {
             var start = new ProcessStartInfo();
@@ -214,6 +265,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     外部プロセスを非同期で実行し、出力をログに記録する（完了を待つ）。
+        /// </summary>
         private async Task RunAsync(string args, Models.ICommandLog log)
         {
             var start = new ProcessStartInfo();

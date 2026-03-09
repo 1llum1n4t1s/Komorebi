@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 
 using Avalonia.Controls;
@@ -8,22 +8,34 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ブランチ名またはタグ名入力用のバリデーション付きテキストボックス。
+    /// </summary>
     public class BranchOrTagNameTextBox : TextBox
     {
         protected override Type StyleKeyOverride => typeof(TextBox);
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
             PastingFromClipboard += OnPastingFromClipboard;
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             PastingFromClipboard -= OnPastingFromClipboard;
             base.OnUnloaded(e);
         }
 
+        /// <summary>
+        ///     TextInputイベントのハンドラ。
+        /// </summary>
         protected override void OnTextInput(TextInputEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Text))
@@ -43,6 +55,9 @@ namespace Komorebi.Views
             base.OnTextInput(e);
         }
 
+        /// <summary>
+        ///     PastingFromClipboardイベントのハンドラ。
+        /// </summary>
         private async void OnPastingFromClipboard(object sender, RoutedEventArgs e)
         {
             e.Handled = true;

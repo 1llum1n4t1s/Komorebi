@@ -5,14 +5,25 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    /// ローカルブランチをリモートにプッシュするダイアログのViewModel。
+    /// ローカルブランチ、リモート、リモートブランチの選択、追跡設定、
+    /// 強制プッシュ、タグプッシュ、サブモジュールチェックなどのオプションを管理する。
+    /// </summary>
     public class Push : Popup
     {
+        /// <summary>
+        /// 特定のローカルブランチが指定されて開かれたかどうか。
+        /// </summary>
         public bool HasSpecifiedLocalBranch
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// プッシュ元のローカルブランチ（必須入力）。変更時にリモートブランチを自動選択する。
+        /// </summary>
         [Required(ErrorMessage = "Local branch is required!!!")]
         public Models.Branch SelectedLocalBranch
         {
@@ -24,16 +35,25 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        /// ローカルブランチ一覧。
+        /// </summary>
         public List<Models.Branch> LocalBranches
         {
             get;
         }
 
+        /// <summary>
+        /// リモート一覧。
+        /// </summary>
         public List<Models.Remote> Remotes
         {
             get => _repo.Remotes;
         }
 
+        /// <summary>
+        /// プッシュ先のリモート（必須入力）。変更時にリモートブランチを自動選択する。
+        /// </summary>
         [Required(ErrorMessage = "Remote is required!!!")]
         public Models.Remote SelectedRemote
         {
@@ -45,12 +65,18 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        /// 選択されたリモートに属するブランチ一覧。
+        /// </summary>
         public List<Models.Branch> RemoteBranches
         {
             get => _remoteBranches;
             private set => SetProperty(ref _remoteBranches, value);
         }
 
+        /// <summary>
+        /// プッシュ先のリモートブランチ（必須入力）。変更時に追跡設定の表示を更新する。
+        /// </summary>
         [Required(ErrorMessage = "Remote branch is required!!!")]
         public Models.Branch SelectedRemoteBranch
         {
@@ -62,46 +88,69 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        /// 追跡設定オプションを表示するかどうか。
+        /// 選択されたリモートブランチがアップストリームと異なる場合に表示する。
+        /// </summary>
         public bool IsSetTrackOptionVisible
         {
             get => _isSetTrackOptionVisible;
             private set => SetProperty(ref _isSetTrackOptionVisible, value);
         }
 
+        /// <summary>
+        /// プッシュ後にリモートブランチを追跡ブランチとして設定するかどうか。
+        /// </summary>
         public bool Tracking
         {
             get => _tracking;
             set => SetProperty(ref _tracking, value);
         }
 
+        /// <summary>
+        /// サブモジュールチェックオプションを表示するかどうか。サブモジュールが存在する場合にtrue。
+        /// </summary>
         public bool IsCheckSubmodulesVisible
         {
             get => _repo.Submodules.Count > 0;
         }
 
+        /// <summary>
+        /// プッシュ前にサブモジュールをチェックするかどうか。
+        /// </summary>
         public bool CheckSubmodules
         {
             get;
             set;
         } = true;
 
+        /// <summary>
+        /// すべてのタグもプッシュするかどうか。リポジトリのUI状態と連動する。
+        /// </summary>
         public bool PushAllTags
         {
             get => _repo.UIStates.PushAllTags;
             set => _repo.UIStates.PushAllTags = value;
         }
 
+        /// <summary>
+        /// 強制プッシュを行うかどうか。
+        /// </summary>
         public bool ForcePush
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// リポジトリとオプションのローカルブランチを指定してダイアログを初期化する。
+        /// ローカルブランチ一覧を構築し、アップストリームに基づいてリモートとブランチを自動選択する。
+        /// </summary>
         public Push(Repository repo, Models.Branch localBranch)
         {
             _repo = repo;
 
-            // Gather all local branches and find current branch.
+            // すべてのローカルブランチを収集し、現在のブランチを特定
             LocalBranches = new List<Models.Branch>();
             Models.Branch current = null;
             foreach (var branch in _repo.Branches)
@@ -160,6 +209,10 @@ namespace Komorebi.ViewModels
             AutoSelectBranchByRemote();
         }
 
+        /// <summary>
+        /// 指定された名前の新しいリモートブランチにプッシュする。
+        /// 既存のブランチが見つかればそれを選択し、なければ仮のブランチを作成して選択する。
+        /// </summary>
         public void PushToNewBranch(string name)
         {
             var exist = _remoteBranches.Find(x => x.Name.Equals(name, StringComparison.Ordinal));
@@ -181,11 +234,19 @@ namespace Komorebi.ViewModels
             SelectedRemoteBranch = fake;
         }
 
+        /// <summary>
+        /// リモートブランチが既存（HEADあり）の場合にのみ直接実行可能とする。
+        /// 新規ブランチの場合は確認ダイアログを表示する。
+        /// </summary>
         public override bool CanStartDirectly()
         {
             return !string.IsNullOrEmpty(_selectedRemoteBranch?.Head);
         }
 
+        /// <summary>
+        /// プッシュを実行する。
+        /// ローカルブランチをリモートブランチにプッシュし、オプションで追跡設定も行う。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -210,9 +271,13 @@ namespace Komorebi.ViewModels
             return succ;
         }
 
+        /// <summary>
+        /// 選択されたリモートに基づいてリモートブランチを自動選択する。
+        /// アップストリーム、同名ブランチの順に検索し、見つからない場合は仮のブランチを作成する。
+        /// </summary>
         private void AutoSelectBranchByRemote()
         {
-            // Gather branches.
+            // 選択されたリモートに属するブランチを収集
             var branches = new List<Models.Branch>();
             foreach (var branch in _repo.Branches)
             {
@@ -256,12 +321,19 @@ namespace Komorebi.ViewModels
             SelectedRemoteBranch = fake;
         }
 
+        /// <summary>対象リポジトリ</summary>
         private readonly Repository _repo = null;
+        /// <summary>選択されたローカルブランチ</summary>
         private Models.Branch _selectedLocalBranch = null;
+        /// <summary>選択されたリモート</summary>
         private Models.Remote _selectedRemote = null;
+        /// <summary>リモートブランチ一覧</summary>
         private List<Models.Branch> _remoteBranches = [];
+        /// <summary>選択されたリモートブランチ</summary>
         private Models.Branch _selectedRemoteBranch = null;
+        /// <summary>追跡設定オプションの表示フラグ</summary>
         private bool _isSetTrackOptionVisible = false;
+        /// <summary>追跡設定を行うかどうか</summary>
         private bool _tracking = true;
     }
 }

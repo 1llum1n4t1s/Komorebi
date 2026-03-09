@@ -4,8 +4,15 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     リモートリポジトリの設定を編集するダイアログViewModel。
+    ///     名前、URL、SSH鍵の変更に対応し、バリデーション付き。
+    /// </summary>
     public class EditRemote : Popup
     {
+        /// <summary>
+        ///     リモート名。一意性とフォーマットのバリデーション付き。
+        /// </summary>
         [Required(ErrorMessage = "Remote name is required!!!")]
         [RegularExpression(@"^[\w\-\.]+$", ErrorMessage = "Bad remote name format!!!")]
         [CustomValidation(typeof(EditRemote), nameof(ValidateRemoteName))]
@@ -15,6 +22,9 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _name, value, true);
         }
 
+        /// <summary>
+        ///     リモートURL。変更時にSSH判定を自動更新する。
+        /// </summary>
         [Required(ErrorMessage = "Remote URL is required!!!")]
         [CustomValidation(typeof(EditRemote), nameof(ValidateRemoteURL))]
         public string Url
@@ -27,6 +37,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     SSH接続を使用するかどうか。変更時にSSH鍵のバリデーションを再実行する。
+        /// </summary>
         public bool UseSSH
         {
             get => _useSSH;
@@ -37,6 +50,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     SSH秘密鍵のファイルパス。ファイル存在チェックのバリデーション付き。
+        /// </summary>
         [CustomValidation(typeof(EditRemote), nameof(ValidateSSHKey))]
         public string SSHKey
         {
@@ -44,6 +60,9 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _sshkey, value, true);
         }
 
+        /// <summary>
+        ///     コンストラクタ。対象リポジトリとリモート設定を指定する。SSH使用時はSSH鍵を読み込む。
+        /// </summary>
         public EditRemote(Repository repo, Models.Remote remote)
         {
             _repo = repo;
@@ -56,6 +75,9 @@ namespace Komorebi.ViewModels
                 _sshkey = new Commands.Config(repo.FullPath).Get($"remote.{remote.Name}.sshkey");
         }
 
+        /// <summary>
+        ///     リモート名の一意性を検証するバリデーター。
+        /// </summary>
         public static ValidationResult ValidateRemoteName(string name, ValidationContext ctx)
         {
             if (ctx.ObjectInstance is EditRemote edit)
@@ -70,6 +92,9 @@ namespace Komorebi.ViewModels
             return ValidationResult.Success;
         }
 
+        /// <summary>
+        ///     リモートURLのフォーマットと一意性を検証するバリデーター。
+        /// </summary>
         public static ValidationResult ValidateRemoteURL(string url, ValidationContext ctx)
         {
             if (ctx.ObjectInstance is EditRemote edit)
@@ -87,6 +112,9 @@ namespace Komorebi.ViewModels
             return ValidationResult.Success;
         }
 
+        /// <summary>
+        ///     SSH秘密鍵ファイルの存在を検証するバリデーター。
+        /// </summary>
         public static ValidationResult ValidateSSHKey(string sshkey, ValidationContext ctx)
         {
             if (ctx.ObjectInstance is EditRemote { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
@@ -98,11 +126,16 @@ namespace Komorebi.ViewModels
             return ValidationResult.Success;
         }
 
+        /// <summary>
+        ///     リモート設定の変更を実行する確認アクション。
+        ///     名前変更、URL変更、プッシュURL同期、SSH鍵設定を順に行う。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
             ProgressDescription = $"Editing remote '{_remote.Name}' ...";
 
+            // リモート名が変更された場合はリネーム
             if (_remote.Name != _name)
             {
                 var succ = await new Commands.Remote(_repo.FullPath).RenameAsync(_remote.Name, _name);
@@ -110,6 +143,7 @@ namespace Komorebi.ViewModels
                     _remote.Name = _name;
             }
 
+            // フェッチURLが変更された場合は更新
             if (_remote.URL != _url)
             {
                 var succ = await new Commands.Remote(_repo.FullPath).SetURLAsync(_name, _url, false);
@@ -117,10 +151,12 @@ namespace Komorebi.ViewModels
                     _remote.URL = _url;
             }
 
+            // プッシュURLもフェッチURLと同期
             var pushURL = await new Commands.Remote(_repo.FullPath).GetURLAsync(_name, true);
             if (pushURL != _url)
                 await new Commands.Remote(_repo.FullPath).SetURLAsync(_name, _url, true);
 
+            // SSH鍵の設定を更新
             await new Commands.Config(_repo.FullPath).SetAsync($"remote.{_name}.sshkey", _useSSH ? SSHKey : null);
             return true;
         }

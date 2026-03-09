@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -8,6 +8,9 @@ using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     スタッシュの件名を表示するプレゼンタ。
+    /// </summary>
     public partial class StashSubjectPresenter : Control
     {
         public static readonly StyledProperty<FontFamily> FontFamilyProperty =
@@ -55,6 +58,9 @@ namespace Komorebi.Views
             set => SetValue(SubjectProperty, value);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -101,6 +107,9 @@ namespace Komorebi.Views
             context.DrawText(body, new Point(x, (h - body.Height) * 0.5));
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -115,6 +124,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             var typeface = new Typeface(FontFamily);
@@ -125,9 +137,15 @@ namespace Komorebi.Views
         }
 
         [GeneratedRegex(@"^On ([^\s]+)\: ")]
+        /// <summary>
+        ///     REG_KEYWORD_ONの処理を行う。
+        /// </summary>
         private static partial Regex REG_KEYWORD_ON();
 
         [GeneratedRegex(@"^WIP on ([^\s]+)\: ([a-f0-9]{6,40}) ")]
+        /// <summary>
+        ///     REG_KEYWORD_WIPの処理を行う。
+        /// </summary>
         private static partial Regex REG_KEYWORD_WIP();
     }
 }

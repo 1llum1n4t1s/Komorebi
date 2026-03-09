@@ -13,6 +13,9 @@ using AvaloniaEdit.TextMate;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     RevisionTextFileViewクラス。
+    /// </summary>
     public class RevisionTextFileView : TextEditor
     {
         public static readonly StyledProperty<int> TabWidthProperty =
@@ -35,6 +38,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public RevisionTextFileView() : base(new TextArea(), new TextDocument())
         {
             IsReadOnly = true;
@@ -52,6 +58,9 @@ namespace Komorebi.Views
             TextArea.TextView.Margin = new Thickness(4, 0);
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -60,6 +69,9 @@ namespace Komorebi.Views
             UpdateTextMate();
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
@@ -75,6 +87,9 @@ namespace Komorebi.Views
             GC.Collect();
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -91,6 +106,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -101,6 +119,9 @@ namespace Komorebi.Views
                 UpdateTextMate();
         }
 
+        /// <summary>
+        ///     TextViewContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
         {
             var selected = SelectedText;
@@ -132,6 +153,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     UpdateTextMateの処理を行う。
+        /// </summary>
         private void UpdateTextMate()
         {
             if (UseSyntaxHighlighting)
@@ -154,8 +178,14 @@ namespace Komorebi.Views
         private TextMate.Installation _textMate = null;
     }
 
+    /// <summary>
+    ///     リビジョンのファイル内容ビューアのコードビハインド。
+    /// </summary>
     public partial class RevisionFileContentViewer : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public RevisionFileContentViewer()
         {
             InitializeComponent();

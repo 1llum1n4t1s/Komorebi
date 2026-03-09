@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,6 +11,9 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミットメッセージをリッチテキスト（リンク・Issue参照等）で表示するプレゼンタ。
+    /// </summary>
     public class CommitMessagePresenter : SelectableTextBlock
     {
         public static readonly StyledProperty<Models.CommitFullMessage> FullMessageProperty =
@@ -24,6 +27,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(SelectableTextBlock);
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -76,6 +82,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ポインターが移動した際のイベント処理。
+        /// </summary>
         protected override void OnPointerMoved(PointerEventArgs e)
         {
             base.OnPointerMoved(e);
@@ -111,6 +120,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             var point = e.GetCurrentPoint(this);
@@ -240,12 +252,18 @@ namespace Komorebi.Views
             base.OnPointerPressed(e);
         }
 
+        /// <summary>
+        ///     PointerExitedイベントのハンドラ。
+        /// </summary>
         protected override void OnPointerExited(PointerEventArgs e)
         {
             base.OnPointerExited(e);
             ClearHoveredIssueLink();
         }
 
+        /// <summary>
+        ///     ProcessHoverCommitLinkの処理を行う。
+        /// </summary>
         private void ProcessHoverCommitLink(Models.InlineElement link)
         {
             var sha = link.Link;
@@ -279,6 +297,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     SetHoveredIssueLinkの処理を行う。
+        /// </summary>
         private void SetHoveredIssueLink(Models.InlineElement link)
         {
             if (link == _lastHover || link.Type == Models.InlineElementType.Code)
@@ -293,6 +314,9 @@ namespace Komorebi.Views
                 ProcessHoverCommitLink(link);
         }
 
+        /// <summary>
+        ///     ClearHoveredIssueLinkの処理を行う。
+        /// </summary>
         private void ClearHoveredIssueLink()
         {
             if (_lastHover != null)
@@ -304,6 +328,9 @@ namespace Komorebi.Views
         }
 
         private Models.InlineElement _lastHover = null;
+        /// <summary>
+        ///     Dictionaryの処理を行う。
+        /// </summary>
         private Dictionary<string, Models.Commit> _inlineCommits = new();
     }
 }

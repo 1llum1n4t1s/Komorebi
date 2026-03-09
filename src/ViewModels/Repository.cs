@@ -12,50 +12,64 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     リポジトリのメインViewModel。
+    ///     ブランチ、タグ、履歴、ワーキングコピー、スタッシュ、サブモジュール、
+    ///     ワークツリー、Bisect、LFS、Git Flow、カスタムアクション、自動フェッチ等を統合管理する。
+    /// </summary>
     public class Repository : ObservableObject, Models.IRepository
     {
+        /// <summary>ベアリポジトリかどうか。</summary>
         public bool IsBare
         {
             get;
         }
 
+        /// <summary>リポジトリのフルパス（スラッシュ区切り、末尾スラッシュなし）。</summary>
         public string FullPath
         {
             get;
         }
 
+        /// <summary>.gitディレクトリのフルパス（スラッシュ区切り）。</summary>
         public string GitDir
         {
             get;
         }
 
+        /// <summary>リポジトリ固有の設定（カスタムアクション、テンプレート等）。</summary>
         public Models.RepositorySettings Settings
         {
             get => _settings;
         }
 
+        /// <summary>リポジトリのUI状態（展開状態、ソートモード、履歴フィルタ等）。</summary>
         public Models.RepositoryUIStates UIStates
         {
             get => _uiStates;
         }
 
+        /// <summary>Git Flow設定（master/develop/feature/release/hotfixのブランチ名プレフィックス）。</summary>
         public Models.GitFlow GitFlow
         {
             get;
             set;
         } = new();
 
+        /// <summary>履歴のフィルタモード（Include/Exclude/None）。</summary>
         public Models.FilterMode HistoryFilterMode
         {
             get => _historyFilterMode;
             private set => SetProperty(ref _historyFilterMode, value);
         }
 
+        /// <summary>GPG SSH署名の許可済み署名者ファイルが設定されているかどうか。</summary>
         public bool HasAllowedSignersFile
         {
             get => _hasAllowedSignersFile;
         }
 
+        /// <summary>選択中のビューインデックス。0=履歴、1=ワーキングコピー、2=スタッシュ。</summary>
         public int SelectedViewIndex
         {
             get => _selectedViewIndex;
@@ -73,12 +87,14 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>現在選択中のビューオブジェクト（Histories/WorkingCopy/StashesPage）。</summary>
         public object SelectedView
         {
             get => _selectedView;
             set => SetProperty(ref _selectedView, value);
         }
 
+        /// <summary>履歴をトポロジカル順序で表示するかどうか。変更時にコミット一覧を再取得する。</summary>
         public bool EnableTopoOrderInHistory
         {
             get => _uiStates.EnableTopoOrderInHistory;
@@ -92,6 +108,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>履歴表示フラグ（マージコミット表示、ファーストペアレントのみ等）。変更時にコミット一覧を再取得する。</summary>
         public Models.HistoryShowFlags HistoryShowFlags
         {
             get => _uiStates.HistoryShowFlags;
@@ -105,6 +122,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>履歴グラフで現在のブランチのみハイライトするかどうか。</summary>
         public bool OnlyHighlightCurrentBranchInHistory
         {
             get => _uiStates.OnlyHighlightCurrentBranchInHistory;
@@ -118,6 +136,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>サイドバーのフィルタ文字列。変更時にブランチツリー、タグ、サブモジュールの表示を再構築する。</summary>
         public string Filter
         {
             get => _filter;
@@ -134,18 +153,21 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>リモートリポジトリの一覧。</summary>
         public List<Models.Remote> Remotes
         {
             get => _remotes;
             private set => SetProperty(ref _remotes, value);
         }
 
+        /// <summary>ブランチの一覧（ローカル・リモート両方）。</summary>
         public List<Models.Branch> Branches
         {
             get => _branches;
             private set => SetProperty(ref _branches, value);
         }
 
+        /// <summary>現在チェックアウト中のブランチ。HEAD変更時にAmendモードをリセットする。</summary>
         public Models.Branch CurrentBranch
         {
             get => _currentBranch;
@@ -160,30 +182,35 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>ローカルブランチのツリー表示用ノード一覧。</summary>
         public List<BranchTreeNode> LocalBranchTrees
         {
             get => _localBranchTrees;
             private set => SetProperty(ref _localBranchTrees, value);
         }
 
+        /// <summary>リモートブランチのツリー表示用ノード一覧。</summary>
         public List<BranchTreeNode> RemoteBranchTrees
         {
             get => _remoteBranchTrees;
             private set => SetProperty(ref _remoteBranchTrees, value);
         }
 
+        /// <summary>ワークツリーの一覧。</summary>
         public List<Worktree> Worktrees
         {
             get => _worktrees;
             private set => SetProperty(ref _worktrees, value);
         }
 
+        /// <summary>タグの一覧。</summary>
         public List<Models.Tag> Tags
         {
             get => _tags;
             private set => SetProperty(ref _tags, value);
         }
 
+        /// <summary>タグをツリー形式で表示するかどうか。変更時に表示リストを再構築する。</summary>
         public bool ShowTagsAsTree
         {
             get => _uiStates.ShowTagsAsTree;
@@ -198,18 +225,21 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>フィルタ・ソート適用後の表示用タグコレクション（ツリーまたはリスト）。</summary>
         public object VisibleTags
         {
             get => _visibleTags;
             private set => SetProperty(ref _visibleTags, value);
         }
 
+        /// <summary>サブモジュールの一覧。</summary>
         public List<Models.Submodule> Submodules
         {
             get => _submodules;
             private set => SetProperty(ref _submodules, value);
         }
 
+        /// <summary>サブモジュールをツリー形式で表示するかどうか。変更時に表示リストを再構築する。</summary>
         public bool ShowSubmodulesAsTree
         {
             get => _uiStates.ShowSubmodulesAsTree;
@@ -224,30 +254,35 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>フィルタ適用後の表示用サブモジュールコレクション（ツリーまたはリスト）。</summary>
         public object VisibleSubmodules
         {
             get => _visibleSubmodules;
             private set => SetProperty(ref _visibleSubmodules, value);
         }
 
+        /// <summary>ローカル変更ファイル数。タブのダーティ状態インジケーターに使用する。</summary>
         public int LocalChangesCount
         {
             get => _localChangesCount;
             private set => SetProperty(ref _localChangesCount, value);
         }
 
+        /// <summary>スタッシュの総数。</summary>
         public int StashesCount
         {
             get => _stashesCount;
             private set => SetProperty(ref _stashesCount, value);
         }
 
+        /// <summary>ローカルブランチの総数（デタッチHEADを除く）。</summary>
         public int LocalBranchesCount
         {
             get => _localBranchesCount;
             private set => SetProperty(ref _localBranchesCount, value);
         }
 
+        /// <summary>未追跡ファイルをローカル変更に含めるかどうか。変更時にワーキングコピーを再取得する。</summary>
         public bool IncludeUntracked
         {
             get => _uiStates.IncludeUntrackedInLocalChanges;
@@ -262,6 +297,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>コミット検索中かどうか。trueで履歴ビューに切り替え、falseで検索を終了する。</summary>
         public bool IsSearchingCommits
         {
             get => _isSearchingCommits;
@@ -269,6 +305,7 @@ namespace Komorebi.ViewModels
             {
                 if (SetProperty(ref _isSearchingCommits, value))
                 {
+                    // 検索開始時は履歴ビューに切り替え、終了時は検索コンテキストをクリア
                     if (value)
                         SelectedViewIndex = 0;
                     else
@@ -277,11 +314,13 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>コミット検索コンテキスト。検索条件と結果を管理する。</summary>
         public SearchCommitContext SearchCommitContext
         {
             get => _searchCommitContext;
         }
 
+        /// <summary>サイドバーのローカルブランチグループが展開されているかどうか。</summary>
         public bool IsLocalBranchGroupExpanded
         {
             get => _uiStates.IsLocalBranchesExpandedInSideBar;
@@ -295,6 +334,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>サイドバーのリモートグループが展開されているかどうか。</summary>
         public bool IsRemoteGroupExpanded
         {
             get => _uiStates.IsRemotesExpandedInSideBar;
@@ -308,6 +348,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>サイドバーのタググループが展開されているかどうか。</summary>
         public bool IsTagGroupExpanded
         {
             get => _uiStates.IsTagsExpandedInSideBar;
@@ -321,6 +362,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>サイドバーのサブモジュールグループが展開されているかどうか。</summary>
         public bool IsSubmoduleGroupExpanded
         {
             get => _uiStates.IsSubmodulesExpandedInSideBar;
@@ -334,6 +376,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>サイドバーのワークツリーグループが展開されているかどうか。</summary>
         public bool IsWorktreeGroupExpanded
         {
             get => _uiStates.IsWorktreeExpandedInSideBar;
@@ -347,6 +390,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>ローカルブランチを名前順でソートするかどうか。falseの場合はコミッター日時順。変更時にツリーを再構築する。</summary>
         public bool IsSortingLocalBranchByName
         {
             get => _uiStates.LocalBranchSortMode == Models.BranchSortMode.Name;
@@ -361,6 +405,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>リモートブランチを名前順でソートするかどうか。falseの場合はコミッター日時順。変更時にツリーを再構築する。</summary>
         public bool IsSortingRemoteBranchByName
         {
             get => _uiStates.RemoteBranchSortMode == Models.BranchSortMode.Name;
@@ -375,6 +420,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>タグを名前順でソートするかどうか。falseの場合は作成日時順。変更時に表示リストを再構築する。</summary>
         public bool IsSortingTagsByName
         {
             get => _uiStates.TagSortMode == Models.TagSortMode.Name;
@@ -386,51 +432,62 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>進行中の操作コンテキスト（マージ/リベース/チェリーピック等）。ワーキングコピーから取得する。</summary>
         public InProgressContext InProgressContext
         {
             get => _workingCopy?.InProgressContext;
         }
 
+        /// <summary>Bisectの状態（None/InProgress/Finished）。</summary>
         public Models.BisectState BisectState
         {
             get => _bisectState;
             private set => SetProperty(ref _bisectState, value);
         }
 
+        /// <summary>Bisectコマンドが実行中かどうか。UIのボタン無効化に使用する。</summary>
         public bool IsBisectCommandRunning
         {
             get => _isBisectCommandRunning;
             private set => SetProperty(ref _isBisectCommandRunning, value);
         }
 
+        /// <summary>自動フェッチが実行中かどうか。実行中はポップアップ作成を抑制する。</summary>
         public bool IsAutoFetching
         {
             get => _isAutoFetching;
             private set => SetProperty(ref _isAutoFetching, value);
         }
 
+        /// <summary>課題トラッカー（Issue Tracker）のルール一覧。git configから読み込まれる。</summary>
         public AvaloniaList<Models.IssueTracker> IssueTrackers
         {
             get;
         } = [];
 
+        /// <summary>コマンド実行ログの一覧。新しいログが先頭に追加される。</summary>
         public AvaloniaList<CommandLog> Logs
         {
             get;
         } = [];
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリのパスを正規化し、ワークツリーの場合はcommondirを解決する。
+        /// </summary>
         public Repository(bool isBare, string path, string gitDir)
         {
             IsBare = isBare;
             FullPath = path.Replace('\\', '/').TrimEnd('/');
             GitDir = gitDir.Replace('\\', '/').TrimEnd('/');
 
+            // ワークツリーの場合、commondirファイルから共有gitディレクトリを取得
             var commonDirFile = Path.Combine(GitDir, "commondir");
             var isWorktree = GitDir.IndexOf("/worktrees/", StringComparison.Ordinal) > 0 &&
                           File.Exists(commonDirFile);
 
             if (isWorktree)
             {
+                // commondirが相対パスの場合はGitDirを基準に絶対パスに変換
                 var commonDir = File.ReadAllText(commonDirFile).Trim();
                 if (Path.IsPathRooted(commonDir))
                     commonDir = new DirectoryInfo(commonDir).FullName;
@@ -445,6 +502,10 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     リポジトリを開く。設定・UI状態の読み込み、ファイル監視の開始、
+        ///     各種ビューの初期化、自動フェッチタイマーの起動、全データの更新を行う。
+        /// </summary>
         public void Open()
         {
             _settings = Models.RepositorySettings.Get(_gitCommonDir);
@@ -481,6 +542,10 @@ namespace Komorebi.ViewModels
             RefreshAll();
         }
 
+        /// <summary>
+        ///     リポジトリを閉じる。全ての非同期タスクをキャンセルし、
+        ///     タイマー・ウォッチャー・ビューを解放してリソースをクリーンアップする。
+        /// </summary>
         public void Close()
         {
             SelectedView = null; // Do NOT modify. Used to remove exists widgets for GC.Collect
@@ -530,6 +595,7 @@ namespace Komorebi.ViewModels
             _visibleSubmodules = null;
         }
 
+        /// <summary>新しいポップアップを作成できるかどうか。自動フェッチ中またはポップアップ実行中はfalse。</summary>
         public bool CanCreatePopup()
         {
             var page = GetOwnerPage();
@@ -539,6 +605,7 @@ namespace Komorebi.ViewModels
             return !_isAutoFetching && page.CanCreatePopup();
         }
 
+        /// <summary>指定されたポップアップダイアログを表示する。</summary>
         public void ShowPopup(Popup popup)
         {
             var page = GetOwnerPage();
@@ -546,6 +613,7 @@ namespace Komorebi.ViewModels
                 page.Popup = popup;
         }
 
+        /// <summary>ポップアップを表示し、直接開始可能であれば即座に処理を実行する。</summary>
         public async Task ShowAndStartPopupAsync(Popup popup)
         {
             var page = GetOwnerPage();
@@ -555,6 +623,7 @@ namespace Komorebi.ViewModels
                 await page.ProcessPopupAsync();
         }
 
+        /// <summary>Git Flowが有効かどうか。設定が有効でmaster/developブランチが存在する場合にtrue。</summary>
         public bool IsGitFlowEnabled()
         {
             return GitFlow is { IsValid: true } &&
@@ -562,6 +631,7 @@ namespace Komorebi.ViewModels
                 _branches.Find(x => x.IsLocal && x.Name.Equals(GitFlow.Develop, StringComparison.Ordinal)) != null;
         }
 
+        /// <summary>指定ブランチのGit Flowタイプ（Feature/Release/Hotfix）を判定する。</summary>
         public Models.GitFlowBranchType GetGitFlowType(Models.Branch b)
         {
             if (!IsGitFlowEnabled())
@@ -577,6 +647,7 @@ namespace Komorebi.ViewModels
             return Models.GitFlowBranchType.None;
         }
 
+        /// <summary>Git LFSが有効かどうか。pre-pushフックの存在とLFSコマンドの含有を確認する。</summary>
         public bool IsLFSEnabled()
         {
             var path = Path.Combine(FullPath, ".git", "hooks", "pre-push");
@@ -594,6 +665,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>Git LFSをこのリポジトリにインストールする。</summary>
         public async Task InstallLFSAsync()
         {
             var log = CreateLog("Install LFS");
@@ -604,6 +676,7 @@ namespace Komorebi.ViewModels
             log.Complete();
         }
 
+        /// <summary>指定パターンでLFSトラッキングを追加する。</summary>
         public async Task<bool> TrackLFSFileAsync(string pattern, bool isFilenameMode)
         {
             var log = CreateLog("Track LFS");
@@ -618,6 +691,7 @@ namespace Komorebi.ViewModels
             return succ;
         }
 
+        /// <summary>LFSファイルをロックする。</summary>
         public async Task<bool> LockLFSFileAsync(string remote, string path)
         {
             var log = CreateLog("Lock LFS File");
@@ -632,6 +706,7 @@ namespace Komorebi.ViewModels
             return succ;
         }
 
+        /// <summary>LFSファイルのロックを解除する。forceがtrueの場合は他ユーザーのロックも解除する。</summary>
         public async Task<bool> UnlockLFSFileAsync(string remote, string path, bool force, bool notify)
         {
             var log = CreateLog("Unlock LFS File");
@@ -646,6 +721,7 @@ namespace Komorebi.ViewModels
             return succ;
         }
 
+        /// <summary>新しいコマンドログを作成し、ログ一覧の先頭に追加する。</summary>
         public CommandLog CreateLog(string name)
         {
             var log = new CommandLog(name);
@@ -653,6 +729,10 @@ namespace Komorebi.ViewModels
             return log;
         }
 
+        /// <summary>
+        ///     全データを一括更新する。コミット、ブランチ、タグ、サブモジュール、
+        ///     ワークツリー、ワーキングコピー、スタッシュ、課題トラッカー、Git Flow設定を再取得する。
+        /// </summary>
         public void RefreshAll()
         {
             RefreshCommits();
@@ -690,6 +770,7 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>フェッチダイアログを表示する。autoStartがtrueの場合は即座に実行を開始する。</summary>
         public async Task FetchAsync(bool autoStart)
         {
             if (!CanCreatePopup())
@@ -707,6 +788,7 @@ namespace Komorebi.ViewModels
                 ShowPopup(new Fetch(this));
         }
 
+        /// <summary>プルダイアログを表示する。autoStartがtrueで上流ブランチがある場合は即座に実行を開始する。</summary>
         public async Task PullAsync(bool autoStart)
         {
             if (IsBare || !CanCreatePopup())
@@ -731,6 +813,7 @@ namespace Komorebi.ViewModels
                 ShowPopup(pull);
         }
 
+        /// <summary>プッシュダイアログを表示する。autoStartがtrueの場合は即座に実行を開始する。</summary>
         public async Task PushAsync(bool autoStart)
         {
             if (!CanCreatePopup())
@@ -754,12 +837,14 @@ namespace Komorebi.ViewModels
                 ShowPopup(new Push(this, null));
         }
 
+        /// <summary>パッチ適用ダイアログを表示する。</summary>
         public void ApplyPatch()
         {
             if (CanCreatePopup())
                 ShowPopup(new Apply(this));
         }
 
+        /// <summary>カスタムアクションを実行する。コントロールがない場合は即座に開始、ある場合はダイアログを表示する。</summary>
         public async Task ExecCustomActionAsync(Models.CustomAction action, object scopeTarget)
         {
             if (!CanCreatePopup())
@@ -772,28 +857,33 @@ namespace Komorebi.ViewModels
                 ShowPopup(popup);
         }
 
+        /// <summary>リポジトリのクリーンアップ（git gc）を実行する。</summary>
         public async Task CleanupAsync()
         {
             if (CanCreatePopup())
                 await ShowAndStartPopupAsync(new Cleanup(this));
         }
 
+        /// <summary>インデックスキャッシュをクリアする。</summary>
         public async Task ClearIndexCacheAsync()
         {
             if (CanCreatePopup())
                 await ShowAndStartPopupAsync(new ClearIndexCache(this));
         }
 
+        /// <summary>サイドバーのフィルタをクリアする。</summary>
         public void ClearFilter()
         {
             Filter = string.Empty;
         }
 
+        /// <summary>ファイル監視を一時的にロックする。IDisposableのDisposeでロック解除される。</summary>
         public IDisposable LockWatcher()
         {
             return _watcher?.Lock();
         }
 
+        /// <summary>ブランチデータを手動で更新する。ブランチ、コミット、ワーキングコピー、ワークツリーを再取得する。</summary>
         public void MarkBranchesDirtyManually()
         {
             _watcher?.MarkBranchUpdated();
@@ -803,6 +893,7 @@ namespace Komorebi.ViewModels
             RefreshWorktrees();
         }
 
+        /// <summary>タグデータを手動で更新する。タグとコミットを再取得する。</summary>
         public void MarkTagsDirtyManually()
         {
             _watcher?.MarkTagUpdated();
@@ -810,29 +901,34 @@ namespace Komorebi.ViewModels
             RefreshCommits();
         }
 
+        /// <summary>ワーキングコピーデータを手動で更新する。</summary>
         public void MarkWorkingCopyDirtyManually()
         {
             _watcher?.MarkWorkingCopyUpdated();
             RefreshWorkingCopyChanges();
         }
 
+        /// <summary>スタッシュデータを手動で更新する。</summary>
         public void MarkStashesDirtyManually()
         {
             _watcher?.MarkStashUpdated();
             RefreshStashes();
         }
 
+        /// <summary>サブモジュールデータを手動で更新する。</summary>
         public void MarkSubmodulesDirtyManually()
         {
             _watcher?.MarkSubmodulesUpdated();
             RefreshSubmodules();
         }
 
+        /// <summary>最終フェッチ時刻を現在時刻に更新する。自動フェッチのインターバルリセットに使用する。</summary>
         public void MarkFetched()
         {
             _lastFetchTime = DateTime.Now;
         }
 
+        /// <summary>指定されたSHAのコミットに履歴ビューをナビゲートする。遅延モードではコミット読み込み完了後にナビゲートする。</summary>
         public void NavigateToCommit(string sha, bool isDelayMode = false)
         {
             if (isDelayMode)
@@ -846,23 +942,27 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>ワーキングコピーのコミットメッセージを設定する。</summary>
         public void SetCommitMessage(string message)
         {
             if (_workingCopy is not null)
                 _workingCopy.CommitMessage = message;
         }
 
+        /// <summary>ワーキングコピーのコミットメッセージをクリアする。</summary>
         public void ClearCommitMessage()
         {
             if (_workingCopy is not null)
                 _workingCopy.CommitMessage = string.Empty;
         }
 
+        /// <summary>履歴ビューで現在選択中のコミットを取得する。</summary>
         public Models.Commit GetSelectedCommitInHistory()
         {
             return (_histories?.DetailContext as CommitDetail)?.Commit;
         }
 
+        /// <summary>全ての履歴フィルタをクリアし、ブランチツリーとタグのフィルタモードもリセットする。</summary>
         public void ClearHistoryFilters()
         {
             _uiStates.HistoryFilters.Clear();
@@ -874,6 +974,7 @@ namespace Komorebi.ViewModels
             RefreshCommits();
         }
 
+        /// <summary>指定された履歴フィルタを削除し、フィルタモードを更新する。</summary>
         public void RemoveHistoryFilter(Models.HistoryFilter filter)
         {
             if (_uiStates.HistoryFilters.Remove(filter))
@@ -883,6 +984,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>ブランチツリーノードの展開状態をUI状態に永続化する。フィルタ適用中は無視する。</summary>
         public void UpdateBranchNodeIsExpanded(BranchTreeNode node)
         {
             if (_uiStates == null || !string.IsNullOrWhiteSpace(_filter))
@@ -899,6 +1001,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>指定タグの履歴フィルタモードを設定し、フィルタを更新する。</summary>
         public void SetTagFilterMode(Models.Tag tag, Models.FilterMode mode)
         {
             var changed = _uiStates.UpdateHistoryFilters(tag.Name, Models.FilterType.Tag, mode);
@@ -906,6 +1009,7 @@ namespace Komorebi.ViewModels
                 RefreshHistoryFilters(true);
         }
 
+        /// <summary>指定ブランチの履歴フィルタモードを設定する。ブランチオブジェクトからノードを検索して委譲する。</summary>
         public void SetBranchFilterMode(Models.Branch branch, Models.FilterMode mode, bool clearExists, bool refresh)
         {
             var node = FindBranchNode(branch.IsLocal ? _localBranchTrees : _remoteBranchTrees, branch.FullName);
@@ -913,6 +1017,11 @@ namespace Komorebi.ViewModels
                 SetBranchFilterMode(node, mode, clearExists, refresh);
         }
 
+        /// <summary>
+        ///     指定ブランチツリーノードの履歴フィルタモードを設定する。
+        ///     ブランチの場合は上流も連動、フォルダの場合は子ブランチのフィルタを削除する。
+        ///     親フォルダのフィルタモードもリセットする。
+        /// </summary>
         public void SetBranchFilterMode(BranchTreeNode node, Models.FilterMode mode, bool clearExists, bool refresh)
         {
             var isLocal = node.Path.StartsWith("refs/heads/", StringComparison.Ordinal);
@@ -964,6 +1073,7 @@ namespace Komorebi.ViewModels
             RefreshHistoryFilters(refresh);
         }
 
+        /// <summary>全変更をスタッシュするダイアログを表示する。autoStartがtrueの場合は即座に実行する。</summary>
         public async Task StashAllAsync(bool autoStart)
         {
             if (!CanCreatePopup())
@@ -976,18 +1086,21 @@ namespace Komorebi.ViewModels
                 ShowPopup(popup);
         }
 
+        /// <summary>マージ/リベース/チェリーピックのスキップを実行する。</summary>
         public async Task SkipMergeAsync()
         {
             if (_workingCopy != null)
                 await _workingCopy.SkipMergeAsync();
         }
 
+        /// <summary>マージ/リベース/チェリーピックの中止を実行する。</summary>
         public async Task AbortMergeAsync()
         {
             if (_workingCopy != null)
                 await _workingCopy.AbortMergeAsync();
         }
 
+        /// <summary>指定スコープのカスタムアクション一覧を取得する。グローバルとリポジトリ固有の両方を含む。</summary>
         public List<(Models.CustomAction, CustomActionContextMenuLabel)> GetCustomActions(Models.CustomActionScope scope)
         {
             var actions = new List<(Models.CustomAction, CustomActionContextMenuLabel)>();

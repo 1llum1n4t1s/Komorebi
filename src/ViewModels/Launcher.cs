@@ -9,26 +9,34 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     アプリケーションのメインランチャーViewModel。
+    ///     タブ管理、ワークスペース切り替え、リポジトリの開閉を担当する。
+    /// </summary>
     public class Launcher : ObservableObject
     {
+        /// <summary>ウィンドウタイトル。アクティブタブとワークスペース名から構築される。</summary>
         public string Title
         {
             get => _title;
             private set => SetProperty(ref _title, value);
         }
 
+        /// <summary>開いているタブページの一覧。</summary>
         public AvaloniaList<LauncherPage> Pages
         {
             get;
             private set;
         }
 
+        /// <summary>現在アクティブなワークスペース。</summary>
         public Workspace ActiveWorkspace
         {
             get => _activeWorkspace;
             private set => SetProperty(ref _activeWorkspace, value);
         }
 
+        /// <summary>現在アクティブな（前面表示中の）タブページ。変更時にタイトルを更新する。</summary>
         public LauncherPage ActivePage
         {
             get => _activePage;
@@ -39,12 +47,17 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>現在表示中のコマンドパレット。nullの場合は非表示。</summary>
         public ICommandPalette CommandPalette
         {
             get => _commandPalette;
             set => SetProperty(ref _commandPalette, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。ワークスペースのリポジトリを復元し、
+        ///     起動引数で指定されたリポジトリがあればそれを開く。
+        /// </summary>
         public Launcher(string startupRepo)
         {
             _ignoreIndexChange = true;
@@ -96,6 +109,7 @@ namespace Komorebi.ViewModels
             PostActivePageChanged();
         }
 
+        /// <summary>アプリケーション終了時に全タブのリポジトリを閉じる。</summary>
         public void Quit()
         {
             _ignoreIndexChange = true;
@@ -106,6 +120,10 @@ namespace Komorebi.ViewModels
             _ignoreIndexChange = false;
         }
 
+        /// <summary>
+        ///     指定されたワークスペースに切り替える。
+        ///     実行中タスクがある場合は中止する。現在のタブを閉じて新ワークスペースのリポジトリを開く。
+        /// </summary>
         public void SwitchWorkspace(Workspace to)
         {
             if (to == null || to.IsActive)
@@ -168,6 +186,7 @@ namespace Komorebi.ViewModels
                 _ = ScanRepositories.ScanDirectoryAsync(cloneDir);
         }
 
+        /// <summary>新しい空タブ（Welcomeページ）を追加し、アクティブにする。</summary>
         public void AddNewTab()
         {
             var page = new LauncherPage();
@@ -175,6 +194,7 @@ namespace Komorebi.ViewModels
             ActivePage = page;
         }
 
+        /// <summary>タブをドラッグ＆ドロップで並び替える。ワークスペースのリポジトリ順序も更新する。</summary>
         public void MoveTab(LauncherPage from, LauncherPage to)
         {
             _ignoreIndexChange = true;
@@ -194,6 +214,7 @@ namespace Komorebi.ViewModels
             ActivePage = from;
         }
 
+        /// <summary>次のタブに切り替える（循環）。</summary>
         public void GotoNextTab()
         {
             if (Pages.Count == 1)
@@ -204,6 +225,7 @@ namespace Komorebi.ViewModels
             ActivePage = Pages[nextIdx];
         }
 
+        /// <summary>前のタブに切り替える（循環）。</summary>
         public void GotoPrevTab()
         {
             if (Pages.Count == 1)
@@ -214,6 +236,10 @@ namespace Komorebi.ViewModels
             ActivePage = Pages[prevIdx];
         }
 
+        /// <summary>
+        ///     タブを閉じる。最後のタブの場合はリポジトリを閉じてWelcomeに戻るか、
+        ///     Welcomeならアプリケーションを終了する。
+        /// </summary>
         public void CloseTab(LauncherPage page)
         {
             if (Pages.Count == 1)
@@ -255,6 +281,7 @@ namespace Komorebi.ViewModels
             GC.Collect();
         }
 
+        /// <summary>アクティブタブ以外の全タブを閉じる。</summary>
         public void CloseOtherTabs()
         {
             if (Pages.Count == 1)
@@ -277,6 +304,7 @@ namespace Komorebi.ViewModels
             GC.Collect();
         }
 
+        /// <summary>アクティブタブより右側の全タブを閉じる。</summary>
         public void CloseRightTabs()
         {
             _ignoreIndexChange = true;
@@ -292,8 +320,13 @@ namespace Komorebi.ViewModels
             GC.Collect();
         }
 
+        /// <summary>
+        ///     リポジトリをタブで開く。既に開いているタブがあればそちらに切り替える。
+        ///     pageがnullの場合は新規タブまたはアクティブタブを再利用する。
+        /// </summary>
         public void OpenRepositoryInTab(RepositoryNode node, LauncherPage page)
         {
+            // 既に開いているタブがあればそちらに切り替え
             foreach (var one in Pages)
             {
                 if (one.Node.Id == node.Id)
@@ -303,12 +336,14 @@ namespace Komorebi.ViewModels
                 }
             }
 
+            // リポジトリパスの存在チェック
             if (!Path.Exists(node.Id))
             {
                 App.RaiseException(node.Id, "Repository does NOT exist any more. Please remove it.");
                 return;
             }
 
+            // ベアリポジトリ判定とgitディレクトリの取得
             var isBare = new Commands.IsBareRepository(node.Id).GetResult();
             var gitDir = isBare ? node.Id : GetRepositoryGitDir(node.Id);
             if (string.IsNullOrEmpty(gitDir))
@@ -322,6 +357,7 @@ namespace Komorebi.ViewModels
 
             if (page == null)
             {
+                // アクティブタブがリポジトリの場合は新規タブを追加、そうでなければ既存タブを再利用
                 if (_activePage == null || _activePage.Node.IsRepository)
                 {
                     page = new LauncherPage(node, repo);
@@ -340,6 +376,7 @@ namespace Komorebi.ViewModels
                 page.Data = repo;
             }
 
+            // ワークスペースのリポジトリ一覧を再構築
             _activeWorkspace.Repositories.Clear();
             foreach (var p in Pages)
             {
@@ -353,8 +390,14 @@ namespace Komorebi.ViewModels
                 ActivePage = page;
         }
 
+        /// <summary>
+        ///     指定されたページIDに対して通知を配信する。
+        ///     UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
+        ///     該当ページが見つからない場合はアクティブページに追加する。
+        /// </summary>
         public void DispatchNotification(string pageId, string message, bool isError)
         {
+            // UIスレッド以外からの呼び出しはUIスレッドにディスパッチ
             if (!Dispatcher.UIThread.CheckAccess())
             {
                 Dispatcher.UIThread.Invoke(() => DispatchNotification(pageId, message, isError));
@@ -367,6 +410,7 @@ namespace Komorebi.ViewModels
                 Message = message,
             };
 
+            // パス区切り文字を統一して該当ページを検索
             foreach (var page in Pages)
             {
                 var id = page.Node.Id.Replace('\\', '/').TrimEnd('/');
@@ -377,12 +421,19 @@ namespace Komorebi.ViewModels
                 }
             }
 
+            // 該当ページが見つからなければアクティブページに通知を追加
             _activePage?.Notifications.Add(notification);
         }
 
+        /// <summary>
+        ///     リポジトリの.gitディレクトリのパスを取得する。
+        ///     .gitがディレクトリなら直接返し、ファイルならリダイレクト先を解決する（worktree対応）。
+        /// </summary>
         private string GetRepositoryGitDir(string repo)
         {
             var fullpath = Path.Combine(repo, ".git");
+
+            // .gitがディレクトリの場合：refs/objects/HEADの存在を確認
             if (Directory.Exists(fullpath))
             {
                 if (Directory.Exists(Path.Combine(fullpath, "refs")) &&
@@ -393,12 +444,14 @@ namespace Komorebi.ViewModels
                 return null;
             }
 
+            // .gitがファイルの場合：worktreeのgitdirリダイレクトを解決
             if (File.Exists(fullpath))
             {
                 var redirect = File.ReadAllText(fullpath).Trim();
                 if (redirect.StartsWith("gitdir: ", StringComparison.Ordinal))
                     redirect = redirect.Substring(8);
 
+                // 相対パスの場合は絶対パスに変換
                 if (!Path.IsPathRooted(redirect))
                     redirect = Path.GetFullPath(Path.Combine(repo, redirect));
 
@@ -408,9 +461,14 @@ namespace Komorebi.ViewModels
                 return null;
             }
 
+            // 上記以外の場合はgitコマンドで問い合わせ
             return new Commands.QueryGitDir(repo).GetResult();
         }
 
+        /// <summary>
+        ///     タブ内のリポジトリを閉じる。ポップアップのクリーンアップも行う。
+        ///     removeFromWorkspaceがtrueの場合はワークスペースからも削除する。
+        /// </summary>
         private void CloseRepositoryInTab(LauncherPage page, bool removeFromWorkspace = true)
         {
             if (page.Data is Repository repo)
@@ -426,14 +484,20 @@ namespace Komorebi.ViewModels
             page.Data = null;
         }
 
+        /// <summary>
+        ///     アクティブページ変更後の処理。ワークスペースのアクティブインデックスを更新し、
+        ///     ウィンドウタイトルを再構築する。
+        /// </summary>
         private void PostActivePageChanged()
         {
             if (_ignoreIndexChange)
                 return;
 
+            // ワークスペースのアクティブインデックスを更新
             if (_activePage is { Data: Repository repo })
                 _activeWorkspace.ActiveIdx = _activeWorkspace.Repositories.IndexOf(repo.FullPath);
 
+            // ウィンドウタイトルを「ページ名 - ワークスペース名」形式で構築
             var builder = new StringBuilder(512);
             builder.Append(string.IsNullOrEmpty(_activePage.Node.Name) ? "Repositories" : _activePage.Node.Name);
 
@@ -445,10 +509,10 @@ namespace Komorebi.ViewModels
             CommandPalette = null;
         }
 
-        private Workspace _activeWorkspace;
-        private LauncherPage _activePage;
-        private bool _ignoreIndexChange;
-        private string _title = string.Empty;
-        private ICommandPalette _commandPalette;
+        private Workspace _activeWorkspace;       // 現在アクティブなワークスペース
+        private LauncherPage _activePage;          // 現在アクティブなタブページ
+        private bool _ignoreIndexChange;           // インデックス変更通知を抑制するフラグ
+        private string _title = string.Empty;      // ウィンドウタイトル
+        private ICommandPalette _commandPalette;   // 現在表示中のコマンドパレット
     }
 }

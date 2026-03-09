@@ -6,72 +6,150 @@ using Avalonia.Media;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     コミットグラフのレイアウト情報を保持するレコード。
+    /// </summary>
+    /// <param name="StartY">描画開始のY座標。</param>
+    /// <param name="ClipWidth">クリッピング幅。</param>
+    /// <param name="RowHeight">1行の高さ。</param>
     public record CommitGraphLayout(double StartY, double ClipWidth, double RowHeight);
 
+    /// <summary>
+    ///     コミット履歴のグラフ構造を解析・保持するクラス。
+    ///     パス、リンク、ドットの描画要素を生成する。
+    /// </summary>
     public class CommitGraph
     {
+        /// <summary>
+        ///     グラフ描画に使用するペンのリスト。
+        /// </summary>
         public static List<Pen> Pens { get; } = [];
 
+        /// <summary>
+        ///     デフォルトの色でペンを初期化する。
+        /// </summary>
+        /// <param name="thickness">線の太さ（デフォルト: 2）。</param>
         public static void SetDefaultPens(double thickness = 2)
         {
             SetPens(s_defaultPenColors, thickness);
         }
 
+        /// <summary>
+        ///     指定した色と太さでペンを設定する。
+        /// </summary>
+        /// <param name="colors">使用する色のリスト。</param>
+        /// <param name="thickness">線の太さ。</param>
         public static void SetPens(List<Color> colors, double thickness)
         {
             Pens.Clear();
 
+            // 各色からペンを作成
             foreach (var c in colors)
                 Pens.Add(new Pen(c.ToUInt32(), thickness));
 
             s_penCount = colors.Count;
         }
 
+        /// <summary>
+        ///     グラフ上のブランチパス（折れ線）を表すクラス。
+        /// </summary>
+        /// <param name="color">パスの色インデックス。</param>
+        /// <param name="isMerged">マージ済みかどうか。</param>
         public class Path(int color, bool isMerged)
         {
+            /// <summary>
+            ///     パスを構成する座標点のリスト。
+            /// </summary>
             public List<Point> Points { get; } = [];
+
+            /// <summary>
+            ///     パスの色インデックス。
+            /// </summary>
             public int Color { get; } = color;
+
+            /// <summary>
+            ///     マージ済みパスかどうか。
+            /// </summary>
             public bool IsMerged { get; } = isMerged;
         }
 
+        /// <summary>
+        ///     グラフ上のベジェ曲線リンク（マージ線）を表すクラス。
+        /// </summary>
         public class Link
         {
+            /// <summary>開始点。</summary>
             public Point Start;
+            /// <summary>制御点。</summary>
             public Point Control;
+            /// <summary>終了点。</summary>
             public Point End;
+            /// <summary>色インデックス。</summary>
             public int Color;
+            /// <summary>マージ済みかどうか。</summary>
             public bool IsMerged;
         }
 
+        /// <summary>
+        ///     コミットドットの種類を表す列挙型。
+        /// </summary>
         public enum DotType
         {
+            /// <summary>通常のコミット。</summary>
             Default,
+            /// <summary>現在のHEADコミット。</summary>
             Head,
+            /// <summary>マージコミット。</summary>
             Merge,
         }
 
+        /// <summary>
+        ///     グラフ上のコミットドット（点）を表すクラス。
+        /// </summary>
         public class Dot
         {
+            /// <summary>ドットの種類。</summary>
             public DotType Type;
+            /// <summary>ドットの中心座標。</summary>
             public Point Center;
+            /// <summary>色インデックス。</summary>
             public int Color;
+            /// <summary>マージ済みかどうか。</summary>
             public bool IsMerged;
         }
 
+        /// <summary>
+        ///     グラフ内の全パス。
+        /// </summary>
         public List<Path> Paths { get; } = [];
+
+        /// <summary>
+        ///     グラフ内の全リンク（マージ線）。
+        /// </summary>
         public List<Link> Links { get; } = [];
+
+        /// <summary>
+        ///     グラフ内の全コミットドット。
+        /// </summary>
         public List<Dot> Dots { get; } = [];
 
+        /// <summary>
+        ///     コミットリストからグラフ構造を解析・生成する。
+        /// </summary>
+        /// <param name="commits">コミットのリスト。</param>
+        /// <param name="firstParentOnlyEnabled">最初の親のみ表示モードかどうか。</param>
+        /// <returns>解析済みのコミットグラフ。</returns>
         public static CommitGraph Parse(List<Commit> commits, bool firstParentOnlyEnabled)
         {
+            // グラフ描画の単位サイズ定数
             const double unitWidth = 12;
             const double halfWidth = 6;
             const double unitHeight = 1;
             const double halfHeight = 0.5;
 
             var temp = new CommitGraph();
-            var unsolved = new List<PathHelper>();
-            var ended = new List<PathHelper>();
+            var unsolved = new List<PathHelper>();  // 未解決（続行中）のパス
+            var ended = new List<PathHelper>();      // 終了したパス
             var offsetY = -halfHeight;
             var colorPicker = new ColorPicker();
 
@@ -219,10 +297,18 @@ namespace Komorebi.Models
             return temp;
         }
 
+        /// <summary>
+        ///     グラフの色をキューで管理し、色の割り当てとリサイクルを行うクラス。
+        /// </summary>
         private class ColorPicker
         {
+            /// <summary>
+            ///     次の色インデックスを取得する。キューが空の場合は全色を補充する。
+            /// </summary>
+            /// <returns>色インデックス。</returns>
             public int Next()
             {
+                // キューが空の場合、全色を再投入
                 if (_colorsQueue.Count == 0)
                 {
                     for (var i = 0; i < s_penCount; i++)
@@ -232,6 +318,10 @@ namespace Komorebi.Models
                 return _colorsQueue.Dequeue();
             }
 
+            /// <summary>
+            ///     使用済みの色インデックスをキューに戻す。
+            /// </summary>
+            /// <param name="idx">リサイクルする色インデックス。</param>
             public void Recycle(int idx)
             {
                 if (!_colorsQueue.Contains(idx))
@@ -241,14 +331,30 @@ namespace Komorebi.Models
             private Queue<int> _colorsQueue = new Queue<int>();
         }
 
+        /// <summary>
+        ///     パスの構築を補助するクラス。コミット間の経路を追跡する。
+        /// </summary>
         private class PathHelper
         {
+            /// <summary>現在構築中のパス。</summary>
             public Path Path { get; private set; }
+
+            /// <summary>次に到達すべきコミットのSHA。</summary>
             public string Next { get; set; }
+
+            /// <summary>最後のX座標。</summary>
             public double LastX { get; private set; }
 
+            /// <summary>パスがマージ済みかどうか。</summary>
             public bool IsMerged => Path.IsMerged;
 
+            /// <summary>
+            ///     開始点を指定してPathHelperを初期化する。
+            /// </summary>
+            /// <param name="next">次のコミットSHA。</param>
+            /// <param name="isMerged">マージ済みかどうか。</param>
+            /// <param name="color">色インデックス。</param>
+            /// <param name="start">開始座標。</param>
             public PathHelper(string next, bool isMerged, int color, Point start)
             {
                 Next = next;
@@ -259,6 +365,14 @@ namespace Komorebi.Models
                 Path.Points.Add(start);
             }
 
+            /// <summary>
+            ///     開始点と到達点を指定してPathHelperを初期化する。
+            /// </summary>
+            /// <param name="next">次のコミットSHA。</param>
+            /// <param name="isMerged">マージ済みかどうか。</param>
+            /// <param name="color">色インデックス。</param>
+            /// <param name="start">開始座標。</param>
+            /// <param name="to">到達座標。</param>
             public PathHelper(string next, bool isMerged, int color, Point start, Point to)
             {
                 Next = next;
@@ -271,11 +385,11 @@ namespace Komorebi.Models
             }
 
             /// <summary>
-            ///     A path that just passed this row.
+            ///     この行を通過するパスを更新する（コミットなし）。
             /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            /// <param name="halfHeight"></param>
+            /// <param name="x">X座標。</param>
+            /// <param name="y">Y座標。</param>
+            /// <param name="halfHeight">行の半分の高さ。</param>
             public void Pass(double x, double y, double halfHeight)
             {
                 if (x > LastX)
@@ -295,11 +409,11 @@ namespace Komorebi.Models
             }
 
             /// <summary>
-            ///     A path that has commit in this row but not ended
+            ///     この行にコミットがあるが終了しないパスを更新する。
             /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            /// <param name="halfHeight"></param>
+            /// <param name="x">X座標。</param>
+            /// <param name="y">Y座標。</param>
+            /// <param name="halfHeight">行の半分の高さ。</param>
             public void Goto(double x, double y, double halfHeight)
             {
                 if (x > LastX)
@@ -322,11 +436,11 @@ namespace Komorebi.Models
             }
 
             /// <summary>
-            ///     A path that has commit in this row and end.
+            ///     この行にコミットがあり終了するパスを更新する。
             /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            /// <param name="halfHeight"></param>
+            /// <param name="x">X座標。</param>
+            /// <param name="y">Y座標。</param>
+            /// <param name="halfHeight">行の半分の高さ。</param>
             public void End(double x, double y, double halfHeight)
             {
                 if (x > LastX)
@@ -346,7 +460,7 @@ namespace Komorebi.Models
             }
 
             /// <summary>
-            ///     End the current path and create a new from the end.
+            ///     現在のパスを終了し、終端から新しいマージ済みパスを開始する。
             /// </summary>
             public void ReplaceMerged()
             {

@@ -9,6 +9,9 @@ using Avalonia.Styling;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     LauncherTabSizeBoxクラス。
+    /// </summary>
     public class LauncherTabSizeBox : Border
     {
         public static readonly StyledProperty<bool> UseFixedWidthProperty =
@@ -20,6 +23,9 @@ namespace Komorebi.Views
             set => SetValue(UseFixedWidthProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public LauncherTabSizeBox()
         {
             Width = 200;
@@ -27,6 +33,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(Border);
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -41,6 +50,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     ランチャーのタブバーコントロールのコードビハインド。
+    /// </summary>
     public partial class LauncherTabBar : UserControl
     {
         public static readonly StyledProperty<bool> IsScrollerVisibleProperty =
@@ -52,11 +64,17 @@ namespace Komorebi.Views
             set => SetValue(IsScrollerVisibleProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public LauncherTabBar()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -153,6 +171,9 @@ namespace Komorebi.Views
             context.DrawGeometry(fill, stroke, geo);
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -161,6 +182,9 @@ namespace Komorebi.Views
                 InvalidateVisual();
         }
 
+        /// <summary>
+        ///     ScrollTabsの処理を行う。
+        /// </summary>
         private void ScrollTabs(object _, PointerWheelEventArgs e)
         {
             if (!e.KeyModifiers.HasFlag(KeyModifiers.Shift))
@@ -173,29 +197,44 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ScrollTabsLeftの処理を行う。
+        /// </summary>
         private void ScrollTabsLeft(object _, RoutedEventArgs e)
         {
             LauncherTabsScroller.LineLeft();
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ScrollTabsRightの処理を行う。
+        /// </summary>
         private void ScrollTabsRight(object _, RoutedEventArgs e)
         {
             LauncherTabsScroller.LineRight();
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     TabsLayoutUpdatedイベントのハンドラ。
+        /// </summary>
         private void OnTabsLayoutUpdated(object _1, EventArgs _2)
         {
             SetCurrentValue(IsScrollerVisibleProperty, LauncherTabsScroller.Extent.Width > LauncherTabsScroller.Viewport.Width);
             InvalidateVisual();
         }
 
+        /// <summary>
+        ///     TabsSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnTabsSelectionChanged(object _1, SelectionChangedEventArgs _2)
         {
             InvalidateVisual();
         }
 
+        /// <summary>
+        ///     PointerPressedTabイベントのハンドラ。
+        /// </summary>
         private void OnPointerPressedTab(object sender, PointerPressedEventArgs e)
         {
             if (sender is Border border)
@@ -215,12 +254,18 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     PointerReleasedTabイベントのハンドラ。
+        /// </summary>
         private void OnPointerReleasedTab(object _1, PointerReleasedEventArgs _2)
         {
             _pressedTab = false;
             _startDragTab = false;
         }
 
+        /// <summary>
+        ///     PointerMovedOverTabイベントのハンドラ。
+        /// </summary>
         private async void OnPointerMovedOverTab(object sender, PointerEventArgs e)
         {
             if (_pressedTab && !_startDragTab && sender is Border { DataContext: ViewModels.LauncherPage page } border)
@@ -239,6 +284,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     DropTabの処理を行う。
+        /// </summary>
         private void DropTab(object sender, DragEventArgs e)
         {
             if (e.DataTransfer.TryGetValue(_dndMainTabFormat) is not { Length: > 0 } id)
@@ -273,6 +321,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     TabContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTabContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is Border { DataContext: ViewModels.LauncherPage page } border &&
@@ -399,6 +450,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CloseTabイベントのハンドラ。
+        /// </summary>
         private void OnCloseTab(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && DataContext is ViewModels.Launcher vm)
@@ -410,6 +464,9 @@ namespace Komorebi.Views
         private bool _pressedTab = false;
         private Point _pressedTabPosition = new();
         private bool _startDragTab = false;
+        /// <summary>
+        ///     DataFormatの処理を行う。
+        /// </summary>
         private readonly DataFormat<string> _dndMainTabFormat = DataFormat.CreateStringApplicationFormat("komorebi-dnd-main-tab");
     }
 }

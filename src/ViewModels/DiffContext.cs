@@ -6,13 +6,23 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     差分表示のコンテキストを管理するViewModel。
+    ///     テキスト差分、バイナリ差分、画像差分、LFS差分、サブモジュール差分など複数の形式に対応する。
+    /// </summary>
     public class DiffContext : ObservableObject
     {
+        /// <summary>
+        ///     差分のタイトル（ファイルパスまたはリネーム情報）。
+        /// </summary>
         public string Title
         {
             get;
         }
 
+        /// <summary>
+        ///     空白文字の変更を無視するかどうか。変更時に差分を再読み込みする。
+        /// </summary>
         public bool IgnoreWhitespace
         {
             get => Preferences.Instance.IgnoreWhitespaceChangesInDiff;
@@ -27,6 +37,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     ファイル全体を表示するかどうか。
+        /// </summary>
         public bool ShowEntireFile
         {
             get => Preferences.Instance.UseFullTextDiff;
@@ -43,6 +56,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     サイドバイサイド（左右分割）表示を使用するかどうか。
+        /// </summary>
         public bool UseSideBySide
         {
             get => Preferences.Instance.UseSideBySideDiff;
@@ -59,30 +75,45 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     ファイルモード（パーミッション）の変更情報。
+        /// </summary>
         public string FileModeChange
         {
             get => _fileModeChange;
             private set => SetProperty(ref _fileModeChange, value);
         }
 
+        /// <summary>
+        ///     テキスト差分かどうか（テキストツールバーの表示制御に使用）。
+        /// </summary>
         public bool IsTextDiff
         {
             get => _isTextDiff;
             private set => SetProperty(ref _isTextDiff, value);
         }
 
+        /// <summary>
+        ///     差分の表示コンテンツ（TextDiffContext、ImageDiff、BinaryDiff等）。
+        /// </summary>
         public object Content
         {
             get => _content;
             private set => SetProperty(ref _content, value);
         }
 
+        /// <summary>
+        ///     統合差分のコンテキスト行数。
+        /// </summary>
         public int UnifiedLines
         {
             get => _unifiedLines;
             private set => SetProperty(ref _unifiedLines, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリパス、差分オプション、前回のコンテキスト（キャッシュ）を指定する。
+        /// </summary>
         public DiffContext(string repo, Models.DiffOption option, DiffContext previous = null)
         {
             _repo = repo;
@@ -105,23 +136,35 @@ namespace Komorebi.ViewModels
             LoadContent();
         }
 
+        /// <summary>
+        ///     コンテキスト行数を1増やして差分を再読み込みする。
+        /// </summary>
         public void IncrUnified()
         {
             UnifiedLines = _unifiedLines + 1;
             LoadContent();
         }
 
+        /// <summary>
+        ///     コンテキスト行数を1減らして差分を再読み込みする（最小4行）。
+        /// </summary>
         public void DecrUnified()
         {
             UnifiedLines = Math.Max(4, _unifiedLines - 1);
             LoadContent();
         }
 
+        /// <summary>
+        ///     外部マージツールで差分を開く。
+        /// </summary>
         public void OpenExternalMergeTool()
         {
             new Commands.DiffTool(_repo, _option).Open();
         }
 
+        /// <summary>
+        ///     設定変更を検出し、必要に応じて差分コンテンツを再読み込みまたはモード切替する。
+        /// </summary>
         public void CheckSettings()
         {
             if (Content is TextDiffContext ctx)
@@ -139,8 +182,13 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     差分コンテンツを非同期で読み込む。
+        ///     テキスト差分、バイナリ差分、画像差分、LFS差分、サブモジュール差分を判別して適切な表示オブジェクトを生成する。
+        /// </summary>
         private void LoadContent()
         {
+            // ディレクトリパスの場合は差分なし
             if (_option.Path.EndsWith('/'))
             {
                 Content = null;
@@ -286,6 +334,9 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     サブモジュールのリビジョン情報を非同期で取得する。
+        /// </summary>
         private async Task<Models.RevisionSubmodule> QuerySubmoduleRevisionAsync(string repo, string sha)
         {
             var commit = await new Commands.QuerySingleCommit(repo, sha).GetResultAsync().ConfigureAwait(false);
@@ -300,6 +351,9 @@ namespace Komorebi.ViewModels
             };
         }
 
+        /// <summary>
+        ///     差分読み込みの状態情報。同一内容の再読み込みを防ぐキャッシュキーとして使用する。
+        /// </summary>
         private class Info
         {
             public string Argument { get; }

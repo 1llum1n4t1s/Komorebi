@@ -4,14 +4,24 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     リポジトリノード（リポジトリまたはグループ）の編集ダイアログViewModel。
+    ///     名前とブックマーク色を変更できる。
+    /// </summary>
     public class EditRepositoryNode : Popup
     {
+        /// <summary>
+        ///     ノードのID。
+        /// </summary>
         public string Id
         {
             get => _id;
             set => SetProperty(ref _id, value);
         }
 
+        /// <summary>
+        ///     ノードの表示名。必須バリデーション付き。
+        /// </summary>
         [Required(ErrorMessage = "Name is required!")]
         public string Name
         {
@@ -19,23 +29,35 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _name, value, true);
         }
 
+        /// <summary>
+        ///     選択可能なブックマーク色のインデックスリスト。
+        /// </summary>
         public List<int> Bookmarks
         {
             get;
         }
 
+        /// <summary>
+        ///     現在選択されているブックマーク色のインデックス。
+        /// </summary>
         public int Bookmark
         {
             get => _bookmark;
             set => SetProperty(ref _bookmark, value);
         }
 
+        /// <summary>
+        ///     リポジトリかグループかの区別（表示制御用）。
+        /// </summary>
         public bool IsRepository
         {
             get => _isRepository;
             set => SetProperty(ref _isRepository, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。編集対象のノードから初期値を設定し、ブックマーク色リストを初期化する。
+        /// </summary>
         public EditRepositoryNode(RepositoryNode node)
         {
             _node = node;
@@ -49,8 +71,13 @@ namespace Komorebi.ViewModels
                 Bookmarks.Add(i);
         }
 
+        /// <summary>
+        ///     ノード編集を実行する確認アクション。
+        ///     名前変更時はソート順を再計算する。
+        /// </summary>
         public override Task<bool> Sure()
         {
+            // 名前が変更された場合はソートが必要
             bool needSort = _node.Name != _name;
             _node.Name = _name;
             _node.Bookmark = _bookmark;

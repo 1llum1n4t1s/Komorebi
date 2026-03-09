@@ -7,13 +7,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ウェルカム画面ツールバーのコードビハインド。
+    /// </summary>
     public partial class WelcomeToolbar : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public WelcomeToolbar()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     OpenLocalRepositoryの処理を行う。
+        /// </summary>
         private async void OpenLocalRepository(object _1, RoutedEventArgs e)
         {
             var activePage = App.GetLauncher().ActivePage;

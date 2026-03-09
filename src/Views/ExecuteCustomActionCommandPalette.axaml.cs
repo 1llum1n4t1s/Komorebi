@@ -1,15 +1,24 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.Input;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     カスタムアクション実行コマンドパレットのコードビハインド。
+    /// </summary>
     public partial class ExecuteCustomActionCommandPalette : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public ExecuteCustomActionCommandPalette()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override async void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -51,6 +60,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ItemTappedイベントのハンドラ。
+        /// </summary>
         private async void OnItemTapped(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.ExecuteCustomActionCommandPalette vm)

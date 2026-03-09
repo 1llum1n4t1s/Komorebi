@@ -8,10 +8,16 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     RepositoryTreeNodeToggleButtonクラス。
+    /// </summary>
     public class RepositoryTreeNodeToggleButton : ToggleButton
     {
         protected override Type StyleKeyOverride => typeof(ToggleButton);
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
@@ -22,10 +28,16 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     RepositoryListBoxクラス。
+    /// </summary>
     public class RepositoryListBox : ListBox
     {
         protected override Type StyleKeyOverride => typeof(ListBox);
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (SelectedItem is ViewModels.RepositoryNode node && e.KeyModifiers == KeyModifiers.None)
@@ -55,25 +67,40 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     ウェルカム画面（リポジトリ一覧・クローン）のコードビハインド。
+    /// </summary>
     public partial class Welcome : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Welcome()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override async void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
             await ViewModels.Welcome.Instance.UpdateStatusAsync(false, _cancellation.Token);
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             _cancellation.Cancel();
             base.OnUnloaded(e);
         }
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -94,6 +121,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     TreeNodeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs ev)
         {
             if (sender is Grid { DataContext: ViewModels.RepositoryNode node } grid)
@@ -200,6 +230,9 @@ namespace Komorebi.Views
             ev.Handled = true;
         }
 
+        /// <summary>
+        ///     PointerPressedTreeNodeイベントのハンドラ。
+        /// </summary>
         private void OnPointerPressedTreeNode(object sender, PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(sender as Visual).Properties.IsLeftButtonPressed)
@@ -215,12 +248,18 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     PointerReleasedOnTreeNodeイベントのハンドラ。
+        /// </summary>
         private void OnPointerReleasedOnTreeNode(object _1, PointerReleasedEventArgs _2)
         {
             _pressedTreeNode = false;
             _startDragTreeNode = false;
         }
 
+        /// <summary>
+        ///     PointerMovedOverTreeNodeイベントのハンドラ。
+        /// </summary>
         private async void OnPointerMovedOverTreeNode(object sender, PointerEventArgs e)
         {
             if (_pressedTreeNode && !_startDragTreeNode &&
@@ -239,12 +278,18 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     TreeViewLostFocusイベントのハンドラ。
+        /// </summary>
         private void OnTreeViewLostFocus(object _1, RoutedEventArgs _2)
         {
             _pressedTreeNode = false;
             _startDragTreeNode = false;
         }
 
+        /// <summary>
+        ///     DragOverTreeViewの処理を行う。
+        /// </summary>
         private void DragOverTreeView(object sender, DragEventArgs e)
         {
             if (e.DataTransfer.Contains(DataFormat.File) || e.DataTransfer.Contains(_dndRepoNode))
@@ -259,6 +304,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     DropOnTreeViewの処理を行う。
+        /// </summary>
         private async void DropOnTreeView(object sender, DragEventArgs e)
         {
             if (e.DataTransfer.TryGetValue(_dndRepoNode) is { Length: > 1 } nodeId)
@@ -292,6 +340,9 @@ namespace Komorebi.Views
             _startDragTreeNode = false;
         }
 
+        /// <summary>
+        ///     DragOverTreeNodeの処理を行う。
+        /// </summary>
         private void DragOverTreeNode(object sender, DragEventArgs e)
         {
             if (e.DataTransfer.Contains(DataFormat.File) || e.DataTransfer.Contains(_dndRepoNode))
@@ -304,6 +355,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     DropOnTreeNodeの処理を行う。
+        /// </summary>
         private async void DropOnTreeNode(object sender, DragEventArgs e)
         {
             if (sender is not Grid grid)
@@ -351,6 +405,9 @@ namespace Komorebi.Views
             _startDragTreeNode = false;
         }
 
+        /// <summary>
+        ///     DoubleTappedTreeNodeイベントのハンドラ。
+        /// </summary>
         private void OnDoubleTappedTreeNode(object sender, TappedEventArgs e)
         {
             if (sender is Grid { DataContext: ViewModels.RepositoryNode node })
@@ -365,9 +422,18 @@ namespace Komorebi.Views
         }
 
         private bool _pressedTreeNode = false;
+        /// <summary>
+        ///     Pointの処理を行う。
+        /// </summary>
         private Point _pressedTreeNodePosition = new Point();
         private bool _startDragTreeNode = false;
+        /// <summary>
+        ///     DataFormatの処理を行う。
+        /// </summary>
         private readonly DataFormat<string> _dndRepoNode = DataFormat.CreateStringApplicationFormat("komorebi-dnd-repo-node");
+        /// <summary>
+        ///     CancellationTokenSourceの処理を行う。
+        /// </summary>
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
     }
 }

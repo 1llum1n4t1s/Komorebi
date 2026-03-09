@@ -3,13 +3,21 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     初回起動時のセットアップダイアログのViewModel。
+    ///     表示言語とデフォルトクローンディレクトリを設定する。
+    /// </summary>
     public class InitSetup : Popup
     {
+        /// <summary>
+        ///     コンストラクタ。OS設定から検出されたロケールを初期値に設定する。
+        /// </summary>
         public InitSetup()
         {
             _selectedLocale = Preferences.DetectedLocale;
         }
 
+        /// <summary>選択された表示言語（ロケールコード）。変更時にアプリのロケールを即座に反映する。</summary>
         public string SelectedLocale
         {
             get => _selectedLocale;
@@ -20,6 +28,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>デフォルトのクローン先ディレクトリ。必須入力。</summary>
         [Required]
         public string DefaultCloneDir
         {
@@ -27,6 +36,10 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _defaultCloneDir, value, true);
         }
 
+        /// <summary>
+        ///     確認ボタン押下時の処理。ロケールとクローンディレクトリをPreferencesに保存し、
+        ///     指定ディレクトリ内のリポジトリを自動スキャンする。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             Preferences.Instance.Locale = _selectedLocale;

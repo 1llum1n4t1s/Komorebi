@@ -19,6 +19,9 @@ using AvaloniaEdit.Utils;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     CommitMessageCodeCompletionDataクラス。
+    /// </summary>
     public class CommitMessageCodeCompletionData : ICompletionData
     {
         public IImage Image
@@ -46,17 +49,26 @@ namespace Komorebi.Views
             get => 0;
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CommitMessageCodeCompletionData(string text)
         {
             Text = text;
         }
 
+        /// <summary>
+        ///     Completeの処理を行う。
+        /// </summary>
         public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
         {
             textArea.Document.Replace(completionSegment, Text);
         }
     }
 
+    /// <summary>
+    ///     CommitMessageTextEditorクラス。
+    /// </summary>
     public class CommitMessageTextEditor : TextEditor
     {
         public static readonly StyledProperty<string> CommitMessageProperty =
@@ -124,6 +136,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CommitMessageTextEditor() : base(new TextArea(), new TextDocument())
         {
             IsReadOnly = false;
@@ -139,6 +154,9 @@ namespace Komorebi.Views
             TextArea.TextView.Options.EnableEmailHyperlinks = false;
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -156,6 +174,9 @@ namespace Komorebi.Views
                         Placeholder,
                         CultureInfo.CurrentCulture,
                         FlowDirection.LeftToRight,
+                        /// <summary>
+                        ///     Typefaceの処理を行う。
+                        /// </summary>
                         new Typeface(FontFamily),
                         FontSize,
                         Brushes.Gray);
@@ -199,6 +220,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -208,6 +232,9 @@ namespace Komorebi.Views
             TextArea.Caret.PositionChanged += OnCaretPositionChanged;
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             TextArea.TextView.ContextRequested -= OnTextViewContextRequested;
@@ -217,6 +244,9 @@ namespace Komorebi.Views
             base.OnUnloaded(e);
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -267,6 +297,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     テキストが変更された際の処理。
+        /// </summary>
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
@@ -324,6 +357,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     TextViewContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
         {
             var selection = TextArea.Selection;
@@ -366,11 +402,17 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     TextViewVisualLinesChangedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
         {
             InvalidateVisual();
         }
 
+        /// <summary>
+        ///     CaretPositionChangedイベントのハンドラ。
+        /// </summary>
         private void OnCaretPositionChanged(object sender, EventArgs e)
         {
             var col = TextArea.Caret.Column;
@@ -399,6 +441,9 @@ namespace Komorebi.Views
         private CompletionWindow _completionWnd = null;
     }
 
+    /// <summary>
+    ///     コミットメッセージツールボックス（テンプレート等）のコードビハインド。
+    /// </summary>
     public partial class CommitMessageToolBox : UserControl
     {
         public static readonly StyledProperty<bool> ShowAdvancedOptionsProperty =
@@ -419,11 +464,17 @@ namespace Komorebi.Views
             set => SetValue(CommitMessageProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CommitMessageToolBox()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     OpenCommitMessagePickerイベントのハンドラ。
+        /// </summary>
         private async void OnOpenCommitMessagePicker(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && DataContext is ViewModels.WorkingCopy vm && ShowAdvancedOptions)
@@ -559,6 +610,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenOpenAIHelperイベントのハンドラ。
+        /// </summary>
         private async void OnOpenOpenAIHelper(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.WorkingCopy vm && sender is Button button && ShowAdvancedOptions)
@@ -608,6 +662,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenConventionalCommitHelperイベントのハンドラ。
+        /// </summary>
         private void OnOpenConventionalCommitHelper(object _, RoutedEventArgs e)
         {
             var owner = TopLevel.GetTopLevel(this) as Window;

@@ -11,10 +11,16 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     SubmoduleTreeNodeToggleButtonクラス。
+    /// </summary>
     public class SubmoduleTreeNodeToggleButton : ToggleButton
     {
         protected override Type StyleKeyOverride => typeof(ToggleButton);
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
@@ -28,6 +34,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     SubmoduleTreeNodeIconクラス。
+    /// </summary>
     public class SubmoduleTreeNodeIcon : UserControl
     {
         public static readonly StyledProperty<bool> IsExpandedProperty =
@@ -39,6 +48,9 @@ namespace Komorebi.Views
             set => SetValue(IsExpandedProperty, value);
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -47,12 +59,18 @@ namespace Komorebi.Views
                 UpdateContent();
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             UpdateContent();
         }
 
+        /// <summary>
+        ///     UpdateContentの処理を行う。
+        /// </summary>
         private void UpdateContent()
         {
             if (DataContext is not ViewModels.SubmoduleTreeNode node)
@@ -69,6 +87,9 @@ namespace Komorebi.Views
                 CreateContent(new Thickness(0, 2, 0, 0), "Icons.Folder");
         }
 
+        /// <summary>
+        ///     CreateContentの処理を行う。
+        /// </summary>
         private void CreateContent(Thickness margin, string iconKey)
         {
             if (this.FindResource(iconKey) is not StreamGeometry geo)
@@ -86,6 +107,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     サブモジュール一覧ビューのコードビハインド。
+    /// </summary>
     public partial class SubmodulesView : UserControl
     {
         public static readonly RoutedEvent<RoutedEventArgs> RowsChangedEvent =
@@ -112,11 +136,17 @@ namespace Komorebi.Views
             private set;
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public SubmodulesView()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ToggleNodeIsExpandedの処理を行う。
+        /// </summary>
         public void ToggleNodeIsExpanded(ViewModels.SubmoduleTreeNode node)
         {
             if (Content is ViewModels.SubmoduleCollectionAsTree tree)
@@ -127,6 +157,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -148,6 +181,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ItemDoubleTappedイベントのハンドラ。
+        /// </summary>
         private void OnItemDoubleTapped(object sender, TappedEventArgs e)
         {
             if (sender is Control control && DataContext is ViewModels.Repository repo)
@@ -168,6 +204,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ItemContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnItemContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is Control control && DataContext is ViewModels.Repository repo)
@@ -325,6 +364,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F && e.KeyModifiers == (OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))

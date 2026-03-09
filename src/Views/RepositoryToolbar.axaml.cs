@@ -9,13 +9,22 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     リポジトリ操作ツールバーのコードビハインド。
+    /// </summary>
     public partial class RepositoryToolbar : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public RepositoryToolbar()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     OpenWithExternalToolsの処理を行う。
+        /// </summary>
         private void OpenWithExternalTools(object sender, RoutedEventArgs ev)
         {
             if (sender is Button button && DataContext is ViewModels.Repository repo)
@@ -134,6 +143,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     OpenStatisticsの処理を行う。
+        /// </summary>
         private async void OpenStatistics(object _, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -143,6 +155,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     OpenConfigureの処理を行う。
+        /// </summary>
         private async void OpenConfigure(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -152,6 +167,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     Fetchの処理を行う。
+        /// </summary>
         private async void Fetch(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -161,6 +179,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     FetchDirectlyByHotKeyの処理を行う。
+        /// </summary>
         private async void FetchDirectlyByHotKey(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -170,6 +191,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     Pullの処理を行う。
+        /// </summary>
         private async void Pull(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -179,6 +203,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     PullDirectlyByHotKeyの処理を行う。
+        /// </summary>
         private async void PullDirectlyByHotKey(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -188,6 +215,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     Pushの処理を行う。
+        /// </summary>
         private async void Push(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -197,6 +227,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     PushDirectlyByHotKeyの処理を行う。
+        /// </summary>
         private async void PushDirectlyByHotKey(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -206,6 +239,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     StashAllの処理を行う。
+        /// </summary>
         private async void StashAll(object _, TappedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -215,6 +251,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     OpenGitFlowMenuの処理を行う。
+        /// </summary>
         private void OpenGitFlowMenu(object sender, RoutedEventArgs ev)
         {
             if (DataContext is ViewModels.Repository repo && sender is Control control)
@@ -281,6 +320,9 @@ namespace Komorebi.Views
             ev.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenGitLFSMenuの処理を行う。
+        /// </summary>
         private void OpenGitLFSMenu(object sender, RoutedEventArgs ev)
         {
             if (DataContext is ViewModels.Repository repo && sender is Control control)
@@ -420,6 +462,9 @@ namespace Komorebi.Views
             ev.Handled = true;
         }
 
+        /// <summary>
+        ///     StartBisectの処理を行う。
+        /// </summary>
         private async void StartBisect(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository { IsBisectCommandRunning: false, InProgressContext: null } repo &&
@@ -436,6 +481,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     Cleanupの処理を行う。
+        /// </summary>
         private async void Cleanup(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -445,6 +493,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ClearIndexCacheの処理を行う。
+        /// </summary>
         private async void ClearIndexCache(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -454,6 +505,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     OpenCustomActionMenuの処理を行う。
+        /// </summary>
         private void OpenCustomActionMenu(object sender, RoutedEventArgs ev)
         {
             if (DataContext is ViewModels.Repository repo && sender is Control control)
@@ -490,6 +544,9 @@ namespace Komorebi.Views
             ev.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenGitLogsの処理を行う。
+        /// </summary>
         private async void OpenGitLogs(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
@@ -499,6 +556,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ナビゲーション処理を行う。
+        /// </summary>
         private void NavigateToHead(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository { CurrentBranch: not null } repo)

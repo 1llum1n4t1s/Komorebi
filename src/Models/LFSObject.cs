@@ -2,6 +2,9 @@
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     Git LFSオブジェクトの情報（OIDとサイズ）を保持するクラス
+    /// </summary>
     public partial class LFSObject
     {
         [GeneratedRegex(@"^version https://git-lfs.github.com/spec/v\d+\r?\noid sha256:([0-9a-f]+)\r?\nsize (\d+)[\r\n]*$")]

@@ -7,8 +7,17 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     ホストがHTTPSをサポートしているかを非同期で検証・キャッシュする静的クラス。
+    ///     git URLのプロトコル自動判定に使用される。
+    /// </summary>
     public static class HTTPSValidator
     {
+        /// <summary>
+        ///     指定ホストのHTTPSサポート状況を非同期で検証し、結果をキャッシュする。
+        ///     既知のホスト（GitHub、GitLab等）は即座にサポートありと判定する。
+        /// </summary>
+        /// <param name="host">検証対象のホスト名</param>
         public static void Add(string host)
         {
             lock (_syncLock)
@@ -67,6 +76,11 @@ namespace Komorebi.Models
             });
         }
 
+        /// <summary>
+        ///     指定ホストがHTTPSをサポートしているかどうかを取得する
+        /// </summary>
+        /// <param name="host">対象のホスト名</param>
+        /// <returns>HTTPSサポートしている場合はtrue</returns>
         public static bool IsSupported(string host)
         {
             lock (_syncLock)

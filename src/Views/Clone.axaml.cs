@@ -5,13 +5,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     リポジトリクローンダイアログのコードビハインド。
+    /// </summary>
     public partial class Clone : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Clone()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ParentFolderの選択処理を行う。
+        /// </summary>
         private async void SelectParentFolder(object _, RoutedEventArgs e)
         {
             var options = new FolderPickerOpenOptions() { AllowMultiple = false };
@@ -37,6 +46,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SSHKeyの選択処理を行う。
+        /// </summary>
         private async void SelectSSHKey(object _, RoutedEventArgs e)
         {
             var toplevel = TopLevel.GetTopLevel(this);

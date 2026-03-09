@@ -12,10 +12,16 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     InteractiveRebaseListBoxクラス。
+    /// </summary>
     public class InteractiveRebaseListBox : ListBox
     {
         protected override Type StyleKeyOverride => typeof(ListBox);
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm || SelectedItems == null)
@@ -85,6 +91,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     InteractiveRebaseIndicatorクラス。
+    /// </summary>
     public class InteractiveRebaseIndicator : Control
     {
         public static readonly StyledProperty<IBrush> FillProperty =
@@ -105,6 +114,9 @@ namespace Komorebi.Views
             set => SetValue(PendingTypeProperty, value);
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -156,6 +168,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -166,8 +181,14 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     インタラクティブリベースダイアログのコードビハインド。
+    /// </summary>
     public partial class InteractiveRebase : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public InteractiveRebase()
         {
             CloseOnESC = true;
@@ -175,6 +196,9 @@ namespace Komorebi.Views
             ItemListBox?.Focus();
         }
 
+        /// <summary>
+        ///     OpenCommitMessageEditorの処理を行う。
+        /// </summary>
         public void OpenCommitMessageEditor(ViewModels.InteractiveRebaseItem item)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm)
@@ -192,11 +216,17 @@ namespace Komorebi.Views
             dialog.ShowDialog(this);
         }
 
+        /// <summary>
+        ///     CloseWindowの処理を行う。
+        /// </summary>
         private void CloseWindow(object _1, RoutedEventArgs _2)
         {
             Close();
         }
 
+        /// <summary>
+        ///     RowsSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnRowsSelectionChanged(object _, SelectionChangedEventArgs e)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm)
@@ -220,6 +250,9 @@ namespace Komorebi.Views
                 OpenCommitMessageEditor(items[0]);
         }
 
+        /// <summary>
+        ///     RowPointerPressedイベントのハンドラ。
+        /// </summary>
         private async void OnRowPointerPressed(object sender, PointerPressedEventArgs e)
         {
             if (sender is not Control { DataContext: ViewModels.InteractiveRebaseItem item })
@@ -250,6 +283,9 @@ namespace Komorebi.Views
             await DragDrop.DoDragDropAsync(e, data, DragDropEffects.Move);
         }
 
+        /// <summary>
+        ///     RowDragOverイベントのハンドラ。
+        /// </summary>
         private void OnRowDragOver(object sender, DragEventArgs e)
         {
             if (DataContext is not ViewModels.InteractiveRebase)
@@ -271,6 +307,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     RowDragLeaveイベントのハンドラ。
+        /// </summary>
         private void OnRowDragLeave(object sender, DragEventArgs e)
         {
             if (sender is not Control { DataContext: ViewModels.InteractiveRebaseItem dst })
@@ -280,6 +319,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     RowDropイベントのハンドラ。
+        /// </summary>
         private void OnRowDrop(object sender, DragEventArgs e)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm)
@@ -317,6 +359,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     MoveSelectedUpイベントのハンドラ。
+        /// </summary>
         private void OnMoveSelectedUp(object sender, RoutedEventArgs e)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm)
@@ -351,6 +396,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     MoveSelectedDownイベントのハンドラ。
+        /// </summary>
         private void OnMoveSelectedDown(object sender, RoutedEventArgs e)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm)
@@ -385,6 +433,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     ShowActionsDropdownMenuイベントのハンドラ。
+        /// </summary>
         private void OnShowActionsDropdownMenu(object sender, RoutedEventArgs e)
         {
             if (sender is not Button { DataContext: ViewModels.InteractiveRebaseItem item } button)
@@ -410,6 +461,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenCommitMessageEditorイベントのハンドラ。
+        /// </summary>
         private void OnOpenCommitMessageEditor(object sender, RoutedEventArgs e)
         {
             if (sender is Button { DataContext: ViewModels.InteractiveRebaseItem item })
@@ -418,6 +472,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     StartJobsイベントのハンドラ。
+        /// </summary>
         private async void OnStartJobs(object _1, RoutedEventArgs _2)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm)
@@ -431,23 +488,38 @@ namespace Komorebi.Views
             Close();
         }
 
+        /// <summary>
+        ///     CreateActionMenuItemの処理を行う。
+        /// </summary>
         private void CreateActionMenuItem(MenuFlyout flyout, ViewModels.InteractiveRebaseItem item, Models.InteractiveRebaseAction action, IBrush iconBrush, string desc, string hotkey)
         {
             var header = new Grid()
             {
                 ColumnDefinitions =
                 [
+                    /// <summary>
+                    ///     ColumnDefinitionの処理を行う。
+                    /// </summary>
                     new ColumnDefinition(64, GridUnitType.Pixel),
+                    /// <summary>
+                    ///     ColumnDefinitionの処理を行う。
+                    /// </summary>
                     new ColumnDefinition(240, GridUnitType.Pixel),
                 ],
                 Children =
                 {
+                    /// <summary>
+                    ///     TextBlockの処理を行う。
+                    /// </summary>
                     new TextBlock()
                     {
                         [Grid.ColumnProperty] = 0,
                         Margin = new Thickness(4, 0),
                         Text = action.ToString()
                     },
+                    /// <summary>
+                    ///     TextBlockの処理を行う。
+                    /// </summary>
                     new TextBlock()
                     {
                         [Grid.ColumnProperty] = 1,
@@ -466,6 +538,9 @@ namespace Komorebi.Views
             flyout.Items.Add(menuItem);
         }
 
+        /// <summary>
+        ///     ChangeItemsActionの処理を行う。
+        /// </summary>
         private void ChangeItemsAction(ViewModels.InteractiveRebaseItem target, Models.InteractiveRebaseAction action)
         {
             if (DataContext is not ViewModels.InteractiveRebase vm)
@@ -492,6 +567,9 @@ namespace Komorebi.Views
         }
 
         private bool _firstSelectionChangedHandled;
+        /// <summary>
+        ///     DataFormatの処理を行う。
+        /// </summary>
         private readonly DataFormat<string> _dndItemFormat = DataFormat.CreateStringApplicationFormat("komorebi-dnd-ir-item");
     }
 }

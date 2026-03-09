@@ -4,17 +4,32 @@ using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
+    /// <summary>
+    ///     インタラクティブリベース用のコミット一覧を取得するクラス。
+    ///     各コミットのフルメッセージ（本文含む）も取得する。
+    /// </summary>
     public class QueryCommitsForInteractiveRebase : Command
     {
+        /// <summary>
+        ///     コンストラクタ。インタラクティブリベース対象のコミット範囲を設定する。
+        /// </summary>
+        /// <param name="repo">リポジトリのパス</param>
+        /// <param name="on">リベースの基点となるコミット/ブランチ</param>
         public QueryCommitsForInteractiveRebase(string repo, string on)
         {
+            // コミットメッセージ本文の区切りとしてユニークな境界文字列を生成
             _boundary = $"----- BOUNDARY OF COMMIT {Guid.NewGuid()} -----";
 
             WorkingDirectory = repo;
             Context = repo;
+            // --topo-order: トポロジカル順、--cherry-pick --right-only: チェリーピック済みを除外、--no-merges: マージコミットを除外
             Args = $"log --topo-order --cherry-pick --right-only --no-merges --no-show-signature --decorate=full --format=\"%H%n%P%n%D%n%aN±%aE%n%at%n%cN±%cE%n%ct%n%B%n{_boundary}\" {on}...HEAD";
         }
 
+        /// <summary>
+        ///     コマンドを非同期で実行し、インタラクティブリベース用のコミットリストを返す。
+        /// </summary>
+        /// <returns>インタラクティブリベース用コミットのリスト</returns>
         public async Task<List<Models.InteractiveCommit>> GetResultAsync()
         {
             var commits = new List<Models.InteractiveCommit>();
@@ -87,6 +102,7 @@ namespace Komorebi.Commands
             return commits;
         }
 
+        /// <summary>コミットメッセージ本文の区切りに使用するユニークな境界文字列</summary>
         private readonly string _boundary;
     }
 }

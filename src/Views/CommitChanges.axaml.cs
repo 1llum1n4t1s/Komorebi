@@ -7,13 +7,22 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミットの変更ファイル一覧表示のコードビハインド。
+    /// </summary>
     public partial class CommitChanges : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CommitChanges()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ChangeContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
         {
             e.Handled = true;
@@ -34,6 +43,9 @@ namespace Komorebi.Views
                 detailView.CreateChangeContextMenu(changes[0])?.Open(view);
         }
 
+        /// <summary>
+        ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
         {
             if (DataContext is not ViewModels.CommitDetail vm)

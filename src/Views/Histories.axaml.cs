@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,6 +14,9 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     HistoriesLayoutクラス。
+    /// </summary>
     public class HistoriesLayout : Grid
     {
         public static readonly StyledProperty<bool> UseHorizontalProperty =
@@ -27,6 +30,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(Grid);
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -35,12 +41,18 @@ namespace Komorebi.Views
                 RefreshLayout();
         }
 
+        /// <summary>
+        ///     ビジュアルツリーにアタッチされた際の処理。
+        /// </summary>
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
             base.OnAttachedToVisualTree(e);
             RefreshLayout();
         }
 
+        /// <summary>
+        ///     表示を更新する。
+        /// </summary>
         private void RefreshLayout()
         {
             if (UseHorizontal)
@@ -76,6 +88,9 @@ namespace Komorebi.Views
         }
     }
 
+    /// <summary>
+    ///     コミット履歴一覧ビューのコードビハインド。
+    /// </summary>
     public partial class Histories : UserControl
     {
         public static readonly StyledProperty<Models.Branch> CurrentBranchProperty =
@@ -132,11 +147,17 @@ namespace Komorebi.Views
             set => SetValue(IsScrollToTopVisibleProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Histories()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -148,6 +169,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CommitListLoadedイベントのハンドラ。
+        /// </summary>
         private void OnCommitListLoaded(object sender, RoutedEventArgs e)
         {
             var dataGrid = CommitListContainer;
@@ -159,6 +183,9 @@ namespace Komorebi.Views
                 dataGrid.ScrollIntoView(dataGrid.SelectedItem, null);
         }
 
+        /// <summary>
+        ///     GotoParentイベントのハンドラ。
+        /// </summary>
         private async void OnGotoParent(object sender, RoutedEventArgs e)
         {
             if (DataContext is not ViewModels.Histories vm)
@@ -205,6 +232,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     GotoChildイベントのハンドラ。
+        /// </summary>
         private async void OnGotoChild(object sender, RoutedEventArgs e)
         {
             if (DataContext is not ViewModels.Histories vm)
@@ -250,6 +280,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CommitListLayoutUpdatedイベントのハンドラ。
+        /// </summary>
         private void OnCommitListLayoutUpdated(object _1, EventArgs _2)
         {
             if (!IsLoaded)
@@ -292,12 +325,18 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ScrollToTopPointerPressedイベントのハンドラ。
+        /// </summary>
         private void OnScrollToTopPointerPressed(object sender, PointerPressedEventArgs e)
         {
             if (DataContext is ViewModels.Histories histories)
                 CommitListContainer.ScrollIntoView(histories.Commits[0], null);
         }
 
+        /// <summary>
+        ///     CommitListSelectionChangedイベントのハンドラ。
+        /// </summary>
         private void OnCommitListSelectionChanged(object _, SelectionChangedEventArgs e)
         {
             if (DataContext is ViewModels.Histories histories)
@@ -306,6 +345,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CommitListContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnCommitListContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (e.Source is Control { DataContext: Models.Commit })
@@ -390,6 +432,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     CommitListKeyDownイベントのハンドラ。
+        /// </summary>
         private async void OnCommitListKeyDown(object sender, KeyEventArgs e)
         {
             if (!e.KeyModifiers.HasFlag(OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
@@ -441,6 +486,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CommitListDoubleTappedイベントのハンドラ。
+        /// </summary>
         private async void OnCommitListDoubleTapped(object sender, TappedEventArgs e)
         {
             e.Handled = true;
@@ -463,6 +511,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     CreateContextMenuForMultipleCommitsの処理を行う。
+        /// </summary>
         private ContextMenu CreateContextMenuForMultipleCommits(ViewModels.Repository repo, List<Models.Commit> selected)
         {
             var canCherryPick = true;
@@ -624,6 +675,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     CreateContextMenuForSingleCommitの処理を行う。
+        /// </summary>
         private ContextMenu CreateContextMenuForSingleCommit(ViewModels.Repository repo, Models.Commit commit)
         {
             var current = repo.CurrentBranch;
@@ -1098,6 +1152,9 @@ namespace Komorebi.Views
             return menu;
         }
 
+        /// <summary>
+        ///     FillCurrentBranchMenuの処理を行う。
+        /// </summary>
         private void FillCurrentBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch current)
         {
             var submenu = new MenuItem();
@@ -1199,6 +1256,9 @@ namespace Komorebi.Views
             menu.Items.Add(submenu);
         }
 
+        /// <summary>
+        ///     FillOtherLocalBranchMenuの処理を行う。
+        /// </summary>
         private void FillOtherLocalBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
         {
             var submenu = new MenuItem();
@@ -1291,6 +1351,9 @@ namespace Komorebi.Views
             menu.Items.Add(submenu);
         }
 
+        /// <summary>
+        ///     FillRemoteBranchMenuの処理を行う。
+        /// </summary>
         private void FillRemoteBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
         {
             var name = branch.FriendlyName;
@@ -1353,6 +1416,9 @@ namespace Komorebi.Views
             menu.Items.Add(submenu);
         }
 
+        /// <summary>
+        ///     FillTagMenuの処理を行う。
+        /// </summary>
         private void FillTagMenu(ContextMenu menu, ViewModels.Repository repo, Models.Tag tag, Models.Branch current, bool merged)
         {
             var submenu = new MenuItem();

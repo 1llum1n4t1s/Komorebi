@@ -4,13 +4,22 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     リセットダイアログのコードビハインド。
+    /// </summary>
     public partial class Reset : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public Reset()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -18,6 +27,9 @@ namespace Komorebi.Views
             ResetMode.Focus();
         }
 
+        /// <summary>
+        ///     ResetModeKeyDownイベントのハンドラ。
+        /// </summary>
         private void OnResetModeKeyDown(object sender, KeyEventArgs e)
         {
             if (sender is ComboBox comboBox)

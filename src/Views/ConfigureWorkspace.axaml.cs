@@ -5,14 +5,23 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     ワークスペース設定ダイアログのコードビハインド。
+    /// </summary>
     public partial class ConfigureWorkspace : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public ConfigureWorkspace()
         {
             CloseOnESC = true;
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられる際の処理。
+        /// </summary>
         protected override void OnClosing(WindowClosingEventArgs e)
         {
             base.OnClosing(e);
@@ -21,6 +30,9 @@ namespace Komorebi.Views
                 ViewModels.Preferences.Instance.Save();
         }
 
+        /// <summary>
+        ///     DefaultCloneDirの選択処理を行う。
+        /// </summary>
         private async void SelectDefaultCloneDir(object _, RoutedEventArgs e)
         {
             var workspace = DataContext as ViewModels.ConfigureWorkspace;

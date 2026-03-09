@@ -12,38 +12,49 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>インタラクティブリベースの事前設定（特定コミットのアクションを指定）。</summary>
     public record InteractiveRebasePrefill(string SHA, Models.InteractiveRebaseAction Action);
 
+    /// <summary>
+    ///     インタラクティブリベースの個々のコミットアイテム。
+    ///     pick/squash/fixup/reword/drop/editのアクションを管理する。
+    /// </summary>
     public class InteractiveRebaseItem : ObservableObject
     {
+        /// <summary>元の並び順（逆順インデックス）。</summary>
         public int OriginalOrder
         {
             get;
         }
 
+        /// <summary>対象のコミット。</summary>
         public Models.Commit Commit
         {
             get;
         }
 
+        /// <summary>このコミットに対するアクション（Pick/Squash/Fixup/Reword/Drop/Edit）。</summary>
         public Models.InteractiveRebaseAction Action
         {
             get => _action;
             set => SetProperty(ref _action, value);
         }
 
+        /// <summary>Squash/Fixupチェーンにおけるこのアイテムの保留状態。</summary>
         public Models.InteractiveRebasePendingType PendingType
         {
             get => _pendingType;
             set => SetProperty(ref _pendingType, value);
         }
 
+        /// <summary>コミットメッセージの件名行（1行目）。</summary>
         public string Subject
         {
             get => _subject;
             private set => SetProperty(ref _subject, value);
         }
 
+        /// <summary>コミットメッセージの全文。変更時に件名も自動更新する。</summary>
         public string FullMessage
         {
             get => _fullMessage;
@@ -58,42 +69,49 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>元のコミットメッセージ全文（リセット用に保持）。</summary>
         public string OriginalFullMessage
         {
             get;
             set;
         }
 
+        /// <summary>Squash/Fixupアクションが選択可能かどうか（先頭アイテムは不可）。</summary>
         public bool CanSquashOrFixup
         {
             get => _canSquashOrFixup;
             set => SetProperty(ref _canSquashOrFixup, value);
         }
 
+        /// <summary>メッセージ編集ボタンを表示するかどうか。</summary>
         public bool ShowEditMessageButton
         {
             get => _showEditMessageButton;
             set => SetProperty(ref _showEditMessageButton, value);
         }
 
+        /// <summary>このアイテムのメッセージがリベース結果に使用されるかどうか。</summary>
         public bool IsFullMessageUsed
         {
             get => _isFullMessageUsed;
             set => SetProperty(ref _isFullMessageUsed, value);
         }
 
+        /// <summary>ドラッグ＆ドロップ時の方向インジケータ。</summary>
         public Thickness DropDirectionIndicator
         {
             get => _dropDirectionIndicator;
             set => SetProperty(ref _dropDirectionIndicator, value);
         }
 
+        /// <summary>ユーザーがメッセージを手動編集したかどうか。</summary>
         public bool IsMessageUserEdited
         {
             get;
             set;
         } = false;
 
+        /// <summary>コンストラクタ。順序、コミット、メッセージを指定して初期化する。</summary>
         public InteractiveRebaseItem(int order, Models.Commit c, string message)
         {
             OriginalOrder = order;
@@ -112,58 +130,75 @@ namespace Komorebi.ViewModels
         private Thickness _dropDirectionIndicator = new Thickness(0);
     }
 
+    /// <summary>
+    ///     インタラクティブリベースのセッション全体を管理するViewModel。
+    ///     コミットリストの読み込み、アクション変更、並び替え、リベースの実行を行う。
+    /// </summary>
     public class InteractiveRebase : ObservableObject
     {
+        /// <summary>現在のブランチ。</summary>
         public Models.Branch Current
         {
             get;
             private set;
         }
 
+        /// <summary>リベースの基点となるコミット（onto）。</summary>
         public Models.Commit On
         {
             get;
         }
 
+        /// <summary>リベース前に自動的にstashを行うかどうか。</summary>
         public bool AutoStash
         {
             get;
             set;
         } = true;
 
+        /// <summary>リポジトリのイシュートラッカー一覧。</summary>
         public AvaloniaList<Models.IssueTracker> IssueTrackers
         {
             get => _repo.IssueTrackers;
         }
 
+        /// <summary>コンベンショナルコミットタイプのオーバーライド設定。</summary>
         public string ConventionalTypesOverride
         {
             get => _repo.Settings.ConventionalTypesOverride;
         }
 
+        /// <summary>コミット一覧を読み込み中かどうか。</summary>
         public bool IsLoading
         {
             get => _isLoading;
             private set => SetProperty(ref _isLoading, value);
         }
 
+        /// <summary>リベース対象のコミットアイテム一覧。</summary>
         public AvaloniaList<InteractiveRebaseItem> Items
         {
             get;
         } = [];
 
+        /// <summary>初期選択されるアイテム。</summary>
         public InteractiveRebaseItem PreSelected
         {
             get => _preSelected;
             private set => SetProperty(ref _preSelected, value);
         }
 
+        /// <summary>選択中コミットの詳細情報（CommitDetailまたはCount）。</summary>
         public object Detail
         {
             get => _detail;
             private set => SetProperty(ref _detail, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。バックグラウンドでリベース対象のコミット一覧を取得し、
+        ///     prefillが指定されている場合はそのコミットのアクションを事前設定する。
+        /// </summary>
         public InteractiveRebase(Repository repo, Models.Commit on, InteractiveRebasePrefill prefill = null)
         {
             _repo = repo;
@@ -206,6 +241,9 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     コミット選択時の処理。選択数に応じて詳細表示を切り替える。
+        /// </summary>
         public void SelectCommits(List<InteractiveRebaseItem> items)
         {
             if (items.Count == 0)
@@ -223,6 +261,10 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     選択されたアイテムのアクションを変更する。
+        ///     Squash/Fixupは条件を満たすアイテムのみ適用される。
+        /// </summary>
         public void ChangeAction(List<InteractiveRebaseItem> selected, Models.InteractiveRebaseAction action)
         {
             if (action == Models.InteractiveRebaseAction.Squash || action == Models.InteractiveRebaseAction.Fixup)
@@ -242,6 +284,9 @@ namespace Komorebi.ViewModels
             UpdateItems();
         }
 
+        /// <summary>
+        ///     選択されたコミットを指定位置に移動する（ドラッグ＆ドロップ対応）。
+        /// </summary>
         public void Move(List<InteractiveRebaseItem> commits, int index)
         {
             var hashes = new HashSet<string>();
@@ -277,6 +322,10 @@ namespace Komorebi.ViewModels
             UpdateItems();
         }
 
+        /// <summary>
+        ///     インタラクティブリベースを実行する。
+        ///     ジョブ情報をJSONファイルに書き出してからgit rebaseコマンドを実行する。
+        /// </summary>
         public async Task<bool> Start()
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -286,6 +335,7 @@ namespace Komorebi.ViewModels
             collection.OrigHead = _repo.CurrentBranch.Head;
             collection.Onto = On.SHA;
 
+            // 逆順にジョブを構築（gitのリベース順序に合わせる）
             InteractiveRebaseItem pending = null;
             for (int i = Items.Count - 1; i >= 0; i--)
             {
@@ -323,11 +373,16 @@ namespace Komorebi.ViewModels
             return succ;
         }
 
+        /// <summary>
+        ///     全アイテムの状態を再計算する。
+        ///     Squash/Fixupの連鎖、メッセージの結合、CanSquashOrFixupフラグを更新する。
+        /// </summary>
         private void UpdateItems()
         {
             if (Items.Count == 0)
                 return;
 
+            // 逆順にスキャンして、Squash/Fixup可能かどうかを判定
             var hasValidParent = false;
             for (var i = Items.Count - 1; i >= 0; i--)
             {
@@ -346,6 +401,7 @@ namespace Komorebi.ViewModels
                 }
             }
 
+            // 順方向にスキャンしてSquash/Fixupチェーンのメッセージ結合を処理
             var hasPending = false;
             var pendingMessages = new List<string>();
             for (var i = 0; i < Items.Count; i++)

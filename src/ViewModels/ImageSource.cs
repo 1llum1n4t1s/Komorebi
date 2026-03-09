@@ -12,17 +12,31 @@ using Pfim;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     画像ソースを管理するクラス。
+    ///     ファイル、Gitリビジョン、LFSオブジェクトから各種画像フォーマットを読み込む。
+    ///     対応形式: ICO, BMP, GIF, JPG, PNG, WebP, TGA, DDS, TIFF。
+    /// </summary>
     public class ImageSource
     {
+        /// <summary>デコードされたビットマップ画像。</summary>
         public Bitmap Bitmap { get; }
+
+        /// <summary>画像ファイルのバイトサイズ。</summary>
         public long Size { get; }
 
+        /// <summary>
+        ///     コンストラクタ。ビットマップとファイルサイズを指定して初期化する。
+        /// </summary>
         public ImageSource(Bitmap bitmap, long size)
         {
             Bitmap = bitmap;
             Size = size;
         }
 
+        /// <summary>
+        ///     ファイル拡張子に基づいて適切な画像デコーダを判定する。
+        /// </summary>
         public static Models.ImageDecoder GetDecoder(string file)
         {
             var ext = (Path.GetExtension(file) ?? ".invalid_img").ToLower(CultureInfo.CurrentCulture);
@@ -36,18 +50,28 @@ namespace Komorebi.ViewModels
             };
         }
 
+        /// <summary>
+        ///     ローカルファイルから画像を非同期で読み込む。
+        /// </summary>
         public static async Task<ImageSource> FromFileAsync(string fullpath, Models.ImageDecoder decoder)
         {
             await using var stream = File.OpenRead(fullpath);
             return await Task.Run(() => LoadFromStream(stream, decoder)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     Gitリビジョンから画像を非同期で読み込む。
+        /// </summary>
         public static async Task<ImageSource> FromRevisionAsync(string repo, string revision, string file, Models.ImageDecoder decoder)
         {
             await using var stream = await Commands.QueryFileContent.RunAsync(repo, revision, file).ConfigureAwait(false);
             return await Task.Run(() => LoadFromStream(stream, decoder)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     Git LFSオブジェクトから画像を非同期で読み込む。
+        ///     ローカルキャッシュがあればそれを使用し、なければリモートから取得する。
+        /// </summary>
         public static async Task<ImageSource> FromLFSObjectAsync(string repo, Models.LFSObject lfs, Models.ImageDecoder decoder)
         {
             if (string.IsNullOrEmpty(lfs.Oid) || lfs.Size == 0)
@@ -62,6 +86,10 @@ namespace Komorebi.ViewModels
             return await Task.Run(() => LoadFromStream(stream, decoder)).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     ストリームからデコーダを使って画像を読み込む内部メソッド。
+        ///     デコーダ種別に応じて適切なデコード処理に振り分ける。
+        /// </summary>
         private static ImageSource LoadFromStream(Stream stream, Models.ImageDecoder decoder)
         {
             var size = stream.Length;
@@ -88,12 +116,19 @@ namespace Komorebi.ViewModels
             return new ImageSource(null, 0);
         }
 
+        /// <summary>
+        ///     Avaloniaのビルトインデコーダで画像を読み込む（ICO, BMP, GIF, JPG, PNG, WebP対応）。
+        /// </summary>
         private static ImageSource DecodeWithAvalonia(Stream stream, long size)
         {
             var bitmap = new Bitmap(stream);
             return new ImageSource(bitmap, size);
         }
 
+        /// <summary>
+        ///     Pfimライブラリを使用してTGA/DDS画像をデコードする。
+        ///     各ピクセルフォーマットに応じてAvaloniaのBitmapに変換する。
+        /// </summary>
         private static ImageSource DecodeWithPfim(Stream stream, long size)
         {
             using (var pfiImage = Pfimage.FromStream(stream))
@@ -103,6 +138,7 @@ namespace Komorebi.ViewModels
 
                 var pixelFormat = PixelFormats.Bgra8888;
                 var alphaFormat = AlphaFormat.Opaque;
+                // ピクセルフォーマットごとにAvalonia互換形式に変換
                 switch (pfiImage.Format)
                 {
                     case ImageFormat.Rgb8:
@@ -118,6 +154,7 @@ namespace Komorebi.ViewModels
                         pixelFormat = PixelFormats.Bgr555;
                         break;
                     case ImageFormat.R5g5b5a1:
+                        // 5551形式をBGRA8888に手動変換
                         var pixels1 = pfiImage.DataLen / 2;
                         data = new byte[pixels1 * 4];
                         stride = pfiImage.Width * 4;
@@ -139,6 +176,7 @@ namespace Komorebi.ViewModels
                         pixelFormat = PixelFormats.Bgr24;
                         break;
                     case ImageFormat.Rgba16:
+                        // RGBA4444形式をBGRA8888に手動変換
                         var pixels2 = pfiImage.DataLen / 2;
                         data = new byte[pixels2 * 4];
                         stride = pfiImage.Width * 4;
@@ -160,6 +198,7 @@ namespace Komorebi.ViewModels
                         return new ImageSource(null, 0);
                 }
 
+                // ピクセルデータのポインタからAvaloniaのBitmapを生成
                 var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
                 var pixelSize = new PixelSize(pfiImage.Width, pfiImage.Height);
                 var dpi = new Vector(96, 96);
@@ -168,6 +207,10 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     LibTiffを使用してTIFF画像をデコードする。
+        ///     RGBA形式でピクセルデータを読み込み、WritableBitmapに変換する。
+        /// </summary>
         private static ImageSource DecodeWithTiff(Stream stream, long size)
         {
             using (var tiff = Tiff.ClientOpen($"{Guid.NewGuid()}.tif", "r", stream, new TiffStream()))

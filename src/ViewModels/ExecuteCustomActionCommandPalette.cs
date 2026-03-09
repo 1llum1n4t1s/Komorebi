@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     コマンドパレットに表示されるカスタムアクションのエントリ。
+    /// </summary>
     public class ExecuteCustomActionCommandPaletteCmd
     {
         public Models.CustomAction Action { get; set; }
@@ -17,20 +20,33 @@ namespace Komorebi.ViewModels
         }
     }
 
+    /// <summary>
+    ///     カスタムアクション実行用のコマンドパレットViewModel。
+    ///     フィルタ入力によるアクションの絞り込みと選択・実行を提供する。
+    /// </summary>
     public class ExecuteCustomActionCommandPalette : ICommandPalette
     {
+        /// <summary>
+        ///     フィルタ適用後の表示アクションリスト。
+        /// </summary>
         public List<ExecuteCustomActionCommandPaletteCmd> VisibleActions
         {
             get => _visibleActions;
             private set => SetProperty(ref _visibleActions, value);
         }
 
+        /// <summary>
+        ///     現在選択されているアクション。
+        /// </summary>
         public ExecuteCustomActionCommandPaletteCmd Selected
         {
             get => _selected;
             set => SetProperty(ref _selected, value);
         }
 
+        /// <summary>
+        ///     フィルタ文字列。変更時に表示アクションを更新する。
+        /// </summary>
         public string Filter
         {
             get => _filter;
@@ -41,6 +57,9 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     コンストラクタ。リポジトリスコープのカスタムアクションを取得してソートする。
+        /// </summary>
         public ExecuteCustomActionCommandPalette(Repository repo)
         {
             _repo = repo;
@@ -64,11 +83,17 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     フィルタをクリアする。
+        /// </summary>
         public void ClearFilter()
         {
             Filter = string.Empty;
         }
 
+        /// <summary>
+        ///     選択されたカスタムアクションを実行する。
+        /// </summary>
         public async Task ExecAsync()
         {
             _actions.Clear();
@@ -79,6 +104,9 @@ namespace Komorebi.ViewModels
                 await _repo.ExecCustomActionAsync(_selected.Action, null);
         }
 
+        /// <summary>
+        ///     フィルタ文字列に基づいて表示アクションリストを更新する。
+        /// </summary>
         private void UpdateVisibleActions()
         {
             var filter = _filter?.Trim();

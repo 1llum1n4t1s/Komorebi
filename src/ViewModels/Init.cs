@@ -2,20 +2,29 @@
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     Gitリポジトリの初期化（git init）を行うダイアログのViewModel。
+    ///     指定パスに新規リポジトリを作成する。
+    /// </summary>
     public class Init : Popup
     {
+        /// <summary>初期化対象のディレクトリパス。</summary>
         public string TargetPath
         {
             get => _targetPath;
             set => SetProperty(ref _targetPath, value);
         }
 
+        /// <summary>初期化が必要な理由の説明テキスト。</summary>
         public string Reason
         {
             get;
             private set;
         }
 
+        /// <summary>
+        ///     コンストラクタ。ページID、パス、親ノード、理由を指定して初期化する。
+        /// </summary>
         public Init(string pageId, string path, RepositoryNode parent, string reason)
         {
             _pageId = pageId;
@@ -24,6 +33,10 @@ namespace Komorebi.ViewModels
             Reason = string.IsNullOrEmpty(reason) ? "Invalid repository detected!" : reason;
         }
 
+        /// <summary>
+        ///     確認ボタン押下時の処理。git initを実行し、
+        ///     成功時はリポジトリノードをPreferencesに登録してWelcome画面を更新する。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             ProgressDescription = $"Initialize git repository at: '{_targetPath}'";
@@ -37,6 +50,7 @@ namespace Komorebi.ViewModels
 
             log.Complete();
 
+            // 成功時: リポジトリノードを登録し、ステータスを更新
             if (succ)
             {
                 var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(_targetPath, _parentNode, true);

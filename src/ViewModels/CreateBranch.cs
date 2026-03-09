@@ -4,8 +4,16 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     新しいブランチを作成するためのダイアログViewModel。
+    ///     ブランチ名のバリデーション、作成後のチェックアウト、ローカル変更の自動スタッシュなどを管理する。
+    /// </summary>
     public class CreateBranch : Popup
     {
+        /// <summary>
+        ///     作成するブランチの名前。
+        ///     必須入力で、正規表現による書式チェックと既存ブランチとの重複チェックを行う。
+        /// </summary>
         [Required(ErrorMessage = "Branch name is required!")]
         [RegularExpression(@"^[\w\-/\.#\+]+$", ErrorMessage = "Bad branch name format!")]
         [CustomValidation(typeof(CreateBranch), nameof(ValidateBranchName))]
@@ -15,17 +23,27 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _name, value, true);
         }
 
+        /// <summary>
+        ///     ブランチ作成の基点となるオブジェクト（ブランチ、コミット、またはタグ）。
+        /// </summary>
         public object BasedOn
         {
             get;
         }
 
+        /// <summary>
+        ///     ローカルの変更を破棄するかどうか。
+        /// </summary>
         public bool DiscardLocalChanges
         {
             get;
             set;
         }
 
+        /// <summary>
+        ///     ブランチ作成後に自動的にチェックアウトするかどうか。
+        ///     リポジトリのUI状態に永続化される。
+        /// </summary>
         public bool CheckoutAfterCreated
         {
             get => _repo.UIStates.CheckoutBranchOnCreateBranch;
@@ -39,11 +57,18 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     ベアリポジトリかどうか。ベアリポジトリではチェックアウト不可。
+        /// </summary>
         public bool IsBareRepository
         {
             get => _repo.IsBare;
         }
 
+        /// <summary>
+        ///     既存の同名ブランチの上書きを許可するかどうか。
+        ///     変更時にブランチ名のバリデーションを再実行する。
+        /// </summary>
         public bool AllowOverwrite
         {
             get => _allowOverwrite;
@@ -54,6 +79,10 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     ブランチを基点として新しいブランチを作成するコンストラクタ。
+        ///     リモートブランチの場合、その名前をデフォルト名として設定する。
+        /// </summary>
         public CreateBranch(Repository repo, Models.Branch branch)
         {
             _repo = repo;
@@ -66,6 +95,9 @@ namespace Komorebi.ViewModels
             DiscardLocalChanges = false;
         }
 
+        /// <summary>
+        ///     コミットを基点として新しいブランチを作成するコンストラクタ。
+        /// </summary>
         public CreateBranch(Repository repo, Models.Commit commit)
         {
             _repo = repo;
@@ -75,6 +107,9 @@ namespace Komorebi.ViewModels
             DiscardLocalChanges = false;
         }
 
+        /// <summary>
+        ///     タグを基点として新しいブランチを作成するコンストラクタ。
+        /// </summary>
         public CreateBranch(Repository repo, Models.Tag tag)
         {
             _repo = repo;
@@ -84,6 +119,10 @@ namespace Komorebi.ViewModels
             DiscardLocalChanges = false;
         }
 
+        /// <summary>
+        ///     ブランチ名の重複を検証するカスタムバリデーション。
+        ///     上書きが許可されていない場合、同名ブランチの存在をチェックする。
+        /// </summary>
         public static ValidationResult ValidateBranchName(string name, ValidationContext ctx)
         {
             if (ctx.ObjectInstance is CreateBranch creator)
@@ -103,6 +142,10 @@ namespace Komorebi.ViewModels
             return new ValidationResult("Missing runtime context to create branch!");
         }
 
+        /// <summary>
+        ///     ブランチ作成を実行する確認アクション。
+        ///     チェックアウトが有効な場合、ローカル変更の自動スタッシュ、サブモジュール更新、上流ブランチ設定も行う。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -110,6 +153,7 @@ namespace Komorebi.ViewModels
             var log = _repo.CreateLog($"Create Branch '{_name}'");
             Use(log);
 
+            // チェックアウト予定の場合、デタッチHEAD状態でコミットが失われないか確認
             if (CheckoutAfterCreated)
             {
                 if (_repo.CurrentBranch is { IsDetachedHead: true } && !_repo.CurrentBranch.Head.Equals(_baseOnRevision, StringComparison.Ordinal))
@@ -126,8 +170,10 @@ namespace Komorebi.ViewModels
             }
 
             bool succ;
+            // チェックアウト付きブランチ作成（ベアリポジトリ以外）
             if (CheckoutAfterCreated && !_repo.IsBare)
             {
+                // ローカル変更がある場合は自動スタッシュ
                 var needPopStash = false;
                 if (!DiscardLocalChanges)
                 {
@@ -168,6 +214,7 @@ namespace Komorebi.ViewModels
                     .CreateAsync(_baseOnRevision, _allowOverwrite);
             }
 
+            // リモートブランチと同名のローカルブランチを作成した場合、上流ブランチを自動設定
             if (succ && BasedOn is Models.Branch { IsLocal: false } basedOn && _name.Equals(basedOn.Name, StringComparison.Ordinal))
             {
                 await new Commands.Branch(_repo.FullPath, _name)
@@ -177,6 +224,7 @@ namespace Komorebi.ViewModels
 
             log.Complete();
 
+            // チェックアウト後、サイドバーのブランチツリーノードを展開しフィルタを設定
             if (succ && CheckoutAfterCreated)
             {
                 var fake = new Models.Branch() { IsLocal = true, FullName = $"refs/heads/{_name}" };
@@ -202,9 +250,9 @@ namespace Komorebi.ViewModels
             return true;
         }
 
-        private readonly Repository _repo = null;
-        private string _name = null;
-        private readonly string _baseOnRevision = null;
-        private bool _allowOverwrite = false;
+        private readonly Repository _repo = null;       // 対象リポジトリ
+        private string _name = null;                     // 新しいブランチ名
+        private readonly string _baseOnRevision = null;  // 基点となるリビジョンSHA
+        private bool _allowOverwrite = false;            // 上書き許可フラグ
     }
 }

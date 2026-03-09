@@ -8,6 +8,9 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     コミット基本情報（著者・日付・ハッシュ等）表示のコードビハインド。
+    /// </summary>
     public partial class CommitBaseInfo : UserControl
     {
         public static readonly StyledProperty<Models.CommitFullMessage> FullMessageProperty =
@@ -55,11 +58,17 @@ namespace Komorebi.Views
             set => SetValue(ChildrenProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public CommitBaseInfo()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     CopyCommitSHAイベントのハンドラ。
+        /// </summary>
         private async void OnCopyCommitSHA(object sender, RoutedEventArgs e)
         {
             if (sender is Button { DataContext: Models.Commit commit })
@@ -68,6 +77,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenWebLinkイベントのハンドラ。
+        /// </summary>
         private void OnOpenWebLink(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.CommitDetail detail && sender is Control control)
@@ -102,6 +114,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     OpenContainsInイベントのハンドラ。
+        /// </summary>
         private async void OnOpenContainsIn(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.CommitDetail detail && sender is Button button)
@@ -117,6 +132,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SHAPointerEnteredイベントのハンドラ。
+        /// </summary>
         private async void OnSHAPointerEntered(object sender, PointerEventArgs e)
         {
             if (DataContext is ViewModels.CommitDetail detail && sender is Control { DataContext: string sha } ctl)
@@ -133,6 +151,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     SHAPressedイベントのハンドラ。
+        /// </summary>
         private void OnSHAPressed(object sender, PointerPressedEventArgs e)
         {
             var point = e.GetCurrentPoint(this);
@@ -144,6 +165,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     UserContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnUserContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is not Control { Tag: Models.User user } control)

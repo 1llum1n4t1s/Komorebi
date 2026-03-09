@@ -3,13 +3,23 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     複数のブランチを一括削除するためのダイアログViewModel。
+    ///     ローカルブランチとリモートブランチの両方に対応する。
+    /// </summary>
     public class DeleteMultipleBranches : Popup
     {
+        /// <summary>
+        ///     削除対象のブランチリスト。
+        /// </summary>
         public List<Models.Branch> Targets
         {
             get;
         }
 
+        /// <summary>
+        ///     コンストラクタ。対象リポジトリ、ブランチリスト、ローカルかどうかを指定する。
+        /// </summary>
         public DeleteMultipleBranches(Repository repo, List<Models.Branch> branches, bool isLocal)
         {
             _repo = repo;
@@ -17,6 +27,9 @@ namespace Komorebi.ViewModels
             Targets = branches;
         }
 
+        /// <summary>
+        ///     複数ブランチの一括削除を実行する確認アクション。
+        /// </summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -25,6 +38,7 @@ namespace Komorebi.ViewModels
             var log = _repo.CreateLog("Delete Multiple Branches");
             Use(log);
 
+            // ローカルブランチの削除
             if (_isLocal)
             {
                 foreach (var target in Targets)

@@ -3,13 +3,22 @@ using Avalonia.Input;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     リポジトリ操作コマンドパレットのコードビハインド。
+    /// </summary>
     public partial class RepositoryCommandPalette : UserControl
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public RepositoryCommandPalette()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     キーが押された際のイベント処理。
+        /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -51,6 +60,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ItemTappedイベントのハンドラ。
+        /// </summary>
         private void OnItemTapped(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryCommandPalette vm)

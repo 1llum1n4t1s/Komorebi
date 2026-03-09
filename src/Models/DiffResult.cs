@@ -5,21 +5,39 @@ using Avalonia.Media.Imaging;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     テキストdiffの行タイプを表すenum
+    /// </summary>
     public enum TextDiffLineType
     {
+        /// <summary>なし（未設定）</summary>
         None,
+        /// <summary>変更なしの行</summary>
         Normal,
+        /// <summary>ハンクヘッダー行（@@で始まる行）</summary>
         Indicator,
+        /// <summary>追加された行</summary>
         Added,
+        /// <summary>削除された行</summary>
         Deleted,
     }
 
+    /// <summary>
+    ///     テキスト内の文字範囲を表すクラス（ハイライト用）
+    /// </summary>
+    /// <param name="p">開始位置</param>
+    /// <param name="n">文字数</param>
     public class TextRange(int p, int n)
     {
+        /// <summary>範囲の開始位置</summary>
         public int Start { get; set; } = p;
+        /// <summary>範囲の終了位置</summary>
         public int End { get; set; } = p + n - 1;
     }
 
+    /// <summary>
+    ///     テキストdiffの1行分のデータを保持するクラス
+    /// </summary>
     public class TextDiffLine
     {
         public TextDiffLineType Type { get; set; } = TextDiffLineType.None;
@@ -42,6 +60,9 @@ namespace Komorebi.Models
         }
     }
 
+    /// <summary>
+    ///     テキストdiffの選択範囲を保持するクラス。パッチ生成時に使用。
+    /// </summary>
     public class TextDiffSelection
     {
         public int StartLine { get; set; } = 0;
@@ -51,6 +72,9 @@ namespace Komorebi.Models
         public int IgnoredDeletes { get; set; } = 0;
     }
 
+    /// <summary>
+    ///     テキスト形式のdiff結果。行単位のdiffデータとパッチ生成機能を提供する。
+    /// </summary>
     public partial class TextDiff
     {
         public List<TextDiffLine> Lines { get; set; } = new List<TextDiffLine>();
@@ -571,18 +595,31 @@ namespace Komorebi.Models
         private static partial Regex REG_INDICATOR();
     }
 
+    /// <summary>
+    ///     Git LFSオブジェクトのdiff結果
+    /// </summary>
     public class LFSDiff
     {
+        /// <summary>変更前のLFSオブジェクト</summary>
         public LFSObject Old { get; set; } = new LFSObject();
+        /// <summary>変更後のLFSオブジェクト</summary>
         public LFSObject New { get; set; } = new LFSObject();
     }
 
+    /// <summary>
+    ///     バイナリファイルのdiff結果（サイズ情報のみ）
+    /// </summary>
     public class BinaryDiff
     {
+        /// <summary>変更前のファイルサイズ（バイト）</summary>
         public long OldSize { get; set; } = 0;
+        /// <summary>変更後のファイルサイズ（バイト）</summary>
         public long NewSize { get; set; } = 0;
     }
 
+    /// <summary>
+    ///     画像ファイルのdiff結果。変更前後の画像データとサイズ情報を保持する。
+    /// </summary>
     public class ImageDiff
     {
         public Bitmap Old { get; set; } = null;
@@ -595,14 +632,25 @@ namespace Komorebi.Models
         public string NewImageSize => New != null ? $"{New.PixelSize.Width} x {New.PixelSize.Height}" : "0 x 0";
     }
 
+    /// <summary>
+    ///     変更なしまたは改行コードのみの変更を表すマーカークラス
+    /// </summary>
     public class NoOrEOLChange;
 
+    /// <summary>
+    ///     サブモジュールのdiff結果。変更前後のサブモジュール情報を保持する。
+    /// </summary>
     public class SubmoduleDiff
     {
+        /// <summary>変更前のサブモジュール情報</summary>
         public RevisionSubmodule Old { get; set; } = null;
+        /// <summary>変更後のサブモジュール情報</summary>
         public RevisionSubmodule New { get; set; } = null;
     }
 
+    /// <summary>
+    ///     diff操作の総合結果を保持するクラス。テキスト、バイナリ、LFS各種diffの結果を含む。
+    /// </summary>
     public class DiffResult
     {
         public bool IsBinary { get; set; } = false;

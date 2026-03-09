@@ -11,28 +11,54 @@ using SkiaSharp;
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     統計の表示モード
+    /// </summary>
     public enum StatisticsMode
     {
+        /// <summary>全期間</summary>
         All,
+        /// <summary>今月</summary>
         ThisMonth,
+        /// <summary>今週</summary>
         ThisWeek,
     }
 
+    /// <summary>
+    ///     統計レポートにおける著者ごとのコミット数情報
+    /// </summary>
     public class StatisticsAuthor(User user, int count)
     {
+        /// <summary>ユーザー情報</summary>
         public User User { get; set; } = user;
+        /// <summary>コミット数</summary>
         public int Count { get; set; } = count;
     }
 
+    /// <summary>
+    ///     特定期間のコミット統計レポート。
+    ///     チャートデータとユーザー別フィルタリングを管理する。
+    /// </summary>
     public class StatisticsReport
     {
+        /// <summary>合計コミット数</summary>
         public int Total { get; set; } = 0;
+        /// <summary>著者リスト（コミット数降順）</summary>
         public List<StatisticsAuthor> Authors { get; set; } = new();
+        /// <summary>チャートのシリーズデータ</summary>
         public List<ISeries> Series { get; set; } = new();
+        /// <summary>X軸の設定</summary>
         public List<Axis> XAxes { get; set; } = new();
+        /// <summary>Y軸の設定</summary>
         public List<Axis> YAxes { get; set; } = new();
+        /// <summary>選択中の著者（変更時にチャートを更新）</summary>
         public StatisticsAuthor SelectedAuthor { get => _selectedAuthor; set => ChangeAuthor(value); }
 
+        /// <summary>
+        ///     統計レポートを初期化する。モードに応じてX軸のサンプルデータを準備する。
+        /// </summary>
+        /// <param name="mode">統計モード（全期間/今月/今週）</param>
+        /// <param name="start">期間の開始日時</param>
         public StatisticsReport(StatisticsMode mode, DateTime start)
         {
             _mode = mode;
@@ -66,6 +92,11 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     コミットをレポートに追加する。日時とユーザーの集計マップを更新する。
+        /// </summary>
+        /// <param name="time">コミットの日時</param>
+        /// <param name="author">コミットの著者</param>
         public void AddCommit(DateTime time, User author)
         {
             Total++;
@@ -102,8 +133,12 @@ namespace Komorebi.Models
             }
         }
 
+        /// <summary>
+        ///     データ収集を完了し、チャート用のシリーズデータを構築する
+        /// </summary>
         public void Complete()
         {
+            // ユーザーマップから著者リストを作成し、コミット数で降順ソート
             foreach (var kv in _mapUsers)
                 Authors.Add(new StatisticsAuthor(kv.Key, kv.Value));
 
@@ -127,6 +162,10 @@ namespace Komorebi.Models
             _mapSamples.Clear();
         }
 
+        /// <summary>
+        ///     チャートの塗りつぶし色を変更する。著者選択時はメインシリーズを半透明にする。
+        /// </summary>
+        /// <param name="color">ARGB色値</param>
         public void ChangeColor(uint color)
         {
             _fillColor = color;
@@ -140,6 +179,10 @@ namespace Komorebi.Models
                 user.Fill = new SolidColorPaint(fill);
         }
 
+        /// <summary>
+        ///     選択著者を変更し、その著者のコミットデータを追加シリーズとして表示する
+        /// </summary>
+        /// <param name="author">選択する著者（nullで全体表示に戻す）</param>
         public void ChangeAuthor(StatisticsAuthor author)
         {
             if (author == _selectedAuthor)
@@ -170,21 +213,37 @@ namespace Komorebi.Models
             ChangeColor(_fillColor);
         }
 
+        /// <summary>曜日の略称ラベル</summary>
         private static readonly string[] WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+        /// <summary>統計モード</summary>
         private StatisticsMode _mode;
+        /// <summary>ユーザーごとのコミット数マップ</summary>
         private Dictionary<User, int> _mapUsers = new();
+        /// <summary>日時ごとのコミット数マップ</summary>
         private Dictionary<DateTime, int> _mapSamples = new();
+        /// <summary>ユーザー×日時ごとのコミット数マップ</summary>
         private Dictionary<User, Dictionary<DateTime, int>> _mapUserSamples = new();
+        /// <summary>現在選択中の著者</summary>
         private StatisticsAuthor _selectedAuthor = null;
+        /// <summary>チャートの塗りつぶし色</summary>
         private uint _fillColor = 255;
     }
 
+    /// <summary>
+    ///     コミット統計を集計するクラス。全期間・今月・今週の3つのレポートを管理する。
+    /// </summary>
     public class Statistics
     {
+        /// <summary>全期間のレポート</summary>
         public StatisticsReport All { get; }
+        /// <summary>今月のレポート</summary>
         public StatisticsReport Month { get; }
+        /// <summary>今週のレポート</summary>
         public StatisticsReport Week { get; }
 
+        /// <summary>
+        ///     統計を初期化する。現在の日時から今週・今月の開始日を計算する。
+        /// </summary>
         public Statistics()
         {
             var today = DateTime.Now.ToLocalTime().Date;
@@ -197,6 +256,11 @@ namespace Komorebi.Models
             Week = new StatisticsReport(StatisticsMode.ThisWeek, _thisWeekStart);
         }
 
+        /// <summary>
+        ///     コミットを統計に追加する。期間に応じた各レポートに振り分ける。
+        /// </summary>
+        /// <param name="author">「名前±メールアドレス」形式の著者文字列</param>
+        /// <param name="timestamp">UNIXタイムスタンプ</param>
         public void AddCommit(string author, double timestamp)
         {
             var emailIdx = author.IndexOf('±');
@@ -217,6 +281,9 @@ namespace Komorebi.Models
             All.AddCommit(time, user);
         }
 
+        /// <summary>
+        ///     全レポートのデータ収集を完了し、チャートデータを構築する
+        /// </summary>
         public void Complete()
         {
             _users.Clear();
@@ -226,8 +293,11 @@ namespace Komorebi.Models
             Week.Complete();
         }
 
+        /// <summary>今月の開始日</summary>
         private readonly DateTime _thisMonthStart;
+        /// <summary>今週の開始日</summary>
         private readonly DateTime _thisWeekStart;
+        /// <summary>メールアドレスによるユーザー検索キャッシュ</summary>
         private readonly Dictionary<string, User> _users = new();
     }
 }

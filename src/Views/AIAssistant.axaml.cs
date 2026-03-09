@@ -13,6 +13,9 @@ using AvaloniaEdit.TextMate;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     AIResponseViewクラス。
+    /// </summary>
     public class AIResponseView : TextEditor
     {
         public static readonly StyledProperty<string> ContentProperty =
@@ -26,6 +29,9 @@ namespace Komorebi.Views
 
         protected override Type StyleKeyOverride => typeof(TextEditor);
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public AIResponseView() : base(new TextArea(), new TextDocument())
         {
             IsReadOnly = true;
@@ -39,6 +45,9 @@ namespace Komorebi.Views
             TextArea.TextView.Options.EnableEmailHyperlinks = false;
         }
 
+        /// <summary>
+        ///     コントロールが読み込まれた際の処理。
+        /// </summary>
         protected override void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
@@ -52,6 +61,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     コントロールがアンロードされた際の処理。
+        /// </summary>
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             base.OnUnloaded(e);
@@ -67,6 +79,9 @@ namespace Komorebi.Views
             GC.Collect();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -75,6 +90,9 @@ namespace Komorebi.Views
                 Text = Content;
         }
 
+        /// <summary>
+        ///     TextViewContextRequestedイベントのハンドラ。
+        /// </summary>
         private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
         {
             var selected = SelectedText;
@@ -109,20 +127,32 @@ namespace Komorebi.Views
         private TextMate.Installation _textMate = null;
     }
 
+    /// <summary>
+    ///     AIアシスタント（コミットメッセージ生成等）ダイアログのコードビハインド。
+    /// </summary>
     public partial class AIAssistant : ChromelessWindow
     {
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public AIAssistant()
         {
             CloseOnESC = true;
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     ウィンドウが閉じられる際の処理。
+        /// </summary>
         protected override void OnClosing(WindowClosingEventArgs e)
         {
             base.OnClosing(e);
             (DataContext as ViewModels.AIAssistant)?.Cancel();
         }
 
+        /// <summary>
+        ///     Applyイベントのハンドラ。
+        /// </summary>
         private void OnApply(object sender, RoutedEventArgs e)
         {
             (DataContext as ViewModels.AIAssistant)?.Apply();

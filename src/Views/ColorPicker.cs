@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -7,6 +7,9 @@ using Avalonia.Media;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     色選択用のカスタムコントロール。
+    /// </summary>
     public class ColorPicker : Control
     {
         public static readonly StyledProperty<uint> ValueProperty =
@@ -83,11 +86,17 @@ namespace Komorebi.Views
             }
         };
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         static ColorPicker()
         {
             ValueProperty.Changed.AddClassHandler<ColorPicker>((c, _) => c.UpdateColors());
         }
 
+        /// <summary>
+        ///     コントロールの描画処理を行う。
+        /// </summary>
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -129,6 +138,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -140,17 +152,26 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     データコンテキストが変更された際の処理。
+        /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
             _highlightedTableRect = null;
         }
 
+        /// <summary>
+        ///     コントロールの測定処理をオーバーライドする。
+        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             return new Size(256, 240);
         }
 
+        /// <summary>
+        ///     ポインターが押された際のイベント処理。
+        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -202,6 +223,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     UpdateColorsの処理を行う。
+        /// </summary>
         private void UpdateColors()
         {
             _color = Color.FromUInt32(Value);
@@ -215,6 +239,9 @@ namespace Komorebi.Views
             _lightestColor = GetNextColor(hsvColor, 0.3);
         }
 
+        /// <summary>
+        ///     GetNextColorの処理を行う。
+        /// </summary>
         private Color GetNextColor(HsvColor c, double step)
         {
             var v = c.V;
@@ -225,14 +252,38 @@ namespace Komorebi.Views
             return newColor.ToRgb();
         }
 
+        /// <summary>
+        ///     Parseの処理を行う。
+        /// </summary>
         private BoxShadows _shadow = BoxShadows.Parse("0 0 6 0 #A9000000");
 
+        /// <summary>
+        ///     Rectの処理を行う。
+        /// </summary>
         private Rect _colorTableRect = new Rect(0, 0, 32 * 8, 32 * 6);
+        /// <summary>
+        ///     RoundedRectの処理を行う。
+        /// </summary>
         private RoundedRect _darkestRect = new RoundedRect(new Rect(0, 200, 32, 32), new CornerRadius(4, 0, 0, 4));
+        /// <summary>
+        ///     Rectの処理を行う。
+        /// </summary>
         private Rect _darkerRect = new Rect(32, 200, 32, 32);
+        /// <summary>
+        ///     Rectの処理を行う。
+        /// </summary>
         private Rect _darkRect = new Rect(64, 200, 32, 32);
+        /// <summary>
+        ///     Rectの処理を行う。
+        /// </summary>
         private Rect _lightRect = new Rect(160, 200, 32, 32);
+        /// <summary>
+        ///     Rectの処理を行う。
+        /// </summary>
         private Rect _lighterRect = new Rect(192, 200, 32, 32);
+        /// <summary>
+        ///     RoundedRectの処理を行う。
+        /// </summary>
         private RoundedRect _lightestRect = new RoundedRect(new Rect(224, 200, 32, 32), new CornerRadius(0, 4, 4, 0));
         private Rect? _highlightedTableRect = null;
 

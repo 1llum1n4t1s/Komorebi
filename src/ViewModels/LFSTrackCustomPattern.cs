@@ -3,8 +3,12 @@ using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels
 {
+    /// <summary>
+    ///     LFSのカスタム追跡パターンを追加するダイアログのViewModel。
+    /// </summary>
     public class LFSTrackCustomPattern : Popup
     {
+        /// <summary>追跡パターン（例: "*.psd", "Assets/**"）。必須入力。</summary>
         [Required(ErrorMessage = "LFS track pattern is required!!!")]
         public string Pattern
         {
@@ -12,17 +16,20 @@ namespace Komorebi.ViewModels
             set => SetProperty(ref _pattern, value, true);
         }
 
+        /// <summary>パターンをファイル名として扱うかどうか（--filenameオプション）。</summary>
         public bool IsFilename
         {
             get;
             set;
         } = false;
 
+        /// <summary>コンストラクタ。対象リポジトリを設定する。</summary>
         public LFSTrackCustomPattern(Repository repo)
         {
             _repo = repo;
         }
 
+        /// <summary>確認ボタン押下時の処理。LFS trackコマンドを実行する。</summary>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();

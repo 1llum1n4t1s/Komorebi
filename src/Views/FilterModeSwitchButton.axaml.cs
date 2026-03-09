@@ -5,6 +5,9 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
+    /// <summary>
+    ///     フィルターモード切替ボタンのコードビハインド。
+    /// </summary>
     public partial class FilterModeSwitchButton : UserControl
     {
         public static readonly StyledProperty<Models.FilterMode> ModeProperty =
@@ -34,12 +37,18 @@ namespace Komorebi.Views
             set => SetValue(IsContextMenuOpeningProperty, value);
         }
 
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
         public FilterModeSwitchButton()
         {
             IsVisible = false;
             InitializeComponent();
         }
 
+        /// <summary>
+        ///     プロパティが変更された際の処理。
+        /// </summary>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
@@ -53,6 +62,9 @@ namespace Komorebi.Views
             }
         }
 
+        /// <summary>
+        ///     ChangeFilterModeButtonClickedイベントのハンドラ。
+        /// </summary>
         private void OnChangeFilterModeButtonClicked(object sender, RoutedEventArgs e)
         {
             var repoView = this.FindAncestorOfType<Repository>();
@@ -75,6 +87,9 @@ namespace Komorebi.Views
             e.Handled = true;
         }
 
+        /// <summary>
+        ///     FillContextMenuForTagの処理を行う。
+        /// </summary>
         private void FillContextMenuForTag(ContextMenu menu, ViewModels.Repository repo, Models.Tag tag, Models.FilterMode current)
         {
             if (current != Models.FilterMode.None)
@@ -120,6 +135,9 @@ namespace Komorebi.Views
             menu.Items.Add(exclude);
         }
 
+        /// <summary>
+        ///     FillContextMenuForBranchの処理を行う。
+        /// </summary>
         private void FillContextMenuForBranch(ContextMenu menu, ViewModels.Repository repo, ViewModels.BranchTreeNode node, Models.FilterMode current)
         {
             if (current != Models.FilterMode.None)

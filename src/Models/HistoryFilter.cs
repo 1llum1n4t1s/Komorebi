@@ -2,22 +2,39 @@
 
 namespace Komorebi.Models
 {
+    /// <summary>
+    ///     履歴フィルターの対象種別
+    /// </summary>
     public enum FilterType
     {
+        /// <summary>ローカルブランチ</summary>
         LocalBranch = 0,
+        /// <summary>ローカルブランチフォルダ</summary>
         LocalBranchFolder,
+        /// <summary>リモートブランチ</summary>
         RemoteBranch,
+        /// <summary>リモートブランチフォルダ</summary>
         RemoteBranchFolder,
+        /// <summary>タグ</summary>
         Tag,
     }
 
+    /// <summary>
+    ///     フィルターモード（含む/除外/なし）
+    /// </summary>
     public enum FilterMode
     {
+        /// <summary>フィルターなし</summary>
         None = 0,
+        /// <summary>指定パターンを含む</summary>
         Included,
+        /// <summary>指定パターンを除外する</summary>
         Excluded,
     }
 
+    /// <summary>
+    ///     コミット履歴のフィルター条件を保持するクラス
+    /// </summary>
     public class HistoryFilter : ObservableObject
     {
         public string Pattern
