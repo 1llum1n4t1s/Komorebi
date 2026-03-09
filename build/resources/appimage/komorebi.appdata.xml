@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>com.1llum1n4t1s.Komorebi</id>
+	<metadata_license>MIT</metadata_license>
+	<project_license>MIT</project_license>
+	<name>Komorebi</name>
+	<summary>Open-source GUI client for git users</summary>
+	<description>
+		<p>Open-source GUI client for git users</p>
+	</description>
+  <url type="homepage">https://github.com/1llum1n4t1s/Komorebi</url>
+	<launchable type="desktop-id">com.1llum1n4t1s.Komorebi.desktop</launchable>
+	<provides>
+		<id>com.1llum1n4t1s.Komorebi.desktop</id>
+	</provides>
+</component>

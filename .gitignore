@@ -29,10 +29,13 @@ package.json
 package-lock.json
 
 
-# Flatpak
-!build/resources/flatpak
-
-build/resources/
+build/resources/*
+!build/resources/_common/
+!build/resources/app/
+!build/resources/appimage/
+!build/resources/deb/
+!build/resources/flatpak/
+!build/resources/rpm/
 build/Komorebi/
 build/Komorebi.app/
 build/*.zip
