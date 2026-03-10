@@ -87,7 +87,6 @@ jobs:
           --channel ${{ matrix.label }}
           --icon build/resources/app/App.icns
           --plist Info.plist
-          --bundleId com.1llum1n4t1s.komorebi
       - name: Upload Velopack artifact
         uses: actions/upload-artifact@v4
         with:
