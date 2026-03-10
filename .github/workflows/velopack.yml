@@ -35,6 +35,17 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
+      - name: Checkout app metadata
+        if: startsWith(matrix.runtime, 'osx-')
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            build/resources/app/App.icns
+            build/resources/app/App.plist
+      - name: Prepare macOS app metadata
+        if: startsWith(matrix.runtime, 'osx-')
+        run: |
+          sed "s/KOMOREBI_VERSION/${{ inputs.version }}/g" build/resources/app/App.plist > Info.plist
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
@@ -48,7 +59,21 @@ jobs:
       - name: Install Velopack CLI
         run: dotnet tool install --global vpk
       - name: Create Velopack package
+        if: ${{ !startsWith(matrix.runtime, 'osx-') }}
         run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.runtime }}
+      - name: Create Velopack package (macOS)
+        if: startsWith(matrix.runtime, 'osx-')
+        run: >
+          vpk pack
+          --packId Komorebi
+          --packVersion ${{ inputs.version }}
+          --mainExe ${{ matrix.mainExe }}
+          --packDir publish
+          --outputDir artifacts
+          --channel ${{ matrix.runtime }}
+          --icon build/resources/app/App.icns
+          --plist Info.plist
+          --bundleId com.1llum1n4t1s.komorebi
       - name: Upload Velopack artifact
         uses: actions/upload-artifact@v4
         with:
