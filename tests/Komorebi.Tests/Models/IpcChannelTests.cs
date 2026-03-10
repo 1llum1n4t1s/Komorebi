@@ -54,18 +54,19 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task SendMessage_IsReceived()
         {
+            var ct = TestContext.Current.CancellationToken;
             var pipe = UniquePipeName();
             using var ipc = new IpcChannel(pipe, LockPath());
 
             // Allow the server loop to start.
-            await Task.Delay(100);
+            await Task.Delay(100, ct);
 
             var received = new TaskCompletionSource<string>();
             ipc.MessageReceived += msg => received.TrySetResult(msg);
 
             ipc.SendToFirstInstance("hello");
 
-            var result = await Task.WhenAny(received.Task, Task.Delay(5000));
+            var result = await Task.WhenAny(received.Task, Task.Delay(5000, ct));
             Assert.Same(received.Task, result);
             Assert.Equal("hello", await received.Task);
         }
@@ -73,9 +74,10 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task SendMultipleMessages_AllReceived()
         {
+            var ct = TestContext.Current.CancellationToken;
             var pipe = UniquePipeName();
             using var ipc = new IpcChannel(pipe, LockPath());
-            await Task.Delay(100);
+            await Task.Delay(100, ct);
 
             var messages = new System.Collections.Concurrent.ConcurrentBag<string>();
             var count = new CountdownEvent(3);
@@ -88,12 +90,12 @@ namespace Komorebi.Tests.Models
 
             ipc.SendToFirstInstance("msg1");
             // Small delay between sends to let the server cycle.
-            await Task.Delay(200);
+            await Task.Delay(200, ct);
             ipc.SendToFirstInstance("msg2");
-            await Task.Delay(200);
+            await Task.Delay(200, ct);
             ipc.SendToFirstInstance("msg3");
 
-            var signaled = count.Wait(TimeSpan.FromSeconds(10));
+            var signaled = count.Wait(TimeSpan.FromSeconds(10), ct);
             Assert.True(signaled, $"Only received {3 - count.CurrentCount} of 3 messages");
             Assert.Contains("msg1", messages);
             Assert.Contains("msg2", messages);
@@ -103,16 +105,17 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task Dispose_CompletesCleanly()
         {
+            var ct = TestContext.Current.CancellationToken;
             var pipe = UniquePipeName();
             var ipc = new IpcChannel(pipe, LockPath());
             Assert.True(ipc.IsFirstInstance);
 
             // Let the server loop start waiting for connections.
-            await Task.Delay(200);
+            await Task.Delay(200, ct);
 
             // Dispose should unblock the server via dummy client and return quickly.
-            var disposeTask = Task.Run(() => ipc.Dispose());
-            var completed = await Task.WhenAny(disposeTask, Task.Delay(5000));
+            var disposeTask = Task.Run(() => ipc.Dispose(), ct);
+            var completed = await Task.WhenAny(disposeTask, Task.Delay(5000, ct));
             Assert.Same(disposeTask, completed);
 
             // Dispose should not throw.
@@ -122,12 +125,13 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task Dispose_ThenSend_DoesNotThrow()
         {
+            var ct = TestContext.Current.CancellationToken;
             var pipe = UniquePipeName();
             var ipc = new IpcChannel(pipe, LockPath());
-            await Task.Delay(200);
+            await Task.Delay(200, ct);
 
             ipc.Dispose();
-            await Task.Delay(100);
+            await Task.Delay(100, ct);
 
             // Sending to a disposed channel should silently fail, not throw.
             var ex = Record.Exception(() => ipc.SendToFirstInstance("after-dispose"));
@@ -137,6 +141,8 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task Dispose_NoExceptionOnThreadPool()
         {
+            var ct = TestContext.Current.CancellationToken;
+
             // Capture any unobserved exceptions on the thread pool.
             var unobserved = new TaskCompletionSource<Exception>();
             EventHandler<UnobservedTaskExceptionEventArgs> handler = (_, e) =>
@@ -150,10 +156,10 @@ namespace Komorebi.Tests.Models
             {
                 var pipe = UniquePipeName();
                 var ipc = new IpcChannel(pipe, LockPath());
-                await Task.Delay(200);
+                await Task.Delay(200, ct);
 
                 ipc.Dispose();
-                await Task.Delay(500);
+                await Task.Delay(500, ct);
 
                 // Force GC to finalize any tasks, which surfaces unobserved exceptions.
                 GC.Collect();
@@ -161,10 +167,10 @@ namespace Komorebi.Tests.Models
                 GC.Collect();
 
                 // Give the thread pool a moment to fire any unobserved events.
-                await Task.Delay(200);
+                await Task.Delay(200, ct);
 
                 // If no exception was caught, this times out (good).
-                var result = await Task.WhenAny(unobserved.Task, Task.Delay(1000));
+                var result = await Task.WhenAny(unobserved.Task, Task.Delay(1000, ct));
                 if (result == unobserved.Task)
                     Assert.Fail($"Unobserved exception on thread pool: {await unobserved.Task}");
             }
@@ -192,15 +198,16 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task Dispose_ReleasesLockFile()
         {
+            var ct = TestContext.Current.CancellationToken;
             var pipe = UniquePipeName();
             var lockFile = LockPath();
 
             var ipc = new IpcChannel(pipe, lockFile);
             Assert.True(ipc.IsFirstInstance);
-            await Task.Delay(100);
+            await Task.Delay(100, ct);
 
             ipc.Dispose();
-            await Task.Delay(100);
+            await Task.Delay(100, ct);
 
             // After dispose, we should be able to acquire the lock again.
             using var newIpc = new IpcChannel(UniquePipeName(), lockFile);
@@ -210,6 +217,8 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task Dispose_DummyClientUnblocksServer()
         {
+            var ct = TestContext.Current.CancellationToken;
+
             // Verifies that the dummy client in Dispose() successfully connects
             // to unblock the server's WaitForConnectionAsync, even under rapid
             // create-dispose cycles (regression test for PipeOptions.CurrentUserOnly
@@ -221,11 +230,11 @@ namespace Komorebi.Tests.Models
                 Assert.True(ipc.IsFirstInstance);
 
                 // Let server start waiting.
-                await Task.Delay(150);
+                await Task.Delay(150, ct);
 
                 // Dispose must complete quickly (dummy client unblocks the server).
-                var disposeTask = Task.Run(() => ipc.Dispose());
-                var completed = await Task.WhenAny(disposeTask, Task.Delay(3000));
+                var disposeTask = Task.Run(() => ipc.Dispose(), ct);
+                var completed = await Task.WhenAny(disposeTask, Task.Delay(3000, ct));
                 Assert.Same(disposeTask, completed);
                 await disposeTask; // must not throw
             }
@@ -234,12 +243,13 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task Dispose_ServerStopsAcceptingConnections()
         {
+            var ct = TestContext.Current.CancellationToken;
             var pipe = UniquePipeName();
             var ipc = new IpcChannel(pipe, LockPath());
-            await Task.Delay(150);
+            await Task.Delay(150, ct);
 
             ipc.Dispose();
-            await Task.Delay(200);
+            await Task.Delay(200, ct);
 
             // After dispose, connecting to the pipe should fail (server is gone).
             var ex = Record.Exception(() =>
@@ -298,6 +308,8 @@ namespace Komorebi.Tests.Models
         [Fact]
         public async Task Dispose_NoInvalidOperationException()
         {
+            var ct = TestContext.Current.CancellationToken;
+
             // Specifically tests that Dispose does not throw InvalidOperationException
             // (which was caused by PipeOptions.CurrentUserOnly triggering
             // ValidateRemotePipeUser/NativeObjectSecurity during shutdown).
@@ -316,17 +328,17 @@ namespace Komorebi.Tests.Models
                 {
                     var pipe = UniquePipeName();
                     var ipc = new IpcChannel(pipe, LockPath());
-                    await Task.Delay(200);
+                    await Task.Delay(200, ct);
 
                     ipc.Dispose();
-                    await Task.Delay(300);
+                    await Task.Delay(300, ct);
                 }
 
                 // Force GC to finalize tasks and surface any unobserved exceptions.
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-                await Task.Delay(500);
+                await Task.Delay(500, ct);
 
                 // No InvalidOperationException should have leaked.
                 foreach (var ex in exceptions)
