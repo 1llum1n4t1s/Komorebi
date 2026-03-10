@@ -36,12 +36,13 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - name: Checkout app metadata
-        if: startsWith(matrix.runtime, 'osx-')
+        if: ${{ !startsWith(matrix.runtime, 'win-') }}
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
             build/resources/app/App.icns
             build/resources/app/App.plist
+            build/resources/_common/icons/komorebi.png
       - name: Prepare macOS app metadata
         if: startsWith(matrix.runtime, 'osx-')
         run: |
@@ -58,9 +59,20 @@ jobs:
           rm publish/komorebi.${{ matrix.runtime }}.tar
       - name: Install Velopack CLI
         run: dotnet tool install --global vpk
-      - name: Create Velopack package
-        if: ${{ !startsWith(matrix.runtime, 'osx-') }}
+      - name: Create Velopack package (Windows)
+        if: startsWith(matrix.runtime, 'win-')
         run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.runtime }}
+      - name: Create Velopack package (Linux)
+        if: startsWith(matrix.runtime, 'linux-')
+        run: >
+          vpk pack
+          --packId Komorebi
+          --packVersion ${{ inputs.version }}
+          --mainExe ${{ matrix.mainExe }}
+          --packDir publish
+          --outputDir artifacts
+          --channel ${{ matrix.runtime }}
+          --icon build/resources/_common/icons/komorebi.png
       - name: Create Velopack package (macOS)
         if: startsWith(matrix.runtime, 'osx-')
         run: >
