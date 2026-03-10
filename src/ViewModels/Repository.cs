@@ -1120,6 +1120,10 @@ namespace Komorebi.ViewModels
             return actions;
         }
 
+        /// <summary>
+        ///     Bisectサブコマンド（start/good/bad/reset等）を実行する。
+        ///     完了後にブランチを更新し、HEADにナビゲートする。
+        /// </summary>
         public async Task ExecBisectCommandAsync(string subcmd)
         {
             using var lockWatcher = _watcher?.Lock();
@@ -1141,6 +1145,7 @@ namespace Komorebi.ViewModels
             IsBisectCommandRunning = false;
         }
 
+        /// <summary>サブモジュールが存在する可能性があるかを判定する（.gitmodulesの存在とサイズで判断）。</summary>
         public bool MayHaveSubmodules()
         {
             var modulesFile = Path.Combine(FullPath, ".gitmodules");
@@ -1148,6 +1153,10 @@ namespace Komorebi.ViewModels
             return info.Exists && info.Length > 20;
         }
 
+        /// <summary>
+        ///     ブランチとリモートの一覧を非同期で再取得し、ブランチツリーを再構築する。
+        ///     前回の取得中タスクがあればキャンセルする。
+        /// </summary>
         public void RefreshBranches()
         {
             if (_cancellationRefreshBranches is { IsCancellationRequested: false })
@@ -1191,6 +1200,7 @@ namespace Komorebi.ViewModels
             }, token);
         }
 
+        /// <summary>ワークツリー一覧を非同期で再取得し、UIに反映する。</summary>
         public void RefreshWorktrees()
         {
             Task.Run(async () =>
@@ -1201,6 +1211,10 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     タグ一覧を非同期で再取得し、表示用タグリストを再構築する。
+        ///     前回の取得中タスクがあればキャンセルする。
+        /// </summary>
         public void RefreshTags()
         {
             if (_cancellationRefreshTags is { IsCancellationRequested: false })
@@ -1224,6 +1238,10 @@ namespace Komorebi.ViewModels
             }, token);
         }
 
+        /// <summary>
+        ///     コミット履歴を非同期で再取得し、コミットグラフを再構築する。
+        ///     フィルタ条件と最大件数を適用する。前回の取得中タスクがあればキャンセルする。
+        /// </summary>
         public void RefreshCommits()
         {
             if (_cancellationRefreshCommits is { IsCancellationRequested: false })
@@ -1267,6 +1285,10 @@ namespace Komorebi.ViewModels
             }, token);
         }
 
+        /// <summary>
+        ///     サブモジュール一覧を非同期で再取得する。
+        ///     .gitmodulesが存在しない場合はクリアし、変更がある場合のみUIを更新する。
+        /// </summary>
         public void RefreshSubmodules()
         {
             if (!MayHaveSubmodules())
@@ -1323,6 +1345,10 @@ namespace Komorebi.ViewModels
             });
         }
 
+        /// <summary>
+        ///     ワーキングコピーの変更一覧を非同期で再取得する。
+        ///     ベアリポジトリの場合は何もしない。前回の取得中タスクがあればキャンセルする。
+        /// </summary>
         public void RefreshWorkingCopyChanges()
         {
             if (IsBare)
@@ -1360,6 +1386,10 @@ namespace Komorebi.ViewModels
             }, token);
         }
 
+        /// <summary>
+        ///     スタッシュ一覧を非同期で再取得する。
+        ///     ベアリポジトリの場合は何もしない。前回の取得中タスクがあればキャンセルする。
+        /// </summary>
         public void RefreshStashes()
         {
             if (IsBare)
@@ -1388,6 +1418,7 @@ namespace Komorebi.ViewModels
             }, token);
         }
 
+        /// <summary>履歴表示フラグ（First Parent Only等）をトグルする。</summary>
         public void ToggleHistoryShowFlag(Models.HistoryShowFlags flag)
         {
             if (_uiStates.HistoryShowFlags.HasFlag(flag))
@@ -1396,6 +1427,7 @@ namespace Komorebi.ViewModels
                 HistoryShowFlags |= flag;
         }
 
+        /// <summary>新しいブランチ作成ダイアログを表示する。初回コミット前はエラーを表示する。</summary>
         public void CreateNewBranch()
         {
             if (_currentBranch == null)
@@ -1408,6 +1440,12 @@ namespace Komorebi.ViewModels
                 ShowPopup(new CreateBranch(this, _currentBranch));
         }
 
+        /// <summary>
+        ///     指定ブランチをチェックアウトする。
+        ///     ローカルブランチがワークツリーに紐付いている場合はワークツリーを開く。
+        ///     リモートブランチの場合はローカル追跡ブランチがあればそちらを使用し、
+        ///     なければ新規ブランチ作成ダイアログを表示する。
+        /// </summary>
         public async Task CheckoutBranchAsync(Models.Branch branch)
         {
             if (branch.IsLocal)
@@ -1451,6 +1489,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>指定タグのコミットを取得し、そのコミットに基づいてブランチをチェックアウトする。</summary>
         public async Task CheckoutTagAsync(Models.Tag tag)
         {
             var c = await new Commands.QuerySingleCommit(FullPath, tag.SHA).GetResultAsync();
@@ -1458,24 +1497,28 @@ namespace Komorebi.ViewModels
                 await _histories.CheckoutBranchByCommitAsync(c);
         }
 
+        /// <summary>ブランチ削除の確認ダイアログを表示する。</summary>
         public void DeleteBranch(Models.Branch branch)
         {
             if (CanCreatePopup())
                 ShowPopup(new DeleteBranch(this, branch));
         }
 
+        /// <summary>複数ブランチの一括削除確認ダイアログを表示する。</summary>
         public void DeleteMultipleBranches(List<Models.Branch> branches, bool isLocal)
         {
             if (CanCreatePopup())
                 ShowPopup(new DeleteMultipleBranches(this, branches, isLocal));
         }
 
+        /// <summary>複数ブランチのマージダイアログを表示する。</summary>
         public void MergeMultipleBranches(List<Models.Branch> branches)
         {
             if (CanCreatePopup())
                 ShowPopup(new MergeMultiple(this, branches));
         }
 
+        /// <summary>新しいタグ作成ダイアログを表示する。初回コミット前はエラーを表示する。</summary>
         public void CreateNewTag()
         {
             if (_currentBranch == null)
@@ -1488,36 +1531,45 @@ namespace Komorebi.ViewModels
                 ShowPopup(new CreateTag(this, _currentBranch));
         }
 
+        /// <summary>タグ削除の確認ダイアログを表示する。</summary>
         public void DeleteTag(Models.Tag tag)
         {
             if (CanCreatePopup())
                 ShowPopup(new DeleteTag(this, tag));
         }
 
+        /// <summary>リモート追加ダイアログを表示する。</summary>
         public void AddRemote()
         {
             if (CanCreatePopup())
                 ShowPopup(new AddRemote(this));
         }
 
+        /// <summary>リモート削除の確認ダイアログを表示する。</summary>
         public void DeleteRemote(Models.Remote remote)
         {
             if (CanCreatePopup())
                 ShowPopup(new DeleteRemote(this, remote));
         }
 
+        /// <summary>サブモジュール追加ダイアログを表示する。</summary>
         public void AddSubmodule()
         {
             if (CanCreatePopup())
                 ShowPopup(new AddSubmodule(this));
         }
 
+        /// <summary>サブモジュール更新ダイアログを表示する。</summary>
         public void UpdateSubmodules()
         {
             if (CanCreatePopup())
                 ShowPopup(new UpdateSubmodules(this, null));
         }
 
+        /// <summary>
+        ///     更新可能なサブモジュールを自動更新する。
+        ///     設定で確認が有効な場合は確認ダイアログを表示する。
+        /// </summary>
         public async Task AutoUpdateSubmodulesAsync(Models.ICommandLog log)
         {
             var submodules = await new Commands.QueryUpdatableSubmodules(FullPath, false).GetResultAsync();
@@ -1546,6 +1598,7 @@ namespace Komorebi.ViewModels
             } while (false);
         }
 
+        /// <summary>指定サブモジュールを新しいタブで開く。リポジトリノードが未登録の場合は自動作成する。</summary>
         public void OpenSubmodule(string submodule)
         {
             var selfPage = GetOwnerPage();
@@ -1567,18 +1620,21 @@ namespace Komorebi.ViewModels
             App.GetLauncher().OpenRepositoryInTab(node, null);
         }
 
+        /// <summary>ワークツリー追加ダイアログを表示する。</summary>
         public void AddWorktree()
         {
             if (CanCreatePopup())
                 ShowPopup(new AddWorktree(this));
         }
 
+        /// <summary>不要なワークツリーのプルーン（削除）を実行する。</summary>
         public async Task PruneWorktreesAsync()
         {
             if (CanCreatePopup())
                 await ShowAndStartPopupAsync(new PruneWorktrees(this));
         }
 
+        /// <summary>指定ワークツリーを新しいタブで開く。現在のワークツリーの場合は何もしない。</summary>
         public void OpenWorktree(Worktree worktree)
         {
             if (worktree.IsCurrent)
@@ -1596,6 +1652,7 @@ namespace Komorebi.ViewModels
             App.GetLauncher().OpenRepositoryInTab(node, null);
         }
 
+        /// <summary>指定ワークツリーをロックし、誤削除を防止する。</summary>
         public async Task LockWorktreeAsync(Worktree worktree)
         {
             using var lockWatcher = _watcher?.Lock();
@@ -1606,6 +1663,7 @@ namespace Komorebi.ViewModels
             log.Complete();
         }
 
+        /// <summary>指定ワークツリーのロックを解除する。</summary>
         public async Task UnlockWorktreeAsync(Worktree worktree)
         {
             using var lockWatcher = _watcher?.Lock();
@@ -1616,6 +1674,10 @@ namespace Komorebi.ViewModels
             log.Complete();
         }
 
+        /// <summary>
+        ///     優先OpenAIサービスのリストを取得する。
+        ///     リポジトリ固有の設定があればそれを優先し、なければ全サービスを返す。
+        /// </summary>
         public List<Models.OpenAIService> GetPreferredOpenAIServices()
         {
             var services = Preferences.Instance.OpenAIServices;
@@ -1638,18 +1700,24 @@ namespace Komorebi.ViewModels
             return all;
         }
 
+        /// <summary>全変更の破棄確認ダイアログを表示する。</summary>
         public void DiscardAllChanges()
         {
             if (CanCreatePopup())
                 ShowPopup(new Discard(this));
         }
 
+        /// <summary>全スタッシュのクリア確認ダイアログを表示する。</summary>
         public void ClearStashes()
         {
             if (CanCreatePopup())
                 ShowPopup(new ClearStashes(this));
         }
 
+        /// <summary>
+        ///     指定コミットをパッチファイルとして保存する。
+        ///     ファイル名はインデックスとコミットサブジェクトから安全な文字列を生成する。
+        /// </summary>
         public async Task<bool> SaveCommitAsPatchAsync(Models.Commit commit, string folder, int index = 0)
         {
             var ignoredChars = new HashSet<char> { '/', '\\', ':', ',', '*', '?', '\"', '<', '>', '|', '`', '$', '^', '%', '[', ']', '+', '-' };
@@ -1683,6 +1751,7 @@ namespace Komorebi.ViewModels
             return succ;
         }
 
+        /// <summary>このリポジトリが表示されているランチャーページを取得する。見つからない場合はnull。</summary>
         private LauncherPage GetOwnerPage()
         {
             var launcher = App.GetLauncher();
@@ -1698,6 +1767,11 @@ namespace Komorebi.ViewModels
             return null;
         }
 
+        /// <summary>
+        ///     ブランチとリモートからブランチツリーを構築する。
+        ///     フィルタが設定されている場合はフィルタに一致するブランチのみを含める。
+        ///     構築後にフィルタモードを適用する。
+        /// </summary>
         private BranchTreeNode.Builder BuildBranchTree(List<Models.Branch> branches, List<Models.Remote> remotes)
         {
             var builder = new BranchTreeNode.Builder(_uiStates.LocalBranchSortMode, _uiStates.RemoteBranchSortMode);
@@ -1727,6 +1801,10 @@ namespace Komorebi.ViewModels
             return builder;
         }
 
+        /// <summary>
+        ///     表示用タグコレクションを構築する。
+        ///     ソートモードに応じてソートし、フィルタを適用後、ツリーまたはリスト形式で返す。
+        /// </summary>
         private object BuildVisibleTags()
         {
             switch (_uiStates.TagSortMode)
@@ -1772,6 +1850,10 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     表示用サブモジュールコレクションを構築する。
+        ///     フィルタを適用後、ツリーまたはリスト形式で返す。
+        /// </summary>
         private object BuildVisibleSubmodules()
         {
             var visible = new List<Models.Submodule>();
@@ -1794,6 +1876,7 @@ namespace Komorebi.ViewModels
                 return new SubmoduleCollectionAsList() { Submodules = visible };
         }
 
+        /// <summary>履歴フィルタモードを更新し、refreshがtrueの場合はブランチツリー・タグ・コミットを再描画する。</summary>
         private void RefreshHistoryFilters(bool refresh)
         {
             HistoryFilterMode = _uiStates.GetHistoryFilterMode();
@@ -1807,6 +1890,7 @@ namespace Komorebi.ViewModels
             RefreshCommits();
         }
 
+        /// <summary>ブランチツリーの各ノードにフィルタモードを再帰的に適用する。</summary>
         private void UpdateBranchTreeFilterMode(List<BranchTreeNode> nodes, Dictionary<string, Models.FilterMode> map)
         {
             foreach (var node in nodes)
@@ -1818,6 +1902,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>タグのフィルタモードを更新する（ツリー形式またはリスト形式に対応）。</summary>
         private void UpdateTagFilterMode(Dictionary<string, Models.FilterMode> map)
         {
             if (VisibleTags is TagCollectionAsTree tree)
@@ -1832,6 +1917,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>ブランチツリーの全ノードのフィルタモードをNoneに再帰的にリセットする。</summary>
         private void ResetBranchTreeFilterMode(List<BranchTreeNode> nodes)
         {
             foreach (var node in nodes)
@@ -1842,6 +1928,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>全タグのフィルタモードをNoneにリセットする（ツリー形式またはリスト形式に対応）。</summary>
         private void ResetTagFilterMode()
         {
             if (VisibleTags is TagCollectionAsTree tree)
@@ -1857,6 +1944,7 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>指定パスに一致するブランチツリーノードを再帰的に検索する。見つからない場合はnull。</summary>
         private BranchTreeNode FindBranchNode(List<BranchTreeNode> nodes, string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -1878,6 +1966,7 @@ namespace Komorebi.ViewModels
             return null;
         }
 
+        /// <summary>タイマーコールバック。UIスレッドで自動フェッチを実行する。</summary>
         private void AutoFetchByTimer(object sender)
         {
             try
@@ -1890,6 +1979,11 @@ namespace Komorebi.ViewModels
             }
         }
 
+        /// <summary>
+        ///     UIスレッド上で自動フェッチを実行する。
+        ///     設定の有効/無効、ロックファイルの存在、前回フェッチからの経過時間をチェックし、
+        ///     条件を満たした場合に全リモートまたはデフォルトリモートからフェッチする。
+        /// </summary>
         private async Task AutoFetchOnUIThread()
         {
             if (_uiStates == null)
@@ -1949,51 +2043,51 @@ namespace Komorebi.ViewModels
             log?.Complete();
         }
 
-        private readonly string _gitCommonDir = null;
-        private Models.RepositorySettings _settings = null;
-        private Models.RepositoryUIStates _uiStates = null;
-        private Models.FilterMode _historyFilterMode = Models.FilterMode.None;
-        private bool _hasAllowedSignersFile = false;
-        private ulong _queryLocalChangesTimes = 0;
+        private readonly string _gitCommonDir = null;                                    // 共有gitディレクトリパス（worktree用）
+        private Models.RepositorySettings _settings = null;                                // リポジトリ固有設定
+        private Models.RepositoryUIStates _uiStates = null;                                // UI状態（フィルタ、展開状態等）
+        private Models.FilterMode _historyFilterMode = Models.FilterMode.None;             // 履歴フィルタモード
+        private bool _hasAllowedSignersFile = false;                                       // GPG許可署名者ファイルの存在フラグ
+        private ulong _queryLocalChangesTimes = 0;                                         // ローカル変更クエリの実行回数
 
-        private Models.Watcher _watcher = null;
-        private Histories _histories = null;
-        private WorkingCopy _workingCopy = null;
-        private StashesPage _stashesPage = null;
-        private int _selectedViewIndex = 0;
-        private object _selectedView = null;
+        private Models.Watcher _watcher = null;                                            // ファイルシステム監視
+        private Histories _histories = null;                                               // 履歴ビューVM
+        private WorkingCopy _workingCopy = null;                                           // ワーキングコピーVM
+        private StashesPage _stashesPage = null;                                           // スタッシュページVM
+        private int _selectedViewIndex = 0;                                                // 選択中のビューインデックス
+        private object _selectedView = null;                                               // 選択中のビューオブジェクト
 
-        private int _localBranchesCount = 0;
-        private int _localChangesCount = 0;
-        private int _stashesCount = 0;
+        private int _localBranchesCount = 0;                                               // ローカルブランチ数
+        private int _localChangesCount = 0;                                                // ローカル変更数
+        private int _stashesCount = 0;                                                     // スタッシュ数
 
-        private bool _isSearchingCommits = false;
-        private SearchCommitContext _searchCommitContext = null;
+        private bool _isSearchingCommits = false;                                          // コミット検索中フラグ
+        private SearchCommitContext _searchCommitContext = null;                            // コミット検索コンテキスト
 
-        private string _filter = string.Empty;
-        private List<Models.Remote> _remotes = [];
-        private List<Models.Branch> _branches = [];
-        private Models.Branch _currentBranch = null;
-        private List<BranchTreeNode> _localBranchTrees = [];
-        private List<BranchTreeNode> _remoteBranchTrees = [];
-        private List<Worktree> _worktrees = [];
-        private List<Models.Tag> _tags = [];
-        private object _visibleTags = null;
-        private List<Models.Submodule> _submodules = [];
-        private object _visibleSubmodules = null;
-        private string _navigateToCommitDelayed = string.Empty;
+        private string _filter = string.Empty;                                             // サイドバーフィルタ文字列
+        private List<Models.Remote> _remotes = [];                                         // リモート一覧
+        private List<Models.Branch> _branches = [];                                        // ブランチ一覧
+        private Models.Branch _currentBranch = null;                                       // 現在のブランチ
+        private List<BranchTreeNode> _localBranchTrees = [];                               // ローカルブランチツリー
+        private List<BranchTreeNode> _remoteBranchTrees = [];                              // リモートブランチツリー
+        private List<Worktree> _worktrees = [];                                            // ワークツリー一覧
+        private List<Models.Tag> _tags = [];                                               // タグ一覧
+        private object _visibleTags = null;                                                // 表示用タグコレクション
+        private List<Models.Submodule> _submodules = [];                                   // サブモジュール一覧
+        private object _visibleSubmodules = null;                                          // 表示用サブモジュールコレクション
+        private string _navigateToCommitDelayed = string.Empty;                            // 遅延ナビゲーション先コミットSHA
 
-        private bool _isAutoFetching = false;
-        private Timer _autoFetchTimer = null;
-        private DateTime _lastFetchTime = DateTime.MinValue;
+        private bool _isAutoFetching = false;                                              // 自動フェッチ実行中フラグ
+        private Timer _autoFetchTimer = null;                                              // 自動フェッチタイマー
+        private DateTime _lastFetchTime = DateTime.MinValue;                               // 最終フェッチ時刻
 
-        private Models.BisectState _bisectState = Models.BisectState.None;
-        private bool _isBisectCommandRunning = false;
+        private Models.BisectState _bisectState = Models.BisectState.None;                 // Bisect状態
+        private bool _isBisectCommandRunning = false;                                      // Bisectコマンド実行中フラグ
 
-        private CancellationTokenSource _cancellationRefreshBranches = null;
-        private CancellationTokenSource _cancellationRefreshTags = null;
-        private CancellationTokenSource _cancellationRefreshWorkingCopyChanges = null;
-        private CancellationTokenSource _cancellationRefreshCommits = null;
-        private CancellationTokenSource _cancellationRefreshStashes = null;
+        private CancellationTokenSource _cancellationRefreshBranches = null;               // ブランチ更新キャンセルトークン
+        private CancellationTokenSource _cancellationRefreshTags = null;                   // タグ更新キャンセルトークン
+        private CancellationTokenSource _cancellationRefreshWorkingCopyChanges = null;     // ワーキングコピー更新キャンセルトークン
+        private CancellationTokenSource _cancellationRefreshCommits = null;                // コミット更新キャンセルトークン
+        private CancellationTokenSource _cancellationRefreshStashes = null;                // スタッシュ更新キャンセルトークン
     }
 }

@@ -9,6 +9,24 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 > [!NOTE]
 > 本プロジェクトは [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォークです。オリジナルの開発者および全コントリビューターに感謝いたします。
 
+## 本家 SourceGit との違い
+
+| 項目 | 内容 |
+|------|------|
+| **OneDark テーマ** | Atom One Dark にインスパイアされた新テーマ（28 色定義）を追加 |
+| **White テーマ** | 純白背景のライトテーマバリアントを追加 |
+| **日本語 UI デフォルト** | OS が日本語環境の場合、初回起動時に自動で日本語ロケール・日本語フォントを設定 |
+| **初回セットアップ画面** | 初回起動時に言語選択とデフォルト Clone ディレクトリを設定するポップアップを表示 |
+| **Filipino ロケール追加** | 本家にない Filipino（fil_PH）ロケールを追加し、計 15 言語に対応 |
+| **日本語ソースコメント** | ソースコード全体（466 ファイル）に日本語の XML ドキュメントコメントとインラインコメントを追加 |
+| **日本語 README** | README を全面的に日本語化 |
+| **アプリアイコン刷新** | 木漏れ日をモチーフにしたオリジナルアイコンに変更 |
+| **Stage/Unstage アイコン修正** | ステージ・アンステージボタンの矢印方向を直感的な向きに修正 |
+| **起動時アップデート通知** | 起動時のアップデートチェックで手動チェックと同様に結果を通知するよう修正 |
+| **バージョン表示修正** | About 画面のバージョン表示が正しく動作するよう修正 |
+| **リポジトリ自動スキャン** | Clone ディレクトリ変更時・ワークスペース切替時にリポジトリを自動スキャン |
+| **バンドルフォント** | 設定画面のフォント選択に woff2 バンドルフォントを追加 |
+
 ## スクリーンショット
 
 | ダークテーマ | ライトテーマ |
@@ -171,7 +189,7 @@ VS Code / VS Code Insiders / VSCodium / Cursor / Sublime Text / Zed / Visual Stu
 
 ### テーマ
 
-ライト / ダーク / システム連動の 3 モード。JSON ファイルによるテーマオーバーライドで、基本カラー・グラフカラーパレット・グラフ線の太さ・未マージコミットの透明度を細かく調整できます。
+ライト / ダーク / **White** / **OneDark** / システム連動の 5 モード。JSON ファイルによるテーマオーバーライドで、基本カラー・グラフカラーパレット・グラフ線の太さ・未マージコミットの透明度を細かく調整できます。
 
 ### フォント・表示
 
@@ -188,9 +206,9 @@ VS Code / VS Code Insiders / VSCodium / Cursor / Sublime Text / Zed / Visual Stu
 
 ## 多言語対応
 
-14 言語をサポートしています:
+15 言語をサポートしています:
 
-Deutsch · English · Español · Français · Bahasa Indonesia · Italiano · 日本語 · 한국어 · Português (Brasil) · Русский · தமிழ் · Українська · 简体中文 · 繁體中文
+Deutsch · English · Español · Filipino · Français · Bahasa Indonesia · Italiano · 日本語 · 한국어 · Português (Brasil) · Русский · தமிழ் · Українська · 简体中文 · 繁體中文
 
 ---
 
@@ -201,38 +219,6 @@ komorebi <DIR>                       # リポジトリを開く
 komorebi --file-history <FILE_PATH>  # ファイル履歴を表示
 komorebi --blame <FILE_PATH>         # Blame を表示（HEAD）
 ```
-
----
-
-## ビルド
-
-```bash
-dotnet restore
-dotnet build
-dotnet run --project src/Komorebi.csproj
-```
-
-リリースビルド（AOT、プラットフォーム別）:
-
-```bash
-dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64
-```
-
-> AOT を無効化する場合は `-p:DisableAOT=true`、自動アップデート検出を無効化する場合は `-p:DisableUpdateDetection=true` を追加してください。
-
----
-
-## 主要な依存パッケージ
-
-| パッケージ | 用途 |
-|-----------|------|
-| [Avalonia](https://avaloniaui.net/) 11.3.x | クロスプラットフォーム XAML UI |
-| [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) | MVVM ソースジェネレータ |
-| [Velopack](https://velopack.io/) | 自動アップデート |
-| [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) | 差分・Blame 用テキストエディタ（サブモジュール） |
-| [OpenAI / Azure.AI.OpenAI](https://github.com/openai/openai-dotnet) | AI コミットメッセージ生成 |
-| [LiveChartsCore](https://livecharts.dev/) | 貢献統計グラフ |
-| [Pfim](https://github.com/nickbabcock/Pfim) / [LibTiff.NET](https://bitmiracle.com/libtiff/) | TGA・DDS・TIFF 画像デコード |
 
 ---
 
