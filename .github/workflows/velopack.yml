@@ -11,21 +11,26 @@ jobs:
       matrix:
         include:
           - runtime: win-x64
+            label: windows-x64
             os: windows-2022
             mainExe: Komorebi.exe
           - runtime: win-arm64
+            label: windows-arm64
             os: windows-2022
             mainExe: Komorebi.exe
           - runtime: osx-arm64
+            label: macos-apple-silicon
             os: macos-latest
             mainExe: Komorebi
           - runtime: linux-x64
+            label: linux-x64
             os: ubuntu-latest
             mainExe: komorebi
           - runtime: linux-arm64
+            label: linux-arm64
             os: ubuntu-latest
             mainExe: komorebi
-    name: Velopack ${{ matrix.runtime }}
+    name: Velopack ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup .NET
@@ -58,7 +63,7 @@ jobs:
         run: dotnet tool install --global vpk
       - name: Create Velopack package (Windows)
         if: startsWith(matrix.runtime, 'win-')
-        run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.runtime }}
+        run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.label }}
       - name: Create Velopack package (Linux)
         if: startsWith(matrix.runtime, 'linux-')
         run: >
@@ -68,7 +73,7 @@ jobs:
           --mainExe ${{ matrix.mainExe }}
           --packDir publish
           --outputDir artifacts
-          --channel ${{ matrix.runtime }}
+          --channel ${{ matrix.label }}
           --icon build/resources/_common/icons/komorebi.png
       - name: Create Velopack package (macOS)
         if: startsWith(matrix.runtime, 'osx-')
@@ -79,12 +84,12 @@ jobs:
           --mainExe ${{ matrix.mainExe }}
           --packDir publish
           --outputDir artifacts
-          --channel ${{ matrix.runtime }}
+          --channel ${{ matrix.label }}
           --icon build/resources/app/App.icns
           --plist Info.plist
           --bundleId com.1llum1n4t1s.komorebi
       - name: Upload Velopack artifact
         uses: actions/upload-artifact@v4
         with:
-          name: velopack.${{ matrix.runtime }}
+          name: velopack.${{ matrix.label }}
           path: artifacts/*

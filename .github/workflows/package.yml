@@ -12,7 +12,11 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        runtime: [win-x64, win-arm64]
+        include:
+          - runtime: win-x64
+            label: windows-x64
+          - runtime: win-arm64
+            label: windows-arm64
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -25,19 +29,21 @@ jobs:
         shell: pwsh
         env:
           VERSION: ${{ inputs.version }}
-          RUNTIME: ${{ matrix.runtime }}
+          LABEL: ${{ matrix.label }}
         run: ./build/scripts/package.win.ps1
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: package.${{ matrix.runtime }}
+          name: package.${{ matrix.label }}
           path: build/komorebi_*.zip
   osx-app:
     name: Package macOS
     runs-on: macos-latest
     strategy:
       matrix:
-        runtime: [osx-arm64]
+        include:
+          - runtime: osx-arm64
+            label: macos-apple-silicon
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -49,7 +55,7 @@ jobs:
       - name: Package
         env:
           VERSION: ${{ inputs.version }}
-          RUNTIME: ${{ matrix.runtime }}
+          LABEL: ${{ matrix.label }}
         run: |
           mkdir build/Komorebi
           tar -xf "build/komorebi.${{ matrix.runtime }}.tar" -C build/Komorebi
@@ -57,7 +63,7 @@ jobs:
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: package.${{ matrix.runtime }}
+          name: package.${{ matrix.label }}
           path: build/komorebi_*.zip
   linux:
     name: Package Linux
@@ -65,7 +71,11 @@ jobs:
     container: ubuntu:20.04
     strategy:
       matrix:
-        runtime: [linux-x64, linux-arm64]
+        include:
+          - runtime: linux-x64
+            label: linux-x64
+          - runtime: linux-arm64
+            label: linux-arm64
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -83,6 +93,7 @@ jobs:
       - name: Package
         env:
           VERSION: ${{ inputs.version }}
+          LABEL: ${{ matrix.label }}
           RUNTIME: ${{ matrix.runtime }}
           APPIMAGE_EXTRACT_AND_RUN: 1
         run: |
@@ -92,7 +103,7 @@ jobs:
       - name: Upload package artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: package.${{ matrix.runtime }}
+          name: package.${{ matrix.label }}
           path: |
             build/komorebi-*.AppImage
             build/komorebi_*.deb

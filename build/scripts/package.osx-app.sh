@@ -11,4 +11,4 @@ sed "s/KOMOREBI_VERSION/$VERSION/g" resources/app/App.plist > Komorebi.app/Conte
 rm -rf Komorebi.app/Contents/MacOS/Komorebi.dsym
 rm -f Komorebi.app/Contents/MacOS/*.pdb
 
-zip "komorebi_$VERSION.$RUNTIME.zip" -r Komorebi.app
+zip "komorebi_$VERSION.$LABEL.zip" -r Komorebi.app
