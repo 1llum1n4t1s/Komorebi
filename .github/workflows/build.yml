@@ -12,9 +12,6 @@ jobs:
           - name: Windows ARM64
             os: windows-2022
             runtime: win-arm64
-          - name: macOS (Intel)
-            os: macos-15-intel
-            runtime: osx-x64
           - name: macOS (Apple Silicon)
             os: macos-latest
             runtime: osx-arm64

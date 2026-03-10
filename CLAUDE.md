@@ -113,7 +113,7 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **localization-check.yml** — validates locale files against `en_US`
 - **ci.yml** — builds all platforms + packages on push/PR to `develop`
 - **release.yml** — triggered by `v*` tags: builds → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
-- **velopack.yml** — reusable workflow creating Velopack packages for 6 RIDs (win-x64, win-arm64, osx-x64, osx-arm64, linux-x64, linux-arm64)
+- **velopack.yml** — reusable workflow creating Velopack packages for 5 RIDs (win-x64, win-arm64, osx-arm64, linux-x64, linux-arm64)
 
 Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.4`). CI reads it directly for both packaging and Velopack.
 

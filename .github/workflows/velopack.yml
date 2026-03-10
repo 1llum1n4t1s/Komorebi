@@ -16,9 +16,6 @@ jobs:
           - runtime: win-arm64
             os: windows-2022
             mainExe: Komorebi.exe
-          - runtime: osx-x64
-            os: macos-latest
-            mainExe: Komorebi
           - runtime: osx-arm64
             os: macos-latest
             mainExe: Komorebi

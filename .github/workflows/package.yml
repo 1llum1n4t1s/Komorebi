@@ -37,7 +37,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        runtime: [osx-x64, osx-arm64]
+        runtime: [osx-arm64]
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
