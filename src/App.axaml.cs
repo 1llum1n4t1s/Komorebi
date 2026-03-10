@@ -327,7 +327,7 @@ namespace Komorebi
 
                 // テキスト・前景色
                 resDic["Color.FG1"] = Color.Parse("#FFABB2BF");
-                resDic["Color.FG2"] = Color.Parse("#40ABB2BF");
+                resDic["Color.FG2"] = Color.Parse("#FF828997");
 
                 // Diff表示色（緑=#98C379ベース、赤=#E06C75ベース、シアン=#56B6C2）
                 resDic["Color.Diff.EmptyBG"] = Color.Parse("#3C000000");
@@ -813,10 +813,10 @@ namespace Komorebi
                 _launcher.ActivePage.Popup = new ViewModels.InitSetup();
             }
 
-            // 起動時の自動更新チェック（1日1回、手動チェックと同じ挙動で実行する）
+            // 起動時の自動更新チェック（1日1回、更新がある場合のみダイアログ表示）
 #if !DISABLE_UPDATE_DETECTION
             if (pref.ShouldCheck4UpdateOnStartup())
-                Check4Update(true);
+                Check4Update(false);
 #endif
         }
 

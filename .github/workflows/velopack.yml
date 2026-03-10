@@ -63,7 +63,7 @@ jobs:
         run: dotnet tool install --global vpk
       - name: Create Velopack package (Windows)
         if: startsWith(matrix.runtime, 'win-')
-        run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.label }}
+        run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.runtime }}
       - name: Create Velopack package (Linux)
         if: startsWith(matrix.runtime, 'linux-')
         run: >
@@ -73,7 +73,7 @@ jobs:
           --mainExe ${{ matrix.mainExe }}
           --packDir publish
           --outputDir artifacts
-          --channel ${{ matrix.label }}
+          --channel ${{ matrix.runtime }}
           --icon build/resources/_common/icons/komorebi.png
       - name: Create Velopack package (macOS)
         if: startsWith(matrix.runtime, 'osx-')
@@ -84,7 +84,7 @@ jobs:
           --mainExe ${{ matrix.mainExe }}
           --packDir publish
           --outputDir artifacts
-          --channel ${{ matrix.label }}
+          --channel ${{ matrix.runtime }}
           --icon build/resources/app/App.icns
           --plist Info.plist
       - name: Upload Velopack artifact
