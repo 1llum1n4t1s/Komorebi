@@ -807,12 +807,14 @@ namespace Komorebi.ViewModels
             {
                 if ((!autoStage && _staged.Count == 0) || (autoStage && _cached.Count == 0))
                 {
-                    var rs = await App.AskConfirmEmptyCommitAsync(_cached.Count > 0);
+                    var rs = await App.AskConfirmEmptyCommitAsync(_cached.Count > 0, _selectedUnstaged is { Count: > 0 });
                     if (rs == Models.ConfirmEmptyCommitResult.Cancel)
                         return;
 
                     if (rs == Models.ConfirmEmptyCommitResult.StageAllAndCommit)
                         autoStage = true;
+                    else if (rs == Models.ConfirmEmptyCommitResult.StageSelectedAndCommit)
+                        await StageChangesAsync(_selectedUnstaged, null);
                 }
             }
 

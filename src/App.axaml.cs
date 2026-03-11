@@ -213,13 +213,14 @@ namespace Komorebi
             return false;
         }
 
-        public static async Task<Models.ConfirmEmptyCommitResult> AskConfirmEmptyCommitAsync(bool hasLocalChanges)
+        public static async Task<Models.ConfirmEmptyCommitResult> AskConfirmEmptyCommitAsync(bool hasLocalChanges, bool hasSelectedUnstaged)
         {
             if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
             {
                 var confirm = new Views.ConfirmEmptyCommit();
                 confirm.TxtMessage.Text = Text(hasLocalChanges ? "ConfirmEmptyCommit.WithLocalChanges" : "ConfirmEmptyCommit.NoLocalChanges");
                 confirm.BtnStageAllAndCommit.IsVisible = hasLocalChanges;
+                confirm.BtnStageSelectedAndCommit.IsVisible = hasSelectedUnstaged;
                 return await confirm.ShowDialog<Models.ConfirmEmptyCommitResult>(owner);
             }
 
