@@ -99,6 +99,31 @@ namespace Komorebi.Native
         }
 
         /// <summary>
+        ///     外部マージ/diffツールの実行ファイルをmacOSシステムから検索する。
+        ///     パターンに一致するファイルが存在するか確認する。
+        /// </summary>
+        public string FindExternalMergerExecFile(string[] patterns)
+        {
+            // macOSではExternalMergerのFinderフィールドにフルパスが定義されている。
+            // AutoSelectExternalMergeToolExecFile()から呼ばれる前にFinderパスは
+            // GetPatternsToFindExecFile()でファイル名のみに変換されるため、
+            // PATHから検索を試みる。
+            var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            var paths = pathVariable.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var pattern in patterns)
+            {
+                foreach (var path in paths)
+                {
+                    var candidate = Path.Combine(path, pattern);
+                    if (File.Exists(candidate))
+                        return candidate;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         ///     macOSにインストールされている外部エディタ/IDEを検出する。
         ///     /Applications 配下のアプリケーションバンドルを確認する。
         /// </summary>

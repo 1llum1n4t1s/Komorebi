@@ -189,6 +189,35 @@ namespace Komorebi.Native
         ///     Windowsにインストールされている外部エディタ/IDEを検出する。
         ///     VSCode、Cursor、JetBrains、Sublime Text、Visual Studio、Zedに対応する。
         /// </summary>
+        /// <summary>
+        ///     外部マージ/diffツールの実行ファイルをWindowsシステムから検索する。
+        ///     App Pathsレジストリ → Program Files → PATH環境変数の順に探索する。
+        /// </summary>
+        /// <param name="patterns">検索する実行ファイル名の配列（例: "WinMergeU.exe"）</param>
+        /// <returns>見つかった実行ファイルのフルパス。見つからない場合はnull。</returns>
+        public string FindExternalMergerExecFile(string[] patterns)
+        {
+            foreach (var pattern in patterns)
+            {
+                // 1. App Pathsレジストリから検索する（WinMerge等が登録している）
+                var appPath = FindExecFileFromAppPaths(pattern);
+                if (!string.IsNullOrEmpty(appPath))
+                    return appPath;
+
+                // 2. Program Files ディレクトリを検索する
+                var programFilesPath = FindExecFileFromProgramFiles(pattern);
+                if (!string.IsNullOrEmpty(programFilesPath))
+                    return programFilesPath;
+
+                // 3. PATH環境変数から検索する
+                var pathEnvPath = FindExecFileFromPath(pattern);
+                if (!string.IsNullOrEmpty(pathEnvPath))
+                    return pathEnvPath;
+            }
+
+            return null;
+        }
+
         public List<Models.ExternalTool> FindExternalTools()
         {
             var localAppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -499,6 +528,92 @@ namespace Komorebi.Native
                 return findInPath.ToString();
 
             return string.Empty;
+        }
+        #endregion
+
+        #region EXTERNAL_MERGER_FINDER
+        /// <summary>
+        ///     App Pathsレジストリから実行ファイルのパスを検索する。
+        ///     WinMerge等のアプリケーションはここに登録している。
+        /// </summary>
+        /// <param name="exeName">実行ファイル名（例: "WinMergeU.exe"）</param>
+        /// <returns>見つかった場合はフルパス、見つからない場合はnull。</returns>
+        private string FindExecFileFromAppPaths(string exeName)
+        {
+            try
+            {
+                var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
+                    Microsoft.Win32.RegistryHive.LocalMachine,
+                    Microsoft.Win32.RegistryView.Registry64);
+
+                var appPaths = localMachine.OpenSubKey($@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\{exeName}");
+                if (appPaths?.GetValue(null) is string path && File.Exists(path))
+                    return path;
+            }
+            catch
+            {
+                // レジストリアクセス失敗時は無視する
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        ///     Program Filesディレクトリから実行ファイルを検索する。
+        ///     1階層目のサブフォルダのみを対象として高速に探索する。
+        /// </summary>
+        /// <param name="exeName">実行ファイル名（例: "WinMergeU.exe"）</param>
+        /// <returns>見つかった場合はフルパス、見つからない場合はnull。</returns>
+        private string FindExecFileFromProgramFiles(string exeName)
+        {
+            // Program Files と Program Files (x86) の両方を確認する
+            var programDirs = new[]
+            {
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+            };
+
+            foreach (var programDir in programDirs)
+            {
+                if (string.IsNullOrEmpty(programDir) || !Directory.Exists(programDir))
+                    continue;
+
+                try
+                {
+                    // 各サブフォルダ直下の実行ファイルを確認する（1階層のみ）
+                    foreach (var subDir in Directory.GetDirectories(programDir))
+                    {
+                        var candidate = Path.Combine(subDir, exeName);
+                        if (File.Exists(candidate))
+                            return candidate;
+                    }
+                }
+                catch
+                {
+                    // アクセス権限エラー等は無視する
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        ///     PATH環境変数から実行ファイルを検索する。
+        /// </summary>
+        /// <param name="exeName">実行ファイル名（例: "WinMergeU.exe"）</param>
+        /// <returns>見つかった場合はフルパス、見つからない場合はnull。</returns>
+        private string FindExecFileFromPath(string exeName)
+        {
+            var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            var paths = pathVariable.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var path in paths)
+            {
+                var candidate = Path.Combine(path, exeName);
+                if (File.Exists(candidate))
+                    return candidate;
+            }
+
+            return null;
         }
         #endregion
     }

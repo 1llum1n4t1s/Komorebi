@@ -52,6 +52,14 @@ namespace Komorebi.Native
             List<Models.ExternalTool> FindExternalTools();
 
             /// <summary>
+            ///     外部マージ/diffツールの実行ファイルをシステムから検索する。
+            ///     レジストリ、Program Files、PATH等のプラットフォーム固有の方法で探索する。
+            /// </summary>
+            /// <param name="patterns">検索する実行ファイル名のパターン配列</param>
+            /// <returns>見つかった実行ファイルのフルパス。見つからない場合はnull。</returns>
+            string FindExternalMergerExecFile(string[] patterns);
+
+            /// <summary>
             ///     指定された作業ディレクトリでターミナルを開く。
             /// </summary>
             void OpenTerminal(string workdir, string args);
@@ -305,11 +313,20 @@ namespace Komorebi.Native
                 // 検出済み外部ツールから一致するものを探す
                 var externalTool = ExternalTools.Find(x => x.Name.Equals(merger.Name, StringComparison.Ordinal));
                 if (externalTool != null)
+                {
                     ExternalMergerExecFile = externalTool.ExecFile;
-                else if (!OperatingSystem.IsWindows() && File.Exists(merger.Finder))
-                    ExternalMergerExecFile = merger.Finder;
+                }
+                else if (!string.IsNullOrEmpty(merger.Finder))
+                {
+                    // プラットフォーム固有の方法で実行ファイルを検索する
+                    var patterns = merger.GetPatternsToFindExecFile();
+                    var found = _backend.FindExternalMergerExecFile(patterns);
+                    ExternalMergerExecFile = found ?? string.Empty;
+                }
                 else
+                {
                     ExternalMergerExecFile = string.Empty;
+                }
 
                 // diff用とマージ用のコマンド引数を設定する
                 ExternalDiffArgs = merger.DiffCmd;

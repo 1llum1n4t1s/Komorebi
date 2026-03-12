@@ -108,6 +108,22 @@ namespace Komorebi.Native
         }
 
         /// <summary>
+        ///     外部マージ/diffツールの実行ファイルをLinuxシステムから検索する。
+        ///     PATH環境変数から検索する。
+        /// </summary>
+        public string FindExternalMergerExecFile(string[] patterns)
+        {
+            foreach (var pattern in patterns)
+            {
+                var found = FindExecutable(pattern);
+                if (!string.IsNullOrEmpty(found))
+                    return found;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         ///     Linuxにインストールされている外部エディタ/IDEを検出する。
         ///     PATHから各エディタのコマンドを検索する。
         /// </summary>
