@@ -534,6 +534,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">暫存</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">取消暫存</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">初始化存放庫</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">在該路徑執行 git init 以初始化 git 倉庫?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">無法在指定路徑開啟本機儲存庫。原因：</x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">路徑:</x:String>
   <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">複製目錄</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">請選擇您偏好的語言和複製儲存庫的預設目錄。</x:String>
