@@ -1,79 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Komorebi.Models
+namespace SourceGit.Models
 {
-    /// <summary>
-    ///     日付・日時のフォーマットを管理するクラス。
-    ///     アプリケーション内の日時表示形式を定義する。
-    /// </summary>
     public class DateTimeFormat
     {
-        /// <summary>
-        ///     日付のみのフォーマット文字列（例: "yyyy/MM/dd"）
-        /// </summary>
-        public string DateOnly { get; set; }
+        public string DateOnly
+        {
+            get;
+            set;
+        }
 
-        /// <summary>
-        ///     日時のフォーマット文字列（例: "yyyy/MM/dd, HH:mm:ss"）
-        /// </summary>
-        public string DateTime { get; set; }
+        public string DateTime
+        {
+            get
+            {
+                if (_use24Hours != Use24Hours || string.IsNullOrEmpty(_dateTime))
+                {
+                    _use24Hours = Use24Hours;
+                    _dateTime = _use24Hours ? $"{DateOnly} HH:mm:ss" : $"{DateOnly} hh:mm:ss tt";
+                }
 
-        /// <summary>
-        ///     現在のフォーマットで表示されるサンプル文字列
-        /// </summary>
+                return _dateTime;
+            }
+        }
+
         public string Example
         {
-            get => _example.ToString(DateTime);
+            get
+            {
+                return new DateTime(2025, 1, 31, 8, 0, 0, DateTimeKind.Local).ToString(DateOnly);
+            }
         }
 
-        /// <summary>
-        ///     コンストラクタ
-        /// </summary>
-        /// <param name="dateOnly">日付のみのフォーマット文字列</param>
-        /// <param name="dateTime">日時のフォーマット文字列</param>
-        public DateTimeFormat(string dateOnly, string dateTime)
+        public DateTimeFormat(string date)
         {
-            DateOnly = dateOnly;
-            DateTime = dateTime;
+            DateOnly = date;
         }
 
-        /// <summary>
-        ///     現在選択されているフォーマットのインデックス
-        /// </summary>
         public static int ActiveIndex
         {
             get;
             set;
         } = 0;
 
-        /// <summary>
-        ///     現在アクティブなフォーマットインスタンス
-        /// </summary>
+        public static bool Use24Hours
+        {
+            get;
+            set;
+        } = true;
+
         public static DateTimeFormat Active
         {
             get => Supported[ActiveIndex];
         }
 
-        /// <summary>
-        ///     サポートされている日時フォーマットの一覧
-        /// </summary>
         public static readonly List<DateTimeFormat> Supported = new List<DateTimeFormat>
         {
-            new DateTimeFormat("yyyy/MM/dd", "yyyy/MM/dd, HH:mm:ss"),
-            new DateTimeFormat("yyyy.MM.dd", "yyyy.MM.dd, HH:mm:ss"),
-            new DateTimeFormat("yyyy-MM-dd", "yyyy-MM-dd, HH:mm:ss"),
-            new DateTimeFormat("MM/dd/yyyy", "MM/dd/yyyy, HH:mm:ss"),
-            new DateTimeFormat("MM.dd.yyyy", "MM.dd.yyyy, HH:mm:ss"),
-            new DateTimeFormat("MM-dd-yyyy", "MM-dd-yyyy, HH:mm:ss"),
-            new DateTimeFormat("dd/MM/yyyy", "dd/MM/yyyy, HH:mm:ss"),
-            new DateTimeFormat("dd.MM.yyyy", "dd.MM.yyyy, HH:mm:ss"),
-            new DateTimeFormat("dd-MM-yyyy", "dd-MM-yyyy, HH:mm:ss"),
-            new DateTimeFormat("MMM d yyyy", "MMM d yyyy, HH:mm:ss"),
-            new DateTimeFormat("d MMM yyyy", "d MMM yyyy, HH:mm:ss"),
+            new DateTimeFormat("yyyy/MM/dd"),
+            new DateTimeFormat("yyyy.MM.dd"),
+            new DateTimeFormat("yyyy-MM-dd"),
+            new DateTimeFormat("MM/dd/yyyy"),
+            new DateTimeFormat("MM.dd.yyyy"),
+            new DateTimeFormat("MM-dd-yyyy"),
+            new DateTimeFormat("dd/MM/yyyy"),
+            new DateTimeFormat("dd.MM.yyyy"),
+            new DateTimeFormat("dd-MM-yyyy"),
+            new DateTimeFormat("MMM d yyyy"),
+            new DateTimeFormat("d MMM yyyy"),
         };
 
-        /// <summary>表示例に使用する固定の日時サンプル</summary>
-        private static readonly DateTime _example = new DateTime(2025, 1, 31, 8, 0, 0, DateTimeKind.Local);
+        private bool _use24Hours = true;
+        private string _dateTime = null;
     }
 }
