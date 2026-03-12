@@ -1,61 +1,46 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
-using Velopack;
-
-namespace Komorebi.Models
+namespace SourceGit.Models
 {
-    /// <summary>
-    ///     Velopackによるアプリケーション自動更新の情報を保持するクラス。
-    ///     ダウンロードと適用・再起動を管理する。
-    /// </summary>
-    public class VelopackUpdate
+    public class Version
     {
-        /// <summary>リリースのタグ名（例: v1.0.5）</summary>
-        public string TagName => $"v{_updateInfo.TargetFullRelease.Version}";
-        /// <summary>バージョン文字列</summary>
-        public string VersionString => _updateInfo.TargetFullRelease.Version.ToString();
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
-        public VelopackUpdate(UpdateManager manager, UpdateInfo updateInfo)
+        [JsonPropertyName("tag_name")]
+        public string TagName { get; set; }
+
+        [JsonPropertyName("published_at")]
+        public DateTime PublishedAt { get; set; }
+
+        [JsonPropertyName("body")]
+        public string Body { get; set; }
+
+        [JsonIgnore]
+        public System.Version CurrentVersion { get; }
+
+        [JsonIgnore]
+        public string CurrentVersionStr => $"v{CurrentVersion.Major}.{CurrentVersion.Minor:D2}";
+
+        [JsonIgnore]
+        public bool IsNewVersion => CurrentVersion.CompareTo(new System.Version(TagName.Substring(1))) < 0;
+
+        [JsonIgnore]
+        public string ReleaseDateStr => DateTimeFormat.Format(PublishedAt, true);
+
+        public Version()
         {
-            _manager = manager;
-            _updateInfo = updateInfo;
+            var assembly = Assembly.GetExecutingAssembly().GetName();
+            CurrentVersion = assembly.Version ?? new System.Version();
         }
-
-        /// <summary>
-        ///     更新パッケージを非同期でダウンロードする
-        /// </summary>
-        /// <param name="onProgress">進捗率（0-100）のコールバック</param>
-        /// <param name="token">キャンセルトークン</param>
-        public async Task DownloadAsync(Action<int> onProgress, CancellationToken token)
-        {
-            await _manager.DownloadUpdatesAsync(_updateInfo, onProgress, cancelToken: token);
-        }
-
-        /// <summary>
-        ///     ダウンロード済みの更新を適用してアプリケーションを再起動する
-        /// </summary>
-        public void ApplyAndRestart()
-        {
-            _manager.ApplyUpdatesAndRestart(_updateInfo);
-        }
-
-        private readonly UpdateManager _manager;
-        private readonly UpdateInfo _updateInfo;
     }
 
-    /// <summary>
-    ///     既に最新バージョンであることを示すマーカークラス
-    /// </summary>
     public class AlreadyUpToDate;
 
-    /// <summary>
-    ///     自動更新の失敗情報を保持するクラス
-    /// </summary>
     public class SelfUpdateFailed
     {
-        /// <summary>失敗理由のメッセージ</summary>
         public string Reason
         {
             get;
