@@ -375,6 +375,9 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Diminuisci Numero di Righe Visibili</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Aumenta Numero di Righe Visibili</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">SELEZIONA UN FILE PER VISUALIZZARE LE MODIFICHE</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">Lo strumento CLI "{0}" non è supportato da questa applicazione</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Strumento diff/merge non valido nelle impostazioni</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Configurazione git mancante: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Cronologia Cartella</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">Ha Modifiche Locali</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">Non allineato con Upstream</x:String>
@@ -654,6 +657,10 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Genera avatar predefinito stile GitHub</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Abilita Auto CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Commit come LF, checkout come CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Converti CRLF in LF solo al commit</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Non convertire</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Forza CRLF al commit e al checkout</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Cartella predefinita per cloni</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email Utente</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Email utente Git globale</x:String>
@@ -742,6 +749,8 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Per nome</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Pulizia (GC e Potatura)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Esegui il comando `git gc` per questo repository.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Ottimizzazione aggressiva</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Ricalcolare la compressione delta da zero. Richiede molto più tempo ma produce risultati migliori. Consigliato solo dopo importazioni grandi o riscritture della cronologia.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Svuota cache indice</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Esegui `git rm -r --cached .` e `git add .` per ricostruire l'indice.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Cancella tutto</x:String>

@@ -375,6 +375,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">表示する行数を減らす</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">表示する行数を増やす</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">ファイルを選択すると、変更内容が表示されます</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLIベースのツール「{0}」はこのアプリではサポートされていません</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">設定で指定されたDiff/Mergeツールが無効です</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">gitの設定がありません: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">ディレクトリの履歴</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">ローカルの変更あり</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">上流のブランチとの相違あり</x:String>
@@ -654,6 +657,10 @@
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub のような既定のアバターを生成</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">Git</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">自動 CRLF 変換を有効化</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">コミット時にCRLF→LFに変換、チェックアウト時にLF→CRLFに変換</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">コミット時のみCRLF→LFに変換（チェックアウト時は変換しない）</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">一切変換しない</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">コミット時とチェックアウト時に両方CRLFに変換</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">既定のクローンディレクトリ</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">ユーザーのメールアドレス</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Git ユーザーのメールアドレス (グローバル設定)</x:String>
@@ -742,6 +749,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">名前順</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">クリーンアップ (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">このリポジトリに `git gc` コマンドを実行します。</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">強力な最適化（Aggressive）</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">デルタ圧縮をゼロからやり直します。通常より大幅に時間がかかりますが、より高い圧縮率が得られます。大量インポートや履歴書き換え後にのみ推奨されます。</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">インデックスキャッシュクリア</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">インデックスを再構築します (`git rm -r --cached .` → `git add .`)。</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">すべて消去</x:String>

@@ -20,5 +20,11 @@
     <TextBlock Text="{DynamicResource Text.Repository.CleanTips}"
                Margin="0,16,0,0"
                HorizontalAlignment="Center"/>
+
+    <CheckBox Margin="0,8,0,0"
+              HorizontalAlignment="Center"
+              Content="{DynamicResource Text.Repository.CleanAggressive}"
+              IsChecked="{Binding Aggressive, Mode=TwoWay}"
+              ToolTip.Tip="{DynamicResource Text.Repository.CleanAggressiveTip}"/>
   </StackPanel>
 </UserControl>

@@ -375,6 +375,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Réduit le nombre de ligne visibles</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Augmente le nombre de ligne visibles</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">SÉLECTIONNEZ UN FICHIER POUR VOIR LES CHANGEMENTS</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">L'outil CLI « {0} » n'est pas pris en charge par cette application</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Outil de diff/merge invalide dans les paramètres</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Configuration git manquante : {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Historique du Répertoire</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">A des Modifications Locales</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">Divergence avec le Dépôt Distant</x:String>
@@ -654,6 +657,10 @@
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Générer un avatar par défaut de style GitHub</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Activer auto CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Valider en LF, extraire en CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Convertir CRLF en LF uniquement lors de la validation</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Ne pas convertir</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Forcer CRLF lors de la validation et de l'extraction</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Répertoire de clônage par défaut</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">E-mail utilsateur</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">E-mail utilsateur global</x:String>
@@ -742,6 +749,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Par Nom</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Nettoyage(GC &amp; Elaguage)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Lancer `git gc` pour ce repository.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Optimisation agressive</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Recalculer la compression delta depuis zéro. Prend beaucoup plus de temps mais produit de meilleurs résultats. Recommandé uniquement après de gros imports ou des réécritures d'historique.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Vider le cache de l'index</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Exécuter `git rm -r --cached .` et `git add .` pour reconstruire l'index.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Tout effacer</x:String>

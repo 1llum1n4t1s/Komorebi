@@ -31,7 +31,7 @@ namespace Komorebi.Commands
             var tool = Native.OS.GetDiffMergeTool(true);
             if (tool == null)
             {
-                App.RaiseException(Context, "Invalid diff/merge tool in preference setting!");
+                App.RaiseException(Context, App.Text("DiffMergeTool.InvalidSetting"));
                 return;
             }
 
@@ -85,7 +85,7 @@ namespace Komorebi.Commands
             if (config.TryGetValue("merge.tool", out var mergeTool))
                 return CheckCLIBasedTool(mergeTool);
 
-            App.RaiseException(Context, "Missing git configuration: diff.guitool");
+            App.RaiseException(Context, App.Text("DiffMergeTool.MissingConfig", "diff.guitool"));
             return false;
         }
 
@@ -101,7 +101,7 @@ namespace Komorebi.Commands
             if (tool.StartsWith("vimdiff", StringComparison.Ordinal) ||
                 tool.StartsWith("nvimdiff", StringComparison.Ordinal))
             {
-                App.RaiseException(Context, $"CLI based diff tool \"{tool}\" is not supported by this app!");
+                App.RaiseException(Context, App.Text("DiffMergeTool.CLIToolNotSupported", tool));
                 return false;
             }
 

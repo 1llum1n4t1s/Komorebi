@@ -371,6 +371,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Bawasan ang Bilang ng mga Nakikitang Linya</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Dagdagan ang Bilang ng mga Nakikitang Linya</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">PUMILI NG FILE PARA MAKITA ANG MGA PAGBABAGO</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">Ang CLI based tool na "{0}" ay hindi suportado ng app na ito</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Hindi valid ang diff/merge tool sa preference setting</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Kulang ang git configuration: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Kasaysayan ng Dir</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">May mga Lokal na Pagbabago</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">Hindi Tugma sa Upstream</x:String>
@@ -650,6 +653,10 @@
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Gumawa ng Github style na default avatar</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">I-enable ang Auto CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">I-commit bilang LF, i-checkout bilang CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">I-convert lang ang CRLF sa LF kapag nag-commit</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Huwag i-convert</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Pilitin ang CRLF sa commit at checkout</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Default na Clone Dir</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email ng User</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Global na git user email</x:String>
@@ -738,6 +745,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Ayon sa Pangalan</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Linisin (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Patakbuhin ang `git gc` command para sa repository na ito.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Agresibong pag-optimize</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Muling kalkulahin ang delta compression mula sa simula. Mas matagal ngunit mas magandang resulta. Inirerekomenda lamang pagkatapos ng malalaking import o pagsusulat muli ng history.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">I-clear ang Index Cache</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Patakbuhin ang `git rm -r --cached .` at `git add .` para i-rebuild ang index.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Burahin lahat</x:String>

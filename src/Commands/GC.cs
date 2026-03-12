@@ -10,13 +10,15 @@ namespace Komorebi.Commands
         ///     GCコマンドを初期化する。
         /// </summary>
         /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
-        public GC(string repo)
+        /// <param name="aggressive">trueの場合、--aggressiveオプションでデルタ圧縮を最適化する。</param>
+        public GC(string repo, bool aggressive = false)
         {
             WorkingDirectory = repo;
             Context = repo;
 
             // git gc --prune=now: 不要オブジェクトを即時プルーニングしてリポジトリを最適化する
-            Args = "gc --prune=now";
+            // --aggressive: デルタ圧縮をゼロからやり直し、より強力に最適化する（時間がかかる）
+            Args = aggressive ? "gc --aggressive --prune=now" : "gc --prune=now";
         }
     }
 }

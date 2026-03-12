@@ -375,6 +375,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">减少可见的行数</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">增加可见的行数</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">请选择需要对比的文件</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI 工具「{0}」不受此应用支持</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">偏好设置中的差异/合并工具无效</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">缺少 git 配置：{0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">目录内容变更历史</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">未提交的本地变更</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">当前分支HEAD与远端不一致</x:String>
@@ -654,6 +657,10 @@
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">生成GitHub风格的默认头像</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT配置</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">自动换行转换</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">提交时转换为LF，检出时转换为CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">仅在提交时将CRLF转换为LF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">不进行转换</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">在提交和检出时强制使用CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">默认克隆路径</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">邮箱</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">默认GIT用户邮箱</x:String>
@@ -742,6 +749,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">按名称</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">清理本仓库(GC)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">本操作将执行`git gc`命令。</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">强力优化（Aggressive）</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">从头重新计算增量压缩。耗时更长，但能获得更好的压缩效果。仅建议在大量导入或历史记录重写后使用。</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">清除索引缓存</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">执行 `git rm -r --cached .` 和 `git add .` 以重建索引。</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">清空过滤规则</x:String>

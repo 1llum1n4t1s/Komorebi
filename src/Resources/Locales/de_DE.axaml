@@ -375,6 +375,9 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Weniger Zeilen anzeigen</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Mehr Zeilen anzeigen</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">WÄHLE EINE DATEI AUS, UM ÄNDERUNGEN ANZUZEIGEN</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI-basiertes Tool „{0}" wird von dieser App nicht unterstützt</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Ungültiges Diff/Merge-Tool in den Einstellungen</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Fehlende Git-Konfiguration: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Verzeichnisverlauf</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">Hat lokale Änderungen</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">Abweichungen vom Upstream</x:String>
@@ -654,6 +657,10 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Standard-Avatar im GitHub-Stil generieren</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Aktiviere Auto-CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Beim Commit als LF, beim Checkout als CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Nur beim Commit CRLF zu LF konvertieren</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Nicht konvertieren</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">CRLF beim Commit und Checkout erzwingen</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Standard Klon-Ordner</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Benutzer-E-Mail</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Globale Git Benutzer-E-Mail</x:String>
@@ -742,6 +749,8 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Nach Name</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Aufräumen (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Führt `git gc` in diesem Repository aus.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Aggressive Optimierung</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Delta-Komprimierung von Grund auf neu berechnen. Dauert deutlich länger, erzielt aber bessere Ergebnisse. Nur nach großen Importen oder History-Umschreibungen empfohlen.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Index-Cache leeren</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Führt `git rm -r --cached .` und `git add .` aus, um den Index neu aufzubauen.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Filter aufheben</x:String>

@@ -375,6 +375,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Зменшити кількість видимих рядків</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Збільшити кількість видимих рядків</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">ОБЕРІТЬ ФАЙЛ ДЛЯ ПЕРЕГЛЯДУ ЗМІН</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI-інструмент «{0}» не підтримується цим додатком</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Недійсний інструмент diff/merge у налаштуваннях</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Відсутня конфігурація git: {0}</x:String>
   <x:String x:Key="Text.DirtyState.UpToDate" xml:space="preserve">Вже актуально</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">Не збігається з upstream</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">Є локальні зміни</x:String>
@@ -654,6 +657,10 @@
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Створювати аватар у стилі Github за замовчуванням</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Увімкнути авто-CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Коміт як LF, отримання як CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Конвертувати CRLF у LF лише при коміті</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Не конвертувати</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Примусово використовувати CRLF при коміті та отриманні</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Тека клонування за замовчуванням</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email користувача</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Глобальний email користувача git</x:String>
@@ -742,6 +749,8 @@
   <x:String x:Key="Text.Repository.BranchSort" xml:space="preserve">Сортування</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Очистка (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Виконати команду `git gc` для цього сховища.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Агресивна оптимізація</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Перерахувати дельта-стиснення з нуля. Займає значно більше часу, але дає кращі результати. Рекомендується лише після великого імпорту або перезапису історії.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Очистити кеш індексу</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Виконати `git rm -r --cached .` та `git add .` для перебудови індексу.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Очистити все</x:String>

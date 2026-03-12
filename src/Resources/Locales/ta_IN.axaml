@@ -375,6 +375,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">தெரியும் வரிகளின் எண்ணிக்கையைக் குறை</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">தெரியும் வரிகளின் எண்ணிக்கையை அதிகரி</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">மாற்றங்களைக் காண கோப்பைத் தேர்ந்தெடு</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI அடிப்படையிலான கருவி "{0}" இந்த பயன்பாட்டில் ஆதரிக்கப்படவில்லை</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">விருப்ப அமைப்பில் diff/merge கருவி தவறானது</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">git உள்ளமைவு காணவில்லை: {0}</x:String>
   <x:String x:Key="Text.DirtyState.UpToDate" xml:space="preserve">ஏற்கனவே புதுப்பிக்கப்பட்டது</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">மேல்நிலையுடன் பொருந்தவில்லை</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">உள்ளூர் மாற்றங்கள் உள்ளன</x:String>
@@ -654,6 +657,10 @@
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Github பாணி இயல்புநிலை அவதாரத்தை உருவாக்கு</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">அறிவிலி</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">தானியங்கி  வரிமுடிவை இயக்கு</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">கமிட் செய்யும்போது LF ஆகவும், செக்அவுட் செய்யும்போது CRLF ஆகவும் மாற்று</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">கமிட் செய்யும்போது மட்டும் CRLF ஐ LF ஆக மாற்று</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">மாற்ற வேண்டாம்</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">கமிட் மற்றும் செக்அவுட் செய்யும்போது CRLF-ஐ கட்டாயமாக்கு</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">இயல்புநிலை நகலி அடைவு</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">பயனர் மின்னஞ்சல்</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">உலகளாவிய அறிவிலி பயனர் மின்னஞ்சல்</x:String>
@@ -742,6 +749,8 @@
   <x:String x:Key="Text.Repository.BranchSort" xml:space="preserve">வரிசைப்படுத்து</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">சுத்தப்படுத்தல்(சீசி &amp; கத்தரித்தல்)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">இந்த களஞ்சியத்திற்கு `அறிவிலி சீசி` கட்டளையை இயக்கு.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">தீவிர தரமேற்றம்</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">டெல்டா சுருக்கத்தை புதிதாக கணக்கிடுங்கள். மிகவும் அதிக நேரம் எடுக்கும் ஆனால் சிறந்த முடிவுகளை அளிக்கும். பெரிய இறக்குமதிகள் அல்லது வரலாறு மாற்றங்களுக்குப் பிறகு மட்டுமே பரிந்துரைக்கப்படுகிறது.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">குறியீட்டு தற்காலிக சேமிப்பை அழி</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">`git rm -r --cached .` மற்றும் `git add .` இயக்கி குறியீட்டை மீளமைக்கவும்.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">அனைத்தையும் அழி</x:String>

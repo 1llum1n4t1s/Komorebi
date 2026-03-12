@@ -375,6 +375,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Kurangi Jumlah Baris yang Tampak</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Tambah Jumlah Baris yang Tampak</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">PILIH BERKAS UNTUK MELIHAT PERUBAHAN</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">Alat berbasis CLI "{0}" tidak didukung oleh aplikasi ini</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Alat diff/merge tidak valid dalam pengaturan preferensi</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Konfigurasi git tidak ditemukan: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Riwayat Direktori</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">Memiliki Perubahan Lokal</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">Tidak Cocok dengan Upstream</x:String>
@@ -654,6 +657,10 @@
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Generate avatar default bergaya GitHub</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Aktifkan Auto CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Commit sebagai LF, checkout sebagai CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Hanya konversi CRLF ke LF saat commit</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Jangan konversi</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Paksa CRLF saat commit dan checkout</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Direktori Clone Default</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email Pengguna</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Email pengguna git global</x:String>
@@ -742,6 +749,8 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Berdasarkan Nama</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Bersihkan (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Jalankan perintah `git gc` untuk repositori ini.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Optimasi agresif</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Menghitung ulang kompresi delta dari awal. Membutuhkan waktu lebih lama tetapi menghasilkan hasil yang lebih baik. Hanya disarankan setelah impor besar atau penulisan ulang riwayat.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Bersihkan Cache Indeks</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Jalankan `git rm -r --cached .` dan `git add .` untuk membangun ulang indeks.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Bersihkan semua</x:String>

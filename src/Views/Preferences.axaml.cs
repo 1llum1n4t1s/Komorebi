@@ -26,11 +26,27 @@ namespace Komorebi.Views
             set;
         }
 
+        public static readonly StyledProperty<Models.CRLFMode> CRLFModeProperty =
+            AvaloniaProperty.Register<Preferences, Models.CRLFMode>(nameof(CRLFMode));
+
         public Models.CRLFMode CRLFMode
         {
-            get;
-            set;
-        } = null;
+            get => GetValue(CRLFModeProperty);
+            set => SetValue(CRLFModeProperty, value);
+        }
+
+        public static readonly StyledProperty<bool> ForceEOLCRLFProperty =
+            AvaloniaProperty.Register<Preferences, bool>(nameof(ForceEOLCRLF));
+
+        /// <summary>
+        ///     core.eol=crlf: コミット時・チェックアウト時に両方CRLFに変換する。
+        ///     ONにすると自動CRLF変換（core.autocrlf）はFALSEに強制される。
+        /// </summary>
+        public bool ForceEOLCRLF
+        {
+            get => GetValue(ForceEOLCRLFProperty);
+            set => SetValue(ForceEOLCRLFProperty, value);
+        }
 
         public bool EnablePruneOnFetch
         {
@@ -137,6 +153,8 @@ namespace Komorebi.Views
                     GPGUserKey = signingKey;
                 if (config.TryGetValue("core.autocrlf", out var crlf))
                     CRLFMode = Models.CRLFMode.Supported.Find(x => x.Value == crlf);
+                if (config.TryGetValue("core.eol", out var eol))
+                    ForceEOLCRLF = eol == "crlf";
                 if (config.TryGetValue("fetch.prune", out var pruneOnFetch))
                     EnablePruneOnFetch = (pruneOnFetch == "true");
                 if (config.TryGetValue("commit.gpgsign", out var gpgCommitSign))
@@ -168,6 +186,9 @@ namespace Komorebi.Views
         {
             base.OnPropertyChanged(change);
 
+            if (change.Property == ForceEOLCRLFProperty && ForceEOLCRLF)
+                CRLFMode = Models.CRLFMode.Supported.Find(x => x.Value == "false");
+
             if (change.Property == GPGFormatProperty)
             {
                 var config = await new Commands.Config(null).ReadAllAsync();
@@ -192,6 +213,7 @@ namespace Komorebi.Views
             await SetIfChangedAsync(config, "user.name", DefaultUser, "");
             await SetIfChangedAsync(config, "user.email", DefaultEmail, "");
             await SetIfChangedAsync(config, "user.signingkey", GPGUserKey, "");
+            await SetIfChangedAsync(config, "core.eol", ForceEOLCRLF ? "crlf" : "", "");
             await SetIfChangedAsync(config, "core.autocrlf", CRLFMode?.Value, null);
             await SetIfChangedAsync(config, "fetch.prune", EnablePruneOnFetch ? "true" : "false", "false");
             await SetIfChangedAsync(config, "commit.gpgsign", EnableGPGCommitSigning ? "true" : "false", "false");
