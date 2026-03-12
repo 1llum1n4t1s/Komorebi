@@ -208,6 +208,7 @@ namespace Komorebi.Views
                 {
                     // F1 → ホットキー一覧ダイアログを開く
                     await App.ShowDialog(new Hotkeys());
+                    e.Handled = true;
                     return;
                 }
 
