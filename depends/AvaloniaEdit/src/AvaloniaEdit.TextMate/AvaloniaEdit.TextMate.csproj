@@ -16,4 +16,8 @@
     <PackageReference Include="TextMateSharp.Grammars" Version="$(TextMateSharpVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.200" />
+  </ItemGroup>
+
 </Project>
