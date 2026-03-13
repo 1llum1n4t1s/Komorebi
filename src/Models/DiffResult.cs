@@ -148,9 +148,9 @@ namespace Komorebi.Models
                         continue;
 
                     if (i >= selection.StartLine - 1 && i < selection.EndLine)
-                        writer.WriteLine($"+{line.Content}");
+                        WriteLine(writer, '+', line);
                     else
-                        writer.WriteLine($" {line.Content}");
+                        WriteLine(writer, ' ', line);
                 }
             }
             else
@@ -161,11 +161,10 @@ namespace Komorebi.Models
                     var line = Lines[i];
                     if (line.Type != TextDiffLineType.Added)
                         continue;
-                    writer.WriteLine($"+{line.Content}");
+                    WriteLine(writer, '+', line);
                 }
             }
 
-            writer.WriteLine("\\ No newline at end of file");
             writer.Flush();
         }
 
