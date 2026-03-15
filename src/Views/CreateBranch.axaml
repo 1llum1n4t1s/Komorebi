@@ -20,7 +20,7 @@
                  Text="{DynamicResource Text.CreateBranch.Title}"/>
     </StackPanel>
     
-    <Grid Margin="0,16,0,0" RowDefinitions="32,32,Auto,Auto,Auto">
+    <Grid Margin="0,16,0,0" RowDefinitions="32,32,Auto,Auto,Auto,Auto">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" MinWidth="140"/>
         <ColumnDefinition Width="*"/>
@@ -93,6 +93,10 @@
                 Content="{DynamicResource Text.CreateBranch.Checkout}"
                 IsChecked="{Binding CheckoutAfterCreated, Mode=TwoWay}"
                 IsVisible="{Binding !IsBareRepository}"/>
+
+      <CheckBox Grid.Row="5" Grid.Column="1"
+                Content="{DynamicResource Text.CreateBranch.PushToRemote}"
+                IsChecked="{Binding PushAfterCreated, Mode=TwoWay}"/>
     </Grid>
   </StackPanel>
 </UserControl>

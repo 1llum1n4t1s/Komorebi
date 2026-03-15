@@ -307,6 +307,7 @@
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">கிளை பெயரை உள்ளிடவும்.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">உள்ளக கிளையை உருவாக்கு</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">ஏற்கனவே உள்ள கிளையை மேலெழுது</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">உருவாக்கப்பட்ட கிளையை தொலைநிலைக்கு தள்ளு</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">குறிச்சொல்லை உருவாக்கு...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">இங்கு புதிய குறிச்சொல்:</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">சீபிசீ கையொப்பமிடுதல்</x:String>

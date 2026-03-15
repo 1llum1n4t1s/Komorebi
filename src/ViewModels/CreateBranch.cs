@@ -58,6 +58,23 @@ namespace Komorebi.ViewModels
         }
 
         /// <summary>
+        ///     ブランチ作成後にリモートへプッシュするかどうか。
+        ///     リポジトリのUI状態に永続化される。
+        /// </summary>
+        public bool PushAfterCreated
+        {
+            get => _repo.UIStates.PushToRemoteWhenCreateBranch;
+            set
+            {
+                if (_repo.UIStates.PushToRemoteWhenCreateBranch != value)
+                {
+                    _repo.UIStates.PushToRemoteWhenCreateBranch = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
         ///     ベアリポジトリかどうか。ベアリポジトリではチェックアウト不可。
         /// </summary>
         public bool IsBareRepository
@@ -220,6 +237,19 @@ namespace Komorebi.ViewModels
                 await new Commands.Branch(_repo.FullPath, _name)
                         .Use(log)
                         .SetUpstreamAsync(basedOn);
+            }
+
+            // 作成したブランチをリモートにプッシュ
+            if (succ && PushAfterCreated && _repo.Remotes.Count > 0)
+            {
+                Models.Remote remote = null;
+                if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
+                    remote = _repo.Remotes.Find(x => x.Name == _repo.Settings.DefaultRemote);
+                remote ??= _repo.Remotes[0];
+
+                await new Commands.Push(_repo.FullPath, _name, remote.Name, _name, false, false, true, false)
+                    .Use(log)
+                    .RunAsync();
             }
 
             log.Complete();

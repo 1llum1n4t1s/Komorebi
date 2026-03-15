@@ -167,6 +167,13 @@ namespace Komorebi.Models
             set;
         } = true;
 
+        /// <summary>ブランチ作成時にリモートへプッシュするかどうか</summary>
+        public bool PushToRemoteWhenCreateBranch
+        {
+            get;
+            set;
+        } = false;
+
         /// <summary>コミット時にSign-offを有効にするかどうか</summary>
         public bool EnableSignOffForCommit
         {

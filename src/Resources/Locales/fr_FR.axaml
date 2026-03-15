@@ -307,6 +307,7 @@
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Entrez le nom de la branche.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Créer une branche locale</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">Écraser la branche existante</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">Pousser la branche créée vers le dépôt distant</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">Créer un tag...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">Nouveau tag à :</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">Signature GPG</x:String>

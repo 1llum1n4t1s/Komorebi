@@ -307,6 +307,7 @@
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Masukkan nama branch.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Buat Branch Lokal</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">Timpa branch yang ada</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">Push branch yang dibuat ke remote</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">Buat Tag...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">Tag Baru Pada:</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">Tanda tangan GPG</x:String>

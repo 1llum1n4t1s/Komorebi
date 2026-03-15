@@ -297,6 +297,7 @@
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">브랜치 이름을 입력하세요.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">로컬 브랜치 생성</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">기존 브랜치 덮어쓰기</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">생성된 브랜치를 원격으로 푸시</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">태그 생성...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">태그 생성 위치:</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">GPG 서명</x:String>

@@ -307,6 +307,7 @@
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">ブランチの名前を入力</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">ローカルブランチを作成</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">既存のブランチを上書き</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">作成したブランチをリモートにプッシュ</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">タグを作成...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">付与するコミット:</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">GPG で署名</x:String>

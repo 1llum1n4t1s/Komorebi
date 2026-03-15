@@ -307,6 +307,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Einen Branch-Namen eingeben</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Lokalen Branch erstellen</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">Überschreibe existierenden Branch</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">Erstellten Branch zum Remote pushen</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">Tag erstellen…</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">Neuer Tag auf:</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">Mit GPG signieren</x:String>

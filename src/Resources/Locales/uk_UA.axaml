@@ -307,6 +307,7 @@
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Введіть назву гілки.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Створити локальну гілку</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">Перезаписати існуючу гілку</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">Відправити створену гілку на віддалений сервер</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">Створити тег...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">Новий тег для:</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">Підпис GPG</x:String>
