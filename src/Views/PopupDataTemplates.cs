@@ -31,7 +31,7 @@ namespace Komorebi.Views
                     {
                         focusable.Focus(NavigationMethod.Directional);
                         if (input is TextBox box)
-                            box.CaretIndex = box.CaretIndex = box.Text?.Length ?? 0;
+                            box.CaretIndex = box.Text?.Length ?? 0;
                         return;
                     }
                 }
