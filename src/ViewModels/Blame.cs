@@ -232,9 +232,12 @@ namespace Komorebi.ViewModels
         /// <param name="rev">対象のリビジョン情報</param>
         private void SetBlameData(RevisionInfo rev)
         {
-            // 前回の取得処理をキャンセルする
-            if (_cancellationSource is { IsCancellationRequested: false })
+            // 前回の取得処理をキャンセル・破棄する
+            if (_cancellationSource != null)
+            {
                 _cancellationSource.Cancel();
+                _cancellationSource.Dispose();
+            }
 
             _cancellationSource = new CancellationTokenSource();
             var token = _cancellationSource.Token;
@@ -265,7 +268,7 @@ namespace Komorebi.ViewModels
                         PrevRevision = commits.Count > 1 ? commits[1] : null;
                     }
                 });
-            });
+            }, token);
 
             // git blameを実行してデータを取得するタスク
             Task.Run(async () =>

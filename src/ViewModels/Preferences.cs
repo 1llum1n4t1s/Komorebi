@@ -526,6 +526,9 @@ namespace Komorebi.ViewModels
                     return w;
             }
 
+            if (Workspaces.Count == 0)
+                Workspaces.Add(new Workspace() { Name = "Default", IsActive = true });
+
             var first = Workspaces[0];
             first.IsActive = true;
             return first;

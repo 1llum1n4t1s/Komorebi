@@ -1167,7 +1167,7 @@ namespace Komorebi.Views
             submenu.Items.Add(visibility);
             submenu.Items.Add(new MenuItem() { Header = "-" });
 
-            if (!string.IsNullOrEmpty(current.Upstream))
+            if (!string.IsNullOrEmpty(current.Upstream) && current.Upstream.StartsWith("refs/remotes/", StringComparison.Ordinal))
             {
                 var upstream = current.Upstream.Substring(13);
 

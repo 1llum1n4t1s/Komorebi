@@ -183,7 +183,7 @@ namespace Komorebi.ViewModels
             // ブランチ名またはパスのファイル名部分で一致するリモートブランチを探す
             var name = string.IsNullOrEmpty(_selectedBranch) ? System.IO.Path.GetFileName(_path.TrimEnd('/', '\\')) : _selectedBranch;
             var remoteBranch = RemoteBranches.Find(b => b.EndsWith(name, StringComparison.Ordinal));
-            if (string.IsNullOrEmpty(remoteBranch))
+            if (string.IsNullOrEmpty(remoteBranch) && RemoteBranches.Count > 0)
                 remoteBranch = RemoteBranches[0];
 
             // 選択が変わった場合のみプロパティ変更通知を発行する

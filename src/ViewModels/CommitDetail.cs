@@ -270,6 +270,7 @@ namespace Komorebi.ViewModels
             _searchChangeFilter = null;
             _diffContext = null;
             _viewRevisionFileContent = null;
+            _cancellationSource?.Dispose();
             _cancellationSource = null;
             _requestingRevisionFiles = false;
             _revisionFiles = null;
@@ -685,9 +686,12 @@ namespace Komorebi.ViewModels
                 return;
             }
 
-            // 前回の非同期処理をキャンセルする
-            if (_cancellationSource is { IsCancellationRequested: false })
+            // 前回の非同期処理をキャンセル・破棄する
+            if (_cancellationSource != null)
+            {
                 _cancellationSource.Cancel();
+                _cancellationSource.Dispose();
+            }
 
             _cancellationSource = new CancellationTokenSource();
             var token = _cancellationSource.Token;
@@ -968,7 +972,9 @@ namespace Komorebi.ViewModels
 
             // テキストファイルの内容を読み込む
             var contentStream = await Commands.QueryFileContent.RunAsync(_repo.FullPath, _commit.SHA, file.Path);
-            var content = await new StreamReader(contentStream).ReadToEndAsync();
+            string content;
+            using (var reader = new StreamReader(contentStream))
+                content = await reader.ReadToEndAsync();
 
             // LFSオブジェクトかどうかを判定する
             var lfs = Models.LFSObject.Parse(content);

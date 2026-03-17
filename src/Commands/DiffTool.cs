@@ -57,7 +57,7 @@ namespace Komorebi.Commands
             try
             {
                 // gitプロセスを起動する（非同期で外部ツールが開く）
-                Process.Start(CreateGitStartInfo(false));
+                Process.Start(CreateGitStartInfo(false))?.Dispose();
             }
             catch (Exception ex)
             {

@@ -28,7 +28,17 @@ namespace Komorebi.Models
         public string CurrentVersionStr => $"v{CurrentVersion.Major}.{CurrentVersion.Minor:D2}";
 
         [JsonIgnore]
-        public bool IsNewVersion => CurrentVersion.CompareTo(new System.Version(TagName.Substring(1))) < 0;
+        public bool IsNewVersion
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(TagName) || !TagName.StartsWith('v'))
+                    return false;
+
+                return System.Version.TryParse(TagName.Substring(1), out var remote) &&
+                       CurrentVersion.CompareTo(remote) < 0;
+            }
+        }
 
         [JsonIgnore]
         public string ReleaseDateStr => DateTimeFormat.Format(PublishedAt, true);

@@ -116,7 +116,9 @@ namespace Komorebi.ViewModels
                 }
 
                 var contentStream = await Commands.QueryFileContent.RunAsync(_repo, _revision.SHA, _file).ConfigureAwait(false);
-                var content = await new StreamReader(contentStream).ReadToEndAsync();
+                string content;
+                using (var reader = new StreamReader(contentStream))
+                    content = await reader.ReadToEndAsync();
                 var lfs = Models.LFSObject.Parse(content);
                 if (lfs != null)
                 {

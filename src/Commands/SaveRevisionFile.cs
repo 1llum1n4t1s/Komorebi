@@ -68,7 +68,8 @@ namespace Komorebi.Commands
 
                     if (input != null)
                     {
-                        var inputString = await new StreamReader(input).ReadToEndAsync().ConfigureAwait(false);
+                        using var inputReader = new StreamReader(input);
+                        var inputString = await inputReader.ReadToEndAsync().ConfigureAwait(false);
                         await proc.StandardInput.WriteAsync(inputString).ConfigureAwait(false);
                     }
 

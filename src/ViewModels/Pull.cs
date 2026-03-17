@@ -105,7 +105,7 @@ namespace Komorebi.ViewModels
             {
                 // アップストリームからリモート名を抽出して自動選択を試みる
                 Models.Remote autoSelectedRemote = null;
-                if (!string.IsNullOrEmpty(Current.Upstream))
+                if (Current.Upstream is { Length: > 13 } && Current.Upstream.StartsWith("refs/remotes/"))
                 {
                     var remoteNameEndIdx = Current.Upstream.IndexOf('/', 13);
                     if (remoteNameEndIdx > 0)
@@ -121,7 +121,7 @@ namespace Komorebi.ViewModels
                     Models.Remote remote = null;
                     if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
                         remote = _repo.Remotes.Find(x => x.Name == _repo.Settings.DefaultRemote);
-                    _selectedRemote = remote ?? _repo.Remotes[0];
+                    _selectedRemote = remote ?? (_repo.Remotes.Count > 0 ? _repo.Remotes[0] : null);
                 }
                 else
                 {

@@ -96,6 +96,7 @@ namespace Komorebi.Views
         protected override void OnUnloaded(RoutedEventArgs e)
         {
             _cancellation.Cancel();
+            _cancellation.Dispose();
             base.OnUnloaded(e);
         }
 

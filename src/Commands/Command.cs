@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -106,8 +107,9 @@ namespace Komorebi.Commands
             // コマンドラインをログに記録する
             Log?.AppendLine($"$ git {Args}\n");
 
-            // エラーメッセージ収集用のリスト
-            var errs = new List<string>();
+            // エラーメッセージ収集用のスレッドセーフコレクション
+            // OutputDataReceived/ErrorDataReceivedはスレッドプールから呼ばれるため
+            var errs = new ConcurrentQueue<string>();
 
             // gitプロセスを作成し、出力リダイレクトを設定する
             using var proc = new Process();
@@ -176,7 +178,7 @@ namespace Komorebi.Commands
                 if (RaiseError)
                 {
                     // エラーメッセージを結合してユーザーに通知する
-                    var errMsg = string.Join("\n", errs).Trim();
+                    var errMsg = string.Join("\n", errs.ToArray()).Trim();
                     if (!string.IsNullOrEmpty(errMsg))
                         App.RaiseException(Context, errMsg);
                 }
@@ -334,7 +336,7 @@ namespace Komorebi.Commands
         /// </summary>
         /// <param name="line">プロセスから出力された1行。</param>
         /// <param name="errs">エラーメッセージの収集リスト。</param>
-        private void HandleOutput(string line, List<string> errs)
+        private void HandleOutput(string line, ConcurrentQueue<string> errs)
         {
             if (line == null)
                 return;
@@ -359,8 +361,8 @@ namespace Komorebi.Commands
                     return;
             }
 
-            // フィルタリングされなかった行をエラーリストに追加する
-            errs.Add(line);
+            // フィルタリングされなかった行をエラーキューに追加する
+            errs.Enqueue(line);
         }
 
         /// <summary>

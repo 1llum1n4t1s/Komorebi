@@ -36,6 +36,9 @@ namespace Komorebi.Commands
             var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
+                if (line.Length < 2)
+                    continue;
+
                 // '>' で始まる行はリモート側のコミット（ローカルが遅れている）
                 if (line[0] == '>')
                     local.Behind.Add(line.Substring(1));

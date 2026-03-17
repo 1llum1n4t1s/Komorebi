@@ -175,6 +175,9 @@ namespace Komorebi.Commands
             // LFSファイルの差分を解析
             if (result.IsLFS)
             {
+                if (line.Length == 0)
+                    return;
+
                 var ch = line[0];
                 if (ch == '-')
                 {

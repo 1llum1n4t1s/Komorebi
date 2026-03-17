@@ -1135,10 +1135,12 @@ namespace Komorebi.ViewModels
             log.Complete();
 
             var head = await new Commands.QueryRevisionByRefName(FullPath, "HEAD").GetResultAsync();
+            var nlIdx = log.Content.IndexOf('\n');
+            var bisectMsg = nlIdx >= 0 ? log.Content.Substring(nlIdx).Trim() : log.Content.Trim();
             if (!succ)
-                App.RaiseException(FullPath, log.Content.Substring(log.Content.IndexOf('\n')).Trim());
+                App.RaiseException(FullPath, bisectMsg);
             else if (log.Content.Contains("is the first bad commit"))
-                App.SendNotification(FullPath, log.Content.Substring(log.Content.IndexOf('\n')).Trim());
+                App.SendNotification(FullPath, bisectMsg);
 
             MarkBranchesDirtyManually();
             NavigateToCommit(head, true);
