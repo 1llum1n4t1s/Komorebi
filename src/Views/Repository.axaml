@@ -50,7 +50,7 @@
       </StackPanel>
 
       <!-- Dashboard -->
-      <Grid Grid.Row="1" Margin="0,0,0,8" RowDefinitions="Auto,Auto,*" IsVisible="{Binding !IsSearchingCommits}">
+      <Grid Grid.Row="1" Margin="0,0,0,8" RowDefinitions="Auto,Auto,Auto,*" IsVisible="{Binding !IsSearchingCommits}">
         <!-- Page Switcher for Right Panel -->
         <Border Grid.Row="0" Margin="8,0,4,0" BorderThickness="1" BorderBrush="{DynamicResource Brush.Border2}" CornerRadius="6">
           <Border CornerRadius="6" ClipToBounds="True">
@@ -218,7 +218,24 @@
           </TextBox.InnerRightContent>
         </TextBox>
 
-        <Grid Grid.Row="2" x:Name="LeftSidebarGroups" Margin="0,4,0,0" RowDefinitions="28,Auto,28,Auto,28,Auto,28,Auto,28,Auto" SizeChanged="OnLeftSidebarSizeChanged">
+        <!-- Expand All / Collapse All Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,2,4,0">
+          <Button Classes="icon_button"
+                  Width="20" Height="20"
+                  Click="OnExpandAllBranchNodes"
+                  ToolTip.Tip="{DynamicResource Text.Repository.UnfoldAll}">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.UnfoldAll}"/>
+          </Button>
+          <Button Classes="icon_button"
+                  Width="20" Height="20"
+                  Margin="4,0,0,0"
+                  Click="OnCollapseAllBranchNodes"
+                  ToolTip.Tip="{DynamicResource Text.Repository.FoldAll}">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.FoldAll}"/>
+          </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="3" x:Name="LeftSidebarGroups" Margin="0,4,0,0" RowDefinitions="28,Auto,28,Auto,28,Auto,28,Auto,28,Auto" SizeChanged="OnLeftSidebarSizeChanged">
           <!-- Local Branches -->
           <ToggleButton Grid.Row="0" Classes="group_expander" IsChecked="{Binding IsLocalBranchGroupExpanded, Mode=TwoWay}">
             <Grid ColumnDefinitions="16,*,Auto,Auto">

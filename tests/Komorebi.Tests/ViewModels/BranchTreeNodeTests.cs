@@ -344,7 +344,7 @@ namespace Komorebi.Tests.ViewModels
         }
 
         [Fact]
-        public void Builder_InvalidExpandedNodes_AreTracked()
+        public void Builder_NonexistentExpandedNodes_AreNotCollected()
         {
             var branches = new List<Komorebi.Models.Branch>
             {
@@ -357,8 +357,10 @@ namespace Komorebi.Tests.ViewModels
 
             builder.Run(branches, new List<Komorebi.Models.Remote>(), false);
 
-            Assert.Single(builder.InvalidExpandedNodes);
-            Assert.Equal("refs/heads/nonexistent", builder.InvalidExpandedNodes[0]);
+            // 存在しないパスはツリーに含まれないため、CollectExpandedPathsで収集されない
+            var collected = new List<string>();
+            Komorebi.ViewModels.BranchTreeNode.Builder.CollectExpandedPaths(builder.Locals, collected);
+            Assert.Empty(collected);
         }
 
         // ------------------------------------------------------------------

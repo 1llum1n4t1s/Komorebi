@@ -768,6 +768,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">Не встановлено</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Приховати в графі комітів</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Фільтрувати в графі комітів</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">Згорнути все</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">РОЗТАШУВАННЯ</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Горизонтальне</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Вертикальне</x:String>
@@ -811,6 +812,7 @@
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">За назвою</x:String>
   <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">Сортувати</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">Відкрити в терміналі</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">Розгорнути все</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">Відвідати '{0}' у браузері</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">Переглянути журнали</x:String>
   <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">Використовувати відносний час</x:String>

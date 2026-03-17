@@ -57,6 +57,7 @@ namespace Komorebi.Commands
             }
 
             // ローカルブランチのupstream追跡状態を解決
+            var trackTasks = new List<Task>();
             foreach (var b in branches)
             {
                 if (b.IsLocal && !string.IsNullOrEmpty(b.Upstream))
@@ -65,9 +66,9 @@ namespace Komorebi.Commands
                     {
                         b.IsUpstreamGone = false;
 
-                        // 追跡状態が不一致の場合、詳細な追跡情報を取得
+                        // 追跡状態が不一致の場合、詳細な追跡情報を並列取得
                         if (mismatched.Contains(b.FullName))
-                            await new QueryTrackStatus(WorkingDirectory).GetResultAsync(b, upstream).ConfigureAwait(false);
+                            trackTasks.Add(new QueryTrackStatus(WorkingDirectory).GetResultAsync(b, upstream));
                     }
                     else
                     {
@@ -76,6 +77,9 @@ namespace Komorebi.Commands
                     }
                 }
             }
+
+            if (trackTasks.Count > 0)
+                await Task.WhenAll(trackTasks).ConfigureAwait(false);
 
             return branches;
         }

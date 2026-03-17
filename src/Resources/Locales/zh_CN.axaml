@@ -768,6 +768,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">不指定</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">在提交列表中隐藏</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">使用其对提交列表过滤</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">全部折叠</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">布局方式</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">水平排布</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">竖直排布</x:String>
@@ -811,6 +812,7 @@
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">按名称</x:String>
   <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">排序</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">在终端中打开</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">全部展开</x:String>
   <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">在提交列表中使用相对时间</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">查看命令日志</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">访问远程仓库 '{0}'</x:String>

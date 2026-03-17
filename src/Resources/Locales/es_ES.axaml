@@ -768,6 +768,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">Desestablecer</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Ocultar en el Gráfico de Commits</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Filtrar en el Gráfico de Commits</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">Contraer todo</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">DISPOSICIÓN</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Horizontal</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Vertical</x:String>
@@ -811,6 +812,7 @@
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">Por Nombre</x:String>
   <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">Ordenar</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">Abrir en Terminal</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">Expandir todo</x:String>
   <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">Usar tiempo relativo</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">Ver Logs</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">Visitar '{0}' en el Navegador</x:String>
