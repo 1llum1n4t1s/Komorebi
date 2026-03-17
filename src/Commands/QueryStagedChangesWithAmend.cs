@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace SourceGit.Commands
+namespace Komorebi.Commands
 {
     public partial class QueryStagedChangesWithAmend : Command
     {

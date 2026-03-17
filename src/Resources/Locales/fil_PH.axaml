@@ -134,6 +134,10 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">URL ng Repository:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">ISARA</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">Editor</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">I-checkout ang Commit</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">I-cherry-pick ang Commit</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Cherry-Pick ...</x:String>
@@ -279,6 +283,7 @@
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">MAGPATULOY</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Nadetect ang walang lamang commit! Gusto mo bang magpatuloy (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">I-STAGE LAHAT &amp; I-COMMIT</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">Nadetect ang walang lamang commit! Gusto mo bang magpatuloy (--allow-empty) o i-stage lahat tapos i-commit?</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">Kailangan ng Pag-restart</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">Kailangan mong i-restart ang app na ito para mailapat ang mga pagbabago.</x:String>
@@ -525,6 +530,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">Stage</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">I-unstage</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">I-initialize ang Repository</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Path:</x:String>
   <x:String x:Key="Text.InitSetup" xml:space="preserve">Unang Pag-setup</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Pumili ng iyong gustong wika at default na direktoryo para sa pag-clone ng mga repository.</x:String>
@@ -652,6 +659,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Ipakita ang mga tag sa commit graph</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Haba ng Gabay sa Paksa</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Gumawa ng Github style na default avatar</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">I-enable ang Auto CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">I-commit bilang LF, i-checkout bilang CRLF</x:String>

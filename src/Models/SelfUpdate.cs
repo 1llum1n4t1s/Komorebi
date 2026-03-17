@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
+using Velopack;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class Version
     {
@@ -35,6 +38,42 @@ namespace SourceGit.Models
             var assembly = Assembly.GetExecutingAssembly().GetName();
             CurrentVersion = assembly.Version ?? new System.Version();
         }
+    }
+
+    /// <summary>
+    ///     Velopack更新情報を保持するクラス
+    /// </summary>
+    public class VelopackUpdate
+    {
+        /// <summary>リリースのタグ名（例: v1.0.5）</summary>
+        public string TagName => $"v{_updateInfo.TargetFullRelease.Version}";
+        /// <summary>バージョン文字列</summary>
+        public string VersionString => _updateInfo.TargetFullRelease.Version.ToString();
+
+        public VelopackUpdate(UpdateManager manager, UpdateInfo updateInfo)
+        {
+            _manager = manager;
+            _updateInfo = updateInfo;
+        }
+
+        /// <summary>
+        ///     更新パッケージを非同期でダウンロードする
+        /// </summary>
+        public async Task DownloadAsync(Action<int> onProgress, CancellationToken token)
+        {
+            await _manager.DownloadUpdatesAsync(_updateInfo, onProgress, cancelToken: token);
+        }
+
+        /// <summary>
+        ///     ダウンロード済みの更新を適用してアプリケーションを再起動する
+        /// </summary>
+        public void ApplyAndRestart()
+        {
+            _manager.ApplyUpdatesAndRestart(_updateInfo);
+        }
+
+        private readonly UpdateManager _manager;
+        private readonly UpdateInfo _updateInfo;
     }
 
     public class AlreadyUpToDate;

@@ -3,7 +3,7 @@ using System;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public partial class Askpass : ChromelessWindow
     {

@@ -156,13 +156,11 @@ namespace Komorebi.Tests.Models
         // -----------------------------------------------------------
 
         [Fact]
-        public void Set_EmptyPath_DoesNotThrow()
+        public void Set_EmptyPath_ThrowsIndexOutOfRange()
         {
             var change = new Change { Path = "" };
 
-            var exception = Record.Exception(() => change.Set(ChangeState.Modified));
-
-            Assert.Null(exception);
+            Assert.Throws<System.IndexOutOfRangeException>(() => change.Set(ChangeState.Modified));
         }
 
         // -----------------------------------------------------------

@@ -138,6 +138,10 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">URL du dépôt :</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">FERMER</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">Éditeur</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">Récupérer ce commit</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">Cherry-Pick ce commit</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Cherry-Pick ...</x:String>
@@ -283,6 +287,7 @@
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">CONTINUER</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Commit vide détecté ! Voulez-vous continuer (--allow-empty) ?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">TOUT INDEXER &amp; COMMIT</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">Commit vide détecté ! Voulez-vous continuer (--allow-empty) ou tout indexer puis commit ?</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">Redémarrage Requis</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">Vous devez redémarrer cette application pour appliquer les changements.</x:String>
@@ -529,6 +534,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">Indexer</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">Retirer de l'index</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">Initialiser le repository</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Chemin :</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Veuillez sélectionner votre langue préférée et le répertoire par défaut pour le clonage des dépôts.</x:String>
   <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">Répertoire de clonage</x:String>
@@ -656,6 +663,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Afficher les tags dans le graphique des commits</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Guide de longueur du sujet</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Générer un avatar par défaut de style GitHub</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Activer auto CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Valider en LF, extraire en CRLF</x:String>

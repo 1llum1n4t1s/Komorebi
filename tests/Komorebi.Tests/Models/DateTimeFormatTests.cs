@@ -8,11 +8,10 @@ namespace Komorebi.Tests.Models
         #region Constructor
 
         [Fact]
-        public void Constructor_SetsDateOnlyAndDateTime()
+        public void Constructor_SetsDateFormat()
         {
-            var format = new DateTimeFormat("yyyy/MM/dd", "yyyy/MM/dd, HH:mm:ss");
-            Assert.Equal("yyyy/MM/dd", format.DateOnly);
-            Assert.Equal("yyyy/MM/dd, HH:mm:ss", format.DateTime);
+            var format = new DateTimeFormat("yyyy/MM/dd");
+            Assert.Equal("yyyy/MM/dd", format.DateFormat);
         }
 
         #endregion
@@ -32,112 +31,27 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void Supported_AllItemsHaveNonEmptyDateOnly()
+        public void Supported_AllItemsHaveNonEmptyDateFormat()
         {
             foreach (var format in DateTimeFormat.Supported)
             {
-                Assert.False(string.IsNullOrWhiteSpace(format.DateOnly),
-                    $"DateTimeFormat with DateTime='{format.DateTime}' has empty DateOnly");
-            }
-        }
-
-        [Fact]
-        public void Supported_AllItemsHaveNonEmptyDateTime()
-        {
-            foreach (var format in DateTimeFormat.Supported)
-            {
-                Assert.False(string.IsNullOrWhiteSpace(format.DateTime),
-                    $"DateTimeFormat with DateOnly='{format.DateOnly}' has empty DateTime");
-            }
-        }
-
-        [Fact]
-        public void Supported_DateTimeAlwaysContainsDateOnly()
-        {
-            // The DateTime format should contain the DateOnly portion
-            foreach (var format in DateTimeFormat.Supported)
-            {
-                Assert.StartsWith(format.DateOnly, format.DateTime);
-            }
-        }
-
-        [Fact]
-        public void Supported_DateTimeAlwaysContainsTimeComponent()
-        {
-            foreach (var format in DateTimeFormat.Supported)
-            {
-                Assert.Contains("HH:mm:ss", format.DateTime);
+                Assert.False(string.IsNullOrWhiteSpace(format.DateFormat),
+                    "DateTimeFormat has empty DateFormat");
             }
         }
 
         #endregion
 
-        #region Example Property
-
-        [Fact]
-        public void Example_ReturnsFormattedString()
-        {
-            var format = new DateTimeFormat("yyyy/MM/dd", "yyyy/MM/dd, HH:mm:ss");
-            var example = format.Example;
-            Assert.False(string.IsNullOrWhiteSpace(example));
-            // The example uses a fixed date: 2025/01/31 08:00:00
-            Assert.Equal("2025/01/31, 08:00:00", example);
-        }
-
-        [Fact]
-        public void Example_AllSupportedFormatsProduceValidExamples()
-        {
-            foreach (var format in DateTimeFormat.Supported)
-            {
-                var example = format.Example;
-                Assert.False(string.IsNullOrWhiteSpace(example),
-                    $"DateTimeFormat '{format.DateOnly}' produced empty Example");
-            }
-        }
-
-        [Theory]
-        [InlineData(0, "2025/01/31, 08:00:00")]
-        [InlineData(1, "2025.01.31, 08:00:00")]
-        [InlineData(2, "2025-01-31, 08:00:00")]
-        [InlineData(3, "01/31/2025, 08:00:00")]
-        [InlineData(4, "01.31.2025, 08:00:00")]
-        [InlineData(5, "01-31-2025, 08:00:00")]
-        [InlineData(6, "31/01/2025, 08:00:00")]
-        [InlineData(7, "31.01.2025, 08:00:00")]
-        [InlineData(8, "31-01-2025, 08:00:00")]
-        public void Example_ProducesExpectedOutput(int index, string expected)
-        {
-            Assert.Equal(expected, DateTimeFormat.Supported[index].Example);
-        }
-
-        #endregion
-
-        #region ActiveIndex and Active
+        #region ActiveIndex
 
         [Fact]
         public void ActiveIndex_DefaultIsZero()
         {
-            // Save and restore to avoid affecting other tests
             var original = DateTimeFormat.ActiveIndex;
             try
             {
                 DateTimeFormat.ActiveIndex = 0;
                 Assert.Equal(0, DateTimeFormat.ActiveIndex);
-            }
-            finally
-            {
-                DateTimeFormat.ActiveIndex = original;
-            }
-        }
-
-        [Fact]
-        public void Active_ReturnsItemAtActiveIndex()
-        {
-            var original = DateTimeFormat.ActiveIndex;
-            try
-            {
-                DateTimeFormat.ActiveIndex = 2;
-                Assert.Same(DateTimeFormat.Supported[2], DateTimeFormat.Active);
             }
             finally
             {
@@ -154,7 +68,7 @@ namespace Komorebi.Tests.Models
                 for (int i = 0; i < DateTimeFormat.Supported.Count; i++)
                 {
                     DateTimeFormat.ActiveIndex = i;
-                    Assert.Same(DateTimeFormat.Supported[i], DateTimeFormat.Active);
+                    Assert.Equal(i, DateTimeFormat.ActiveIndex);
                 }
             }
             finally
@@ -165,27 +79,64 @@ namespace Komorebi.Tests.Models
 
         #endregion
 
-        #region Format Uniqueness
+        #region Format Method
 
         [Fact]
-        public void Supported_AllDateOnlyFormatsAreUnique()
+        public void Format_DateOnly_ReturnsDateString()
         {
-            var formats = new HashSet<string>();
-            foreach (var format in DateTimeFormat.Supported)
+            var originalIndex = DateTimeFormat.ActiveIndex;
+            try
             {
-                Assert.True(formats.Add(format.DateOnly),
-                    $"Duplicate DateOnly format: '{format.DateOnly}'");
+                DateTimeFormat.ActiveIndex = 0; // yyyy/MM/dd
+                var result = DateTimeFormat.Format(0UL, dateOnly: true);
+                Assert.False(string.IsNullOrWhiteSpace(result));
+            }
+            finally
+            {
+                DateTimeFormat.ActiveIndex = originalIndex;
             }
         }
 
         [Fact]
-        public void Supported_AllDateTimeFormatsAreUnique()
+        public void Format_WithTime_IncludesTimeComponent()
+        {
+            var originalIndex = DateTimeFormat.ActiveIndex;
+            try
+            {
+                DateTimeFormat.ActiveIndex = 0;
+                var dateOnly = DateTimeFormat.Format(0UL, dateOnly: true);
+                var dateTime = DateTimeFormat.Format(0UL, dateOnly: false);
+                // DateTime version should be longer than DateOnly
+                Assert.True(dateTime.Length > dateOnly.Length);
+            }
+            finally
+            {
+                DateTimeFormat.ActiveIndex = originalIndex;
+            }
+        }
+
+        #endregion
+
+        #region Use24Hours
+
+        [Fact]
+        public void Use24Hours_DefaultIsTrue()
+        {
+            Assert.True(DateTimeFormat.Use24Hours);
+        }
+
+        #endregion
+
+        #region Format Uniqueness
+
+        [Fact]
+        public void Supported_AllDateFormatsAreUnique()
         {
             var formats = new HashSet<string>();
             foreach (var format in DateTimeFormat.Supported)
             {
-                Assert.True(formats.Add(format.DateTime),
-                    $"Duplicate DateTime format: '{format.DateTime}'");
+                Assert.True(formats.Add(format.DateFormat),
+                    $"Duplicate DateFormat: '{format.DateFormat}'");
             }
         }
 

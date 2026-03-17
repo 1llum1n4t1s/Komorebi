@@ -2,12 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:m="using:SourceGit.Models"
-                    xmlns:vm="using:SourceGit.ViewModels"
-                    xmlns:c="using:SourceGit.Converters"
-                    xmlns:v="using:SourceGit.Views"
+                    xmlns:m="using:Komorebi.Models"
+                    xmlns:vm="using:Komorebi.ViewModels"
+                    xmlns:c="using:Komorebi.Converters"
+                    xmlns:v="using:Komorebi.Views"
                     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-                    x:Class="SourceGit.Views.InteractiveRebase"
+                    x:Class="Komorebi.Views.InteractiveRebase"
                     x:DataType="vm:InteractiveRebase"
                     x:Name="ThisControl"
                     Icon="/App.ico"
@@ -155,6 +155,7 @@
                   </Button>
 
                   <v:CommitSubjectPresenter Grid.Column="1"
+                                            Height="28"
                                             Margin="0,0,4,0"
                                             FontFamily="{DynamicResource Fonts.Default}"
                                             CodeFontFamily="{DynamicResource Fonts.Monospace}"
@@ -164,8 +165,8 @@
                                             Subject="{Binding Subject}"
                                             IssueTrackers="{Binding $parent[v:InteractiveRebase].((vm:InteractiveRebase)DataContext).IssueTrackers}"
                                             FontWeight="Normal"
-                                            Opacity="{Binding IsFullMessageUsed, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
-                                            ShowStrikethrough="{Binding Action, Mode=OneWay, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:InteractiveRebaseAction.Drop}}"/>
+                                            Opacity="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.ToOpacity}}"
+                                            ShowStrikethrough="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.IsDrop}}"/>
                 </Grid>
 
                 <!-- Author Avatar -->
@@ -173,27 +174,29 @@
                           Width="16" Height="16"
                           Margin="8,0,0,0"
                           VerticalAlignment="Center"
-                          User="{Binding Commit.Author}"
-                          Opacity="{Binding IsFullMessageUsed, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
+                          User="{Binding Commit.Author}"/>
 
                 <!-- Author Name -->
                 <Border Grid.Column="5" ClipToBounds="True">
                   <TextBlock Margin="6,0,12,0"
-                             Text="{Binding Commit.Author.Name}" 
-                             Opacity="{Binding IsFullMessageUsed, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
+                             Text="{Binding Commit.Author.Name}"
+                             Opacity="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.ToOpacity}}"
+                             Classes.dropped="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.IsDrop}}"/>
                 </Border>
 
                 <!-- Commit SHA -->
                 <Border Grid.Column="6" ClipToBounds="True">
                   <TextBlock Text="{Binding Commit.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                             Opacity="{Binding IsFullMessageUsed, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
+                             Opacity="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.ToOpacity}}"
+                             Classes.dropped="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.IsDrop}}"/>
                 </Border>
 
                 <!-- Commit Time -->
                 <Border Grid.Column="7">
                   <v:DateTimePresenter Margin="16,0,8,0"
                                        Timestamp="{Binding Commit.CommitterTime}"
-                                       Opacity="{Binding IsFullMessageUsed, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
+                                       Opacity="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.ToOpacity}}"
+                                       Classes.dropped="{Binding Action, Mode=OneWay, Converter={x:Static c:InteractiveRebaseActionConverters.IsDrop}}"/>
                 </Border>
               </Grid>
             </DataTemplate>

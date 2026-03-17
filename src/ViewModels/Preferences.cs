@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class Preferences : ObservableObject
     {
@@ -765,15 +765,52 @@ namespace SourceGit.ViewModels
             return changed;
         }
 
+        private static string DetectDefaultLocale()
+        {
+            var supported = new HashSet<string>(StringComparer.Ordinal)
+            {
+                "de_DE", "en_US", "es_ES", "fil_PH", "fr_FR", "id_ID", "it_IT", "ja_JP",
+                "ko_KR", "pt_BR", "ru_RU", "ta_IN", "uk_UA", "zh_CN", "zh_TW",
+            };
+
+            var culture = System.Globalization.CultureInfo.CurrentUICulture;
+
+            var exact = culture.Name.Replace('-', '_');
+            if (supported.Contains(exact))
+                return exact;
+
+            var lang = culture.TwoLetterISOLanguageName;
+
+            if (lang == "zh")
+            {
+                var name = culture.Name;
+                if (name.Contains("Hant") || name.Contains("TW") || name.Contains("HK") || name.Contains("MO"))
+                    return "zh_TW";
+                return "zh_CN";
+            }
+
+            foreach (var locale in supported)
+            {
+                if (locale.StartsWith(lang + "_", StringComparison.Ordinal))
+                    return locale;
+            }
+
+            return "en_US";
+        }
+
         private static Preferences _instance = null;
+        private static readonly string s_detectedLocale = DetectDefaultLocale();
+
+        /// <summary>システムから自動検出されたデフォルトロケール。</summary>
+        internal static string DetectedLocale => s_detectedLocale;
 
         private bool _isLoading = true;
         private bool _isReadonly = true;
         private string _locale = "en_US";
         private string _theme = "Default";
         private string _themeOverrides = string.Empty;
-        private string _defaultFontFamily = string.Empty;
-        private string _monospaceFontFamily = string.Empty;
+        private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "Yu Gothic UI" : "Inter";
+        private string _monospaceFontFamily = s_detectedLocale == "ja_JP" ? "UDEV Gothic JPDOC" : "JetBrains Mono";
         private double _defaultFontSize = 13;
         private double _editorFontSize = 13;
         private int _editorTabWidth = 4;

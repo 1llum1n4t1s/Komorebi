@@ -1,10 +1,10 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <ResourceDictionary.MergedDictionaries>
-    <ResourceInclude Source="avares://SourceGit/Resources/Locales/en_US.axaml"/>
+    <ResourceInclude Source="avares://Komorebi/Resources/Locales/en_US.axaml"/>
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">О программе</x:String>
-  <x:String x:Key="Text.About.Menu" xml:space="preserve">О SourceGit</x:String>
+  <x:String x:Key="Text.About.Menu" xml:space="preserve">О Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Дата выпуска: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Примечания выпуска</x:String>
   <x:String x:Key="Text.About.SubTitle" xml:space="preserve">Бесплатный графический клиент Git с исходным кодом</x:String>
@@ -25,7 +25,7 @@
   <x:String x:Key="Text.AIAssistant.Regen" xml:space="preserve">ПЕРЕСОЗДАТЬ</x:String>
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Использовать OpenAI для создания сообщения о ревизии</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">ПРИМЕНИТЬ КАК СООБЩЕНИЕ РЕВИЗИИ</x:String>
-  <x:String x:Key="Text.App.Hide" xml:space="preserve">Скрыть SourceGit</x:String>
+  <x:String x:Key="Text.App.Hide" xml:space="preserve">Скрыть Komorebi</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Показать все</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Исправить </x:String>
   <x:String x:Key="Text.Apply.File" xml:space="preserve">Файл заплатки:</x:String>
@@ -42,7 +42,7 @@
   <x:String x:Key="Text.Archive.File.Placeholder" xml:space="preserve">Выберите путь к архивному файлу</x:String>
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Ревизия:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Архив</x:String>
-  <x:String x:Key="Text.Askpass" xml:space="preserve">Спросить разрешения SourceGit</x:String>
+  <x:String x:Key="Text.Askpass" xml:space="preserve">Спросить разрешения Komorebi</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Введите парольную фразу:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">НЕОТСЛЕЖИВАЕМЫЕ ФАЙЛЫ</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">СПИСОК ПУСТ</x:String>
@@ -138,6 +138,10 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">Адрес репозитория:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">ЗАКРЫТЬ</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">Редактор</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">Переключиться на эту ревизию</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">Применить эту ревизию (cherry-pick)</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Применить несколько ревизий ...</x:String>
@@ -258,7 +262,7 @@
   <x:String x:Key="Text.Configure.IssueTracker.URLTemplate.Tip" xml:space="preserve">Пожалуйста, используйте $1, $2 для доступа к значениям групп регулярных выражений.</x:String>
   <x:String x:Key="Text.Configure.OpenAI" xml:space="preserve">ОТКРЫТЬ ИИ</x:String>
   <x:String x:Key="Text.Configure.OpenAI.Preferred" xml:space="preserve">Предпочтительный сервис:</x:String>
-  <x:String x:Key="Text.Configure.OpenAI.Preferred.Tip" xml:space="preserve">Если «Предпочтительный сервис» установлен, SourceGit будет использовать только этот репозиторий. В противном случае, если доступно более одной услуги, будет отображено контекстное меню для выбора одной из них.</x:String>
+  <x:String x:Key="Text.Configure.OpenAI.Preferred.Tip" xml:space="preserve">Если «Предпочтительный сервис» установлен, Komorebi будет использовать только этот репозиторий. В противном случае, если доступно более одной услуги, будет отображено контекстное меню для выбора одной из них.</x:String>
   <x:String x:Key="Text.Configure.Proxy" xml:space="preserve">HTTP-прокси</x:String>
   <x:String x:Key="Text.Configure.Proxy.Placeholder" xml:space="preserve">HTTP-прокси для репозитория</x:String>
   <x:String x:Key="Text.Configure.User" xml:space="preserve">Имя пользователя</x:String>
@@ -275,12 +279,15 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Встроенные переменные ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, и ${TAG} останутся здесь доступными</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Тип:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Рабочие пространства</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Clone Dir</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Uses global setting if empty</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Цвет</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Имя</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Восстанавливать вкладки при запуске</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">ПРОДОЛЖИТЬ</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Обнаружена пустая ревизия! Вы хотите продолжить (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">Сформировать всё и зафиксировать ревизию</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">Обнаружена пустая ревизия! Вы хотите продолжить (--allow-empty) или отложить всё, а затем зафиксировать ревизию?</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">Требуется перезапуск</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">Вы должны перезапустить приложение после применения изменений.</x:String>
@@ -305,6 +312,7 @@
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Введите имя ветки.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Создать локальную ветку</x:String>
   <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">Перезаписать существующую ветку</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">Push the created branch to remote</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">Создать метку...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">Новая метка у:</x:String>
   <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">GPG подпись</x:String>
@@ -373,6 +381,9 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Меньше видимых строк</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Больше видимых строк</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">ВЫБЕРИТЕ ФАЙЛ ДЛЯ ПРОСМОТРА ИЗМЕНЕНИЙ</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI based tool &quot;{0}&quot; is not supported by this app</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Invalid diff/merge tool in preference setting</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Missing git configuration: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Каталог историй</x:String>
   <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">Есть локальные изменения</x:String>
   <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">Не соответствует с исходящим потоком</x:String>
@@ -523,7 +534,12 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">Сформировать</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">Расформировать</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">Создать репозиторий</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Путь:</x:String>
+  <x:String x:Key="Text.InitSetup" xml:space="preserve">Initial Setup</x:String>
+  <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Please select your preferred language and default directory for cloning repositories.</x:String>
+  <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">Clone Dir</x:String>
   <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">Выполняется частичный перенос ревизий (cherry-pick).</x:String>
   <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">Обрабтка ревизии.</x:String>
   <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">Выполняется слияние.</x:String>
@@ -647,8 +663,13 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Показывать метки на графике</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Длина темы ревизии</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Создать Github-подобный аватар по умолчанию</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Включить автозавершение CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Commit as LF, checkout as CRLF</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Only convert CRLF to LF on commit</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Do NOT convert</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Force CRLF on commit and checkout</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Каталог клонирования по умолчанию</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Электроная почта пользователя</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Общая электроная почта пользователя git</x:String>
@@ -737,6 +758,10 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">По имени</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Очистить (Сбор мусора и удаление) </x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Запустить команду (git gc) для данного репозитория.</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Aggressive optimization</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Recompute delta compression from scratch. Takes much longer but produces better results. Recommended only after large imports or history rewrites.</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Clear Index Cache</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Run `git rm -r --cached .` and `git add .` to rebuild the index.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Очистить всё</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Очистить</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Настройка репозитория</x:String>
@@ -824,6 +849,7 @@
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">Доступна новая версия программного обеспечения: </x:String>
   <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">Текущая версия: </x:String>
   <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Не удалось проверить наличие обновлений!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">Download &amp; Install</x:String>
   <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">Загрузка</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Пропустить эту версию</x:String>
   <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">Дата выпуска новой версии: </x:String>
