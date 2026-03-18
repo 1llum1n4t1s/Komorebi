@@ -862,6 +862,7 @@
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Перейти</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Втиснуть ГОЛОВУ (HEAD) в родительскую</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Исправить ГОЛОВУ (HEAD) в родительском</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Принудительно отправить после завершения</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватный ключ SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Путь хранения приватного ключа SSH</x:String>

@@ -858,6 +858,7 @@
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Go to</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD into Parent</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD into Parent</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Force push after done</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Into:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH Private Key:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Private SSH key store path</x:String>

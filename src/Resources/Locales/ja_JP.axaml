@@ -862,6 +862,7 @@
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">このコミットに移動</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">親コミットにコメント結合して統合(Squash)</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">親コミットのコメントのみで統合(Fixup)</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">実行後に強制プッシュする</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">統合先:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH の秘密鍵:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">SSH の秘密鍵が保管されているパス</x:String>

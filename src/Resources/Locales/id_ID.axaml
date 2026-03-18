@@ -863,6 +863,7 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD ke Induk</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ke:</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD ke Induk</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Paksa push setelah selesai</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Kunci SSH Privat:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Jalur penyimpanan kunci SSH privat</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">MULAI</x:String>

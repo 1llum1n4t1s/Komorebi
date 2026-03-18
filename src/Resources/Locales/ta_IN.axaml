@@ -863,6 +863,7 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">HEAD-ஐ பெற்றோருக்குள் Squash செய்</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">உள்ளே:</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">HEAD-ஐ பெற்றோருக்குள் Fixup செய்</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">முடிந்த பிறகு கட்டாய புஷ்</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">பாஓடு தனியார் திறவுகோல்:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">தனியார் பாஓடு திறவுகோல் கடை பாதை</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">தொடங்கு</x:String>

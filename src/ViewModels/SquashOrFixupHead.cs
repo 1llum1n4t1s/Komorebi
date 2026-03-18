@@ -36,6 +36,23 @@ namespace Komorebi.ViewModels
         }
 
         /// <summary>
+        ///     現在のブランチにupstreamが設定されているかどうか。
+        /// </summary>
+        public bool HasUpstream
+        {
+            get;
+        }
+
+        /// <summary>
+        ///     操作完了後に強制プッシュするかどうか。
+        /// </summary>
+        public bool ForcePushAfterDone
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         ///     コンストラクタ。リポジトリ、対象コミット、メッセージ、モードを受け取る。
         /// </summary>
         public SquashOrFixupHead(Repository repo, Models.Commit target, string message, bool fixup)
@@ -45,6 +62,9 @@ namespace Komorebi.ViewModels
 
             _repo = repo;
             _message = message;
+
+            var branch = repo.CurrentBranch;
+            HasUpstream = branch != null && !string.IsNullOrEmpty(branch.Upstream);
         }
 
         /// <summary>
@@ -99,6 +119,24 @@ namespace Komorebi.ViewModels
                 await new Commands.Stash(_repo.FullPath)
                     .Use(log)
                     .PopAsync("stash@{0}");
+
+            if (succ && ForcePushAfterDone)
+            {
+                var branch = _repo.CurrentBranch;
+                if (branch != null && !string.IsNullOrEmpty(branch.Upstream))
+                {
+                    var upstream = branch.Upstream.Substring(13); // "refs/remotes/" を除去
+                    var separatorIdx = upstream.IndexOf('/');
+                    if (separatorIdx > 0)
+                    {
+                        var remote = upstream.Substring(0, separatorIdx);
+                        var remoteBranch = upstream.Substring(separatorIdx + 1);
+                        await new Commands.Push(_repo.FullPath, branch.Name, remote, remoteBranch, false, false, false, true)
+                            .Use(log)
+                            .ExecAsync();
+                    }
+                }
+            }
 
             log.Complete();
             return succ;

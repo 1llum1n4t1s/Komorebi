@@ -863,6 +863,7 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD до батьківського</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">До:</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD до батьківського</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Примусово надіслати після завершення</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватний ключ SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Шлях до сховища приватного ключа SSH</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">ПОЧАТИ</x:String>

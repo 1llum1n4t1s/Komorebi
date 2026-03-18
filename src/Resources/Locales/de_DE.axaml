@@ -862,6 +862,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Zum Commit wechseln</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD in Vorgänger</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD in Vorgänger</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Nach Abschluss Force-Push durchführen</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Privater SSH-Schlüssel:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Pfad zum privaten SSH-Schlüssel</x:String>

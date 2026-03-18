@@ -862,6 +862,7 @@
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">前往此提交</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">合併變更入父提交</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">修正至父提交</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">完成後強制推送</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">父提交:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH 金鑰:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">SSH 金鑰檔案</x:String>

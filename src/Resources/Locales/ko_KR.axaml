@@ -853,6 +853,7 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">HEAD를 부모에 Squash</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">대상:</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">HEAD를 부모에 Fixup</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">완료 후 강제 푸시</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH 개인 키:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">개인 SSH 키 저장 경로</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">시작</x:String>

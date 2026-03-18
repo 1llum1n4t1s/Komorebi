@@ -862,6 +862,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Vai a</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD nel Genitore</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD nel Genitore</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Esegui push forzato al termine</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Chiave Privata SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Percorso per la chiave SSH privata</x:String>

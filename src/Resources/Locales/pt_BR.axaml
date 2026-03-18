@@ -862,6 +862,7 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash do HEAD no Pai</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Em:</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup do HEAD no Pai</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Forçar push após concluir</x:String>
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Ir para</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Chave SSH Privada:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Caminho para a chave SSH privada</x:String>
