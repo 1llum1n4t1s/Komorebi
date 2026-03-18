@@ -486,11 +486,8 @@ namespace Komorebi.ViewModels
             set;
         } = [];
 
-        public double LastCheckUpdateTime
-        {
-            get => _lastCheckUpdateTime;
-            set => SetProperty(ref _lastCheckUpdateTime, value);
-        }
+        [JsonExtensionData]
+        public Dictionary<string, System.Text.Json.JsonElement> ExtensionData { get; set; }
 
         public void SetCanModify()
         {
@@ -505,17 +502,7 @@ namespace Komorebi.ViewModels
 
         public bool ShouldCheck4UpdateOnStartup()
         {
-            if (!_check4UpdatesOnStartup)
-                return false;
-
-            var lastCheck = DateTime.UnixEpoch.AddSeconds(LastCheckUpdateTime).ToLocalTime();
-            var now = DateTime.Now;
-
-            if (lastCheck.Year == now.Year && lastCheck.Month == now.Month && lastCheck.Day == now.Day)
-                return false;
-
-            LastCheckUpdateTime = now.Subtract(DateTime.UnixEpoch.ToLocalTime()).TotalSeconds;
-            return true;
+            return _check4UpdatesOnStartup;
         }
 
         public Workspace GetActiveWorkspace()
@@ -623,6 +610,8 @@ namespace Komorebi.ViewModels
         {
             if (_isLoading || _isReadonly)
                 return;
+
+            ExtensionData = null;
 
             var file = Path.Combine(Native.OS.DataDir, "preference.json");
             using var stream = File.Create(file);
@@ -829,7 +818,6 @@ namespace Komorebi.ViewModels
         private bool _showChildren = false;
 
         private bool _check4UpdatesOnStartup = true;
-        private double _lastCheckUpdateTime = 0;
         private string _ignoreUpdateTag = string.Empty;
 
         private bool _showTagsInGraph = true;
