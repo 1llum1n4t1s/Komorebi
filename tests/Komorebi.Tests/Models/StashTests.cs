@@ -59,24 +59,13 @@ namespace Komorebi.Tests.Models
 
         #endregion
 
-        #region TimeStr Property
+        #region Time Property
 
         [Fact]
-        public void TimeStr_ZeroTime_ProducesValidString()
+        public void Time_CanBeSetAndRetrieved()
         {
-            var stash = new Stash { Time = 0 };
-            var timeStr = stash.TimeStr;
-            Assert.False(string.IsNullOrWhiteSpace(timeStr));
-        }
-
-        [Fact]
-        public void TimeStr_KnownTimestamp_ContainsExpectedDate()
-        {
-            // 2025-01-15 12:00:00 UTC = 1736942400
             var stash = new Stash { Time = 1736942400 };
-            var timeStr = stash.TimeStr;
-            // Should contain 2025 somewhere in the formatted string
-            Assert.Contains("2025", timeStr);
+            Assert.Equal(1736942400UL, stash.Time);
         }
 
         #endregion

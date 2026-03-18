@@ -156,7 +156,7 @@ namespace Komorebi.Native
             var browser = Environment.GetEnvironmentVariable("BROWSER");
             if (string.IsNullOrEmpty(browser))
                 browser = "xdg-open";
-            Process.Start(browser, url.Quoted());
+            Process.Start(browser, url.Quoted())?.Dispose();
         }
 
         /// <summary>
@@ -168,14 +168,14 @@ namespace Komorebi.Native
             if (Directory.Exists(path))
             {
                 // ディレクトリの場合はそのまま開く
-                Process.Start("xdg-open", path.Quoted());
+                Process.Start("xdg-open", path.Quoted())?.Dispose();
             }
             else
             {
                 // ファイルの場合は親ディレクトリを開く
                 var dir = Path.GetDirectoryName(path);
                 if (Directory.Exists(dir))
-                    Process.Start("xdg-open", dir.Quoted());
+                    Process.Start("xdg-open", dir.Quoted())?.Dispose();
             }
         }
 
@@ -195,7 +195,7 @@ namespace Komorebi.Native
 
             try
             {
-                Process.Start(startInfo);
+                Process.Start(startInfo)?.Dispose();
             }
             catch (Exception e)
             {

@@ -30,7 +30,9 @@ namespace Komorebi.ViewModels
             _pageId = pageId;
             _targetPath = path;
             _parentNode = parent;
-            Reason = string.IsNullOrEmpty(reason) ? "Invalid repository detected!" : reason;
+
+            Reason = string.IsNullOrEmpty(reason) ? "unknown error" : reason;
+            Reason = Reason.Trim();
         }
 
         /// <summary>

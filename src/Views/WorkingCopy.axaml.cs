@@ -282,6 +282,9 @@ namespace Komorebi.Views
         /// </summary>
         private async void OnCommit(object _, RoutedEventArgs e)
         {
+            if (App.GetLauncher() is { CommandPalette: { } } launcher)
+                return;
+
             if (DataContext is ViewModels.WorkingCopy vm)
                 await vm.CommitAsync(false, false);
 
@@ -293,6 +296,9 @@ namespace Komorebi.Views
         /// </summary>
         private async void OnCommitWithAutoStage(object _, RoutedEventArgs e)
         {
+            if (App.GetLauncher() is { CommandPalette: { } } launcher)
+                return;
+
             if (DataContext is ViewModels.WorkingCopy vm)
                 await vm.CommitAsync(true, false);
 
@@ -304,6 +310,9 @@ namespace Komorebi.Views
         /// </summary>
         private async void OnCommitWithPush(object _, RoutedEventArgs e)
         {
+            if (App.GetLauncher() is { CommandPalette: { } } launcher)
+                return;
+
             if (DataContext is ViewModels.WorkingCopy vm)
                 await vm.CommitAsync(false, true);
 

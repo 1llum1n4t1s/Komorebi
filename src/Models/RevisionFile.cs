@@ -30,7 +30,8 @@ namespace Komorebi.Models
         {
             Image = img;
             FileSize = size;
-            ImageType = Path.GetExtension(file)!.Substring(1).ToUpper(CultureInfo.CurrentCulture);
+            var ext = Path.GetExtension(file);
+            ImageType = string.IsNullOrEmpty(ext) ? string.Empty : ext.Substring(1).ToUpper(CultureInfo.CurrentCulture);
         }
     }
 

@@ -482,6 +482,9 @@ namespace Komorebi.ViewModels
         /// </summary>
         public async Task DropHeadAsync(Models.Commit head)
         {
+            if (head.Parents.Count == 0)
+                return;
+
             var parent = _commits.Find(x => x.SHA.Equals(head.Parents[0]));
             if (parent == null)
                 parent = await new Commands.QuerySingleCommit(_repo.FullPath, head.Parents[0]).GetResultAsync();

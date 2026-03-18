@@ -207,7 +207,7 @@ namespace Komorebi.ViewModels
                 .ConfigureAwait(false);
 
             foreach (var c in changes)
-                opts.Add(new Models.DiffOption(_selectedStash.Parents[0], _selectedStash.SHA, c));
+                opts.Add(new Models.DiffOption(stash.Parents[0], stash.SHA, c));
 
             if (stash.Parents.Count == 3)
             {
@@ -216,7 +216,7 @@ namespace Komorebi.ViewModels
                     .ConfigureAwait(false);
 
                 foreach (var c in untracked)
-                    opts.Add(new Models.DiffOption(Models.Commit.EmptyTreeSHA1, _selectedStash.Parents[2], c));
+                    opts.Add(new Models.DiffOption(Models.Commit.EmptyTreeSHA1, stash.Parents[2], c));
 
                 changes.AddRange(untracked);
             }

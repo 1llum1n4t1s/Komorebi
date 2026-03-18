@@ -1,45 +1,18 @@
 using System;
 
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
-using Avalonia.VisualTree;
 
 namespace Komorebi.Views
 {
-    /// <summary>
-    ///     カスタムアクション実行ダイアログのコードビハインド。
-    /// </summary>
     public partial class ExecuteCustomAction : UserControl
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
         public ExecuteCustomAction()
         {
             InitializeComponent();
         }
 
-        /// <summary>
-        ///     コントロールが読み込まれた際の処理。
-        /// </summary>
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var inputs = this.GetVisualDescendants();
-            foreach (var input in inputs)
-            {
-                if (input is InputElement { Focusable: true, IsTabStop: true } focusable)
-                {
-                    focusable.Focus();
-                    return;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Pathの選択処理を行う。
-        /// </summary>
         private async void SelectPath(object sender, RoutedEventArgs e)
         {
             var topLevel = TopLevel.GetTopLevel(this);

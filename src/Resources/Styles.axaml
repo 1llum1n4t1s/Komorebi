@@ -182,6 +182,14 @@
     <Setter Property="FontSize" Value="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize}"/>
   </Style>
 
+  <Style Selector="AdornerLayer">
+    <Setter Property="DefaultFocusAdorner">
+      <FocusAdornerTemplate>
+        <Rectangle Margin="0" Stroke="{DynamicResource Brush.FG1}" StrokeDashArray="1,2" StrokeThickness="1"/>
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+
   <Style Selector="ToolTip">
     <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
     <Setter Property="Background" Value="{DynamicResource Brush.Popup}"/>
@@ -190,8 +198,9 @@
     <Setter Property="TextBlock.TextDecorations" Value=""/>
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="8" Effect="drop-shadow(0 0 8 #30000000)">
-          <Border Padding="8,6"
+        <Grid Effect="drop-shadow(0 0 8 #30000000)">
+          <Border Margin="8"
+                  Padding="8,6"
                   CornerRadius="4"
                   Background="{DynamicResource Brush.Popup}"
                   BorderBrush="{DynamicResource Brush.Border2}"
@@ -218,10 +227,17 @@
 
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
+        <Grid>
+          <Border Background="{DynamicResource Brush.Popup}" BorderThickness="0" Margin="4" CornerRadius="{TemplateBinding CornerRadius}">
+            <Border.Effect>
+              <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="4" Color="Black" Opacity=".6"/>
+            </Border.Effect>
+          </Border>
+
           <Border Name="LayoutRoot"
+                  Margin="4"
                   Padding="12"
-                  Background="{DynamicResource Brush.Popup}"
+                  Background="Transparent"
                   BorderThickness="0"
                   CornerRadius="{TemplateBinding CornerRadius}">
             <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
@@ -516,6 +532,9 @@
     <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
     <Setter Property="Opacity" Value=".56"/>
   </Style>
+  <Style Selector="TextBlock.dropped">
+    <Setter Property="TextDecorations" Value="Strikethrough"/>
+  </Style>
 
   <Style Selector="Run.issue_link">
     <Setter Property="Foreground" Value="{DynamicResource Brush.Link}"/>
@@ -805,11 +824,15 @@
     <Setter Property="VerticalOffset" Value="-4"/>
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
+        <Grid>
+          <Border Background="{DynamicResource Brush.Popup}" BorderThickness="0" Margin="4" CornerRadius="{TemplateBinding CornerRadius}">
+            <Border.Effect>
+              <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="4" Color="Black" Opacity=".6"/>
+            </Border.Effect>
+          </Border>
+
           <Border BorderThickness="0"
-                  Background="{DynamicResource Brush.Popup}"
-                  CornerRadius="{TemplateBinding CornerRadius}"
-                  Padding="8,4"
+                  Margin="8,4"
                   MaxWidth="{TemplateBinding MaxWidth}"
                   MinHeight="{TemplateBinding MinHeight}"
                   HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
@@ -829,9 +852,16 @@
   <Style Selector="MenuFlyoutPresenter">
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
+        <Grid>
+          <Border Background="{DynamicResource Brush.Popup}" BorderThickness="0" Margin="4" CornerRadius="{TemplateBinding CornerRadius}">
+            <Border.Effect>
+              <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="4" Color="Black" Opacity=".6"/>
+            </Border.Effect>
+          </Border>
+
           <Border Name="LayoutRoot"
-                  Background="{DynamicResource Brush.Popup}"
+                  Margin="4"
+                  Background="Transparent"
                   BorderBrush="{TemplateBinding BorderBrush}"
                   BorderThickness="0"
                   Padding="4,2"
@@ -942,8 +972,14 @@
                  HorizontalOffset="-4"
                  VerticalOffset="-4"
                  IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
-            <Grid Margin="4" Effect="drop-shadow(0 0 4 #A0000000)">
-              <Border BorderThickness="0" Padding="8,4" MaxHeight="400" Background="{DynamicResource Brush.Popup}" CornerRadius="{DynamicResource OverlayCornerRadius}">
+            <Grid>
+              <Border Background="{DynamicResource Brush.Popup}" Margin="4" CornerRadius="{DynamicResource OverlayCornerRadius}">
+                <Border.Effect>
+                  <DropShadowEffect OffsetX="0" OffsetY="0" Color="Black" BlurRadius="4" Opacity=".6"/>
+                </Border.Effect>
+              </Border>
+
+              <Border BorderThickness="0" Margin="8,4" MaxHeight="400">
                 <ScrollViewer>
                   <ItemsPresenter Name="PART_ItemsPresenter"
                                   Margin="{DynamicResource MenuFlyoutScrollerMargin}"
@@ -1015,7 +1051,7 @@
     <Style.Resources>
       <Thickness x:Key="ComboBoxDropdownBorderPadding">4,0</Thickness>
       <Thickness x:Key="ComboBoxItemThemePadding">6,4</Thickness>
-      <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{DynamicResource SystemAltHighColor}"/>
+      <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{DynamicResource Color.Contents}"/>
       <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource SystemAccentColor}"/>
     </Style.Resources>
 
@@ -1042,12 +1078,18 @@
   </Style>
 
   <Style Selector="CheckBox">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border/>
+      </FocusAdornerTemplate>
+    </Setter>
+    
     <Setter Property="VerticalAlignment" Value="Center"/>
     <Setter Property="Template">
       <ControlTemplate>
         <Grid Background="Transparent" ColumnDefinitions="Auto,*">
           <Border x:Name="Border" Grid.Column="0" Width="16" Height="16" VerticalAlignment="Center" BorderBrush="{DynamicResource Brush.Border1}" BorderThickness="1" Background="Transparent" CornerRadius="2">
-            <Path x:Name="Icon" Height="12" Width="12" Data="{DynamicResource Icons.Check}" Fill="{DynamicResource Brush.Accent}" Margin="0,2,0,0"/>
+            <Path x:Name="Icon" Height="12" Width="12" Data="{DynamicResource Icons.Check}" Fill="{DynamicResource Brush.Accent}" IsVisible="False" Margin="0,2,0,0"/>
           </Border>
 
           <ContentPresenter x:Name="ContentPresenter"
@@ -1060,9 +1102,13 @@
         </Grid>
       </ControlTemplate>
     </Setter>
-
-    <Style Selector="^ /template/ Path#Icon">
-      <Setter Property="IsVisible" Value="False"/>
+    
+    <Style Selector="^:focus-visible /template/ Border#Border">
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
+      <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
+    </Style>
+    <Style Selector="^:focus-visible /template/ Path#Icon">
+      <Setter Property="Fill" Value="White"/>
     </Style>
     <Style Selector="^:pointerover /template/ Border#Border">
       <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
@@ -1073,6 +1119,12 @@
   </Style>
 
   <Style Selector="RadioButton">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border/>
+      </FocusAdornerTemplate>
+    </Setter>
+    
     <Setter Property="Template">
       <ControlTemplate>
         <Grid ColumnDefinitions="16,*" Background="Transparent">
@@ -1089,6 +1141,8 @@
             <Ellipse x:Name="Dot"
                      Width="10"
                      Height="10"
+                     Fill="Transparent"
+                     Stroke="Transparent"
                      StrokeThickness="1"
                      UseLayoutRounding="False" />
           </Grid>
@@ -1106,19 +1160,32 @@
       </ControlTemplate>
     </Setter>
 
-    <Style Selector="^ /template/ Ellipse#Dot">
-      <Setter Property="Fill" Value="Transparent"/>
-      <Setter Property="Stroke" Value="Transparent"/>
-    </Style>
     <Style Selector="^:pointerover /template/ Ellipse#Border">
       <Setter Property="Stroke" Value="{DynamicResource Brush.Accent}"/>
     </Style>
     <Style Selector="^:checked /template/ Ellipse#Dot">
       <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
     </Style>
+    <Style Selector="^:focus-visible /template/ Ellipse#Border">
+      <Setter Property="Stroke" Value="{DynamicResource Brush.Accent}"/>
+      <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
+    </Style>
+    <Style Selector="^:focus-visible /template/ Ellipse#Dot">
+      <Setter Property="Stroke" Value="White"/>
+      <Setter Property="Fill" Value="White"/>
+    </Style>
+    <Style Selector="^:focus-visible:checked /template/ Ellipse#Dot">
+      <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
+    </Style>
   </Style>
 
   <Style Selector="RadioButton.switch_button">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Rectangle Margin="0" Stroke="{DynamicResource Brush.FG1}" StrokeDashArray="1,2" StrokeThickness="1"/>
+      </FocusAdornerTemplate>
+    </Setter>
+
     <Setter Property="Height" Value="24"/>
     <Setter Property="BorderThickness" Value="0"/>
     <Setter Property="Background" Value="Transparent"/>

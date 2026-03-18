@@ -138,6 +138,10 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">リポジトリの URL:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">閉じる</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">エディター</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">ブランチ</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">ブランチ &amp; タグ</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">リポジトリアクション</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">リビジョンファイル</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">コミットをチェックアウト</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">コミットを取り込む</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">取り込む...</x:String>
@@ -283,6 +287,7 @@
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">続行</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">コミットの内容が何もありません！それでも続行しますか (--allow-empty)？</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">すべてステージに上げてからコミット</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">選択をステージしてコミット</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">コミットの内容が何もありません！コミットする前に、すべての変更をステージに上げますか？それともこのまま続行しますか (--allow-empty)？</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">再起動が必要です</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">この変更は、アプリを再起動したあとに反映されます。</x:String>
@@ -529,6 +534,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">ステージに上げる</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">ステージから降ろす</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">リポジトリを初期化</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">指定したパスでgit initを実行します</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">git initコマンドの実行に失敗しました</x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">パス:</x:String>
   <x:String x:Key="Text.InitSetup" xml:space="preserve">初期設定</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">使用する言語と、リポジトリのクローン先となるフォルダを選択してください。</x:String>
@@ -656,6 +663,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">コミットグラフにタグを表示</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">適切とするコミットタイトルの長さ</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub のような既定のアバターを生成</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24時間表示</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">Git</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">自動 CRLF 変換を有効化</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">コミット時にCRLF→LFに変換、チェックアウト時にLF→CRLFに変換</x:String>

@@ -25,10 +25,10 @@ namespace Komorebi.Views
         /// </summary>
         private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
         {
-            if (sender is TextBlock { DataContext: Models.Commit commit } &&
+            if (sender is TextBlock { DataContext: Models.FileVersion ver } &&
                 DataContext is ViewModels.FileHistories vm)
             {
-                vm.NavigateToCommit(commit);
+                vm.NavigateToCommit(ver);
             }
 
             e.Handled = true;
@@ -100,12 +100,12 @@ namespace Komorebi.Views
         /// </summary>
         private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
         {
-            if (sender is Border { DataContext: Models.Commit commit } border &&
+            if (sender is Border { DataContext: Models.FileVersion ver } border &&
                 DataContext is ViewModels.FileHistories vm)
             {
                 var tooltip = ToolTip.GetTip(border);
                 if (tooltip == null)
-                    ToolTip.SetTip(border, vm.GetCommitFullMessage(commit));
+                    ToolTip.SetTip(border, vm.GetCommitFullMessage(ver));
             }
         }
 

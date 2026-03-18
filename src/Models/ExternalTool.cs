@@ -86,7 +86,7 @@ namespace Komorebi.Models
                     FileName = ExecFile,
                     Arguments = args,
                     UseShellExecute = false,
-                });
+                })?.Dispose();
             }
         }
 

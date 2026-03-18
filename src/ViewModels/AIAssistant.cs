@@ -54,9 +54,13 @@ namespace Komorebi.ViewModels
         /// </summary>
         public void Regen()
         {
-            // 前回の生成がまだ実行中なら先にキャンセルする
-            if (_cancel is { IsCancellationRequested: false })
+            // 前回の生成がまだ実行中なら先にキャンセル・破棄する
+            if (_cancel != null)
+            {
                 _cancel.Cancel();
+                _cancel.Dispose();
+                _cancel = null;
+            }
 
             Gen();
         }
@@ -76,6 +80,8 @@ namespace Komorebi.ViewModels
         public void Cancel()
         {
             _cancel?.Cancel();
+            _cancel?.Dispose();
+            _cancel = null;
         }
 
         /// <summary>

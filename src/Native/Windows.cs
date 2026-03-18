@@ -241,7 +241,7 @@ namespace Komorebi.Native
         {
             var info = new ProcessStartInfo("cmd", $"""/c start "" {url.Quoted()}""");
             info.CreateNoWindow = true;
-            Process.Start(info);
+            Process.Start(info)?.Dispose();
         }
 
         /// <summary>
@@ -265,7 +265,7 @@ namespace Komorebi.Native
             startInfo.WorkingDirectory = cwd;
             startInfo.FileName = terminal;
             startInfo.Arguments = args;
-            Process.Start(startInfo);
+            Process.Start(startInfo)?.Dispose();
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Komorebi.Native
             {
                 UseShellExecute = true,
                 CreateNoWindow = true,
-            });
+            })?.Dispose();
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace Komorebi.Native
             var info = new FileInfo(file);
             var start = new ProcessStartInfo("cmd", $"""/c start "" {info.FullName.Quoted()}""");
             start.CreateNoWindow = true;
-            Process.Start(start);
+            Process.Start(start)?.Dispose();
         }
 
         #region HELPER_METHODS

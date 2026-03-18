@@ -257,7 +257,7 @@ namespace Komorebi.ViewModels
 
             try
             {
-                Process.Start(start);
+                Process.Start(start)?.Dispose();
             }
             catch (Exception e)
             {

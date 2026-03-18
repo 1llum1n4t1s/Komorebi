@@ -138,6 +138,10 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">களஞ்சிய முகவரி:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">மூடு</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">திருத்தி</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">உறுதிமொழி சரிபார்</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">கனி-பறி உறுதிமொழி</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">கனி-பறி ...</x:String>
@@ -284,6 +288,7 @@
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">மாற்றங்களைப் பொருத்த இந்த செயலியை மறுதொடக்கம் செய்ய வேண்டும்.</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">வெற்று commit கண்டறியப்பட்டது! தொடர விரும்புகிறீர்களா (--allow-empty) அல்லது அனைத்தையும் stage செய்து commit செய்யவா?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">அனைத்தையும் STAGE செய் &amp; COMMIT செய்</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">வெற்று commit கண்டறியப்பட்டது! தொடர விரும்புகிறீர்களா (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">தொடர்</x:String>
   <x:String x:Key="Text.ConventionalCommit" xml:space="preserve">வழக்கமான உறுதிமொழி உதவியாளர்</x:String>
@@ -529,6 +534,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">நிலைபடுத்து</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">நிலைநீக்கு</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">களஞ்சியத்தைத் துவக்கு</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">பாதை:</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">உங்கள் விருப்பமான மொழியையும் களஞ்சியங்களை clone செய்வதற்கான இயல்புநிலை கோப்புறையையும் தேர்ந்தெடுக்கவும்.</x:String>
   <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">Clone கோப்புறை</x:String>
@@ -656,6 +663,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">உறுதிமொழி வரைபடத்தில் குறிச்சொற்களைக் காட்டு</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">பொருள் வழிகாட்டி நீளம்</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Github பாணி இயல்புநிலை அவதாரத்தை உருவாக்கு</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">அறிவிலி</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">தானியங்கி  வரிமுடிவை இயக்கு</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">கமிட் செய்யும்போது LF ஆகவும், செக்அவுட் செய்யும்போது CRLF ஆகவும் மாற்று</x:String>

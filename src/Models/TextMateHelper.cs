@@ -82,7 +82,8 @@ namespace Komorebi.Models
 
                     try
                     {
-                        return GrammarReader.ReadGrammarSync(new StreamReader(asset));
+                        using var reader = new StreamReader(asset);
+                        return GrammarReader.ReadGrammarSync(reader);
                     }
                     catch
                     {

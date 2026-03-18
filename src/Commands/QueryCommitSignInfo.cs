@@ -42,6 +42,9 @@ namespace Komorebi.Commands
                 return null;
 
             var lines = raw.Split('\n');
+            if (lines.Length < 3 || lines[0].Length == 0)
+                return null;
+
             return new Models.CommitSignInfo()
             {
                 VerifyResult = lines[0][0],

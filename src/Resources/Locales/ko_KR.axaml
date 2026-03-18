@@ -135,6 +135,10 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">저장소 URL:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">닫기</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">에디터</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">커밋 체크아웃</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">커밋 체리픽</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">체리픽...</x:String>
@@ -273,6 +277,7 @@
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">계속</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">빈 커밋이 감지되었습니다! 계속하시겠습니까 (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">모두 스테이징 &amp; 커밋</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">빈 커밋이 감지되었습니다! 계속하시겠습니까 (--allow-empty) 아니면 모두 스테이징 후 커밋하시겠습니까?</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">재시작 필요</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">변경 사항을 적용하려면 앱을 다시 시작해야 합니다.</x:String>
@@ -519,6 +524,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">스테이지</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">언스테이지</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">저장소 초기화</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">경로:</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">선호하는 언어와 저장소 복제를 위한 기본 디렉터리를 선택하세요.</x:String>
   <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">복제 디렉터리</x:String>
@@ -646,6 +653,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">커밋 그래프에 태그 표시</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">제목 가이드 길이</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub 스타일 기본 아바타 생성</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">자동 CRLF 활성화</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">커밋 시 LF로, 체크아웃 시 CRLF로 변환</x:String>

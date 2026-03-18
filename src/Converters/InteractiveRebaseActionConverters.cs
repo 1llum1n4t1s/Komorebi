@@ -14,7 +14,7 @@ namespace Komorebi.Converters
         ///     Pick → 緑、Edit/Reword → オレンジ、Squash/Fixup → ライトグレー、Drop → 赤を返す。
         /// </summary>
         public static readonly FuncValueConverter<Models.InteractiveRebaseAction, IBrush> ToIconBrush =
-            new FuncValueConverter<Models.InteractiveRebaseAction, IBrush>(v =>
+            new(v =>
             {
                 return v switch
                 {
@@ -38,6 +38,12 @@ namespace Komorebi.Converters
         ///     enum値のToString()結果を返す（例: "Pick", "Edit"）。
         /// </summary>
         public static readonly FuncValueConverter<Models.InteractiveRebaseAction, string> ToName =
-            new FuncValueConverter<Models.InteractiveRebaseAction, string>(v => v.ToString());
+            new(v => v.ToString());
+
+        public static readonly FuncValueConverter<Models.InteractiveRebaseAction, bool> IsDrop =
+            new(v => v == Models.InteractiveRebaseAction.Drop);
+
+        public static readonly FuncValueConverter<Models.InteractiveRebaseAction, double> ToOpacity =
+            new(v => v > Models.InteractiveRebaseAction.Reword ? 0.65 : 1.0);
     }
 }

@@ -147,7 +147,7 @@ namespace Komorebi.Native
         /// </summary>
         public void OpenBrowser(string url)
         {
-            Process.Start("open", url);
+            Process.Start("open", url)?.Dispose();
         }
 
         /// <summary>
@@ -157,9 +157,9 @@ namespace Komorebi.Native
         public void OpenInFileManager(string path)
         {
             if (Directory.Exists(path))
-                Process.Start("open", path.Quoted());
+                Process.Start("open", path.Quoted())?.Dispose();
             else if (File.Exists(path))
-                Process.Start("open", $"{path.Quoted()} -R");
+                Process.Start("open", $"{path.Quoted()} -R")?.Dispose();
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Komorebi.Native
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var dir = string.IsNullOrEmpty(workdir) ? home : workdir;
             // -a オプションでアプリケーション名を指定して起動する
-            Process.Start("open", $"-a {OS.ShellOrTerminal} {dir.Quoted()}");
+            Process.Start("open", $"-a {OS.ShellOrTerminal} {dir.Quoted()}")?.Dispose();
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace Komorebi.Native
         /// </summary>
         public void OpenWithDefaultEditor(string file)
         {
-            Process.Start("open", file.Quoted());
+            Process.Start("open", file.Quoted())?.Dispose();
         }
     }
 }

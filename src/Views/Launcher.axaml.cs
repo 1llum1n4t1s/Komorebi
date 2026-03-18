@@ -157,6 +157,11 @@ namespace Komorebi.Views
                 // ウィンドウ状態を設定に保存する
                 ViewModels.Preferences.Instance.Layout.LauncherWindowState = state;
             }
+            else if (change.Property == IsActiveProperty)
+            {
+                if (!IsActive && DataContext is ViewModels.Launcher { CommandPalette: { } } vm)
+                    vm.CommandPalette = null;
+            }
         }
 
         /// <summary>
@@ -220,8 +225,30 @@ namespace Komorebi.Views
                 }
             }
 
+            var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+
+            // コマンドパレット表示中はホットキーをブロックする
+            if (vm.CommandPalette != null)
+            {
+                if (e.Key == Key.Escape)
+                {
+                    vm.CommandPalette = null;
+                    e.Handled = true;
+                }
+                else if (vm.ActivePage.Data is ViewModels.Repository repo
+                    && vm.CommandPalette is ViewModels.LauncherPagesCommandPalette
+                    && e.Key == Key.P
+                    && e.KeyModifiers == (cmdKey | KeyModifiers.Shift))
+                {
+                    vm.CommandPalette = new ViewModels.RepositoryCommandPalette(repo);
+                    e.Handled = true;
+                }
+
+                return;
+            }
+
             // Ctrl（macOSではCmd）キーとの組み合わせ
-            if (e.KeyModifiers.HasFlag(OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
+            if (e.KeyModifiers.HasFlag(cmdKey))
             {
                 if (e.Key == Key.W)
                 {
@@ -238,6 +265,14 @@ namespace Komorebi.Views
                         vm.AddNewTab();
 
                     ViewModels.Welcome.Instance.Clone();
+                    e.Handled = true;
+                    return;
+                }
+
+                if (e.Key == Key.T)
+                {
+                    // Ctrl+T → 新しいタブを追加する
+                    vm.AddNewTab();
                     e.Handled = true;
                     return;
                 }
@@ -379,6 +414,9 @@ namespace Komorebi.Views
         {
             if (sender is Button btn && DataContext is ViewModels.Launcher launcher)
             {
+                if (launcher.CommandPalette != null)
+                    launcher.CommandPalette = null;
+
                 var pref = ViewModels.Preferences.Instance;
                 var menu = new ContextMenu();
                 menu.Placement = PlacementMode.BottomEdgeAlignedLeft;

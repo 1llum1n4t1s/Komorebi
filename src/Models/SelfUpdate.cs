@@ -1,14 +1,57 @@
-using System;
+﻿using System;
+using System.Reflection;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Velopack;
 
 namespace Komorebi.Models
 {
+    public class Version
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("tag_name")]
+        public string TagName { get; set; }
+
+        [JsonPropertyName("published_at")]
+        public DateTime PublishedAt { get; set; }
+
+        [JsonPropertyName("body")]
+        public string Body { get; set; }
+
+        [JsonIgnore]
+        public System.Version CurrentVersion { get; }
+
+        [JsonIgnore]
+        public string CurrentVersionStr => $"v{CurrentVersion.Major}.{CurrentVersion.Minor:D2}";
+
+        [JsonIgnore]
+        public bool IsNewVersion
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(TagName) || !TagName.StartsWith('v'))
+                    return false;
+
+                return System.Version.TryParse(TagName.Substring(1), out var remote) &&
+                       CurrentVersion.CompareTo(remote) < 0;
+            }
+        }
+
+        [JsonIgnore]
+        public string ReleaseDateStr => DateTimeFormat.Format(PublishedAt, true);
+
+        public Version()
+        {
+            var assembly = Assembly.GetExecutingAssembly().GetName();
+            CurrentVersion = assembly.Version ?? new System.Version();
+        }
+    }
+
     /// <summary>
-    ///     Velopackによるアプリケーション自動更新の情報を保持するクラス。
-    ///     ダウンロードと適用・再起動を管理する。
+    ///     Velopack更新情報を保持するクラス
     /// </summary>
     public class VelopackUpdate
     {
@@ -26,8 +69,6 @@ namespace Komorebi.Models
         /// <summary>
         ///     更新パッケージを非同期でダウンロードする
         /// </summary>
-        /// <param name="onProgress">進捗率（0-100）のコールバック</param>
-        /// <param name="token">キャンセルトークン</param>
         public async Task DownloadAsync(Action<int> onProgress, CancellationToken token)
         {
             await _manager.DownloadUpdatesAsync(_updateInfo, onProgress, cancelToken: token);
@@ -45,17 +86,10 @@ namespace Komorebi.Models
         private readonly UpdateInfo _updateInfo;
     }
 
-    /// <summary>
-    ///     既に最新バージョンであることを示すマーカークラス
-    /// </summary>
     public class AlreadyUpToDate;
 
-    /// <summary>
-    ///     自動更新の失敗情報を保持するクラス
-    /// </summary>
     public class SelfUpdateFailed
     {
-        /// <summary>失敗理由のメッセージ</summary>
         public string Reason
         {
             get;
