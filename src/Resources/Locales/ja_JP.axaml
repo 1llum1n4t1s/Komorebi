@@ -776,6 +776,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">解除</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">コミットグラフから隠す</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">コミットグラフで絞り込む</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">すべて折りたたむ</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">レイアウト</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">水平</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">垂直</x:String>
@@ -819,6 +820,7 @@
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">名前順</x:String>
   <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">並べ替え</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">端末で開く</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">すべて展開</x:String>
   <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">相対時間を使用</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">ログを表示</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">ブラウザーで '{0}' を訪問</x:String>
@@ -868,6 +870,7 @@
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">このコミットに移動</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">親コミットにコメント結合して統合(Squash)</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">親コミットのコメントのみで統合(Fixup)</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">実行後に強制プッシュする</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">統合先:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH の秘密鍵:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">SSH の秘密鍵が保管されているパス</x:String>

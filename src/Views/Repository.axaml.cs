@@ -211,6 +211,24 @@ namespace Komorebi.Views
         }
 
         /// <summary>
+        ///     ブランチツリーの全フォルダノードを展開するボタンのクリックハンドラ。
+        /// </summary>
+        private void OnExpandAllBranchNodes(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Repository repo)
+                repo.ExpandAllBranchNodes();
+        }
+
+        /// <summary>
+        ///     ブランチツリーの全フォルダノードを折りたたむボタンのクリックハンドラ。
+        /// </summary>
+        private void OnCollapseAllBranchNodes(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Repository repo)
+                repo.CollapseAllBranchNodes();
+        }
+
+        /// <summary>
         ///     LeftSidebarRowsChangedイベントのハンドラ。
         /// </summary>
         private void OnLeftSidebarRowsChanged(object _, RoutedEventArgs e)

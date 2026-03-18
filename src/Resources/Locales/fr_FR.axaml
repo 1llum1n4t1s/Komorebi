@@ -776,6 +776,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">Réinitialiser</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Cacher dans le graphique des commits</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Filtrer dans le graphique des commits</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">Tout replier</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">DISPOSITION</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Horizontal</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Vertical</x:String>
@@ -819,6 +820,7 @@
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">Par nom</x:String>
   <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">Trier</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">Ouvrir dans un terminal</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">Tout déplier</x:String>
   <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">Utiliser l'heure relative</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">Voir les Logs</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">Visiter '{0}' dans le navigateur</x:String>
@@ -869,6 +871,7 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash du HEAD dans le parent</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Dans :</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup du HEAD dans le parent</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Forcer le push après l'opération</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clé privée SSH :</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Chemin du magasin de clés privées SSH</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">START</x:String>

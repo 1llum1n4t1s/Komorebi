@@ -136,7 +136,7 @@ namespace Komorebi.ViewModels
             }
         }
 
-        /// <summary>サイドバーのフィルタ文字列。変更時にブランチツリー、タグ、サブモジュールの表示を再構築する。</summary>
+        /// <summary>サイドバーのフィルタ文字列。変更時にデバウンス付きでブランチツリー、タグ、サブモジュールの表示を再構築する。</summary>
         public string Filter
         {
             get => _filter;
@@ -144,13 +144,22 @@ namespace Komorebi.ViewModels
             {
                 if (SetProperty(ref _filter, value))
                 {
-                    var builder = BuildBranchTree(_branches, _remotes);
-                    LocalBranchTrees = builder.Locals;
-                    RemoteBranchTrees = builder.Remotes;
-                    VisibleTags = BuildVisibleTags();
-                    VisibleSubmodules = BuildVisibleSubmodules();
+                    if (_filterDebounceTimer == null)
+                        _filterDebounceTimer = new System.Threading.Timer(_ => Dispatcher.UIThread.Post(ApplyFilter), null, Timeout.Infinite, Timeout.Infinite);
+
+                    _filterDebounceTimer.Change(150, Timeout.Infinite);
                 }
             }
+        }
+
+        /// <summary>フィルタの実適用処理。</summary>
+        private void ApplyFilter()
+        {
+            var builder = BuildBranchTree(_branches, _remotes);
+            LocalBranchTrees = builder.Locals;
+            RemoteBranchTrees = builder.Remotes;
+            VisibleTags = BuildVisibleTags();
+            VisibleSubmodules = BuildVisibleSubmodules();
         }
 
         /// <summary>リモートリポジトリの一覧。</summary>
@@ -564,6 +573,9 @@ namespace Komorebi.ViewModels
             _cancellationRefreshStashes?.Cancel();
             _cancellationRefreshStashes?.Dispose();
 
+            _filterDebounceTimer?.Dispose();
+            _filterDebounceTimer = null;
+
             _autoFetchTimer.Dispose();
             _autoFetchTimer = null;
 
@@ -871,10 +883,13 @@ namespace Komorebi.ViewModels
                 await ShowAndStartPopupAsync(new ClearIndexCache(this));
         }
 
-        /// <summary>サイドバーのフィルタをクリアする。</summary>
+        /// <summary>サイドバーのフィルタをクリアする。デバウンスをバイパスして即時適用する。</summary>
         public void ClearFilter()
         {
-            Filter = string.Empty;
+            _filterDebounceTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+
+            if (SetProperty(ref _filter, string.Empty, nameof(Filter)))
+                ApplyFilter();
         }
 
         /// <summary>ファイル監視を一時的にロックする。IDisposableのDisposeでロック解除される。</summary>
@@ -982,6 +997,36 @@ namespace Komorebi.ViewModels
                 HistoryFilterMode = _uiStates.GetHistoryFilterMode();
                 RefreshHistoryFilters(true);
             }
+        }
+
+        /// <summary>サイドバーの全セクションとブランチツリーの全フォルダノードを展開する。</summary>
+        public void ExpandAllBranchNodes()
+        {
+            IsLocalBranchGroupExpanded = true;
+            IsRemoteGroupExpanded = true;
+            IsTagGroupExpanded = true;
+            IsSubmoduleGroupExpanded = true;
+            IsWorktreeGroupExpanded = true;
+
+            var builder = BuildBranchTree(_branches, _remotes, true);
+            LocalBranchTrees = builder.Locals;
+            RemoteBranchTrees = builder.Remotes;
+        }
+
+        /// <summary>サイドバーの全セクションとブランチツリーの全フォルダノードを折りたたむ。</summary>
+        public void CollapseAllBranchNodes()
+        {
+            IsLocalBranchGroupExpanded = false;
+            IsRemoteGroupExpanded = false;
+            IsTagGroupExpanded = false;
+            IsSubmoduleGroupExpanded = false;
+            IsWorktreeGroupExpanded = false;
+
+            _uiStates.ExpandedBranchNodesInSideBar = [];
+
+            var builder = BuildBranchTree(_branches, _remotes);
+            LocalBranchTrees = builder.Locals;
+            RemoteBranchTrees = builder.Remotes;
         }
 
         /// <summary>ブランチツリーノードの展開状態をUI状態に永続化する。フィルタ適用中は無視する。</summary>
@@ -1170,8 +1215,12 @@ namespace Komorebi.ViewModels
 
             Task.Run(async () =>
             {
-                var branches = await new Commands.QueryBranches(FullPath).GetResultAsync().ConfigureAwait(false);
-                var remotes = await new Commands.QueryRemotes(FullPath).GetResultAsync().ConfigureAwait(false);
+                var branchesTask = new Commands.QueryBranches(FullPath).GetResultAsync();
+                var remotesTask = new Commands.QueryRemotes(FullPath).GetResultAsync();
+                await Task.WhenAll(branchesTask, remotesTask).ConfigureAwait(false);
+
+                var branches = branchesTask.Result;
+                var remotes = remotesTask.Result;
                 var builder = BuildBranchTree(branches, remotes);
 
                 Dispatcher.UIThread.Invoke(() =>
@@ -1774,16 +1823,21 @@ namespace Komorebi.ViewModels
         ///     フィルタが設定されている場合はフィルタに一致するブランチのみを含める。
         ///     構築後にフィルタモードを適用する。
         /// </summary>
-        private BranchTreeNode.Builder BuildBranchTree(List<Models.Branch> branches, List<Models.Remote> remotes)
+        private BranchTreeNode.Builder BuildBranchTree(List<Models.Branch> branches, List<Models.Remote> remotes, bool forceExpanded = false)
         {
             var builder = new BranchTreeNode.Builder(_uiStates.LocalBranchSortMode, _uiStates.RemoteBranchSortMode);
             if (string.IsNullOrEmpty(_filter))
             {
-                builder.SetExpandedNodes(_uiStates.ExpandedBranchNodesInSideBar);
-                builder.Run(branches, remotes, false);
+                if (!forceExpanded)
+                    builder.SetExpandedNodes(_uiStates.ExpandedBranchNodesInSideBar);
+                builder.Run(branches, remotes, forceExpanded);
 
-                foreach (var invalid in builder.InvalidExpandedNodes)
-                    _uiStates.ExpandedBranchNodesInSideBar.Remove(invalid);
+                // 再構築後のツリーから実際に展開されているパスを収集して保存する。
+                // IsCurrentによる自動展開も含め、存在しないパスは自然に除外される。
+                var expanded = new List<string>();
+                BranchTreeNode.Builder.CollectExpandedPaths(builder.Locals, expanded);
+                BranchTreeNode.Builder.CollectExpandedPaths(builder.Remotes, expanded);
+                _uiStates.ExpandedBranchNodesInSideBar = expanded;
             }
             else
             {
@@ -1897,7 +1951,9 @@ namespace Komorebi.ViewModels
         {
             foreach (var node in nodes)
             {
-                node.FilterMode = map.GetValueOrDefault(node.Path, Models.FilterMode.None);
+                var mode = map.GetValueOrDefault(node.Path, Models.FilterMode.None);
+                if (node.FilterMode != mode)
+                    node.FilterMode = mode;
 
                 if (!node.IsBranch)
                     UpdateBranchTreeFilterMode(node.Children, map);
@@ -2086,6 +2142,7 @@ namespace Komorebi.ViewModels
         private Models.BisectState _bisectState = Models.BisectState.None;                 // Bisect状態
         private bool _isBisectCommandRunning = false;                                      // Bisectコマンド実行中フラグ
 
+        private System.Threading.Timer _filterDebounceTimer = null;                          // フィルタデバウンスタイマー
         private CancellationTokenSource _cancellationRefreshBranches = null;               // ブランチ更新キャンセルトークン
         private CancellationTokenSource _cancellationRefreshTags = null;                   // タグ更新キャンセルトークン
         private CancellationTokenSource _cancellationRefreshWorkingCopyChanges = null;     // ワーキングコピー更新キャンセルトークン

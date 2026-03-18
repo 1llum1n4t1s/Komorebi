@@ -776,6 +776,7 @@
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">Desfazer</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Esconder no gráfico de commit</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Incluir no gráfico de commit</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">Recolher tudo</x:String>
   <x:String x:Key="Text.Repository.HistoriesOrder" xml:space="preserve">ORDEM DOS COMMITS</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Vertical</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Horizontal</x:String>
@@ -819,6 +820,7 @@
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">Por Nome</x:String>
   <x:String x:Key="Text.Repository.Tags.OrderByCreatorDate" xml:space="preserve">Por Data de Criação</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">Abrir no Terminal</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">Expandir tudo</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">Visitar '{0}' no Navegador</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">Ver Logs</x:String>
   <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">Usar tempo relativo</x:String>
@@ -868,6 +870,7 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash do HEAD no Pai</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Em:</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup do HEAD no Pai</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Forçar push após concluir</x:String>
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Ir para</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Chave SSH Privada:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Caminho para a chave SSH privada</x:String>

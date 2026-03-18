@@ -105,8 +105,6 @@ namespace Komorebi.ViewModels
             public List<BranchTreeNode> Locals { get; } = [];
             /// <summary>リモートブランチのツリーノードリスト</summary>
             public List<BranchTreeNode> Remotes { get; } = [];
-            /// <summary>存在しなくなった展開済みノードのパスリスト</summary>
-            public List<string> InvalidExpandedNodes { get; } = [];
 
             /// <summary>
             ///     コンストラクタ。ローカル・リモートそれぞれのソートモードを受け取る。
@@ -175,13 +173,6 @@ namespace Komorebi.ViewModels
                         remote.Counter++;
                         MakeBranchNode(branch, remote.Children, folders, rk, bForceExpanded);
                     }
-                }
-
-                // 存在しなくなった展開ノードを記録する
-                foreach (var path in _expanded)
-                {
-                    if (!folders.ContainsKey(path))
-                        InvalidExpandedNodes.Add(path);
                 }
 
                 folders.Clear();
@@ -347,6 +338,25 @@ namespace Komorebi.ViewModels
                 // 子ノードも再帰的にソートする
                 foreach (var node in nodes)
                     SortNodesByTime(node.Children);
+            }
+
+            /// <summary>
+            ///     構築済みツリーから展開中のフォルダノードのパスを収集する。
+            /// </summary>
+            /// <param name="nodes">対象のノードリスト</param>
+            /// <param name="result">収集先のリスト</param>
+            public static void CollectExpandedPaths(List<BranchTreeNode> nodes, List<string> result)
+            {
+                foreach (var node in nodes)
+                {
+                    if (node.IsBranch)
+                        continue;
+
+                    if (node.IsExpanded)
+                        result.Add(node.Path);
+
+                    CollectExpandedPaths(node.Children, result);
+                }
             }
 
             /// <summary>ローカルブランチのソートモード</summary>

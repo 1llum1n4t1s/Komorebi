@@ -44,5 +44,11 @@
     </Grid>
 
     <v:CommitMessageToolBox Height="120" Margin="0,4,0,0" CommitMessage="{Binding Message, Mode=TwoWay}"/>
+
+    <CheckBox Margin="0,8,0,0"
+              Content="{DynamicResource Text.SquashOrFixup.ForcePushAfterDone}"
+              IsChecked="{Binding ForcePushAfterDone, Mode=TwoWay}"
+              IsVisible="{Binding HasUpstream}"
+              ToolTip.Tip="--force-with-lease"/>
   </StackPanel>
 </UserControl>

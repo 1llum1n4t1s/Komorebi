@@ -776,6 +776,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">Non impostato</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Nascondi nel grafico dei commit</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Filtra nel grafico dei commit</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">Comprimi tutto</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">LAYOUT</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Orizzontale</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Verticale</x:String>
@@ -819,6 +820,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">Per nome</x:String>
   <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">Ordina</x:String>
   <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">Apri nel Terminale</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">Espandi tutto</x:String>
   <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">Usa tempo relativo</x:String>
   <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">Visualizza i Log</x:String>
   <x:String x:Key="Text.Repository.Visit" xml:space="preserve">Visita '{0}' nel Browser</x:String>
@@ -868,6 +870,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Vai a</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD nel Genitore</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD nel Genitore</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Esegui push forzato al termine</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Chiave Privata SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Percorso per la chiave SSH privata</x:String>
