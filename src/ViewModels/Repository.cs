@@ -144,11 +144,10 @@ namespace Komorebi.ViewModels
             {
                 if (SetProperty(ref _filter, value))
                 {
-                    _filterDebounceTimer?.Dispose();
-                    _filterDebounceTimer = new System.Threading.Timer(_ =>
-                    {
-                        Dispatcher.UIThread.Post(() => ApplyFilter());
-                    }, null, 150, Timeout.Infinite);
+                    if (_filterDebounceTimer == null)
+                        _filterDebounceTimer = new System.Threading.Timer(_ => Dispatcher.UIThread.Post(ApplyFilter), null, Timeout.Infinite, Timeout.Infinite);
+
+                    _filterDebounceTimer.Change(150, Timeout.Infinite);
                 }
             }
         }
@@ -887,8 +886,7 @@ namespace Komorebi.ViewModels
         /// <summary>サイドバーのフィルタをクリアする。デバウンスをバイパスして即時適用する。</summary>
         public void ClearFilter()
         {
-            _filterDebounceTimer?.Dispose();
-            _filterDebounceTimer = null;
+            _filterDebounceTimer?.Change(Timeout.Infinite, Timeout.Infinite);
 
             if (SetProperty(ref _filter, string.Empty, nameof(Filter)))
                 ApplyFilter();
