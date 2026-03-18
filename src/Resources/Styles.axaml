@@ -1105,10 +1105,6 @@
     
     <Style Selector="^:focus-visible /template/ Border#Border">
       <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
-      <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
-    </Style>
-    <Style Selector="^:focus-visible /template/ Path#Icon">
-      <Setter Property="Fill" Value="White"/>
     </Style>
     <Style Selector="^:pointerover /template/ Border#Border">
       <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
@@ -1168,14 +1164,6 @@
     </Style>
     <Style Selector="^:focus-visible /template/ Ellipse#Border">
       <Setter Property="Stroke" Value="{DynamicResource Brush.Accent}"/>
-      <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
-    </Style>
-    <Style Selector="^:focus-visible /template/ Ellipse#Dot">
-      <Setter Property="Stroke" Value="White"/>
-      <Setter Property="Fill" Value="White"/>
-    </Style>
-    <Style Selector="^:focus-visible:checked /template/ Ellipse#Dot">
-      <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
     </Style>
   </Style>
 
