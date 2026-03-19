@@ -665,7 +665,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Commit as LF, checkout as CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Only convert CRLF to LF on commit</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Do NOT convert</x:String>
-  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Force CRLF on commit and checkout</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Use CRLF for both local and remote</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Default Clone Dir</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">User Email</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Global git user email</x:String>

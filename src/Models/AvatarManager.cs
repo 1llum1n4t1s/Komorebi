@@ -53,6 +53,8 @@ namespace Komorebi.Models
         [GeneratedRegex(@"^(?:(\d+)\+)?(.+?)@.+\.github\.com$")]
         private static partial Regex REG_GITHUB_USER_EMAIL();
 
+        // HttpClientはスレッドセーフで再利用可能。ループ内で毎回new するとソケット枯渇の原因になる
+        private static readonly HttpClient s_httpClient = new() { Timeout = TimeSpan.FromSeconds(2) };
         private readonly Lock _synclock = new();
         /// <summary>アバター画像のローカルキャッシュディレクトリパス</summary>
         private string _storePath;
@@ -95,7 +97,8 @@ namespace Komorebi.Models
 
                     if (email == null)
                     {
-                        Thread.Sleep(100);
+                        // Thread.Sleepはスレッドプールを占有するためTask.Delayに変更
+                        await Task.Delay(100).ConfigureAwait(false);
                         continue;
                     }
 
@@ -115,9 +118,8 @@ namespace Komorebi.Models
                     Bitmap img = null;
                     try
                     {
-                        using var client = new HttpClient();
-                        client.Timeout = TimeSpan.FromSeconds(2);
-                        var rsp = await client.GetAsync(url);
+                        // staticなHttpClientを再利用（ソケット枯渇防止・DNS再利用・接続プール活用）
+                        var rsp = await s_httpClient.GetAsync(url);
                         if (rsp.IsSuccessStatusCode)
                         {
                             using (var stream = rsp.Content.ReadAsStream())
@@ -277,14 +279,13 @@ namespace Komorebi.Models
         /// </summary>
         /// <param name="email">対象のメールアドレス</param>
         /// <returns>MD5ハッシュの16進数文字列</returns>
-        private string GetEmailHash(string email)
+        private static string GetEmailHash(string email)
         {
-            var lowered = email.ToLower(CultureInfo.CurrentCulture).Trim();
-            var hash = MD5.HashData(Encoding.Default.GetBytes(lowered));
-            var builder = new StringBuilder(hash.Length * 2);
-            foreach (var c in hash)
-                builder.Append(c.ToString("x2"));
-            return builder.ToString();
+            // Gravatar仕様に準拠: UTF-8でエンコードしたメールアドレスのMD5ハッシュ
+            // 旧: Encoding.Defaultはプラットフォーム依存で非ASCII文字のハッシュが異なる可能性あり
+            var lowered = email.Trim().ToLowerInvariant();
+            var hash = MD5.HashData(Encoding.UTF8.GetBytes(lowered));
+            return Convert.ToHexString(hash).ToLowerInvariant();
         }
 
         /// <summary>

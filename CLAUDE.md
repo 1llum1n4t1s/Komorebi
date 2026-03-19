@@ -55,6 +55,11 @@ No test project exists in this codebase.
 - Each subclass sets `Args` and calls `Exec()` or `ExecAsync()`
 - Commands are stateless: create, configure, execute
 
+**Base class shared utilities** (use these instead of re-implementing):
+- `ExecWithSSHKeyAsync(remote)` — fetches SSH key from git config then runs `ExecAsync()` (used by Push/Pull/Fetch)
+- `ResolveGitRelativePath(path)` — resolves a potentially-relative git output path against `WorkingDirectory`
+- `ParseNameStatusLine(line)` — parses `--name-status` output lines (M/A/D/R/C) into `(path, ChangeState)` tuples
+
 ### Key ViewModels
 - `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management
 - `Repository.cs` — central VM for an open repo (branches, tags, history, working copy)
@@ -79,8 +84,8 @@ No test project exists in this codebase.
 - Compile flag `DISABLE_UPDATE_DETECTION` skips update checks entirely
 
 ### Localization
-- XAML resource dictionaries in `src/Resources/Locales/` (15 languages, 967 keys each)
-- Supported: de_DE, en_US, es_ES, fil_PH, fr_FR, id_ID, it_IT, ja_JP, ko_KR, pt_BR, ru_RU, ta_IN, uk_UA, zh_CN, zh_TW
+- XAML resource dictionaries in `src/Resources/Locales/` (17 languages, 967 keys each)
+- Supported: de_DE, en_US, es_ES, fil_PH, fr_FR, id_ID, it_IT, ja_JP, ko_KR, la, pt_BR, ru_RU, sa, ta_IN, uk_UA, zh_CN, zh_TW
 - `en_US.axaml` is the reference locale — all other locales must match its key set
 - `build/scripts/localization-check.js` validates translations in CI
 - Keys follow `Text.Category.Name` convention (e.g., `Text.InitSetup.Message`)
@@ -97,6 +102,31 @@ No test project exists in this codebase.
 2. Create `src/Views/MyDialog.axaml` + `.axaml.cs` with `x:DataType="vm:MyDialog"`
 3. View is auto-resolved by naming convention (`ViewModels.MyDialog` → `Views.MyDialog`) via `PopupDataTemplates.cs`
 4. Show via `_launcher.ActivePage.Popup = new ViewModels.MyDialog();`
+
+### Adding a New Git Command
+1. Create `src/Commands/MyCommand.cs` inheriting `Command`
+2. Set `WorkingDirectory`, `Context`, and `Args` in the constructor
+3. For short commands: call `ReadToEnd()` or `ReadToEndAsync()` and parse stdout
+4. For long-running commands (fetch/push/pull): call `ExecAsync()` which streams output
+5. For SSH-authenticated remotes: use `ExecWithSSHKeyAsync(remote)` instead of direct `ExecAsync()`
+6. For `--name-status` output: use `ParseNameStatusLine(line)` instead of writing custom regex
+
+## Common Pitfalls
+
+### Process stdout/stderr must be read concurrently
+`ReadToEnd()` and `ReadToEndAsync()` in `Command.cs` read stdout and stderr in parallel to avoid deadlocks. When adding new process-spawning code, **never** read stdout fully before starting to read stderr — if the stderr buffer fills (4KB–64KB), the process blocks waiting for stderr to be consumed, while the caller blocks waiting for stdout to finish.
+
+### Temporary files need try/finally cleanup
+When using `Path.GetTempFileName()` for git `--file=` or `-F` options, always wrap in `try/finally` to ensure deletion even if `ExecAsync()` throws. See `Commit.cs` and `Tag.cs` for the pattern.
+
+### Independent git commands should run in parallel
+When a ViewModel needs results from multiple independent git commands, use `Task.WhenAll` instead of sequential awaits. Examples: `BlameCommandPalette.cs`, `Compare.cs`, `Histories.cs`.
+
+### HttpClient must be reused
+`AvatarManager.cs` uses a static `HttpClient` instance. Never create `new HttpClient()` per request — it causes socket exhaustion.
+
+### CommitGraph performance considerations
+`CommitGraph.Parse()` processes potentially tens of thousands of commits. It uses `HashSet` for O(1) color recycling checks and `Dictionary` for O(1) parent lookups. When modifying this code, avoid introducing `List.Find()`, `List.Contains()`, or `List.Remove()` in inner loops.
 
 ## Code Style
 

@@ -1,4 +1,5 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
   <x:String x:Key="Text.About" xml:space="preserve">Tungkol</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Tungkol sa Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Petsa ng Paglabas: {0}</x:String>
@@ -198,27 +199,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">I-configure ang Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE NG COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:
-
-  ${branch_name} Pangalan ng kasalukuyang lokal na branch.
-  ${files_num} Bilang ng mga nabagong file
-  ${files} Mga path ng nabagong file
-  ${files:N} Hanggang N na bilang ng mga path ng nabagong file
-  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;
+&#xD;
+  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;
+  ${files_num} Bilang ng mga nabagong file&#xD;
+  ${files} Mga path ng nabagong file&#xD;
+  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;
+  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;
   ${pure_files:N} Katulad ng ${files:N}, ngunit walang mga folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Nilalaman ng Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Pangalan ng Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">CUSTOM NA AKSYON</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Mga Argumento:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:
-
-  ${REPO} Path ng Repository
-  ${REMOTE} Napiling remote o remote ng napiling branch
-  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch
-  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch
-  ${SHA} Hash ng napiling commit
-  ${TAG} Napiling tag
-  ${FILE} Napiling file, relative sa root ng repository
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;
+&#xD;
+  ${REPO} Path ng Repository&#xD;
+  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;
+  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;
+  ${SHA} Hash ng napiling commit&#xD;
+  ${TAG} Napiling tag&#xD;
+  ${FILE} Napiling file, relative sa root ng repository&#xD;
   $1, $2 ... Mga halaga ng input control</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Executable File:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Mga Input Control:</x:String>
@@ -658,14 +659,14 @@
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Ipakita ang mga anak sa mga detalye ng commit</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Ipakita ang mga tag sa commit graph</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Haba ng Gabay sa Paksa</x:String>
-  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Gumawa ng Github style na default avatar</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Gumawa ng Github style na default avatar</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">I-enable ang Auto CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">I-commit bilang LF, i-checkout bilang CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">I-convert lang ang CRLF sa LF kapag nag-commit</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Huwag i-convert</x:String>
-  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Pilitin ang CRLF sa commit at checkout</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Gamitin ang CRLF para sa lokal at remote</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Default na Clone Dir</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email ng User</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Global na git user email</x:String>

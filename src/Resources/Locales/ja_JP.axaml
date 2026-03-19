@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD と比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">リポジトリの設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">コミットテンプレート</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:
-
-  ${branch_name} 現在のローカルブランチ名
-  ${files_num} 変更されたファイル数
-  ${files} 変更されたファイルへのパス
-  ${files:N} 変更されたファイルへのパス (最大 N 件)
-  ${pure_files} 変更されたファイルの名前
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:&#xD;
+&#xD;
+  ${branch_name} 現在のローカルブランチ名&#xD;
+  ${files_num} 変更されたファイル数&#xD;
+  ${files} 変更されたファイルへのパス&#xD;
+  ${files:N} 変更されたファイルへのパス (最大 N 件)&#xD;
+  ${pure_files} 変更されたファイルの名前&#xD;
   ${pure_files:N} 変更されたファイルの名前 (最大 N 件)</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">テンプレートの内容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">テンプレート名:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">カスタムアクション</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">引数:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:
-
-  ${REPO} リポジトリへのパス
-  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名
-  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)
-  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)
-  ${SHA} 選択したコミットのハッシュ
-  ${TAG} 選択したタグ名
-  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:&#xD;
+&#xD;
+  ${REPO} リポジトリへのパス&#xD;
+  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名&#xD;
+  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)&#xD;
+  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)&#xD;
+  ${SHA} 選択したコミットのハッシュ&#xD;
+  ${TAG} 選択したタグ名&#xD;
+  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス&#xD;
   $1, $2 ... 入力プロンプトの値</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">実行ファイル:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">入力プロンプト:</x:String>
@@ -662,14 +662,14 @@
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">コミットの詳細に子コミットを表示</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">コミットグラフにタグを表示</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">適切とするコミットタイトルの長さ</x:String>
-  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub のような既定のアバターを生成</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24時間表示</x:String>
+  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub のような既定のアバターを生成</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">Git</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">自動 CRLF 変換を有効化</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">コミット時にCRLF→LFに変換、チェックアウト時にLF→CRLFに変換</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">コミット時のみCRLF→LFに変換（チェックアウト時は変換しない）</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">一切変換しない</x:String>
-  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">コミット時とチェックアウト時に両方CRLFに変換</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">ローカルとリモート双方をCRLFに設定する</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">既定のクローンディレクトリ</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">ユーザーのメールアドレス</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Git ユーザーのメールアドレス (グローバル設定)</x:String>

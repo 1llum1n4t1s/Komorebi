@@ -150,6 +150,8 @@ namespace Komorebi.Models
             var temp = new CommitGraph();
             var unsolved = new List<PathHelper>();  // 未解決（続行中）のパス
             var ended = new List<PathHelper>();      // 終了したパス
+            // 未解決パスのNext→PathHelper検索用Dictionary（旧: List.Find()のO(n) → O(1)）
+            var unsolvedByNext = new Dictionary<string, PathHelper>(StringComparer.Ordinal);
             var offsetY = -halfHeight;
             var colorPicker = new ColorPicker();
 
@@ -200,12 +202,16 @@ namespace Komorebi.Models
                 }
 
                 // Remove ended curves from unsolved
-                foreach (var l in ended)
+                // HashSetでO(1)判定 → RemoveAllでO(n)一括削除（旧: List.Remove()をm回でO(n*m)）
+                if (ended.Count > 0)
                 {
-                    colorPicker.Recycle(l.Path.Color);
-                    unsolved.Remove(l);
+                    foreach (var l in ended)
+                        colorPicker.Recycle(l.Path.Color);
+
+                    var endedSet = new HashSet<PathHelper>(ended);
+                    unsolved.RemoveAll(endedSet.Contains);
+                    ended.Clear();
                 }
-                ended.Clear();
 
                 // If no path found, create new curve for branch head
                 // Otherwise, create new curve for new merged commit
@@ -239,12 +245,21 @@ namespace Komorebi.Models
                 temp.Dots.Add(anchor);
 
                 // Deal with other parents (the first parent has been processed)
+                // Dictionaryで親コミットをO(1)検索（旧: List.Find()はO(n)）
+                // 親の検索前にDictionaryを再構築（unsolved変更後のため）
+                if (!firstParentOnlyEnabled && commit.Parents.Count > 1)
+                {
+                    unsolvedByNext.Clear();
+                    foreach (var u in unsolved)
+                        unsolvedByNext[u.Next] = u;
+                }
+
                 if (!firstParentOnlyEnabled)
                 {
                     for (int j = 1; j < commit.Parents.Count; j++)
                     {
                         var parentHash = commit.Parents[j];
-                        var parent = unsolved.Find(x => x.Next.Equals(parentHash, StringComparison.Ordinal));
+                        unsolvedByNext.TryGetValue(parentHash, out var parent);
                         if (parent != null)
                         {
                             if (isMerged && !parent.IsMerged)
@@ -299,6 +314,7 @@ namespace Komorebi.Models
 
         /// <summary>
         ///     グラフの色をキューで管理し、色の割り当てとリサイクルを行うクラス。
+        ///     HashSetで重複チェックをO(1)に改善（旧: Queue.Contains()はO(n)）。
         /// </summary>
         private class ColorPicker
         {
@@ -312,23 +328,30 @@ namespace Komorebi.Models
                 if (_colorsQueue.Count == 0)
                 {
                     for (var i = 0; i < s_penCount; i++)
+                    {
                         _colorsQueue.Enqueue(i);
+                        _colorSet.Add(i);
+                    }
                 }
 
-                return _colorsQueue.Dequeue();
+                var color = _colorsQueue.Dequeue();
+                _colorSet.Remove(color);
+                return color;
             }
 
             /// <summary>
             ///     使用済みの色インデックスをキューに戻す。
+            ///     HashSetでO(1)の重複チェック（旧: Queue.Contains()はO(n)）。
             /// </summary>
             /// <param name="idx">リサイクルする色インデックス。</param>
             public void Recycle(int idx)
             {
-                if (!_colorsQueue.Contains(idx))
+                if (_colorSet.Add(idx))
                     _colorsQueue.Enqueue(idx);
             }
 
-            private Queue<int> _colorsQueue = new Queue<int>();
+            private readonly Queue<int> _colorsQueue = new();
+            private readonly HashSet<int> _colorSet = [];
         }
 
         /// <summary>

@@ -59,15 +59,19 @@ namespace Komorebi.Commands
             {
                 // メッセージを一時ファイルに書き出し、-F オプションで指定する
                 string tmp = Path.GetTempFileName();
-                await File.WriteAllTextAsync(tmp, message);
-                builder.Append(" -F ").Append(tmp.Quoted());
+                try
+                {
+                    await File.WriteAllTextAsync(tmp, message);
+                    builder.Append(" -F ").Append(tmp.Quoted());
 
-                Args = builder.ToString();
-                var succ = await ExecAsync().ConfigureAwait(false);
-
-                // 一時ファイルを削除する
-                File.Delete(tmp);
-                return succ;
+                    Args = builder.ToString();
+                    return await ExecAsync().ConfigureAwait(false);
+                }
+                finally
+                {
+                    // 例外発生時も一時ファイルを確実に削除する（旧: ExecAsync()失敗時にリーク）
+                    try { File.Delete(tmp); } catch { /* 削除失敗は無視 */ }
+                }
             }
 
             // メッセージが空の場合はタグ名をメッセージとして使用する

@@ -47,3 +47,4 @@ Komorebi.app/
 build.command
 src/Properties/launchSettings.json
 __pycache__/
+.dotnet/

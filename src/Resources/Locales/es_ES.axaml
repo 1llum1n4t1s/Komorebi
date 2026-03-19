@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Comparar con HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configurar Repositorio</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">PLANTILLA DE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parámetros incorporados:
-
-  ${branch_name} Nombre de la rama local actual.
-  ${files_num} Número de archivos modificados
-  ${files} Rutas de archivos modificados
-  ${files:N} Número N máximo de rutas de archivos modificados
-  ${pure_files} Cómo ${files}, pero solo nombres de archivos puros
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parámetros incorporados:&#xD;
+&#xD;
+  ${branch_name} Nombre de la rama local actual.&#xD;
+  ${files_num} Número de archivos modificados&#xD;
+  ${files} Rutas de archivos modificados&#xD;
+  ${files:N} Número N máximo de rutas de archivos modificados&#xD;
+  ${pure_files} Cómo ${files}, pero solo nombres de archivos puros&#xD;
   ${pure_files:N} Cómo ${files:N}, pero sin carpetas</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contenido de la Plantilla:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nombre de la Plantilla:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACCIÓN PERSONALIZADA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumentos:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parámetros incorporados:
-
-  ${REPO} Ruta del repositorio
-  ${REMOTE} Remoto seleccionado o Remoto de la rama seleccionada
-  ${BRANCH} Rama seleccionada, sin la parte ${REMOTE} para ramas remotas
-  ${BRANCH_FRIENDLY_NAME} Nombre amigable de la rama seleccionada, contiene la parte ${REMOTE} para ramas remotas
-  ${SHA} Hash del commit seleccionado
-  ${TAG} Etiqueta seleccionada
-  ${FILE} Archivo seleccionado, relativo a la raíz del repositorio
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parámetros incorporados:&#xD;
+&#xD;
+  ${REPO} Ruta del repositorio&#xD;
+  ${REMOTE} Remoto seleccionado o Remoto de la rama seleccionada&#xD;
+  ${BRANCH} Rama seleccionada, sin la parte ${REMOTE} para ramas remotas&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nombre amigable de la rama seleccionada, contiene la parte ${REMOTE} para ramas remotas&#xD;
+  ${SHA} Hash del commit seleccionado&#xD;
+  ${TAG} Etiqueta seleccionada&#xD;
+  ${FILE} Archivo seleccionado, relativo a la raíz del repositorio&#xD;
   $1, $2 ... Valores de control de entrada</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Archivo Ejecutable:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Controles de entrada:</x:String>
@@ -537,9 +537,9 @@
   <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">¿Quieres correr el comando `git init` en esta ruta?</x:String>
   <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Falló la apertura del repositorio. Razón:  </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Ruta:</x:String>
+  <x:String x:Key="Text.InitSetup" xml:space="preserve">Configuración Inicial</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Seleccione su idioma preferido y el directorio predeterminado para clonar repositorios.</x:String>
   <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">Dir. Clon</x:String>
-  <x:String x:Key="Text.InitSetup" xml:space="preserve">Configuración Inicial</x:String>
   <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">Cherry-Pick en progreso.</x:String>
   <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">Procesando commit</x:String>
   <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">Merge en progreso.</x:String>
@@ -662,14 +662,14 @@
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Mostrar hijos en los detalles de commit</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Mostrar etiquetas en el gráfico de commit</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Longitud de la guía del asunto</x:String>
-  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Generar avatar con estilo por defecto de Github</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Generar avatar con estilo por defecto de Github</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Habilitar Auto CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Confirmar como LF, extraer como CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Solo convertir CRLF a LF al confirmar</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">No convertir</x:String>
-  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Forzar CRLF al confirmar y extraer</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Usar CRLF tanto en local como en remoto</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Directorio de clonado por defecto</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email del usuario</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Email global del usuario git</x:String>

@@ -461,16 +461,19 @@ namespace Komorebi.ViewModels
         {
             if (head.Parents.Count == 1)
             {
-                var parent = await new Commands.QuerySingleCommit(_repo.FullPath, head.Parents[0]).GetResultAsync();
+                // 独立した複数のgitコマンドを並列実行（旧: 最大3回の逐次git呼び出し）
+                var parentTask = new Commands.QuerySingleCommit(_repo.FullPath, head.Parents[0]).GetResultAsync();
+                var parentMsgTask = new Commands.QueryCommitFullMessage(_repo.FullPath, head.Parents[0]).GetResultAsync();
+                var headMsgTask = fixup
+                    ? Task.FromResult<string>(null)
+                    : new Commands.QueryCommitFullMessage(_repo.FullPath, head.SHA).GetResultAsync();
+                await Task.WhenAll(parentTask, parentMsgTask, headMsgTask).ConfigureAwait(false);
+
+                var parent = parentTask.Result;
                 if (parent == null)
                     return;
 
-                string message = await new Commands.QueryCommitFullMessage(_repo.FullPath, head.Parents[0]).GetResultAsync();
-                if (!fixup)
-                {
-                    var headMessage = await new Commands.QueryCommitFullMessage(_repo.FullPath, head.SHA).GetResultAsync();
-                    message = $"{message}\n\n{headMessage}";
-                }
+                var message = fixup ? parentMsgTask.Result : $"{parentMsgTask.Result}\n\n{headMsgTask.Result}";
 
                 if (_repo.CanCreatePopup())
                     _repo.ShowPopup(new SquashOrFixupHead(_repo, parent, message, fixup));

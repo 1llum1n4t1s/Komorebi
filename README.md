@@ -16,10 +16,11 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 | 項目 | 内容 |
 |------|------|
 | **初回セットアップ画面** | 初回起動時に言語選択とデフォルト Clone ディレクトリを設定するウィザードを表示 |
-| **OS 言語の自動検出** | OS のロケール設定を検出し、15 言語の中から最適な言語を自動選択 |
+| **OS 言語の自動検出** | OS のロケール設定を検出し、17 言語の中から最適な言語を自動選択 |
 | **日本語フォント最適化** | 日本語環境では Yu Gothic UI / UDEV Gothic JPDOC をデフォルトフォントに設定 |
 | **日本語バンドルフォント** | 設定画面のフォント選択に日本語 woff2 フォント（Noto Sans JP、IBM Plex Sans JP 等 8 種）を追加 |
-| **Filipino ロケール追加** | 本家にない Filipino（fil_PH）ロケールを追加し、計 15 言語に対応 |
+| **3 言語の独自追加** | 本家にないタガログ語（fil_PH）・サンスクリット語（sa）・ラテン語（la）を追加し、計 17 言語に対応 |
+| **全ロケール翻訳率 100%** | 本家ではロケールごとに翻訳率にばらつきがあるが、Komorebi は全 17 言語の翻訳を完全に揃えている |
 
 ### Git 操作の改善
 
@@ -224,9 +225,9 @@ VS Code / VS Code Insiders / VSCodium / Cursor / Sublime Text / Zed / Visual Stu
 
 ## 多言語対応
 
-15 言語をサポートしています:
+17 言語をサポートしています（全言語翻訳率 100%）:
 
-Deutsch · English · Español · Filipino · Français · Bahasa Indonesia · Italiano · 日本語 · 한국어 · Português (Brasil) · Русский · தமிழ் · Українська · 简体中文 · 繁體中文
+Deutsch · English · Español · Filipino (Tagalog) · Français · Bahasa Indonesia · Italiano · 日本語 · 한국어 · Latina · Português (Brasil) · Русский · संस्कृतम् · தமிழ் · Українська · 简体中文 · 繁體中文
 
 ---
 

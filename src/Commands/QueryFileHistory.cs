@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
-    public partial class QueryFileHistory : Command
+    public class QueryFileHistory : Command
     {
-        [GeneratedRegex(@"^([MAD])\s+(.+)$")]
-        private static partial Regex REG_FORMAT();
-        [GeneratedRegex(@"^([CR])[0-9]{0,4}\s+(.+)$")]
-        private static partial Regex REG_RENAME_FORMAT();
-
         public QueryFileHistory(string repo, string path, string head)
         {
             WorkingDirectory = repo;
@@ -58,35 +52,13 @@ namespace Komorebi.Commands
                 }
                 else if (last != null)
                 {
-                    var match = REG_FORMAT().Match(line);
-                    if (!match.Success)
-                    {
-                        match = REG_RENAME_FORMAT().Match(line);
-                        if (match.Success)
-                        {
-                            var type = match.Groups[1].Value;
-                            last.Change.Path = match.Groups[2].Value;
-                            last.Change.Set(type == "R" ? Models.ChangeState.Renamed : Models.ChangeState.Copied);
-                        }
-
+                    // 基底クラスの共通パーサーを使用（旧: 25行の重複ロジック）
+                    var parsed = ParseNameStatusLine(line);
+                    if (parsed == null)
                         continue;
-                    }
 
-                    last.Change.Path = match.Groups[2].Value;
-
-                    var status = match.Groups[1].Value;
-                    switch (status[0])
-                    {
-                        case 'M':
-                            last.Change.Set(Models.ChangeState.Modified);
-                            break;
-                        case 'A':
-                            last.Change.Set(Models.ChangeState.Added);
-                            break;
-                        case 'D':
-                            last.Change.Set(Models.ChangeState.Deleted);
-                            break;
-                    }
+                    last.Change.Path = parsed.Value.path;
+                    last.Change.Set(parsed.Value.state);
                 }
             }
 
