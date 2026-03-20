@@ -119,7 +119,7 @@ namespace Komorebi.Models
                     try
                     {
                         // staticなHttpClientを再利用（ソケット枯渇防止・DNS再利用・接続プール活用）
-                        var rsp = await s_httpClient.GetAsync(url);
+                        using var rsp = await s_httpClient.GetAsync(url);
                         if (rsp.IsSuccessStatusCode)
                         {
                             using (var stream = rsp.Content.ReadAsStream())
