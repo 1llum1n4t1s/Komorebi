@@ -613,9 +613,16 @@ namespace Komorebi.ViewModels
 
             ExtensionData = null;
 
-            var file = Path.Combine(Native.OS.DataDir, "preference.json");
-            using var stream = File.Create(file);
-            JsonSerializer.Serialize(stream, this, JsonCodeGen.Default.Preferences);
+            try
+            {
+                var file = Path.Combine(Native.OS.DataDir, "preference.json");
+                using var stream = File.Create(file);
+                JsonSerializer.Serialize(stream, this, JsonCodeGen.Default.Preferences);
+            }
+            catch (Exception ex)
+            {
+                Models.Logger.LogException("設定ファイルの保存に失敗しました", ex);
+            }
         }
 
         private static Preferences Load()
@@ -629,8 +636,9 @@ namespace Komorebi.ViewModels
                 using var stream = File.OpenRead(path);
                 return JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences);
             }
-            catch
+            catch (Exception ex)
             {
+                Models.Logger.Log($"設定ファイルの読み込みに失敗、デフォルト設定を使用: {ex.Message}", Models.LogLevel.Warning);
                 return new Preferences();
             }
         }

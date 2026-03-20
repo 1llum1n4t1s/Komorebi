@@ -136,9 +136,9 @@ namespace Komorebi.Models
                             }
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // ignored
+                        Logger.Log($"アバターダウンロード失敗: {email} - {ex.Message}", LogLevel.Warning);
                     }
 
                     lock (_synclock)
@@ -214,9 +214,9 @@ namespace Komorebi.Models
                             return img;
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // ignore
+                        Logger.Log($"アバターキャッシュ読み込み失敗: {email} - {ex.Message}", LogLevel.Warning);
                     }
                 }
             }
@@ -256,9 +256,9 @@ namespace Komorebi.Models
                 File.Copy(file, store, true);
                 NotifyResourceChanged(email, image);
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore
+                Logger.Log($"ローカルアバター設定失敗: {email} - {ex.Message}", LogLevel.Warning);
             }
         }
 

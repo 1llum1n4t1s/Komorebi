@@ -1304,35 +1304,49 @@ namespace Komorebi.ViewModels
 
             Task.Run(async () =>
             {
-                await Dispatcher.UIThread.InvokeAsync(() => _histories.IsLoading = true);
-
-                var builder = new StringBuilder();
-                builder
-                    .Append('-').Append(Preferences.Instance.MaxHistoryCommits).Append(' ')
-                    .Append(_uiStates.BuildHistoryParams());
-
-                var commits = await new Commands.QueryCommits(FullPath, builder.ToString()).GetResultAsync().ConfigureAwait(false);
-                var graph = Models.CommitGraph.Parse(commits, _uiStates.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly));
-
-                Dispatcher.UIThread.Invoke(() =>
+                try
                 {
-                    if (token.IsCancellationRequested)
-                        return;
+                    await Dispatcher.UIThread.InvokeAsync(() => _histories.IsLoading = true);
 
-                    if (_histories != null)
+                    var builder = new StringBuilder();
+                    builder
+                        .Append('-').Append(Preferences.Instance.MaxHistoryCommits).Append(' ')
+                        .Append(_uiStates.BuildHistoryParams());
+
+                    Models.Logger.Log($"RefreshCommits開始: {FullPath}", Models.LogLevel.Debug);
+                    var commits = await new Commands.QueryCommits(FullPath, builder.ToString()).GetResultAsync().ConfigureAwait(false);
+                    Models.Logger.Log($"RefreshCommits: {commits.Count}件取得、グラフ解析開始", Models.LogLevel.Debug);
+                    var graph = Models.CommitGraph.Parse(commits, _uiStates.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly));
+
+                    Dispatcher.UIThread.Invoke(() =>
                     {
-                        _histories.IsLoading = false;
-                        _histories.Commits = commits;
-                        _histories.Graph = graph;
+                        if (token.IsCancellationRequested)
+                            return;
 
-                        BisectState = _histories.UpdateBisectInfo();
+                        if (_histories != null)
+                        {
+                            _histories.IsLoading = false;
+                            _histories.Commits = commits;
+                            _histories.Graph = graph;
 
-                        if (!string.IsNullOrEmpty(_navigateToCommitDelayed))
-                            NavigateToCommit(_navigateToCommitDelayed);
-                    }
+                            BisectState = _histories.UpdateBisectInfo();
 
-                    _navigateToCommitDelayed = string.Empty;
-                });
+                            if (!string.IsNullOrEmpty(_navigateToCommitDelayed))
+                                NavigateToCommit(_navigateToCommitDelayed);
+                        }
+
+                        _navigateToCommitDelayed = string.Empty;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Models.Logger.LogException($"RefreshCommits失敗: {FullPath}", ex);
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        if (_histories != null)
+                            _histories.IsLoading = false;
+                    });
+                }
             }, token);
         }
 
@@ -1358,7 +1372,16 @@ namespace Komorebi.ViewModels
 
             Task.Run(async () =>
             {
-                var submodules = await new Commands.QuerySubmodules(FullPath).GetResultAsync().ConfigureAwait(false);
+                List<Models.Submodule> submodules;
+                try
+                {
+                    submodules = await new Commands.QuerySubmodules(FullPath).GetResultAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    Models.Logger.LogException($"RefreshSubmodules失敗: {FullPath}", ex);
+                    return;
+                }
 
                 Dispatcher.UIThread.Invoke(() =>
                 {
@@ -1415,25 +1438,32 @@ namespace Komorebi.ViewModels
 
             Task.Run(async () =>
             {
-                var changes = await new Commands.QueryLocalChanges(FullPath, _uiStates.IncludeUntrackedInLocalChanges, noOptionalLocks)
-                    .GetResultAsync()
-                    .ConfigureAwait(false);
-
-                if (_workingCopy == null || token.IsCancellationRequested)
-                    return;
-
-                changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
-                _workingCopy.SetData(changes, token);
-
-                Dispatcher.UIThread.Invoke(() =>
+                try
                 {
-                    if (token.IsCancellationRequested)
+                    var changes = await new Commands.QueryLocalChanges(FullPath, _uiStates.IncludeUntrackedInLocalChanges, noOptionalLocks)
+                        .GetResultAsync()
+                        .ConfigureAwait(false);
+
+                    if (_workingCopy == null || token.IsCancellationRequested)
                         return;
 
-                    LocalChangesCount = changes.Count;
-                    OnPropertyChanged(nameof(InProgressContext));
-                    GetOwnerPage()?.ChangeDirtyState(Models.DirtyState.HasLocalChanges, changes.Count == 0);
-                });
+                    changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
+                    _workingCopy.SetData(changes, token);
+
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        if (token.IsCancellationRequested)
+                            return;
+
+                        LocalChangesCount = changes.Count;
+                        OnPropertyChanged(nameof(InProgressContext));
+                        GetOwnerPage()?.ChangeDirtyState(Models.DirtyState.HasLocalChanges, changes.Count == 0);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Models.Logger.LogException($"RefreshWorkingCopyChanges失敗: {FullPath}", ex);
+                }
             }, token);
         }
 
@@ -1455,17 +1485,24 @@ namespace Komorebi.ViewModels
 
             Task.Run(async () =>
             {
-                var stashes = await new Commands.QueryStashes(FullPath).GetResultAsync().ConfigureAwait(false);
-                Dispatcher.UIThread.Invoke(() =>
+                try
                 {
-                    if (token.IsCancellationRequested)
-                        return;
+                    var stashes = await new Commands.QueryStashes(FullPath).GetResultAsync().ConfigureAwait(false);
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        if (token.IsCancellationRequested)
+                            return;
 
-                    if (_stashesPage != null)
-                        _stashesPage.Stashes = stashes;
+                        if (_stashesPage != null)
+                            _stashesPage.Stashes = stashes;
 
-                    StashesCount = stashes.Count;
-                });
+                        StashesCount = stashes.Count;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Models.Logger.LogException($"RefreshStashes失敗: {FullPath}", ex);
+                }
             }, token);
         }
 

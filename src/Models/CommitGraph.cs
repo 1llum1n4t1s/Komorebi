@@ -148,6 +148,13 @@ namespace Komorebi.Models
             const double halfHeight = 0.5;
 
             var temp = new CommitGraph();
+
+            if (commits == null || commits.Count == 0)
+            {
+                Logger.Log("CommitGraph.Parse: コミットリストが空です", LogLevel.Debug);
+                return temp;
+            }
+
             var unsolved = new List<PathHelper>();  // 未解決（続行中）のパス
             var ended = new List<PathHelper>();      // 終了したパス
             // 未解決パスのNext→PathHelper検索用Dictionary（旧: List.Find()のO(n) → O(1)）

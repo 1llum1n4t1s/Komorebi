@@ -36,13 +36,21 @@ namespace Komorebi
 
             Native.OS.SetupDataDir();
 
+            Models.Logger.Initialize(new Models.LoggerConfig
+            {
+                LogDirectory = Path.Combine(Native.OS.DataDir, "logs"),
+                FilePrefix = "Komorebi",
+            });
+            Models.Logger.LogStartup();
+
             AppDomain.CurrentDomain.UnhandledException += (_, e) =>
             {
-                LogException(e.ExceptionObject as Exception);
+                Models.Logger.LogCrash(e.ExceptionObject as Exception, "AppDomain.UnhandledException");
             };
 
             TaskScheduler.UnobservedTaskException += (_, e) =>
             {
+                Models.Logger.LogCrash(e.Exception, "UnobservedTaskException");
                 e.SetObserved();
             };
 
@@ -57,7 +65,11 @@ namespace Komorebi
             }
             catch (Exception ex)
             {
-                LogException(ex);
+                Models.Logger.LogCrash(ex, "Main");
+            }
+            finally
+            {
+                Models.Logger.Dispose();
             }
         }
 
@@ -83,33 +95,12 @@ namespace Komorebi
             return builder;
         }
 
-        public static void LogException(Exception ex)
+        /// <summary>
+        /// 後方互換性のための例外ログ出力（内部でNLogロガーに委譲する）
+        /// </summary>
+        public static void LogException(Exception ex, string context = null)
         {
-            if (ex == null)
-                return;
-
-            var crashDir = Path.Combine(Native.OS.DataDir, "crashes");
-            if (!Directory.Exists(crashDir))
-                Directory.CreateDirectory(crashDir);
-
-            var time = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            var file = Path.Combine(crashDir, $"{time}.log");
-            using var writer = new StreamWriter(file);
-            writer.WriteLine($"Crash::: {ex.GetType().FullName}: {ex.Message}");
-            writer.WriteLine();
-            writer.WriteLine("----------------------------");
-            writer.WriteLine($"Version: {Assembly.GetExecutingAssembly().GetName().Version}");
-            writer.WriteLine($"OS: {Environment.OSVersion}");
-            writer.WriteLine($"Framework: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}");
-            writer.WriteLine($"Source: {ex.Source}");
-            writer.WriteLine($"Thread Name: {Thread.CurrentThread.Name ?? "Unnamed"}");
-            writer.WriteLine($"App Start Time: {Process.GetCurrentProcess().StartTime}");
-            writer.WriteLine($"Exception Time: {DateTime.Now}");
-            writer.WriteLine($"Memory Usage: {Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024} MB");
-            writer.WriteLine("----------------------------");
-            writer.WriteLine();
-            writer.WriteLine(ex);
-            writer.Flush();
+            Models.Logger.LogCrash(ex, context);
         }
         #endregion
 
@@ -384,9 +375,9 @@ namespace Komorebi
                     app.Resources.MergedDictionaries.Add(resDic);
                     app._themeOverrides = resDic;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // テーマオーバーライドの読み込み失敗は無視する
+                    Models.Logger.Log($"テーマオーバーライドの読み込み失敗: {ex.Message}", Models.LogLevel.Warning);
                 }
             }
             else
@@ -531,6 +522,13 @@ namespace Komorebi
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 BindingPlugins.DataValidators.RemoveAt(0);
+
+                // UIスレッドの未処理例外をクラッシュログに記録する
+                Dispatcher.UIThread.UnhandledException += (_, e) =>
+                {
+                    Models.Logger.LogCrash(e.Exception, "Dispatcher.UIThread.UnhandledException");
+                    e.Handled = true;
+                };
 
                 // Disable tooltip if window is not active.
                 ToolTip.ToolTipOpeningEvent.AddClassHandler<Control>((c, e) =>
@@ -906,6 +904,8 @@ namespace Komorebi
                 }
                 catch (Exception e)
                 {
+                    Models.Logger.LogException("更新チェック失敗", e);
+
                     // 手動チェック時のみエラーを表示する
                     if (manually)
                         ShowSelfUpdateResult(new Models.SelfUpdateFailed(e));
@@ -925,9 +925,9 @@ namespace Komorebi
                 {
                     await ShowDialog(new ViewModels.SelfUpdate { Data = data });
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ウィンドウが既に閉じられている場合などの例外は無視する
+                    Models.Logger.Log($"更新結果ダイアログ表示失敗: {ex.Message}", Models.LogLevel.Warning);
                 }
             });
         }

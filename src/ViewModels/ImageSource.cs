@@ -109,7 +109,7 @@ namespace Komorebi.ViewModels
                 }
                 catch (Exception e)
                 {
-                    Console.Out.WriteLine(e.Message);
+                    Models.Logger.Log($"画像デコード失敗: {e.Message}", Models.LogLevel.Warning);
                 }
             }
 

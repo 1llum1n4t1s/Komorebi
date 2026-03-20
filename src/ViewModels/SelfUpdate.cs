@@ -71,6 +71,7 @@ namespace Komorebi.ViewModels
                 }
                 catch (Exception e)
                 {
+                    Models.Logger.LogException("アップデートダウンロード失敗", e);
                     Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                     {
                         IsDownloading = false;
