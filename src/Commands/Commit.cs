@@ -73,15 +73,16 @@ namespace Komorebi.Commands
                 await File.WriteAllTextAsync(_tmpFile, _message).ConfigureAwait(false);
 
                 // git commitを非同期で実行する
-                var succ = await ExecAsync().ConfigureAwait(false);
-
-                // 一時ファイルを削除する
-                File.Delete(_tmpFile);
-                return succ;
+                return await ExecAsync().ConfigureAwait(false);
             }
             catch
             {
                 return false;
+            }
+            finally
+            {
+                // 例外発生時も一時ファイルを確実に削除する（旧: catchブロックで削除されずリーク）
+                try { File.Delete(_tmpFile); } catch { /* 削除失敗は無視 */ }
             }
         }
 

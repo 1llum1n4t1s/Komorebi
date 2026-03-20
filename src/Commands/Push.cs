@@ -83,17 +83,10 @@ namespace Komorebi.Commands
         }
 
         /// <summary>
-        ///     SSH鍵を設定してからプッシュを実行する。
+        ///     SSH鍵を設定してからプッシュを実行する（基底クラスの共通メソッドを使用）。
         /// </summary>
         /// <returns>コマンドが成功した場合はtrue。</returns>
-        public async Task<bool> RunAsync()
-        {
-            // リモートに紐づくSSH秘密鍵パスをgit configから取得する
-            SSHKey = await new Config(WorkingDirectory).GetAsync($"remote.{_remote}.sshkey").ConfigureAwait(false);
-
-            // プッシュを非同期で実行する
-            return await ExecAsync().ConfigureAwait(false);
-        }
+        public Task<bool> RunAsync() => ExecWithSSHKeyAsync(_remote);
 
         /// <summary>
         ///     操作対象のリモート名。

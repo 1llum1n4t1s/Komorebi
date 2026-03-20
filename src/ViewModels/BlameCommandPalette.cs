@@ -63,15 +63,14 @@ namespace Komorebi.ViewModels
 
             Task.Run(async () =>
             {
-                // HEADリビジョンのファイル名一覧を取得する
-                var files = await new Commands.QueryRevisionFileNames(_repo, "HEAD")
-                    .GetResultAsync()
-                    .ConfigureAwait(false);
-
-                // HEADコミットの情報を取得する
-                var head = await new Commands.QuerySingleCommit(_repo, "HEAD")
-                    .GetResultAsync()
-                    .ConfigureAwait(false);
+                // 独立した2つのgitコマンドを並列実行（旧: 逐次実行で応答時間が2倍）
+                var filesTask = new Commands.QueryRevisionFileNames(_repo, "HEAD")
+                    .GetResultAsync();
+                var headTask = new Commands.QuerySingleCommit(_repo, "HEAD")
+                    .GetResultAsync();
+                await Task.WhenAll(filesTask, headTask).ConfigureAwait(false);
+                var files = filesTask.Result;
+                var head = headTask.Result;
 
                 // UIスレッドでロード完了後の処理を実行する
                 Dispatcher.UIThread.Post(() =>

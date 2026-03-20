@@ -355,110 +355,65 @@ namespace Komorebi.Native
         #endregion
 
         #region EXTERNAL_EDITOR_FINDER
+
+        // レジストリ値名の定数（重複排除）
+        private const string RegistryDisplayIcon = "DisplayIcon";
+        private const string RegistryUninstallPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\";
+
         /// <summary>
-        ///     WindowsレジストリからVSCodeのインストールパスを検索する。
-        ///     システムインストールとユーザーインストールの両方を確認する。
+        ///     WindowsレジストリからDisplayIconを検索する共通メソッド。
+        ///     システムインストール（LocalMachine）とユーザーインストール（CurrentUser）の両方を確認する。
+        ///     3メソッド（FindVSCode/FindVSCodeInsiders/FindVSCodium）の重複を統合。
         /// </summary>
+        /// <param name="systemGuid">システムインストールのレジストリGUID。</param>
+        /// <param name="userGuid">ユーザーインストールのレジストリGUID。</param>
+        /// <returns>DisplayIconの値。見つからない場合は空文字列。</returns>
+        private static string FindRegistryDisplayIcon(string systemGuid, string userGuid)
+        {
+            // システムインストールを確認（using でリソースリークを防止）
+            using var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
+                    Microsoft.Win32.RegistryHive.LocalMachine,
+                    Microsoft.Win32.RegistryView.Registry64);
+            using var systemKey = localMachine.OpenSubKey($@"{RegistryUninstallPath}{systemGuid}_is1");
+            if (systemKey?.GetValue(RegistryDisplayIcon) is string systemIcon)
+                return systemIcon;
+
+            // ユーザーインストールを確認
+            using var currentUser = Microsoft.Win32.RegistryKey.OpenBaseKey(
+                    Microsoft.Win32.RegistryHive.CurrentUser,
+                    Microsoft.Win32.RegistryView.Registry64);
+            using var userKey = currentUser.OpenSubKey($@"{RegistryUninstallPath}{userGuid}_is1");
+            return userKey?.GetValue(RegistryDisplayIcon) as string ?? string.Empty;
+        }
+
         private string FindVSCode()
-        {
-            var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
-                    Microsoft.Win32.RegistryHive.LocalMachine,
-                    Microsoft.Win32.RegistryView.Registry64);
+            => FindRegistryDisplayIcon("{EA457B21-F73E-494C-ACAB-524FDE069978}", "{771FD6B0-FA20-440A-A002-3B3BAC16DC50}");
 
-            // VSCode (system)
-            var systemVScode = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{EA457B21-F73E-494C-ACAB-524FDE069978}_is1");
-            if (systemVScode != null)
-                return systemVScode.GetValue("DisplayIcon") as string;
-
-            var currentUser = Microsoft.Win32.RegistryKey.OpenBaseKey(
-                    Microsoft.Win32.RegistryHive.CurrentUser,
-                    Microsoft.Win32.RegistryView.Registry64);
-
-            // VSCode (user)
-            var vscode = currentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{771FD6B0-FA20-440A-A002-3B3BAC16DC50}_is1");
-            if (vscode != null)
-                return vscode.GetValue("DisplayIcon") as string;
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        ///     WindowsレジストリからVSCode Insidersのインストールパスを検索する。
-        /// </summary>
         private string FindVSCodeInsiders()
-        {
-            var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
-                    Microsoft.Win32.RegistryHive.LocalMachine,
-                    Microsoft.Win32.RegistryView.Registry64);
+            => FindRegistryDisplayIcon("{1287CAD5-7C8D-410D-88B9-0D1EE4A83FF2}", "{217B4C08-948D-4276-BFBB-BEE930AE5A2C}");
 
-            // VSCode - Insiders (system)
-            var systemVScodeInsiders = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{1287CAD5-7C8D-410D-88B9-0D1EE4A83FF2}_is1");
-            if (systemVScodeInsiders != null)
-                return systemVScodeInsiders.GetValue("DisplayIcon") as string;
-
-            var currentUser = Microsoft.Win32.RegistryKey.OpenBaseKey(
-                    Microsoft.Win32.RegistryHive.CurrentUser,
-                    Microsoft.Win32.RegistryView.Registry64);
-
-            // VSCode - Insiders (user)
-            var vscodeInsiders = currentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{217B4C08-948D-4276-BFBB-BEE930AE5A2C}_is1");
-            if (vscodeInsiders != null)
-                return vscodeInsiders.GetValue("DisplayIcon") as string;
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        ///     WindowsレジストリからVSCodiumのインストールパスを検索する。
-        /// </summary>
         private string FindVSCodium()
-        {
-            var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
-                    Microsoft.Win32.RegistryHive.LocalMachine,
-                    Microsoft.Win32.RegistryView.Registry64);
-
-            // VSCodium (system)
-            var systemVSCodium = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{88DA3577-054F-4CA1-8122-7D820494CFFB}_is1");
-            if (systemVSCodium != null)
-                return systemVSCodium.GetValue("DisplayIcon") as string;
-
-            var currentUser = Microsoft.Win32.RegistryKey.OpenBaseKey(
-                    Microsoft.Win32.RegistryHive.CurrentUser,
-                    Microsoft.Win32.RegistryView.Registry64);
-
-            // VSCodium (user)
-            var vscodium = currentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{2E1F05D1-C245-4562-81EE-28188DB6FD17}_is1");
-            if (vscodium != null)
-                return vscodium.GetValue("DisplayIcon") as string;
-
-            return string.Empty;
-        }
+            => FindRegistryDisplayIcon("{88DA3577-054F-4CA1-8122-7D820494CFFB}", "{2E1F05D1-C245-4562-81EE-28188DB6FD17}");
 
         /// <summary>
         ///     WindowsレジストリからSublime Textのインストールパスを検索する。
-        ///     バージョン3と4の両方を確認する。
+        ///     バージョン3と4の両方を確認する。using でリソースリークを防止。
         /// </summary>
         private string FindSublimeText()
         {
-            var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
+            using var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
                     Microsoft.Win32.RegistryHive.LocalMachine,
                     Microsoft.Win32.RegistryView.Registry64);
 
             // Sublime Text 4
-            var sublime = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Sublime Text_is1");
-            if (sublime != null)
-            {
-                var icon = sublime.GetValue("DisplayIcon") as string;
-                return Path.Combine(Path.GetDirectoryName(icon)!, "subl.exe");
-            }
+            using var sublime = localMachine.OpenSubKey($@"{RegistryUninstallPath}Sublime Text_is1");
+            if (sublime?.GetValue(RegistryDisplayIcon) is string icon4)
+                return Path.Combine(Path.GetDirectoryName(icon4)!, "subl.exe");
 
             // Sublime Text 3
-            var sublime3 = localMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Sublime Text 3_is1");
-            if (sublime3 != null)
-            {
-                var icon = sublime3.GetValue("DisplayIcon") as string;
-                return Path.Combine(Path.GetDirectoryName(icon)!, "subl.exe");
-            }
+            using var sublime3 = localMachine.OpenSubKey($@"{RegistryUninstallPath}Sublime Text 3_is1");
+            if (sublime3?.GetValue(RegistryDisplayIcon) is string icon3)
+                return Path.Combine(Path.GetDirectoryName(icon3)!, "subl.exe");
 
             return string.Empty;
         }
@@ -513,14 +468,14 @@ namespace Komorebi.Native
         /// </summary>
         private string FindZed()
         {
-            var currentUser = Microsoft.Win32.RegistryKey.OpenBaseKey(
+            using var currentUser = Microsoft.Win32.RegistryKey.OpenBaseKey(
                     Microsoft.Win32.RegistryHive.CurrentUser,
                     Microsoft.Win32.RegistryView.Registry64);
 
             // NOTE: this is the official Zed Preview reg data.
-            var preview = currentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{F70E4811-D0E2-4D88-AC99-D63752799F95}_is1");
-            if (preview != null)
-                return preview.GetValue("DisplayIcon") as string;
+            using var preview = currentUser.OpenSubKey($@"{RegistryUninstallPath}{{F70E4811-D0E2-4D88-AC99-D63752799F95}}_is1");
+            if (preview?.GetValue(RegistryDisplayIcon) is string icon)
+                return icon;
 
             // PATHからzed.exeを検索する
             var findInPath = new StringBuilder("zed.exe", 512);
@@ -542,11 +497,11 @@ namespace Komorebi.Native
         {
             try
             {
-                var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
+                using var localMachine = Microsoft.Win32.RegistryKey.OpenBaseKey(
                     Microsoft.Win32.RegistryHive.LocalMachine,
                     Microsoft.Win32.RegistryView.Registry64);
 
-                var appPaths = localMachine.OpenSubKey($@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\{exeName}");
+                using var appPaths = localMachine.OpenSubKey($@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\{exeName}");
                 if (appPaths?.GetValue(null) is string path && File.Exists(path))
                     return path;
             }

@@ -390,21 +390,19 @@ namespace Komorebi.ViewModels
 
             Task.Run(async () =>
             {
-                // 初回のみコミット情報を取得する
+                // 初回のみコミット情報を取得する（独立した2コマンドを並列実行）
                 if (_baseHead == null)
                 {
-                    var baseHead = await new Commands.QuerySingleCommit(_repo, _based)
-                        .GetResultAsync()
-                        .ConfigureAwait(false);
-
-                    var toHead = await new Commands.QuerySingleCommit(_repo, _to)
-                        .GetResultAsync()
-                        .ConfigureAwait(false);
+                    var baseHeadTask = new Commands.QuerySingleCommit(_repo, _based)
+                        .GetResultAsync();
+                    var toHeadTask = new Commands.QuerySingleCommit(_repo, _to)
+                        .GetResultAsync();
+                    await Task.WhenAll(baseHeadTask, toHeadTask).ConfigureAwait(false);
 
                     Dispatcher.UIThread.Post(() =>
                     {
-                        BaseHead = baseHead;
-                        ToHead = toHead;
+                        BaseHead = baseHeadTask.Result;
+                        ToHead = toHeadTask.Result;
                     });
                 }
 

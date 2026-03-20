@@ -40,8 +40,8 @@ namespace Komorebi.Commands
             if (string.IsNullOrEmpty(stdout))
                 return null;
 
-            // 相対パスの場合はWorkingDirectoryを基準に絶対パスに変換
-            return Path.IsPathRooted(stdout) ? stdout : Path.GetFullPath(Path.Combine(WorkingDirectory, stdout));
+            // 相対パスの場合はWorkingDirectoryを基準に絶対パスに変換（基底クラスの共通メソッド使用）
+            return ResolveGitRelativePath(stdout);
         }
     }
 }

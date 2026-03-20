@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Сравнить с ГОЛОВОЙ</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Настройка репозитория</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН РЕВИЗИИ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: 
-  
-  ${branch_name} Имя текущей локальной ветки
-  ${files_num} Количество изменённых файлов
-  ${files} Пути изменённых файлов
-  ${files:N} Пути изменённых файлов, не более N
-  ${pure_files} То же, что и ${files}, но только имена файлов
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;
+  &#xD;
+  ${branch_name} Имя текущей локальной ветки&#xD;
+  ${files_num} Количество изменённых файлов&#xD;
+  ${files} Пути изменённых файлов&#xD;
+  ${files:N} Пути изменённых файлов, не более N&#xD;
+  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;
   ${pure_files:N} То же, что и ${files:N}, но только имена файлов</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Cодержание:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Название:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ПОЛЬЗОВАТЕЛЬСКОЕ ДЕЙСТВИЕ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументы:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: 
-  
-  ${REPO} Путь репозитория
-  ${REMOTE} Выбранная удаённая ветка
-  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток
-  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки
-  ${SHA} Хеш выбранной ревизии
-  ${TAG} Выбранная метка
-  ${FILE} Выбранный файл, относительно корня репозитория
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;
+  &#xD;
+  ${REPO} Путь репозитория&#xD;
+  ${REMOTE} Выбранная удаённая ветка&#xD;
+  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;
+  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;
+  ${SHA} Хеш выбранной ревизии&#xD;
+  ${TAG} Выбранная метка&#xD;
+  ${FILE} Выбранный файл, относительно корня репозитория&#xD;
   $1, $2 ... Ввод управляющих значений</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Исполняемый файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Элементы управления вводом:</x:String>
@@ -381,7 +381,7 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Меньше видимых строк</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Больше видимых строк</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">ВЫБЕРИТЕ ФАЙЛ ДЛЯ ПРОСМОТРА ИЗМЕНЕНИЙ</x:String>
-  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI based tool &quot;{0}&quot; is not supported by this app</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI based tool "{0}" is not supported by this app</x:String>
   <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Некорректный инструмент сравнения/слияния в настройках</x:String>
   <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Отсутствует конфигурация git: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Каталог историй</x:String>
@@ -662,14 +662,14 @@
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Показать наследника в деталях комментария</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Показывать метки на графике</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Длина темы ревизии</x:String>
-  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Создать Github-подобный аватар по умолчанию</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-часовой формат</x:String>
+  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Создать Github-подобный аватар по умолчанию</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Включить автозавершение CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Коммит как LF, переключение как CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Конвертировать CRLF в LF только при коммите</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">НЕ конвертировать</x:String>
-  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Принудительно CRLF при коммите и переключении</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Использовать CRLF как локально, так и удалённо</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Каталог клонирования по умолчанию</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Электроная почта пользователя</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Общая электроная почта пользователя git</x:String>

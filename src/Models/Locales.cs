@@ -37,6 +37,8 @@ namespace Komorebi.Models
             new Locale("日本語", "ja_JP"),
             new Locale("தமிழ் (Tamil)", "ta_IN"),
             new Locale("한국어", "ko_KR"),
+            new Locale("संस्कृतम् (Sanskrit)", "sa"),
+            new Locale("Latina (Latin)", "la"),
         };
 
         /// <summary>

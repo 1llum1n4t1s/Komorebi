@@ -1,17 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Komorebi.Commands
 {
-    public partial class CompareRevisions : Command
+    public class CompareRevisions : Command
     {
-        [GeneratedRegex(@"^([MAD])\s+(.+)$")]
-        private static partial Regex REG_FORMAT();
-        [GeneratedRegex(@"^([CR])[0-9]{0,4}\s+(.+)$")]
-        private static partial Regex REG_RENAME_FORMAT();
-
         public CompareRevisions(string repo, string start, string end)
         {
             WorkingDirectory = repo;
@@ -39,41 +33,16 @@ namespace Komorebi.Commands
                 proc.StartInfo = CreateGitStartInfo(true);
                 proc.Start();
 
+                // 基底クラスの共通パーサーを使用（旧: 30行の重複ロジック）
                 while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
                 {
-                    var match = REG_FORMAT().Match(line);
-                    if (!match.Success)
-                    {
-                        match = REG_RENAME_FORMAT().Match(line);
-                        if (match.Success)
-                        {
-                            var type = match.Groups[1].Value;
-                            var renamed = new Models.Change() { Path = match.Groups[2].Value };
-                            renamed.Set(type == "R" ? Models.ChangeState.Renamed : Models.ChangeState.Copied);
-                            changes.Add(renamed);
-                        }
-
+                    var parsed = ParseNameStatusLine(line);
+                    if (parsed == null)
                         continue;
-                    }
 
-                    var change = new Models.Change() { Path = match.Groups[2].Value };
-                    var status = match.Groups[1].Value;
-
-                    switch (status[0])
-                    {
-                        case 'M':
-                            change.Set(Models.ChangeState.Modified);
-                            changes.Add(change);
-                            break;
-                        case 'A':
-                            change.Set(Models.ChangeState.Added);
-                            changes.Add(change);
-                            break;
-                        case 'D':
-                            change.Set(Models.ChangeState.Deleted);
-                            changes.Add(change);
-                            break;
-                    }
+                    var change = new Models.Change() { Path = parsed.Value.path };
+                    change.Set(parsed.Value.state);
+                    changes.Add(change);
                 }
 
                 await proc.WaitForExitAsync().ConfigureAwait(false);

@@ -1,0 +1,1011 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <x:String x:Key="Text.About" xml:space="preserve">विषये</x:String>
+  <x:String x:Key="Text.About.Menu" xml:space="preserve">Komorebi विषये</x:String>
+  <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">प्रकाशनतिथिः: {0}</x:String>
+  <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">प्रकाशनटिप्पण्यः</x:String>
+  <x:String x:Key="Text.About.SubTitle" xml:space="preserve">मुक्तस्रोतः एवं निःशुल्कं Git GUI साधनम्</x:String>
+  <x:String x:Key="Text.AddToIgnore" xml:space="preserve">सञ्चिकाः उपेक्षासूच्यां योजयतु</x:String>
+  <x:String x:Key="Text.AddToIgnore.Pattern" xml:space="preserve">प्रतिमानम्:</x:String>
+  <x:String x:Key="Text.AddToIgnore.Storage" xml:space="preserve">भण्डारणसञ्चिका:</x:String>
+  <x:String x:Key="Text.AddWorktree" xml:space="preserve">कार्यवृक्षं योजयतु</x:String>
+  <x:String x:Key="Text.AddWorktree.Location" xml:space="preserve">स्थानम्:</x:String>
+  <x:String x:Key="Text.AddWorktree.Location.Placeholder" xml:space="preserve">अस्य कार्यवृक्षस्य मार्गः। सापेक्षमार्गः अनुमतः।</x:String>
+  <x:String x:Key="Text.AddWorktree.Name" xml:space="preserve">शाखानाम:</x:String>
+  <x:String x:Key="Text.AddWorktree.Name.Placeholder" xml:space="preserve">ऐच्छिकम्। पूर्वनिर्धारितं गन्तव्यपत्रिकानाम।</x:String>
+  <x:String x:Key="Text.AddWorktree.Tracking" xml:space="preserve">अनुसरणशाखा:</x:String>
+  <x:String x:Key="Text.AddWorktree.Tracking.Toggle" xml:space="preserve">दूरस्थशाखायाः अनुसरणम्</x:String>
+  <x:String x:Key="Text.AddWorktree.WhatToCheckout" xml:space="preserve">किं निष्कासनीयम्:</x:String>
+  <x:String x:Key="Text.AddWorktree.WhatToCheckout.CreateNew" xml:space="preserve">नवीनां शाखां रचयतु</x:String>
+  <x:String x:Key="Text.AddWorktree.WhatToCheckout.Existing" xml:space="preserve">विद्यमाना शाखा</x:String>
+  <x:String x:Key="Text.AIAssistant" xml:space="preserve">AI सहायकः</x:String>
+  <x:String x:Key="Text.AIAssistant.Regen" xml:space="preserve">पुनः उत्पादयतु</x:String>
+  <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">AI द्वारा प्रतिबद्धसन्देशं रचयतु</x:String>
+  <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">प्रतिबद्धसन्देशरूपेण उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.App.Hide" xml:space="preserve">Komorebi गोपयतु</x:String>
+  <x:String x:Key="Text.App.ShowAll" xml:space="preserve">सर्वं दर्शयतु</x:String>
+  <x:String x:Key="Text.Apply" xml:space="preserve">पैच्</x:String>
+  <x:String x:Key="Text.Apply.File" xml:space="preserve">पैच्-सञ्चिका:</x:String>
+  <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">प्रयोजनार्थं .patch सञ्चिकां चिनुत</x:String>
+  <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">रिक्तस्थानपरिवर्तनानि उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.Apply.Title" xml:space="preserve">पैच् प्रयोजयतु</x:String>
+  <x:String x:Key="Text.Apply.WS" xml:space="preserve">रिक्तस्थानम्:</x:String>
+  <x:String x:Key="Text.ApplyStash" xml:space="preserve">निक्षेपं प्रयोजयतु</x:String>
+  <x:String x:Key="Text.ApplyStash.DropAfterApply" xml:space="preserve">प्रयोजनानन्तरं विलोपयतु</x:String>
+  <x:String x:Key="Text.ApplyStash.RestoreIndex" xml:space="preserve">सूचिकापरिवर्तनानि पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.ApplyStash.Stash" xml:space="preserve">निक्षेपः:</x:String>
+  <x:String x:Key="Text.Archive" xml:space="preserve">संग्रहणम्...</x:String>
+  <x:String x:Key="Text.Archive.File" xml:space="preserve">संग्रहणं रक्षतु:</x:String>
+  <x:String x:Key="Text.Archive.File.Placeholder" xml:space="preserve">संग्रहणसञ्चिकामार्गं चिनुत</x:String>
+  <x:String x:Key="Text.Archive.Revision" xml:space="preserve">संशोधनम्:</x:String>
+  <x:String x:Key="Text.Archive.Title" xml:space="preserve">संग्रहणम्</x:String>
+  <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi कूटशब्दप्रश्नः</x:String>
+  <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">कूटवाक्यं प्रविष्टं कुरुत:</x:String>
+  <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">अपरिवर्तितमिति गृहीताः सञ्चिकाः</x:String>
+  <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">अपरिवर्तितमिति गृहीताः सञ्चिकाः नास्ति</x:String>
+  <x:String x:Key="Text.Avatar.Load" xml:space="preserve">चित्रं लोडयतु...</x:String>
+  <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">पुनः आनयतु</x:String>
+  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">द्विचरसञ्चिका असमर्थिता!!!</x:String>
+  <x:String x:Key="Text.Bisect">द्विभाजनम्</x:String>
+  <x:String x:Key="Text.Bisect.Abort">परित्यजतु</x:String>
+  <x:String x:Key="Text.Bisect.Bad">दुष्टम्</x:String>
+  <x:String x:Key="Text.Bisect.Detecting">द्विभाजनं प्रवर्तते। वर्तमानं HEAD सुष्ठु वा दुष्टं वा?</x:String>
+  <x:String x:Key="Text.Bisect.Good">सुष्ठु</x:String>
+  <x:String x:Key="Text.Bisect.Skip">लङ्घयतु</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange">द्विभाजनं प्रवर्तते। वर्तमानप्रतिबद्धं सुष्ठु वा दुष्टं वा इति चिह्नयतु अन्यच्च निष्कासयतु।</x:String>
+  <x:String x:Key="Text.Blame" xml:space="preserve">दोषारोपणम्</x:String>
+  <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">पूर्वसंशोधने दोषारोपणम्</x:String>
+  <x:String x:Key="Text.Blame.IgnoreWhitespace">रिक्तस्थानपरिवर्तनानि उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">अस्यां सञ्चिकायां दोषारोपणम् असमर्थितम्!!!</x:String>
+  <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">${0}$ निष्कासयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">चयनिते द्वे शाखे तुलयतु</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWith" xml:space="preserve">तुलना...</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
+  <x:String x:Key="Text.BranchCM.CopyName" xml:space="preserve">शाखानाम प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.BranchCM.CreatePR" xml:space="preserve">PR रचयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.CreatePRForUpstream" xml:space="preserve">ऊर्ध्वप्रवाहाय ${0}$ PR रचयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
+  <x:String x:Key="Text.BranchCM.Delete" xml:space="preserve">${0}$ विलोपयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.DeleteMultiBranches" xml:space="preserve">चयनिताः {0} शाखाः विलोपयतु</x:String>
+  <x:String x:Key="Text.BranchCM.EditDescription" xml:space="preserve">${0}$ विवरणं सम्पादयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.FastForward" xml:space="preserve">${0}$ प्रति द्रुतप्रसारणम्</x:String>
+  <x:String x:Key="Text.BranchCM.FetchInto" xml:space="preserve">${0}$ आनीय ${1}$ मध्ये स्थापयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.Finish" xml:space="preserve">Git Flow - ${0}$ समापयतु</x:String>
+  <x:String x:Key="Text.BranchCM.InteractiveRebase.Manually" xml:space="preserve">${0}$ इत्यस्य ${1}$ उपरि सम्वादात्मकं पुनःस्थापनम्</x:String>
+  <x:String x:Key="Text.BranchCM.Merge" xml:space="preserve">${0}$ ${1}$ मध्ये विलयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.MergeMultiBranches" xml:space="preserve">चयनिताः {0} शाखाः वर्तमाने विलयतु</x:String>
+  <x:String x:Key="Text.BranchCM.Pull" xml:space="preserve">${0}$ आकर्षयतु</x:String>
+  <x:String x:Key="Text.BranchCM.PullInto" xml:space="preserve">${0}$ आकृष्य ${1}$ मध्ये स्थापयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.Push" xml:space="preserve">${0}$ प्रेषयतु</x:String>
+  <x:String x:Key="Text.BranchCM.Rebase" xml:space="preserve">${0}$ इत्यस्य ${1}$ उपरि पुनःस्थापनम्...</x:String>
+  <x:String x:Key="Text.BranchCM.Rename" xml:space="preserve">${0}$ पुनर्नामकरणम्...</x:String>
+  <x:String x:Key="Text.BranchCM.ResetToSelectedCommit" xml:space="preserve">${0}$ प्रतिबद्धं ${1}$ प्रति पुनःस्थापयतु...</x:String>
+  <x:String x:Key="Text.BranchCM.SwitchToWorktree" xml:space="preserve">${0}$ (कार्यवृक्षः) प्रति परिवर्तयतु</x:String>
+  <x:String x:Key="Text.BranchCM.Tracking" xml:space="preserve">अनुसरणशाखां निर्धारयतु...</x:String>
+  <x:String x:Key="Text.BranchTree.Ahead" xml:space="preserve">{0} प्रतिबद्धं(प्रतिबद्धानि) अग्रे</x:String>
+  <x:String x:Key="Text.BranchTree.AheadBehind" xml:space="preserve">{0} प्रतिबद्धं(प्रतिबद्धानि) अग्रे, {1} प्रतिबद्धं(प्रतिबद्धानि) पृष्ठे</x:String>
+  <x:String x:Key="Text.BranchTree.Behind" xml:space="preserve">{0} प्रतिबद्धं(प्रतिबद्धानि) पृष्ठे</x:String>
+  <x:String x:Key="Text.BranchTree.InvalidUpstream" xml:space="preserve">अमान्यम्</x:String>
+  <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">दूरस्थम्</x:String>
+  <x:String x:Key="Text.BranchTree.Status" xml:space="preserve">स्थितिः</x:String>
+  <x:String x:Key="Text.BranchTree.Tracking" xml:space="preserve">अनुसरणम्</x:String>
+  <x:String x:Key="Text.BranchTree.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.BranchTree.Worktree" xml:space="preserve">कार्यवृक्षः</x:String>
+  <x:String x:Key="Text.Cancel" xml:space="preserve">निरस्यताम्</x:String>
+  <x:String x:Key="Text.ChangeCM.CheckoutFirstParentRevision" xml:space="preserve">जनकसंशोधनं प्रति पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.ChangeCM.CheckoutThisRevision" xml:space="preserve">एतत् संशोधनं प्रति पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.ChangeCM.GenerateCommitMessage" xml:space="preserve">प्रतिबद्धसन्देशम् उत्पादयतु</x:String>
+  <x:String x:Key="Text.ChangeCM.Merge" xml:space="preserve">विलयनम् (अन्तर्निर्मितम्)</x:String>
+  <x:String x:Key="Text.ChangeCM.MergeExternal" xml:space="preserve">विलयनम् (बाह्यम्)</x:String>
+  <x:String x:Key="Text.ChangeCM.ResetFileTo" xml:space="preserve">सञ्चिकाः ${0}$ प्रति पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.ChangeDisplayMode" xml:space="preserve">प्रदर्शनप्रकारं परिवर्तयतु</x:String>
+  <x:String x:Key="Text.ChangeDisplayMode.Grid" xml:space="preserve">सञ्चिका-निर्देशिका-सूचीरूपेण दर्शयतु</x:String>
+  <x:String x:Key="Text.ChangeDisplayMode.List" xml:space="preserve">मार्गसूचीरूपेण दर्शयतु</x:String>
+  <x:String x:Key="Text.ChangeDisplayMode.Tree" xml:space="preserve">सञ्चिकावृक्षरूपेण दर्शयतु</x:String>
+  <x:String x:Key="Text.ChangeSubmoduleUrl" xml:space="preserve">उपमॉड्यूल-URL परिवर्तयतु</x:String>
+  <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">उपमॉड्यूलम्:</x:String>
+  <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
+  <x:String x:Key="Text.Checkout" xml:space="preserve">शाखां निष्कासयतु</x:String>
+  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">प्रतिबद्धं निष्कासयतु</x:String>
+  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">प्रतिबद्धम्:</x:String>
+  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">चेतावनी: प्रतिबद्धनिष्कासनेन भवतः शीर्षं विच्छिन्नं भविष्यति</x:String>
+  <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">स्थानीयपरिवर्तनानि:</x:String>
+  <x:String x:Key="Text.Checkout.LocalChanges.Discard" xml:space="preserve">त्यजतु</x:String>
+  <x:String x:Key="Text.Checkout.LocalChanges.StashAndReapply" xml:space="preserve">निक्षिप्य पुनःप्रयोजयतु</x:String>
+  <x:String x:Key="Text.Checkout.Target" xml:space="preserve">शाखा:</x:String>
+  <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">भवतः वर्तमानशीर्षे कस्यापि शाखायाः/चिह्नस्य अयुक्तानि प्रतिबद्धानि सन्ति! किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
+  <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">एतेषाम् उपमॉड्यूलानाम् अद्यतनम् आवश्यकम्:{0}किं भवान् तान् अद्यतनयितुम् इच्छति?</x:String>
+  <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">निष्कासनं तथा द्रुतप्रसारणम्</x:String>
+  <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">द्रुतप्रसारणं प्रति:</x:String>
+  <x:String x:Key="Text.CherryPick" xml:space="preserve">चयनोद्धरणम्</x:String>
+  <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">स्रोतं प्रतिबद्धसन्देशे योजयतु</x:String>
+  <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">प्रतिबद्धम्(प्रतिबद्धानि):</x:String>
+  <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">सर्वपरिवर्तनानि प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">मुख्यरेखा:</x:String>
+  <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">सामान्यतः विलयनस्य चयनोद्धरणं कर्तुं न शक्यते यतः विलयनस्य कः पक्षः मुख्यरेखा इति ज्ञातुं न शक्यते। एषः विकल्पः निर्दिष्टजनकं सापेक्षं परिवर्तनं पुनःप्रदर्शयितुं शक्नोति।</x:String>
+  <x:String x:Key="Text.ClearStashes" xml:space="preserve">निक्षेपान् मार्जयतु</x:String>
+  <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">भवान् सर्वान् निक्षेपान् मार्जयितुम् उद्यतः। किं भवान् निश्चितः?</x:String>
+  <x:String x:Key="Text.Clone" xml:space="preserve">दूरस्थभण्डारं प्रतिरूपयतु</x:String>
+  <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">अतिरिक्तपरिमितयः:</x:String>
+  <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">प्रतिरूपणार्थम् अतिरिक्तपरिमितयः। ऐच्छिकम्।</x:String>
+  <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">स्थानीयनाम:</x:String>
+  <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">भण्डारनाम। ऐच्छिकम्।</x:String>
+  <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">जनकपत्रिका:</x:String>
+  <x:String x:Key="Text.Clone.RecurseSubmodules" xml:space="preserve">उपमॉड्यूलानि आरम्भयतु तथा अद्यतनयतु</x:String>
+  <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">भण्डार-URL:</x:String>
+  <x:String x:Key="Text.Close" xml:space="preserve">पिदधातु</x:String>
+  <x:String x:Key="Text.CodeEditor" xml:space="preserve">सम्पादकः</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">शाखाः</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">शाखाः तथा चिह्नानि</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">भण्डारस्य अभिरुचिक्रियाः</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">संशोधनसञ्चिकाः</x:String>
+  <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">प्रतिबद्धं निष्कासयतु</x:String>
+  <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">प्रतिबद्धं चयनोद्धरतु</x:String>
+  <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">चयनोद्धरणम् ...</x:String>
+  <x:String x:Key="Text.CommitCM.CompareWithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
+  <x:String x:Key="Text.CommitCM.CompareWithWorktree" xml:space="preserve">कार्यवृक्षेण सह तुलयतु</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthor" xml:space="preserve">लेखकः</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitMessage" xml:space="preserve">सन्देशः</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitter" xml:space="preserve">प्रतिबद्धकर्ता</x:String>
+  <x:String x:Key="Text.CommitCM.CopySHA" xml:space="preserve">SHA</x:String>
+  <x:String x:Key="Text.CommitCM.CopySubject" xml:space="preserve">विषयः</x:String>
+  <x:String x:Key="Text.CommitCM.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
+  <x:String x:Key="Text.CommitCM.Drop" xml:space="preserve">प्रतिबद्धं त्यजतु</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase" xml:space="preserve">सम्वादात्मकं पुनःस्थापनम्</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase.Drop" xml:space="preserve">त्यजतु...</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase.Edit" xml:space="preserve">सम्पादयतु...</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase.Fixup" xml:space="preserve">जनके संशोधयतु...</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">${0}$ इत्यस्य ${1}$ उपरि सम्वादात्मकं पुनःस्थापनम्</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">पुनर्वचनम्...</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">जनके संपीडयतु...</x:String>
+  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">${0}$ मध्ये विलयतु</x:String>
+  <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">विलयनम् ...</x:String>
+  <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">${0}$ प्रति ${1}$ प्रेषयतु</x:String>
+  <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">${0}$ इत्यस्य ${1}$ उपरि पुनःस्थापनम्</x:String>
+  <x:String x:Key="Text.CommitCM.Reset" xml:space="preserve">${0}$ प्रतिबद्धं ${1}$ प्रति पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.CommitCM.Revert" xml:space="preserve">प्रतिबद्धं प्रत्यावर्तयतु</x:String>
+  <x:String x:Key="Text.CommitCM.Reword" xml:space="preserve">पुनर्वचनम्</x:String>
+  <x:String x:Key="Text.CommitCM.SaveAsPatch" xml:space="preserve">पैच्रूपेण रक्षतु...</x:String>
+  <x:String x:Key="Text.CommitCM.Squash" xml:space="preserve">जनके संपीडयतु</x:String>
+  <x:String x:Key="Text.CommitCM.Fixup" xml:space="preserve">जनके संशोधयतु</x:String>
+  <x:String x:Key="Text.CommitDetail.Changes" xml:space="preserve">परिवर्तनानि</x:String>
+  <x:String x:Key="Text.CommitDetail.Changes.Count" xml:space="preserve">परिवर्तितसञ्चिकाः</x:String>
+  <x:String x:Key="Text.CommitDetail.Changes.Search" xml:space="preserve">परिवर्तनानि अन्विष्यतु...</x:String>
+  <x:String x:Key="Text.CommitDetail.Files" xml:space="preserve">सञ्चिकाः</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.LFS" xml:space="preserve">LFS सञ्चिका</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Search" xml:space="preserve">सञ्चिकाः अन्विष्यतु...</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Submodule" xml:space="preserve">उपमॉड्यूलम्</x:String>
+  <x:String x:Key="Text.CommitDetail.Info" xml:space="preserve">सूचना</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Author" xml:space="preserve">लेखकः</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Children" xml:space="preserve">अपत्यानि</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Committer" xml:space="preserve">प्रतिबद्धकर्ता</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.ContainsIn" xml:space="preserve">एतत् प्रतिबद्धं धारयतां सन्दर्भान् परीक्षतु</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.ContainsIn.Title" xml:space="preserve">प्रतिबद्धं एतैः धार्यते</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.CopyEmail" xml:space="preserve">विद्युत्पत्रं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.CopyName" xml:space="preserve">नाम प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.CopyNameAndEmail" xml:space="preserve">नाम तथा विद्युत्पत्रं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.GotoChangesPage" xml:space="preserve">प्रथमशतं परिवर्तनानि एव दर्श्यन्ते। सर्वपरिवर्तनानि परिवर्तनपटले पश्यतु।</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Key" xml:space="preserve">कुञ्चिका:</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Message" xml:space="preserve">सन्देशः</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Parents" xml:space="preserve">जनकाः</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Refs" xml:space="preserve">सन्दर्भाः</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.SHA" xml:space="preserve">SHA</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Signer" xml:space="preserve">हस्ताक्षरकर्ता:</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">अन्तर्जाले उद्घाटयतु</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.Column" xml:space="preserve">स्तम्भः</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">प्रतिबद्धसन्देशं प्रविष्टं कुरुत। विषयं विवरणं च पृथक्कर्तुं रिक्तपङ्क्तिम् उपयुज्यताम्!</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">विषयः</x:String>
+  <x:String x:Key="Text.Compare" xml:space="preserve">तुलना</x:String>
+  <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
+  <x:String x:Key="Text.Configure" xml:space="preserve">भण्डारविन्यासः</x:String>
+  <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">प्रतिबद्धसन्देशप्रारूपम्</x:String>
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:
+
+${branch_name} वर्तमानस्थानीयशाखानाम।
+${files_num} परिवर्तितसञ्चिकासंख्या
+${files} परिवर्तितसञ्चिकामार्गाः
+${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः
+${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि
+${pure_files:N} ${files:N} सदृशं, किन्तु पत्रिकाभिः विना</x:String>
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">प्रारूपविषयः:</x:String>
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">प्रारूपनाम:</x:String>
+  <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">परिमितयः:</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:
+
+${REPO} भण्डारमार्गः
+${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्
+${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना
+${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्
+${SHA} चयनितप्रतिबद्धस्य हैश्
+${TAG} चयनितं चिह्नम्
+${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा
+$1, $2 ... निवेशनियन्त्रणमूल्यानि</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">निष्पादनीयसञ्चिका:</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">निवेशनियन्त्रणानि:</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.InputControls.Edit" xml:space="preserve">सम्पादयतु</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Name" xml:space="preserve">नाम:</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope" xml:space="preserve">कार्यक्षेत्रम्:</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope.Branch" xml:space="preserve">शाखा</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope.Commit" xml:space="preserve">प्रतिबद्धम्</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope.File" xml:space="preserve">सञ्चिका</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope.Remote" xml:space="preserve">दूरस्थम्</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope.Repository" xml:space="preserve">भण्डारम्</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope.Tag" xml:space="preserve">चिह्नम्</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.WaitForExit" xml:space="preserve">क्रियासमाप्तेः प्रतीक्षतु</x:String>
+  <x:String x:Key="Text.Configure.Email" xml:space="preserve">विद्युत्पत्रसङ्केतः</x:String>
+  <x:String x:Key="Text.Configure.Email.Placeholder" xml:space="preserve">विद्युत्पत्रसङ्केतः</x:String>
+  <x:String x:Key="Text.Configure.Git" xml:space="preserve">GIT</x:String>
+  <x:String x:Key="Text.Configure.Git.AskBeforeAutoUpdatingSubmodules" xml:space="preserve">उपमॉड्यूलस्वयमद्यतनात् पूर्वं पृच्छतु</x:String>
+  <x:String x:Key="Text.Configure.Git.AutoFetch" xml:space="preserve">दूरस्थानि स्वयम् आनयतु</x:String>
+  <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">निमेषः(निमेषाः)</x:String>
+  <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">परम्परागतप्रतिबद्धप्रकाराः</x:String>
+  <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">पूर्वनिर्धारितदूरस्थम्</x:String>
+  <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">अभिमतविलयनप्रकारः</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">समस्याअनुसरणम्</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Azure DevOps नियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleGerritChangeIdCommit" xml:space="preserve">Gerrit Change-Id प्रतिबद्धनियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleGiteeIssue" xml:space="preserve">Gitee समस्यानियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleGiteePullRequest" xml:space="preserve">Gitee Pull Request नियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleGitHub" xml:space="preserve">GitHub नियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleGitLabIssue" xml:space="preserve">GitLab समस्यानियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleGitLabMergeRequest" xml:space="preserve">GitLab Merge Request नियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.AddSampleJira" xml:space="preserve">Jira नियमं योजयतु</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.NewRule" xml:space="preserve">नवीनो नियमः</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.Regex" xml:space="preserve">समस्या-Regex अभिव्यक्तिः:</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.RuleName" xml:space="preserve">नियमनाम:</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.Share" xml:space="preserve">एतं नियमं .issuetracker सञ्चिकायां साझां कुरुत</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.URLTemplate" xml:space="preserve">परिणाम-URL:</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.URLTemplate.Tip" xml:space="preserve">Regex समूहमूल्यानां प्राप्त्यर्थं $1, $2 उपयुज्यताम्।</x:String>
+  <x:String x:Key="Text.Configure.OpenAI" xml:space="preserve">AI</x:String>
+  <x:String x:Key="Text.Configure.OpenAI.Preferred" xml:space="preserve">अभिमतसेवा:</x:String>
+  <x:String x:Key="Text.Configure.OpenAI.Preferred.Tip" xml:space="preserve">यदि अभिमतसेवा निर्धारिता, Komorebi अस्मिन् भण्डारे केवलं ताम् उपयोक्ष्यते। अन्यथा यदि एकाधिकसेवा उपलभ्यते, तेषां मध्ये एकस्य चयनार्थं सन्दर्भवाचिका प्रदर्श्यते।</x:String>
+  <x:String x:Key="Text.Configure.Proxy" xml:space="preserve">HTTP प्रतिनिधिः</x:String>
+  <x:String x:Key="Text.Configure.Proxy.Placeholder" xml:space="preserve">अस्य भण्डारस्य HTTP प्रतिनिधिः</x:String>
+  <x:String x:Key="Text.Configure.User" xml:space="preserve">उपयोक्तृनाम</x:String>
+  <x:String x:Key="Text.Configure.User.Placeholder" xml:space="preserve">अस्य भण्डारस्य उपयोक्तृनाम</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls" xml:space="preserve">अभिरुचिक्रियानियन्त्रणानि सम्पादयतु</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.CheckedValue" xml:space="preserve">चिह्नितमूल्यम्:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.CheckedValue.Tip" xml:space="preserve">चिह्निते सति एतन्मूल्यम् आदेशपङ्क्तिपरिमितिषु उपयुज्यते</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Description" xml:space="preserve">विवरणम्:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.DefaultValue" xml:space="preserve">पूर्वनिर्धारितम्:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.IsFolder" xml:space="preserve">पत्रिका अस्ति:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">शीर्षकम्:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">विकल्पाः:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">विकल्पानां विभाजनार्थं '|' उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">अन्तर्निर्मितचराः ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, तथा ${TAG} अत्रापि उपलभ्यन्ते</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">प्रकारः:</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">कार्यस्थलानि</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">प्रतिरूपणनिर्देशिका</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">रिक्ते सति वैश्विकविन्यासम् उपयुज्यते</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">वर्णः</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">नाम</x:String>
+  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">प्रारम्भे पटलानि पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">अग्रे गच्छतु</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">रिक्तप्रतिबद्धम् अवगतम्! किं भवान् अग्रे गन्तुम् इच्छति (--allow-empty)?</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">सर्वं स्थापयतु तथा प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">चयनितं स्थापयतु तथा प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">रिक्तप्रतिबद्धम् अवगतम्! किं भवान् अग्रे गन्तुम् इच्छति (--allow-empty) अथवा स्वयं स्थापयित्वा प्रतिबध्नातु?</x:String>
+  <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">पुनःप्रारम्भः आवश्यकः</x:String>
+  <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">परिवर्तनानि प्रयोजयितुं भवता एतद् अनुप्रयोगं पुनः प्रारभणीयम्।</x:String>
+  <x:String x:Key="Text.ConventionalCommit" xml:space="preserve">परम्परागतप्रतिबद्धसहायकः</x:String>
+  <x:String x:Key="Text.ConventionalCommit.BreakingChanges" xml:space="preserve">विखण्डनपरिवर्तनम्:</x:String>
+  <x:String x:Key="Text.ConventionalCommit.ClosedIssue" xml:space="preserve">समापितसमस्या:</x:String>
+  <x:String x:Key="Text.ConventionalCommit.Detail" xml:space="preserve">विस्तृतपरिवर्तनानि:</x:String>
+  <x:String x:Key="Text.ConventionalCommit.Scope" xml:space="preserve">कार्यक्षेत्रम्:</x:String>
+  <x:String x:Key="Text.ConventionalCommit.ShortDescription" xml:space="preserve">संक्षिप्तविवरणम्:</x:String>
+  <x:String x:Key="Text.ConventionalCommit.Type" xml:space="preserve">परिवर्तनप्रकारः:</x:String>
+  <x:String x:Key="Text.Copy" xml:space="preserve">प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.CopyAllText" xml:space="preserve">सर्वपाठं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.CopyFullPath" xml:space="preserve">पूर्णमार्गं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.CopyPath" xml:space="preserve">मार्गं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.CreateBranch" xml:space="preserve">शाखां रचयतु...</x:String>
+  <x:String x:Key="Text.CreateBranch.BasedOn" xml:space="preserve">आधारः:</x:String>
+  <x:String x:Key="Text.CreateBranch.Checkout" xml:space="preserve">रचितां शाखां निष्कासयतु</x:String>
+  <x:String x:Key="Text.CreateBranch.LocalChanges" xml:space="preserve">स्थानीयपरिवर्तनानि:</x:String>
+  <x:String x:Key="Text.CreateBranch.LocalChanges.Discard" xml:space="preserve">त्यजतु</x:String>
+  <x:String x:Key="Text.CreateBranch.LocalChanges.StashAndReapply" xml:space="preserve">निक्षिप्य पुनःप्रयोजयतु</x:String>
+  <x:String x:Key="Text.CreateBranch.Name" xml:space="preserve">नवीनशाखानाम:</x:String>
+  <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">शाखानाम प्रविष्टं कुरुत।</x:String>
+  <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">स्थानीयशाखां रचयतु</x:String>
+  <x:String x:Key="Text.CreateBranch.OverwriteExisting" xml:space="preserve">विद्यमानां शाखां लिखित्वा स्थापयतु</x:String>
+  <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">रचितां शाखां दूरस्थं प्रेषयतु</x:String>
+  <x:String x:Key="Text.CreateTag" xml:space="preserve">चिह्नं रचयतु...</x:String>
+  <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">नवीनचिह्नस्थानम्:</x:String>
+  <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">GPG हस्ताक्षरः</x:String>
+  <x:String x:Key="Text.CreateTag.Message" xml:space="preserve">चिह्नसन्देशः:</x:String>
+  <x:String x:Key="Text.CreateTag.Message.Placeholder" xml:space="preserve">ऐच्छिकम्।</x:String>
+  <x:String x:Key="Text.CreateTag.Name" xml:space="preserve">चिह्ननाम:</x:String>
+  <x:String x:Key="Text.CreateTag.Name.Placeholder" xml:space="preserve">अनुशंसितप्रारूपम्: v1.0.0-alpha</x:String>
+  <x:String x:Key="Text.CreateTag.PushToAllRemotes" xml:space="preserve">रचनानन्तरं सर्वदूरस्थेषु प्रेषयतु</x:String>
+  <x:String x:Key="Text.CreateTag.Title" xml:space="preserve">चिह्नं रचयतु</x:String>
+  <x:String x:Key="Text.CreateTag.Type" xml:space="preserve">प्रकारः:</x:String>
+  <x:String x:Key="Text.CreateTag.Type.Annotated" xml:space="preserve">टिप्पणीयुक्तम्</x:String>
+  <x:String x:Key="Text.CreateTag.Type.Lightweight" xml:space="preserve">लघुभारम्</x:String>
+  <x:String x:Key="Text.CtrlClickTip" xml:space="preserve">सीधा प्रारम्भार्थं Ctrl धारयतु</x:String>
+  <x:String x:Key="Text.Cut" xml:space="preserve">कर्तयतु</x:String>
+  <x:String x:Key="Text.DeinitSubmodule" xml:space="preserve">उपमॉड्यूलम् अनारम्भयतु</x:String>
+  <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">स्थानीयपरिवर्तनसत्त्वेऽपि बलात् अनारम्भयतु।</x:String>
+  <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">उपमॉड्यूलम्:</x:String>
+  <x:String x:Key="Text.DeleteBranch" xml:space="preserve">शाखां विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">शाखा:</x:String>
+  <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">भवान् दूरस्थशाखां विलोपयितुम् उद्यतः!!!</x:String>
+  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">दूरस्थशाखां ${0}$ अपि विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">बहुशाखाः विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">भवान् एकदा बहुशाखाः विलोपयितुम् उद्यतः। कृपया कर्तुं पूर्वं द्विवारं परीक्षतु!</x:String>
+  <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">बहुचिह्नानि विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteMultiTags.DeleteFromRemotes" xml:space="preserve">दूरस्थेभ्यः अपि विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteMultiTags.Tip" xml:space="preserve">भवान् एकदा बहुचिह्नानि विलोपयितुम् उद्यतः। कृपया कर्तुं पूर्वं द्विवारं परीक्षतु!</x:String>
+  <x:String x:Key="Text.DeleteRemote" xml:space="preserve">दूरस्थं विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">दूरस्थम्:</x:String>
+  <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">मार्गः:</x:String>
+  <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">सर्वाणि अपत्यानि सूच्याः निष्कास्यन्ते।</x:String>
+  <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">एतत् केवलं सूच्याः निष्कासयति, मुद्रिकायाः न!</x:String>
+  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">समूहविलोपनं सुनिश्चितं कुरुत</x:String>
+  <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">भण्डारविलोपनं सुनिश्चितं कुरुत</x:String>
+  <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">उपमॉड्यूलं विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">उपमॉड्यूलमार्गः:</x:String>
+  <x:String x:Key="Text.DeleteTag" xml:space="preserve">चिह्नं विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">चिह्नम्:</x:String>
+  <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">दूरस्थभण्डारेभ्यः विलोपयतु</x:String>
+  <x:String x:Key="Text.Diff.Binary" xml:space="preserve">द्विचरभेदः</x:String>
+  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">सञ्चिकाप्रकारः परिवर्तितः</x:String>
+  <x:String x:Key="Text.Diff.First" xml:space="preserve">प्रथमभेदः</x:String>
+  <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">रिक्तस्थानपरिवर्तनानि उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">मिश्रणम्</x:String>
+  <x:String x:Key="Text.Diff.Image.Difference" xml:space="preserve">भेदः</x:String>
+  <x:String x:Key="Text.Diff.Image.SideBySide" xml:space="preserve">पार्श्वतः</x:String>
+  <x:String x:Key="Text.Diff.Image.Swipe" xml:space="preserve">स्वाइप्</x:String>
+  <x:String x:Key="Text.Diff.Last" xml:space="preserve">अन्तिमभेदः</x:String>
+  <x:String x:Key="Text.Diff.LFS" xml:space="preserve">LFS वस्तुपरिवर्तनम्</x:String>
+  <x:String x:Key="Text.Diff.New" xml:space="preserve">नवीनम्</x:String>
+  <x:String x:Key="Text.Diff.Next" xml:space="preserve">अग्रिमभेदः</x:String>
+  <x:String x:Key="Text.Diff.NoChange" xml:space="preserve">परिवर्तनानि नास्ति अथवा केवलं पङ्क्त्यन्तपरिवर्तनानि</x:String>
+  <x:String x:Key="Text.Diff.Old" xml:space="preserve">पुरातनम्</x:String>
+  <x:String x:Key="Text.Diff.Prev" xml:space="preserve">पूर्वभेदः</x:String>
+  <x:String x:Key="Text.Diff.SaveAsPatch" xml:space="preserve">पैच्रूपेण रक्षतु</x:String>
+  <x:String x:Key="Text.Diff.ShowHiddenSymbols" xml:space="preserve">गुप्तचिह्नानि दर्शयतु</x:String>
+  <x:String x:Key="Text.Diff.SideBySide" xml:space="preserve">पार्श्वतः भेददर्शनम्</x:String>
+  <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">उपमॉड्यूलम्</x:String>
+  <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">विलोपितम्</x:String>
+  <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">नवीनम्</x:String>
+  <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">विनिमयः</x:String>
+  <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">वाक्यरचनाप्रकाशनम्</x:String>
+  <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">पङ्क्तिशब्दवलनम्</x:String>
+  <x:String x:Key="Text.Diff.UseMerger" xml:space="preserve">विलयनसाधने उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Diff.VisualLines.All" xml:space="preserve">सर्वपङ्क्तीः दर्शयतु</x:String>
+  <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">दृश्यपङ्क्तिसंख्यां न्यूनीकुरुत</x:String>
+  <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">दृश्यपङ्क्तिसंख्यां वर्धयतु</x:String>
+  <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">परिवर्तनदर्शनार्थं सञ्चिकां चिनुत</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI आधारितं साधनं "{0}" अनेन अनुप्रयोगेन असमर्थितम्</x:String>
+  <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">अभिरुचिविन्यासे अमान्यं भेद/विलयनसाधनम्</x:String>
+  <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Git विन्यासः अनुपलब्धः: {0}</x:String>
+  <x:String x:Key="Text.DirHistories" xml:space="preserve">निर्देशिकाइतिहासः</x:String>
+  <x:String x:Key="Text.DirtyState.HasLocalChanges" xml:space="preserve">स्थानीयपरिवर्तनानि सन्ति</x:String>
+  <x:String x:Key="Text.DirtyState.HasPendingPullOrPush" xml:space="preserve">ऊर्ध्वप्रवाहेण असङ्गतम्</x:String>
+  <x:String x:Key="Text.DirtyState.UpToDate" xml:space="preserve">पूर्वत एव अद्यतनम्</x:String>
+  <x:String x:Key="Text.Discard" xml:space="preserve">परिवर्तनानि त्यजतु</x:String>
+  <x:String x:Key="Text.Discard.All" xml:space="preserve">कार्यप्रतौ सर्वाणि स्थानीयपरिवर्तनानि।</x:String>
+  <x:String x:Key="Text.Discard.Changes" xml:space="preserve">परिवर्तनानि:</x:String>
+  <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">उपेक्षितसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
+  <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">अननुसृतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
+  <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} परिवर्तनानि त्यक्ष्यन्ते</x:String>
+  <x:String x:Key="Text.Discard.Warning" xml:space="preserve">एतत् कर्म पूर्ववत् कर्तुं न शक्यते!!!</x:String>
+  <x:String x:Key="Text.DropHead" xml:space="preserve">प्रतिबद्धं त्यजतु</x:String>
+  <x:String x:Key="Text.DropHead.Commit" xml:space="preserve">प्रतिबद्धम्:</x:String>
+  <x:String x:Key="Text.DropHead.NewHead" xml:space="preserve">नवीनं HEAD:</x:String>
+  <x:String x:Key="Text.EditBranchDescription" xml:space="preserve">शाखाविवरणं सम्पादयतु</x:String>
+  <x:String x:Key="Text.EditBranchDescription.Target" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">पुस्तकचिह्नम्:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">नवीननाम:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">चयनितसमूहं सम्पादयतु</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">चयनितभण्डारं सम्पादयतु</x:String>
+  <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">एतद् भण्डारम्</x:String>
+  <x:String x:Key="Text.Fetch" xml:space="preserve">आनयनम्</x:String>
+  <x:String x:Key="Text.Fetch.AllRemotes" xml:space="preserve">सर्वदूरस्थानि आनयतु</x:String>
+  <x:String x:Key="Text.Fetch.Force" xml:space="preserve">स्थानीयसन्दर्भान् बलात् अधिलिखतु</x:String>
+  <x:String x:Key="Text.Fetch.NoTags" xml:space="preserve">चिह्नैः विना आनयतु</x:String>
+  <x:String x:Key="Text.Fetch.Remote" xml:space="preserve">दूरस्थम्:</x:String>
+  <x:String x:Key="Text.Fetch.Title" xml:space="preserve">दूरस्थपरिवर्तनानि आनयतु</x:String>
+  <x:String x:Key="Text.FileCM.AssumeUnchanged" xml:space="preserve">अपरिवर्तितम् इति गृह्यताम्</x:String>
+  <x:String x:Key="Text.FileCM.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
+  <x:String x:Key="Text.FileCM.Discard" xml:space="preserve">त्यजतु...</x:String>
+  <x:String x:Key="Text.FileCM.DiscardMulti" xml:space="preserve">{0} सञ्चिकाः त्यजतु...</x:String>
+  <x:String x:Key="Text.FileCM.ResolveUsing" xml:space="preserve">${0}$ उपयुज्य समाधानं कुरुत</x:String>
+  <x:String x:Key="Text.FileCM.SaveAsPatch" xml:space="preserve">पैच्रूपेण रक्षतु...</x:String>
+  <x:String x:Key="Text.FileCM.Stage" xml:space="preserve">स्थापयतु</x:String>
+  <x:String x:Key="Text.FileCM.StageMulti" xml:space="preserve">{0} सञ्चिकाः स्थापयतु</x:String>
+  <x:String x:Key="Text.FileCM.Stash" xml:space="preserve">निक्षिपतु...</x:String>
+  <x:String x:Key="Text.FileCM.StashMulti" xml:space="preserve">{0} सञ्चिकाः निक्षिपतु...</x:String>
+  <x:String x:Key="Text.FileCM.Unstage" xml:space="preserve">अस्थापयतु</x:String>
+  <x:String x:Key="Text.FileCM.UnstageMulti" xml:space="preserve">{0} सञ्चिकाः अस्थापयतु</x:String>
+  <x:String x:Key="Text.FileCM.UseMine" xml:space="preserve">मदीयम् उपयुज्यताम् (checkout --ours)</x:String>
+  <x:String x:Key="Text.FileCM.UseTheirs" xml:space="preserve">तदीयम् उपयुज्यताम् (checkout --theirs)</x:String>
+  <x:String x:Key="Text.FileHistory" xml:space="preserve">सञ्चिकेतिहासः</x:String>
+  <x:String x:Key="Text.FileHistory.FileChange" xml:space="preserve">परिवर्तनम्</x:String>
+  <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">विषयः</x:String>
+  <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
+  <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">विकासशाखा:</x:String>
+  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">विशेषता:</x:String>
+  <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">विशेषतापूर्वप्रत्ययः:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - विशेषतां समापयतु</x:String>
+  <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - तात्कालिकसंशोधनं समापयतु</x:String>
+  <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - प्रकाशनं समापयतु</x:String>
+  <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithPush" xml:space="preserve">समाप्त्यनन्तरं दूरस्थेषु प्रेषयतु</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">विलयने संपीडयतु</x:String>
+  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">तात्कालिकसंशोधनम्:</x:String>
+  <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">तात्कालिकसंशोधनपूर्वप्रत्ययः:</x:String>
+  <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Git-Flow आरम्भयतु</x:String>
+  <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">शाखां धारयतु</x:String>
+  <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">उत्पादनशाखा:</x:String>
+  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">प्रकाशनम्:</x:String>
+  <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">प्रकाशनपूर्वप्रत्ययः:</x:String>
+  <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">विशेषतां प्रारभतु...</x:String>
+  <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - विशेषतां प्रारभतु</x:String>
+  <x:String x:Key="Text.GitFlow.StartHotfix" xml:space="preserve">तात्कालिकसंशोधनं प्रारभतु...</x:String>
+  <x:String x:Key="Text.GitFlow.StartHotfixTitle" xml:space="preserve">FLOW - तात्कालिकसंशोधनं प्रारभतु</x:String>
+  <x:String x:Key="Text.GitFlow.StartPlaceholder" xml:space="preserve">नाम प्रविष्टं कुरुत</x:String>
+  <x:String x:Key="Text.GitFlow.StartRelease" xml:space="preserve">प्रकाशनं प्रारभतु...</x:String>
+  <x:String x:Key="Text.GitFlow.StartReleaseTitle" xml:space="preserve">FLOW - प्रकाशनं प्रारभतु</x:String>
+  <x:String x:Key="Text.GitFlow.TagPrefix" xml:space="preserve">संस्करणचिह्नपूर्वप्रत्ययः:</x:String>
+  <x:String x:Key="Text.GitLFS" xml:space="preserve">Git LFS</x:String>
+  <x:String x:Key="Text.GitLFS.AddTrackPattern" xml:space="preserve">अनुसरणप्रतिमानं योजयतु...</x:String>
+  <x:String x:Key="Text.GitLFS.AddTrackPattern.IsFilename" xml:space="preserve">प्रतिमानं सञ्चिकानाम अस्ति</x:String>
+  <x:String x:Key="Text.GitLFS.AddTrackPattern.Pattern" xml:space="preserve">अभिरुचिप्रतिमानम्:</x:String>
+  <x:String x:Key="Text.GitLFS.AddTrackPattern.Title" xml:space="preserve">Git LFS मध्ये अनुसरणप्रतिमानं योजयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Fetch" xml:space="preserve">आनयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Fetch.Tips" xml:space="preserve">Git LFS वस्तूनि अवतारयितुं `git lfs fetch` चालयतु। एतत् कार्यप्रतिम् अद्यतनं न करोति।</x:String>
+  <x:String x:Key="Text.GitLFS.Fetch.Title" xml:space="preserve">LFS वस्तूनि आनयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Install" xml:space="preserve">Git LFS हुक् संस्थापयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Locks" xml:space="preserve">तालान् दर्शयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.Empty" xml:space="preserve">तालिताः सञ्चिकाः नास्ति</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.Lock" xml:space="preserve">तालयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.OnlyMine" xml:space="preserve">केवलं मदीयतालान् दर्शयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.Title" xml:space="preserve">LFS तालाः</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.Unlock" xml:space="preserve">उद्घाटयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.UnlockAllMyLocks" xml:space="preserve">मदीयसर्वतालान् उद्घाटयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.UnlockAllMyLocks.Confirm" xml:space="preserve">किं भवान् निश्चितः यत् सर्वाः तालितसञ्चिकाः उद्घाटनीयाः?</x:String>
+  <x:String x:Key="Text.GitLFS.Locks.UnlockForce" xml:space="preserve">बलात् उद्घाटयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Prune" xml:space="preserve">शोधनम्</x:String>
+  <x:String x:Key="Text.GitLFS.Prune.Tips" xml:space="preserve">स्थानीयभण्डारात् पुरातनानि LFS सञ्चिकानि विलोपयितुं `git lfs prune` चालयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Pull" xml:space="preserve">आकर्षणम्</x:String>
+  <x:String x:Key="Text.GitLFS.Pull.Tips" xml:space="preserve">वर्तमानसन्दर्भस्य सर्वाणि Git LFS सञ्चिकानि अवतारयित्वा निष्कासयितुं `git lfs pull` चालयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Pull.Title" xml:space="preserve">LFS वस्तूनि आकर्षयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Push" xml:space="preserve">प्रेषणम्</x:String>
+  <x:String x:Key="Text.GitLFS.Push.Tips" xml:space="preserve">पङ्क्तिस्थानि बृहत्सञ्चिकानि Git LFS अन्तबिन्दुं प्रति प्रेषयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Push.Title" xml:space="preserve">LFS वस्तूनि प्रेषयतु</x:String>
+  <x:String x:Key="Text.GitLFS.Remote" xml:space="preserve">दूरस्थम्:</x:String>
+  <x:String x:Key="Text.GitLFS.Track" xml:space="preserve">'{0}' नामसञ्चिकाः अनुसरतु</x:String>
+  <x:String x:Key="Text.GitLFS.TrackByExtension" xml:space="preserve">सर्वाः *{0} सञ्चिकाः अनुसरतु</x:String>
+  <x:String x:Key="Text.GotoRevisionSelector" xml:space="preserve">प्रतिबद्धं चिनुत</x:String>
+  <x:String x:Key="Text.Histories" xml:space="preserve">इतिहासः</x:String>
+  <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">लेखकः</x:String>
+  <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">लेखककालः</x:String>
+  <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">प्रतिबद्धकालः</x:String>
+  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">दिनाङ्ककालः</x:String>
+  <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">आलेखः तथा विषयः</x:String>
+  <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
+  <x:String x:Key="Text.Histories.Selected" xml:space="preserve">{0} प्रतिबद्धानि चयनितानि</x:String>
+  <x:String x:Key="Text.Histories.ShowColumns" xml:space="preserve">स्तम्भान् दर्शयतु</x:String>
+  <x:String x:Key="Text.Histories.Tips" xml:space="preserve">बहुप्रतिबद्धचयनार्थं 'Ctrl' अथवा 'Shift' धारयतु।</x:String>
+  <x:String x:Key="Text.Histories.Tips.MacOS" xml:space="preserve">बहुप्रतिबद्धचयनार्थं ⌘ अथवा ⇧ धारयतु।</x:String>
+  <x:String x:Key="Text.Histories.Tips.Prefix" xml:space="preserve">सूचना:</x:String>
+  <x:String x:Key="Text.Hotkeys" xml:space="preserve">कुञ्चिकापटलसन्दर्भः</x:String>
+  <x:String x:Key="Text.Hotkeys.Global" xml:space="preserve">वैश्विकम्</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.Clone" xml:space="preserve">नवीनभण्डारं प्रतिरूपयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.CloseTab" xml:space="preserve">वर्तमानपटलं पिदधातु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">अग्रिमपटलं गच्छतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">पूर्वपटलं गच्छतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">नवीनपटलं रचयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">अभिरुचिसंवादं उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">कार्यस्थलवाचिकां दर्शयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.SwitchTab" xml:space="preserve">सक्रियपटलं परिवर्तयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.Zoom" xml:space="preserve">आवर्धनम्/ह्रासः</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo" xml:space="preserve">भण्डारम्</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.Commit" xml:space="preserve">स्थापितपरिवर्तनानि प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.CommitAndPush" xml:space="preserve">प्रतिबध्य प्रेषयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">सर्वपरिवर्तनानि स्थापयित्वा प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">आनयतु, सीधा प्रारभते</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">नियन्त्रणफलकप्रकारः (पूर्वनिर्धारितम्)</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">चयनितप्रतिबद्धस्य अपत्यं गच्छतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoToParent" xml:space="preserve">चयनितप्रतिबद्धस्य जनकं गच्छतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.OpenCommandPalette" xml:space="preserve">आदेशवाचिकां उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.OpenSearchCommits" xml:space="preserve">प्रतिबद्धान्वेषणप्रकारः</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.Pull" xml:space="preserve">आकर्षयतु, सीधा प्रारभते</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.Push" xml:space="preserve">प्रेषयतु, सीधा प्रारभते</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.Refresh" xml:space="preserve">एतद् भण्डारं बलात् पुनर्लोडयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.ViewChanges" xml:space="preserve">'स्थानीयपरिवर्तनानि' प्रति परिवर्तयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.ViewHistories" xml:space="preserve">'इतिहासः' प्रति परिवर्तयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.ViewStashes" xml:space="preserve">'निक्षेपाः' प्रति परिवर्तयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.TextEditor" xml:space="preserve">पाठसम्पादकः</x:String>
+  <x:String x:Key="Text.Hotkeys.TextEditor.CloseSearch" xml:space="preserve">अन्वेषणपटलं पिदधातु</x:String>
+  <x:String x:Key="Text.Hotkeys.TextEditor.GotoNextMatch" xml:space="preserve">अग्रिमसाम्यं गवेषयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.TextEditor.GotoPrevMatch" xml:space="preserve">पूर्वसाम्यं गवेषयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.TextEditor.OpenExternalMergeTool" xml:space="preserve">बाह्यभेद/विलयनसाधनेन उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.TextEditor.Search" xml:space="preserve">अन्वेषणपटलम् उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Hunk.Discard" xml:space="preserve">त्यजतु</x:String>
+  <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">स्थापयतु</x:String>
+  <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">अस्थापयतु</x:String>
+  <x:String x:Key="Text.Init" xml:space="preserve">भण्डारम् आरम्भयतु</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">किं भवान् अस्मिन् मार्गे `git init` आदेशं चालयितुम् इच्छति?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">भण्डारोद्घाटनं विफलम्। कारणम्:  </x:String>
+  <x:String x:Key="Text.Init.Path" xml:space="preserve">मार्गः:</x:String>
+  <x:String x:Key="Text.InitSetup" xml:space="preserve">प्रारम्भिकविन्यासः</x:String>
+  <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">कृपया भवतः अभिमतभाषां तथा प्रतिरूपणस्य पूर्वनिर्धारितनिर्देशिकां चिनुत।</x:String>
+  <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">प्रतिरूपणनिर्देशिका</x:String>
+  <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">चयनोद्धरणं प्रचलति।</x:String>
+  <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">प्रतिबद्धं संसाध्यते</x:String>
+  <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">विलयनं प्रचलति।</x:String>
+  <x:String x:Key="Text.InProgress.Merge.Operating" xml:space="preserve">विलयनं क्रियते</x:String>
+  <x:String x:Key="Text.InProgress.Rebase" xml:space="preserve">पुनःस्थापनं प्रचलति।</x:String>
+  <x:String x:Key="Text.InProgress.Rebase.StoppedAt" xml:space="preserve">अत्र स्थगितम्</x:String>
+  <x:String x:Key="Text.InProgress.Revert" xml:space="preserve">प्रत्यावर्तनं प्रचलति।</x:String>
+  <x:String x:Key="Text.InProgress.Revert.Head" xml:space="preserve">प्रतिबद्धं प्रत्यावर्त्यते</x:String>
+  <x:String x:Key="Text.InteractiveRebase" xml:space="preserve">सम्वादात्मकं पुनःस्थापनम्</x:String>
+  <x:String x:Key="Text.InteractiveRebase.AutoStash" xml:space="preserve">स्थानीयपरिवर्तनानि निक्षिप्य पुनःप्रयोजयतु</x:String>
+  <x:String x:Key="Text.InteractiveRebase.On" xml:space="preserve">उपरि:</x:String>
+  <x:String x:Key="Text.InteractiveRebase.ReorderTip" xml:space="preserve">प्रतिबद्धानां क्रमपरिवर्तनार्थम् आकर्षयित्वा स्थापयतु</x:String>
+  <x:String x:Key="Text.InteractiveRebase.Target" xml:space="preserve">लक्ष्यशाखा:</x:String>
+  <x:String x:Key="Text.IssueLinkCM.CopyLink" xml:space="preserve">सम्बन्धं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.IssueLinkCM.OpenInBrowser" xml:space="preserve">अन्तर्जाले उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Launcher.Commands" xml:space="preserve">आदेशाः</x:String>
+  <x:String x:Key="Text.Launcher.Error" xml:space="preserve">दोषः</x:String>
+  <x:String x:Key="Text.Launcher.Info" xml:space="preserve">सूचना</x:String>
+  <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">भण्डाराणि उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">पटलानि</x:String>
+  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">कार्यस्थलानि</x:String>
+  <x:String x:Key="Text.Merge" xml:space="preserve">शाखाविलयनम्</x:String>
+  <x:String x:Key="Text.Merge.Edit" xml:space="preserve">विलयनसन्देशं अभिरूपयतु</x:String>
+  <x:String x:Key="Text.Merge.Into" xml:space="preserve">मध्ये:</x:String>
+  <x:String x:Key="Text.Merge.Mode" xml:space="preserve">विलयनविकल्पः:</x:String>
+  <x:String x:Key="Text.Merge.Source" xml:space="preserve">स्रोतः:</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">प्रथमं मदीयं, ततः तदीयम्</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">प्रथमं तदीयं, ततः मदीयम्</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">द्वयम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.AllResolved" xml:space="preserve">सर्वे विरोधाः समाधिताः</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.ConflictsRemaining" xml:space="preserve">{0} विरोधः(विरोधाः) अवशिष्टः(अवशिष्टाः)</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Mine" xml:space="preserve">मदीयम्</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.NextConflict" xml:space="preserve">अग्रिमविरोधः</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">पूर्वविरोधः</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">परिणामः</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">रक्षतु तथा स्थापयतु</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">तदीयम्</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">विलयनविरोधाः</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">अरक्षितपरिवर्तनानि त्यजतु वा?</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UseMine" xml:space="preserve">मदीयम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UseTheirs" xml:space="preserve">तदीयम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Undo" xml:space="preserve">पूर्ववत् कुरुत</x:String>
+  <x:String x:Key="Text.MergeMultiple" xml:space="preserve">विलयनम् (बहुविधम्)</x:String>
+  <x:String x:Key="Text.MergeMultiple.CommitChanges" xml:space="preserve">सर्वपरिवर्तनानि प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.MergeMultiple.Strategy" xml:space="preserve">रणनीतिः:</x:String>
+  <x:String x:Key="Text.MergeMultiple.Targets" xml:space="preserve">लक्ष्यानि:</x:String>
+  <x:String x:Key="Text.MoveSubmodule" xml:space="preserve">उपमॉड्यूलं स्थानान्तरयतु</x:String>
+  <x:String x:Key="Text.MoveSubmodule.MoveTo" xml:space="preserve">स्थानान्तरणस्थानम्:</x:String>
+  <x:String x:Key="Text.MoveSubmodule.Submodule" xml:space="preserve">उपमॉड्यूलम्:</x:String>
+  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">भण्डारसन्धिं स्थानान्तरयतु</x:String>
+  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">अस्य कृते जनकसन्धिं चिनुत:</x:String>
+  <x:String x:Key="Text.Name" xml:space="preserve">नाम:</x:String>
+  <x:String x:Key="Text.No" xml:space="preserve">न</x:String>
+  <x:String x:Key="Text.NotConfigured" xml:space="preserve">Git विन्यस्तः नास्ति। कृपया [अभिरुचयः] प्रति गत्वा प्रथमं विन्यसतु।</x:String>
+  <x:String x:Key="Text.Open" xml:space="preserve">उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Open.SystemDefaultEditor" xml:space="preserve">पूर्वनिर्धारितसम्पादकः (तन्त्रम्)</x:String>
+  <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">दत्तभण्डारणनिर्देशिकां उद्घाटयतु</x:String>
+  <x:String x:Key="Text.OpenFile" xml:space="preserve">सञ्चिकां उद्घाटयतु</x:String>
+  <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">बाह्यविलयनसाधने उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Optional" xml:space="preserve">ऐच्छिकम्।</x:String>
+  <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">नवीनपटलं रचयतु</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Bookmark" xml:space="preserve">पुस्तकचिह्नम्</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">पटलं पिदधातु</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">अन्यपटलानि पिदधातु</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">दक्षिणपार्श्वीयपटलानि पिदधातु</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">भण्डारमार्गं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">कार्यस्थलं प्रति स्थानान्तरयतु</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">पुनः आनयतु</x:String>
+  <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">भण्डाराणि</x:String>
+  <x:String x:Key="Text.Paste" xml:space="preserve">चिपकयतु</x:String>
+  <x:String x:Key="Text.Period.DaysAgo" xml:space="preserve">{0} दिनानि पूर्वम्</x:String>
+  <x:String x:Key="Text.Period.HourAgo" xml:space="preserve">१ होरा पूर्वम्</x:String>
+  <x:String x:Key="Text.Period.HoursAgo" xml:space="preserve">{0} होराः पूर्वम्</x:String>
+  <x:String x:Key="Text.Period.JustNow" xml:space="preserve">अधुनैव</x:String>
+  <x:String x:Key="Text.Period.LastMonth" xml:space="preserve">गतमासे</x:String>
+  <x:String x:Key="Text.Period.LastYear" xml:space="preserve">गतवर्षे</x:String>
+  <x:String x:Key="Text.Period.MinutesAgo" xml:space="preserve">{0} निमेषाः पूर्वम्</x:String>
+  <x:String x:Key="Text.Period.MonthsAgo" xml:space="preserve">{0} मासाः पूर्वम्</x:String>
+  <x:String x:Key="Text.Period.YearsAgo" xml:space="preserve">{0} वर्षाणि पूर्वम्</x:String>
+  <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">ह्यः</x:String>
+  <x:String x:Key="Text.Preferences" xml:space="preserve">अभिरुचयः</x:String>
+  <x:String x:Key="Text.Preferences.AI" xml:space="preserve">AI</x:String>
+  <x:String x:Key="Text.Preferences.AI.AnalyzeDiffPrompt" xml:space="preserve">भेदविश्लेषणसूचना</x:String>
+  <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">API कुञ्चिका</x:String>
+  <x:String x:Key="Text.Preferences.AI.GenerateSubjectPrompt" xml:space="preserve">विषयोत्पादनसूचना</x:String>
+  <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">प्रतिरूपम्</x:String>
+  <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">नाम</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">प्रविष्टमूल्यं ENV तः API कुञ्चिकां लोडयितुं नाम अस्ति</x:String>
+  <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">सेवकः</x:String>
+  <x:String x:Key="Text.Preferences.AI.Streaming" xml:space="preserve">प्रवाहम् सक्षमं कुरुत</x:String>
+  <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">रूपम्</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.DefaultFont" xml:space="preserve">पूर्वनिर्धारितमुद्राक्षरम्</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.EditorTabWidth" xml:space="preserve">सम्पादकपटलविस्तारः</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.FontSize" xml:space="preserve">मुद्राक्षरमापनम्</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.FontSize.Default" xml:space="preserve">पूर्वनिर्धारितम्</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.FontSize.Editor" xml:space="preserve">सम्पादकः</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.MonospaceFont" xml:space="preserve">समदूरमुद्राक्षरम्</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.Theme" xml:space="preserve">प्रसङ्गः</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.ThemeOverrides" xml:space="preserve">प्रसङ्गाधिलेखनसञ्चिका</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.UseAutoHideScrollBars" xml:space="preserve">स्वयंगोपनस्खलनपट्टिकाः उपयुज्यन्ताम्</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">शीर्षकपट्टिकायां निश्चितपटलविस्तारम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">मूलवातायनचौकटम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">भेद/विलयनसाधनम्</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">भेदपरिमितयः</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">उपलभ्यचराः: $LOCAL, $REMOTE</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs" xml:space="preserve">विलयनपरिमितयः</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs.Tip" xml:space="preserve">उपलभ्यचराः: $BASE, $LOCAL, $REMOTE, $MERGED</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.Path" xml:space="preserve">संस्थापनमार्गः</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.Path.Placeholder" xml:space="preserve">भेद/विलयनसाधनस्य मार्गं प्रविष्टं कुरुत</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.Type" xml:space="preserve">साधनम्</x:String>
+  <x:String x:Key="Text.Preferences.General" xml:space="preserve">सामान्यम्</x:String>
+  <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">प्रारम्भे अद्यतनं परीक्षतु</x:String>
+  <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">दिनाङ्कप्रारूपम्</x:String>
+  <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">परिवर्तनवृक्षे संहतपत्रिकाः सक्षमं कुरुत</x:String>
+  <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">भाषा</x:String>
+  <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">इतिहासप्रतिबद्धानि</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">आलेखे प्रतिबद्धकालस्थाने लेखककालं दर्शयतु</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">पूर्वनिर्धारितरूपेण `स्थानीयपरिवर्तनानि` पृष्ठं दर्शयतु</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">पूर्वनिर्धारितरूपेण प्रतिबद्धविवरणे `परिवर्तनानि` पटलं दर्शयतु</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">प्रतिबद्धविवरणे अपत्यानि दर्शयतु</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">प्रतिबद्धालेखे चिह्नानि दर्शयतु</x:String>
+  <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">विषयमार्गदर्शिदीर्घता</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">२४-होराः</x:String>
+  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub शैल्याः पूर्वनिर्धारितप्रतिमां रचयतु</x:String>
+  <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">स्वयं CRLF सक्षमं कुरुत</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">LF रूपेण प्रतिबध्नातु, CRLF रूपेण निष्कासयतु</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">प्रतिबद्धने केवलं CRLF तः LF परिवर्तयतु</x:String>
+  <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">परिवर्तनं मा कुरुत</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">स्थानीयं दूरस्थं च द्वयोः कृते CRLF उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">पूर्वनिर्धारितप्रतिरूपणनिर्देशिका</x:String>
+  <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">उपयोक्तृविद्युत्पत्रम्</x:String>
+  <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">वैश्विकं Git उपयोक्तृविद्युत्पत्रम्</x:String>
+  <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">आनयनानन्तरं मृतशाखाः शोधयतु</x:String>
+  <x:String x:Key="Text.Preferences.Git.IgnoreCRAtEOLInDiff" xml:space="preserve">पाठभेदे पङ्क्त्यन्ते CR उपेक्षतु</x:String>
+  <x:String x:Key="Text.Preferences.Git.Invalid" xml:space="preserve">अस्य अनुप्रयोगस्य कृते Git (&gt;= 2.25.1) आवश्यकः</x:String>
+  <x:String x:Key="Text.Preferences.Git.Path" xml:space="preserve">संस्थापनमार्गः</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSLVerify" xml:space="preserve">HTTP SSL सत्यापनं सक्षमं कुरुत</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseLibsecret" xml:space="preserve">git-credential-manager स्थाने git-credential-libsecret उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.Preferences.Git.User" xml:space="preserve">उपयोक्तृनाम</x:String>
+  <x:String x:Key="Text.Preferences.Git.User.Placeholder" xml:space="preserve">वैश्विकं Git उपयोक्तृनाम</x:String>
+  <x:String x:Key="Text.Preferences.Git.Version" xml:space="preserve">Git संस्करणम्</x:String>
+  <x:String x:Key="Text.Preferences.GPG" xml:space="preserve">GPG हस्ताक्षरः</x:String>
+  <x:String x:Key="Text.Preferences.GPG.CommitEnabled" xml:space="preserve">प्रतिबद्धस्य GPG हस्ताक्षरः</x:String>
+  <x:String x:Key="Text.Preferences.GPG.Format" xml:space="preserve">GPG प्रारूपम्</x:String>
+  <x:String x:Key="Text.Preferences.GPG.Path" xml:space="preserve">कार्यक्रमसंस्थापनमार्गः</x:String>
+  <x:String x:Key="Text.Preferences.GPG.Path.Placeholder" xml:space="preserve">संस्थापितस्य GPG कार्यक्रमस्य मार्गं प्रविष्टं कुरुत</x:String>
+  <x:String x:Key="Text.Preferences.GPG.TagEnabled" xml:space="preserve">चिह्नस्य GPG हस्ताक्षरः</x:String>
+  <x:String x:Key="Text.Preferences.GPG.UserKey" xml:space="preserve">उपयोक्तृहस्ताक्षरकुञ्चिका</x:String>
+  <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">उपयोक्तुः GPG हस्ताक्षरकुञ्चिका</x:String>
+  <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">एकीकरणम्</x:String>
+  <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">शेल्/सम्प्रेषकम्</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">परिमितयः</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">कार्यनिर्देशिकां सूचयितुं '.' उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">मार्गः</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">शेल्/सम्प्रेषकम्</x:String>
+  <x:String x:Key="Text.PruneRemote" xml:space="preserve">दूरस्थं शोधयतु</x:String>
+  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">कार्यवृक्षान् शोधयतु</x:String>
+  <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">`$GIT_COMMON_DIR/worktrees` मध्ये कार्यवृक्षसूचनां शोधयतु</x:String>
+  <x:String x:Key="Text.Pull" xml:space="preserve">आकर्षणम्</x:String>
+  <x:String x:Key="Text.Pull.Branch" xml:space="preserve">दूरस्थशाखा:</x:String>
+  <x:String x:Key="Text.Pull.Into" xml:space="preserve">मध्ये:</x:String>
+  <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">स्थानीयपरिवर्तनानि:</x:String>
+  <x:String x:Key="Text.Pull.LocalChanges.Discard" xml:space="preserve">त्यजतु</x:String>
+  <x:String x:Key="Text.Pull.LocalChanges.StashAndReapply" xml:space="preserve">निक्षिप्य पुनःप्रयोजयतु</x:String>
+  <x:String x:Key="Text.Pull.Remote" xml:space="preserve">दूरस्थम्:</x:String>
+  <x:String x:Key="Text.Pull.Title" xml:space="preserve">आकर्षणम् (आनयनम् तथा विलयनम्)</x:String>
+  <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">विलयनस्थाने पुनःस्थापनम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.Push" xml:space="preserve">प्रेषणम्</x:String>
+  <x:String x:Key="Text.Push.CheckSubmodules" xml:space="preserve">उपमॉड्यूलानि प्रेषितानि इति सुनिश्चितं कुरुत</x:String>
+  <x:String x:Key="Text.Push.Force" xml:space="preserve">बलात् प्रेषयतु</x:String>
+  <x:String x:Key="Text.Push.Local" xml:space="preserve">स्थानीयशाखा:</x:String>
+  <x:String x:Key="Text.Push.New" xml:space="preserve">नवीनम्</x:String>
+  <x:String x:Key="Text.Push.Remote" xml:space="preserve">दूरस्थम्:</x:String>
+  <x:String x:Key="Text.Push.Revision" xml:space="preserve">संशोधनम्:</x:String>
+  <x:String x:Key="Text.Push.Revision.Title" xml:space="preserve">संशोधनं दूरस्थं प्रेषयतु</x:String>
+  <x:String x:Key="Text.Push.Title" xml:space="preserve">परिवर्तनानि दूरस्थं प्रेषयतु</x:String>
+  <x:String x:Key="Text.Push.To" xml:space="preserve">दूरस्थशाखा:</x:String>
+  <x:String x:Key="Text.Push.Tracking" xml:space="preserve">अनुसरणशाखारूपेण निर्धारयतु</x:String>
+  <x:String x:Key="Text.Push.WithAllTags" xml:space="preserve">सर्वचिह्नानि प्रेषयतु</x:String>
+  <x:String x:Key="Text.PushTag" xml:space="preserve">चिह्नं दूरस्थं प्रेषयतु</x:String>
+  <x:String x:Key="Text.PushTag.PushAllRemotes" xml:space="preserve">सर्वदूरस्थेषु प्रेषयतु</x:String>
+  <x:String x:Key="Text.PushTag.Remote" xml:space="preserve">दूरस्थम्:</x:String>
+  <x:String x:Key="Text.PushTag.Tag" xml:space="preserve">चिह्नम्:</x:String>
+  <x:String x:Key="Text.PushToNewBranch" xml:space="preserve">नवीनशाखां प्रति प्रेषयतु</x:String>
+  <x:String x:Key="Text.PushToNewBranch.Title" xml:space="preserve">नवीनदूरस्थशाखायाः नाम प्रविष्टं कुरुत:</x:String>
+  <x:String x:Key="Text.Quit" xml:space="preserve">बहिर्गच्छतु</x:String>
+  <x:String x:Key="Text.Rebase" xml:space="preserve">वर्तमानशाखायाः पुनःस्थापनम्</x:String>
+  <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">स्थानीयपरिवर्तनानि निक्षिप्य पुनःप्रयोजयतु</x:String>
+  <x:String x:Key="Text.Rebase.On" xml:space="preserve">उपरि:</x:String>
+  <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">दूरस्थं योजयतु</x:String>
+  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">दूरस्थं सम्पादयतु</x:String>
+  <x:String x:Key="Text.Remote.Name" xml:space="preserve">नाम:</x:String>
+  <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">दूरस्थनाम</x:String>
+  <x:String x:Key="Text.Remote.URL" xml:space="preserve">भण्डार-URL:</x:String>
+  <x:String x:Key="Text.Remote.URL.Placeholder" xml:space="preserve">दूरस्थं Git भण्डार-URL</x:String>
+  <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">URL प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
+  <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">विलोपयतु...</x:String>
+  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">सम्पादयतु...</x:String>
+  <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">आनयतु</x:String>
+  <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">अन्तर्जाले उद्घाटयतु</x:String>
+  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">शोधयतु</x:String>
+  <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">कार्यवृक्षापसारणं सुनिश्चितं कुरुत</x:String>
+  <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">`--force` विकल्पं सक्षमं कुरुत</x:String>
+  <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.RenameBranch" xml:space="preserve">शाखायाः पुनर्नामकरणम्</x:String>
+  <x:String x:Key="Text.RenameBranch.Name" xml:space="preserve">नवीननाम:</x:String>
+  <x:String x:Key="Text.RenameBranch.Name.Placeholder" xml:space="preserve">अस्यै शाखायै अनन्यं नाम</x:String>
+  <x:String x:Key="Text.RenameBranch.Target" xml:space="preserve">शाखा:</x:String>
+  <x:String x:Key="Text.Repository.Abort" xml:space="preserve">परित्यजतु</x:String>
+  <x:String x:Key="Text.Repository.AutoFetching" xml:space="preserve">दूरस्थेभ्यः स्वयं परिवर्तनानि आनीयन्ते...</x:String>
+  <x:String x:Key="Text.Repository.BranchSort" xml:space="preserve">क्रमयतु</x:String>
+  <x:String x:Key="Text.Repository.BranchSort.ByCommitterDate" xml:space="preserve">प्रतिबद्धकर्तृदिनाङ्केन</x:String>
+  <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">नाम्ना</x:String>
+  <x:String x:Key="Text.Repository.Clean" xml:space="preserve">शुद्धिः (GC तथा शोधनम्)</x:String>
+  <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">अस्य भण्डारस्य कृते `git gc` आदेशं चालयतु।</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">आक्रामकम् अनुकूलनम्</x:String>
+  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">भेदसंपीडनं मूलतः पुनर्गणयतु। अधिककालम् अपेक्षते किन्तु उत्तमपरिणामान् उत्पादयति। बृहत्-आयातस्य वा इतिहासपुनर्लेखनस्य अनन्तरमेव अनुशंस्यते।</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">सूचिकाविस्मृतिं मार्जयतु</x:String>
+  <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">सूचिकां पुनर्निर्मातुं `git rm -r --cached .` तथा `git add .` चालयतु।</x:String>
+  <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">सर्वं मार्जयतु</x:String>
+  <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">मार्जयतु</x:String>
+  <x:String x:Key="Text.Repository.Configure" xml:space="preserve">एतद् भण्डारं विन्यसतु</x:String>
+  <x:String x:Key="Text.Repository.Continue" xml:space="preserve">अग्रे गच्छतु</x:String>
+  <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">अभिरुचिक्रियाः</x:String>
+  <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">अभिरुचिक्रियाः नास्ति</x:String>
+  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">नियन्त्रणफलकम्</x:String>
+  <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">सर्वपरिवर्तनानि त्यजतु</x:String>
+  <x:String x:Key="Text.Repository.Explore" xml:space="preserve">सञ्चिकाप्रदर्शके उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Repository.Filter" xml:space="preserve">शाखाः/चिह्नानि/उपमॉड्यूलानि अन्विष्यतु</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits" xml:space="preserve">आलेखे दृश्यता</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Default" xml:space="preserve">अनिर्धारितम्</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">प्रतिबद्धालेखात् गोपयतु</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">प्रतिबद्धालेखे छानयतु</x:String>
+  <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">सर्वं सङ्कोचयतु</x:String>
+  <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">विन्यासः</x:String>
+  <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">क्षैतिजम्</x:String>
+  <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">ऊर्ध्वाधरम्</x:String>
+  <x:String x:Key="Text.Repository.HistoriesOrder" xml:space="preserve">प्रतिबद्धक्रमः</x:String>
+  <x:String x:Key="Text.Repository.HistoriesOrder.ByDate" xml:space="preserve">प्रतिबद्धदिनाङ्कः</x:String>
+  <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">स्थलाकृतिशः</x:String>
+  <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">स्थानीयशाखाः</x:String>
+  <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">अधिकविकल्पाः...</x:String>
+  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">HEAD प्रति गच्छतु</x:String>
+  <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">शाखां रचयतु</x:String>
+  <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">सूचनाः मार्जयतु</x:String>
+  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">केवलं वर्तमानशाखां प्रकाशयतु</x:String>
+  <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">पत्रिकारूपेण उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">{0} मध्ये उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">बाह्यसाधनेषु उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Repository.Remotes" xml:space="preserve">दूरस्थानि</x:String>
+  <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">दूरस्थं योजयतु</x:String>
+  <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">समाधानम्</x:String>
+  <x:String x:Key="Text.Repository.Search" xml:space="preserve">प्रतिबद्धम् अन्विष्यतु</x:String>
+  <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">लेखकः</x:String>
+  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">प्रतिबद्धकर्ता</x:String>
+  <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">विषयः</x:String>
+  <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">सन्देशः</x:String>
+  <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">मार्गः</x:String>
+  <x:String x:Key="Text.Repository.Search.BySHA" xml:space="preserve">SHA</x:String>
+  <x:String x:Key="Text.Repository.Search.InCurrentBranch" xml:space="preserve">वर्तमानशाखा</x:String>
+  <x:String x:Key="Text.Repository.ShowDecoratedCommitsOnly" xml:space="preserve">केवलं अलङ्कृतप्रतिबद्धानि</x:String>
+  <x:String x:Key="Text.Repository.ShowFirstParentOnly" xml:space="preserve">केवलं प्रथमजनकः</x:String>
+  <x:String x:Key="Text.Repository.ShowFlags" xml:space="preserve">ध्वजान् दर्शयतु</x:String>
+  <x:String x:Key="Text.Repository.ShowLostCommits" xml:space="preserve">नष्टप्रतिबद्धानि दर्शयतु</x:String>
+  <x:String x:Key="Text.Repository.ShowSubmodulesAsTree" xml:space="preserve">उपमॉड्यूलानि वृक्षरूपेण दर्शयतु</x:String>
+  <x:String x:Key="Text.Repository.ShowTagsAsTree" xml:space="preserve">चिह्नानि वृक्षरूपेण दर्शयतु</x:String>
+  <x:String x:Key="Text.Repository.Skip" xml:space="preserve">लङ्घयतु</x:String>
+  <x:String x:Key="Text.Repository.Statistics" xml:space="preserve">साङ्ख्यिकी</x:String>
+  <x:String x:Key="Text.Repository.Submodules" xml:space="preserve">उपमॉड्यूलानि</x:String>
+  <x:String x:Key="Text.Repository.Submodules.Add" xml:space="preserve">उपमॉड्यूलं योजयतु</x:String>
+  <x:String x:Key="Text.Repository.Submodules.Update" xml:space="preserve">उपमॉड्यूलम् अद्यतनयतु</x:String>
+  <x:String x:Key="Text.Repository.Tags" xml:space="preserve">चिह्नानि</x:String>
+  <x:String x:Key="Text.Repository.Tags.Add" xml:space="preserve">नवीनचिह्नम्</x:String>
+  <x:String x:Key="Text.Repository.Tags.OrderByCreatorDate" xml:space="preserve">रचयितृदिनाङ्केन</x:String>
+  <x:String x:Key="Text.Repository.Tags.OrderByName" xml:space="preserve">नाम्ना</x:String>
+  <x:String x:Key="Text.Repository.Tags.Sort" xml:space="preserve">क्रमयतु</x:String>
+  <x:String x:Key="Text.Repository.Terminal" xml:space="preserve">सम्प्रेषके उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Repository.UnfoldAll" xml:space="preserve">सर्वं विस्तारयतु</x:String>
+  <x:String x:Key="Text.Repository.UseRelativeTimeInGraph" xml:space="preserve">सापेक्षकालम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.Repository.ViewLogs" xml:space="preserve">अभिलेखान् पश्यतु</x:String>
+  <x:String x:Key="Text.Repository.Visit" xml:space="preserve">अन्तर्जाले '{0}' पश्यतु</x:String>
+  <x:String x:Key="Text.Repository.Worktrees" xml:space="preserve">कार्यवृक्षाः</x:String>
+  <x:String x:Key="Text.Repository.Worktrees.Add" xml:space="preserve">कार्यवृक्षं योजयतु</x:String>
+  <x:String x:Key="Text.Repository.Worktrees.Prune" xml:space="preserve">शोधयतु</x:String>
+  <x:String x:Key="Text.RepositoryURL" xml:space="preserve">Git भण्डार-URL</x:String>
+  <x:String x:Key="Text.Reset" xml:space="preserve">वर्तमानशाखां संशोधनं प्रति पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.Reset.Mode" xml:space="preserve">पुनःस्थापनप्रकारः:</x:String>
+  <x:String x:Key="Text.Reset.MoveTo" xml:space="preserve">प्रति स्थानान्तरयतु:</x:String>
+  <x:String x:Key="Text.Reset.Target" xml:space="preserve">वर्तमानशाखा:</x:String>
+  <x:String x:Key="Text.ResetWithoutCheckout" xml:space="preserve">शाखां पुनःस्थापयतु (निष्कासनं विना)</x:String>
+  <x:String x:Key="Text.ResetWithoutCheckout.MoveTo" xml:space="preserve">प्रति स्थानान्तरयतु:</x:String>
+  <x:String x:Key="Text.ResetWithoutCheckout.Target" xml:space="preserve">शाखा:</x:String>
+  <x:String x:Key="Text.RevealFile" xml:space="preserve">सञ्चिकाप्रदर्शके प्रकाशयतु</x:String>
+  <x:String x:Key="Text.Revert" xml:space="preserve">प्रतिबद्धं प्रत्यावर्तयतु</x:String>
+  <x:String x:Key="Text.Revert.Commit" xml:space="preserve">प्रतिबद्धम्:</x:String>
+  <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">प्रत्यावर्तनपरिवर्तनानि प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.Reword" xml:space="preserve">प्रतिबद्धसन्देशं पुनर्लिखतु</x:String>
+  <x:String x:Key="Text.Running" xml:space="preserve">चलति। कृपया प्रतीक्षताम्...</x:String>
+  <x:String x:Key="Text.Save" xml:space="preserve">रक्षतु</x:String>
+  <x:String x:Key="Text.SaveAs" xml:space="preserve">इति रक्षतु...</x:String>
+  <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">पैच् सफलतया रक्षितम्!</x:String>
+  <x:String x:Key="Text.ScanRepositories" xml:space="preserve">भण्डाराणि परीक्षतु</x:String>
+  <x:String x:Key="Text.ScanRepositories.RootDir" xml:space="preserve">मूलनिर्देशिका:</x:String>
+  <x:String x:Key="Text.ScanRepositories.UseCustomDir" xml:space="preserve">अन्यां अभिरुचिनिर्देशिकां परीक्षतु</x:String>
+  <x:String x:Key="Text.SelfUpdate" xml:space="preserve">अद्यतनं परीक्षतु...</x:String>
+  <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">अस्य तन्त्रांशस्य नवीनसंस्करणम् उपलभ्यते: </x:String>
+  <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">वर्तमानसंस्करणम्: </x:String>
+  <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">अद्यतनपरीक्षणं विफलम्!</x:String>
+  <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">अवतारयतु तथा संस्थापयतु</x:String>
+  <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">अवतारयतु</x:String>
+  <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">एतत् संस्करणं लङ्घयतु</x:String>
+  <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">नवीनसंस्करणप्रकाशनतिथिः: </x:String>
+  <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">तन्त्रांशाद्यतनम्</x:String>
+  <x:String x:Key="Text.SelfUpdate.UpToDate" xml:space="preserve">सम्प्रति कोऽपि अद्यतनं नोपलभ्यते।</x:String>
+  <x:String x:Key="Text.SetSubmoduleBranch" xml:space="preserve">उपमॉड्यूलशाखां निर्धारयतु</x:String>
+  <x:String x:Key="Text.SetSubmoduleBranch.Submodule" xml:space="preserve">उपमॉड्यूलम्:</x:String>
+  <x:String x:Key="Text.SetSubmoduleBranch.Current" xml:space="preserve">वर्तमानम्:</x:String>
+  <x:String x:Key="Text.SetSubmoduleBranch.New" xml:space="preserve">प्रति परिवर्तयतु:</x:String>
+  <x:String x:Key="Text.SetSubmoduleBranch.New.Tip" xml:space="preserve">ऐच्छिकम्। रिक्ते सति पूर्वनिर्धारितं निर्धार्यते।</x:String>
+  <x:String x:Key="Text.SetUpstream" xml:space="preserve">अनुसरणशाखां निर्धारयतु</x:String>
+  <x:String x:Key="Text.SetUpstream.Local" xml:space="preserve">शाखा:</x:String>
+  <x:String x:Key="Text.SetUpstream.Unset" xml:space="preserve">ऊर्ध्वप्रवाहम् अपसारयतु</x:String>
+  <x:String x:Key="Text.SetUpstream.Upstream" xml:space="preserve">ऊर्ध्वप्रवाहः:</x:String>
+  <x:String x:Key="Text.SHALinkCM.CopySHA" xml:space="preserve">SHA प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">गच्छतु</x:String>
+  <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">HEAD जनके संपीडयतु</x:String>
+  <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">HEAD जनके संशोधयतु</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">समाप्त्यनन्तरं बलात् प्रेषयतु</x:String>
+  <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">मध्ये:</x:String>
+  <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH गोपनकुञ्चिका:</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">गोपन-SSH कुञ्चिकाभण्डारणमार्गः</x:String>
+  <x:String x:Key="Text.Start" xml:space="preserve">प्रारभतु</x:String>
+  <x:String x:Key="Text.Stash" xml:space="preserve">निक्षेपः</x:String>
+  <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">अननुसृतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
+  <x:String x:Key="Text.Stash.Message" xml:space="preserve">सन्देशः:</x:String>
+  <x:String x:Key="Text.Stash.Message.Placeholder" xml:space="preserve">ऐच्छिकम्। अस्य निक्षेपस्य सन्देशः</x:String>
+  <x:String x:Key="Text.Stash.Mode" xml:space="preserve">प्रकारः:</x:String>
+  <x:String x:Key="Text.Stash.OnlyStagedChanges" xml:space="preserve">केवलं स्थापितपरिवर्तनानि</x:String>
+  <x:String x:Key="Text.Stash.TipForSelectedFiles" xml:space="preserve">चयनितसञ्चिकानां स्थापित-अस्थापितपरिवर्तनानि द्वयमपि निक्षिप्यते!!!</x:String>
+  <x:String x:Key="Text.Stash.Title" xml:space="preserve">स्थानीयपरिवर्तनानि निक्षिपतु</x:String>
+  <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">प्रयोजयतु</x:String>
+  <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">परिवर्तनानि प्रयोजयतु</x:String>
+  <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">सन्देशं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">त्यजतु</x:String>
+  <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">पैच्रूपेण रक्षतु...</x:String>
+  <x:String x:Key="Text.StashDropConfirm" xml:space="preserve">निक्षेपं त्यजतु</x:String>
+  <x:String x:Key="Text.StashDropConfirm.Label" xml:space="preserve">त्यजतु:</x:String>
+  <x:String x:Key="Text.Stashes" xml:space="preserve">निक्षेपाः</x:String>
+  <x:String x:Key="Text.Stashes.Changes" xml:space="preserve">परिवर्तनानि</x:String>
+  <x:String x:Key="Text.Stashes.Stashes" xml:space="preserve">निक्षेपाः</x:String>
+  <x:String x:Key="Text.Statistics" xml:space="preserve">साङ्ख्यिकी</x:String>
+  <x:String x:Key="Text.Statistics.Overview" xml:space="preserve">अवलोकनम्</x:String>
+  <x:String x:Key="Text.Statistics.ThisMonth" xml:space="preserve">मासः</x:String>
+  <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">सप्ताहः</x:String>
+  <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">लेखकाः: </x:String>
+  <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">प्रतिबद्धानि: </x:String>
+  <x:String x:Key="Text.Submodule" xml:space="preserve">उपमॉड्यूलानि</x:String>
+  <x:String x:Key="Text.Submodule.Add" xml:space="preserve">उपमॉड्यूलं योजयतु</x:String>
+  <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">शाखा</x:String>
+  <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">शाखा</x:String>
+  <x:String x:Key="Text.Submodule.CopyPath" xml:space="preserve">सापेक्षमार्गः</x:String>
+  <x:String x:Key="Text.Submodule.Deinit" xml:space="preserve">अनारम्भयतु</x:String>
+  <x:String x:Key="Text.Submodule.FetchNested" xml:space="preserve">नीडितोपमॉड्यूलानि आनयतु</x:String>
+  <x:String x:Key="Text.Submodule.Histories" xml:space="preserve">इतिहासः</x:String>
+  <x:String x:Key="Text.Submodule.Move" xml:space="preserve">स्थानान्तरयतु</x:String>
+  <x:String x:Key="Text.Submodule.Open" xml:space="preserve">भण्डारं उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Submodule.RelativePath" xml:space="preserve">सापेक्षमार्गः:</x:String>
+  <x:String x:Key="Text.Submodule.RelativePath.Placeholder" xml:space="preserve">एतन्मॉड्यूलभण्डारणार्थं सापेक्षपत्रिका।</x:String>
+  <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">विलोपयतु</x:String>
+  <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">शाखां निर्धारयतु</x:String>
+  <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">URL परिवर्तयतु</x:String>
+  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">स्थितिः</x:String>
+  <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">परिवर्तितम्</x:String>
+  <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">अनारब्धम्</x:String>
+  <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">संशोधनं परिवर्तितम्</x:String>
+  <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">अविलीनम्</x:String>
+  <x:String x:Key="Text.Submodule.Update" xml:space="preserve">अद्यतनयतु</x:String>
+  <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.Sure" xml:space="preserve">अस्तु</x:String>
+  <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">चिह्नकर्ता</x:String>
+  <x:String x:Key="Text.Tag.Time" xml:space="preserve">कालः</x:String>
+  <x:String x:Key="Text.TagCM.CompareTwo" xml:space="preserve">द्वे चिह्ने तुलयतु</x:String>
+  <x:String x:Key="Text.TagCM.CompareWith" xml:space="preserve">तुलना...</x:String>
+  <x:String x:Key="Text.TagCM.CompareWithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
+  <x:String x:Key="Text.TagCM.Copy.Message" xml:space="preserve">सन्देशः</x:String>
+  <x:String x:Key="Text.TagCM.Copy.Name" xml:space="preserve">नाम</x:String>
+  <x:String x:Key="Text.TagCM.Copy.Tagger" xml:space="preserve">चिह्नकर्ता</x:String>
+  <x:String x:Key="Text.TagCM.CopyName" xml:space="preserve">चिह्ननाम प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
+  <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">${0}$ विलोपयतु...</x:String>
+  <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">चयनितानि {0} चिह्नानि विलोपयतु...</x:String>
+  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">${0}$ ${1}$ मध्ये विलयतु...</x:String>
+  <x:String x:Key="Text.TagCM.Push" xml:space="preserve">${0}$ प्रेषयतु...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">उपमॉड्यूलानि अद्यतनयतु</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">सर्वोपमॉड्यूलानि</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Init" xml:space="preserve">आवश्यकतानुसारम् आरम्भयतु</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Target" xml:space="preserve">उपमॉड्यूलम्:</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.UpdateToRemoteTrackingBranch" xml:space="preserve">उपमॉड्यूलस्य दूरस्थानुसरणशाखां प्रति अद्यतनयतु</x:String>
+  <x:String x:Key="Text.URL" xml:space="preserve">URL:</x:String>
+  <x:String x:Key="Text.ViewLogs" xml:space="preserve">अभिलेखाः</x:String>
+  <x:String x:Key="Text.ViewLogs.Clear" xml:space="preserve">सर्वं मार्जयतु</x:String>
+  <x:String x:Key="Text.ViewLogs.CopyLog" xml:space="preserve">प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.ViewLogs.Delete" xml:space="preserve">विलोपयतु</x:String>
+  <x:String x:Key="Text.Warn" xml:space="preserve">चेतावनी</x:String>
+  <x:String x:Key="Text.Welcome" xml:space="preserve">स्वागतपृष्ठम्</x:String>
+  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">समूहं रचयतु</x:String>
+  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">उपसमूहं रचयतु</x:String>
+  <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">भण्डारं प्रतिरूपयतु</x:String>
+  <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">विलोपयतु</x:String>
+  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">आकर्षणस्थापनं समर्थितम्। अभिरुचिसमूहीकरणं समर्थितम्।</x:String>
+  <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">सम्पादयतु</x:String>
+  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">अन्यसमूहं प्रति स्थानान्तरयतु</x:String>
+  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">सर्वभण्डाराणि उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">भण्डारम् उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">सम्प्रेषकम् उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">पूर्वनिर्धारितप्रतिरूपणनिर्देशिकायां भण्डाराणि पुनः परीक्षतु</x:String>
+  <x:String x:Key="Text.Welcome.Search" xml:space="preserve">भण्डाराणि अन्विष्यतु...</x:String>
+  <x:String x:Key="Text.WorkingCopy" xml:space="preserve">स्थानीयपरिवर्तनानि</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git उपेक्षा</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">सर्वाः *{0} सञ्चिकाः उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">समानपत्रिकायां *{0} सञ्चिकाः उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">अस्यां पत्रिकायाम् अननुसृतसञ्चिकाः उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">केवलम् एतां सञ्चिकाम् उपेक्षतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">संशोधयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">भवान् अधुना एतां सञ्चिकां स्थापयितुं शक्नोति।</x:String>
+  <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">इतिहासं मार्जयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.ClearCommitHistories.Confirm" xml:space="preserve">किं भवान् निश्चितः यत् सर्वं प्रतिबद्धसन्देशेतिहासं मार्जयितुम् इच्छति? एतत् कर्म पूर्ववत् कर्तुं न शक्यते।</x:String>
+  <x:String x:Key="Text.WorkingCopy.Commit" xml:space="preserve">प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitAndPush" xml:space="preserve">प्रतिबध्य प्रेषयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitMessageHelper" xml:space="preserve">प्रारूपम्/इतिहासः</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">क्लिक्-घटनां प्रवर्तयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">प्रतिबध्नातु (सम्पादनम्)</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">सर्वपरिवर्तनानि स्थापयित्वा प्रतिबध्नातु</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">भवान् विच्छिन्नशीर्षे प्रतिबद्धं रचयति। किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">भवता {0} सञ्चिकाः स्थापिताः किन्तु केवलं {1} सञ्चिकाः प्रदर्श्यन्ते ({2} सञ्चिकाः छानिताः)। किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">विरोधाः अवगताः</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">विलयनम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">बाह्यसाधनेन विलयनम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.OpenExternalMergeToolAllConflicts" xml:space="preserve">सर्वविरोधान् बाह्यविलयनसाधने उद्घाटयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.Resolved" xml:space="preserve">सञ्चिकाविरोधाः समाधिताः</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.UseMine" xml:space="preserve">मदीयम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.UseTheirs" xml:space="preserve">तदीयम् उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.IncludeUntracked" xml:space="preserve">अननुसृतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.NoCommitHistories" xml:space="preserve">नवीनाः निवेशसन्देशाः नास्ति</x:String>
+  <x:String x:Key="Text.WorkingCopy.NoCommitTemplates" xml:space="preserve">प्रतिबद्धप्रारूपाणि नास्ति</x:String>
+  <x:String x:Key="Text.WorkingCopy.NoVerify" xml:space="preserve">सत्यापनं विना</x:String>
+  <x:String x:Key="Text.WorkingCopy.ResetAuthor" xml:space="preserve">लेखकं पुनःस्थापयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.SignOff" xml:space="preserve">हस्ताक्षरः</x:String>
+  <x:String x:Key="Text.WorkingCopy.Staged" xml:space="preserve">स्थापितम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.Staged.Unstage" xml:space="preserve">अस्थापयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.Staged.UnstageAll" xml:space="preserve">सर्वम् अस्थापयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.Unstaged" xml:space="preserve">अस्थापितम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.Unstaged.Stage" xml:space="preserve">स्थापयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">सर्वं स्थापयतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">अपरिवर्तितगृहीतानि पश्यतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">प्रारूपम्: ${0}$</x:String>
+  <x:String x:Key="Text.Workspace" xml:space="preserve">कार्यस्थलम्: </x:String>
+  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">कार्यस्थलानि विन्यसतु...</x:String>
+  <x:String x:Key="Text.Worktree" xml:space="preserve">कार्यवृक्षः</x:String>
+  <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">शाखा</x:String>
+  <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">मार्गं प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.Worktree.Head" xml:space="preserve">HEAD</x:String>
+  <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">तालयतु</x:String>
+  <x:String x:Key="Text.Worktree.Open" xml:space="preserve">उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Worktree.Path" xml:space="preserve">मार्गः</x:String>
+  <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">अपसारयतु</x:String>
+  <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">उद्घाटयतु</x:String>
+  <x:String x:Key="Text.Yes" xml:space="preserve">आम्</x:String>
+</ResourceDictionary>

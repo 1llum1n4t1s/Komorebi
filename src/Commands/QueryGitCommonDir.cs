@@ -31,10 +31,8 @@ namespace Komorebi.Commands
                 return string.Empty;
 
             var dir = rs.StdOut.Trim();
-            // 相対パスの場合はWorkingDirectoryを基準に絶対パスに変換
-            if (Path.IsPathRooted(dir))
-                return dir;
-            return Path.GetFullPath(Path.Combine(WorkingDirectory, dir));
+            // 相対パスの場合はWorkingDirectoryを基準に絶対パスに変換（基底クラスの共通メソッド使用）
+            return ResolveGitRelativePath(dir);
         }
     }
 }

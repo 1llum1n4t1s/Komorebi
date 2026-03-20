@@ -61,9 +61,9 @@
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Ignorer les changements d'espaces blancs</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">LE BLÂME SUR CE FICHIER N'EST PAS SUPPORTÉ!!!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">Récupérer ${0}$...</x:String>
-  <x:String x:Key="Text.BranchCM.CompareWithHead" xml:space="preserve">Comparer avec HEAD</x:String>
-  <x:String x:Key="Text.BranchCM.CompareWith" xml:space="preserve">Comparer avec...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">Comparer les 2 branches sélectionnées</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWith" xml:space="preserve">Comparer avec...</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithHead" xml:space="preserve">Comparer avec HEAD</x:String>
   <x:String x:Key="Text.BranchCM.CopyName" xml:space="preserve">Copier le nom de la branche</x:String>
   <x:String x:Key="Text.BranchCM.CreatePR" xml:space="preserve">Créer une PR...</x:String>
   <x:String x:Key="Text.BranchCM.CreatePRForUpstream" xml:space="preserve">Créer une PR pour l'upstream ${0}$...</x:String>
@@ -98,9 +98,9 @@
   <x:String x:Key="Text.ChangeCM.CheckoutFirstParentRevision" xml:space="preserve">Réinitialiser à la révision parente</x:String>
   <x:String x:Key="Text.ChangeCM.CheckoutThisRevision" xml:space="preserve">Réinitialiser à cette révision</x:String>
   <x:String x:Key="Text.ChangeCM.GenerateCommitMessage" xml:space="preserve">Générer un message de commit</x:String>
-  <x:String x:Key="Text.ChangeCM.ResetFileTo" xml:space="preserve">Réinitialiser le(s) fichier(s) à ${0}$</x:String>
-  <x:String x:Key="Text.ChangeCM.MergeExternal" xml:space="preserve">Fusionner (externe)</x:String>
   <x:String x:Key="Text.ChangeCM.Merge" xml:space="preserve">Fusionner (intégré)</x:String>
+  <x:String x:Key="Text.ChangeCM.MergeExternal" xml:space="preserve">Fusionner (externe)</x:String>
+  <x:String x:Key="Text.ChangeCM.ResetFileTo" xml:space="preserve">Réinitialiser le(s) fichier(s) à ${0}$</x:String>
   <x:String x:Key="Text.ChangeDisplayMode" xml:space="preserve">CHANGER LE MODE D'AFFICHAGE</x:String>
   <x:String x:Key="Text.ChangeDisplayMode.Grid" xml:space="preserve">Afficher comme liste de dossiers/fichiers</x:String>
   <x:String x:Key="Text.ChangeDisplayMode.List" xml:space="preserve">Afficher comme liste de chemins</x:String>
@@ -195,34 +195,34 @@
   <x:String x:Key="Text.CommitDetail.Info.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.CommitDetail.Info.Signer" xml:space="preserve">Signataire :</x:String>
   <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">Ouvrir dans le navigateur</x:String>
-  <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">Saisissez le message de commit. Utilisez une ligne vide pour séparer le sujet de la description !</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.Column" xml:space="preserve">COL</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">Saisissez le message de commit. Utilisez une ligne vide pour séparer le sujet de la description !</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">SUJET</x:String>
   <x:String x:Key="Text.Compare" xml:space="preserve">Comparer</x:String>
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Comparer avec HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configurer le dépôt</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">MODÈLE DE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés : 
-  
-  ${branch_name} Nom de la branche locale actuelle.
-  ${files_num} Nombre de fichiers modifiés
-  ${files} Chemins des fichiers modifiés
-  ${files:N} Nombre maximum N de chemins de fichiers modifiés
-  ${pure_files} Comme ${files}, mais uniquement les noms de fichiers purs
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés : &#xD;
+  &#xD;
+  ${branch_name} Nom de la branche locale actuelle.&#xD;
+  ${files_num} Nombre de fichiers modifiés&#xD;
+  ${files} Chemins des fichiers modifiés&#xD;
+  ${files:N} Nombre maximum N de chemins de fichiers modifiés&#xD;
+  ${pure_files} Comme ${files}, mais uniquement les noms de fichiers purs&#xD;
   ${pure_files:N} Comme ${files:N}, mais sans les dossiers</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contenu de modèle:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nom de modèle:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTION PERSONNALISÉE</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Arguments :</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés : 
-  
-  ${REPO} Chemin du dépôt
-  ${REMOTE} Dépôt distant sélectionné ou dépôt distant de la branche sélectionnée
-  ${BRANCH} Branche sélectionnée, sans la partie ${REMOTE} pour les branches distantes
-  ${BRANCH_FRIENDLY_NAME} Nom d'affichage de la branche sélectionnée, contient la partie ${REMOTE} pour les branches distantes
-  ${SHA} Hash du commit sélectionné
-  ${TAG} Tag sélectionné
-  ${FILE} Fichier sélectionné, relatif à la racine du dépôt
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés : &#xD;
+  &#xD;
+  ${REPO} Chemin du dépôt&#xD;
+  ${REMOTE} Dépôt distant sélectionné ou dépôt distant de la branche sélectionnée&#xD;
+  ${BRANCH} Branche sélectionnée, sans la partie ${REMOTE} pour les branches distantes&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nom d'affichage de la branche sélectionnée, contient la partie ${REMOTE} pour les branches distantes&#xD;
+  ${SHA} Hash du commit sélectionné&#xD;
+  ${TAG} Tag sélectionné&#xD;
+  ${FILE} Fichier sélectionné, relatif à la racine du dépôt&#xD;
   $1, $2 ... Paramètres d'entrée utilisateur</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Fichier exécutable :</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Paramètres d'entrée utilisateur :</x:String>
@@ -398,8 +398,8 @@
   <x:String x:Key="Text.DropHead" xml:space="preserve">Supprimer le Commit</x:String>
   <x:String x:Key="Text.DropHead.Commit" xml:space="preserve">Commit :</x:String>
   <x:String x:Key="Text.DropHead.NewHead" xml:space="preserve">Nouveau HEAD :</x:String>
-  <x:String x:Key="Text.EditBranchDescription.Target" xml:space="preserve">Cible :</x:String>
   <x:String x:Key="Text.EditBranchDescription" xml:space="preserve">Modifier la description de la branche</x:String>
+  <x:String x:Key="Text.EditBranchDescription.Target" xml:space="preserve">Cible :</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Signet :</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Nouveau nom :</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Cible :</x:String>
@@ -514,8 +514,8 @@
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">Ajouter tous les changements et commit</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Fetch, démarre directement</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Mode tableau de bord (Défaut)</x:String>
-  <x:String x:Key="Text.Hotkeys.Repo.GoToParent" xml:space="preserve">Aller au commit parent du commit sélectionné</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">Aller au commit enfant du commit sélectionné</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoToParent" xml:space="preserve">Aller au commit parent du commit sélectionné</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.OpenCommandPalette" xml:space="preserve">Ouvrir la palette de commandes</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.OpenSearchCommits" xml:space="preserve">Recherche de commit</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Pull" xml:space="preserve">Pull, démarre directement</x:String>
@@ -537,9 +537,9 @@
   <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
   <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Chemin :</x:String>
+  <x:String x:Key="Text.InitSetup" xml:space="preserve">Configuration initiale</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Veuillez sélectionner votre langue préférée et le répertoire par défaut pour le clonage des dépôts.</x:String>
   <x:String x:Key="Text.InitSetup.Dir" xml:space="preserve">Répertoire de clonage</x:String>
-  <x:String x:Key="Text.InitSetup" xml:space="preserve">Configuration initiale</x:String>
   <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">Cherry-Pick en cours.</x:String>
   <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">Traitement du commit</x:String>
   <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">Merge request en cours.</x:String>
@@ -566,22 +566,22 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Dans :</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Option de merge:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Source:</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.UseTheirs" xml:space="preserve">UTILISER LE LEUR</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.UseMine" xml:space="preserve">UTILISER LE MIEN</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">UTILISER LES DEUX</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">Abandonner les modifications non enregistrées ?</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.Undo" xml:space="preserve">ANNULER</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Conflits de fusion</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">LEUR</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">ENREGISTRER &amp; INDEXER</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">RÉSULTAT</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">Conflit précédent</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.NextConflict" xml:space="preserve">Conflit suivant</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.Mine" xml:space="preserve">MIEN</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.ConflictsRemaining" xml:space="preserve">{0} conflit(s) restant(s)</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.AllResolved" xml:space="preserve">Tous les conflits sont résolus</x:String>
-  <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">D'abord les leurs, puis les miens</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">D'abord les miens, puis les leurs</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">D'abord les leurs, puis les miens</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">UTILISER LES DEUX</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.AllResolved" xml:space="preserve">Tous les conflits sont résolus</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.ConflictsRemaining" xml:space="preserve">{0} conflit(s) restant(s)</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Mine" xml:space="preserve">MIEN</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.NextConflict" xml:space="preserve">Conflit suivant</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">Conflit précédent</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">RÉSULTAT</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">ENREGISTRER &amp; INDEXER</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">LEUR</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Conflits de fusion</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">Abandonner les modifications non enregistrées ?</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UseMine" xml:space="preserve">UTILISER LE MIEN</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.UseTheirs" xml:space="preserve">UTILISER LE LEUR</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.Undo" xml:space="preserve">ANNULER</x:String>
   <x:String x:Key="Text.MergeMultiple" xml:space="preserve">Fusionner (Plusieurs)</x:String>
   <x:String x:Key="Text.MergeMultiple.CommitChanges" xml:space="preserve">Commit tous les changement</x:String>
   <x:String x:Key="Text.MergeMultiple.Strategy" xml:space="preserve">Stratégie:</x:String>
@@ -606,8 +606,8 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Fermer les autres onglets</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Fermer les onglets à droite</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Copier le chemin vers le dépôt</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Actualiser</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">Déplacer vers l'espace de travail</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Actualiser</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Dépôts</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Coller</x:String>
   <x:String x:Key="Text.Period.DaysAgo" xml:space="preserve">il y a {0} jours</x:String>
@@ -643,10 +643,10 @@
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">Utiliser des onglets de taille fixe dans la barre de titre</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">Utiliser un cadre de fenêtre natif</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">OUTIL DIFF/MERGE</x:String>
-  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs.Tip" xml:space="preserve">Variables disponibles : $BASE, $LOCAL, $REMOTE, $MERGED</x:String>
-  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs" xml:space="preserve">Arguments de fusion</x:String>
-  <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">Variables disponibles : $LOCAL, $REMOTE</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">Arguments de diff</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">Variables disponibles : $LOCAL, $REMOTE</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs" xml:space="preserve">Arguments de fusion</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs.Tip" xml:space="preserve">Variables disponibles : $BASE, $LOCAL, $REMOTE, $MERGED</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Path" xml:space="preserve">Chemin d'installation</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Path.Placeholder" xml:space="preserve">Saisir le chemin d'installation de l'outil diff/merge</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Type" xml:space="preserve">Outil</x:String>
@@ -662,14 +662,14 @@
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Afficher les enfants dans les détails du commit</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Afficher les tags dans le graphique des commits</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Guide de longueur du sujet</x:String>
-  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Générer un avatar par défaut de style GitHub</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Générer un avatar par défaut de style GitHub</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Activer auto CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.True" xml:space="preserve">Valider en LF, extraire en CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.Input" xml:space="preserve">Convertir CRLF en LF uniquement lors de la validation</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Ne pas convertir</x:String>
-  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Forcer CRLF lors de la validation et de l'extraction</x:String>
+  <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Utiliser CRLF en local et en distant</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Répertoire de clônage par défaut</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">E-mail utilsateur</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">E-mail utilsateur global</x:String>
@@ -692,8 +692,8 @@
   <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">Clé de signature GPG de l'utilisateur</x:String>
   <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">INTEGRATION</x:String>
   <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">SHELL/TERMINAL</x:String>
-  <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Veuillez utiliser '.' pour indiquer le répertoire de travail</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">Arguments</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Veuillez utiliser '.' pour indiquer le répertoire de travail</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Chemin</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Shell/Terminal</x:String>
   <x:String x:Key="Text.PruneRemote" xml:space="preserve">Élaguer une branche distant</x:String>
@@ -869,9 +869,9 @@
   <x:String x:Key="Text.SHALinkCM.CopySHA" xml:space="preserve">Copier le SHA</x:String>
   <x:String x:Key="Text.SHALinkCM.NavigateTo" xml:space="preserve">Aller à</x:String>
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash du HEAD dans le parent</x:String>
-  <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Dans :</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup du HEAD dans le parent</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Forcer le push après l'opération</x:String>
+  <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Dans :</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clé privée SSH :</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Chemin du magasin de clés privées SSH</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">START</x:String>
@@ -924,9 +924,9 @@
   <x:String x:Key="Text.Sure" xml:space="preserve">OK</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">TAGUEUR</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">HEURE</x:String>
-  <x:String x:Key="Text.TagCM.CompareWithHead" xml:space="preserve">Comparer avec HEAD</x:String>
-  <x:String x:Key="Text.TagCM.CompareWith" xml:space="preserve">Comparer avec...</x:String>
   <x:String x:Key="Text.TagCM.CompareTwo" xml:space="preserve">Comparer les 2 tags</x:String>
+  <x:String x:Key="Text.TagCM.CompareWith" xml:space="preserve">Comparer avec...</x:String>
+  <x:String x:Key="Text.TagCM.CompareWithHead" xml:space="preserve">Comparer avec HEAD</x:String>
   <x:String x:Key="Text.TagCM.Copy.Message" xml:space="preserve">Message</x:String>
   <x:String x:Key="Text.TagCM.Copy.Name" xml:space="preserve">Nom</x:String>
   <x:String x:Key="Text.TagCM.Copy.Tagger" xml:space="preserve">Tagueur</x:String>
@@ -979,8 +979,8 @@
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">Vous êtes en train de créer un commit sur un HEAD détaché. Voulez-vous continuer ?</x:String>
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">Vous avez indexé {0} fichier(s) mais seulement {1} fichier(s) sont affichés ({2} fichiers sont filtrés). Voulez-vous continuer ?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">CONFLITS DÉTECTÉS</x:String>
-  <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">Fusionner avec un outil externe</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">FUSIONNER</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">Fusionner avec un outil externe</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.OpenExternalMergeToolAllConflicts" xml:space="preserve">OUVRIR TOUS LES CONFLITS DANS L'OUTIL DE FUSION EXTERNE</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Resolved" xml:space="preserve">LES CONFLITS DE FICHIER SONT RÉSOLUS</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.UseMine" xml:space="preserve">UTILISER LES MIENS</x:String>

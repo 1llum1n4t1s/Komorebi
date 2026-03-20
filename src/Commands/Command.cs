@@ -178,7 +178,8 @@ namespace Komorebi.Commands
                 if (RaiseError)
                 {
                     // エラーメッセージを結合してユーザーに通知する
-                    var errMsg = string.Join("\n", errs.ToArray()).Trim();
+                    // ConcurrentQueueはIEnumerable<T>を実装するため.ToArray()は不要
+                    var errMsg = string.Join("\n", errs).Trim();
                     if (!string.IsNullOrEmpty(errMsg))
                         App.RaiseException(Context, errMsg);
                 }
@@ -210,10 +211,11 @@ namespace Komorebi.Commands
                 return Result.Failed(e.Message);
             }
 
-            // 標準出力と標準エラーを全て読み取る
+            // stderrを別スレッドで読み取る（逐次読み取りはバッファ満杯時にデッドロックする）
             var rs = new Result() { IsSuccess = true };
+            var stderrTask = Task.Run(() => proc.StandardError.ReadToEnd());
             rs.StdOut = proc.StandardOutput.ReadToEnd();
-            rs.StdErr = proc.StandardError.ReadToEnd();
+            rs.StdErr = stderrTask.GetAwaiter().GetResult();
             proc.WaitForExit();
 
             // 終了コードで成功/失敗を判定する
@@ -241,10 +243,13 @@ namespace Komorebi.Commands
                 return Result.Failed(e.Message);
             }
 
-            // 標準出力と標準エラーを非同期で読み取る
+            // stdout/stderrを並列で読み取る（逐次読み取りはバッファ満杯時にデッドロックする）
             var rs = new Result() { IsSuccess = true };
-            rs.StdOut = await proc.StandardOutput.ReadToEndAsync(CancellationToken).ConfigureAwait(false);
-            rs.StdErr = await proc.StandardError.ReadToEndAsync(CancellationToken).ConfigureAwait(false);
+            var stdoutTask = proc.StandardOutput.ReadToEndAsync(CancellationToken);
+            var stderrTask = proc.StandardError.ReadToEndAsync(CancellationToken);
+            await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
+            rs.StdOut = await stdoutTask.ConfigureAwait(false);
+            rs.StdErr = await stderrTask.ConfigureAwait(false);
             await proc.WaitForExitAsync(CancellationToken).ConfigureAwait(false);
 
             // 終了コードで成功/失敗を判定する
@@ -277,7 +282,8 @@ namespace Komorebi.Commands
 
             // Force using this app as SSH askpass program
             // このアプリ自体をSSH askpassプログラムとして使用する設定
-            var selfExecFile = Process.GetCurrentProcess().MainModule!.FileName;
+            // アプリ実行中に変わらないためstaticキャッシュを使用（毎回カーネル呼び出しを回避）
+            var selfExecFile = s_selfExecFile;
             start.Environment.Add("SSH_ASKPASS", selfExecFile); // Can not use parameter here, because it invoked by SSH with `exec`
             start.Environment.Add("SSH_ASKPASS_REQUIRE", "prefer");
             start.Environment.Add("SOURCEGIT_LAUNCH_AS_ASKPASS", "TRUE");
@@ -331,6 +337,69 @@ namespace Komorebi.Commands
         }
 
         /// <summary>
+        ///     git diff/logの--name-status出力行をパースしてChangeオブジェクトに変換する共通メソッド。
+        ///     CompareRevisions/QueryFileHistoryの重複ロジックを統合。
+        /// </summary>
+        /// <param name="line">name-status形式の1行（例: "M\tsrc/foo.cs"）。</param>
+        /// <returns>パース成功時はChangeオブジェクト、失敗時はnull。</returns>
+        [GeneratedRegex(@"^([MAD])\s+(.+)$")]
+        private static partial Regex REG_NAME_STATUS();
+        [GeneratedRegex(@"^([CR])[0-9]{0,4}\s+(.+)$")]
+        private static partial Regex REG_NAME_STATUS_RENAME();
+
+        internal static (string path, Models.ChangeState state)? ParseNameStatusLine(string line)
+        {
+            var match = REG_NAME_STATUS().Match(line);
+            if (match.Success)
+            {
+                var state = match.Groups[1].Value[0] switch
+                {
+                    'M' => Models.ChangeState.Modified,
+                    'A' => Models.ChangeState.Added,
+                    'D' => Models.ChangeState.Deleted,
+                    _ => (Models.ChangeState?)null,
+                };
+                if (state.HasValue)
+                    return (match.Groups[2].Value, state.Value);
+            }
+
+            match = REG_NAME_STATUS_RENAME().Match(line);
+            if (match.Success)
+            {
+                var type = match.Groups[1].Value;
+                var state = type == "R" ? Models.ChangeState.Renamed : Models.ChangeState.Copied;
+                return (match.Groups[2].Value, state);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        ///     git出力の相対パスをWorkingDirectoryを基準に絶対パスに解決する共通メソッド。
+        ///     QueryGitDir/QueryGitCommonDirの重複ロジックを統合。
+        /// </summary>
+        /// <param name="path">gitから返されたパス（絶対or相対）。</param>
+        /// <returns>絶対パス。</returns>
+        protected string ResolveGitRelativePath(string path)
+        {
+            return System.IO.Path.IsPathRooted(path)
+                ? path
+                : System.IO.Path.GetFullPath(System.IO.Path.Combine(WorkingDirectory, path));
+        }
+
+        /// <summary>
+        ///     リモートに紐づくSSH鍵を取得してから非同期実行する共通メソッド。
+        ///     Push/Pull/Fetchの重複ロジックを統合。
+        /// </summary>
+        /// <param name="remote">リモート名。</param>
+        /// <returns>コマンドが成功した場合はtrue。</returns>
+        protected async Task<bool> ExecWithSSHKeyAsync(string remote)
+        {
+            SSHKey = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey").ConfigureAwait(false);
+            return await ExecAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
         ///     プロセス出力の各行を処理し、ログへの記録とエラー収集を行う。
         ///     進捗表示や不要な行はフィルタリングする。
         /// </summary>
@@ -375,6 +444,11 @@ namespace Komorebi.Commands
             /// </summary>
             public Process Process { get; set; } = null;
         }
+
+        /// <summary>
+        ///     自身の実行ファイルパスのキャッシュ（アプリ実行中は不変）。
+        /// </summary>
+        private static readonly string s_selfExecFile = Process.GetCurrentProcess().MainModule!.FileName;
 
         /// <summary>
         ///     進捗表示のパーセンテージパターンにマッチする正規表現。
