@@ -248,8 +248,8 @@ namespace Komorebi.Commands
             var stdoutTask = proc.StandardOutput.ReadToEndAsync(CancellationToken);
             var stderrTask = proc.StandardError.ReadToEndAsync(CancellationToken);
             await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
-            rs.StdOut = stdoutTask.Result;
-            rs.StdErr = stderrTask.Result;
+            rs.StdOut = await stdoutTask.ConfigureAwait(false);
+            rs.StdErr = await stderrTask.ConfigureAwait(false);
             await proc.WaitForExitAsync(CancellationToken).ConfigureAwait(false);
 
             // 終了コードで成功/失敗を判定する

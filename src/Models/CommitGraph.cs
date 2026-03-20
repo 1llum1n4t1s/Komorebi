@@ -251,7 +251,12 @@ namespace Komorebi.Models
                 {
                     unsolvedByNext.Clear();
                     foreach (var u in unsolved)
-                        unsolvedByNext[u.Next] = u;
+                    {
+                        // 同じNextを持つ複数のPathLink（複数ブランチが同じ祖先に収束するケース）を保持する
+                        // Dictionaryは上書きするため、最初のマッチのみ保持（旧List.Findと同じ挙動）
+                        if (!unsolvedByNext.ContainsKey(u.Next))
+                            unsolvedByNext[u.Next] = u;
+                    }
                 }
 
                 if (!firstParentOnlyEnabled)
