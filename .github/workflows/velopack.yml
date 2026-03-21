@@ -92,3 +92,4 @@ jobs:
         with:
           name: velopack.${{ matrix.label }}
           path: artifacts/*
+          retention-days: 3

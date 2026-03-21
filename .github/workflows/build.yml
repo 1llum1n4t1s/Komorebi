@@ -76,3 +76,4 @@ jobs:
         with:
           name: komorebi.${{ matrix.runtime }}
           path: publish/*
+          retention-days: 3
