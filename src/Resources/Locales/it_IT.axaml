@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Confronta con HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configura Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE DI COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri integrati:&#xD;
-&#xD;
-${branch_name} Nome del branch locale corrente.&#xD;
-${files_num} Numero di file modificati&#xD;
-${files} Percorsi dei file modificati&#xD;
-${files:N} Massimo N percorsi di file modificati&#xD;
-${pure_files} Come ${files}, ma solo nomi file puri&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri integrati:&#xD;&#xD;
+&#xD;&#xD;
+${branch_name} Nome del branch locale corrente.&#xD;&#xD;
+${files_num} Numero di file modificati&#xD;&#xD;
+${files} Percorsi dei file modificati&#xD;&#xD;
+${files:N} Massimo N percorsi di file modificati&#xD;&#xD;
+${pure_files} Come ${files}, ma solo nomi file puri&#xD;&#xD;
 ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contenuto Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nome Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">AZIONE PERSONALIZZATA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argomenti:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri integrati:&#xD;
-  &#xD;
-  ${REPO} Percorso del repository&#xD;
-  ${REMOTE} Remoto selezionato o remoto del branch selezionato&#xD;
-  ${BRANCH} Branch selezionato, senza la parte ${REMOTE} per i branch remoti&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nome amichevole del branch selezionato, contiene la parte ${REMOTE} per i branch remoti&#xD;
-  ${SHA} Hash del commit selezionato&#xD;
-  ${TAG} Tag selezionato&#xD;
-  ${FILE} File selezionato, relativo alla radice del repository&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri integrati:&#xD;&#xD;
+  &#xD;&#xD;
+  ${REPO} Percorso del repository&#xD;&#xD;
+  ${REMOTE} Remoto selezionato o remoto del branch selezionato&#xD;&#xD;
+  ${BRANCH} Branch selezionato, senza la parte ${REMOTE} per i branch remoti&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nome amichevole del branch selezionato, contiene la parte ${REMOTE} per i branch remoti&#xD;&#xD;
+  ${SHA} Hash del commit selezionato&#xD;&#xD;
+  ${TAG} Tag selezionato&#xD;&#xD;
+  ${FILE} File selezionato, relativo alla radice del repository&#xD;&#xD;
   $1, $2 ... Valori dei controlli di input</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">File Eseguibile:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Controlli di Input:</x:String>
@@ -964,8 +964,9 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Ignora tutti i file *{0}</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">Ignora i file *{0} nella stessa cartella</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Ignora file non tracciati in questa cartella</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Ignora la cartella '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">Ignora solo questo file</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">Ignora la cartella '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">Modifica</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">Puoi aggiungere in stage questo file ora.</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Cancella Cronologia</x:String>

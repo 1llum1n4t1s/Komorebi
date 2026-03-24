@@ -204,15 +204,15 @@
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">템플릿 이름:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">사용자 지정 작업</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">인수:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">내장 파라미터: &#xD;
-  &#xD;
-  ${REPO} 저장소 경로&#xD;
-  ${REMOTE} 선택한 원격 또는 선택한 브랜치의 원격&#xD;
-  ${BRANCH} 선택한 브랜치 (원격 브랜치의 경우 ${REMOTE} 부분 제외)&#xD;
-  ${BRANCH_FRIENDLY_NAME} 선택한 브랜치의 식별하기 쉬운 이름 (원격 브랜치의 경우 ${REMOTE} 부분 포함)&#xD;
-  ${SHA} 선택한 커밋의 해시&#xD;
-  ${TAG} 선택한 태그&#xD;
-  ${FILE} 저장소 루트에 상대적인 선택된 파일&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">내장 파라미터: &#xD;&#xD;
+  &#xD;&#xD;
+  ${REPO} 저장소 경로&#xD;&#xD;
+  ${REMOTE} 선택한 원격 또는 선택한 브랜치의 원격&#xD;&#xD;
+  ${BRANCH} 선택한 브랜치 (원격 브랜치의 경우 ${REMOTE} 부분 제외)&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 선택한 브랜치의 식별하기 쉬운 이름 (원격 브랜치의 경우 ${REMOTE} 부분 포함)&#xD;&#xD;
+  ${SHA} 선택한 커밋의 해시&#xD;&#xD;
+  ${TAG} 선택한 태그&#xD;&#xD;
+  ${FILE} 저장소 루트에 상대적인 선택된 파일&#xD;&#xD;
   $1, $2 ... 입력 컨트롤 값</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">실행 파일:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">입력 컨트롤:</x:String>
@@ -954,8 +954,9 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git 무시</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">모든 *{0} 파일 무시</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">같은 폴더의 *{0} 파일 무시</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">이 폴더의 추적하지 않는 파일 무시</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">'{0}' 폴더 무시</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">이 파일만 무시</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">'{0}' 폴더 무시</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">수정</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">이제 이 파일을 스테이징할 수 있습니다.</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">히스토리 지우기</x:String>

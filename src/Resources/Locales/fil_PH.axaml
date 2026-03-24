@@ -199,27 +199,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">I-configure ang Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE NG COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;
-&#xD;
-  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;
-  ${files_num} Bilang ng mga nabagong file&#xD;
-  ${files} Mga path ng nabagong file&#xD;
-  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;
-  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;
+&#xD;&#xD;
+  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;
+  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;
+  ${files} Mga path ng nabagong file&#xD;&#xD;
+  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;
+  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;
   ${pure_files:N} Katulad ng ${files:N}, ngunit walang mga folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Nilalaman ng Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Pangalan ng Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">CUSTOM NA AKSYON</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Mga Argumento:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;
-&#xD;
-  ${REPO} Path ng Repository&#xD;
-  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;
-  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;
-  ${SHA} Hash ng napiling commit&#xD;
-  ${TAG} Napiling tag&#xD;
-  ${FILE} Napiling file, relative sa root ng repository&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;
+&#xD;&#xD;
+  ${REPO} Path ng Repository&#xD;&#xD;
+  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;
+  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;
+  ${SHA} Hash ng napiling commit&#xD;&#xD;
+  ${TAG} Napiling tag&#xD;&#xD;
+  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;
   $1, $2 ... Mga halaga ng input control</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Executable File:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Mga Input Control:</x:String>
@@ -961,8 +961,9 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Huwag pansinin ang lahat ng *{0} na file</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">Huwag pansinin ang *{0} na file sa parehong folder</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Huwag pansinin ang mga untracked na file sa folder na ito</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Huwag pansinin ang folder na '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">Huwag pansinin ang file na ito lamang</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">Huwag pansinin ang folder na '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">Amend</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">Maaari mo nang i-stage ang file na ito.</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Burahin ang Kasaysayan</x:String>

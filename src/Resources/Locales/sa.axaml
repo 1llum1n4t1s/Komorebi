@@ -199,27 +199,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">भण्डारविन्यासः</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">प्रतिबद्धसन्देशप्रारूपम्</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:
-
-${branch_name} वर्तमानस्थानीयशाखानाम।
-${files_num} परिवर्तितसञ्चिकासंख्या
-${files} परिवर्तितसञ्चिकामार्गाः
-${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः
-${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;
+&#xD;
+${branch_name} वर्तमानस्थानीयशाखानाम।&#xD;
+${files_num} परिवर्तितसञ्चिकासंख्या&#xD;
+${files} परिवर्तितसञ्चिकामार्गाः&#xD;
+${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः&#xD;
+${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि&#xD;
 ${pure_files:N} ${files:N} सदृशं, किन्तु पत्रिकाभिः विना</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">प्रारूपविषयः:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">प्रारूपनाम:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">परिमितयः:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:
-
-${REPO} भण्डारमार्गः
-${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्
-${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना
-${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्
-${SHA} चयनितप्रतिबद्धस्य हैश्
-${TAG} चयनितं चिह्नम्
-${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;
+&#xD;
+${REPO} भण्डारमार्गः&#xD;
+${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्&#xD;
+${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना&#xD;
+${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्&#xD;
+${SHA} चयनितप्रतिबद्धस्य हैश्&#xD;
+${TAG} चयनितं चिह्नम्&#xD;
+${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा&#xD;
 $1, $2 ... निवेशनियन्त्रणमूल्यानि</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">निष्पादनीयसञ्चिका:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">निवेशनियन्त्रणानि:</x:String>
@@ -961,8 +961,9 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git उपेक्षा</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">सर्वाः *{0} सञ्चिकाः उपेक्षन्ताम्</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">समानपत्रिकायां *{0} सञ्चिकाः उपेक्षन्ताम्</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">अस्यां पत्रिकायाम् अननुसृतसञ्चिकाः उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">'{0}' सञ्चिकाकोषम् उपेक्षतु</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">केवलम् एतां सञ्चिकाम् उपेक्षतु</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">'{0}' सञ्चिकाकोषम् उपेक्षतु</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">संशोधयतु</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">भवान् अधुना एतां सञ्चिकां स्थापयितुं शक्नोति।</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">इतिहासं मार्जयतु</x:String>

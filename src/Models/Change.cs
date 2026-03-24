@@ -72,11 +72,11 @@
                 }
             }
 
-            if (Path.Length > 0 && Path[0] == '"')
-                Path = Path.Substring(1, Path.Length - 2);
+            if (Path.Length > 1 && Path[0] == '"' && Path[^1] == '"')
+                Path = Path[1..^1];
 
-            if (!string.IsNullOrEmpty(OriginalPath) && OriginalPath[0] == '"')
-                OriginalPath = OriginalPath.Substring(1, OriginalPath.Length - 2);
+            if (OriginalPath.Length > 1 && OriginalPath[0] == '"' && OriginalPath[^1] == '"')
+                OriginalPath = OriginalPath[1..^1];
         }
 
         private static readonly string[] TYPE_DESCS =

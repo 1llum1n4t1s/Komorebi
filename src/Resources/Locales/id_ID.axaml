@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Bandingkan dengan HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Konfigurasi Repositori</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;
-  &#xD;
-  ${branch_name} Nama branch lokal saat ini.&#xD;
-  ${files_num} Jumlah berkas yang diubah&#xD;
-  ${files} Jalur berkas yang diubah&#xD;
-  ${files:N} Maksimal N jalur berkas yang diubah&#xD;
-  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;&#xD;
+  &#xD;&#xD;
+  ${branch_name} Nama branch lokal saat ini.&#xD;&#xD;
+  ${files_num} Jumlah berkas yang diubah&#xD;&#xD;
+  ${files} Jalur berkas yang diubah&#xD;&#xD;
+  ${files:N} Maksimal N jalur berkas yang diubah&#xD;&#xD;
+  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;&#xD;
   ${pure_files:N} Seperti ${files:N}, tapi tanpa folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Konten Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nama Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">AKSI KUSTOM</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumen:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;
-  &#xD;
-  ${REPO} Jalur repositori&#xD;
-  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;
-  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;
-  ${SHA} Hash commit yang dipilih&#xD;
-  ${TAG} Tag yang dipilih&#xD;
-  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;&#xD;
+  &#xD;&#xD;
+  ${REPO} Jalur repositori&#xD;&#xD;
+  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;&#xD;
+  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;&#xD;
+  ${SHA} Hash commit yang dipilih&#xD;&#xD;
+  ${TAG} Tag yang dipilih&#xD;&#xD;
+  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;&#xD;
   $1, $2 ... Nilai kontrol input</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Berkas Eksekusi:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Kontrol Input:</x:String>
@@ -964,8 +964,9 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Abaikan semua berkas *{0}</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">Abaikan berkas *{0} di folder yang sama</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Abaikan berkas yang tidak dilacak di folder ini</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Abaikan folder '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">Abaikan hanya berkas ini</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">Abaikan folder '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">Amend</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">Anda dapat stage berkas ini sekarang.</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Bersihkan Riwayat</x:String>

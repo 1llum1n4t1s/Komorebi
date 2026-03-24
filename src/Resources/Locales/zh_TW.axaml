@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">與目前 HEAD 比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">存放庫設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">提交訊息範本</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;
-&#xD;
-  ${branch_name} 目前分支名稱&#xD;
-  ${files_num} 已變更檔案數&#xD;
-  ${files} 已變更檔案路徑清單&#xD;
-  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;
-  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;
+&#xD;&#xD;
+  ${branch_name} 目前分支名稱&#xD;&#xD;
+  ${files_num} 已變更檔案數&#xD;&#xD;
+  ${files} 已變更檔案路徑清單&#xD;&#xD;
+  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;
+  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;
   ${pure_files:N} 類似 ${files:N}，不含資料夾的純檔案名稱</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">範本內容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">範本名稱:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">自訂動作</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">指令參數:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;
-&#xD;
-  ${REPO} 存放庫路徑&#xD;
-  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;
-  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;
-  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;
-  ${SHA} 所選的提交編號&#xD;
-  ${TAG} 所選的標籤&#xD;
-  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;
+&#xD;&#xD;
+  ${REPO} 存放庫路徑&#xD;&#xD;
+  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;
+  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;
+  ${SHA} 所選的提交編號&#xD;&#xD;
+  ${TAG} 所選的標籤&#xD;&#xD;
+  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;
   $1, $2 ... 輸入控制項中的值</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">可執行檔案路徑:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">輸入控制項:</x:String>
@@ -964,8 +964,9 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">加入至 .gitignore 忽略清單</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">忽略所有 *{0} 檔案</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">忽略同路徑下所有 *{0} 檔案</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">忽略本路徑下的新增檔案</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">忽略 '{0}' 資料夾</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">忽略本檔案</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">忽略 '{0}' 資料夾</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">修補</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">現在您已可將其加入暫存區中</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">清除提交訊息歷史</x:String>

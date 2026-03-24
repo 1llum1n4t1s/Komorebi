@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Vergleichen mit HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Repository-Einstellungen</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">COMMIT-VORLAGE</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Vordefinierte Parameter:&#xD;
-&#xD;
-${branch_name} Name des aktuellen lokalen Branches.&#xD;
-${files_num} Anzahl der geänderten Dateien&#xD;
-${files} Pfade der geänderten Dateien&#xD;
-${files:N} Maximale Anzahl N an Pfaden geänderter Dateien&#xD;
-${pure_files} Wie ${files}, aber nur die reinen Dateinamen&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;
+&#xD;&#xD;
+${branch_name} Name des aktuellen lokalen Branches.&#xD;&#xD;
+${files_num} Anzahl der geänderten Dateien&#xD;&#xD;
+${files} Pfade der geänderten Dateien&#xD;&#xD;
+${files:N} Maximale Anzahl N an Pfaden geänderter Dateien&#xD;&#xD;
+${pure_files} Wie ${files}, aber nur die reinen Dateinamen&#xD;&#xD;
 ${pure_files:N} Wie ${files:N}, aber ohne Ordner</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Vorlageninhalt:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Vorlagenname:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">BENUTZERDEFINIERTE AKTION</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumente:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Vordefinierte Parameter:&#xD;
-&#xD;
-${REPO} Repository-Pfad&#xD;
-${REMOTE} Selektierter Remote oder selektierter Branch-Remote&#xD;
-${BRANCH} Selektierter Branch, ohne ${REMOTE}-Teil für Remote-Branches&#xD;
-${BRANCH_FRIENDLY_NAME} Benutzerfreundlicher Name des selektierten Branches, enthält ${REMOTE}-Teil für Remote-Branches&#xD;
-${SHA} Hash des selektierten Commits&#xD;
-${TAG} Ausgewählter Tag&#xD;
-${FILE} Ausgewählte Datei, relativ zum Stammverzeichnis des Repositorys&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;
+&#xD;&#xD;
+${REPO} Repository-Pfad&#xD;&#xD;
+${REMOTE} Selektierter Remote oder selektierter Branch-Remote&#xD;&#xD;
+${BRANCH} Selektierter Branch, ohne ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;
+${BRANCH_FRIENDLY_NAME} Benutzerfreundlicher Name des selektierten Branches, enthält ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;
+${SHA} Hash des selektierten Commits&#xD;&#xD;
+${TAG} Ausgewählter Tag&#xD;&#xD;
+${FILE} Ausgewählte Datei, relativ zum Stammverzeichnis des Repositorys&#xD;&#xD;
 $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Ausführbare Datei:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Eingabe-Steuerelemente:</x:String>
@@ -964,8 +964,9 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Ignoriere alle *{0} Dateien</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">Ignoriere *{0} Dateien im selben Ordner</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Ignoriere nicht-verfolgte Dateien in diesem Ordner</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Ordner '{0}' ignorieren</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">Ignoriere nur diese Datei</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">Ordner '{0}' ignorieren</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">Nachbesserung</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">Du kannst diese Datei jetzt stagen.</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Verlauf löschen</x:String>

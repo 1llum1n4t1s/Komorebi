@@ -31,12 +31,29 @@ dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64 -p:DisableAO
 dotnet build -p:DisableUpdateDetection=true
 ```
 
-No test project exists in this codebase.
+## Tests
+
+```bash
+# Run all tests
+dotnet test tests/Komorebi.Tests/Komorebi.Tests.csproj
+
+# Run specific test class
+dotnet test tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ChangeTests"
+
+# Run specific test method
+dotnet test tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ParseLine_Untracked"
+
+# Localization validation (CI enforced)
+node build/scripts/localization-check.js
+```
+
+Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komorebi.csproj`.
 
 ## Solution Structure
 
 `Komorebi.slnx` (XML-based solution file):
 - `src/Komorebi.csproj` — main application
+- `tests/Komorebi.Tests/` — xUnit v3 test project
 - `depends/AvaloniaEdit/` — git submodule (text editor for diff/blame views)
 - `.github/workflows/` — CI/CD workflows
 - `build/` — packaging scripts and resources
@@ -84,7 +101,7 @@ No test project exists in this codebase.
 - Compile flag `DISABLE_UPDATE_DETECTION` skips update checks entirely
 
 ### Localization
-- XAML resource dictionaries in `src/Resources/Locales/` (17 languages, 967 keys each)
+- XAML resource dictionaries in `src/Resources/Locales/` (17 languages)
 - Supported: de_DE, en_US, es_ES, fil_PH, fr_FR, id_ID, it_IT, ja_JP, ko_KR, la, pt_BR, ru_RU, sa, ta_IN, uk_UA, zh_CN, zh_TW
 - `en_US.axaml` is the reference locale — all other locales must match its key set
 - `build/scripts/localization-check.js` validates translations in CI
@@ -124,6 +141,9 @@ When a ViewModel needs results from multiple independent git commands, use `Task
 
 ### HttpClient must be reused
 `AvatarManager.cs` uses a static `HttpClient` instance. Never create `new HttpClient()` per request — it causes socket exhaustion.
+
+### Watcher lock scope must not include MarkWorkingCopyDirtyManually
+When using `LockWatcher()` in a `Popup.Sure()` override, the lock must be released **before** calling `MarkWorkingCopyDirtyManually()`. If the lock is held during the call, FileSystemWatcher events that were buffered during the lock get delivered after unlock, causing `_updateWC` to be re-set. This triggers a second `RefreshWorkingCopyChanges()` that cancels the first one's `CancellationToken`, resulting in the UI not updating. Use a block-scoped `using (_repo.LockWatcher()) { ... }` around the command execution only, then call `MarkWorkingCopyDirtyManually()` outside the block. See `Discard.cs` for the correct pattern.
 
 ### CommitGraph performance considerations
 `CommitGraph.Parse()` processes potentially tens of thousands of commits. It uses `HashSet` for O(1) color recycling checks and `Dictionary` for O(1) parent lookups. When modifying this code, avoid introducing `List.Find()`, `List.Contains()`, or `List.Remove()` in inner loops.

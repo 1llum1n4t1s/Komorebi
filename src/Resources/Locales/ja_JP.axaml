@@ -15,7 +15,7 @@
   <x:String x:Key="Text.AddWorktree.Location" xml:space="preserve">場所:</x:String>
   <x:String x:Key="Text.AddWorktree.Location.Placeholder" xml:space="preserve">この作業ツリーへのパス (相対パスも使用できます)</x:String>
   <x:String x:Key="Text.AddWorktree.Name" xml:space="preserve">ブランチの名前:</x:String>
-  <x:String x:Key="Text.AddWorktree.Name.Placeholder" xml:space="preserve">省略可能 - 既定では宛先のフォルダーと同じ名前が使用されます</x:String>
+  <x:String x:Key="Text.AddWorktree.Name.Placeholder" xml:space="preserve">省略可能 - 既定では宛先のフォルダと同じ名前が使用されます</x:String>
   <x:String x:Key="Text.AddWorktree.Tracking" xml:space="preserve">追跡するブランチ:</x:String>
   <x:String x:Key="Text.AddWorktree.Tracking.Toggle" xml:space="preserve">追跡するリモートブランチを設定</x:String>
   <x:String x:Key="Text.AddWorktree.WhatToCheckout" xml:space="preserve">チェックアウトする内容:</x:String>
@@ -133,7 +133,7 @@
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">リポジトリをクローンする際の追加の引数 (省略可能)</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">ローカル名:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">リポジトリの名前 (省略可能)</x:String>
-  <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">親フォルダー:</x:String>
+  <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">親フォルダ:</x:String>
   <x:String x:Key="Text.Clone.RecurseSubmodules" xml:space="preserve">サブモジュールを初期化して更新</x:String>
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">リポジトリの URL:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">閉じる</x:String>
@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD と比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">リポジトリの設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">コミットテンプレート</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:&#xD;
-&#xD;
-  ${branch_name} 現在のローカルブランチ名&#xD;
-  ${files_num} 変更されたファイル数&#xD;
-  ${files} 変更されたファイルへのパス&#xD;
-  ${files:N} 変更されたファイルへのパス (最大 N 件)&#xD;
-  ${pure_files} 変更されたファイルの名前&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;
+&#xD;&#xD;
+  ${branch_name} 現在のローカルブランチ名&#xD;&#xD;
+  ${files_num} 変更されたファイル数&#xD;&#xD;
+  ${files} 変更されたファイルへのパス&#xD;&#xD;
+  ${files:N} 変更されたファイルへのパス (最大 N 件)&#xD;&#xD;
+  ${pure_files} 変更されたファイルの名前&#xD;&#xD;
   ${pure_files:N} 変更されたファイルの名前 (最大 N 件)</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">テンプレートの内容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">テンプレート名:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">カスタムアクション</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">引数:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:&#xD;
-&#xD;
-  ${REPO} リポジトリへのパス&#xD;
-  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名&#xD;
-  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)&#xD;
-  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)&#xD;
-  ${SHA} 選択したコミットのハッシュ&#xD;
-  ${TAG} 選択したタグ名&#xD;
-  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;
+&#xD;&#xD;
+  ${REPO} リポジトリへのパス&#xD;&#xD;
+  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名&#xD;&#xD;
+  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)&#xD;&#xD;
+  ${SHA} 選択したコミットのハッシュ&#xD;&#xD;
+  ${TAG} 選択したタグ名&#xD;&#xD;
+  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス&#xD;&#xD;
   $1, $2 ... 入力プロンプトの値</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">実行ファイル:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">入力プロンプト:</x:String>
@@ -272,7 +272,7 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.CheckedValue.Tip" xml:space="preserve">チェックされたときにのみ、この値がコマンドライン引数として渡されます</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Description" xml:space="preserve">説明:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.DefaultValue" xml:space="preserve">既定値:</x:String>
-  <x:String x:Key="Text.ConfigureCustomActionControls.IsFolder" xml:space="preserve">フォルダー選択:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.IsFolder" xml:space="preserve">フォルダ選択:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">ラベル:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">選択肢:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">選択肢は '|' で区切って記述します</x:String>
@@ -653,7 +653,7 @@
   <x:String x:Key="Text.Preferences.General" xml:space="preserve">総合</x:String>
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">起動時にアップデートを確認</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">日付の書式</x:String>
-  <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">変更ツリーのフォルダー階層をまとめる</x:String>
+  <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">変更ツリーのフォルダ階層をまとめる</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">言語</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">コミット履歴</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">グラフにコミット日時ではなく著者の日時を表示</x:String>
@@ -789,7 +789,7 @@
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">ブランチを作成</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">通知を消去</x:String>
   <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">現在のブランチのみを強調表示</x:String>
-  <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">フォルダーとして開く</x:String>
+  <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">フォルダとして開く</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">{0} で開く</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">外部ツールで開く</x:String>
   <x:String x:Key="Text.Repository.Remotes" xml:space="preserve">リモート</x:String>
@@ -910,7 +910,7 @@
   <x:String x:Key="Text.Submodule.Move" xml:space="preserve">移動</x:String>
   <x:String x:Key="Text.Submodule.Open" xml:space="preserve">リポジトリを開く</x:String>
   <x:String x:Key="Text.Submodule.RelativePath" xml:space="preserve">相対パス:</x:String>
-  <x:String x:Key="Text.Submodule.RelativePath.Placeholder" xml:space="preserve">このモジュールを保存するフォルダーへの相対パス</x:String>
+  <x:String x:Key="Text.Submodule.RelativePath.Placeholder" xml:space="preserve">このモジュールを保存するフォルダへの相対パス</x:String>
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">ブランチを設定</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">URL を変更</x:String>
@@ -952,7 +952,7 @@
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">サブグループを作成</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">リポジトリをクローン</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">削除</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ドラッグ &amp; ドロップでフォルダーを追加できます。また、グループの作成・編集もできます。</x:String>
+  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ドラッグ &amp; ドロップでフォルダを追加できます。また、グループの作成・編集もできます。</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">編集</x:String>
   <x:String x:Key="Text.Welcome.Move" xml:space="preserve">別のグループに移動</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">すべてのリポジトリを開く</x:String>
@@ -962,10 +962,11 @@
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">リポジトリを検索...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">ローカルの変更</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">無視</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">すべての *{0} ファイルを無視</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">同一フォルダーの *{0} ファイルを無視</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">このフォルダーで未追跡のファイルを無視</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">このファイルのみを無視</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">すべての *{0} ファイルを無視する</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">同一フォルダの *{0} ファイルを無視する</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">'{0}' フォルダを無視する</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">このファイルのみを無視する</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">'{0}' フォルダを無視する</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">最後のコミットをやり直す</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">このファイルをステージに上げられるようになりました。</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">履歴を消去</x:String>

@@ -529,7 +529,7 @@ namespace Komorebi.Views
                         if (hasSelectedFolder)
                         {
                             var ignoreFolder = new MenuItem();
-                            ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder");
+                            ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder", selectedSingleFolder);
                             ignoreFolder.Click += (_, e) =>
                             {
                                 if (repo.CanCreatePopup())
@@ -550,6 +550,22 @@ namespace Komorebi.Views
                                 e.Handled = true;
                             };
                             addToIgnore.Items.Add(singleFile);
+
+                            // リスト表示でサブフォルダ内のファイルを右クリックした場合、
+                            // トップレベルフォルダの無視メニューを追加する
+                            if (!isRooted)
+                            {
+                                var topFolder = change.Path.Substring(0, change.Path.IndexOf('/'));
+                                var ignoreTopFolder = new MenuItem();
+                                ignoreTopFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.TopFolder", topFolder);
+                                ignoreTopFolder.Click += (_, e) =>
+                                {
+                                    if (repo.CanCreatePopup())
+                                        repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{topFolder}/"));
+                                    e.Handled = true;
+                                };
+                                addToIgnore.Items.Add(ignoreTopFolder);
+                            }
 
                             if (!string.IsNullOrEmpty(extension))
                             {
@@ -587,7 +603,7 @@ namespace Komorebi.Views
                         addToIgnore.Icon = App.CreateMenuIcon("Icons.GitIgnore");
 
                         var ignoreFolder = new MenuItem();
-                        ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder");
+                        ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder", selectedSingleFolder);
                         ignoreFolder.Click += (_, e) =>
                         {
                             if (repo.CanCreatePopup())
@@ -913,7 +929,7 @@ namespace Komorebi.Views
                 if (hasSelectedFolder)
                 {
                     var ignoreFolder = new MenuItem();
-                    ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder");
+                    ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder", selectedSingleFolder);
                     ignoreFolder.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())

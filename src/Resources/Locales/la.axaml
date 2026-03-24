@@ -199,27 +199,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Compara cum HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configura Repositorium</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">EXEMPLAR COMMITTENDI</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:
-
-  ${branch_name} Nomen rami localis praesentis.
-  ${files_num} Numerus documentorum mutatorum
-  ${files} Semitae documentorum mutatorum
-  ${files:N} Maxime N semitae documentorum mutatorum
-  ${pure_files} Ut ${files}, sed solum nomina documentorum
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;
+&#xD;
+  ${branch_name} Nomen rami localis praesentis.&#xD;
+  ${files_num} Numerus documentorum mutatorum&#xD;
+  ${files} Semitae documentorum mutatorum&#xD;
+  ${files:N} Maxime N semitae documentorum mutatorum&#xD;
+  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;
   ${pure_files:N} Ut ${files:N}, sed sine fasciculis</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contentum Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nomen Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTIO PROPRIA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumenta:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:
-
-  ${REPO} Semita repositorii
-  ${REMOTE} Remotum selectum vel remotum rami selecti
-  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis
-  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis
-  ${SHA} Hash committi selecti
-  ${TAG} Signum selectum
-  ${FILE} Documentum selectum, relativum ad radicem repositorii
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;
+&#xD;
+  ${REPO} Semita repositorii&#xD;
+  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;
+  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;
+  ${SHA} Hash committi selecti&#xD;
+  ${TAG} Signum selectum&#xD;
+  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;
   $1, $2 ... Valores moderaminum inscriptionis</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Documentum Exsecutabile:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Moderamina Inscriptionis:</x:String>
@@ -961,8 +961,9 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignora</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Ignora omnia documenta *{0}</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">Ignora documenta *{0} in eodem fasciculo</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Ignora documenta non vestigata in hoc fasciculo</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Ignora directorium '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.SingleFile" xml:space="preserve">Ignora solum hoc documentum</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">Ignora directorium '{0}'</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">Emenda</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">Potes hoc documentum nunc proponere.</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Purga Historiam</x:String>

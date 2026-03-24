@@ -102,22 +102,27 @@ namespace Komorebi.ViewModels
         /// </summary>
         public override async Task<bool> Sure()
         {
-            using var lockWatcher = _repo.LockWatcher();
             ProgressDescription = _changes == null ? "Discard all local changes ..." : $"Discard total {_changes.Count} changes ...";
 
             var log = _repo.CreateLog("Discard Changes");
             Use(log);
 
-            if (Mode is DiscardAllMode all)
+            // Watcherをロックして破棄操作中のFSイベントによるリフレッシュを抑止する。
+            // ロック解除後にMarkWorkingCopyDirtyManuallyを呼ぶことで、
+            // 遅延FSイベントによるリフレッシュ競合（キャンセル）を防ぐ。
+            using (_repo.LockWatcher())
             {
-                // 全変更破棄：追跡外・無視ファイルのオプション付き
-                await Commands.Discard.AllAsync(_repo.FullPath, all.IncludeUntracked, all.IncludeIgnored, log);
-                _repo.ClearCommitMessage();
-            }
-            else
-            {
-                // 選択された変更のみ破棄
-                await Commands.Discard.ChangesAsync(_repo.FullPath, _changes, log);
+                if (Mode is DiscardAllMode all)
+                {
+                    // 全変更破棄：追跡外・無視ファイルのオプション付き
+                    await Commands.Discard.AllAsync(_repo.FullPath, all.IncludeUntracked, all.IncludeIgnored, log);
+                    _repo.ClearCommitMessage();
+                }
+                else
+                {
+                    // 選択された変更のみ破棄
+                    await Commands.Discard.ChangesAsync(_repo.FullPath, _changes, log);
+                }
             }
 
             log.Complete();
