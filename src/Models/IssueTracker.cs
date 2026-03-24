@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.Models
@@ -46,8 +47,8 @@ namespace Komorebi.Models
                     {
                         try
                         {
-                            // 正規表現をコンパイル（複数行モード）
-                            _regex = new Regex(_regexString, RegexOptions.Multiline);
+                            // 正規表現をコンパイル（複数行モード、ReDoS対策にタイムアウト設定）
+                            _regex = new Regex(_regexString, RegexOptions.Multiline, TimeSpan.FromSeconds(1));
                         }
                         catch
                         {
@@ -90,28 +91,35 @@ namespace Komorebi.Models
             if (_regex == null || string.IsNullOrEmpty(_urlTemplate))
                 return;
 
-            // メッセージ中のすべてのマッチを検索
-            var matches = _regex.Matches(message);
-            foreach (Match match in matches)
+            try
             {
-                var start = match.Index;
-                var len = match.Length;
-
-                // 既存の要素と重複する場合はスキップ
-                if (outs.Intersect(start, len) != null)
-                    continue;
-
-                // URLテンプレートのプレースホルダーをマッチグループで置換
-                var link = _urlTemplate;
-                for (var j = 1; j < match.Groups.Count; j++)
+                // メッセージ中のすべてのマッチを検索
+                var matches = _regex.Matches(message);
+                foreach (Match match in matches)
                 {
-                    var group = match.Groups[j];
-                    if (group.Success)
-                        link = link.Replace($"${j}", group.Value);
-                }
+                    var start = match.Index;
+                    var len = match.Length;
 
-                // リンク要素として追加
-                outs.Add(new InlineElement(InlineElementType.Link, start, len, link));
+                    // 既存の要素と重複する場合はスキップ
+                    if (outs.Intersect(start, len) != null)
+                        continue;
+
+                    // URLテンプレートのプレースホルダーをマッチグループで置換
+                    var link = _urlTemplate;
+                    for (var j = 1; j < match.Groups.Count; j++)
+                    {
+                        var group = match.Groups[j];
+                        if (group.Success)
+                            link = link.Replace($"${j}", group.Value);
+                    }
+
+                    // リンク要素として追加
+                    outs.Add(new InlineElement(InlineElementType.Link, start, len, link));
+                }
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                // ReDoS対策：タイムアウト時は静かに中断
             }
         }
 

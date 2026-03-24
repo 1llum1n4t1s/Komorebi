@@ -56,6 +56,7 @@ namespace Komorebi.Models
         private const char VARIABLE_REGEX = '/';
         private const char NEWLINE = '\n';
         private const RegexOptions REGEX_OPTIONS = RegexOptions.Singleline | RegexOptions.IgnoreCase;
+        private static readonly TimeSpan s_regexTimeout = TimeSpan.FromSeconds(1);
 
         /// <summary>
         ///     テンプレート文字列を評価し、変数を展開した結果を返す
@@ -257,6 +258,7 @@ namespace Komorebi.Models
             var sb = new StringBuilder();
             var tok = _pos;
             var esc = false;
+            var found = false;
             while (Next() is { } c)
             {
                 if (esc)
@@ -276,7 +278,7 @@ namespace Komorebi.Models
                         }
                         break;
                     case VARIABLE_REGEX:
-                        // goto is fine
+                        found = true;
                         goto Loop_exit;
                     case NEWLINE:
                         // 改行は許可されない
@@ -284,6 +286,10 @@ namespace Komorebi.Models
                 }
             }
         Loop_exit:
+            // 終端デリミタが見つからずにEOFに達した場合は不正な構文
+            if (!found)
+                return null;
+
             sb.Append(_chars, tok, _pos - 1 - tok);
 
             try
@@ -291,7 +297,7 @@ namespace Komorebi.Models
                 var pattern = sb.ToString();
                 if (pattern.Length == 0)
                     return null;
-                var regex = new Regex(pattern, REGEX_OPTIONS);
+                var regex = new Regex(pattern, REGEX_OPTIONS, s_regexTimeout);
 
                 return regex;
             }
@@ -307,6 +313,7 @@ namespace Komorebi.Models
             var sb = new StringBuilder();
             var tok = _pos;
             var esc = false;
+            var found = false;
             while (Next() is { } c)
             {
                 if (esc)
@@ -326,7 +333,7 @@ namespace Komorebi.Models
                         }
                         break;
                     case VARIABLE_END:
-                        // goto is fine
+                        found = true;
                         goto Loop_exit;
                     case NEWLINE:
                         // no newlines allowed
@@ -334,6 +341,10 @@ namespace Komorebi.Models
                 }
             }
         Loop_exit:
+            // 終端デリミタが見つからずにEOFに達した場合は不正な構文
+            if (!found)
+                return null;
+
             sb.Append(_chars, tok, _pos - 1 - tok);
 
             var replacement = sb.ToString();
@@ -375,7 +386,16 @@ namespace Komorebi.Models
             var str = EvalVariable(context, variable.name);
             if (string.IsNullOrEmpty(str))
                 return str;
-            return variable.regex.Replace(str, variable.replacement);
+
+            try
+            {
+                return variable.regex.Replace(str, variable.replacement);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                // ReDoS対策：タイムアウト時は元の文字列をそのまま返す
+                return str;
+            }
         }
 
         /// <summary>現在のパーサー位置</summary>
