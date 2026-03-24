@@ -758,8 +758,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">名前順</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">クリーンアップ (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">このリポジトリに `git gc` コマンドを実行します。</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">強力な最適化（Aggressive）</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">デルタ圧縮をゼロからやり直します。通常より大幅に時間がかかりますが、より高い圧縮率が得られます。大量インポートや履歴書き換え後にのみ推奨されます。</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">インデックスキャッシュクリア</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">インデックスを再構築します (`git rm -r --cached .` → `git add .`)。</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">すべて消去</x:String>

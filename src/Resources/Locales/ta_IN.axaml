@@ -758,8 +758,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">பெயர் வாரியாக</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">சுத்தப்படுத்தல்(சீசி &amp; கத்தரித்தல்)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">இந்த களஞ்சியத்திற்கு `அறிவிலி சீசி` கட்டளையை இயக்கு.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">தீவிர தரமேற்றம்</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">டெல்டா சுருக்கத்தை புதிதாக கணக்கிடுங்கள். மிகவும் அதிக நேரம் எடுக்கும் ஆனால் சிறந்த முடிவுகளை அளிக்கும். பெரிய இறக்குமதிகள் அல்லது வரலாறு மாற்றங்களுக்குப் பிறகு மட்டுமே பரிந்துரைக்கப்படுகிறது.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">குறியீட்டு தற்காலிக சேமிப்பை அழி</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">`git rm -r --cached .` மற்றும் `git add .` இயக்கி குறியீட்டை மீளமைக்கவும்.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">அனைத்தையும் அழி</x:String>

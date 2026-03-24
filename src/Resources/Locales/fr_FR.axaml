@@ -758,8 +758,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Par Nom</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Nettoyage(GC &amp; Elaguage)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Lancer `git gc` pour ce repository.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Optimisation agressive</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Recalculer la compression delta depuis zéro. Prend beaucoup plus de temps mais produit de meilleurs résultats. Recommandé uniquement après de gros imports ou des réécritures d'historique.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Vider le cache de l'index</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Exécuter `git rm -r --cached .` et `git add .` pour reconstruire l'index.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Tout effacer</x:String>

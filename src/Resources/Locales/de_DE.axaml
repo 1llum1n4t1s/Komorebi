@@ -758,8 +758,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Nach Name</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Aufräumen (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Führt `git gc` in diesem Repository aus.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Aggressive Optimierung</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Delta-Komprimierung von Grund auf neu berechnen. Dauert deutlich länger, erzielt aber bessere Ergebnisse. Nur nach großen Importen oder History-Umschreibungen empfohlen.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Index-Cache leeren</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Führt `git rm -r --cached .` und `git add .` aus, um den Index neu aufzubauen.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Filter aufheben</x:String>

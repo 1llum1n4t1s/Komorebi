@@ -4,7 +4,8 @@ namespace Komorebi.ViewModels
 {
     /// <summary>
     ///     リポジトリクリーンアップダイアログのViewModel。
-    ///     git gc（ガベージコレクション）とpruneコマンドでリポジトリを最適化する。
+    ///     git gc --aggressive とpruneコマンドでリポジトリを最適化する。
+    ///     ツールバーから即時実行され、進捗はダイアログで表示される。
     /// </summary>
     public class Cleanup : Popup
     {
@@ -18,33 +19,21 @@ namespace Komorebi.ViewModels
         }
 
         /// <summary>
-        ///     Aggressiveモード（git gc --aggressive）を有効にするかどうか。
-        ///     デルタ圧縮をゼロからやり直し、より強力に最適化する。
-        ///     通常より大幅に時間がかかる。
-        /// </summary>
-        public bool Aggressive
-        {
-            get => _aggressive;
-            set => SetProperty(ref _aggressive, value);
-        }
-
-        /// <summary>
-        ///     確定処理。git gcコマンドを実行してリポジトリを最適化する。
+        ///     確定処理。git gc --aggressiveコマンドを実行してリポジトリを最適化する。
         ///     不要なオブジェクトの削除とパックファイルの再圧縮を行う。
         /// </summary>
         /// <returns>常にtrue</returns>
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            var desc = Aggressive ? "Cleanup (GC aggressive & prune) ..." : "Cleanup (GC & prune) ...";
-            ProgressDescription = desc;
+            ProgressDescription = "Cleanup (GC aggressive & prune) ...";
 
             // コマンドログを作成してGCを実行する
-            var log = _repo.CreateLog(desc);
+            var log = _repo.CreateLog("Cleanup (GC aggressive & prune)");
             Use(log);
 
-            // git gcコマンドでガベージコレクションとpruneを実行する
-            await new Commands.GC(_repo.FullPath, Aggressive)
+            // git gc --aggressiveコマンドでガベージコレクションとpruneを実行する
+            await new Commands.GC(_repo.FullPath, true)
                 .Use(log)
                 .ExecAsync();
 
@@ -54,6 +43,5 @@ namespace Komorebi.ViewModels
 
         /// <summary>対象リポジトリへの参照</summary>
         private readonly Repository _repo = null;
-        private bool _aggressive = false;
     }
 }

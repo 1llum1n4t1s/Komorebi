@@ -755,8 +755,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">नाम्ना</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">शुद्धिः (GC तथा शोधनम्)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">अस्य भण्डारस्य कृते `git gc` आदेशं चालयतु।</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">आक्रामकम् अनुकूलनम्</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">भेदसंपीडनं मूलतः पुनर्गणयतु। अधिककालम् अपेक्षते किन्तु उत्तमपरिणामान् उत्पादयति। बृहत्-आयातस्य वा इतिहासपुनर्लेखनस्य अनन्तरमेव अनुशंस्यते।</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">सूचिकाविस्मृतिं मार्जयतु</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">सूचिकां पुनर्निर्मातुं `git rm -r --cached .` तथा `git add .` चालयतु।</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">सर्वं मार्जयतु</x:String>

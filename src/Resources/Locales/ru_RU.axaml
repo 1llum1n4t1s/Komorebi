@@ -758,8 +758,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">По имени</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Очистить (Сбор мусора и удаление) </x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Запустить команду (git gc) для данного репозитория.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Агрессивная оптимизация</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Пересчитать дельта-сжатие с нуля. Занимает значительно больше времени, но даёт лучшие результаты. Рекомендуется только после крупного импорта или перезаписи истории.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Очистить кеш индекса</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Выполнить `git rm -r --cached .` и `git add .` для пересборки индекса.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Очистить всё</x:String>

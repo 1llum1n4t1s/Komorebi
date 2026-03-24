@@ -870,10 +870,10 @@ namespace Komorebi.ViewModels
         }
 
         /// <summary>リポジトリのクリーンアップ（git gc）を実行する。</summary>
-        public void Cleanup()
+        public async Task CleanupAsync()
         {
             if (CanCreatePopup())
-                ShowPopup(new Cleanup(this));
+                await ShowAndStartPopupAsync(new Cleanup(this));
         }
 
         /// <summary>インデックスキャッシュをクリアする。</summary>

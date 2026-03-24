@@ -748,8 +748,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">이름 순</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">정리 (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">이 저장소에 대해 `git gc` 명령을 실행합니다.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">강력한 최적화 (Aggressive)</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">델타 압축을 처음부터 다시 계산합니다. 시간이 훨씬 오래 걸리지만 더 나은 결과를 얻을 수 있습니다. 대량 가져오기 또는 기록 재작성 후에만 권장됩니다.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">인덱스 캐시 지우기</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">`git rm -r --cached .`와 `git add .`를 실행하여 인덱스를 재구축합니다.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">모두 지우기</x:String>

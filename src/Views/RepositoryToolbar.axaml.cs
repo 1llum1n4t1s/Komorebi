@@ -493,11 +493,11 @@ namespace Komorebi.Views
         /// <summary>
         ///     Cleanupの処理を行う。
         /// </summary>
-        private void Cleanup(object sender, RoutedEventArgs e)
+        private async void Cleanup(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository repo)
             {
-                repo.Cleanup();
+                await repo.CleanupAsync();
                 e.Handled = true;
             }
         }

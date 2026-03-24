@@ -755,8 +755,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Per Nomen</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Purga (GC &amp; Puta)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Exsequi mandatum `git gc` pro hoc repositorio.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Optimizatio aggressiva</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Recalcula compressionem deltam ab initio. Diutius durat sed meliora producit. Commendatur solum post magnas importationes vel rescriptiones historiae.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Purga Cache Indicis</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Exsequi `git rm -r --cached .` et `git add .` ad reaedificandum indicem.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Purga omnia</x:String>

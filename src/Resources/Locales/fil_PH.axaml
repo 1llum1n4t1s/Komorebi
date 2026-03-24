@@ -755,8 +755,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Ayon sa Pangalan</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Linisin (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Patakbuhin ang `git gc` command para sa repository na ito.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Agresibong pag-optimize</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Muling kalkulahin ang delta compression mula sa simula. Mas matagal ngunit mas magandang resulta. Inirerekomenda lamang pagkatapos ng malalaking import o pagsusulat muli ng history.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">I-clear ang Index Cache</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Patakbuhin ang `git rm -r --cached .` at `git add .` para i-rebuild ang index.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Burahin lahat</x:String>

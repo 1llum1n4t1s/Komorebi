@@ -754,8 +754,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">By Name</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Cleanup (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Run `git gc` command for this repository.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Aggressive optimization</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Recompute delta compression from scratch. Takes much longer but produces better results. Recommended only after large imports or history rewrites.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Clear Index Cache</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Run `git rm -r --cached .` and `git add .` to rebuild the index.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Clear all</x:String>

@@ -758,8 +758,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">按名称</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">清理本仓库(GC)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">本操作将执行`git gc`命令。</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">强力优化（Aggressive）</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">从头重新计算增量压缩。耗时更长，但能获得更好的压缩效果。仅建议在大量导入或历史记录重写后使用。</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">清除索引缓存</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">执行 `git rm -r --cached .` 和 `git add .` 以重建索引。</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">清空过滤规则</x:String>

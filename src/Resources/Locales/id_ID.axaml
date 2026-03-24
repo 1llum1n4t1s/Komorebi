@@ -758,8 +758,6 @@
   <x:String x:Key="Text.Repository.BranchSort.ByName" xml:space="preserve">Berdasarkan Nama</x:String>
   <x:String x:Key="Text.Repository.Clean" xml:space="preserve">Bersihkan (GC &amp; Prune)</x:String>
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Jalankan perintah `git gc` untuk repositori ini.</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressive" xml:space="preserve">Optimasi agresif</x:String>
-  <x:String x:Key="Text.Repository.CleanAggressiveTip" xml:space="preserve">Menghitung ulang kompresi delta dari awal. Membutuhkan waktu lebih lama tetapi menghasilkan hasil yang lebih baik. Hanya disarankan setelah impor besar atau penulisan ulang riwayat.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Bersihkan Cache Indeks</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Jalankan `git rm -r --cached .` dan `git add .` untuk membangun ulang indeks.</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Bersihkan semua</x:String>
