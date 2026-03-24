@@ -41,7 +41,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Remove worktree ...";
+            ProgressDescription = App.Text("Progress.RemoveWorktree");
 
             var log = _repo.CreateLog("Remove worktree");
             Use(log);

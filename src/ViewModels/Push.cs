@@ -252,7 +252,7 @@ namespace Komorebi.ViewModels
             using var lockWatcher = _repo.LockWatcher();
 
             var remoteBranchName = _selectedRemoteBranch.Name;
-            ProgressDescription = $"Push {_selectedLocalBranch.Name} -> {_selectedRemote.Name}/{remoteBranchName} ...";
+            ProgressDescription = App.Text("Progress.Pushing", _selectedLocalBranch.Name, _selectedRemote.Name, remoteBranchName);
 
             var log = _repo.CreateLog("Push");
             Use(log);

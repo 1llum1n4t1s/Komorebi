@@ -133,7 +133,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Editing remote '{_remote.Name}' ...";
+            ProgressDescription = App.Text("Progress.EditingRemote", _remote.Name);
 
             // リモート名が変更された場合はリネーム
             if (_remote.Name != _name)

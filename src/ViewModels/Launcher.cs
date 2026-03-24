@@ -133,7 +133,7 @@ namespace Komorebi.ViewModels
             {
                 if (!one.CanCreatePopup() || one.Data is Repository { IsAutoFetching: true })
                 {
-                    App.RaiseException(null, "You have unfinished task(s) in opened pages. Please wait!!!");
+                    App.RaiseException(null, App.Text("Error.UnfinishedTasks"));
                     return;
                 }
             }
@@ -339,7 +339,7 @@ namespace Komorebi.ViewModels
             // リポジトリパスの存在チェック
             if (!Path.Exists(node.Id))
             {
-                App.RaiseException(node.Id, "Repository does NOT exist any more. Please remove it.");
+                App.RaiseException(node.Id, App.Text("Error.RepositoryNotExist"));
                 return;
             }
 
@@ -348,7 +348,7 @@ namespace Komorebi.ViewModels
             var gitDir = isBare ? node.Id : GetRepositoryGitDir(node.Id);
             if (string.IsNullOrEmpty(gitDir))
             {
-                App.RaiseException(node.Id, "Given path is not a valid git repository!");
+                App.RaiseException(node.Id, App.Text("Error.InvalidGitRepository"));
                 return;
             }
 

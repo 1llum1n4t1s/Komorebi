@@ -107,7 +107,7 @@ namespace Komorebi.ViewModels
             using var lockWatcher = _repo.LockWatcher();
             // コミットメッセージをクリアする（チェリーピック後のコンフリクト解決用）
             _repo.ClearCommitMessage();
-            ProgressDescription = "Cherry-Pick commit(s) ...";
+            ProgressDescription = App.Text("Progress.CherryPick");
 
             var log = _repo.CreateLog("Cherry-Pick");
             Use(log);

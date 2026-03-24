@@ -36,7 +36,7 @@ namespace Komorebi.Commands
             var rs = await ReadToEndAsync().ConfigureAwait(false);
             if (!rs.IsSuccess)
             {
-                App.RaiseException(Context, $"Failed to query commits for interactive-rebase. Reason: {rs.StdErr}");
+                App.RaiseException(Context, App.Text("Error.FailedToQueryInteractiveRebase", rs.StdErr));
                 return commits;
             }
 

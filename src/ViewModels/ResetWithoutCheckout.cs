@@ -57,7 +57,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Reset {Target.Name} to {_revision} ...";
+            ProgressDescription = App.Text("Progress.ResettingWithoutCheckout", Target.Name, _revision);
 
             var log = _repo.CreateLog($"Reset '{Target.Name}' to '{_revision}'");
             Use(log);

@@ -65,7 +65,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Deleting branch...";
+            ProgressDescription = App.Text("Progress.DeletingBranch");
 
             var log = _repo.CreateLog("Delete Branch");
             Use(log);

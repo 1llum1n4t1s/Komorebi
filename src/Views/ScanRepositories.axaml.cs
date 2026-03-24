@@ -44,7 +44,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select root scanning directory: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectScanDir", ex.Message));
             }
 
             e.Handled = true;

@@ -1007,4 +1007,107 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">अपसारयतु</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">उद्घाटयतु</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">आम्</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">अप्रतिबद्धानि स्थानीयपरिवर्तनानि सन्ति। कृपया प्रथमं तानि त्यजतु वा संगृह्णातु।</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect चलति! कृपया नवं प्रारभ्य पूर्वं निवर्तयतु।</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">चयने विरोधयुक्तानि अविरोधयुक्तानि च परिवर्तनानि सन्ति!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">स्थानं चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">जनकसञ्चिकाकोशं चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Patch इति रक्षितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">सञ्चिकां रक्षितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">पूर्वनिर्धारितं clone निर्देशिकां चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Git कार्यान्वयनसञ्चिकां चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">GPG कार्यक्रमं चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Shell/terminal चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Merge उपकरणं चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">स्वकीयक्रियायै कार्यक्रमं चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">अन्वेषणमूलनिर्देशिकां चेतुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">भण्डारं उद्घाटयितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">परिवर्तनानि त्यक्तुं न शक्तम्। कारणम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Commit सन्देशं जनयितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Commits अन्वेषितुं न शक्तम्। कारणम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">सम्वादात्मक rebase हेतु commits अन्वेषितुं न शक्तम्। कारणम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">सञ्चिकाविषयं अन्वेषितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">सूचिकां नवीकर्तुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">सञ्चिकां रक्षितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Patch परिवर्तनं रक्षितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">भण्डाराणि अन्वेषितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">भण्डारस्य '{0}' प्रेक्षकं प्रारभितुं न शक्तम्। 'F5' पीडयित्वा हस्तेन नवीकरणं कर्तव्यम्!
+कारणम्: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' प्रारभितुं न शक्तम्। कारणम्: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">उद्घाटयितुं न शक्तम्: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">Commit हेतु सञ्चिकाः न योजिताः!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">OpenAI विन्यासः दुष्टः</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Git flow प्रारम्भः विफलः: Branch न प्राप्तः!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">दुष्टः git-flow branch प्रकारः!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">सञ्चिकाकोशः '{0}' न प्राप्तः</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">वर्तमानं commit जनके संपीडयितुं न शक्यते!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">विवृतपृष्ठेषु अपूर्णानि कार्याणि सन्ति। कृपया प्रतीक्षताम्!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">भण्डारं इदानीं न विद्यते। कृपया अपनयतु।</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">दत्तः मार्गः वैधं Git भण्डारं नास्ति!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">अस्मिन् भण्डारे remote न योजिताः!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">वर्तमानं branch प्राप्तुं न शक्यते!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">प्रथमात् commit पूर्वं Git branch स्रष्टुं न शक्नोति।</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">अन्वेषणमूलनिर्देशिका नास्ति!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">संशोधनाय commits नास्ति!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">भण्डारे अपूर्णं कार्यम् अस्ति! कृपया प्रतीक्षताम्!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">भण्डारे असमाधिताः विरोधाः सन्ति। स्वचालित-stage तथा commit निष्क्रियाः!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">Terminal निर्दिष्टं नास्ति! कृपया सम्यक् shell/terminal विन्यस्तम् इति सुनिश्चितं कुरुत।</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">उपघटकं योजयति...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Worktree योजयति...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">सङ्ग्रहयति...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Patch प्रयुनक्ति...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Remote योजयति...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">उपेक्षितसञ्चिकाः योजयति...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout तथा Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Branch नवीकरणं प्रतीक्षते...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Commit '{0}' checkout करोति...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Stash प्रयुनक्ति: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">शोधनम् (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick commit(s)...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">उपघटकस्य URL परिवर्तयति...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">सूचिका-cache शोधयति...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">सर्वान् stash अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">प्रतिलिपिं करोति...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Tag सृजति...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">उपघटकं निष्प्रारम्भयति</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Branch अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">बहून् tags अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">बहून् branches अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Remote अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">उपघटकम् अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Tag '{0}' अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' त्यजति...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Stash त्यजति: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Remote '{0}' सम्पादयति...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">स्वकीयक्रियां चालयति...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} समापयति...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - {0} प्रारभते...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Git भण्डारं प्रारभते: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Git-flow प्रारभते...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Remote तः LFS वस्तूनि आनयति...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Remote तः LFS वस्तूनि आकर्षति...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">LFS वस्तूनि remote प्रति प्रेषयति...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">स्वकीयं LFS अनुसरणप्रतिरूपं योजयति...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">'{0}' मध्ये '{1}' संयोजयति...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Head(s) संयोजयति...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">उपघटकं स्थानान्तरयति...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Worktrees शोधयति...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Worktree अपनयति...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Remote मध्ये prune चालयति...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Tag प्रेषयति...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' पुनर्नामकरोति</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">वर्तमानं branch {0} प्रति पुनःस्थापयति...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">{0} प्रति {1} पुनःस्थापयति...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Commit '{0}' प्रत्यावर्तयति...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">HEAD सन्देशं सम्पादयति...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">'{0}' अधः भण्डाराणि अन्विष्यति...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">उपघटकस्य branch स्थापयति...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream स्थापयति...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">परिवर्तनानि संगृह्णाति...</x:String>
 </ResourceDictionary>

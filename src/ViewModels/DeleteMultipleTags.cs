@@ -42,7 +42,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Deleting multiple tags...";
+            ProgressDescription = App.Text("Progress.DeletingMultipleTags");
 
             var log = _repo.CreateLog("Delete Multiple Tags");
             Use(log);

@@ -154,7 +154,7 @@ namespace Komorebi.ViewModels
         /// <returns>成功した場合はtrue</returns>
         public override async Task<bool> Sure()
         {
-            ProgressDescription = "Clone ...";
+            ProgressDescription = App.Text("Progress.Cloning");
 
             // クローン専用のコマンドログを作成する
             var log = new CommandLog("Clone");
@@ -189,7 +189,7 @@ namespace Komorebi.ViewModels
             // クローン先フォルダが存在するか確認する
             if (!Directory.Exists(path))
             {
-                App.RaiseException(_pageId, $"Folder '{path}' can NOT be found");
+                App.RaiseException(_pageId, App.Text("Error.FolderNotFound", path));
                 return false;
             }
 

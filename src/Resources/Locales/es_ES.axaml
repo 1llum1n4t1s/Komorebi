@@ -1010,4 +1010,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Eliminar</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Desbloquear</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">SÍ</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">Tiene cambios locales sin confirmar. Por favor, descártelos o guárdelos primero.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">¡Bisect está en ejecución! Por favor, abórtelo antes de iniciar uno nuevo.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">¡La selección contiene cambios con y sin conflictos!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">Error al seleccionar la ubicación: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">Error al seleccionar la carpeta principal: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Error al guardar como parche: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">Error al guardar el archivo: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">Error al seleccionar el directorio de clonación predeterminado: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Error al seleccionar el ejecutable de Git: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">Error al seleccionar el programa GPG: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Error al seleccionar el shell/terminal: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Error al seleccionar la herramienta de fusión: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">Error al seleccionar el programa para la acción personalizada: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">Error al seleccionar el directorio raíz de escaneo: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">Error al abrir el repositorio: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">Error al descartar los cambios. Razón: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Error al generar el mensaje de confirmación: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Error al consultar las confirmaciones. Razón: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">Error al consultar las confirmaciones para rebase interactivo. Razón: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">Error al consultar el contenido del archivo: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">Error al actualizar el índice: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Error al guardar el archivo: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Error al guardar el cambio como parche: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Error al escanear los repositorios: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Error al iniciar el observador para el repositorio: '{0}'. Es posible que necesite presionar 'F5' para actualizar el repositorio manualmente.
+Razón: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Error al iniciar '{0}'. Razón: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Error al abrir: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">¡No se han añadido archivos para confirmar!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">Configuración incorrecta de OpenAI</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">¡Inicialización de Git flow fallida: no se encontró ninguna rama!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">¡Tipo de rama de Git flow incorrecto!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">No se puede encontrar la carpeta '{0}'</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">¡No se puede comprimir la confirmación actual en la confirmación padre!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">¡Tiene tareas sin terminar en las páginas abiertas. Por favor, espere!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">El repositorio ya no existe. Por favor, elimínelo.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">¡La ruta proporcionada no es un repositorio Git válido!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">¡No se han añadido remotos a este repositorio!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">¡No se puede encontrar la rama actual!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">Git no puede crear una rama antes de su primera confirmación.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">¡Falta el directorio raíz para escanear!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">¡No hay confirmaciones para modificar!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">¡El repositorio tiene un trabajo sin terminar! ¡Por favor, espere!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">¡El repositorio tiene conflictos sin resolver. El staging automático y la confirmación están deshabilitados!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">¡El terminal no está especificado! Por favor, confirme que se ha configurado el shell/terminal correcto.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">Añadiendo submódulo...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Añadiendo worktree...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">Archivando...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Aplicando parche...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Añadiendo remoto...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Añadiendo archivo(s) ignorado(s)...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout y Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Esperando actualización de rama...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout del commit '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Aplicando stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">Limpieza (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick de commit(s)...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">Cambiando URL del submódulo...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">Limpiando caché del índice...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">Eliminando todos los stashes...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">Clonando...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Creando tag...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">Desinicializando submódulo</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Eliminando rama...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">Eliminando múltiples tags...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">Eliminando múltiples ramas...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Eliminando remoto...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">Eliminando submódulo...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Eliminando tag '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">Descartando HEAD '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Descartando stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Editando remoto '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Ejecutando acción personalizada...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - Finalizando {0}...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - Iniciando {0}...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Inicializando repositorio git en: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Inicializando git-flow...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Obteniendo objetos LFS del remoto...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Descargando objetos LFS del remoto...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">Enviando objetos LFS al remoto...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">Añadiendo patrón de seguimiento LFS personalizado...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">Fusionando '{0}' en '{1}'...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Fusionando head(s)...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">Moviendo submódulo...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Limpiando worktrees...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Eliminando worktree...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Ejecutando prune en remoto...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Enviando tag...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Renombrando '{0}'</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">Restableciendo rama actual a {0}...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">Restableciendo {0} a {1}...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Revirtiendo commit '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">Editando mensaje de HEAD...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">Escaneando repositorios en '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Estableciendo rama del submódulo...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Estableciendo upstream...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Guardando cambios en stash...</x:String>
 </ResourceDictionary>

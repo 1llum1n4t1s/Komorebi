@@ -55,7 +55,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Checkout '{Branch}' ...";
+            ProgressDescription = App.Text("Progress.Checkout", Branch);
 
             var log = _repo.CreateLog($"Checkout '{Branch}'");
             Use(log);
@@ -124,7 +124,7 @@ namespace Komorebi.ViewModels
             _repo.MarkBranchesDirtyManually();
 
             // ブランチ更新を待つ
-            ProgressDescription = "Waiting for branch updated...";
+            ProgressDescription = App.Text("Progress.WaitingBranchUpdate");
             await Task.Delay(400);
             return succ;
         }

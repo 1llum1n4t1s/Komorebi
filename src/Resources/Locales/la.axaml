@@ -1007,4 +1007,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Remove</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Recludi</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">ITA</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">Mutationes locales non commissae habes. Prius abice aut reconde eas.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect iam currit! Prius abrumpe antequam novum incipias.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">Selectio continet mutationes cum et sine conflictu!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">Locum seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">Involucrum parentis seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Ut patch servare non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">Fasciculum servare non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">Directorium clone praefinitum seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Fasciculum Git exsecutivum seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">Programma GPG seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Shell/terminal seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Instrumentum merge seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">Programma pro actione propria seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">Directorium radicis explorationis seligere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">Repositorium aperire non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">Mutationes abicere non potuit. Causa: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Nuntium commit generare non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Commits quaerere non potuit. Causa: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">Commits pro rebase interactivo quaerere non potuit. Causa: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">Contentum fasciculi quaerere non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">Indicem renovare non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Fasciculum servare non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Mutationem ad patch servare non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Repositoria explorare non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!
+Causa: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' incipere non potuit. Causa: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Aperire non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">Nulli fasciculi ad commit additi sunt!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">Configuratio OpenAI mala est</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Initiatio Git flow defecit: Nullus branch inventus!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">Genus branch git-flow malum!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">Involucrum '{0}' inveniri non potest</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">Commit currentem in parentem comprimere non potest!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">Opera imperfecta in paginis apertis habes. Quaeso exspecta!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">Repositorium iam non exsistit. Quaeso remove id.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">Via data non est repositorium Git validum!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">Nulli remotes huic repositorio additi sunt!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">Branch currentem invenire non potest!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">Git branch creare non potest ante primum commit tuum.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">Directorium radicis explorationis deest!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">Nulli commits ad emendandum!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">Repositorium opus imperfectum habet! Quaeso exspecta!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">Repositorium conflictus insolutos habet. Auto-stage et commit inhabilitata sunt!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">Terminal non designatum est! Quaeso confirma shell/terminal rectum configuratum esse.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">Submodulum addendo...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Worktree addendo...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">Archivando...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Patch applicando...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Remote addendo...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Fasciculos ignoratos addendo...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout et Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Renovationem branch exspectando...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout commit '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Stash applicando: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">Purgatio (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick commit(s)...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">URL submoduli mutando...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">Cache indicis purgando...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">Omnes stashes delendo...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">Clonando...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Tag creando...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">Submodulum deinitiando</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Branch delendo...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">Plures tags delendo...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">Plures branches delendo...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Remote delendo...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">Submodulum delendo...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Tag '{0}' delendo...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' abiciendo...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Stash abiciendo: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Remote '{0}' emendando...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Actionem propriam exsequendo...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} perficiendo...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - {0} incipiendo...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Repositorium Git initiando in: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Git-flow initiando...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Objecta LFS a remote accipiendo...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Objecta LFS a remote trahendo...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">Objecta LFS ad remote pellendo...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">Exemplar LFS proprium addendo...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">'{0}' in '{1}' mergendo...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Head(s) mergendo...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">Submodulum movendo...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Worktrees purgando...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Worktree removendo...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Prune in remote exsequendo...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Tag pellendo...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' renominando</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">Branch currentem ad {0} restituendo...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">{0} ad {1} restituendo...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Commit '{0}' revertendo...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">Nuntium HEAD emendando...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">Repositoria sub '{0}' explorando...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Branch submoduli statuendo...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream statuendo...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Mutationes recondendo...</x:String>
 </ResourceDictionary>

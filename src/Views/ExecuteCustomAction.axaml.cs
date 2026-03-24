@@ -39,7 +39,7 @@ namespace Komorebi.Views
                 }
                 catch (Exception exception)
                 {
-                    App.RaiseException(string.Empty, $"Failed to select parent folder: {exception.Message}");
+                    App.RaiseException(string.Empty, App.Text("Error.FailedToSelectFolder", exception.Message));
                 }
             }
             else

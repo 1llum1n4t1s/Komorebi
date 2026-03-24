@@ -265,7 +265,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select git executable: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectGitExe", ex.Message));
             }
 
             e.Handled = true;
@@ -292,7 +292,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select default clone directory: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCloneDir", ex.Message));
             }
 
             e.Handled = true;
@@ -323,7 +323,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select gpg program: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectGpg", ex.Message));
             }
 
             e.Handled = true;
@@ -357,7 +357,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select shell/terminal: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectTerminal", ex.Message));
             }
 
             e.Handled = true;
@@ -391,7 +391,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select merge tool: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectMergeTool", ex.Message));
             }
 
             e.Handled = true;
@@ -490,7 +490,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select program for custom action: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCustomAction", ex.Message));
             }
 
             e.Handled = true;

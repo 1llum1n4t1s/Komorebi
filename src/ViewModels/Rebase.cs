@@ -70,7 +70,7 @@ namespace Komorebi.ViewModels
             using var lockWatcher = _repo.LockWatcher();
             // リベース前にコミットメッセージをクリア
             _repo.ClearCommitMessage();
-            ProgressDescription = "Rebasing ...";
+            ProgressDescription = App.Text("Progress.Rebasing");
 
             var log = _repo.CreateLog("Rebase");
             Use(log);

@@ -273,7 +273,7 @@ namespace Komorebi.ViewModels
 
             if (CheckoutAfterCreated)
             {
-                ProgressDescription = "Waiting for branch updated...";
+                ProgressDescription = App.Text("Progress.WaitingBranchUpdate");
                 await Task.Delay(400);
             }
 

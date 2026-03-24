@@ -68,7 +68,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Git Flow - Finish {Branch.Name} ...";
+            ProgressDescription = App.Text("Progress.GitFlowFinish", Branch.Name);
 
             var log = _repo.CreateLog("GitFlow - Finish");
             Use(log);

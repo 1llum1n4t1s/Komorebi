@@ -199,7 +199,7 @@ namespace Komorebi.Native
             }
             catch (Exception e)
             {
-                App.RaiseException(workdir, $"Failed to start '{OS.ShellOrTerminal}'. Reason: {e.Message}");
+                App.RaiseException(workdir, App.Text("Error.FailedToStartTerminal", OS.ShellOrTerminal, e.Message));
             }
         }
 
@@ -215,7 +215,7 @@ namespace Komorebi.Native
                 proc.WaitForExit();
 
                 if (proc.ExitCode != 0)
-                    App.RaiseException("", $"Failed to open: {file}");
+                    App.RaiseException("", App.Text("Error.FailedToOpenFile", file));
 
                 proc.Close();
             }

@@ -97,7 +97,7 @@ namespace Komorebi.Commands
             }
             catch (Exception e)
             {
-                App.RaiseException(_repo, "Failed to update index: " + e.Message);
+                App.RaiseException(_repo, App.Text("Error.FailedToUpdateIndex", e.Message));
                 return false;
             }
         }

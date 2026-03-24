@@ -41,7 +41,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Drop HEAD '{Target.SHA}' ...";
+            ProgressDescription = App.Text("Progress.DropHead", Target.SHA);
 
             var log = _repo.CreateLog($"Drop '{Target.SHA}'");
             Use(log);

@@ -52,7 +52,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Push {Revision.SHA.AsSpan(0, 10)} -> {RemoteBranch.FriendlyName} ...";
+            ProgressDescription = App.Text("Progress.PushRevision", Revision.SHA[..10], RemoteBranch.FriendlyName);
 
             var log = _repo.CreateLog("Push Revision");
             Use(log);

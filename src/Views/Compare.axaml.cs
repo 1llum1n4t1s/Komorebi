@@ -56,7 +56,7 @@ namespace Komorebi.Views
                     }
                     catch (Exception exception)
                     {
-                        App.RaiseException(null, $"Failed to save as patch: {exception.Message}");
+                        App.RaiseException(null, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                     }
 
                     e.Handled = true;

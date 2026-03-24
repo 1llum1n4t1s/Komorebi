@@ -119,7 +119,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Create tag...";
+            ProgressDescription = App.Text("Progress.CreateTag");
 
             // プッシュ先のリモート一覧を取得（プッシュしない場合はnull）
             var remotes = PushToRemotes ? _repo.Remotes : null;

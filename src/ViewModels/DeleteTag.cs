@@ -42,7 +42,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Deleting tag '{Target.Name}' ...";
+            ProgressDescription = App.Text("Progress.DeletingTag", Target.Name);
 
             // プッシュ先のリモート一覧を取得
             var remotes = PushToRemotes ? _repo.Remotes : [];

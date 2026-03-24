@@ -493,7 +493,7 @@ namespace Komorebi.Views
                         }
                         catch (Exception exception)
                         {
-                            App.RaiseException(repo.FullPath, $"Failed to save as patch: {exception.Message}");
+                            App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                         }
 
                         e.Handled = true;
@@ -797,7 +797,7 @@ namespace Komorebi.Views
                 {
                     if (hasNonConflicts)
                     {
-                        App.RaiseException(repo.FullPath, "Selection contains both conflict and non-conflict changes!");
+                        App.RaiseException(repo.FullPath, App.Text("Error.ConflictAndNonConflictMixed"));
                         return null;
                     }
 
@@ -915,7 +915,7 @@ namespace Komorebi.Views
                     }
                     catch (Exception exception)
                     {
-                        App.RaiseException(repo.FullPath, $"Failed to save as patch: {exception.Message}");
+                        App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                     }
 
                     e.Handled = true;
@@ -1101,7 +1101,7 @@ namespace Komorebi.Views
                     }
                     catch (Exception exception)
                     {
-                        App.RaiseException(repo.FullPath, $"Failed to save as patch: {exception.Message}");
+                        App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                     }
 
                     e.Handled = true;
@@ -1318,7 +1318,7 @@ namespace Komorebi.Views
                     }
                     catch (Exception exception)
                     {
-                        App.RaiseException(repo.FullPath, $"Failed to save as patch: {exception.Message}");
+                        App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                     }
 
                     e.Handled = true;

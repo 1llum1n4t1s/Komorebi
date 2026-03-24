@@ -50,7 +50,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Adding Ignored File(s) ...";
+            ProgressDescription = App.Text("Progress.AddingIgnoredFiles");
 
             // 保存先ファイルのフルパスを取得する
             var file = StorageFile.GetFullPath(_repo.FullPath, _repo.GitDir);

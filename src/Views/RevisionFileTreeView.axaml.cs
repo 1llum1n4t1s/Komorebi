@@ -195,7 +195,7 @@ namespace Komorebi.Views
                         }
                         catch (Exception ex)
                         {
-                            App.RaiseException(detail.Repository.FullPath, $"Failed to save file: {ex.Message}");
+                            App.RaiseException(detail.Repository.FullPath, App.Text("Error.FailedToSaveFile", ex.Message));
                         }
 
                         e.Handled = true;
@@ -644,7 +644,7 @@ namespace Komorebi.Views
                 }
                 catch (Exception e)
                 {
-                    App.RaiseException(repo.FullPath, $"Failed to save file: {e.Message}");
+                    App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveFile", e.Message));
                 }
 
                 ev.Handled = true;

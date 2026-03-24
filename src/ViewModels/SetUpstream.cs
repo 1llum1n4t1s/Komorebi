@@ -75,7 +75,7 @@ namespace Komorebi.ViewModels
         /// </summary>
         public override async Task<bool> Sure()
         {
-            ProgressDescription = "Setting upstream...";
+            ProgressDescription = App.Text("Progress.SettingUpstream");
             Models.Branch upstream = _unset ? null : SelectedRemoteBranch;
 
             if (upstream == null)

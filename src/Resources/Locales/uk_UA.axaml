@@ -1010,4 +1010,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Видалити</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Розблокувати</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">ТАК</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">Є незафіксовані локальні зміни. Будь ласка, спочатку скасуйте або сховайте їх.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect вже виконується! Перервіть його перед запуском нового.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">Виділення містить як конфліктні, так і неконфліктні зміни!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">Не вдалося вибрати розташування: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">Не вдалося вибрати батьківську теку: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Не вдалося зберегти як патч: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">Не вдалося зберегти файл: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">Не вдалося вибрати каталог клонування за замовчуванням: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Не вдалося вибрати виконуваний файл Git: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">Не вдалося вибрати програму GPG: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Не вдалося вибрати оболонку/термінал: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Не вдалося вибрати інструмент злиття: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">Не вдалося вибрати програму для користувацької дії: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">Не вдалося вибрати кореневий каталог для сканування: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">Не вдалося відкрити репозиторій: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">Не вдалося скасувати зміни. Причина: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Не вдалося згенерувати повідомлення коміту: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Не вдалося запитати коміти. Причина: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">Не вдалося запитати коміти для інтерактивного перебазування. Причина: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">Не вдалося запитати вміст файлу: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">Не вдалося оновити індекс: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не вдалося зберегти файл: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не вдалося зберегти зміни в патч: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не вдалося просканувати репозиторії: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!
+Причина: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не вдалося запустити '{0}'. Причина: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не вдалося відкрити: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">Немає файлів для коміту!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">Невірна конфігурація OpenAI</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Ініціалізація Git flow не вдалася: гілку не знайдено!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">Недопустимий тип гілки Git flow!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">Теку '{0}' не знайдено</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">Неможливо стиснути поточний коміт у батьківський!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">На відкритих сторінках є незавершені завдання. Зачекайте!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">Репозиторій більше не існує. Видаліть його.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">Вказаний шлях не є допустимим репозиторієм Git!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">До цього репозиторію не додано віддалених!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">Не вдається знайти поточну гілку!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">Git не може створити гілку до першого коміту.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">Не вказано кореневий каталог для сканування!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">Немає комітів для зміни!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">У репозиторії є незавершене завдання! Зачекайте!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">У репозиторії є невирішені конфлікти. Автоматичне додавання та коміт вимкнено!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">Термінал не вказано! Переконайтеся, що налаштовано правильну оболонку/термінал.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">Додавання підмодуля...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Додавання робочого дерева...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">Архівування...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Застосування патча...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Додавання віддаленого...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Додавання ігнорованих файлів...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout та Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Очікування оновлення гілки...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout коміту '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Застосування stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">Очищення (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick комітів...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">Зміна URL підмодуля...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">Очищення кешу індексу...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">Видалення всіх stash...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">Клонування...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Створення тегу...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">Деініціалізація підмодуля</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Видалення гілки...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">Видалення кількох тегів...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">Видалення кількох гілок...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Видалення віддаленого...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">Видалення підмодуля...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Видалення тегу '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">Скидання HEAD '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Видалення stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Редагування віддаленого '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Виконання користувацької дії...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - Завершення {0}...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - Запуск {0}...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Ініціалізація репозиторію Git: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Ініціалізація git-flow...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Отримання об'єктів LFS з віддаленого...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Завантаження об'єктів LFS з віддаленого...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">Відправлення об'єктів LFS на віддалений...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">Додавання користувацького шаблону відстеження LFS...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">Злиття '{0}' в '{1}'...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Злиття head(s)...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">Переміщення підмодуля...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Очищення робочих дерев...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Видалення робочого дерева...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Виконання prune на віддаленому...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Відправлення тегу...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Перейменування '{0}'</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">Скидання поточної гілки на {0}...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">Скидання {0} на {1}...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Скасування коміту '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">Редагування повідомлення HEAD...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">Сканування репозиторіїв у '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Встановлення гілки підмодуля...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Встановлення upstream...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Збереження змін у stash...</x:String>
 </ResourceDictionary>

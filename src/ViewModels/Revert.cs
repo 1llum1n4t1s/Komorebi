@@ -44,7 +44,7 @@ namespace Komorebi.ViewModels
         {
             using var lockWatcher = _repo.LockWatcher();
             _repo.ClearCommitMessage();
-            ProgressDescription = $"Revert commit '{Target.SHA}' ...";
+            ProgressDescription = App.Text("Progress.Reverting", Target.SHA);
 
             var log = _repo.CreateLog($"Revert '{Target.SHA}'");
             Use(log);

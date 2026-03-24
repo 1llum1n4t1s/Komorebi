@@ -621,7 +621,7 @@ namespace Komorebi.Views
 
                 if (vm.Staged == null || vm.Staged.Count == 0)
                 {
-                    App.RaiseException(repo.FullPath, "No files added to commit!");
+                    App.RaiseException(repo.FullPath, App.Text("Error.NoFilesForCommit"));
                     e.Handled = true;
                     return;
                 }
@@ -629,7 +629,7 @@ namespace Komorebi.Views
                 var services = repo.GetPreferredOpenAIServices();
                 if (services.Count == 0)
                 {
-                    App.RaiseException(repo.FullPath, "Bad configuration for OpenAI");
+                    App.RaiseException(repo.FullPath, App.Text("Error.BadOpenAIConfig"));
                     e.Handled = true;
                     return;
                 }

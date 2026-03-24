@@ -27,7 +27,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Dropping stash: {Stash.Name}";
+            ProgressDescription = App.Text("Progress.DroppingStash", Stash.Name);
 
             var log = _repo.CreateLog("Drop Stash");
             Use(log);

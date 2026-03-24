@@ -17,7 +17,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "LFS prune ...";
+            ProgressDescription = App.Text("Progress.LFSPrune");
 
             var log = _repo.CreateLog("LFS Prune");
             Use(log);

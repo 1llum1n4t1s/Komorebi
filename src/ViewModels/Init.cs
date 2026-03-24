@@ -41,7 +41,7 @@ namespace Komorebi.ViewModels
         /// </summary>
         public override async Task<bool> Sure()
         {
-            ProgressDescription = $"Initialize git repository at: '{_targetPath}'";
+            ProgressDescription = App.Text("Progress.InitRepo", _targetPath);
 
             var log = new CommandLog("Initialize");
             Use(log);

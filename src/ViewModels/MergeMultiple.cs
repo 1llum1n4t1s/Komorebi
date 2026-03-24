@@ -65,7 +65,7 @@ namespace Komorebi.ViewModels
         {
             using var lockWatcher = _repo.LockWatcher();
             _repo.ClearCommitMessage();
-            ProgressDescription = "Merge head(s) ...";
+            ProgressDescription = App.Text("Progress.MergeHeads");
 
             var log = _repo.CreateLog("Merge Multiple Heads");
             Use(log);

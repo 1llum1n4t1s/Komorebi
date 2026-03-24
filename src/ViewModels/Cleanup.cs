@@ -26,7 +26,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Cleanup (GC aggressive & prune) ...";
+            ProgressDescription = App.Text("Progress.Cleanup");
 
             // コマンドログを作成してGCを実行する
             var log = _repo.CreateLog("Cleanup (GC aggressive & prune)");

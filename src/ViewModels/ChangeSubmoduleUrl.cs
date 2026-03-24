@@ -66,7 +66,7 @@ namespace Komorebi.ViewModels
                 return true;
 
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Change submodule's url...";
+            ProgressDescription = App.Text("Progress.ChangeSubmoduleUrl");
 
             // コマンドログを作成する
             var log = _repo.CreateLog("Change Submodule's URL");

@@ -33,7 +33,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Adding custom LFS tracking pattern ...";
+            ProgressDescription = App.Text("Progress.LFSTrack");
 
             var log = _repo.CreateLog("LFS Add Custom Pattern");
             Use(log);

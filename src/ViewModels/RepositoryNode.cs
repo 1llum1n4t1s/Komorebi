@@ -219,6 +219,7 @@ namespace Komorebi.ViewModels
             {
                 _lastUpdateStatus = DateTime.Now;
                 Status = null;
+                OnPropertyChanged(nameof(IsInvalid));
                 return;
             }
 
@@ -232,6 +233,7 @@ namespace Komorebi.ViewModels
 
             _lastUpdateStatus = DateTime.Now;
             Status = await new Commands.QueryRepositoryStatus(_id).GetResultAsync();
+            OnPropertyChanged(nameof(IsInvalid));
         }
 
         private string _id = string.Empty;

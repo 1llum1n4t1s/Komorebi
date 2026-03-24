@@ -365,7 +365,7 @@ namespace Komorebi.Native
         {
             // ターミナルが設定されていない場合はエラーを通知する
             if (string.IsNullOrEmpty(ShellOrTerminal))
-                App.RaiseException(workdir, "Terminal is not specified! Please confirm that the correct shell/terminal has been configured.");
+                App.RaiseException(workdir, App.Text("Error.TerminalNotSpecified"));
             else
                 _backend.OpenTerminal(workdir, ShellOrTerminalArgs);
         }

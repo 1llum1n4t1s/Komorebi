@@ -45,7 +45,7 @@ namespace Komorebi.ViewModels
         /// </summary>
         public override async Task<bool> Sure()
         {
-            ProgressDescription = "Moving submodule ...";
+            ProgressDescription = App.Text("Progress.MovingSubmodule");
 
             // 旧パスと新パスの絶対パスを取得
             var oldPath = Native.OS.GetAbsPath(_repo.FullPath, Submodule.Path);

@@ -1000,4 +1000,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">제거</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">잠금 해제</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">예</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">커밋되지 않은 로컬 변경 사항이 있습니다. 먼저 폐기하거나 스태시해 주세요.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect가 실행 중입니다! 새로 시작하기 전에 중단해 주세요.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">선택 범위에 충돌과 비충돌 변경 사항이 혼합되어 있습니다!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">위치 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">상위 폴더 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">패치로 저장 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">파일 저장 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">기본 클론 디렉터리 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Git 실행 파일 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">GPG 프로그램 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">셸/터미널 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">병합 도구 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">사용자 정의 작업 프로그램 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">스캔 루트 디렉터리 선택 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">저장소 열기 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">변경 사항 폐기 실패. 이유: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">커밋 메시지 생성 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">커밋 조회 실패. 이유: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">대화형 리베이스용 커밋 조회 실패. 이유: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">파일 내용 조회 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">인덱스 업데이트 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">파일 저장 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">패치 변경 사항 저장 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">저장소 스캔 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">저장소 '{0}'의 감시자 시작 실패. 'F5'를 눌러 저장소를 수동으로 새로고침해야 할 수 있습니다!
+이유: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' 시작 실패. 이유: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">열기 실패: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">커밋할 파일이 추가되지 않았습니다!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">잘못된 OpenAI 설정</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Git flow 초기화 실패: 브랜치를 찾을 수 없습니다!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">잘못된 Git flow 브랜치 유형!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">폴더 '{0}'을(를) 찾을 수 없습니다</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">현재 커밋을 부모 커밋에 스쿼시할 수 없습니다!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">열린 페이지에 완료되지 않은 작업이 있습니다. 잠시 기다려 주세요!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">저장소가 더 이상 존재하지 않습니다. 제거해 주세요.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">지정된 경로는 유효한 Git 저장소가 아닙니다!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">이 저장소에 추가된 리모트가 없습니다!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">현재 브랜치를 찾을 수 없습니다!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">첫 번째 커밋 전에는 브랜치를 만들 수 없습니다.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">스캔할 루트 디렉터리가 없습니다!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">수정할 커밋이 없습니다!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">저장소에 완료되지 않은 작업이 있습니다! 잠시 기다려 주세요!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">저장소에 해결되지 않은 충돌이 있습니다. 자동 스테이징 및 커밋이 비활성화되었습니다!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">터미널이 지정되지 않았습니다! 올바른 셸/터미널이 설정되어 있는지 확인해 주세요.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">서브모듈 추가 중...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">워크트리 추가 중...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">아카이브 중...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">패치 적용 중...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">리모트 추가 중...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">무시 파일 추가 중...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout 및 Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">브랜치 업데이트 대기 중...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">커밋 '{0}' Checkout 중...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">스태시 적용 중: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">'{0}' Checkout 중...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">정리 (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">커밋 Cherry-Pick 중...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">서브모듈 URL 변경 중...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">인덱스 캐시 지우는 중...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">모든 스태시 삭제 중...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">클론 중...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">태그 생성 중...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">서브모듈 초기화 해제 중</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">브랜치 삭제 중...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">여러 태그 삭제 중...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">여러 브랜치 삭제 중...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">리모트 삭제 중...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">서브모듈 삭제 중...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">태그 '{0}' 삭제 중...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' 드롭 중...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">스태시 삭제 중: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">리모트 '{0}' 편집 중...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">사용자 정의 작업 실행 중...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} 완료 중...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - {0} 시작 중...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Git 저장소 초기화 중: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">git-flow 초기화 중...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">리모트에서 LFS 객체 가져오는 중...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">리모트에서 LFS 객체 풀 중...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">리모트로 LFS 객체 푸시 중...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">사용자 정의 LFS 추적 패턴 추가 중...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">'{0}'을(를) '{1}'에 머지 중...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">head(s) 머지 중...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">서브모듈 이동 중...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">워크트리 정리 중...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">푸시 {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">리베이스 중...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">워크트리 제거 중...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">리모트에서 prune 실행 중...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">푸시 {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">태그 푸시 중...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' 이름 변경 중</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">현재 브랜치를 {0}으로 리셋 중...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">{0}을(를) {1}으로 리셋 중...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">커밋 '{0}' 리버트 중...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">HEAD 메시지 편집 중...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">'{0}' 하위 저장소 스캔 중...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">서브모듈 브랜치 설정 중...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">업스트림 설정 중...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">변경 사항 스태시 중...</x:String>
 </ResourceDictionary>

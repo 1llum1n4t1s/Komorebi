@@ -153,7 +153,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Adding worktree ...";
+            ProgressDescription = App.Text("Progress.AddingWorktree");
 
             // ブランチ名とトラッキングブランチを取得する
             var branchName = _selectedBranch;

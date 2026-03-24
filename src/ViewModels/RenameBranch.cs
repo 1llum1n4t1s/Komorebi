@@ -72,7 +72,7 @@ namespace Komorebi.ViewModels
                 return true;
 
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Rename '{Target.Name}'";
+            ProgressDescription = App.Text("Progress.RenamingBranch", Target.Name);
 
             var log = _repo.CreateLog($"Rename Branch '{Target.Name}'");
             Use(log);
@@ -96,7 +96,7 @@ namespace Komorebi.ViewModels
             // 現在のブランチをリネームした場合は更新完了を待機
             if (isCurrent)
             {
-                ProgressDescription = "Waiting for branch updated...";
+                ProgressDescription = App.Text("Progress.WaitingBranchUpdate");
                 await Task.Delay(400);
             }
 

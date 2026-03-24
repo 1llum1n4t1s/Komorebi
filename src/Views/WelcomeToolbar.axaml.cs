@@ -68,7 +68,7 @@ namespace Komorebi.Views
             }
             catch (Exception exception)
             {
-                App.RaiseException(string.Empty, $"Failed to open repository: {exception.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToOpenRepository", exception.Message));
             }
 
             e.Handled = true;

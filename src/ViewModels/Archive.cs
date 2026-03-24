@@ -76,7 +76,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Archiving ...";
+            ProgressDescription = App.Text("Progress.Archiving");
 
             // コマンドログを作成する
             var log = _repo.CreateLog("Archive");

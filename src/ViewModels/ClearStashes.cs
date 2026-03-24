@@ -24,7 +24,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Clear all stashes...";
+            ProgressDescription = App.Text("Progress.ClearAllStashes");
 
             // コマンドログを作成してスタッシュクリアを実行する
             var log = _repo.CreateLog("Clear Stashes");

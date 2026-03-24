@@ -128,7 +128,7 @@ namespace Komorebi.ViewModels
                         var currentBranch = _repo.CurrentBranch;
                         if (currentBranch == null)
                         {
-                            App.RaiseException(_repo.FullPath, "No commits to amend!!!");
+                            App.RaiseException(_repo.FullPath, App.Text("Error.NoCommitsToAmend"));
                             _useAmend = false;
                             OnPropertyChanged();
                             return;
@@ -773,14 +773,14 @@ namespace Komorebi.ViewModels
 
             if (!_repo.CanCreatePopup())
             {
-                App.RaiseException(_repo.FullPath, "Repository has an unfinished job! Please wait!");
+                App.RaiseException(_repo.FullPath, App.Text("Error.RepoHasUnfinishedJob"));
                 return;
             }
 
             // 未解決コンフリクトがある場合は自動ステージ不可
             if (autoStage && HasUnsolvedConflicts)
             {
-                App.RaiseException(_repo.FullPath, "Repository has unsolved conflict(s). Auto-stage and commit is disabled!");
+                App.RaiseException(_repo.FullPath, App.Text("Error.RepoHasConflicts"));
                 return;
             }
 

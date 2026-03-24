@@ -44,7 +44,7 @@ namespace Komorebi.Commands
                 }
                 catch (Exception e)
                 {
-                    App.RaiseException(repo, $"Failed to discard changes. Reason: {e.Message}");
+                    App.RaiseException(repo, App.Text("Error.FailedToDiscard", e.Message));
                 }
 
                 // git cleanで残りの未追跡ファイルを削除する
@@ -97,7 +97,7 @@ namespace Komorebi.Commands
             }
             catch (Exception e)
             {
-                App.RaiseException(repo, $"Failed to discard changes. Reason: {e.Message}");
+                App.RaiseException(repo, App.Text("Error.FailedToDiscard", e.Message));
             }
 
             // git restoreで復元するファイルがある場合、一時ファイル経由で実行する

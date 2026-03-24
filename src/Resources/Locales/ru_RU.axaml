@@ -1010,4 +1010,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Удалить</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Разблокировать</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">Да</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">Есть незафиксированные локальные изменения. Пожалуйста, сначала отмените или спрячьте их.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect уже выполняется! Прервите его перед запуском нового.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">Выделение содержит как конфликтующие, так и неконфликтующие изменения!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">Не удалось выбрать расположение: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">Не удалось выбрать родительскую папку: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Не удалось сохранить как патч: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">Не удалось сохранить файл: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">Не удалось выбрать каталог клонирования по умолчанию: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Не удалось выбрать исполняемый файл Git: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">Не удалось выбрать программу GPG: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Не удалось выбрать оболочку/терминал: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Не удалось выбрать инструмент слияния: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">Не удалось выбрать программу для пользовательского действия: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">Не удалось выбрать корневой каталог для сканирования: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">Не удалось открыть репозиторий: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">Не удалось отменить изменения. Причина: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Не удалось сгенерировать сообщение коммита: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Не удалось запросить коммиты. Причина: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">Не удалось запросить коммиты для интерактивного перебазирования. Причина: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">Не удалось запросить содержимое файла: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">Не удалось обновить индекс: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не удалось сохранить файл: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не удалось сохранить изменения в патч: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не удалось просканировать репозитории: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!
+Причина: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не удалось запустить '{0}'. Причина: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не удалось открыть: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">Нет файлов для коммита!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">Неверная конфигурация OpenAI</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Инициализация Git flow не удалась: ветка не найдена!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">Недопустимый тип ветки Git flow!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">Папка '{0}' не найдена</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">Невозможно сжать текущий коммит в родительский!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">Есть незавершённые задачи на открытых страницах. Подождите!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">Репозиторий больше не существует. Удалите его.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">Указанный путь не является допустимым репозиторием Git!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">К этому репозиторию не добавлены удалённые!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">Не удаётся найти текущую ветку!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">Git не может создать ветку до первого коммита.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">Не указан корневой каталог для сканирования!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">Нет коммитов для изменения!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">В репозитории есть незавершённая задача! Подождите!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">В репозитории есть неразрешённые конфликты. Автоматическое добавление и коммит отключены!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">Терминал не указан! Убедитесь, что настроена правильная оболочка/терминал.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">Добавление подмодуля...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Добавление рабочего дерева...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">Архивирование...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Применение патча...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Добавление удалённого...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Добавление игнорируемых файлов...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout и Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Ожидание обновления ветки...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout коммита '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Применение stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">Очистка (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick коммитов...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">Изменение URL подмодуля...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">Очистка кэша индекса...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">Удаление всех stash...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">Клонирование...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Создание тега...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">Деинициализация подмодуля</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Удаление ветки...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">Удаление нескольких тегов...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">Удаление нескольких веток...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Удаление удалённого...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">Удаление подмодуля...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Удаление тега '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">Сброс HEAD '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Удаление stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Редактирование удалённого '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Выполнение пользовательского действия...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - Завершение {0}...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - Запуск {0}...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Инициализация репозитория Git: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Инициализация git-flow...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Получение объектов LFS с удалённого...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Загрузка объектов LFS с удалённого...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">Отправка объектов LFS на удалённый...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">Добавление пользовательского шаблона отслеживания LFS...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">Слияние '{0}' в '{1}'...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Слияние head(s)...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">Перемещение подмодуля...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Очистка рабочих деревьев...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Удаление рабочего дерева...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Выполнение prune на удалённом...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Отправка тега...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Переименование '{0}'</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">Сброс текущей ветки на {0}...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">Сброс {0} на {1}...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Отмена коммита '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">Редактирование сообщения HEAD...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">Сканирование репозиториев в '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Установка ветки подмодуля...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Установка upstream...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Сохранение изменений в stash...</x:String>
 </ResourceDictionary>

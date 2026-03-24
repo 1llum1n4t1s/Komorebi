@@ -71,7 +71,7 @@ namespace Komorebi.Commands
                     start.Args = $"flow hotfix start {name}";
                     break;
                 default:
-                    App.RaiseException(repo, "Bad git-flow branch type!!!");
+                    App.RaiseException(repo, App.Text("Error.BadGitFlowBranchType"));
                     return false;
             }
 
@@ -108,7 +108,7 @@ namespace Komorebi.Commands
                     builder.Append("hotfix");
                     break;
                 default:
-                    App.RaiseException(repo, "Bad git-flow branch type!!!");
+                    App.RaiseException(repo, App.Text("Error.BadGitFlowBranchType"));
                     return false;
             }
 

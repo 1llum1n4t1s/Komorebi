@@ -99,7 +99,7 @@ namespace Komorebi.ViewModels
             }
             catch (Exception ex)
             {
-                App.RaiseException(null, $"Failed to scan repositories: {ex.Message}");
+                App.RaiseException(null, App.Text("Error.FailedToScanRepositories", ex.Message));
             }
         }
 
@@ -113,7 +113,7 @@ namespace Komorebi.ViewModels
             {
                 if (string.IsNullOrEmpty(_customDir))
                 {
-                    App.RaiseException(null, "Missing root directory to scan!");
+                    App.RaiseException(null, App.Text("Error.MissingScanDir"));
                     return false;
                 }
 
@@ -123,7 +123,7 @@ namespace Komorebi.ViewModels
             {
                 if (_selected == null || string.IsNullOrEmpty(_selected.Path))
                 {
-                    App.RaiseException(null, "Missing root directory to scan!");
+                    App.RaiseException(null, App.Text("Error.MissingScanDir"));
                     return false;
                 }
 
@@ -133,7 +133,7 @@ namespace Komorebi.ViewModels
             if (!Directory.Exists(selectedDir))
                 return true;
 
-            ProgressDescription = $"Scan repositories under '{selectedDir}' ...";
+            ProgressDescription = App.Text("Progress.ScanningRepositories", selectedDir);
 
             var minDelay = Task.Delay(500);
             var rootDir = new DirectoryInfo(selectedDir);

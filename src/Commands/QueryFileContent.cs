@@ -38,7 +38,7 @@ namespace Komorebi.Commands
             }
             catch (Exception e)
             {
-                App.RaiseException(repo, $"Failed to query file content: {e}");
+                App.RaiseException(repo, App.Text("Error.FailedToQueryFileContent", e));
             }
 
             stream.Position = 0;
@@ -76,7 +76,7 @@ namespace Komorebi.Commands
             }
             catch (Exception e)
             {
-                App.RaiseException(repo, $"Failed to query file content: {e}");
+                App.RaiseException(repo, App.Text("Error.FailedToQueryFileContent", e));
             }
 
             stream.Position = 0;

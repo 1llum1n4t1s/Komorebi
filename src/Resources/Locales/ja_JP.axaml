@@ -1010,4 +1010,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">ロックを解除</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">はい</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">コミットされていないローカル変更があります。先に変更を破棄するかスタッシュしてください。</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisectが実行中です！新しく開始する前に中止してください。</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">選択範囲に競合と非競合の変更が混在しています！</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">場所の選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">親フォルダの選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">パッチの保存に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">ファイルの保存に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">デフォルトのクローンディレクトリの選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Git実行ファイルの選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">GPGプログラムの選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">シェル/ターミナルの選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">マージツールの選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">カスタムアクションのプログラム選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">スキャン対象のルートディレクトリの選択に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">リポジトリを開けませんでした: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">変更の破棄に失敗しました。理由: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">コミットメッセージの生成に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">コミットの取得に失敗しました。理由: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">インタラクティブリベース用のコミット取得に失敗しました。理由: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">ファイル内容の取得に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">インデックスの更新に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">ファイルの保存に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">パッチへの変更の保存に失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">リポジトリのスキャンに失敗しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">リポジトリ '{0}' のウォッチャー起動に失敗しました。'F5'キーを押して手動でリポジトリを更新する必要があるかもしれません。
+理由: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' の起動に失敗しました。理由: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開けませんでした: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">コミット対象のファイルがありません！</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">OpenAIの設定が不正です</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Git flowの初期化に失敗しました: ブランチが見つかりません！</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">不正なgit-flowブランチタイプです！</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">フォルダ '{0}' が見つかりません</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">現在のコミットを親コミットにスカッシュできません！</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">開いているページに未完了のタスクがあります。お待ちください！</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">リポジトリがもう存在しません。削除してください。</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">指定されたパスは有効なGitリポジトリではありません！</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">このリポジトリにはリモートが追加されていません！</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">現在のブランチが見つかりません！</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">最初のコミットの前にブランチを作成することはできません。</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">スキャン対象のルートディレクトリが指定されていません！</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">修正対象のコミットがありません！</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">リポジトリに未完了のジョブがあります！お待ちください！</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">リポジトリに未解決の競合があります。自動ステージとコミットは無効です！</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">ターミナルが指定されていません！正しいシェル/ターミナルが設定されているか確認してください。</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">サブモジュールを追加中...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">作業ツリーを追加中...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">アーカイブ中...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">パッチを適用中...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">リモートを追加中...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">無視ファイルを追加中...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">チェックアウトとファストフォワード '{0}' ...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">ブランチの更新を待機中...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">コミット '{0}' をチェックアウト中...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">スタッシュを適用中: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">'{0}' をチェックアウト中...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">クリーンアップ (GC aggressive &amp; prune) ...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">コミットをチェリーピック中...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">サブモジュールのURLを変更中...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">インデックスキャッシュをクリア中...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">全スタッシュをクリア中...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">クローン中...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">タグを作成中...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">サブモジュールを初期化解除中</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">ブランチを削除中...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">複数のタグを削除中...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">複数のブランチを削除中...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">リモートを削除中...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">サブモジュールを削除中...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">タグ '{0}' を削除中...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' をドロップ中...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">スタッシュを破棄中: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">リモート '{0}' を編集中...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">カスタムアクションを実行中...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">ファストフォワード中...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} を完了中...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - {0} を開始中...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Gitリポジトリを初期化中: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Git flowを初期化中...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">リモートからLFSオブジェクトをフェッチ中...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFSプルーン中...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">リモートからLFSオブジェクトをプル中...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">リモートにLFSオブジェクトをプッシュ中...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">カスタムLFS追跡パターンを追加中...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">'{0}' を '{1}' にマージ中...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">ヘッドをマージ中...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">サブモジュールを移動中...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">作業ツリーをプルーン中...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">{0} を {1} にプッシュ中...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">リベース中...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">作業ツリーを削除中...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">リモートでプルーンを実行中...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">{0} を {1}/{2} にプッシュ中...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">タグをプッシュ中...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' をリネーム中</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">現在のブランチを {0} にリセット中...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">{0} を {1} にリセット中...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">コミット '{0}' をリバート中...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">HEADメッセージを編集中...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">'{0}' 配下のリポジトリをスキャン中...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">サブモジュールのブランチを設定中...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">アップストリームを設定中...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">変更をスタッシュ中...</x:String>
 </ResourceDictionary>

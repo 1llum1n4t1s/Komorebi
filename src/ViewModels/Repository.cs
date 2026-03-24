@@ -526,7 +526,7 @@ namespace Komorebi.ViewModels
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to start watcher for repository: '{FullPath}'. You may need to press 'F5' to refresh repository manually!\n\nReason: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToStartWatcher", FullPath, ex.Message));
             }
 
             _historyFilterMode = _uiStates.GetHistoryFilterMode();
@@ -790,7 +790,7 @@ namespace Komorebi.ViewModels
 
             if (_remotes.Count == 0)
             {
-                App.RaiseException(FullPath, "No remotes added to this repository!!!");
+                App.RaiseException(FullPath, App.Text("Error.NoRemotes"));
                 return;
             }
 
@@ -808,13 +808,13 @@ namespace Komorebi.ViewModels
 
             if (_remotes.Count == 0)
             {
-                App.RaiseException(FullPath, "No remotes added to this repository!!!");
+                App.RaiseException(FullPath, App.Text("Error.NoRemotes"));
                 return;
             }
 
             if (_currentBranch == null)
             {
-                App.RaiseException(FullPath, "Can NOT find current branch!!!");
+                App.RaiseException(FullPath, App.Text("Error.CanNotFindBranch"));
                 return;
             }
 
@@ -833,13 +833,13 @@ namespace Komorebi.ViewModels
 
             if (_remotes.Count == 0)
             {
-                App.RaiseException(FullPath, "No remotes added to this repository!!!");
+                App.RaiseException(FullPath, App.Text("Error.NoRemotes"));
                 return;
             }
 
             if (_currentBranch == null)
             {
-                App.RaiseException(FullPath, "Can NOT find current branch!!!");
+                App.RaiseException(FullPath, App.Text("Error.CanNotFindBranch"));
                 return;
             }
 
@@ -1520,7 +1520,7 @@ namespace Komorebi.ViewModels
         {
             if (_currentBranch == null)
             {
-                App.RaiseException(FullPath, "Git cannot create a branch before your first commit.");
+                App.RaiseException(FullPath, App.Text("Error.NoBranchBeforeFirstCommit"));
                 return;
             }
 
@@ -1611,7 +1611,7 @@ namespace Komorebi.ViewModels
         {
             if (_currentBranch == null)
             {
-                App.RaiseException(FullPath, "Git cannot create a branch before your first commit.");
+                App.RaiseException(FullPath, App.Text("Error.NoBranchBeforeFirstCommit"));
                 return;
             }
 

@@ -41,7 +41,7 @@ namespace Komorebi.Views
             }
             catch (Exception ex)
             {
-                App.RaiseException(string.Empty, $"Failed to select default clone directory: {ex.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCloneDir", ex.Message));
             }
 
             e.Handled = true;

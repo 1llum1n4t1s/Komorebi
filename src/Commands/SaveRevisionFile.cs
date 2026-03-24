@@ -78,7 +78,7 @@ namespace Komorebi.Commands
                 }
                 catch (Exception e)
                 {
-                    App.RaiseException(repo, "Save file failed: " + e.Message);
+                    App.RaiseException(repo, App.Text("Error.FailedToSaveRevisionFile", e.Message));
                 }
             }
         }

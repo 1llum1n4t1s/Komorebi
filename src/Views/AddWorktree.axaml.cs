@@ -41,7 +41,7 @@ namespace Komorebi.Views
             }
             catch (Exception exception)
             {
-                App.RaiseException(string.Empty, $"Failed to select location: {exception.Message}");
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectLocation", exception.Message));
             }
 
             e.Handled = true;

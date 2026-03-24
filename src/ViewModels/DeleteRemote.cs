@@ -31,7 +31,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Deleting remote ...";
+            ProgressDescription = App.Text("Progress.DeletingRemote");
 
             var log = _repo.CreateLog("Delete Remote");
             Use(log);

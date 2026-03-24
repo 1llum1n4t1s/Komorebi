@@ -1010,4 +1010,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Hapus</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Unlock</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">YA</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">Anda memiliki perubahan lokal yang belum di-commit. Silakan buang atau simpan sementara terlebih dahulu.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect sedang berjalan! Silakan batalkan sebelum memulai yang baru.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">Pilihan berisi perubahan yang berkonflik dan tidak berkonflik!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">Gagal memilih lokasi: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">Gagal memilih folder induk: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Gagal menyimpan sebagai patch: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">Gagal menyimpan file: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">Gagal memilih direktori clone default: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Gagal memilih file eksekusi Git: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">Gagal memilih program GPG: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Gagal memilih shell/terminal: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Gagal memilih alat merge: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">Gagal memilih program untuk aksi kustom: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">Gagal memilih direktori root pemindaian: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">Gagal membuka repositori: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">Gagal membuang perubahan. Alasan: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Gagal menghasilkan pesan commit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Gagal mengambil commit. Alasan: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">Gagal mengambil commit untuk interactive rebase. Alasan: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">Gagal mengambil konten file: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">Gagal memperbarui indeks: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Gagal menyimpan file: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Gagal menyimpan perubahan sebagai patch: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Gagal memindai repositori: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Gagal memulai pengamat untuk repositori '{0}'. Anda mungkin perlu menekan 'F5' untuk memperbarui secara manual!
+Alasan: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Gagal memulai '{0}'. Alasan: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Gagal membuka: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">Tidak ada file yang ditambahkan untuk commit!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">Konfigurasi OpenAI salah</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Inisialisasi Git flow gagal: Tidak ada branch yang ditemukan!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">Tipe branch git-flow tidak valid!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">Folder '{0}' tidak ditemukan</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">Tidak dapat melakukan squash commit saat ini ke commit induk!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">Ada tugas yang belum selesai di halaman yang terbuka. Silakan tunggu!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">Repositori sudah tidak ada lagi. Silakan hapus.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">Path yang diberikan bukan repositori Git yang valid!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">Tidak ada remote yang ditambahkan ke repositori ini!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">Tidak dapat menemukan branch saat ini!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">Git tidak dapat membuat branch sebelum commit pertama Anda.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">Direktori root untuk pemindaian tidak ada!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">Tidak ada commit untuk diubah!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">Repositori memiliki pekerjaan yang belum selesai! Silakan tunggu!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">Repositori memiliki konflik yang belum diselesaikan. Auto-stage dan commit dinonaktifkan!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">Terminal tidak ditentukan! Silakan pastikan shell/terminal yang benar telah dikonfigurasi.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">Menambahkan submodule...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Menambahkan worktree...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">Mengarsipkan...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Menerapkan patch...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Menambahkan remote...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Menambahkan file yang diabaikan...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout dan Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Menunggu pembaruan branch...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout commit '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Menerapkan stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">Pembersihan (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick commit...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">Mengubah URL submodule...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">Membersihkan cache indeks...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">Menghapus semua stash...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">Mengkloning...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Membuat tag...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">Menghapus inisialisasi submodule</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Menghapus branch...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">Menghapus beberapa tag...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">Menghapus beberapa branch...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Menghapus remote...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">Menghapus submodule...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Menghapus tag '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">Menghapus HEAD '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Menghapus stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Mengedit remote '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Menjalankan aksi kustom...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - Menyelesaikan {0}...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - Memulai {0}...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Menginisialisasi repositori git di: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Menginisialisasi git-flow...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Mengambil objek LFS dari remote...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Mengunduh objek LFS dari remote...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">Mengirim objek LFS ke remote...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">Menambahkan pola pelacakan LFS kustom...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">Menggabungkan '{0}' ke '{1}'...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Menggabungkan head(s)...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">Memindahkan submodule...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Membersihkan worktree...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Menghapus worktree...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Menjalankan prune pada remote...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Mengirim tag...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Mengganti nama '{0}'</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">Mereset branch saat ini ke {0}...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">Mereset {0} ke {1}...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Mengembalikan commit '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">Mengedit pesan HEAD...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">Memindai repositori di '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Mengatur branch submodule...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Mengatur upstream...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Menyimpan perubahan ke stash...</x:String>
 </ResourceDictionary>

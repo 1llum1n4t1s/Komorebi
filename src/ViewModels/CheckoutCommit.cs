@@ -45,7 +45,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = $"Checkout Commit '{Commit.SHA}' ...";
+            ProgressDescription = App.Text("Progress.CheckoutCommit", Commit.SHA);
 
             var log = _repo.CreateLog("Checkout Commit");
             Use(log);

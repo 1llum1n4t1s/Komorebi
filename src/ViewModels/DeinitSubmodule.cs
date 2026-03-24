@@ -41,7 +41,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "De-initialize Submodule";
+            ProgressDescription = App.Text("Progress.DeinitSubmodule");
 
             var log = _repo.CreateLog("De-initialize Submodule");
             Use(log);

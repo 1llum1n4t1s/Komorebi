@@ -1010,4 +1010,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">移除工作區</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">解除鎖定工作區</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">是</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">存在未提交的本機變更。請先捨棄或暫存它們。</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect正在執行中！請先中止再啟動新的。</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">選擇範圍中同時包含衝突和非衝突的變更！</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">選擇位置失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">選擇父資料夾失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">儲存為修補檔失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">儲存檔案失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">選擇預設複製目錄失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">選擇Git執行檔失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">選擇GPG程式失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">選擇Shell/終端機失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">選擇合併工具失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">選擇自訂動作程式失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">選擇掃描根目錄失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">開啟儲存庫失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">捨棄變更失敗。原因：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">產生提交訊息失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">查詢提交失敗。原因：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">查詢互動式變基的提交失敗。原因：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">查詢檔案內容失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">更新索引失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">儲存檔案失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">儲存修補檔變更失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">掃描儲存庫失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！
+原因：{1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">啟動 '{0}' 失敗。原因：{1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開啟失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">沒有新增要提交的檔案！</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">OpenAI設定錯誤</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Git flow初始化失敗：未找到分支！</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">無效的Git flow分支類型！</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">找不到資料夾 '{0}'</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">無法將目前提交壓縮到父提交中！</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">已開啟的頁面中有未完成的工作。請等待！</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">儲存庫已不存在。請將其移除。</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">指定的路徑不是有效的Git儲存庫！</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">此儲存庫未新增任何遠端！</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">找不到目前的分支！</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">在第一次提交之前，Git無法建立分支。</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">缺少掃描根目錄！</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">沒有可修改的提交！</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">儲存庫有未完成的工作！請等待！</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">儲存庫存在未解決的衝突。自動暫存和提交已停用！</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">未指定終端機！請確認已設定正確的Shell/終端機。</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">正在新增子模組...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">正在新增工作樹...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">正在封存...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">正在套用修補檔...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">正在新增遠端...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">正在新增忽略檔案...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout 並 Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">等待分支更新...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout 提交 '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">正在套用 stash：{0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">清理 (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick 提交...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">正在變更子模組 URL...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">正在清除索引快取...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">正在清除所有 stash...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">正在複製...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">正在建立標籤...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">正在取消初始化子模組</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">正在刪除分支...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">正在刪除多個標籤...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">正在刪除多個分支...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">正在刪除遠端...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">正在刪除子模組...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">正在刪除標籤 '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">丟棄 HEAD '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">正在丟棄 stash：{0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">正在編輯遠端 '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">正在執行自訂動作...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - 完成 {0}...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - 開始 {0}...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">正在初始化 Git 儲存庫：'{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">正在初始化 git-flow...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">正在從遠端取得 LFS 物件...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">正在從遠端拉取 LFS 物件...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">正在推送 LFS 物件到遠端...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">正在新增自訂 LFS 追蹤模式...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">正在合併 '{0}' 到 '{1}'...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">正在合併 head(s)...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">正在移動子模組...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">正在清理工作樹...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">推送 {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">正在變基...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">正在移除工作樹...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">正在遠端執行 prune...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">推送 {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">正在推送標籤...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">正在重新命名 '{0}'</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">正在將目前分支重設到 {0}...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">正在將 {0} 重設到 {1}...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">正在還原提交 '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">正在編輯 HEAD 訊息...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">正在掃描 '{0}' 下的儲存庫...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">正在設定子模組的分支...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">正在設定 upstream...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">正在暫存變更...</x:String>
 </ResourceDictionary>

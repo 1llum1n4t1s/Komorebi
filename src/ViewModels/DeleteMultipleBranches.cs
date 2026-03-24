@@ -33,7 +33,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Deleting multiple branches...";
+            ProgressDescription = App.Text("Progress.DeletingMultipleBranches");
 
             var log = _repo.CreateLog("Delete Multiple Branches");
             Use(log);

@@ -119,7 +119,7 @@ namespace Komorebi.Commands
             }
             catch (Exception e)
             {
-                App.RaiseException(Context, $"Failed to query commits. Reason: {e.Message}");
+                App.RaiseException(Context, App.Text("Error.FailedToQueryCommits", e.Message));
             }
 
             return commits;

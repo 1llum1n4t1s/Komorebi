@@ -40,7 +40,7 @@ namespace Komorebi.ViewModels
         /// </summary>
         public override async Task<bool> Sure()
         {
-            ProgressDescription = "Set submodule's branch ...";
+            ProgressDescription = App.Text("Progress.SetSubmoduleBranch");
 
             if (_changeTo.Equals(Submodule.Branch, StringComparison.Ordinal))
                 return true;

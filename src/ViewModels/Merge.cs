@@ -119,7 +119,7 @@ namespace Komorebi.ViewModels
             // ファイルシステムウォッチャーをロックしてマージ中の変更検知を抑制
             using var lockWatcher = _repo.LockWatcher();
             _repo.ClearCommitMessage();
-            ProgressDescription = $"Merging '{_sourceName}' into '{Into}' ...";
+            ProgressDescription = App.Text("Progress.Merging", _sourceName, Into);
 
             var log = _repo.CreateLog($"Merging '{_sourceName}' into '{Into}'");
             Use(log);

@@ -27,7 +27,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Clear index cache ...";
+            ProgressDescription = App.Text("Progress.ClearIndexCache");
 
             // コマンドログを作成する
             var log = _repo.CreateLog("Clear index cache");

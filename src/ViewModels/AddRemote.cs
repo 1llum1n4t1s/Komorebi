@@ -138,7 +138,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Adding remote ...";
+            ProgressDescription = App.Text("Progress.AddingRemote");
 
             // コマンドログを作成する
             var log = _repo.CreateLog("Add Remote");

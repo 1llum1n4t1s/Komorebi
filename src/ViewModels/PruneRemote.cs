@@ -32,7 +32,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Run `prune` on remote ...";
+            ProgressDescription = App.Text("Progress.PruneRemote");
 
             var log = _repo.CreateLog($"Prune Remote '{Remote.Name}'");
             Use(log);

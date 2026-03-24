@@ -104,7 +104,7 @@ namespace Komorebi.Commands
             }
             catch (Exception e)
             {
-                App.RaiseException(repo, "Save change to patch failed: " + e.Message);
+                App.RaiseException(repo, App.Text("Error.FailedToSavePatch", e.Message));
                 return false;
             }
         }

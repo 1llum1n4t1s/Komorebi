@@ -51,7 +51,7 @@ namespace Komorebi.ViewModels
                 return true;
 
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Editing HEAD message ...";
+            ProgressDescription = App.Text("Progress.EditingHeadMessage");
 
             var log = _repo.CreateLog("Reword HEAD");
             Use(log);

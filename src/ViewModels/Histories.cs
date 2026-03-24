@@ -510,7 +510,7 @@ namespace Komorebi.ViewModels
 
             var on = await new Commands.QuerySingleCommit(_repo.FullPath, start).GetResultAsync();
             if (on == null)
-                App.RaiseException(_repo.FullPath, $"Can not squash current commit into parent!");
+                App.RaiseException(_repo.FullPath, App.Text("Error.CanNotSquash"));
             else
                 await App.ShowDialog(new InteractiveRebase(_repo, on, prefill));
         }

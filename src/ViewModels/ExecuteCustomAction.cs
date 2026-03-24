@@ -168,7 +168,7 @@ namespace Komorebi.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Run custom action ...";
+            ProgressDescription = App.Text("Progress.RunCustomAction");
 
             // コマンドライン引数のプレースホルダーを実際の値に置換
             var cmdline = PrepareStringByTarget(CustomAction.Arguments);

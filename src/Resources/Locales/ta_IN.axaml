@@ -1010,4 +1010,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">நீக்கு</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">திற</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">ஆம்</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">உறுதிப்படுத்தப்படாத உள்ளூர் மாற்றங்கள் உள்ளன. முதலில் அவற்றை நிராகரிக்கவும் அல்லது stash செய்யவும்.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Bisect இயங்குகிறது! புதியதை தொடங்கும் முன் நிறுத்தவும்.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">தேர்வில் முரண்பாடான மற்றும் முரண்பாடற்ற மாற்றங்கள் இரண்டும் உள்ளன!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">இடத்தைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">மூல கோப்புறையைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Patch ஆகச் சேமிக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">கோப்பைச் சேமிக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">இயல்பு clone கோப்பகத்தைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Git இயங்கு கோப்பைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">GPG நிரலைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Shell/terminal தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Merge கருவியைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">தனிப்பயன் செயலுக்கான நிரலைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">ஸ்கேன் மூல கோப்பகத்தைத் தேர்வு செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">களஞ்சியத்தைத் திறக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">மாற்றங்களை நிராகரிக்க இயலவில்லை. காரணம்: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Commit செய்தியை உருவாக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Commits வினவ இயலவில்லை. காரணம்: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">ஊடாடும் rebase க்கான commits வினவ இயலவில்லை. காரணம்: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">கோப்பு உள்ளடக்கத்தை வினவ இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">அட்டவணையைப் புதுப்பிக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">கோப்பைச் சேமிக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Patch மாற்றத்தைச் சேமிக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">களஞ்சியங்களை ஸ்கேன் செய்ய இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">களஞ்சியம் '{0}' க்கான கண்காணியை தொடங்க இயலவில்லை. கைமுறையாகப் புதுப்பிக்க 'F5' அழுத்தவும்!
+காரணம்: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' ஐத் தொடங்க இயலவில்லை. காரணம்: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">திறக்க இயலவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">Commit க்கு கோப்புகள் சேர்க்கப்படவில்லை!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">OpenAI அமைப்பு தவறானது</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Git flow துவக்கம் தோல்வி: Branch கிடைக்கவில்லை!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">தவறான git-flow branch வகை!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">கோப்புறை '{0}' கிடைக்கவில்லை</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">தற்போதைய commit ஐ மூல commit இல் சுருக்க இயலாது!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">திறந்த பக்கங்களில் முடிக்கப்படாத பணிகள் உள்ளன. காத்திருக்கவும்!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">களஞ்சியம் இனி இல்லை. தயவுசெய்து நீக்கவும்.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">கொடுக்கப்பட்ட பாதை செல்லுபடியான Git களஞ்சியம் அல்ல!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">இந்தக் களஞ்சியத்தில் remote சேர்க்கப்படவில்லை!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">தற்போதைய branch கண்டுபிடிக்க இயலவில்லை!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">முதல் commit க்கு முன் Git branch உருவாக்க இயலாது.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">ஸ்கேன் மூல கோப்பகம் இல்லை!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">திருத்துவதற்கு commits இல்லை!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">களஞ்சியத்தில் முடிக்கப்படாத பணி உள்ளது! காத்திருக்கவும்!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">களஞ்சியத்தில் தீர்க்கப்படாத முரண்பாடுகள் உள்ளன. தானியங்கி stage மற்றும் commit முடக்கப்பட்டுள்ளது!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">Terminal குறிப்பிடப்படவில்லை! சரியான shell/terminal அமைக்கப்பட்டுள்ளதா உறுதிப்படுத்தவும்.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">துணைத்தொகுதி சேர்க்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Worktree சேர்க்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">காப்பகப்படுத்துகிறது...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Patch பயன்படுத்துகிறது...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Remote சேர்க்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">புறக்கணிக்கப்பட்ட கோப்புகளைச் சேர்க்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout மற்றும் Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Branch புதுப்பிப்புக்காகக் காத்திருக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Commit '{0}' checkout செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Stash பயன்படுத்துகிறது: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">சுத்தப்படுத்துகிறது (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick commit(s)...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">துணைத்தொகுதி URL மாற்றுகிறது...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">அட்டவணை cache அழிக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">அனைத்து stash அழிக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">Clone செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Tag உருவாக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">துணைத்தொகுதியை நிறுத்துகிறது</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Branch நீக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">பல tags நீக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">பல branches நீக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Remote நீக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">துணைத்தொகுதி நீக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Tag '{0}' நீக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' கைவிடுகிறது...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Stash கைவிடுகிறது: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Remote '{0}' திருத்துகிறது...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">தனிப்பயன் செயலை இயக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} முடிக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - {0} தொடங்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Git களஞ்சியத்தை துவக்குகிறது: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Git-flow துவக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Remote இலிருந்து LFS பொருட்களைப் பெறுகிறது...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Remote இலிருந்து LFS பொருட்களை இழுக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">LFS பொருட்களை remote க்கு அனுப்புகிறது...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">தனிப்பயன் LFS கண்காணிப்பு வடிவத்தைச் சேர்க்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">'{0}' ஐ '{1}' இல் merge செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Head(s) merge செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">துணைத்தொகுதியை நகர்த்துகிறது...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Worktrees சுத்தப்படுத்துகிறது...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Worktree நீக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Remote இல் prune இயக்குகிறது...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Tag push செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' மறுபெயரிடுகிறது</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">தற்போதைய branch ஐ {0} க்கு மீட்டமைக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">{0} ஐ {1} க்கு மீட்டமைக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Commit '{0}' மாற்றியமைக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">HEAD செய்தியைத் திருத்துகிறது...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">'{0}' கீழ் களஞ்சியங்களை ஸ்கேன் செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">துணைத்தொகுதி branch அமைக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream அமைக்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">மாற்றங்களை stash செய்கிறது...</x:String>
 </ResourceDictionary>

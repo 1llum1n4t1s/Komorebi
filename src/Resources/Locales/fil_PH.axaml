@@ -1007,4 +1007,107 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Alisin</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">I-unlock</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">OO</x:String>
+  <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">Mayroon kang mga hindi na-commit na lokal na pagbabago. Mangyaring i-discard o i-stash muna ang mga ito.</x:String>
+  <x:String x:Key="Text.Error.BisectAlreadyRunning" xml:space="preserve">Tumatakbo ang Bisect! Mangyaring i-abort muna bago magsimula ng bago.</x:String>
+  <x:String x:Key="Text.Error.ConflictAndNonConflictMixed" xml:space="preserve">Ang napili ay naglalaman ng parehong may-conflict at walang-conflict na mga pagbabago!</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectLocation" xml:space="preserve">Hindi nagawang pumili ng lokasyon: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectFolder" xml:space="preserve">Hindi nagawang pumili ng parent folder: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveAsPatch" xml:space="preserve">Hindi nagawang i-save bilang patch: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveFile" xml:space="preserve">Hindi nagawang i-save ang file: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCloneDir" xml:space="preserve">Hindi nagawang pumili ng default na clone directory: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGitExe" xml:space="preserve">Hindi nagawang pumili ng Git executable: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectGpg" xml:space="preserve">Hindi nagawang pumili ng GPG program: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectTerminal" xml:space="preserve">Hindi nagawang pumili ng shell/terminal: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectMergeTool" xml:space="preserve">Hindi nagawang pumili ng merge tool: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectCustomAction" xml:space="preserve">Hindi nagawang pumili ng program para sa custom action: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSelectScanDir" xml:space="preserve">Hindi nagawang pumili ng root scanning directory: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenRepository" xml:space="preserve">Hindi nagawang buksan ang repository: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToDiscard" xml:space="preserve">Hindi nagawang i-discard ang mga pagbabago. Dahilan: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToGenerateCommitMessage" xml:space="preserve">Hindi nagawang gumawa ng commit message: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryCommits" xml:space="preserve">Hindi nagawang kunin ang mga commit. Dahilan: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryInteractiveRebase" xml:space="preserve">Hindi nagawang kunin ang mga commit para sa interactive rebase. Dahilan: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToQueryFileContent" xml:space="preserve">Hindi nagawang kunin ang nilalaman ng file: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToUpdateIndex" xml:space="preserve">Hindi nagawang i-update ang index: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Hindi nagawang i-save ang file: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Hindi nagawang i-save ang pagbabago bilang patch: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Hindi nagawang i-scan ang mga repository: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!
+Dahilan: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Hindi nagawang simulan ang '{0}'. Dahilan: {1}</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Hindi nagawang buksan: {0}</x:String>
+  <x:String x:Key="Text.Error.NoFilesForCommit" xml:space="preserve">Walang mga file na idinagdag para sa commit!</x:String>
+  <x:String x:Key="Text.Error.BadOpenAIConfig" xml:space="preserve">Mali ang configuration ng OpenAI</x:String>
+  <x:String x:Key="Text.Error.GitFlowNoBranch" xml:space="preserve">Nabigo ang Git flow init: Walang branch na nahanap!</x:String>
+  <x:String x:Key="Text.Error.BadGitFlowBranchType" xml:space="preserve">Mali ang uri ng git-flow branch!</x:String>
+  <x:String x:Key="Text.Error.FolderNotFound" xml:space="preserve">Hindi mahanap ang folder '{0}'</x:String>
+  <x:String x:Key="Text.Error.CanNotSquash" xml:space="preserve">Hindi ma-squash ang kasalukuyang commit sa parent!</x:String>
+  <x:String x:Key="Text.Error.UnfinishedTasks" xml:space="preserve">May hindi pa natapos na mga gawain sa mga bukas na pahina. Mangyaring maghintay!</x:String>
+  <x:String x:Key="Text.Error.RepositoryNotExist" xml:space="preserve">Wala na ang repository. Mangyaring alisin ito.</x:String>
+  <x:String x:Key="Text.Error.InvalidGitRepository" xml:space="preserve">Ang ibinigay na path ay hindi isang valid na Git repository!</x:String>
+  <x:String x:Key="Text.Error.NoRemotes" xml:space="preserve">Walang remote na idinagdag sa repository na ito!</x:String>
+  <x:String x:Key="Text.Error.CanNotFindBranch" xml:space="preserve">Hindi mahanap ang kasalukuyang branch!</x:String>
+  <x:String x:Key="Text.Error.NoBranchBeforeFirstCommit" xml:space="preserve">Hindi makagawa ang Git ng branch bago ang iyong unang commit.</x:String>
+  <x:String x:Key="Text.Error.MissingScanDir" xml:space="preserve">Walang root directory para sa pag-scan!</x:String>
+  <x:String x:Key="Text.Error.NoCommitsToAmend" xml:space="preserve">Walang mga commit na maaaring baguhin!</x:String>
+  <x:String x:Key="Text.Error.RepoHasUnfinishedJob" xml:space="preserve">May hindi pa natapos na trabaho ang repository! Mangyaring maghintay!</x:String>
+  <x:String x:Key="Text.Error.RepoHasConflicts" xml:space="preserve">May hindi pa nalulutas na mga conflict ang repository. Naka-disable ang auto-stage at commit!</x:String>
+  <x:String x:Key="Text.Error.TerminalNotSpecified" xml:space="preserve">Hindi tinukoy ang terminal! Mangyaring tiyakin na naka-configure ang tamang shell/terminal.</x:String>
+  <x:String x:Key="Text.Progress.AddingSubmodule" xml:space="preserve">Nagdadagdag ng submodule...</x:String>
+  <x:String x:Key="Text.Progress.AddingWorktree" xml:space="preserve">Nagdadagdag ng worktree...</x:String>
+  <x:String x:Key="Text.Progress.Archiving" xml:space="preserve">Nag-a-archive...</x:String>
+  <x:String x:Key="Text.Progress.ApplyPatch" xml:space="preserve">Nag-a-apply ng patch...</x:String>
+  <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Nagdadagdag ng remote...</x:String>
+  <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Nagdadagdag ng mga ignored file...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout at Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Naghihintay ng branch update...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout ng commit '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Nag-a-apply ng stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.Checkout" xml:space="preserve">Checkout '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.Cleanup" xml:space="preserve">Paglilinis (GC aggressive &amp; prune)...</x:String>
+  <x:String x:Key="Text.Progress.CherryPick" xml:space="preserve">Cherry-Pick ng commit(s)...</x:String>
+  <x:String x:Key="Text.Progress.ChangeSubmoduleUrl" xml:space="preserve">Binabago ang URL ng submodule...</x:String>
+  <x:String x:Key="Text.Progress.ClearIndexCache" xml:space="preserve">Nililinis ang index cache...</x:String>
+  <x:String x:Key="Text.Progress.ClearAllStashes" xml:space="preserve">Binubura ang lahat ng stash...</x:String>
+  <x:String x:Key="Text.Progress.Cloning" xml:space="preserve">Nagko-clone...</x:String>
+  <x:String x:Key="Text.Progress.CreateTag" xml:space="preserve">Gumagawa ng tag...</x:String>
+  <x:String x:Key="Text.Progress.DeinitSubmodule" xml:space="preserve">Dine-deinitialize ang submodule</x:String>
+  <x:String x:Key="Text.Progress.DeletingBranch" xml:space="preserve">Binubura ang branch...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleTags" xml:space="preserve">Binubura ang maraming tag...</x:String>
+  <x:String x:Key="Text.Progress.DeletingMultipleBranches" xml:space="preserve">Binubura ang maraming branch...</x:String>
+  <x:String x:Key="Text.Progress.DeletingRemote" xml:space="preserve">Binubura ang remote...</x:String>
+  <x:String x:Key="Text.Progress.DeletingSubmodule" xml:space="preserve">Binubura ang submodule...</x:String>
+  <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Binubura ang tag '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">Dini-drop ang HEAD '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Dini-drop ang stash: {0}</x:String>
+  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Ine-edit ang remote '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Pinapatakbo ang custom action...</x:String>
+  <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - Tinapos ang {0}...</x:String>
+  <x:String x:Key="Text.Progress.GitFlowStart" xml:space="preserve">Git Flow - Sinisimulan ang {0}...</x:String>
+  <x:String x:Key="Text.Progress.InitRepo" xml:space="preserve">Ini-initialize ang Git repository sa: '{0}'</x:String>
+  <x:String x:Key="Text.Progress.InitGitFlow" xml:space="preserve">Ini-initialize ang git-flow...</x:String>
+  <x:String x:Key="Text.Progress.LFSFetch" xml:space="preserve">Kinukuha ang mga LFS object mula sa remote...</x:String>
+  <x:String x:Key="Text.Progress.LFSPrune" xml:space="preserve">LFS prune...</x:String>
+  <x:String x:Key="Text.Progress.LFSPull" xml:space="preserve">Dina-download ang mga LFS object mula sa remote...</x:String>
+  <x:String x:Key="Text.Progress.LFSPush" xml:space="preserve">Ipinapadala ang mga LFS object sa remote...</x:String>
+  <x:String x:Key="Text.Progress.LFSTrack" xml:space="preserve">Nagdadagdag ng custom LFS tracking pattern...</x:String>
+  <x:String x:Key="Text.Progress.Merging" xml:space="preserve">Nag-me-merge ng '{0}' sa '{1}'...</x:String>
+  <x:String x:Key="Text.Progress.MergeHeads" xml:space="preserve">Nag-me-merge ng head(s)...</x:String>
+  <x:String x:Key="Text.Progress.MovingSubmodule" xml:space="preserve">Inililipat ang submodule...</x:String>
+  <x:String x:Key="Text.Progress.PruneWorktrees" xml:space="preserve">Nililinis ang mga worktree...</x:String>
+  <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
+  <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
+  <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Tinatanggal ang worktree...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Pinapatakbo ang prune sa remote...</x:String>
+  <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
+  <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Pinapu-push ang tag...</x:String>
+  <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Pinapalitan ang pangalan ng '{0}'</x:String>
+  <x:String x:Key="Text.Progress.Resetting" xml:space="preserve">Nire-reset ang kasalukuyang branch sa {0}...</x:String>
+  <x:String x:Key="Text.Progress.ResettingWithoutCheckout" xml:space="preserve">Nire-reset ang {0} sa {1}...</x:String>
+  <x:String x:Key="Text.Progress.Reverting" xml:space="preserve">Nire-revert ang commit '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.EditingHeadMessage" xml:space="preserve">Ine-edit ang HEAD message...</x:String>
+  <x:String x:Key="Text.Progress.ScanningRepositories" xml:space="preserve">Ini-scan ang mga repository sa '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Sine-set ang branch ng submodule...</x:String>
+  <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Sine-set ang upstream...</x:String>
+  <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Sine-stash ang mga pagbabago...</x:String>
 </ResourceDictionary>

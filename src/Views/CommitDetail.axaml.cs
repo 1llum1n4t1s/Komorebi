@@ -76,7 +76,7 @@ namespace Komorebi.Views
                 }
                 catch (Exception exception)
                 {
-                    App.RaiseException(repo.FullPath, $"Failed to save as patch: {exception.Message}");
+                    App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                 }
 
                 e.Handled = true;
@@ -147,7 +147,7 @@ namespace Komorebi.Views
                 }
                 catch (Exception exception)
                 {
-                    App.RaiseException(repo.FullPath, $"Failed to save as patch: {exception.Message}");
+                    App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                 }
 
                 e.Handled = true;
@@ -327,7 +327,7 @@ namespace Komorebi.Views
                 }
                 catch (Exception exception)
                 {
-                    App.RaiseException(repo.FullPath, $"Failed to save as patch: {exception.Message}");
+                    App.RaiseException(repo.FullPath, App.Text("Error.FailedToSaveAsPatch", exception.Message));
                 }
 
                 e.Handled = true;

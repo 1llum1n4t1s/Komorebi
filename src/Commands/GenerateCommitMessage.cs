@@ -130,7 +130,7 @@ namespace Komorebi.Commands
             }
             catch (Exception e)
             {
-                App.RaiseException(_repo, $"Failed to generate commit message: {e}");
+                App.RaiseException(_repo, App.Text("Error.FailedToGenerateCommitMessage", e));
             }
         }
 

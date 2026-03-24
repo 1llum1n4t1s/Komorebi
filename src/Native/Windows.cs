@@ -256,7 +256,7 @@ namespace Komorebi.Native
             // ターミナルの存在を確認する
             if (!File.Exists(terminal))
             {
-                App.RaiseException(workdir, "Terminal is not specified! Please confirm that the correct shell/terminal has been configured.");
+                App.RaiseException(workdir, App.Text("Error.TerminalNotSpecified"));
                 return;
             }
 
