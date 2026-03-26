@@ -199,27 +199,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">I-configure ang Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE NG COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;
-&#xD;&#xD;
-  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;
-  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;
-  ${files} Mga path ng nabagong file&#xD;&#xD;
-  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;
-  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;
+  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;
+  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;
+  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;
+  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;
   ${pure_files:N} Katulad ng ${files:N}, ngunit walang mga folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Nilalaman ng Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Pangalan ng Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">CUSTOM NA AKSYON</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Mga Argumento:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;
-&#xD;&#xD;
-  ${REPO} Path ng Repository&#xD;&#xD;
-  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;
-  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;
-  ${SHA} Hash ng napiling commit&#xD;&#xD;
-  ${TAG} Napiling tag&#xD;&#xD;
-  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${REPO} Path ng Repository&#xD;&#xD;&#xD;
+  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;
+  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;
+  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;
+  ${TAG} Napiling tag&#xD;&#xD;&#xD;
+  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;
   $1, $2 ... Mga halaga ng input control</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Executable File:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Mga Input Control:</x:String>
@@ -1031,7 +1031,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Hindi nagawang i-save ang file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Hindi nagawang i-save ang pagbabago bilang patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Hindi nagawang i-scan ang mga repository: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;
 Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Hindi nagawang simulan ang '{0}'. Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Hindi nagawang buksan: {0}</x:String>
@@ -1110,4 +1110,34 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Sine-set ang branch ng submodule...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Sine-set ang upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Sine-stash ang mga pagbabago...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Maaaring may ibang proseso ng git na tumatakbo. Kung wala, tanggalin ang .lock file sa .git directory.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">May nakitang merge conflict. Ayusin ang mga conflict sa bawat file, pagkatapos i-stage at i-commit.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">Ang HEAD ay naka-detach. Gumawa ng bagong branch para mapanatili ang iyong mga pagbabago.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Tinanggihan ang push dahil may mas bagong pagbabago sa remote. Mag-pull (o mag-fetch at merge) muna, pagkatapos mag-push ulit.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">May mga pagbabagong hindi pa naka-commit. I-commit o i-stash ang mga ito bago magpatuloy.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Nabigo ang authentication. Suriin ang iyong credentials, SSH key, o personal access token.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Hindi nahanap ang remote repository. I-verify ang URL at ang iyong koneksyon sa network.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">May branch o tag na may ganitong pangalan. Pumili ng ibang pangalan.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Ang mga hindi sinusubaybayang file ay mapapatungan. Ilipat o tanggalin ang mga ito, o gamitin ang stash.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">Nabigo ang koneksyon sa network. Suriin ang iyong koneksyon sa internet at proxy settings.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">May rebase na nagaganap. Ituloy, laktawan, o i-abort muna ang kasalukuyang rebase.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">Walang naka-stage na pagbabago para i-commit. Mag-stage ng mga file muna.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">May problema sa submodule. Subukan ang 'git submodule update --init --recursive'.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Hindi naka-install o hindi naka-configure ang Git LFS. I-install ang Git LFS at patakbuhin ang 'git lfs install'.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">Lumampas ang file sa limitasyon ng laki. Gamitin ang Git LFS para sa malalaking file.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">May conflict ang cherry-pick. Ayusin ang mga conflict, pagkatapos patakbuhin ang 'git cherry-pick --continue' o '--abort'.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">Hindi pa natapos ang nakaraang merge. Patakbuhin ang 'git merge --abort' para i-cancel, o ayusin at i-commit.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">Walang nakatakdang upstream branch. Gamitin ang 'git push -u origin &lt;branch&gt;' para itakda ang tracking.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">Ito ay shallow clone na may limitadong kasaysayan. Patakbuhin ang 'git fetch --unshallow' para makuha ang buong kasaysayan.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">Walang sapat na espasyo sa disk. Magpalaya ng espasyo at subukan ulit.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">Tinanggihan ang pahintulot sa file system. Suriin ang mga pahintulot ng file/directory o patakbuhin na may tamang pribilehiyo.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">Hindi valid ang pangalan ng reference o revision. Suriin kung may typo sa pangalan ng branch, tag, o commit.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">Hindi nahanap ang remote branch o reference. Maaaring na-delete na. Patakbuhin ang 'git fetch --prune' para i-update.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">May sira o nawawalang object sa repository. Subukan ang 'git fsck' para mag-diagnose, o mag-clone ulit kung kailangan.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">Hindi git repository ang directory na ito. Patakbuhin ang 'git init' para gumawa, o suriin ang path.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">Walang nakitang stash entry. Walang naka-save na pagbabago para i-apply.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Nabigo ang clean/smudge filter. Suriin ang .gitattributes at ang filter configuration.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Tinanggihan ng git hook ang operasyon. Suriin ang hook script o gamitin ang '--no-verify' para i-bypass (mag-ingat).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Hindi nai-apply nang maayos ang patch. Maaaring nagbago na ang target files. Subukang ayusin nang manu-mano.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree conflict: maaaring naka-checkout na ang branch sa ibang lugar. Suriin gamit ang 'git worktree list'.</x:String>
 </ResourceDictionary>

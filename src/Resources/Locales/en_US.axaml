@@ -1113,4 +1113,34 @@ Reason: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Set submodule's branch ...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Setting upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Stash changes ...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Another git process may be running. If not, delete the .lock file in the .git directory.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Merge conflicts detected. Resolve the conflicts in each file, then stage and commit.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD is detached. Create a new branch to keep your changes.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Push was rejected because the remote has newer changes. Pull (or fetch and merge) first, then push again.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">You have uncommitted changes. Commit or stash them before proceeding.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Authentication failed. Check your credentials, SSH key, or personal access token.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Remote repository not found. Verify the URL and your network connection.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">A branch or tag with that name already exists. Choose a different name.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Untracked files would be overwritten. Move or delete them, or use stash to save them.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">Network connection failed. Check your internet connection and proxy settings.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">A rebase is in progress. Continue, skip, or abort the current rebase first.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">There are no staged changes to commit. Stage files first.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">Submodule issue detected. Try running 'git submodule update --init --recursive'.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS is not installed or not configured. Install Git LFS and run 'git lfs install'.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">File exceeds the size limit. Use Git LFS to track large files.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick resulted in conflicts. Resolve the conflicts, then run 'git cherry-pick --continue' or '--abort'.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">A previous merge has not been completed. Run 'git merge --abort' to cancel or resolve and commit.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">No upstream branch is set. Use 'git push -u origin &lt;branch&gt;' to set tracking.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">This is a shallow clone with limited history. Run 'git fetch --unshallow' to get full history.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">Not enough disk space. Free up space and try again.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">File system permission denied. Check file/directory permissions or run with appropriate privileges.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">Invalid reference name or revision. Check for typos in the branch, tag, or commit name.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">Remote branch or reference not found. It may have been deleted. Run 'git fetch --prune' to update.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">Repository has corrupt or missing objects. Try 'git fsck' to diagnose, or re-clone if needed.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">This directory is not a git repository. Run 'git init' to create one, or check the path.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">No stash entries found. There is nothing saved in stash to apply or pop.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">A clean/smudge filter failed. Check your .gitattributes and filter configuration.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">A git hook rejected the operation. Check the hook script or use '--no-verify' to bypass (with caution).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Patch could not be applied cleanly. The target files may have changed. Try resolving manually.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree conflict: the branch may already be checked out elsewhere. Use 'git worktree list' to check.</x:String>
 </ResourceDictionary>

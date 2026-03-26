@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Comparar com HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configurar Repositório</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE DE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;
-  &#xD;&#xD;
-  ${branch_name} Current local branch name.&#xD;&#xD;
-  ${files_num} Number of changed files&#xD;&#xD;
-  ${files} Paths of changed files&#xD;&#xD;
-  ${files:N} Max N number of paths of changed files&#xD;&#xD;
-  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;
+  ${files_num} Number of changed files&#xD;&#xD;&#xD;
+  ${files} Paths of changed files&#xD;&#xD;&#xD;
+  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;
+  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;
   ${pure_files:N} Likes ${files:N}, but without folders</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Conteúdo do Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nome do Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">AÇÃO CUSTOMIZADA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumentos:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;
-  &#xD;&#xD;
-  ${REPO} Repository's path&#xD;&#xD;
-  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;
-  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;
-  ${SHA} Selected commit's hash&#xD;&#xD;
-  ${TAG} Selected tag&#xD;&#xD;
-  ${FILE} Selected file, relative to repository root&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${REPO} Repository's path&#xD;&#xD;&#xD;
+  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;
+  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;
+  ${TAG} Selected tag&#xD;&#xD;&#xD;
+  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;
   $1, $2 ... Input control values</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Caminho do executável:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Controles de Entrada:</x:String>
@@ -1034,7 +1034,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Falha ao salvar arquivo: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Falha ao salvar alteração como patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Falha ao varrer repositórios: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Falha ao iniciar observador para o repositório '{0}'. Pode ser necessário pressionar 'F5' para atualizar manualmente!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Falha ao iniciar observador para o repositório '{0}'. Pode ser necessário pressionar 'F5' para atualizar manualmente!&#xD;
 Motivo: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Falha ao iniciar '{0}'. Motivo: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Falha ao abrir: {0}</x:String>
@@ -1113,4 +1113,34 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Definindo branch do submódulo...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Definindo upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Salvando alterações em stash...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Outro processo git pode estar em execução. Caso contrário, exclua o arquivo .lock no diretório .git.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Conflitos de merge detectados. Resolva os conflitos em cada arquivo, depois adicione ao stage e faça commit.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD está desanexado. Crie um novo branch para manter suas alterações.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">O push foi rejeitado porque o remoto tem alterações mais recentes. Faça pull (ou fetch e merge) primeiro, depois push novamente.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">Você tem alterações não commitadas. Faça commit ou stash antes de continuar.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Autenticação falhou. Verifique suas credenciais, chave SSH ou token de acesso pessoal.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Repositório remoto não encontrado. Verifique a URL e sua conexão de rede.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Um branch ou tag com esse nome já existe. Escolha um nome diferente.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Arquivos não rastreados seriam sobrescritos. Mova-os, exclua-os ou use stash para salvá-los.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">Falha na conexão de rede. Verifique sua conexão com a internet e configurações de proxy.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">Um rebase está em andamento. Continue, pule ou aborte o rebase atual primeiro.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">Não há alterações em stage para commitar. Adicione arquivos ao stage primeiro.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">Problema de submódulo detectado. Tente executar 'git submodule update --init --recursive'.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS não está instalado ou configurado. Instale o Git LFS e execute 'git lfs install'.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">O arquivo excede o limite de tamanho. Use Git LFS para rastrear arquivos grandes.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick resultou em conflitos. Resolva os conflitos e execute 'git cherry-pick --continue' ou '--abort'.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">Um merge anterior não foi concluído. Execute 'git merge --abort' para cancelar, ou resolva e faça commit.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">Nenhum branch upstream definido. Use 'git push -u origin &lt;branch&gt;' para configurar o rastreamento.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">Este é um clone superficial com histórico limitado. Execute 'git fetch --unshallow' para obter o histórico completo.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">Espaço em disco insuficiente. Libere espaço e tente novamente.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">Permissão do sistema de arquivos negada. Verifique as permissões de arquivo/diretório ou execute com privilégios adequados.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">Nome de referência ou revisão inválido. Verifique erros de digitação no nome do branch, tag ou commit.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">Branch ou referência remota não encontrada. Pode ter sido excluída. Execute 'git fetch --prune' para atualizar.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">O repositório possui objetos corrompidos ou ausentes. Tente 'git fsck' para diagnosticar, ou re-clone se necessário.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">Este diretório não é um repositório git. Execute 'git init' para criar um, ou verifique o caminho.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">Nenhuma entrada stash encontrada. Não há alterações salvas para aplicar.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Um filtro clean/smudge falhou. Verifique .gitattributes e a configuração do filtro.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Um hook do git rejeitou a operação. Verifique o script do hook ou use '--no-verify' para ignorar (com cuidado).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">O patch não pôde ser aplicado corretamente. Os arquivos de destino podem ter sido alterados. Tente resolver manualmente.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflito de worktree: o branch pode já estar em checkout em outro local. Verifique com 'git worktree list'.</x:String>
 </ResourceDictionary>

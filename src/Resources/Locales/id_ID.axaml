@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Bandingkan dengan HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Konfigurasi Repositori</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;&#xD;
-  &#xD;&#xD;
-  ${branch_name} Nama branch lokal saat ini.&#xD;&#xD;
-  ${files_num} Jumlah berkas yang diubah&#xD;&#xD;
-  ${files} Jalur berkas yang diubah&#xD;&#xD;
-  ${files:N} Maksimal N jalur berkas yang diubah&#xD;&#xD;
-  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${branch_name} Nama branch lokal saat ini.&#xD;&#xD;&#xD;
+  ${files_num} Jumlah berkas yang diubah&#xD;&#xD;&#xD;
+  ${files} Jalur berkas yang diubah&#xD;&#xD;&#xD;
+  ${files:N} Maksimal N jalur berkas yang diubah&#xD;&#xD;&#xD;
+  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;&#xD;&#xD;
   ${pure_files:N} Seperti ${files:N}, tapi tanpa folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Konten Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nama Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">AKSI KUSTOM</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumen:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;&#xD;
-  &#xD;&#xD;
-  ${REPO} Jalur repositori&#xD;&#xD;
-  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;&#xD;
-  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;&#xD;
-  ${SHA} Hash commit yang dipilih&#xD;&#xD;
-  ${TAG} Tag yang dipilih&#xD;&#xD;
-  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${REPO} Jalur repositori&#xD;&#xD;&#xD;
+  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;&#xD;&#xD;
+  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;
+  ${SHA} Hash commit yang dipilih&#xD;&#xD;&#xD;
+  ${TAG} Tag yang dipilih&#xD;&#xD;&#xD;
+  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;&#xD;&#xD;
   $1, $2 ... Nilai kontrol input</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Berkas Eksekusi:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Kontrol Input:</x:String>
@@ -1034,7 +1034,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Gagal menyimpan file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Gagal menyimpan perubahan sebagai patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Gagal memindai repositori: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Gagal memulai pengamat untuk repositori '{0}'. Anda mungkin perlu menekan 'F5' untuk memperbarui secara manual!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Gagal memulai pengamat untuk repositori '{0}'. Anda mungkin perlu menekan 'F5' untuk memperbarui secara manual!&#xD;
 Alasan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Gagal memulai '{0}'. Alasan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Gagal membuka: {0}</x:String>
@@ -1113,4 +1113,34 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Mengatur branch submodule...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Mengatur upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Menyimpan perubahan ke stash...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Mungkin ada proses git lain yang sedang berjalan. Jika tidak, hapus file .lock di direktori .git.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Konflik merge terdeteksi. Selesaikan konflik di setiap file, lalu stage dan commit.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD dalam keadaan terlepas. Buat branch baru untuk menyimpan perubahan Anda.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Push ditolak karena remote memiliki perubahan yang lebih baru. Lakukan pull (atau fetch dan merge) terlebih dahulu, lalu push lagi.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">Anda memiliki perubahan yang belum di-commit. Commit atau stash sebelum melanjutkan.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Autentikasi gagal. Periksa kredensial, kunci SSH, atau token akses pribadi Anda.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Repositori remote tidak ditemukan. Verifikasi URL dan koneksi jaringan Anda.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Branch atau tag dengan nama tersebut sudah ada. Pilih nama yang berbeda.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">File yang tidak dilacak akan ditimpa. Pindahkan atau hapus file tersebut, atau gunakan stash untuk menyimpannya.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">Koneksi jaringan gagal. Periksa koneksi internet dan pengaturan proxy Anda.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">Rebase sedang berlangsung. Lanjutkan, lewati, atau batalkan rebase saat ini terlebih dahulu.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">Tidak ada perubahan yang di-stage untuk di-commit. Stage file terlebih dahulu.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">Masalah submodul terdeteksi. Coba jalankan 'git submodule update --init --recursive'.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS tidak terinstal atau tidak dikonfigurasi. Instal Git LFS dan jalankan 'git lfs install'.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">File melebihi batas ukuran. Gunakan Git LFS untuk melacak file besar.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick menghasilkan konflik. Selesaikan konflik, lalu jalankan 'git cherry-pick --continue' atau '--abort'.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">Merge sebelumnya belum selesai. Jalankan 'git merge --abort' untuk membatalkan, atau selesaikan dan commit.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">Branch upstream belum diatur. Gunakan 'git push -u origin &lt;branch&gt;' untuk mengatur pelacakan.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">Ini adalah clone dangkal dengan riwayat terbatas. Jalankan 'git fetch --unshallow' untuk mendapatkan riwayat lengkap.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">Ruang disk tidak cukup. Kosongkan ruang dan coba lagi.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">Izin sistem file ditolak. Periksa izin file/direktori atau jalankan dengan hak akses yang sesuai.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">Nama referensi atau revisi tidak valid. Periksa kesalahan ketik pada nama branch, tag, atau commit.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">Branch atau referensi remote tidak ditemukan. Mungkin sudah dihapus. Jalankan 'git fetch --prune' untuk memperbarui.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">Repositori memiliki objek yang rusak atau hilang. Coba 'git fsck' untuk diagnosis, atau clone ulang jika perlu.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">Direktori ini bukan repositori git. Jalankan 'git init' untuk membuat, atau periksa jalurnya.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">Tidak ada entri stash yang ditemukan. Tidak ada perubahan tersimpan untuk diterapkan.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Filter clean/smudge gagal. Periksa .gitattributes dan konfigurasi filter.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Hook git menolak operasi. Periksa skrip hook atau gunakan '--no-verify' untuk melewati (dengan hati-hati).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Patch tidak dapat diterapkan dengan bersih. File target mungkin telah berubah. Coba selesaikan secara manual.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Konflik worktree: branch mungkin sudah di-checkout di tempat lain. Periksa dengan 'git worktree list'.</x:String>
 </ResourceDictionary>

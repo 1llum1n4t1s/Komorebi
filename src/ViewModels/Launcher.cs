@@ -395,12 +395,12 @@ namespace Komorebi.ViewModels
         ///     UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
         ///     該当ページが見つからない場合はアクティブページに追加する。
         /// </summary>
-        public void DispatchNotification(string pageId, string message, bool isError)
+        public void DispatchNotification(string pageId, string message, bool isError, string hint = "")
         {
             // UIスレッド以外からの呼び出しはUIスレッドにディスパッチ
             if (!Dispatcher.UIThread.CheckAccess())
             {
-                Dispatcher.UIThread.Invoke(() => DispatchNotification(pageId, message, isError));
+                Dispatcher.UIThread.Invoke(() => DispatchNotification(pageId, message, isError, hint));
                 return;
             }
 
@@ -408,6 +408,7 @@ namespace Komorebi.ViewModels
             {
                 IsError = isError,
                 Message = message,
+                Hint = hint,
             };
 
             // パス区切り文字を統一して該当ページを検索

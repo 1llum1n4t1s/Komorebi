@@ -221,13 +221,28 @@ namespace Komorebi
         public static void RaiseException(string context, string message)
         {
             if (Current is App { _launcher: not null } app)
-                app._launcher.DispatchNotification(context, message, true);
+            {
+                var hintKey = Models.GitErrorHelper.GetHintKey(message);
+                var hint = string.IsNullOrEmpty(hintKey) ? string.Empty : app.FindLocaleString(hintKey);
+                app._launcher.DispatchNotification(context, message, true, hint);
+            }
         }
 
         public static void SendNotification(string context, string message)
         {
             if (Current is App { _launcher: not null } app)
                 app._launcher.DispatchNotification(context, message, false);
+        }
+
+        /// <summary>
+        ///     現在のロケールリソースから指定キーの文字列を取得する。
+        ///     キーが見つからない場合は空文字列を返す。
+        /// </summary>
+        private string FindLocaleString(string key)
+        {
+            if (Resources.TryGetResource(key, null, out var value) && value is string str)
+                return str;
+            return string.Empty;
         }
 
         public static void SetLocale(string localeKey)

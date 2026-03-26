@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Сравнить с ГОЛОВОЙ</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Настройка репозитория</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН РЕВИЗИИ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;
-  &#xD;&#xD;
-  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;
-  ${files_num} Количество изменённых файлов&#xD;&#xD;
-  ${files} Пути изменённых файлов&#xD;&#xD;
-  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;
-  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;&#xD;
+  ${files_num} Количество изменённых файлов&#xD;&#xD;&#xD;
+  ${files} Пути изменённых файлов&#xD;&#xD;&#xD;
+  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;&#xD;
+  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;&#xD;
   ${pure_files:N} То же, что и ${files:N}, но только имена файлов</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Cодержание:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Название:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ПОЛЬЗОВАТЕЛЬСКОЕ ДЕЙСТВИЕ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументы:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;
-  &#xD;&#xD;
-  ${REPO} Путь репозитория&#xD;&#xD;
-  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;
-  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;
-  ${SHA} Хеш выбранной ревизии&#xD;&#xD;
-  ${TAG} Выбранная метка&#xD;&#xD;
-  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${REPO} Путь репозитория&#xD;&#xD;&#xD;
+  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;&#xD;
+  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;&#xD;
+  ${SHA} Хеш выбранной ревизии&#xD;&#xD;&#xD;
+  ${TAG} Выбранная метка&#xD;&#xD;&#xD;
+  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;&#xD;
   $1, $2 ... Ввод управляющих значений</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Исполняемый файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Элементы управления вводом:</x:String>
@@ -1034,7 +1034,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не удалось сохранить файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не удалось сохранить изменения в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не удалось просканировать репозитории: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не удалось запустить '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не удалось открыть: {0}</x:String>
@@ -1113,4 +1113,34 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Установка ветки подмодуля...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Установка upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Сохранение изменений в stash...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Возможно, запущен другой процесс git. Если нет, удалите файл .lock в каталоге .git.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Обнаружены конфликты слияния. Разрешите конфликты в каждом файле, затем добавьте в индекс и сделайте коммит.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD находится в отсоединённом состоянии. Создайте новую ветку, чтобы сохранить изменения.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Отправка отклонена, так как удалённый репозиторий содержит более новые изменения. Сначала выполните pull (или fetch и merge), затем повторите push.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">У вас есть незафиксированные изменения. Сделайте коммит или stash перед продолжением.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Ошибка аутентификации. Проверьте учётные данные, SSH-ключ или персональный токен доступа.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Удалённый репозиторий не найден. Проверьте URL и сетевое подключение.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ветка или тег с таким именем уже существует. Выберите другое имя.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Неотслеживаемые файлы будут перезаписаны. Переместите или удалите их, или используйте stash.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">Ошибка сетевого подключения. Проверьте подключение к интернету и настройки прокси.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">Выполняется rebase. Сначала продолжите, пропустите или отмените текущий rebase.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">Нет проиндексированных изменений для коммита. Сначала добавьте файлы в индекс.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">Обнаружена проблема с подмодулем. Попробуйте выполнить 'git submodule update --init --recursive'.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS не установлен или не настроен. Установите Git LFS и выполните 'git lfs install'.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">Файл превышает ограничение по размеру. Используйте Git LFS для отслеживания больших файлов.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick вызвал конфликты. Разрешите конфликты, затем выполните 'git cherry-pick --continue' или '--abort'.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">Предыдущее слияние не завершено. Выполните 'git merge --abort' для отмены или разрешите конфликты и сделайте коммит.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">Не задана ветка upstream. Используйте 'git push -u origin &lt;ветка&gt;' для настройки отслеживания.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">Это поверхностный клон с ограниченной историей. Выполните 'git fetch --unshallow' для получения полной истории.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">Недостаточно места на диске. Освободите место и повторите попытку.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">Отказано в доступе файловой системы. Проверьте права доступа к файлу/каталогу или запустите с соответствующими привилеями.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">Недопустимое имя ссылки или ревизии. Проверьте опечатки в имени ветки, тега или коммита.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">Удалённая ветка или ссылка не найдена. Возможно, она была удалена. Выполните 'git fetch --prune' для обновления.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">В репозитории есть повреждённые или отсутствующие объекты. Попробуйте 'git fsck' для диагностики или при необходимости клонируйте заново.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">Этот каталог не является git-репозиторием. Выполните 'git init' для создания или проверьте путь.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">Записи stash не найдены. Нет сохранённых изменений для применения.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Ошибка фильтра clean/smudge. Проверьте .gitattributes и настройку фильтров.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Git-хук отклонил операцию. Проверьте скрипт хука или используйте '--no-verify' для обхода (с осторожностью).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Патч не удалось применить чисто. Целевые файлы могли измениться. Попробуйте разрешить вручную.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Конфликт worktree: ветка может быть уже извлечена в другом месте. Проверьте с помощью 'git worktree list'.</x:String>
 </ResourceDictionary>

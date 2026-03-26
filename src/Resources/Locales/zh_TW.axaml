@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">與目前 HEAD 比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">存放庫設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">提交訊息範本</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;
-&#xD;&#xD;
-  ${branch_name} 目前分支名稱&#xD;&#xD;
-  ${files_num} 已變更檔案數&#xD;&#xD;
-  ${files} 已變更檔案路徑清單&#xD;&#xD;
-  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;
-  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${branch_name} 目前分支名稱&#xD;&#xD;&#xD;
+  ${files_num} 已變更檔案數&#xD;&#xD;&#xD;
+  ${files} 已變更檔案路徑清單&#xD;&#xD;&#xD;
+  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;&#xD;
+  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;&#xD;
   ${pure_files:N} 類似 ${files:N}，不含資料夾的純檔案名稱</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">範本內容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">範本名稱:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">自訂動作</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">指令參數:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;
-&#xD;&#xD;
-  ${REPO} 存放庫路徑&#xD;&#xD;
-  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;
-  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;
-  ${SHA} 所選的提交編號&#xD;&#xD;
-  ${TAG} 所選的標籤&#xD;&#xD;
-  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${REPO} 存放庫路徑&#xD;&#xD;&#xD;
+  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;&#xD;
+  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;
+  ${SHA} 所選的提交編號&#xD;&#xD;&#xD;
+  ${TAG} 所選的標籤&#xD;&#xD;&#xD;
+  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;&#xD;
   $1, $2 ... 輸入控制項中的值</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">可執行檔案路徑:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">輸入控制項:</x:String>
@@ -1034,7 +1034,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">儲存檔案失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">儲存修補檔變更失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">掃描儲存庫失敗：{0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！&#xD;
 原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">啟動 '{0}' 失敗。原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開啟失敗：{0}</x:String>
@@ -1113,4 +1113,34 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">正在設定子模組的分支...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">正在設定 upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">正在暫存變更...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">可能有其他git程序正在執行。如果沒有，請刪除.git目錄中的.lock檔案。</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">偵測到合併衝突。請解決每個檔案中的衝突，然後暫存並提交。</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD處於分離狀態。建立新分支以保留您的變更。</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">推送被拒絕，因為遠端有更新的變更。請先拉取（或擷取並合併），然後再推送。</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">您有未提交的變更。請先提交或暫存後再繼續。</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">驗證失敗。請檢查您的憑證、SSH金鑰或個人存取權杖。</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">找不到遠端儲存庫。請驗證URL和網路連線。</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">同名的分支或標籤已存在。請選擇其他名稱。</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">未追蹤的檔案將被覆寫。請移動或刪除它們，或使用stash儲存。</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">網路連線失敗。請檢查您的網際網路連線和代理設定。</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">變基正在進行中。請先繼續、略過或中止目前的變基。</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">沒有已暫存的變更可提交。請先暫存檔案。</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">偵測到子模組問題。請嘗試執行 'git submodule update --init --recursive'。</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS未安裝或未設定。請安裝Git LFS並執行 'git lfs install'。</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">檔案超過大小限制。請使用Git LFS追蹤大型檔案。</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick產生了衝突。解決衝突後，執行 'git cherry-pick --continue' 或 '--abort'。</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">上次的合併尚未完成。執行 'git merge --abort' 取消，或解決衝突後提交。</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">未設定上游分支。使用 'git push -u origin &lt;分支名&gt;' 設定追蹤。</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">這是一個淺層複製，歷史記錄有限。執行 'git fetch --unshallow' 取得完整歷史。</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">磁碟空間不足。請釋放空間後重試。</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">檔案系統權限被拒絕。請檢查檔案/目錄權限或以適當權限執行。</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">無效的參考名稱或修訂版本。請檢查分支名、標籤名或提交名是否有拼寫錯誤。</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">找不到遠端分支或參考。可能已被刪除。執行 'git fetch --prune' 更新。</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">儲存庫存在損壞或遺失的物件。嘗試 'git fsck' 診斷，必要時重新複製。</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">此目錄不是git儲存庫。執行 'git init' 建立，或檢查路徑。</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">未找到stash條目。沒有可以套用或彈出的暫存變更。</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">clean/smudge篩選器執行失敗。請檢查 .gitattributes 和篩選器設定。</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">git掛鉤拒絕了操作。請檢查掛鉤腳本，或使用 '--no-verify' 繞過（請謹慎）。</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">修補程式無法順利套用。目標檔案可能已變更。請嘗試手動解決。</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">工作樹衝突：該分支可能已在其他位置簽出。使用 'git worktree list' 檢查。</x:String>
 </ResourceDictionary>

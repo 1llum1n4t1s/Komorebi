@@ -199,27 +199,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Compara cum HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configura Repositorium</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">EXEMPLAR COMMITTENDI</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;
-&#xD;
-  ${branch_name} Nomen rami localis praesentis.&#xD;
-  ${files_num} Numerus documentorum mutatorum&#xD;
-  ${files} Semitae documentorum mutatorum&#xD;
-  ${files:N} Maxime N semitae documentorum mutatorum&#xD;
-  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;
+&#xD;&#xD;
+  ${branch_name} Nomen rami localis praesentis.&#xD;&#xD;
+  ${files_num} Numerus documentorum mutatorum&#xD;&#xD;
+  ${files} Semitae documentorum mutatorum&#xD;&#xD;
+  ${files:N} Maxime N semitae documentorum mutatorum&#xD;&#xD;
+  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;&#xD;
   ${pure_files:N} Ut ${files:N}, sed sine fasciculis</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contentum Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nomen Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTIO PROPRIA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumenta:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;
-&#xD;
-  ${REPO} Semita repositorii&#xD;
-  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;
-  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;
-  ${SHA} Hash committi selecti&#xD;
-  ${TAG} Signum selectum&#xD;
-  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;
+&#xD;&#xD;
+  ${REPO} Semita repositorii&#xD;&#xD;
+  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;&#xD;
+  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;&#xD;
+  ${SHA} Hash committi selecti&#xD;&#xD;
+  ${TAG} Signum selectum&#xD;&#xD;
+  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;&#xD;
   $1, $2 ... Valores moderaminum inscriptionis</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Documentum Exsecutabile:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Moderamina Inscriptionis:</x:String>
@@ -1031,7 +1031,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Fasciculum servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Mutationem ad patch servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Repositoria explorare non potuit: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!&#xD;
 Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' incipere non potuit. Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Aperire non potuit: {0}</x:String>
@@ -1110,4 +1110,34 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Branch submoduli statuendo...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream statuendo...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Mutationes recondendo...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Fortasse alius processus git currit. Si non, dele fasciculum .lock in directorio .git.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Conflictus fusionum detecti sunt. Resolve conflictus in singulis fasciculis, deinde colloca et committe.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD seiunctum est. Crea novum ramum ut mutationes tuas serves.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Propulsio reiecta est quia repositorium remotum mutationes recentiores habet. Prius trahe (vel arcessere et fundere), deinde iterum propelle.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">Mutationes non commissae habes. Committe vel reconde eas antequam procedas.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Authenticatio defecit. Verifica credentialia, clavem SSH, vel signum accessus personalis.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Repositorium remotum non inventum. Verifica URL et conexionem retis.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ramus vel titulus eo nomine iam existit. Elige nomen diversum.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Fasciculi non vestigati superscribentur. Move vel dele eos, vel utere stash ad eos servandos.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">Conexio retis defecit. Verifica conexionem interretis et configurationem procuratoris.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">Rebase in progressu est. Prius continua, praetermitte, vel abrumpe rebase currentem.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">Nullae mutationes collocatae ad committendum. Prius colloca fasciculos.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">Problema submoduli detectum. Tempta 'git submodule update --init --recursive' exsequi.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS non installatum vel non configuratum est. Installa Git LFS et exsequere 'git lfs install'.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">Fasciculus limitem magnitudinis excedit. Utere Git LFS ad fasciculos magnos vestigandos.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick conflictus effecit. Resolve conflictus, deinde exsequere 'git cherry-pick --continue' vel '--abort'.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">Fusio prior non completa est. Exsequere 'git merge --abort' ad cancellandum, vel resolve et committe.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">Nulla upstream ramus constituta est. Utere 'git push -u origin &lt;ramus&gt;' ad vestigationem constituendam.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">Hoc est clonum superficiale cum historia limitata. Exsequere 'git fetch --unshallow' ad plenam historiam obtinendam.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">Spatium disci non sufficit. Libera spatium et iterum tempta.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">Permissio systematis fasciculorum denegata. Verifica permissiones fasciculorum vel exsequere cum privilegiis aptis.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">Nomen referentiae vel revisionis invalidum. Verifica errores typographicos in nomine rami, tituli vel commissi.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">Ramus vel referentia remota non inventa. Fortasse deleta est. Exsequere 'git fetch --prune' ad renovandum.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">Repositorium obiecta corrupta vel amissa habet. Tempta 'git fsck' ad diagnosim, vel re-clona si necesse.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">Hoc directorium non est repositorium git. Exsequere 'git init' ad creandum, vel verifica viam.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">Nullae notae stash inventae. Nullae mutationes servatae ad applicandum.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Filtrum clean/smudge defecit. Verifica .gitattributes et configurationem filtri.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Uncus git operationem reiecit. Verifica scriptum unci vel utere '--no-verify' ad praetereundum (caute).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Sartura munde applicari non potuit. Fasciculi destinationis mutati esse possunt. Tempta manualiter solvere.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflictus worktree: ramus iam alibi extractus esse potest. Verifica cum 'git worktree list'.</x:String>
 </ResourceDictionary>

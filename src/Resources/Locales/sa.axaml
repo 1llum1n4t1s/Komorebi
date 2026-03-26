@@ -199,27 +199,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">भण्डारविन्यासः</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">प्रतिबद्धसन्देशप्रारूपम्</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;
-&#xD;
-${branch_name} वर्तमानस्थानीयशाखानाम।&#xD;
-${files_num} परिवर्तितसञ्चिकासंख्या&#xD;
-${files} परिवर्तितसञ्चिकामार्गाः&#xD;
-${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः&#xD;
-${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;
+&#xD;&#xD;
+${branch_name} वर्तमानस्थानीयशाखानाम।&#xD;&#xD;
+${files_num} परिवर्तितसञ्चिकासंख्या&#xD;&#xD;
+${files} परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;
+${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;
+${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि&#xD;&#xD;
 ${pure_files:N} ${files:N} सदृशं, किन्तु पत्रिकाभिः विना</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">प्रारूपविषयः:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">प्रारूपनाम:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">परिमितयः:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;
-&#xD;
-${REPO} भण्डारमार्गः&#xD;
-${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्&#xD;
-${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना&#xD;
-${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्&#xD;
-${SHA} चयनितप्रतिबद्धस्य हैश्&#xD;
-${TAG} चयनितं चिह्नम्&#xD;
-${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;
+&#xD;&#xD;
+${REPO} भण्डारमार्गः&#xD;&#xD;
+${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्&#xD;&#xD;
+${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना&#xD;&#xD;
+${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्&#xD;&#xD;
+${SHA} चयनितप्रतिबद्धस्य हैश्&#xD;&#xD;
+${TAG} चयनितं चिह्नम्&#xD;&#xD;
+${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा&#xD;&#xD;
 $1, $2 ... निवेशनियन्त्रणमूल्यानि</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">निष्पादनीयसञ्चिका:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">निवेशनियन्त्रणानि:</x:String>
@@ -1031,7 +1031,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">सञ्चिकां रक्षितुं न शक्तम्: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Patch परिवर्तनं रक्षितुं न शक्तम्: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">भण्डाराणि अन्वेषितुं न शक्तम्: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">भण्डारस्य '{0}' प्रेक्षकं प्रारभितुं न शक्तम्। 'F5' पीडयित्वा हस्तेन नवीकरणं कर्तव्यम्!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">भण्डारस्य '{0}' प्रेक्षकं प्रारभितुं न शक्तम्। 'F5' पीडयित्वा हस्तेन नवीकरणं कर्तव्यम्!&#xD;
 कारणम्: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' प्रारभितुं न शक्तम्। कारणम्: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">उद्घाटयितुं न शक्तम्: {0}</x:String>
@@ -1110,4 +1110,34 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">उपघटकस्य branch स्थापयति...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream स्थापयति...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">परिवर्तनानि संगृह्णाति...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">अन्यः git प्रक्रिया चलति स्यात्। यदि न, .git निर्देशिकायां .lock सञ्चिकां विलोपयतु।</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">विलयनसङ्घर्षाः अवगताः। प्रत्येकसञ्चिकायां सङ्घर्षान् समाधत्त, ततः स्थापयत कमिट् च कुरुत।</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD विच्छिन्नम् अस्ति। परिवर्तनानि रक्षितुं नवीनं शाखां रचयतु।</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">प्रेषणं प्रत्याख्यातम् यतो दूरस्थे नवीनतराणि परिवर्तनानि सन्ति। प्रथमं आकर्षयतु, ततः पुनः प्रेषयतु।</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">अप्रतिबद्धानि परिवर्तनानि सन्ति। अग्रे गन्तुं प्रतिबध्नातु अथवा स्टैश् कुरुत।</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">प्रमाणीकरणं विफलम्। प्रमाणपत्राणि, SSH कुञ्चिकां, अथवा व्यक्तिगतप्रवेशचिह्नं परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">दूरस्थं भण्डारं न प्राप्तम्। URL जालसम्बन्धं च परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">तेन नाम्ना शाखा अथवा चिह्नं पूर्वमेव विद्यते। भिन्नं नाम चिनुत।</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">अननुसृतानि सञ्चिकानि अधिलेखितानि भविष्यन्ति। तानि चालयतु विलोपयतु वा, अथवा स्टैश् उपयुज्यताम्।</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">जालसम्बन्धः विफलः। अन्तर्जालसम्बन्धं प्रतिनिधिसंस्थापनं च परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">रिबेस् प्रचलति। प्रथमं वर्तमानं रिबेस् अनुवर्तयतु, अतिक्रामतु, अथवा निवर्तयतु।</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">प्रतिबद्धुं स्थापितानि परिवर्तनानि नास्ति। प्रथमं सञ्चिकाः स्थापयतु।</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">उपमॉड्यूल् समस्या अवगता। 'git submodule update --init --recursive' चालयितुं प्रयतताम्।</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS स्थापितं नास्ति अथवा संस्थापितं नास्ति। Git LFS स्थापयतु 'git lfs install' च चालयतु।</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">सञ्चिका आकारसीमाम् अतिक्रामति। वृहत्सञ्चिकानां अनुसरणाय Git LFS उपयुज्यताम्।</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">चेरी-पिक् सङ्घर्षान् उत्पादितवान्। सङ्घर्षान् समाधत्त, ततः 'git cherry-pick --continue' अथवा '--abort' चालयतु।</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">पूर्वं विलयनं न समाप्तम्। 'git merge --abort' चालयतु निवर्तयितुं, अथवा समाधय प्रतिबध्नातु।</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">ऊर्ध्वप्रवाहशाखा न स्थापिता। 'git push -u origin &lt;शाखा&gt;' अनुसरणस्थापनाय उपयुज्यताम्।</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">इदं उत्तानं प्रतिरूपं सीमितेतिहासेन। 'git fetch --unshallow' पूर्णेतिहासाय चालयतु।</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">बिम्बे पर्याप्तं स्थानं नास्ति। स्थानं मोचयतु पुनः प्रयतताम् च।</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">सञ्चिकातन्त्रस्य अनुज्ञा प्रत्याख्याता। सञ्चिका-निर्देशिका-अनुज्ञाः परीक्षयतु अथवा उचितैः अधिकारैः चालयतु।</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">अमान्यं सन्दर्भनाम अथवा संशोधनम्। शाखा-चिह्न-प्रतिबद्धिनाम्नि लेखनदोषान् परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">दूरस्थशाखा अथवा सन्दर्भः न प्राप्तः। विलोपितः स्यात्। 'git fetch --prune' नवीकरणाय चालयतु।</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">भण्डारे भग्नानि अथवा लुप्तानि वस्तूनि सन्ति। 'git fsck' निदानाय प्रयतताम्, अथवा आवश्यकतायां पुनः प्रतिरूपयतु।</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">इदं निर्देशिकं git भण्डारं नास्ति। 'git init' रचनाय चालयतु, अथवा मार्गं परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">स्टैश् प्रविष्टयः न प्राप्ताः। प्रयोजयितुं रक्षिताः परिवर्तनाः नास्ति।</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">clean/smudge शोधकं विफलम्। .gitattributes शोधकसंस्थापनं च परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">git अङ्कुशः कार्यं प्रत्याख्यातवान्। अङ्कुशलिपिं परीक्षयतु अथवा '--no-verify' अतिक्रमणाय उपयुज्यताम् (सावधानतया)।</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">सर्तुरा शुद्धतया प्रयोजयितुं न शक्यते। लक्ष्यसञ्चिकाः परिवर्तिताः स्युः। हस्तेन समाधातुं प्रयतताम्।</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">कार्यवृक्षसङ्घर्षः: शाखा अन्यत्र पूर्वमेव निष्कासिता स्यात्। 'git worktree list' इत्यनेन परीक्षयतु।</x:String>
 </ResourceDictionary>

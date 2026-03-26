@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Порівняти з HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Налаштування сховища</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН КОМІТУ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;
-  &#xD;&#xD;
-  ${branch_name} Current local branch name.&#xD;&#xD;
-  ${files_num} Number of changed files&#xD;&#xD;
-  ${files} Paths of changed files&#xD;&#xD;
-  ${files:N} Max N number of paths of changed files&#xD;&#xD;
-  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;
+  ${files_num} Number of changed files&#xD;&#xD;&#xD;
+  ${files} Paths of changed files&#xD;&#xD;&#xD;
+  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;
+  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;
   ${pure_files:N} Likes ${files:N}, but without folders</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Зміст шаблону:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Назва шаблону:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">СПЕЦІАЛЬНА ДІЯ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументи:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;
-  &#xD;&#xD;
-  ${REPO} Repository's path&#xD;&#xD;
-  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;
-  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;
-  ${SHA} Selected commit's hash&#xD;&#xD;
-  ${TAG} Selected tag&#xD;&#xD;
-  ${FILE} Selected file, relative to repository root&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${REPO} Repository's path&#xD;&#xD;&#xD;
+  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;
+  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;
+  ${TAG} Selected tag&#xD;&#xD;&#xD;
+  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;
   $1, $2 ... Input control values</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Виконуваний файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Елементи введення:</x:String>
@@ -1034,7 +1034,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не вдалося зберегти файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не вдалося зберегти зміни в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не вдалося просканувати репозиторії: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не вдалося запустити '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не вдалося відкрити: {0}</x:String>
@@ -1113,4 +1113,34 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Встановлення гілки підмодуля...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Встановлення upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Збереження змін у stash...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Можливо, запущено інший процес git. Якщо ні, видаліть файл .lock у каталозі .git.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Виявлено конфлікти злиття. Вирішіть конфлікти в кожному файлі, потім додайте до індексу та зробіть коміт.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD у від'єднаному стані. Створіть нову гілку, щоб зберегти зміни.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Відправку відхилено, оскільки віддалений репозиторій містить новіші зміни. Спочатку виконайте pull (або fetch і merge), потім повторіть push.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">У вас є незафіксовані зміни. Зробіть коміт або stash перед продовженням.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Помилка автентифікації. Перевірте облікові дані, SSH-ключ або персональний токен доступу.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Віддалений репозиторій не знайдено. Перевірте URL та мережеве з'єднання.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Гілка або тег з такою назвою вже існує. Оберіть іншу назву.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Невідстежувані файли будуть перезаписані. Перемістіть або видаліть їх, або використайте stash.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">Помилка мережевого з'єднання. Перевірте підключення до інтернету та налаштування проксі.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">Виконується rebase. Спочатку продовжте, пропустіть або скасуйте поточний rebase.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">Немає проіндексованих змін для коміту. Спочатку додайте файли до індексу.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">Виявлено проблему з підмодулем. Спробуйте виконати 'git submodule update --init --recursive'.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS не встановлено або не налаштовано. Встановіть Git LFS та виконайте 'git lfs install'.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">Файл перевищує обмеження розміру. Використовуйте Git LFS для відстеження великих файлів.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick спричинив конфлікти. Вирішіть конфлікти, потім виконайте 'git cherry-pick --continue' або '--abort'.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">Попереднє злиття не завершено. Виконайте 'git merge --abort' для скасування або вирішіть конфлікти та зробіть коміт.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">Не задано гілку upstream. Використайте 'git push -u origin &lt;гілка&gt;' для налаштування відстеження.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">Це поверхневий клон з обмеженою історією. Виконайте 'git fetch --unshallow' для отримання повної історії.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">Недостатньо місця на диску. Звільніть місце та спробуйте знову.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">Відмовлено у доступі файлової системи. Перевірте права доступу до файлу/каталогу або запустіть з відповідними привілеями.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">Недійсне ім'я посилання або ревізії. Перевірте помилки в імені гілки, тега або коміту.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">Віддалену гілку або посилання не знайдено. Можливо, її було видалено. Виконайте 'git fetch --prune' для оновлення.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">У репозиторії є пошкоджені або відсутні об'єкти. Спробуйте 'git fsck' для діагностики або за потреби клонуйте заново.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">Цей каталог не є git-репозиторієм. Виконайте 'git init' для створення або перевірте шлях.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">Записи stash не знайдено. Немає збережених змін для застосування.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Помилка фільтра clean/smudge. Перевірте .gitattributes та налаштування фільтрів.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Git-хук відхилив операцію. Перевірте скрипт хука або використайте '--no-verify' для обходу (з обережністю).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Патч не вдалося застосувати чисто. Цільові файли могли змінитися. Спробуйте вирішити вручну.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Конфлікт worktree: гілка може бути вже витягнута в іншому місці. Перевірте за допомогою 'git worktree list'.</x:String>
 </ResourceDictionary>

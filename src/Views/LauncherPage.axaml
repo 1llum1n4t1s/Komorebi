@@ -140,7 +140,7 @@
               <DataTemplate DataType="m:Notification">
                 <Border Margin="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Effect="drop-shadow(0 0 8 #8F000000)">
                   <Border Padding="8" CornerRadius="6" Background="{DynamicResource Brush.Popup}">
-                    <Grid RowDefinitions="26,Auto">
+                    <Grid RowDefinitions="26,Auto,Auto">
                       <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto" Margin="8,0">
                         <Path Grid.Column="0" Width="14" Height="14" Data="{StaticResource Icons.Error}" Fill="Red" IsVisible="{Binding IsError}"/>
                         <Path Grid.Column="0" Width="14" Height="14" Data="{StaticResource Icons.Info}" Fill="Green" IsVisible="{Binding !IsError}"/>
@@ -161,6 +161,28 @@
                                                     WordWrap="True"
                                                     HorizontalScrollBarVisibility="Disabled"
                                                     VerticalScrollBarVisibility="Auto"/>
+
+                      <!-- ヒント（翻訳+対処法） -->
+                      <Border Grid.Row="2"
+                              Margin="8,0,8,8"
+                              Padding="8"
+                              CornerRadius="4"
+                              Background="#1A4FC3F7"
+                              BorderBrush="#504FC3F7"
+                              BorderThickness="1"
+                              IsVisible="{Binding Hint, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                          <Path Width="14" Height="14"
+                                Data="{StaticResource Icons.Info}"
+                                Fill="#4FC3F7"
+                                VerticalAlignment="Top"
+                                Margin="0,2,0,0"/>
+                          <TextBlock Text="{Binding Hint}"
+                                     Foreground="#4FC3F7"
+                                     FontSize="12"
+                                     TextWrapping="Wrap"/>
+                        </StackPanel>
+                      </Border>
                     </Grid>
                   </Border>
                 </Border>

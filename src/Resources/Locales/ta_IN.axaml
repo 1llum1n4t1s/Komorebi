@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD உடன் ஒப்பிடு</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">களஞ்சியம் உள்ளமை</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">உறுதிமொழி வளர்புரு</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;
-  &#xD;&#xD;
-  ${branch_name} Current local branch name.&#xD;&#xD;
-  ${files_num} Number of changed files&#xD;&#xD;
-  ${files} Paths of changed files&#xD;&#xD;
-  ${files:N} Max N number of paths of changed files&#xD;&#xD;
-  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;
+  ${files_num} Number of changed files&#xD;&#xD;&#xD;
+  ${files} Paths of changed files&#xD;&#xD;&#xD;
+  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;
+  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;
   ${pure_files:N} Likes ${files:N}, but without folders</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">வார்ப்புரு உள்ளடக்கம்:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">வார்ப்புரு பெயர்:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">தனிப்பயன் செயல்</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">வாதங்கள்:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;
-  &#xD;&#xD;
-  ${REPO} Repository's path&#xD;&#xD;
-  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;
-  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;
-  ${SHA} Selected commit's hash&#xD;&#xD;
-  ${TAG} Selected tag&#xD;&#xD;
-  ${FILE} Selected file, relative to repository root&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${REPO} Repository's path&#xD;&#xD;&#xD;
+  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;
+  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;
+  ${TAG} Selected tag&#xD;&#xD;&#xD;
+  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;
   $1, $2 ... Input control values</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">இயக்கக்கூடிய கோப்பு:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">உள்ளீட்டு கட்டுப்பாடுகள்:</x:String>
@@ -1034,7 +1034,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">கோப்பைச் சேமிக்க இயலவில்லை: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Patch மாற்றத்தைச் சேமிக்க இயலவில்லை: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">களஞ்சியங்களை ஸ்கேன் செய்ய இயலவில்லை: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">களஞ்சியம் '{0}' க்கான கண்காணியை தொடங்க இயலவில்லை. கைமுறையாகப் புதுப்பிக்க 'F5' அழுத்தவும்!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">களஞ்சியம் '{0}' க்கான கண்காணியை தொடங்க இயலவில்லை. கைமுறையாகப் புதுப்பிக்க 'F5' அழுத்தவும்!&#xD;
 காரணம்: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' ஐத் தொடங்க இயலவில்லை. காரணம்: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">திறக்க இயலவில்லை: {0}</x:String>
@@ -1113,4 +1113,34 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">துணைத்தொகுதி branch அமைக்கிறது...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream அமைக்கிறது...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">மாற்றங்களை stash செய்கிறது...</x:String>
+  <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">வேறு git செயல்முறை இயங்கிக்கொண்டிருக்கலாம். இல்லையென்றால், .git கோப்பகத்தில் .lock கோப்பை நீக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">இணைப்பு முரண்பாடுகள் கண்டறியப்பட்டன. ஒவ்வொரு கோப்பிலும் முரண்பாடுகளைத் தீர்த்து, நிலைப்படுத்தி உறுதிசெய்யவும்.</x:String>
+  <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD பிரிக்கப்பட்ட நிலையில் உள்ளது. மாற்றங்களை வைத்திருக்க புதிய கிளையை உருவாக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">தொலைநிலையில் புதிய மாற்றங்கள் இருப்பதால் தள்ளல் நிராகரிக்கப்பட்டது. முதலில் இழுக்கவும் (அல்லது பெற்று இணைக்கவும்), பின்னர் மீண்டும் தள்ளவும்.</x:String>
+  <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">உறுதிசெய்யப்படாத மாற்றங்கள் உள்ளன. தொடர்வதற்கு முன் உறுதிசெய்யவும் அல்லது ஒதுக்கி வைக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">அங்கீகாரம் தோல்வியடைந்தது. சான்றுகள், SSH விசை அல்லது தனிப்பட்ட அணுகல் டோக்கனை சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">தொலைநிலை களஞ்சியம் கண்டறியப்படவில்லை. URL மற்றும் பிணைய இணைப்பை சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">அந்தப் பெயரில் ஒரு கிளை அல்லது குறிச்சொல் ஏற்கனவே உள்ளது. வேறு பெயரைத் தேர்ந்தெடுக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">கண்காணிக்கப்படாத கோப்புகள் மேலெழுதப்படும். அவற்றை நகர்த்தவும் அல்லது நீக்கவும், அல்லது stash பயன்படுத்தவும்.</x:String>
+  <x:String x:Key="Text.GitError.NetworkError" xml:space="preserve">பிணைய இணைப்பு தோல்வியடைந்தது. இணைய இணைப்பு மற்றும் proxy அமைப்புகளை சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.RebaseInProgress" xml:space="preserve">Rebase நடைபெற்றுக்கொண்டிருக்கிறது. முதலில் தற்போதைய rebase-ஐ தொடரவும், தவிர்க்கவும் அல்லது நிறுத்தவும்.</x:String>
+  <x:String x:Key="Text.GitError.NothingToCommit" xml:space="preserve">உறுதிசெய்ய நிலைப்படுத்தப்பட்ட மாற்றங்கள் இல்லை. முதலில் கோப்புகளை நிலைப்படுத்தவும்.</x:String>
+  <x:String x:Key="Text.GitError.SubmoduleError" xml:space="preserve">துணைத்தொகுதி சிக்கல் கண்டறியப்பட்டது. 'git submodule update --init --recursive' இயக்கி பாருங்கள்.</x:String>
+  <x:String x:Key="Text.GitError.LfsError" xml:space="preserve">Git LFS நிறுவப்படவில்லை அல்லது கட்டமைக்கப்படவில்லை. Git LFS நிறுவி 'git lfs install' இயக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.FileTooLarge" xml:space="preserve">கோப்பு அளவு வரம்பை மீறுகிறது. பெரிய கோப்புகளைக் கண்காணிக்க Git LFS பயன்படுத்தவும்.</x:String>
+  <x:String x:Key="Text.GitError.CherryPickConflict" xml:space="preserve">Cherry-pick முரண்பாடுகளை ஏற்படுத்தியது. முரண்பாடுகளைத் தீர்த்து, 'git cherry-pick --continue' அல்லது '--abort' இயக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.MergeNotFinished" xml:space="preserve">முந்தைய இணைப்பு முடிவடையவில்லை. 'git merge --abort' இயக்கி ரத்து செய்யவும், அல்லது தீர்வு காணி உறுதிசெய்யவும்.</x:String>
+  <x:String x:Key="Text.GitError.NoUpstream" xml:space="preserve">மேல்நிலை கிளை அமைக்கப்படவில்லை. கண்காணிப்பை அமைக்க 'git push -u origin &lt;கிளை&gt;' பயன்படுத்தவும்.</x:String>
+  <x:String x:Key="Text.GitError.ShallowClone" xml:space="preserve">இது வரையறுக்கப்பட்ட வரலாற்றுடன் கூடிய மேலோட்ட நகல். முழு வரலாற்றைப் பெற 'git fetch --unshallow' இயக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.DiskFull" xml:space="preserve">வட்டு இடம் போதுமானதாக இல்லை. இடத்தை காலி செய்து மீண்டும் முயற்சிக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.PermissionDenied" xml:space="preserve">கோப்பு அமைப்பு அனுமதி மறுக்கப்பட்டது. கோப்பு/அடைவு அனுமதிகளை சரிபார்க்கவும் அல்லது பொருத்தமான உரிமைகளுடன் இயக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.InvalidRef" xml:space="preserve">தவறான குறிப்பு பெயர் அல்லது திருத்தம். கிளை, குறிச்சொல் அல்லது உறுதிப்படுத்தல் பெயரில் எழுத்துப் பிழைகளை சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.RemoteRefNotFound" xml:space="preserve">தொலைநிலை கிளை அல்லது குறிப்பு கண்டறியப்படவில்லை. நீக்கப்பட்டிருக்கலாம். 'git fetch --prune' இயக்கி புதுப்பிக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.CorruptObject" xml:space="preserve">களஞ்சியத்தில் சிதைந்த அல்லது காணாமல் போன பொருட்கள் உள்ளன. 'git fsck' பயன்படுத்தி கண்டறியவும், தேவைப்பட்டால் மீண்டும் நகலெடுக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.NotARepo" xml:space="preserve">இந்த அடைவு git களஞ்சியம் அல்ல. 'git init' இயக்கி உருவாக்கவும், அல்லது பாதையை சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.StashError" xml:space="preserve">stash பதிவுகள் கண்டறியப்படவில்லை. பயன்படுத்த சேமிக்கப்பட்ட மாற்றங்கள் இல்லை.</x:String>
+  <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">clean/smudge வடிகட்டி தோல்வியடைந்தது. .gitattributes மற்றும் வடிகட்டி அமைப்பை சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">git hook செயலை நிராகரித்தது. hook ஸ்கிரிப்ட்டை சரிபார்க்கவும் அல்லது '--no-verify' பயன்படுத்தி புறக்கணிக்கவும் (எச்சரிக்கையுடன்).</x:String>
+  <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">இணைப்பை சரியாக பயன்படுத்த இயலவில்லை. இலக்கு கோப்புகள் மாறியிருக்கலாம். கைமுறையாக தீர்க்க முயற்சிக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree முரண்பாடு: கிளை வேறு இடத்தில் ஏற்கனவே சரிபார்க்கப்பட்டிருக்கலாம். 'git worktree list' பயன்படுத்தி சரிபார்க்கவும்.</x:String>
 </ResourceDictionary>
