@@ -101,7 +101,7 @@ namespace Komorebi.Models
         /// <summary>
         ///     トラッキングステータスを表示すべきかどうか。
         /// </summary>
-        public bool IsTrackStatusVisible => Ahead.Count > 0 || Behind.Count > 0;
+        public bool IsTrackStatusVisible => (Ahead?.Count ?? 0) > 0 || (Behind?.Count ?? 0) > 0;
 
         /// <summary>
         ///     トラッキングステータスの説明文字列（例: "3↑ 2↓"）を取得する。
@@ -110,8 +110,8 @@ namespace Komorebi.Models
         {
             get
             {
-                var ahead = Ahead.Count;
-                var behind = Behind.Count;
+                var ahead = Ahead?.Count ?? 0;
+                var behind = Behind?.Count ?? 0;
 
                 // 先行・遅延の状況に応じた文字列を生成
                 if (ahead > 0)

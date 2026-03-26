@@ -11,8 +11,8 @@ canvas{border-radius:8px}
 </style>
 </head>
 <body>
-<h1>Komorebi Icon v7</h1>
-<p>Photo-realistic + trypophobia-safe</p>
+<h1>Komorebi Icon v7 (macOS Full-Bleed)</h1>
+<p>macOS full-bleed (no rounded corners)</p>
 <canvas id="c" width="1024" height="1024"></canvas>
 <div id="st">Rendering...</div>
 <script>
@@ -137,7 +137,7 @@ function drawTrunk(ctx,x0,y0,cx1,cy1,cx2,cy2,x3,y3,w,hlDir){
 /*              MAIN RENDER                  */
 /* ========================================= */
 function render(){
-  const S=1024,PAD=32,SZ=S-PAD*2,CR=192;
+  const S=1024,PAD=0,SZ=S,CR=0;
   const CX=S/2,CY=S*.4;
   const cv=document.getElementById('c');
   const ctx=cv.getContext('2d');
@@ -378,7 +378,7 @@ function render(){
   // ============================
   cv.toBlob(blob=>{
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    a.download='komorebi-icon-1024.png';a.click();URL.revokeObjectURL(a.href);
+    a.download='komorebi-icon-1024-mac.png';a.click();URL.revokeObjectURL(a.href);
     document.getElementById('st').textContent='Downloaded komorebi-icon-1024.png';
   },'image/png');
 }

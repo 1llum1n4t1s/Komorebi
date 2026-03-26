@@ -9,6 +9,6 @@ namespace Komorebi.Models
         public List<string> Parents { get; set; } = [];
         public ulong Time { get; set; } = 0;
         public string Message { get; set; } = "";
-        public string Subject => Message.Split('\n', 2)[0].Trim();
+        public string Subject => (Message ?? "").Split('\n', 2)[0].Trim();
     }
 }

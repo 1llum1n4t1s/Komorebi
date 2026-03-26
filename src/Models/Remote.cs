@@ -93,13 +93,20 @@ namespace Komorebi.Models
 
             if (URL.StartsWith("http", StringComparison.Ordinal))
             {
-                var uri = new Uri(URL.EndsWith(".git", StringComparison.Ordinal) ? URL.Substring(0, URL.Length - 4) : URL);
-                if (uri.Port != 80 && uri.Port != 443)
-                    url = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.LocalPath}";
-                else
-                    url = $"{uri.Scheme}://{uri.Host}{uri.LocalPath}";
+                try
+                {
+                    var uri = new Uri(URL.EndsWith(".git", StringComparison.Ordinal) ? URL.Substring(0, URL.Length - 4) : URL);
+                    if (uri.Port != 80 && uri.Port != 443)
+                        url = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.LocalPath}";
+                    else
+                        url = $"{uri.Scheme}://{uri.Host}{uri.LocalPath}";
 
-                return true;
+                    return true;
+                }
+                catch (UriFormatException)
+                {
+                    return false;
+                }
             }
 
             var match = REG_TO_VISIT_URL_CAPTURE().Match(URL);

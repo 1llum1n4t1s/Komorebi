@@ -39,18 +39,18 @@ namespace Komorebi.Models
                 char c2 = s2[marker2];
 
                 // 数字と非数字が混在する場合は文字として比較
-                bool isDigit1 = char.IsDigit(c1);
-                bool isDigit2 = char.IsDigit(c2);
+                bool isDigit1 = char.IsAsciiDigit(c1);
+                bool isDigit2 = char.IsAsciiDigit(c2);
                 if (isDigit1 != isDigit2)
                     return comparer.Compare(c1.ToString(), c2.ToString());
 
                 // 同じ種類（数字/非数字）の連続文字チャンクの長さを算出
                 int subLen1 = 1;
-                while (marker1 + subLen1 < len1 && char.IsDigit(s1[marker1 + subLen1]) == isDigit1)
+                while (marker1 + subLen1 < len1 && char.IsAsciiDigit(s1[marker1 + subLen1]) == isDigit1)
                     subLen1++;
 
                 int subLen2 = 1;
-                while (marker2 + subLen2 < len2 && char.IsDigit(s2[marker2 + subLen2]) == isDigit2)
+                while (marker2 + subLen2 < len2 && char.IsAsciiDigit(s2[marker2 + subLen2]) == isDigit2)
                     subLen2++;
 
                 string sub1 = s1.Substring(marker1, subLen1);

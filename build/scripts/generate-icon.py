@@ -18,7 +18,7 @@ from PIL import Image
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
-def create_canvas_html():
+def create_canvas_html(fullbleed=False):
     """
     v7: Photo-realistic Canvas renderer -- trypophobia-safe.
 
@@ -32,8 +32,11 @@ def create_canvas_html():
       - Smoother opening path (32 segments + 4-octave noise)
       - Richer sky gradient with more color stops
     Still trypophobia-safe: NO clusters of small shapes.
+
+    fullbleed=True: macOS用フルブリード版（角丸・パディングなし）。
+    macOSが自動でスーパー楕円マスクを適用するため、アイコン自体に角丸は不要。
     """
-    return r'''<!DOCTYPE html>
+    html = r'''<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -423,6 +426,39 @@ render();
 </body>
 </html>'''
 
+    if fullbleed:
+        html = html.replace(
+            'const S=1024,PAD=32,SZ=S-PAD*2,CR=192;',
+            'const S=1024,PAD=0,SZ=S,CR=0;',
+        )
+        html = html.replace(
+            "a.download='komorebi-icon-1024.png'",
+            "a.download='komorebi-icon-1024-mac.png'",
+        )
+        html = html.replace(
+            '<h1>Komorebi Icon v7</h1>',
+            '<h1>Komorebi Icon v7 (macOS Full-Bleed)</h1>',
+        )
+        html = html.replace(
+            'Photo-realistic + trypophobia-safe',
+            'macOS full-bleed (no rounded corners)',
+        )
+
+    return html
+
+
+def create_mac_fullbleed(source_img: Image.Image) -> Image.Image:
+    """既存PNGの透明角をキャノピー色で埋めてmacOS用フルブリード版を生成。
+
+    macOSはアイコンに自動でスーパー楕円マスクを適用するため、
+    アイコンPNG自体には角丸が不要。透明部分をキャノピーの最外周色で
+    埋めることで、マスク適用後もシームレスに見える。
+    """
+    # キャノピーグラデーション最外周色 (#071F08)
+    bg = Image.new('RGBA', source_img.size, (7, 31, 8, 255))
+    bg.paste(source_img, (0, 0), source_img)
+    return bg
+
 
 def create_ico(images: dict[int, Image.Image], output_path: Path):
     """Create a .ico file with multiple resolutions (PNG-compressed)."""
@@ -490,18 +526,31 @@ def create_icns(images: dict[int, Image.Image], output_path: Path):
 
 
 def cmd_svg():
-    """Generate Canvas-based HTML preview for the icon."""
-    html_str = create_canvas_html()
+    """Generate Canvas-based HTML previews (standard + macOS full-bleed)."""
+    app_dir = PROJECT_ROOT / 'build' / 'resources' / 'app'
 
-    html_path = PROJECT_ROOT / 'build' / 'resources' / 'app' / 'icon-preview.html'
+    # 通常版（角丸あり）— Windows/Linux向け
+    html_str = create_canvas_html(fullbleed=False)
+    html_path = app_dir / 'icon-preview.html'
     html_path.write_text(html_str, encoding='utf-8')
     print(f"  [OK] HTML preview: {html_path}")
-    print(f"\n  Open the HTML in a browser to auto-download the 1024x1024 PNG.")
+
+    # macOS用フルブリード版（角丸なし）
+    html_mac = create_canvas_html(fullbleed=True)
+    html_mac_path = app_dir / 'icon-preview-mac.html'
+    html_mac_path.write_text(html_mac, encoding='utf-8')
+    print(f"  [OK] macOS HTML preview: {html_mac_path}")
+
+    print(f"\n  Open both HTML files in a browser to auto-download PNGs.")
+    print(f"  Then run: python generate-icon.py pack <rounded.png> [mac-fullbleed.png]")
     return html_path
 
 
-def cmd_pack(png_path: str):
-    """Pack a 1024x1024 PNG into .ico, .icns, and project PNGs."""
+def cmd_pack(png_path: str, mac_png_path: str = None):
+    """Pack a 1024x1024 PNG into .ico, .icns, and project PNGs.
+
+    mac_png_path: macOS用フルブリードPNGのパス（省略時は自動生成）。
+    """
     src = Path(png_path)
     if not src.exists():
         print(f"  File not found: {src}")
@@ -525,9 +574,23 @@ def cmd_pack(png_path: str):
     images[256].save(png_out, format='PNG')
     print(f"  [OK] PNG: {png_out}")
 
-    # macOS .icns
+    # macOS .icns — フルブリード版を使用
     icns_path = PROJECT_ROOT / 'build' / 'resources' / 'app' / 'App.icns'
-    create_icns(images, icns_path)
+    if mac_png_path:
+        mac_src = Path(mac_png_path)
+        if not mac_src.exists():
+            print(f"  macOS PNG not found: {mac_src}")
+            sys.exit(1)
+        mac_master = Image.open(mac_src).convert('RGBA')
+        print(f"  [OK] macOS source: {mac_master.size[0]}x{mac_master.size[1]} PNG (full-bleed)")
+    else:
+        mac_master = create_mac_fullbleed(master)
+        print(f"  [OK] macOS source: auto-generated full-bleed (transparent corners filled)")
+
+    mac_images: dict[int, Image.Image] = {}
+    for size in all_sizes:
+        mac_images[size] = mac_master.resize((size, size), Image.LANCZOS)
+    create_icns(mac_images, icns_path)
     print(f"  [OK] ICNS: {icns_path}")
 
     print("\n  Done! All icon formats generated.")
@@ -536,8 +599,10 @@ def cmd_pack(png_path: str):
 def main():
     if len(sys.argv) < 2:
         print("Usage:")
-        print("  python generate-icon.py svg              -> Create Canvas HTML preview")
-        print("  python generate-icon.py pack <png_path>   -> Pack PNG into .ico/.icns")
+        print("  python generate-icon.py svg                         -> Create HTML previews (rounded + macOS)")
+        print("  python generate-icon.py pack <png> [mac_png]        -> Pack PNG into .ico/.icns")
+        print("")
+        print("  mac_png: macOS用フルブリードPNG（省略時は透明角を自動補完）")
         sys.exit(1)
 
     cmd = sys.argv[1]
@@ -547,7 +612,8 @@ def main():
         if len(sys.argv) < 3:
             print("  Provide path to 1024x1024 PNG")
             sys.exit(1)
-        cmd_pack(sys.argv[2])
+        mac_path = sys.argv[3] if len(sys.argv) > 3 else None
+        cmd_pack(sys.argv[2], mac_path)
     else:
         print(f"  Unknown command: {cmd}")
         sys.exit(1)

@@ -150,25 +150,25 @@ namespace Komorebi.Commands
             // ファイルモードの変更を検出
             if (line.StartsWith("old mode ", StringComparison.Ordinal))
             {
-                result.OldMode = line.Substring(9);
+                result.OldMode = line[9..];
                 return;
             }
 
             if (line.StartsWith("new mode ", StringComparison.Ordinal))
             {
-                result.NewMode = line.Substring(9);
+                result.NewMode = line[9..];
                 return;
             }
 
             if (line.StartsWith("deleted file mode ", StringComparison.Ordinal))
             {
-                result.OldMode = line.Substring(18);
+                result.OldMode = line[18..];
                 return;
             }
 
             if (line.StartsWith("new file mode ", StringComparison.Ordinal))
             {
-                result.NewMode = line.Substring(14);
+                result.NewMode = line[14..];
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace Komorebi.Commands
                 {
                     if (line.StartsWith("-oid sha256:", StringComparison.Ordinal))
                     {
-                        result.LFSDiff.Old.Oid = line.Substring(12);
+                        result.LFSDiff.Old.Oid = line[12..];
                     }
                     else if (line.StartsWith("-size ", StringComparison.Ordinal))
                     {
@@ -194,7 +194,7 @@ namespace Komorebi.Commands
                 {
                     if (line.StartsWith("+oid sha256:", StringComparison.Ordinal))
                     {
-                        result.LFSDiff.New.Oid = line.Substring(12);
+                        result.LFSDiff.New.Oid = line[12..];
                     }
                     else if (line.StartsWith("+size ", StringComparison.Ordinal))
                     {
@@ -259,7 +259,7 @@ namespace Komorebi.Commands
                         return;
                     }
 
-                    last = new Models.TextDiffLine(Models.TextDiffLineType.Deleted, line.Substring(1), oldLine, 0);
+                    last = new Models.TextDiffLine(Models.TextDiffLineType.Deleted, line[1..], oldLine, 0);
                     deleted.Add(last);
                     oldLine++;
                 }
@@ -272,7 +272,7 @@ namespace Komorebi.Commands
                         return;
                     }
 
-                    last = new Models.TextDiffLine(Models.TextDiffLineType.Added, line.Substring(1), 0, newLine);
+                    last = new Models.TextDiffLine(Models.TextDiffLineType.Added, line[1..], 0, newLine);
                     added.Add(last);
                     newLine++;
                 }
@@ -296,7 +296,7 @@ namespace Komorebi.Commands
                             return;
                         }
 
-                        last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, line.Substring(1), oldLine, newLine);
+                        last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, line[1..], oldLine, newLine);
                         result.TextDiff.Lines.Add(last);
                         oldLine++;
                         newLine++;

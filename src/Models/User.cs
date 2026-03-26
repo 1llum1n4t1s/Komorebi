@@ -30,6 +30,13 @@ namespace Komorebi.Models
         /// <param name="data">「名前±メールアドレス」形式の文字列</param>
         public User(string data)
         {
+            // null/空文字列を安全に処理する
+            if (string.IsNullOrEmpty(data))
+            {
+                _hash = 0;
+                return;
+            }
+
             // 「±」区切りで名前とメールアドレスを分離
             var parts = data.Split('±', 2);
             if (parts.Length < 2)

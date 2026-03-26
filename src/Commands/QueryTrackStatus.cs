@@ -41,10 +41,10 @@ namespace Komorebi.Commands
 
                 // '>' で始まる行はリモート側のコミット（ローカルが遅れている）
                 if (line[0] == '>')
-                    local.Behind.Add(line.Substring(1));
+                    local.Behind.Add(line[1..]);
                 // '<' で始まる行はローカル側のコミット（ローカルが進んでいる）
                 else
-                    local.Ahead.Add(line.Substring(1));
+                    local.Ahead.Add(line[1..]);
             }
         }
     }

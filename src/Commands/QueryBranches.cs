@@ -107,12 +107,12 @@ namespace Komorebi.Commands
 
             if (refName.StartsWith(PREFIX_LOCAL, StringComparison.Ordinal))
             {
-                branch.Name = refName.Substring(PREFIX_LOCAL.Length);
+                branch.Name = refName[PREFIX_LOCAL.Length..];
                 branch.IsLocal = true;
             }
             else if (refName.StartsWith(PREFIX_REMOTE, StringComparison.Ordinal))
             {
-                var name = refName.Substring(PREFIX_REMOTE.Length);
+                var name = refName[PREFIX_REMOTE.Length..];
                 var nameParts = name.Split('/', 2);
                 if (nameParts.Length != 2)
                     return null;

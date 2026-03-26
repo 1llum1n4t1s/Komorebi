@@ -46,7 +46,7 @@ namespace Komorebi.Commands
                     continue;
 
                 // "refs/tags/" プレフィックス（10文字）を除去
-                var name = subs[0].Substring(10);
+                var name = subs[0][10..];
                 // メッセージがタグ名と同一の場合はnullに設定（軽量タグの場合）
                 var message = subs[6].Trim();
                 if (!string.IsNullOrEmpty(message) && message.Equals(name, StringComparison.Ordinal))

@@ -42,7 +42,7 @@ namespace Komorebi.Commands
                     // "worktree <path>" 行: 新しいワークツリーエントリの開始
                     if (line.StartsWith("worktree ", StringComparison.Ordinal))
                     {
-                        last = new Models.Worktree() { FullPath = line.Substring(9).Trim() };
+                        last = new Models.Worktree() { FullPath = line[9..].Trim() };
                         worktrees.Add(last);
                         continue;
                     }
@@ -58,12 +58,12 @@ namespace Komorebi.Commands
                     // "HEAD <sha>" 行: HEADのコミットSHA
                     else if (line.StartsWith("HEAD ", StringComparison.Ordinal))
                     {
-                        last.Head = line.Substring(5).Trim();
+                        last.Head = line[5..].Trim();
                     }
                     // "branch <ref>" 行: チェックアウトしているブランチの参照
                     else if (line.StartsWith("branch ", StringComparison.Ordinal))
                     {
-                        last.Branch = line.Substring(7).Trim();
+                        last.Branch = line[7..].Trim();
                     }
                     // "detached" 行: デタッチドHEAD状態
                     else if (line.StartsWith("detached", StringComparison.Ordinal))

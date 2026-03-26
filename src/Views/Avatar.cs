@@ -335,7 +335,7 @@ namespace Komorebi.Views
 
             // 2文字以上かつASCII文字の場合は先頭と末尾のイニシャルを返す
             if (chars.Count >= 2 && char.IsAsciiLetterOrDigit(chars[0]) && char.IsAsciiLetterOrDigit(chars[^1]))
-                return string.Format("{0}{1}", chars[0], chars[^1]);
+                return $"{chars[0]}{chars[^1]}";
 
             // それ以外は名前の最初の1文字を返す
             return name.Substring(0, 1);

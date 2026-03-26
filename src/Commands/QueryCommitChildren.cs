@@ -40,7 +40,7 @@ namespace Komorebi.Commands
                 {
                     // 親コミットに対象コミットを含む行のSHA（先頭40文字）を取得
                     if (line.Contains(_commit))
-                        outs.Add(line.Substring(0, 40));
+                        outs.Add(line[..40]);
                 }
             }
 

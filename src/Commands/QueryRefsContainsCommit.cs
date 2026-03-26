@@ -40,11 +40,11 @@ namespace Komorebi.Commands
                     continue;
 
                 if (line.StartsWith("refs/heads/", StringComparison.Ordinal))
-                    outs.Add(new() { Name = line.Substring("refs/heads/".Length), Type = Models.DecoratorType.LocalBranchHead });
+                    outs.Add(new() { Name = line["refs/heads/".Length..], Type = Models.DecoratorType.LocalBranchHead });
                 else if (line.StartsWith("refs/remotes/", StringComparison.Ordinal))
-                    outs.Add(new() { Name = line.Substring("refs/remotes/".Length), Type = Models.DecoratorType.RemoteBranchHead });
+                    outs.Add(new() { Name = line["refs/remotes/".Length..], Type = Models.DecoratorType.RemoteBranchHead });
                 else if (line.StartsWith("refs/tags/", StringComparison.Ordinal))
-                    outs.Add(new() { Name = line.Substring("refs/tags/".Length), Type = Models.DecoratorType.Tag });
+                    outs.Add(new() { Name = line["refs/tags/".Length..], Type = Models.DecoratorType.Tag });
             }
 
             return outs;

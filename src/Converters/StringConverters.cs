@@ -120,7 +120,7 @@ namespace Komorebi.Converters
         ///     例: "abc123def456..." → "abc123def4"
         /// </summary>
         public static readonly FuncValueConverter<string, string> ToShortSHA =
-            new FuncValueConverter<string, string>(v => v == null ? string.Empty : (v.Length > 10 ? v.Substring(0, 10) : v));
+            new FuncValueConverter<string, string>(v => v == null ? string.Empty : (v.Length > 10 ? v[..10] : v));
 
         /// <summary>
         ///     refs/プレフィックスを除去してブランチ名のみを取得するコンバータ。
@@ -134,11 +134,11 @@ namespace Komorebi.Converters
 
                 // ローカルブランチのプレフィックスを除去
                 if (v.StartsWith("refs/heads/", StringComparison.Ordinal))
-                    return v.Substring(11);
+                    return v[11..];
 
                 // リモートブランチのプレフィックスを除去
                 if (v.StartsWith("refs/remotes/", StringComparison.Ordinal))
-                    return v.Substring(13);
+                    return v[13..];
 
                 return v;
             });
@@ -162,7 +162,7 @@ namespace Komorebi.Converters
         ///     "refs/remotes/"プレフィックス（13文字）を除去してリモートブランチ名のみを返す。
         /// </summary>
         public static readonly FuncValueConverter<string, string> ToFriendlyUpstream =
-            new FuncValueConverter<string, string>(v => v is { Length: > 13 } ? v.Substring(13) : string.Empty);
+            new FuncValueConverter<string, string>(v => v is { Length: > 13 } ? v[13..] : string.Empty);
 
         /// <summary>
         ///     KeyGestureオブジェクトをプラットフォーム表記の文字列に変換するコンバータ。

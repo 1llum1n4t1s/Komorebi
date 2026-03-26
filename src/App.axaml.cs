@@ -71,6 +71,12 @@ namespace Komorebi
             {
                 Models.Logger.Dispose();
             }
+
+            // macOS: メインループ正常終了後もexit()時にC++デストラクタ
+            // (ComPtr<IAvnDispatcher>)が.NETランタイムへの逆P/Invokeで
+            // abort()するため、プロセスを強制終了して回避する。
+            if (OperatingSystem.IsMacOS())
+                Process.GetCurrentProcess().Kill();
         }
 
         public static AppBuilder BuildAvaloniaApp()
@@ -572,7 +578,7 @@ namespace Komorebi
                     if (!string.IsNullOrEmpty(arg))
                     {
                         if (arg.StartsWith('"') && arg.EndsWith('"'))
-                            arg = arg.Substring(1, arg.Length - 2).Trim();
+                            arg = arg[1..^1].Trim();
 
                         if (arg.Length > 0 && !Path.IsPathFullyQualified(arg))
                             arg = Path.GetFullPath(arg);
@@ -584,7 +590,17 @@ namespace Komorebi
                 else
                 {
                     _ipcChannel.MessageReceived += TryOpenRepository;
-                    desktop.Exit += (_, _) => _ipcChannel.Dispose();
+                    desktop.Exit += (_, _) =>
+                    {
+                        _ipcChannel.Dispose();
+
+                        // macOS: [NSApplication terminate:]がexit()を呼ぶとC++グローバルデストラクタ
+                        // (ComPtr<IAvnDispatcher>::~ComPtr)が実行され、シャットダウン中の.NETランタイムへ
+                        // 逆P/Invokeを試みてabort()でクラッシュする。
+                        // Exit イベント時点（exit()の前）でプロセスを強制終了して回避する。
+                        if (OperatingSystem.IsMacOS())
+                            Process.GetCurrentProcess().Kill();
+                    };
                     TryLaunchAsNormal(desktop);
                 }
             }
