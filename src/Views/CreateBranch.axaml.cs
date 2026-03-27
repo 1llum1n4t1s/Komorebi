@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ブランチ作成ダイアログのコードビハインド。
+/// </summary>
+public partial class CreateBranch : UserControl
 {
     /// <summary>
-    ///     ブランチ作成ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CreateBranch : UserControl
+    public CreateBranch()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CreateBranch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     スタッシュ作成ダイアログのコードビハインド。
+/// </summary>
+public partial class StashChanges : UserControl
 {
     /// <summary>
-    ///     スタッシュ作成ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class StashChanges : UserControl
+    public StashChanges()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public StashChanges()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

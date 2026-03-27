@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using Avalonia;
@@ -6,206 +6,205 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     コミット基本情報（著者・日付・ハッシュ等）表示のコードビハインド。
+/// </summary>
+public partial class CommitBaseInfo : UserControl
 {
-    /// <summary>
-    ///     コミット基本情報（著者・日付・ハッシュ等）表示のコードビハインド。
-    /// </summary>
-    public partial class CommitBaseInfo : UserControl
+    public static readonly StyledProperty<Models.CommitFullMessage> FullMessageProperty =
+        AvaloniaProperty.Register<CommitBaseInfo, Models.CommitFullMessage>(nameof(FullMessage));
+
+    public Models.CommitFullMessage FullMessage
     {
-        public static readonly StyledProperty<Models.CommitFullMessage> FullMessageProperty =
-            AvaloniaProperty.Register<CommitBaseInfo, Models.CommitFullMessage>(nameof(FullMessage));
+        get => GetValue(FullMessageProperty);
+        set => SetValue(FullMessageProperty, value);
+    }
 
-        public Models.CommitFullMessage FullMessage
+    public static readonly StyledProperty<Models.CommitSignInfo> SignInfoProperty =
+        AvaloniaProperty.Register<CommitBaseInfo, Models.CommitSignInfo>(nameof(SignInfo));
+
+    public Models.CommitSignInfo SignInfo
+    {
+        get => GetValue(SignInfoProperty);
+        set => SetValue(SignInfoProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> SupportsContainsInProperty =
+        AvaloniaProperty.Register<CommitBaseInfo, bool>(nameof(SupportsContainsIn));
+
+    public bool SupportsContainsIn
+    {
+        get => GetValue(SupportsContainsInProperty);
+        set => SetValue(SupportsContainsInProperty, value);
+    }
+
+    public static readonly StyledProperty<List<Models.CommitLink>> WebLinksProperty =
+        AvaloniaProperty.Register<CommitBaseInfo, List<Models.CommitLink>>(nameof(WebLinks));
+
+    public List<Models.CommitLink> WebLinks
+    {
+        get => GetValue(WebLinksProperty);
+        set => SetValue(WebLinksProperty, value);
+    }
+
+    public static readonly StyledProperty<List<string>> ChildrenProperty =
+        AvaloniaProperty.Register<CommitBaseInfo, List<string>>(nameof(Children));
+
+    public List<string> Children
+    {
+        get => GetValue(ChildrenProperty);
+        set => SetValue(ChildrenProperty, value);
+    }
+
+    /// <summary>
+    ///     コンストラクタ。コンポーネントを初期化する。
+    /// </summary>
+    public CommitBaseInfo()
+    {
+        InitializeComponent();
+    }
+
+    /// <summary>
+    ///     CopyCommitSHAイベントのハンドラ。
+    /// </summary>
+    private async void OnCopyCommitSHA(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: Models.Commit commit })
+            await App.CopyTextAsync(commit.SHA);
+
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     OpenWebLinkイベントのハンドラ。
+    /// </summary>
+    private void OnOpenWebLink(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.CommitDetail detail && sender is Control control)
         {
-            get => GetValue(FullMessageProperty);
-            set => SetValue(FullMessageProperty, value);
-        }
-
-        public static readonly StyledProperty<Models.CommitSignInfo> SignInfoProperty =
-            AvaloniaProperty.Register<CommitBaseInfo, Models.CommitSignInfo>(nameof(SignInfo));
-
-        public Models.CommitSignInfo SignInfo
-        {
-            get => GetValue(SignInfoProperty);
-            set => SetValue(SignInfoProperty, value);
-        }
-
-        public static readonly StyledProperty<bool> SupportsContainsInProperty =
-            AvaloniaProperty.Register<CommitBaseInfo, bool>(nameof(SupportsContainsIn));
-
-        public bool SupportsContainsIn
-        {
-            get => GetValue(SupportsContainsInProperty);
-            set => SetValue(SupportsContainsInProperty, value);
-        }
-
-        public static readonly StyledProperty<List<Models.CommitLink>> WebLinksProperty =
-            AvaloniaProperty.Register<CommitBaseInfo, List<Models.CommitLink>>(nameof(WebLinks));
-
-        public List<Models.CommitLink> WebLinks
-        {
-            get => GetValue(WebLinksProperty);
-            set => SetValue(WebLinksProperty, value);
-        }
-
-        public static readonly StyledProperty<List<string>> ChildrenProperty =
-            AvaloniaProperty.Register<CommitBaseInfo, List<string>>(nameof(Children));
-
-        public List<string> Children
-        {
-            get => GetValue(ChildrenProperty);
-            set => SetValue(ChildrenProperty, value);
-        }
-
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CommitBaseInfo()
-        {
-            InitializeComponent();
-        }
-
-        /// <summary>
-        ///     CopyCommitSHAイベントのハンドラ。
-        /// </summary>
-        private async void OnCopyCommitSHA(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button { DataContext: Models.Commit commit })
-                await App.CopyTextAsync(commit.SHA);
-
-            e.Handled = true;
-        }
-
-        /// <summary>
-        ///     OpenWebLinkイベントのハンドラ。
-        /// </summary>
-        private void OnOpenWebLink(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.CommitDetail detail && sender is Control control)
+            var links = WebLinks;
+            if (links.Count > 1)
             {
-                var links = WebLinks;
-                if (links.Count > 1)
-                {
-                    var menu = new ContextMenu();
+                var menu = new ContextMenu();
 
-                    foreach (var link in links)
+                foreach (var link in links)
+                {
+                    var url = $"{link.URLPrefix}{detail.Commit.SHA}";
+                    var item = new MenuItem() { Header = link.Name };
+                    item.Click += (_, ev) =>
                     {
-                        var url = $"{link.URLPrefix}{detail.Commit.SHA}";
-                        var item = new MenuItem() { Header = link.Name };
-                        item.Click += (_, ev) =>
-                        {
-                            Native.OS.OpenBrowser(url);
-                            ev.Handled = true;
-                        };
+                        Native.OS.OpenBrowser(url);
+                        ev.Handled = true;
+                    };
 
-                        menu.Items.Add(item);
-                    }
-
-                    menu.Open(control);
+                    menu.Items.Add(item);
                 }
-                else if (links.Count == 1)
-                {
-                    var url = $"{links[0].URLPrefix}{detail.Commit.SHA}";
-                    Native.OS.OpenBrowser(url);
-                }
+
+                menu.Open(control);
             }
-
-            e.Handled = true;
-        }
-
-        /// <summary>
-        ///     OpenContainsInイベントのハンドラ。
-        /// </summary>
-        private async void OnOpenContainsIn(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.CommitDetail detail && sender is Button button)
+            else if (links.Count == 1)
             {
-                var tracking = new CommitRelationTracking();
-                var flyout = new Flyout();
-                flyout.Content = tracking;
-                flyout.ShowAt(button);
-
-                await tracking.SetDataAsync(detail);
+                var url = $"{links[0].URLPrefix}{detail.Commit.SHA}";
+                Native.OS.OpenBrowser(url);
             }
-
-            e.Handled = true;
         }
 
-        /// <summary>
-        ///     SHAPointerEnteredイベントのハンドラ。
-        /// </summary>
-        private async void OnSHAPointerEntered(object sender, PointerEventArgs e)
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     OpenContainsInイベントのハンドラ。
+    /// </summary>
+    private async void OnOpenContainsIn(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.CommitDetail detail && sender is Button button)
         {
-            if (DataContext is ViewModels.CommitDetail detail && sender is Control { DataContext: string sha } ctl)
-            {
-                var tooltip = ToolTip.GetTip(ctl);
-                if (tooltip is Models.Commit commit && commit.SHA.Equals(sha, StringComparison.Ordinal))
-                    return;
+            var tracking = new CommitRelationTracking();
+            var flyout = new Flyout();
+            flyout.Content = tracking;
+            flyout.ShowAt(button);
 
-                var c = await detail.GetCommitAsync(sha);
-                if (c is not null && ctl is { IsEffectivelyVisible: true, DataContext: string newSHA } && sha.Equals(newSHA, StringComparison.Ordinal))
-                    ToolTip.SetTip(ctl, c);
-            }
-
-            e.Handled = true;
+            await tracking.SetDataAsync(detail);
         }
 
-        /// <summary>
-        ///     SHAPressedイベントのハンドラ。
-        /// </summary>
-        private void OnSHAPressed(object sender, PointerPressedEventArgs e)
-        {
-            var point = e.GetCurrentPoint(this);
-            if (point.Properties.IsLeftButtonPressed &&
-                DataContext is ViewModels.CommitDetail detail &&
-                sender is Control { DataContext: string sha })
-                detail.NavigateTo(sha);
+        e.Handled = true;
+    }
 
-            e.Handled = true;
-        }
-
-        /// <summary>
-        ///     UserContextRequestedイベントのハンドラ。
-        /// </summary>
-        private void OnUserContextRequested(object sender, ContextRequestedEventArgs e)
+    /// <summary>
+    ///     SHAPointerEnteredイベントのハンドラ。
+    /// </summary>
+    private async void OnSHAPointerEntered(object sender, PointerEventArgs e)
+    {
+        if (DataContext is ViewModels.CommitDetail detail && sender is Control { DataContext: string sha } ctl)
         {
-            if (sender is not Control { Tag: Models.User user } control)
+            var tooltip = ToolTip.GetTip(ctl);
+            if (tooltip is Models.Commit commit && commit.SHA.Equals(sha, StringComparison.Ordinal))
                 return;
 
-            var copyName = new MenuItem();
-            copyName.Header = App.Text("CommitDetail.Info.CopyName");
-            copyName.Icon = App.CreateMenuIcon("Icons.Copy");
-            copyName.Click += async (_, ev) =>
-            {
-                await App.CopyTextAsync(user.Name);
-                ev.Handled = true;
-            };
-
-            var copyEmail = new MenuItem();
-            copyEmail.Header = App.Text("CommitDetail.Info.CopyEmail");
-            copyEmail.Icon = App.CreateMenuIcon("Icons.Email");
-            copyEmail.Click += async (_, ev) =>
-            {
-                await App.CopyTextAsync(user.Email);
-                ev.Handled = true;
-            };
-
-            var copyUser = new MenuItem();
-            copyUser.Header = App.Text("CommitDetail.Info.CopyNameAndEmail");
-            copyUser.Icon = App.CreateMenuIcon("Icons.User");
-            copyUser.Click += async (_, ev) =>
-            {
-                await App.CopyTextAsync(user.ToString());
-                ev.Handled = true;
-            };
-
-            var menu = new ContextMenu();
-            menu.Items.Add(copyName);
-            menu.Items.Add(copyEmail);
-            menu.Items.Add(copyUser);
-            menu.Open(control);
-            e.Handled = true;
+            var c = await detail.GetCommitAsync(sha);
+            if (c is not null && ctl is { IsEffectivelyVisible: true, DataContext: string newSHA } && sha.Equals(newSHA, StringComparison.Ordinal))
+                ToolTip.SetTip(ctl, c);
         }
+
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     SHAPressedイベントのハンドラ。
+    /// </summary>
+    private void OnSHAPressed(object sender, PointerPressedEventArgs e)
+    {
+        var point = e.GetCurrentPoint(this);
+        if (point.Properties.IsLeftButtonPressed &&
+            DataContext is ViewModels.CommitDetail detail &&
+            sender is Control { DataContext: string sha })
+            detail.NavigateTo(sha);
+
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     UserContextRequestedイベントのハンドラ。
+    /// </summary>
+    private void OnUserContextRequested(object sender, ContextRequestedEventArgs e)
+    {
+        if (sender is not Control { Tag: Models.User user } control)
+            return;
+
+        var copyName = new MenuItem();
+        copyName.Header = App.Text("CommitDetail.Info.CopyName");
+        copyName.Icon = App.CreateMenuIcon("Icons.Copy");
+        copyName.Click += async (_, ev) =>
+        {
+            await App.CopyTextAsync(user.Name);
+            ev.Handled = true;
+        };
+
+        var copyEmail = new MenuItem();
+        copyEmail.Header = App.Text("CommitDetail.Info.CopyEmail");
+        copyEmail.Icon = App.CreateMenuIcon("Icons.Email");
+        copyEmail.Click += async (_, ev) =>
+        {
+            await App.CopyTextAsync(user.Email);
+            ev.Handled = true;
+        };
+
+        var copyUser = new MenuItem();
+        copyUser.Header = App.Text("CommitDetail.Info.CopyNameAndEmail");
+        copyUser.Icon = App.CreateMenuIcon("Icons.User");
+        copyUser.Click += async (_, ev) =>
+        {
+            await App.CopyTextAsync(user.ToString());
+            ev.Handled = true;
+        };
+
+        var menu = new ContextMenu();
+        menu.Items.Add(copyName);
+        menu.Items.Add(copyEmail);
+        menu.Items.Add(copyUser);
+        menu.Open(control);
+        e.Handled = true;
     }
 }

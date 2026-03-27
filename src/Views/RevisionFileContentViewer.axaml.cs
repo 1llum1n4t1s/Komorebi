@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -11,184 +11,183 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.TextMate;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     RevisionTextFileViewクラス。
+/// </summary>
+public class RevisionTextFileView : TextEditor
 {
-    /// <summary>
-    ///     RevisionTextFileViewクラス。
-    /// </summary>
-    public class RevisionTextFileView : TextEditor
+    public static readonly StyledProperty<int> TabWidthProperty =
+        AvaloniaProperty.Register<RevisionTextFileView, int>(nameof(TabWidth), 4);
+
+    public int TabWidth
     {
-        public static readonly StyledProperty<int> TabWidthProperty =
-            AvaloniaProperty.Register<RevisionTextFileView, int>(nameof(TabWidth), 4);
+        get => GetValue(TabWidthProperty);
+        set => SetValue(TabWidthProperty, value);
+    }
 
-        public int TabWidth
-        {
-            get => GetValue(TabWidthProperty);
-            set => SetValue(TabWidthProperty, value);
-        }
+    public static readonly StyledProperty<bool> UseSyntaxHighlightingProperty =
+        AvaloniaProperty.Register<RevisionTextFileView, bool>(nameof(UseSyntaxHighlighting));
 
-        public static readonly StyledProperty<bool> UseSyntaxHighlightingProperty =
-            AvaloniaProperty.Register<RevisionTextFileView, bool>(nameof(UseSyntaxHighlighting));
+    public bool UseSyntaxHighlighting
+    {
+        get => GetValue(UseSyntaxHighlightingProperty);
+        set => SetValue(UseSyntaxHighlightingProperty, value);
+    }
 
-        public bool UseSyntaxHighlighting
-        {
-            get => GetValue(UseSyntaxHighlightingProperty);
-            set => SetValue(UseSyntaxHighlightingProperty, value);
-        }
+    protected override Type StyleKeyOverride => typeof(TextEditor);
 
-        protected override Type StyleKeyOverride => typeof(TextEditor);
+    /// <summary>
+    ///     コンストラクタ。コンポーネントを初期化する。
+    /// </summary>
+    public RevisionTextFileView() : base(new TextArea(), new TextDocument())
+    {
+        IsReadOnly = true;
+        ShowLineNumbers = true;
+        WordWrap = false;
 
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public RevisionTextFileView() : base(new TextArea(), new TextDocument())
-        {
-            IsReadOnly = true;
-            ShowLineNumbers = true;
-            WordWrap = false;
+        Options.IndentationSize = TabWidth;
+        Options.EnableHyperlinks = false;
+        Options.EnableEmailHyperlinks = false;
 
-            Options.IndentationSize = TabWidth;
-            Options.EnableHyperlinks = false;
-            Options.EnableEmailHyperlinks = false;
+        HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+        VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-            VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-
-            TextArea.LeftMargins[0].Margin = new Thickness(8, 0);
-            TextArea.TextView.Margin = new Thickness(4, 0);
-        }
-
-        /// <summary>
-        ///     コントロールが読み込まれた際の処理。
-        /// </summary>
-        protected override void OnLoaded(RoutedEventArgs e)
-        {
-            base.OnLoaded(e);
-
-            TextArea.TextView.ContextRequested += OnTextViewContextRequested;
-            UpdateTextMate();
-        }
-
-        /// <summary>
-        ///     コントロールがアンロードされた際の処理。
-        /// </summary>
-        protected override void OnUnloaded(RoutedEventArgs e)
-        {
-            base.OnUnloaded(e);
-
-            TextArea.TextView.ContextRequested -= OnTextViewContextRequested;
-
-            if (_textMate != null)
-            {
-                _textMate.Dispose();
-                _textMate = null;
-            }
-
-            GC.Collect();
-        }
-
-        /// <summary>
-        ///     データコンテキストが変更された際の処理。
-        /// </summary>
-        protected override void OnDataContextChanged(EventArgs e)
-        {
-            base.OnDataContextChanged(e);
-
-            if (DataContext is Models.RevisionTextFile source)
-            {
-                Text = source.Content;
-                Models.TextMateHelper.SetGrammarByFileName(_textMate, source.FileName);
-                ScrollToHome();
-            }
-            else
-            {
-                Text = string.Empty;
-            }
-        }
-
-        /// <summary>
-        ///     プロパティが変更された際の処理。
-        /// </summary>
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-        {
-            base.OnPropertyChanged(change);
-
-            if (change.Property == TabWidthProperty)
-                Options.IndentationSize = TabWidth;
-            else if (change.Property == UseSyntaxHighlightingProperty)
-                UpdateTextMate();
-        }
-
-        /// <summary>
-        ///     TextViewContextRequestedイベントのハンドラ。
-        /// </summary>
-        private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
-        {
-            var selected = SelectedText;
-            if (string.IsNullOrEmpty(selected))
-                return;
-
-            var copy = new MenuItem() { Header = App.Text("Copy") };
-            copy.Click += async (_, ev) =>
-            {
-                await App.CopyTextAsync(selected);
-                ev.Handled = true;
-            };
-
-            if (this.FindResource("Icons.Copy") is Geometry geo)
-            {
-                copy.Icon = new Avalonia.Controls.Shapes.Path()
-                {
-                    Width = 10,
-                    Height = 10,
-                    Stretch = Stretch.Uniform,
-                    Data = geo,
-                };
-            }
-
-            var menu = new ContextMenu();
-            menu.Items.Add(copy);
-            menu.Open(TextArea.TextView);
-
-            e.Handled = true;
-        }
-
-        /// <summary>
-        ///     UpdateTextMateの処理を行う。
-        /// </summary>
-        private void UpdateTextMate()
-        {
-            if (UseSyntaxHighlighting)
-            {
-                _textMate ??= Models.TextMateHelper.CreateForEditor(this);
-
-                if (DataContext is Models.RevisionTextFile file)
-                    Models.TextMateHelper.SetGrammarByFileName(_textMate, file.FileName);
-            }
-            else if (_textMate != null)
-            {
-                _textMate.Dispose();
-                _textMate = null;
-                GC.Collect();
-
-                TextArea.TextView.Redraw();
-            }
-        }
-
-        private TextMate.Installation _textMate = null;
+        TextArea.LeftMargins[0].Margin = new Thickness(8, 0);
+        TextArea.TextView.Margin = new Thickness(4, 0);
     }
 
     /// <summary>
-    ///     リビジョンのファイル内容ビューアのコードビハインド。
+    ///     コントロールが読み込まれた際の処理。
     /// </summary>
-    public partial class RevisionFileContentViewer : UserControl
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public RevisionFileContentViewer()
+        base.OnLoaded(e);
+
+        TextArea.TextView.ContextRequested += OnTextViewContextRequested;
+        UpdateTextMate();
+    }
+
+    /// <summary>
+    ///     コントロールがアンロードされた際の処理。
+    /// </summary>
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+
+        TextArea.TextView.ContextRequested -= OnTextViewContextRequested;
+
+        if (_textMate is not null)
         {
-            InitializeComponent();
+            _textMate.Dispose();
+            _textMate = null;
         }
+
+        GC.Collect();
+    }
+
+    /// <summary>
+    ///     データコンテキストが変更された際の処理。
+    /// </summary>
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        if (DataContext is Models.RevisionTextFile source)
+        {
+            Text = source.Content;
+            Models.TextMateHelper.SetGrammarByFileName(_textMate, source.FileName);
+            ScrollToHome();
+        }
+        else
+        {
+            Text = string.Empty;
+        }
+    }
+
+    /// <summary>
+    ///     プロパティが変更された際の処理。
+    /// </summary>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == TabWidthProperty)
+            Options.IndentationSize = TabWidth;
+        else if (change.Property == UseSyntaxHighlightingProperty)
+            UpdateTextMate();
+    }
+
+    /// <summary>
+    ///     TextViewContextRequestedイベントのハンドラ。
+    /// </summary>
+    private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
+    {
+        var selected = SelectedText;
+        if (string.IsNullOrEmpty(selected))
+            return;
+
+        var copy = new MenuItem() { Header = App.Text("Copy") };
+        copy.Click += async (_, ev) =>
+        {
+            await App.CopyTextAsync(selected);
+            ev.Handled = true;
+        };
+
+        if (this.FindResource("Icons.Copy") is Geometry geo)
+        {
+            copy.Icon = new Avalonia.Controls.Shapes.Path()
+            {
+                Width = 10,
+                Height = 10,
+                Stretch = Stretch.Uniform,
+                Data = geo,
+            };
+        }
+
+        var menu = new ContextMenu();
+        menu.Items.Add(copy);
+        menu.Open(TextArea.TextView);
+
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     UpdateTextMateの処理を行う。
+    /// </summary>
+    private void UpdateTextMate()
+    {
+        if (UseSyntaxHighlighting)
+        {
+            _textMate ??= Models.TextMateHelper.CreateForEditor(this);
+
+            if (DataContext is Models.RevisionTextFile file)
+                Models.TextMateHelper.SetGrammarByFileName(_textMate, file.FileName);
+        }
+        else if (_textMate is not null)
+        {
+            _textMate.Dispose();
+            _textMate = null;
+            GC.Collect();
+
+            TextArea.TextView.Redraw();
+        }
+    }
+
+    private TextMate.Installation _textMate = null;
+}
+
+/// <summary>
+///     リビジョンのファイル内容ビューアのコードビハインド。
+/// </summary>
+public partial class RevisionFileContentViewer : UserControl
+{
+    /// <summary>
+    ///     コンストラクタ。コンポーネントを初期化する。
+    /// </summary>
+    public RevisionFileContentViewer()
+    {
+        InitializeComponent();
     }
 }

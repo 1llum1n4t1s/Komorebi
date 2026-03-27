@@ -1,17 +1,16 @@
-namespace Komorebi.Views
+﻿namespace Komorebi.Views;
+
+/// <summary>
+///     ホットキー一覧表示ダイアログのコードビハインド。
+/// </summary>
+public partial class Hotkeys : ChromelessWindow
 {
     /// <summary>
-    ///     ホットキー一覧表示ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Hotkeys : ChromelessWindow
+    public Hotkeys()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Hotkeys()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
     }
 }

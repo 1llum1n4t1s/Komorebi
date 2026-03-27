@@ -1,35 +1,34 @@
-using Avalonia.Input;
+﻿using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class PushToNewBranch : ChromelessWindow
 {
-    public partial class PushToNewBranch : ChromelessWindow
+    public PushToNewBranch()
     {
-        public PushToNewBranch()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
+    }
 
-        protected override void OnLoaded(RoutedEventArgs e)
-        {
-            base.OnLoaded(e);
-            TxtName.Focus(NavigationMethod.Directional);
-        }
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        TxtName.Focus(NavigationMethod.Directional);
+    }
 
-        public void SetRemote(string remote)
-        {
-            TxtPrefix.Text = remote;
-        }
+    public void SetRemote(string remote)
+    {
+        TxtPrefix.Text = remote;
+    }
 
-        private void OnSure(object _1, RoutedEventArgs _2)
-        {
-            Close(TxtName.Text);
-        }
+    private void OnSure(object _1, RoutedEventArgs _2)
+    {
+        Close(TxtName.Text);
+    }
 
-        private void OnCancel(object _1, RoutedEventArgs _2)
-        {
-            Close(string.Empty);
-        }
+    private void OnCancel(object _1, RoutedEventArgs _2)
+    {
+        Close(string.Empty);
     }
 }

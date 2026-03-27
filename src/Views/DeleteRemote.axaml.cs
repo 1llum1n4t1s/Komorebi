@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リモート削除ダイアログのコードビハインド。
+/// </summary>
+public partial class DeleteRemote : UserControl
 {
     /// <summary>
-    ///     リモート削除ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DeleteRemote : UserControl
+    public DeleteRemote()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DeleteRemote()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

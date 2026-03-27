@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     サブモジュール削除ダイアログのコードビハインド。
+/// </summary>
+public partial class DeleteSubmodule : UserControl
 {
     /// <summary>
-    ///     サブモジュール削除ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DeleteSubmodule : UserControl
+    public DeleteSubmodule()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DeleteSubmodule()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

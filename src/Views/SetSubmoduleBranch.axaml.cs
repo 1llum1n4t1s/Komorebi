@@ -1,19 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     サブモジュール追跡ブランチ設定ダイアログのコードビハインド。
+/// </summary>
+public partial class SetSubmoduleBranch : UserControl
 {
     /// <summary>
-    ///     サブモジュール追跡ブランチ設定ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class SetSubmoduleBranch : UserControl
+    public SetSubmoduleBranch()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public SetSubmoduleBranch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
-

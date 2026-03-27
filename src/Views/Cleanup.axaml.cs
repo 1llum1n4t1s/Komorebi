@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リポジトリクリーンアップ（GC等）ダイアログのコードビハインド。
+/// </summary>
+public partial class Cleanup : UserControl
 {
     /// <summary>
-    ///     リポジトリクリーンアップ（GC等）ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Cleanup : UserControl
+    public Cleanup()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Cleanup()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

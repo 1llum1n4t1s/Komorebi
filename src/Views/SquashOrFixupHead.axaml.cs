@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     HEADコミットのスカッシュ/フィックスアップダイアログのコードビハインド。
+/// </summary>
+public partial class SquashOrFixupHead : UserControl
 {
     /// <summary>
-    ///     HEADコミットのスカッシュ/フィックスアップダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class SquashOrFixupHead : UserControl
+    public SquashOrFixupHead()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public SquashOrFixupHead()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

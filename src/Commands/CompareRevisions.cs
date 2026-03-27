@@ -2,59 +2,58 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class CompareRevisions : Command
 {
-    public class CompareRevisions : Command
+    public CompareRevisions(string repo, string start, string end)
     {
-        public CompareRevisions(string repo, string start, string end)
+        WorkingDirectory = repo;
+        Context = repo;
+
+        var based = string.IsNullOrEmpty(start) ? "-R" : start;
+        Args = $"diff --name-status {based} {end}";
+    }
+
+    public CompareRevisions(string repo, string start, string end, string path)
+    {
+        WorkingDirectory = repo;
+        Context = repo;
+
+        var based = string.IsNullOrEmpty(start) ? "-R" : start;
+        Args = $"diff --name-status {based} {end} -- {path.Quoted()}";
+    }
+
+    public async Task<List<Models.Change>> ReadAsync()
+    {
+        var changes = new List<Models.Change>();
+        try
         {
-            WorkingDirectory = repo;
-            Context = repo;
+            using var proc = new Process();
+            proc.StartInfo = CreateGitStartInfo(true);
+            proc.Start();
 
-            var based = string.IsNullOrEmpty(start) ? "-R" : start;
-            Args = $"diff --name-status {based} {end}";
-        }
-
-        public CompareRevisions(string repo, string start, string end, string path)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-
-            var based = string.IsNullOrEmpty(start) ? "-R" : start;
-            Args = $"diff --name-status {based} {end} -- {path.Quoted()}";
-        }
-
-        public async Task<List<Models.Change>> ReadAsync()
-        {
-            var changes = new List<Models.Change>();
-            try
+            // 基底クラスの共通パーサーを使用（旧: 30行の重複ロジック）
+            while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
             {
-                using var proc = new Process();
-                proc.StartInfo = CreateGitStartInfo(true);
-                proc.Start();
+                var parsed = ParseNameStatusLine(line);
+                if (parsed is null)
+                    continue;
 
-                // 基底クラスの共通パーサーを使用（旧: 30行の重複ロジック）
-                while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
-                {
-                    var parsed = ParseNameStatusLine(line);
-                    if (parsed == null)
-                        continue;
-
-                    var change = new Models.Change() { Path = parsed.Value.path };
-                    change.Set(parsed.Value.state);
-                    changes.Add(change);
-                }
-
-                await proc.WaitForExitAsync().ConfigureAwait(false);
-
-                changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
-            }
-            catch
-            {
-                //ignore changes;
+                var change = new Models.Change() { Path = parsed.Value.path };
+                change.Set(parsed.Value.state);
+                changes.Add(change);
             }
 
-            return changes;
+            await proc.WaitForExitAsync().ConfigureAwait(false);
+
+            changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
         }
+        catch
+        {
+            //ignore changes;
+        }
+
+        return changes;
     }
 }

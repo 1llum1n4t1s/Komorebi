@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     タグプッシュダイアログのコードビハインド。
+/// </summary>
+public partial class PushTag : UserControl
 {
     /// <summary>
-    ///     タグプッシュダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class PushTag : UserControl
+    public PushTag()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public PushTag()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

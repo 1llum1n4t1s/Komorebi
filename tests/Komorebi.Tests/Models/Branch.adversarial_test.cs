@@ -140,7 +140,7 @@ namespace Komorebi.Tests.Models
         [InlineData(false, "", false)]       // IsCurrent=false, path空 → false
         [InlineData(false, null, false)]     // IsCurrent=false, path=null → false
         [InlineData(true, null, false)]      // IsCurrent=true, path=null → false
-        public void HasWorktree_AllCombinations(bool isCurrent, string path, bool expected)
+        public void HasWorktree_AllCombinations(bool isCurrent, string? path, bool expected)
         {
             var branch = new Branch { IsCurrent = isCurrent, WorktreePath = path };
             Assert.Equal(expected, branch.HasWorktree);

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 
@@ -7,281 +7,280 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リビジョン比較ビューのコードビハインド。
+/// </summary>
+public partial class RevisionCompare : UserControl
 {
     /// <summary>
-    ///     リビジョン比較ビューのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class RevisionCompare : UserControl
+    public RevisionCompare()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public RevisionCompare()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        /// <summary>
-        ///     ChangeContextRequestedイベントのハンドラ。
-        /// </summary>
-        private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
+    /// <summary>
+    ///     ChangeContextRequestedイベントのハンドラ。
+    /// </summary>
+    private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
+    {
+        if (DataContext is ViewModels.RevisionCompare { SelectedChanges: { Count: > 0 } selected } vm &&
+            sender is ChangeCollectionView view)
         {
-            if (DataContext is ViewModels.RevisionCompare { SelectedChanges: { Count: > 0 } selected } vm &&
-                sender is ChangeCollectionView view)
+            var patch = new MenuItem();
+            patch.Header = App.Text("FileCM.SaveAsPatch");
+            patch.Icon = App.CreateMenuIcon("Icons.Save");
+            patch.Click += async (_, e) =>
             {
-                var patch = new MenuItem();
-                patch.Header = App.Text("FileCM.SaveAsPatch");
-                patch.Icon = App.CreateMenuIcon("Icons.Save");
-                patch.Click += async (_, e) =>
+                var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
+                if (storageProvider is null)
+                    return;
+
+                var options = new FilePickerSaveOptions();
+                options.Title = App.Text("FileCM.SaveAsPatch");
+                options.DefaultExtension = ".patch";
+                options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
+
+                try
                 {
-                    var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
-                    if (storageProvider == null)
-                        return;
-
-                    var options = new FilePickerSaveOptions();
-                    options.Title = App.Text("FileCM.SaveAsPatch");
-                    options.DefaultExtension = ".patch";
-                    options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
-
-                    try
+                    var storageFile = await storageProvider.SaveFilePickerAsync(options);
+                    if (storageFile is not null)
                     {
-                        var storageFile = await storageProvider.SaveFilePickerAsync(options);
-                        if (storageFile != null)
-                        {
-                            var saveTo = storageFile.Path.LocalPath;
-                            await vm.SaveChangesAsPatchAsync(selected, saveTo);
-                        }
+                        var saveTo = storageFile.Path.LocalPath;
+                        await vm.SaveChangesAsPatchAsync(selected, saveTo);
                     }
-                    catch (Exception exception)
-                    {
-                        App.RaiseException(string.Empty, App.Text("Error.FailedToSaveAsPatch", exception.Message));
-                    }
+                }
+                catch (Exception exception)
+                {
+                    App.RaiseException(string.Empty, App.Text("Error.FailedToSaveAsPatch", exception.Message));
+                }
 
-                    e.Handled = true;
+                e.Handled = true;
+            };
+
+            var menu = new ContextMenu();
+            if (selected.Count == 1)
+            {
+                var change = selected[0];
+                var changeFullPath = vm.GetAbsPath(change.Path);
+
+                var openWithMerger = new MenuItem();
+                openWithMerger.Header = App.Text("OpenInExternalMergeTool");
+                openWithMerger.Icon = App.CreateMenuIcon("Icons.OpenWith");
+                openWithMerger.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+D" : "Ctrl+Shift+D";
+                openWithMerger.Click += (_, ev) =>
+                {
+                    vm.OpenChangeWithExternalDiffTool(change);
+                    ev.Handled = true;
+                };
+                menu.Items.Add(openWithMerger);
+
+                if (change.Index != Models.ChangeState.Deleted)
+                {
+                    var explore = new MenuItem();
+                    explore.Header = App.Text("RevealFile");
+                    explore.Icon = App.CreateMenuIcon("Icons.Explore");
+                    explore.IsEnabled = File.Exists(changeFullPath);
+                    explore.Click += (_, ev) =>
+                    {
+                        Native.OS.OpenInFileManager(changeFullPath);
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(explore);
+                }
+
+                var resetToLeft = new MenuItem();
+                resetToLeft.Header = App.Text("ChangeCM.ResetFileTo", vm.LeftSideDesc);
+                resetToLeft.Icon = App.CreateMenuIcon("Icons.File.Checkout");
+                resetToLeft.IsEnabled = vm.CanResetToLeft;
+                resetToLeft.Click += async (_, ev) =>
+                {
+                    await vm.ResetToLeftAsync(change);
+                    ev.Handled = true;
                 };
 
-                var menu = new ContextMenu();
-                if (selected.Count == 1)
+                var resetToRight = new MenuItem();
+                resetToRight.Header = App.Text("ChangeCM.ResetFileTo", vm.RightSideDesc);
+                resetToRight.Icon = App.CreateMenuIcon("Icons.File.Checkout");
+                resetToRight.IsEnabled = vm.CanResetToRight;
+                resetToRight.Click += async (_, ev) =>
                 {
-                    var change = selected[0];
-                    var changeFullPath = vm.GetAbsPath(change.Path);
+                    await vm.ResetToRightAsync(change);
+                    ev.Handled = true;
+                };
 
-                    var openWithMerger = new MenuItem();
-                    openWithMerger.Header = App.Text("OpenInExternalMergeTool");
-                    openWithMerger.Icon = App.CreateMenuIcon("Icons.OpenWith");
-                    openWithMerger.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+D" : "Ctrl+Shift+D";
-                    openWithMerger.Click += (_, ev) =>
-                    {
-                        vm.OpenChangeWithExternalDiffTool(change);
-                        ev.Handled = true;
-                    };
-                    menu.Items.Add(openWithMerger);
-
-                    if (change.Index != Models.ChangeState.Deleted)
-                    {
-                        var explore = new MenuItem();
-                        explore.Header = App.Text("RevealFile");
-                        explore.Icon = App.CreateMenuIcon("Icons.Explore");
-                        explore.IsEnabled = File.Exists(changeFullPath);
-                        explore.Click += (_, ev) =>
-                        {
-                            Native.OS.OpenInFileManager(changeFullPath);
-                            ev.Handled = true;
-                        };
-                        menu.Items.Add(explore);
-                    }
-
-                    var resetToLeft = new MenuItem();
-                    resetToLeft.Header = App.Text("ChangeCM.ResetFileTo", vm.LeftSideDesc);
-                    resetToLeft.Icon = App.CreateMenuIcon("Icons.File.Checkout");
-                    resetToLeft.IsEnabled = vm.CanResetToLeft;
-                    resetToLeft.Click += async (_, ev) =>
-                    {
-                        await vm.ResetToLeftAsync(change);
-                        ev.Handled = true;
-                    };
-
-                    var resetToRight = new MenuItem();
-                    resetToRight.Header = App.Text("ChangeCM.ResetFileTo", vm.RightSideDesc);
-                    resetToRight.Icon = App.CreateMenuIcon("Icons.File.Checkout");
-                    resetToRight.IsEnabled = vm.CanResetToRight;
-                    resetToRight.Click += async (_, ev) =>
-                    {
-                        await vm.ResetToRightAsync(change);
-                        ev.Handled = true;
-                    };
-
-                    var copyPath = new MenuItem();
-                    copyPath.Header = App.Text("CopyPath");
-                    copyPath.Icon = App.CreateMenuIcon("Icons.Copy");
-                    copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
-                    copyPath.Click += async (_, ev) =>
-                    {
-                        await App.CopyTextAsync(change.Path);
-                        ev.Handled = true;
-                    };
-
-                    var copyFullPath = new MenuItem();
-                    copyFullPath.Header = App.Text("CopyFullPath");
-                    copyFullPath.Icon = App.CreateMenuIcon("Icons.Copy");
-                    copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
-                    copyFullPath.Click += async (_, ev) =>
-                    {
-                        await App.CopyTextAsync(changeFullPath);
-                        ev.Handled = true;
-                    };
-
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(patch);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(resetToLeft);
-                    menu.Items.Add(resetToRight);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(copyPath);
-                    menu.Items.Add(copyFullPath);
-                }
-                else
+                var copyPath = new MenuItem();
+                copyPath.Header = App.Text("CopyPath");
+                copyPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
+                copyPath.Click += async (_, ev) =>
                 {
-                    var resetToLeft = new MenuItem();
-                    resetToLeft.Header = App.Text("ChangeCM.ResetFileTo", vm.LeftSideDesc);
-                    resetToLeft.Icon = App.CreateMenuIcon("Icons.File.Checkout");
-                    resetToLeft.IsEnabled = vm.CanResetToLeft;
-                    resetToLeft.Click += async (_, ev) =>
-                    {
-                        await vm.ResetMultipleToLeftAsync(selected);
-                        ev.Handled = true;
-                    };
+                    await App.CopyTextAsync(change.Path);
+                    ev.Handled = true;
+                };
 
-                    var resetToRight = new MenuItem();
-                    resetToRight.Header = App.Text("ChangeCM.ResetFileTo", vm.RightSideDesc);
-                    resetToRight.Icon = App.CreateMenuIcon("Icons.File.Checkout");
-                    resetToRight.IsEnabled = vm.CanResetToRight;
-                    resetToRight.Click += async (_, ev) =>
-                    {
-                        await vm.ResetMultipleToRightAsync(selected);
-                        ev.Handled = true;
-                    };
+                var copyFullPath = new MenuItem();
+                copyFullPath.Header = App.Text("CopyFullPath");
+                copyFullPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
+                copyFullPath.Click += async (_, ev) =>
+                {
+                    await App.CopyTextAsync(changeFullPath);
+                    ev.Handled = true;
+                };
 
-                    var copyPath = new MenuItem();
-                    copyPath.Header = App.Text("CopyPath");
-                    copyPath.Icon = App.CreateMenuIcon("Icons.Copy");
-                    copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
-                    copyPath.Click += async (_, ev) =>
-                    {
-                        var builder = new StringBuilder();
-                        foreach (var c in selected)
-                            builder.AppendLine(c.Path);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(patch);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(resetToLeft);
+                menu.Items.Add(resetToRight);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(copyPath);
+                menu.Items.Add(copyFullPath);
+            }
+            else
+            {
+                var resetToLeft = new MenuItem();
+                resetToLeft.Header = App.Text("ChangeCM.ResetFileTo", vm.LeftSideDesc);
+                resetToLeft.Icon = App.CreateMenuIcon("Icons.File.Checkout");
+                resetToLeft.IsEnabled = vm.CanResetToLeft;
+                resetToLeft.Click += async (_, ev) =>
+                {
+                    await vm.ResetMultipleToLeftAsync(selected);
+                    ev.Handled = true;
+                };
 
-                        await App.CopyTextAsync(builder.ToString());
-                        ev.Handled = true;
-                    };
+                var resetToRight = new MenuItem();
+                resetToRight.Header = App.Text("ChangeCM.ResetFileTo", vm.RightSideDesc);
+                resetToRight.Icon = App.CreateMenuIcon("Icons.File.Checkout");
+                resetToRight.IsEnabled = vm.CanResetToRight;
+                resetToRight.Click += async (_, ev) =>
+                {
+                    await vm.ResetMultipleToRightAsync(selected);
+                    ev.Handled = true;
+                };
 
-                    var copyFullPath = new MenuItem();
-                    copyFullPath.Header = App.Text("CopyFullPath");
-                    copyFullPath.Icon = App.CreateMenuIcon("Icons.Copy");
-                    copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
-                    copyFullPath.Click += async (_, ev) =>
-                    {
-                        var builder = new StringBuilder();
-                        foreach (var c in selected)
-                            builder.AppendLine(vm.GetAbsPath(c.Path));
+                var copyPath = new MenuItem();
+                copyPath.Header = App.Text("CopyPath");
+                copyPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
+                copyPath.Click += async (_, ev) =>
+                {
+                    var builder = new StringBuilder();
+                    foreach (var c in selected)
+                        builder.AppendLine(c.Path);
 
-                        await App.CopyTextAsync(builder.ToString());
-                        ev.Handled = true;
-                    };
+                    await App.CopyTextAsync(builder.ToString());
+                    ev.Handled = true;
+                };
 
-                    menu.Items.Add(patch);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(resetToLeft);
-                    menu.Items.Add(resetToRight);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(copyPath);
-                    menu.Items.Add(copyFullPath);
-                }
+                var copyFullPath = new MenuItem();
+                copyFullPath.Header = App.Text("CopyFullPath");
+                copyFullPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
+                copyFullPath.Click += async (_, ev) =>
+                {
+                    var builder = new StringBuilder();
+                    foreach (var c in selected)
+                        builder.AppendLine(vm.GetAbsPath(c.Path));
 
-                menu.Open(view);
+                    await App.CopyTextAsync(builder.ToString());
+                    ev.Handled = true;
+                };
+
+                menu.Items.Add(patch);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(resetToLeft);
+                menu.Items.Add(resetToRight);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(copyPath);
+                menu.Items.Add(copyFullPath);
             }
 
-            e.Handled = true;
+            menu.Open(view);
         }
 
-        /// <summary>
-        ///     PressedSHAイベントのハンドラ。
-        /// </summary>
-        private void OnPressedSHA(object sender, PointerPressedEventArgs e)
-        {
-            if (DataContext is ViewModels.RevisionCompare vm && sender is TextBlock block)
-                vm.NavigateTo(block.Text);
+        e.Handled = true;
+    }
 
-            e.Handled = true;
+    /// <summary>
+    ///     PressedSHAイベントのハンドラ。
+    /// </summary>
+    private void OnPressedSHA(object sender, PointerPressedEventArgs e)
+    {
+        if (DataContext is ViewModels.RevisionCompare vm && sender is TextBlock block)
+            vm.NavigateTo(block.Text);
+
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     SaveAsPatchイベントのハンドラ。
+    /// </summary>
+    private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
+    {
+        var storage = TopLevel.GetTopLevel(this)?.StorageProvider;
+        if (storage is null)
+            return;
+
+        if (DataContext is not ViewModels.RevisionCompare vm)
+            return;
+
+        var options = new FilePickerSaveOptions();
+        options.Title = App.Text("FileCM.SaveAsPatch");
+        options.DefaultExtension = ".patch";
+        options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
+
+        try
+        {
+            var storageFile = await storage.SaveFilePickerAsync(options);
+            if (storageFile is not null)
+                await vm.SaveChangesAsPatchAsync(null, storageFile.Path.LocalPath);
+        }
+        catch (Exception exception)
+        {
+            App.RaiseException(string.Empty, App.Text("Error.FailedToSaveAsPatch", exception.Message));
         }
 
-        /// <summary>
-        ///     SaveAsPatchイベントのハンドラ。
-        /// </summary>
-        private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+    /// </summary>
+    private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (DataContext is not ViewModels.RevisionCompare vm)
+            return;
+
+        if (sender is not ChangeCollectionView { SelectedChanges: { Count: > 0 } selectedChanges })
+            return;
+
+        var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+        if (e.Key == Key.C && e.KeyModifiers.HasFlag(cmdKey))
         {
-            var storage = TopLevel.GetTopLevel(this)?.StorageProvider;
-            if (storage == null)
-                return;
-
-            if (DataContext is not ViewModels.RevisionCompare vm)
-                return;
-
-            var options = new FilePickerSaveOptions();
-            options.Title = App.Text("FileCM.SaveAsPatch");
-            options.DefaultExtension = ".patch";
-            options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
-
-            try
+            var builder = new StringBuilder();
+            var copyAbsPath = e.KeyModifiers.HasFlag(KeyModifiers.Shift);
+            if (selectedChanges.Count == 1)
             {
-                var storageFile = await storage.SaveFilePickerAsync(options);
-                if (storageFile != null)
-                    await vm.SaveChangesAsPatchAsync(null, storageFile.Path.LocalPath);
+                builder.Append(copyAbsPath ? vm.GetAbsPath(selectedChanges[0].Path) : selectedChanges[0].Path);
             }
-            catch (Exception exception)
+            else
             {
-                App.RaiseException(string.Empty, App.Text("Error.FailedToSaveAsPatch", exception.Message));
+                foreach (var c in selectedChanges)
+                    builder.AppendLine(copyAbsPath ? vm.GetAbsPath(c.Path) : c.Path);
             }
 
+            await App.CopyTextAsync(builder.ToString());
             e.Handled = true;
         }
-
-        /// <summary>
-        ///     ChangeCollectionViewKeyDownイベントのハンドラ。
-        /// </summary>
-        private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
+        else if (e.Key == Key.F && e.KeyModifiers == cmdKey)
         {
-            if (DataContext is not ViewModels.RevisionCompare vm)
-                return;
-
-            if (sender is not ChangeCollectionView { SelectedChanges: { Count: > 0 } selectedChanges })
-                return;
-
-            var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
-            if (e.Key == Key.C && e.KeyModifiers.HasFlag(cmdKey))
-            {
-                var builder = new StringBuilder();
-                var copyAbsPath = e.KeyModifiers.HasFlag(KeyModifiers.Shift);
-                if (selectedChanges.Count == 1)
-                {
-                    builder.Append(copyAbsPath ? vm.GetAbsPath(selectedChanges[0].Path) : selectedChanges[0].Path);
-                }
-                else
-                {
-                    foreach (var c in selectedChanges)
-                        builder.AppendLine(copyAbsPath ? vm.GetAbsPath(c.Path) : c.Path);
-                }
-
-                await App.CopyTextAsync(builder.ToString());
-                e.Handled = true;
-            }
-            else if (e.Key == Key.F && e.KeyModifiers == cmdKey)
-            {
-                RevisionCompareChangeSearchBox.Focus();
-                e.Handled = true;
-            }
+            RevisionCompareChangeSearchBox.Focus();
+            e.Handled = true;
         }
     }
 }

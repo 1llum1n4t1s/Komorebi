@@ -4,32 +4,31 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public class RepositoryCommandPaletteTextBox : TextBox
 {
-    public class RepositoryCommandPaletteTextBox : TextBox
+    protected override Type StyleKeyOverride => typeof(TextBox);
+
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        protected override Type StyleKeyOverride => typeof(TextBox);
+        base.OnLoaded(e);
+        Focus(NavigationMethod.Directional);
+    }
 
-        protected override void OnLoaded(RoutedEventArgs e)
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (e.Key == Key.Back && string.IsNullOrEmpty(Text))
         {
-            base.OnLoaded(e);
-            Focus(NavigationMethod.Directional);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if (e.Key == Key.Back && string.IsNullOrEmpty(Text))
+            var launcher = App.GetLauncher();
+            if (launcher is { ActivePage: { Data: ViewModels.Repository repo } })
             {
-                var launcher = App.GetLauncher();
-                if (launcher is { ActivePage: { Data: ViewModels.Repository repo } })
-                {
-                    launcher.CommandPalette = new ViewModels.RepositoryCommandPalette(repo);
-                    e.Handled = true;
-                    return;
-                }
+                launcher.CommandPalette = new ViewModels.RepositoryCommandPalette(repo);
+                e.Handled = true;
+                return;
             }
-
-            base.OnKeyDown(e);
         }
+
+        base.OnKeyDown(e);
     }
 }

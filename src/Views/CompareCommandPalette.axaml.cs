@@ -1,75 +1,74 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     比較コマンドパレットのコードビハインド。
+/// </summary>
+public partial class CompareCommandPalette : UserControl
 {
     /// <summary>
-    ///     比較コマンドパレットのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CompareCommandPalette : UserControl
+    public CompareCommandPalette()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CompareCommandPalette()
+        InitializeComponent();
+    }
+
+    /// <summary>
+    ///     キーが押された際のイベント処理。
+    /// </summary>
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        base.OnKeyDown(e);
+
+        if (DataContext is not ViewModels.CompareCommandPalette vm)
+            return;
+
+        if (e.Key == Key.Enter)
         {
-            InitializeComponent();
+            vm.Launch();
+            e.Handled = true;
         }
-
-        /// <summary>
-        ///     キーが押された際のイベント処理。
-        /// </summary>
-        protected override void OnKeyDown(KeyEventArgs e)
+        else if (e.Key == Key.Up)
         {
-            base.OnKeyDown(e);
-
-            if (DataContext is not ViewModels.CompareCommandPalette vm)
+            if (RefsListBox.IsKeyboardFocusWithin)
+            {
+                FilterTextBox.Focus(NavigationMethod.Directional);
+                e.Handled = true;
                 return;
-
-            if (e.Key == Key.Enter)
-            {
-                vm.Launch();
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Up)
-            {
-                if (RefsListBox.IsKeyboardFocusWithin)
-                {
-                    FilterTextBox.Focus(NavigationMethod.Directional);
-                    e.Handled = true;
-                    return;
-                }
-            }
-            else if (e.Key == Key.Down || e.Key == Key.Tab)
-            {
-                if (FilterTextBox.IsKeyboardFocusWithin)
-                {
-                    if (vm.Refs.Count > 0)
-                        RefsListBox.Focus(NavigationMethod.Directional);
-
-                    e.Handled = true;
-                    return;
-                }
-
-                if (RefsListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
-                {
-                    FilterTextBox.Focus(NavigationMethod.Directional);
-                    e.Handled = true;
-                    return;
-                }
             }
         }
-
-        /// <summary>
-        ///     ItemTappedイベントのハンドラ。
-        /// </summary>
-        private void OnItemTapped(object sender, TappedEventArgs e)
+        else if (e.Key == Key.Down || e.Key == Key.Tab)
         {
-            if (DataContext is ViewModels.CompareCommandPalette vm)
+            if (FilterTextBox.IsKeyboardFocusWithin)
             {
-                vm.Launch();
+                if (vm.Refs.Count > 0)
+                    RefsListBox.Focus(NavigationMethod.Directional);
+
                 e.Handled = true;
+                return;
             }
+
+            if (RefsListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
+            {
+                FilterTextBox.Focus(NavigationMethod.Directional);
+                e.Handled = true;
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     ItemTappedイベントのハンドラ。
+    /// </summary>
+    private void OnItemTapped(object sender, TappedEventArgs e)
+    {
+        if (DataContext is ViewModels.CompareCommandPalette vm)
+        {
+            vm.Launch();
+            e.Handled = true;
         }
     }
 }

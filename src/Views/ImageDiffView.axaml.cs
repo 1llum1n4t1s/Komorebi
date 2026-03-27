@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     画像差分ビューのコードビハインド。
+/// </summary>
+public partial class ImageDiffView : UserControl
 {
     /// <summary>
-    ///     画像差分ビューのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class ImageDiffView : UserControl
+    public ImageDiffView()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public ImageDiffView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

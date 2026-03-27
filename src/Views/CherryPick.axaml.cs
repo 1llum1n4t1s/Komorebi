@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     チェリーピックダイアログのコードビハインド。
+/// </summary>
+public partial class CherryPick : UserControl
 {
     /// <summary>
-    ///     チェリーピックダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CherryPick : UserControl
+    public CherryPick()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CherryPick()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

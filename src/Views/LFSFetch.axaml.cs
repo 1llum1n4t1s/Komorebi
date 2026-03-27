@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     Git LFSフェッチダイアログのコードビハインド。
+/// </summary>
+public partial class LFSFetch : UserControl
 {
     /// <summary>
-    ///     Git LFSフェッチダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class LFSFetch : UserControl
+    public LFSFetch()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public LFSFetch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

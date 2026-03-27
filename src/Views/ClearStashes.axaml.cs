@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     全スタッシュ削除確認ダイアログのコードビハインド。
+/// </summary>
+public partial class ClearStashes : UserControl
 {
     /// <summary>
-    ///     全スタッシュ削除確認ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class ClearStashes : UserControl
+    public ClearStashes()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public ClearStashes()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

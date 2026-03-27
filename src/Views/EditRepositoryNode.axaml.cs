@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リポジトリノード編集ダイアログのコードビハインド。
+/// </summary>
+public partial class EditRepositoryNode : UserControl
 {
     /// <summary>
-    ///     リポジトリノード編集ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class EditRepositoryNode : UserControl
+    public EditRepositoryNode()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public EditRepositoryNode()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

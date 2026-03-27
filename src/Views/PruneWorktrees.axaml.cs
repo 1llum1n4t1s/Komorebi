@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ワークツリープルーンダイアログのコードビハインド。
+/// </summary>
+public partial class PruneWorktrees : UserControl
 {
     /// <summary>
-    ///     ワークツリープルーンダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class PruneWorktrees : UserControl
+    public PruneWorktrees()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public PruneWorktrees()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,33 +1,32 @@
-using Avalonia.Interactivity;
+﻿using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     Conventional Commitsメッセージ構築ダイアログのコードビハインド。
+/// </summary>
+public partial class ConventionalCommitMessageBuilder : ChromelessWindow
 {
     /// <summary>
-    ///     Conventional Commitsメッセージ構築ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class ConventionalCommitMessageBuilder : ChromelessWindow
+    public ConventionalCommitMessageBuilder()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public ConventionalCommitMessageBuilder()
+        CloseOnESC = true;
+        InitializeComponent();
+    }
+
+    /// <summary>
+    ///     ApplyClickedイベントのハンドラ。
+    /// </summary>
+    private void OnApplyClicked(object _, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.ConventionalCommitMessageBuilder builder)
         {
-            CloseOnESC = true;
-            InitializeComponent();
+            if (builder.Apply())
+                Close();
         }
 
-        /// <summary>
-        ///     ApplyClickedイベントのハンドラ。
-        /// </summary>
-        private void OnApplyClicked(object _, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.ConventionalCommitMessageBuilder builder)
-            {
-                if (builder.Apply())
-                    Close();
-            }
-
-            e.Handled = true;
-        }
+        e.Handled = true;
     }
 }

@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リポジトリ初期化（git init）ダイアログのコードビハインド。
+/// </summary>
+public partial class Init : UserControl
 {
     /// <summary>
-    ///     リポジトリ初期化（git init）ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Init : UserControl
+    public Init()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Init()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

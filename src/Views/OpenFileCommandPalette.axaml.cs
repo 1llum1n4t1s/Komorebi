@@ -1,75 +1,74 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ファイルを開くコマンドパレットのコードビハインド。
+/// </summary>
+public partial class OpenFileCommandPalette : UserControl
 {
     /// <summary>
-    ///     ファイルを開くコマンドパレットのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class OpenFileCommandPalette : UserControl
+    public OpenFileCommandPalette()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public OpenFileCommandPalette()
+        InitializeComponent();
+    }
+
+    /// <summary>
+    ///     キーが押された際のイベント処理。
+    /// </summary>
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        base.OnKeyDown(e);
+
+        if (DataContext is not ViewModels.OpenFileCommandPalette vm)
+            return;
+
+        if (e.Key == Key.Enter)
         {
-            InitializeComponent();
+            vm.Launch();
+            e.Handled = true;
         }
-
-        /// <summary>
-        ///     キーが押された際のイベント処理。
-        /// </summary>
-        protected override void OnKeyDown(KeyEventArgs e)
+        else if (e.Key == Key.Up)
         {
-            base.OnKeyDown(e);
-
-            if (DataContext is not ViewModels.OpenFileCommandPalette vm)
+            if (FileListBox.IsKeyboardFocusWithin)
+            {
+                FilterTextBox.Focus(NavigationMethod.Directional);
+                e.Handled = true;
                 return;
-
-            if (e.Key == Key.Enter)
-            {
-                vm.Launch();
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Up)
-            {
-                if (FileListBox.IsKeyboardFocusWithin)
-                {
-                    FilterTextBox.Focus(NavigationMethod.Directional);
-                    e.Handled = true;
-                    return;
-                }
-            }
-            else if (e.Key == Key.Down || e.Key == Key.Tab)
-            {
-                if (FilterTextBox.IsKeyboardFocusWithin)
-                {
-                    if (vm.VisibleFiles.Count > 0)
-                        FileListBox.Focus(NavigationMethod.Directional);
-
-                    e.Handled = true;
-                    return;
-                }
-
-                if (FileListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
-                {
-                    FilterTextBox.Focus(NavigationMethod.Directional);
-                    e.Handled = true;
-                    return;
-                }
             }
         }
-
-        /// <summary>
-        ///     ItemTappedイベントのハンドラ。
-        /// </summary>
-        private void OnItemTapped(object sender, TappedEventArgs e)
+        else if (e.Key == Key.Down || e.Key == Key.Tab)
         {
-            if (DataContext is ViewModels.OpenFileCommandPalette vm)
+            if (FilterTextBox.IsKeyboardFocusWithin)
             {
-                vm.Launch();
+                if (vm.VisibleFiles.Count > 0)
+                    FileListBox.Focus(NavigationMethod.Directional);
+
                 e.Handled = true;
+                return;
             }
+
+            if (FileListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
+            {
+                FilterTextBox.Focus(NavigationMethod.Directional);
+                e.Handled = true;
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     ItemTappedイベントのハンドラ。
+    /// </summary>
+    private void OnItemTapped(object sender, TappedEventArgs e)
+    {
+        if (DataContext is ViewModels.OpenFileCommandPalette vm)
+        {
+            vm.Launch();
+            e.Handled = true;
         }
     }
 }

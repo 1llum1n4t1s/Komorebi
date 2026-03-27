@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リポジトリノード移動ダイアログのコードビハインド。
+/// </summary>
+public partial class MoveRepositoryNode : UserControl
 {
     /// <summary>
-    ///     リポジトリノード移動ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class MoveRepositoryNode : UserControl
+    public MoveRepositoryNode()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public MoveRepositoryNode()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

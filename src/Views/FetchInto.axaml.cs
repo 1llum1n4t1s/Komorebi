@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     フェッチ先指定ダイアログのコードビハインド。
+/// </summary>
+public partial class FetchInto : UserControl
 {
     /// <summary>
-    ///     フェッチ先指定ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class FetchInto : UserControl
+    public FetchInto()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public FetchInto()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

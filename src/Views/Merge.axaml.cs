@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     マージダイアログのコードビハインド。
+/// </summary>
+public partial class Merge : UserControl
 {
     /// <summary>
-    ///     マージダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Merge : UserControl
+    public Merge()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Merge()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

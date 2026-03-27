@@ -1,123 +1,122 @@
-using System;
+﻿using System;
 
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ファイル履歴ビューのコードビハインド。
+/// </summary>
+public partial class FileHistories : ChromelessWindow
 {
     /// <summary>
-    ///     ファイル履歴ビューのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class FileHistories : ChromelessWindow
+    public FileHistories()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public FileHistories()
+        InitializeComponent();
+    }
+
+    /// <summary>
+    ///     PressCommitSHAイベントのハンドラ。
+    /// </summary>
+    private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
+    {
+        if (sender is TextBlock { DataContext: Models.FileVersion ver } &&
+            DataContext is ViewModels.FileHistories vm)
         {
-            InitializeComponent();
+            vm.NavigateToCommit(ver);
         }
 
-        /// <summary>
-        ///     PressCommitSHAイベントのハンドラ。
-        /// </summary>
-        private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
-        {
-            if (sender is TextBlock { DataContext: Models.FileVersion ver } &&
-                DataContext is ViewModels.FileHistories vm)
-            {
-                vm.NavigateToCommit(ver);
-            }
+        e.Handled = true;
+    }
 
-            e.Handled = true;
+    /// <summary>
+    ///     ResetToSelectedRevisionイベントのハンドラ。
+    /// </summary>
+    private async void OnResetToSelectedRevision(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: ViewModels.FileHistoriesSingleRevision single })
+        {
+            await single.ResetToSelectedRevisionAsync();
+            NotifyDonePanel.IsVisible = true;
         }
 
-        /// <summary>
-        ///     ResetToSelectedRevisionイベントのハンドラ。
-        /// </summary>
-        private async void OnResetToSelectedRevision(object sender, RoutedEventArgs e)
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     CloseNotifyPanelイベントのハンドラ。
+    /// </summary>
+    private void OnCloseNotifyPanel(object _, PointerPressedEventArgs e)
+    {
+        NotifyDonePanel.IsVisible = false;
+        e.Handled = true;
+    }
+
+    /// <summary>
+    ///     SaveAsPatchイベントのハンドラ。
+    /// </summary>
+    private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: ViewModels.FileHistoriesCompareRevisions compare })
         {
-            if (sender is Button { DataContext: ViewModels.FileHistoriesSingleRevision single })
+            var options = new FilePickerSaveOptions();
+            options.Title = App.Text("FileCM.SaveAsPatch");
+            options.DefaultExtension = ".patch";
+            options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
+
+            try
             {
-                await single.ResetToSelectedRevisionAsync();
+                var storageFile = await StorageProvider.SaveFilePickerAsync(options);
+                if (storageFile is not null)
+                    await compare.SaveAsPatch(storageFile.Path.LocalPath);
+
                 NotifyDonePanel.IsVisible = true;
             }
-
-            e.Handled = true;
-        }
-
-        /// <summary>
-        ///     CloseNotifyPanelイベントのハンドラ。
-        /// </summary>
-        private void OnCloseNotifyPanel(object _, PointerPressedEventArgs e)
-        {
-            NotifyDonePanel.IsVisible = false;
-            e.Handled = true;
-        }
-
-        /// <summary>
-        ///     SaveAsPatchイベントのハンドラ。
-        /// </summary>
-        private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button { DataContext: ViewModels.FileHistoriesCompareRevisions compare })
+            catch (Exception exception)
             {
-                var options = new FilePickerSaveOptions();
-                options.Title = App.Text("FileCM.SaveAsPatch");
-                options.DefaultExtension = ".patch";
-                options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
-
-                try
-                {
-                    var storageFile = await StorageProvider.SaveFilePickerAsync(options);
-                    if (storageFile != null)
-                        await compare.SaveAsPatch(storageFile.Path.LocalPath);
-
-                    NotifyDonePanel.IsVisible = true;
-                }
-                catch (Exception exception)
-                {
-                    App.RaiseException(string.Empty, App.Text("Error.FailedToSaveAsPatch", exception.Message));
-                }
-
-                e.Handled = true;
+                App.RaiseException(string.Empty, App.Text("Error.FailedToSaveAsPatch", exception.Message));
             }
-        }
-
-        /// <summary>
-        ///     CommitSubjectDataContextChangedイベントのハンドラ。
-        /// </summary>
-        private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
-        {
-            if (sender is Border border)
-                ToolTip.SetTip(border, null);
-        }
-
-        /// <summary>
-        ///     CommitSubjectPointerMovedイベントのハンドラ。
-        /// </summary>
-        private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
-        {
-            if (sender is Border { DataContext: Models.FileVersion ver } border &&
-                DataContext is ViewModels.FileHistories vm)
-            {
-                var tooltip = ToolTip.GetTip(border);
-                if (tooltip == null)
-                    ToolTip.SetTip(border, vm.GetCommitFullMessage(ver));
-            }
-        }
-
-        /// <summary>
-        ///     OpenFileWithDefaultEditorイベントのハンドラ。
-        /// </summary>
-        private async void OnOpenFileWithDefaultEditor(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.FileHistories { ViewContent: ViewModels.FileHistoriesSingleRevision revision })
-                await revision.OpenWithDefaultEditorAsync();
 
             e.Handled = true;
         }
+    }
+
+    /// <summary>
+    ///     CommitSubjectDataContextChangedイベントのハンドラ。
+    /// </summary>
+    private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
+    {
+        if (sender is Border border)
+            ToolTip.SetTip(border, null);
+    }
+
+    /// <summary>
+    ///     CommitSubjectPointerMovedイベントのハンドラ。
+    /// </summary>
+    private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
+    {
+        if (sender is Border { DataContext: Models.FileVersion ver } border &&
+            DataContext is ViewModels.FileHistories vm)
+        {
+            var tooltip = ToolTip.GetTip(border);
+            if (tooltip is null)
+                ToolTip.SetTip(border, vm.GetCommitFullMessage(ver));
+        }
+    }
+
+    /// <summary>
+    ///     OpenFileWithDefaultEditorイベントのハンドラ。
+    /// </summary>
+    private async void OnOpenFileWithDefaultEditor(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.FileHistories { ViewContent: ViewModels.FileHistoriesSingleRevision revision })
+            await revision.OpenWithDefaultEditorAsync();
+
+        e.Handled = true;
     }
 }

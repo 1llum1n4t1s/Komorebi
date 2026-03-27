@@ -1,32 +1,31 @@
-using Avalonia.Interactivity;
+﻿using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class ConfirmEmptyCommit : ChromelessWindow
 {
-    public partial class ConfirmEmptyCommit : ChromelessWindow
+    public ConfirmEmptyCommit()
     {
-        public ConfirmEmptyCommit()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void StageSelectedThenCommit(object _1, RoutedEventArgs _2)
-        {
-            Close(Models.ConfirmEmptyCommitResult.StageSelectedAndCommit);
-        }
+    private void StageSelectedThenCommit(object _1, RoutedEventArgs _2)
+    {
+        Close(Models.ConfirmEmptyCommitResult.StageSelectedAndCommit);
+    }
 
-        private void StageAllThenCommit(object _1, RoutedEventArgs _2)
-        {
-            Close(Models.ConfirmEmptyCommitResult.StageAllAndCommit);
-        }
+    private void StageAllThenCommit(object _1, RoutedEventArgs _2)
+    {
+        Close(Models.ConfirmEmptyCommitResult.StageAllAndCommit);
+    }
 
-        private void Continue(object _1, RoutedEventArgs _2)
-        {
-            Close(Models.ConfirmEmptyCommitResult.CreateEmptyCommit);
-        }
+    private void Continue(object _1, RoutedEventArgs _2)
+    {
+        Close(Models.ConfirmEmptyCommitResult.CreateEmptyCommit);
+    }
 
-        private void CloseWindow(object _1, RoutedEventArgs _2)
-        {
-            Close(Models.ConfirmEmptyCommitResult.Cancel);
-        }
+    private void CloseWindow(object _1, RoutedEventArgs _2)
+    {
+        Close(Models.ConfirmEmptyCommitResult.Cancel);
     }
 }

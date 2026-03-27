@@ -1,30 +1,29 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     コミット間の関連追跡ビューのコードビハインド。
+/// </summary>
+public partial class CommitRelationTracking : UserControl
 {
     /// <summary>
-    ///     コミット間の関連追跡ビューのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CommitRelationTracking : UserControl
+    public CommitRelationTracking()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CommitRelationTracking()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        /// <summary>
-        ///     SetDataAsyncの処理を行う。
-        /// </summary>
-        public async Task SetDataAsync(ViewModels.CommitDetail detail)
-        {
-            LoadingIcon.IsVisible = true;
-            var containsIn = await detail.GetRefsContainsThisCommitAsync();
-            Container.ItemsSource = containsIn;
-            LoadingIcon.IsVisible = false;
-        }
+    /// <summary>
+    ///     SetDataAsyncの処理を行う。
+    /// </summary>
+    public async Task SetDataAsync(ViewModels.CommitDetail detail)
+    {
+        LoadingIcon.IsVisible = true;
+        var containsIn = await detail.GetRefsContainsThisCommitAsync();
+        Container.ItemsSource = containsIn;
+        LoadingIcon.IsVisible = false;
     }
 }

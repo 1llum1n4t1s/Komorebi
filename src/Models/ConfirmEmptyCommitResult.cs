@@ -1,10 +1,9 @@
-﻿namespace Komorebi.Models
+﻿namespace Komorebi.Models;
+
+public enum ConfirmEmptyCommitResult
 {
-    public enum ConfirmEmptyCommitResult
-    {
-        Cancel = 0,
-        StageSelectedAndCommit,
-        StageAllAndCommit,
-        CreateEmptyCommit,
-    }
+    Cancel = 0,
+    StageSelectedAndCommit,
+    StageAllAndCommit,
+    CreateEmptyCommit,
 }

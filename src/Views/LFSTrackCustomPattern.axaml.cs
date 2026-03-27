@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     Git LFSカスタムパターン追跡設定ダイアログのコードビハインド。
+/// </summary>
+public partial class LFSTrackCustomPattern : UserControl
 {
     /// <summary>
-    ///     Git LFSカスタムパターン追跡設定ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class LFSTrackCustomPattern : UserControl
+    public LFSTrackCustomPattern()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public LFSTrackCustomPattern()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

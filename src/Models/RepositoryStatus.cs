@@ -1,37 +1,36 @@
-﻿namespace Komorebi.Models
+﻿namespace Komorebi.Models;
+
+/// <summary>
+///     リポジトリの現在の状態情報（ブランチ名、先行/後退コミット数、ローカル変更数）を保持するクラス
+/// </summary>
+public class RepositoryStatus
 {
-    /// <summary>
-    ///     リポジトリの現在の状態情報（ブランチ名、先行/後退コミット数、ローカル変更数）を保持するクラス
-    /// </summary>
-    public class RepositoryStatus
+    /// <summary>現在のブランチ名</summary>
+    public string CurrentBranch { get; set; } = string.Empty;
+    /// <summary>リモートより先行しているコミット数</summary>
+    public int Ahead { get; set; } = 0;
+    /// <summary>リモートより後退しているコミット数</summary>
+    public int Behind { get; set; } = 0;
+    /// <summary>ローカルの変更ファイル数</summary>
+    public int LocalChanges { get; set; } = 0;
+
+    /// <summary>先行/後退コミットがある場合にtrueを返す</summary>
+    public bool IsTrackingStatusVisible
     {
-        /// <summary>現在のブランチ名</summary>
-        public string CurrentBranch { get; set; } = string.Empty;
-        /// <summary>リモートより先行しているコミット数</summary>
-        public int Ahead { get; set; } = 0;
-        /// <summary>リモートより後退しているコミット数</summary>
-        public int Behind { get; set; } = 0;
-        /// <summary>ローカルの変更ファイル数</summary>
-        public int LocalChanges { get; set; } = 0;
-
-        /// <summary>先行/後退コミットがある場合にtrueを返す</summary>
-        public bool IsTrackingStatusVisible
+        get
         {
-            get
-            {
-                return Ahead > 0 || Behind > 0;
-            }
+            return Ahead > 0 || Behind > 0;
         }
+    }
 
-        public string TrackingDescription
+    public string TrackingDescription
+    {
+        get
         {
-            get
-            {
-                if (Ahead > 0)
-                    return Behind > 0 ? $"{Ahead}↑ {Behind}↓" : $"{Ahead}↑";
+            if (Ahead > 0)
+                return Behind > 0 ? $"{Ahead}↑ {Behind}↓" : $"{Ahead}↑";
 
-                return Behind > 0 ? $"{Behind}↓" : string.Empty;
-            }
+            return Behind > 0 ? $"{Behind}↓" : string.Empty;
         }
     }
 }

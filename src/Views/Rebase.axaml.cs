@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リベースダイアログのコードビハインド。
+/// </summary>
+public partial class Rebase : UserControl
 {
     /// <summary>
-    ///     リベースダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Rebase : UserControl
+    public Rebase()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Rebase()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

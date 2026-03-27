@@ -1,17 +1,16 @@
-namespace Komorebi.Views
+﻿namespace Komorebi.Views;
+
+/// <summary>
+///     カスタムアクション設定コントロールのコードビハインド。
+/// </summary>
+public partial class ConfigureCustomActionControls : ChromelessWindow
 {
     /// <summary>
-    ///     カスタムアクション設定コントロールのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class ConfigureCustomActionControls : ChromelessWindow
+    public ConfigureCustomActionControls()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public ConfigureCustomActionControls()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
     }
 }

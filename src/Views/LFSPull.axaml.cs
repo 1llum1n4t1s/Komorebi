@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     Git LFSプルダイアログのコードビハインド。
+/// </summary>
+public partial class LFSPull : UserControl
 {
     /// <summary>
-    ///     Git LFSプルダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class LFSPull : UserControl
+    public LFSPull()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public LFSPull()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

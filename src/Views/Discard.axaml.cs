@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     変更破棄確認ダイアログのコードビハインド。
+/// </summary>
+public partial class Discard : UserControl
 {
     /// <summary>
-    ///     変更破棄確認ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Discard : UserControl
+    public Discard()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Discard()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

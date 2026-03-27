@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     チェックアウト＆ファストフォワードダイアログのコードビハインド。
+/// </summary>
+public partial class CheckoutAndFastForward : UserControl
 {
     /// <summary>
-    ///     チェックアウト＆ファストフォワードダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CheckoutAndFastForward : UserControl
+    public CheckoutAndFastForward()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CheckoutAndFastForward()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

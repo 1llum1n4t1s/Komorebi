@@ -1,17 +1,16 @@
-namespace Komorebi.Views
+﻿namespace Komorebi.Views;
+
+/// <summary>
+///     リポジトリ統計情報（コミット数・貢献者グラフ等）ビューのコードビハインド。
+/// </summary>
+public partial class Statistics : ChromelessWindow
 {
     /// <summary>
-    ///     リポジトリ統計情報（コミット数・貢献者グラフ等）ビューのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Statistics : ChromelessWindow
+    public Statistics()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Statistics()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
     }
 }

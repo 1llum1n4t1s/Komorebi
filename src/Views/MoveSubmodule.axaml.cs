@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     サブモジュール移動ダイアログのコードビハインド。
+/// </summary>
+public partial class MoveSubmodule : UserControl
 {
     /// <summary>
-    ///     サブモジュール移動ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class MoveSubmodule : UserControl
+    public MoveSubmodule()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public MoveSubmodule()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

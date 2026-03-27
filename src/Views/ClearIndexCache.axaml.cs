@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     インデックスキャッシュクリアダイアログのコードビハインド。
+/// </summary>
+public partial class ClearIndexCache : UserControl
 {
     /// <summary>
-    ///     インデックスキャッシュクリアダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class ClearIndexCache : UserControl
+    public ClearIndexCache()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public ClearIndexCache()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,38 +1,37 @@
 ﻿using System.Threading.Tasks;
 
-namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+/// <summary>
+///     リポジトリノード（リポジトリまたはグループ）をブックマークリストから削除するためのダイアログViewModel。
+/// </summary>
+public class DeleteRepositoryNode : Popup
 {
     /// <summary>
-    ///     リポジトリノード（リポジトリまたはグループ）をブックマークリストから削除するためのダイアログViewModel。
+    ///     削除対象のリポジトリノード。
     /// </summary>
-    public class DeleteRepositoryNode : Popup
+    public RepositoryNode Node
     {
-        /// <summary>
-        ///     削除対象のリポジトリノード。
-        /// </summary>
-        public RepositoryNode Node
-        {
-            get;
-        }
+        get;
+    }
 
-        /// <summary>
-        ///     コンストラクタ。削除対象のノードを指定する。
-        /// </summary>
-        public DeleteRepositoryNode(RepositoryNode node)
-        {
-            Node = node;
-        }
+    /// <summary>
+    ///     コンストラクタ。削除対象のノードを指定する。
+    /// </summary>
+    public DeleteRepositoryNode(RepositoryNode node)
+    {
+        Node = node;
+    }
 
-        /// <summary>
-        ///     ノード削除を実行する確認アクション。
-        ///     設定からノードを削除し、ウェルカム画面を更新する。
-        /// </summary>
-        public override Task<bool> Sure()
-        {
-            // 設定からノードを再帰的に削除
-            Preferences.Instance.RemoveNode(Node, true);
-            Welcome.Instance.Refresh();
-            return Task.FromResult(true);
-        }
+    /// <summary>
+    ///     ノード削除を実行する確認アクション。
+    ///     設定からノードを削除し、ウェルカム画面を更新する。
+    /// </summary>
+    public override Task<bool> Sure()
+    {
+        // 設定からノードを再帰的に削除
+        Preferences.Instance.RemoveNode(Node, true);
+        Welcome.Instance.Refresh();
+        return Task.FromResult(true);
     }
 }

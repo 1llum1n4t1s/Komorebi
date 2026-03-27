@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     タグ削除ダイアログのコードビハインド。
+/// </summary>
+public partial class DeleteTag : UserControl
 {
     /// <summary>
-    ///     タグ削除ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DeleteTag : UserControl
+    public DeleteTag()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DeleteTag()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

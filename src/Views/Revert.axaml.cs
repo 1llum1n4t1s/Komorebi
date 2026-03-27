@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リバート（コミット打消し）ダイアログのコードビハインド。
+/// </summary>
+public partial class Revert : UserControl
 {
     /// <summary>
-    ///     リバート（コミット打消し）ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Revert : UserControl
+    public Revert()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Revert()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

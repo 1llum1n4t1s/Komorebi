@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     HEADドロップ（コミット取消）ダイアログのコードビハインド。
+/// </summary>
+public partial class DropHead : UserControl
 {
     /// <summary>
-    ///     HEADドロップ（コミット取消）ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DropHead : UserControl
+    public DropHead()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DropHead()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     プルダイアログのコードビハインド。
+/// </summary>
+public partial class Pull : UserControl
 {
     /// <summary>
-    ///     プルダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Pull : UserControl
+    public Pull()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Pull()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

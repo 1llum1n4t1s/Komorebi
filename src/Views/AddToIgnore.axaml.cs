@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     .gitignoreへのパターン追加ダイアログのコードビハインド。
+/// </summary>
+public partial class AddToIgnore : UserControl
 {
     /// <summary>
-    ///     .gitignoreへのパターン追加ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class AddToIgnore : UserControl
+    public AddToIgnore()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public AddToIgnore()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ブランチチェックアウトダイアログのコードビハインド。
+/// </summary>
+public partial class Checkout : UserControl
 {
     /// <summary>
-    ///     ブランチチェックアウトダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Checkout : UserControl
+    public Checkout()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Checkout()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

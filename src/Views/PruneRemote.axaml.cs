@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リモートプルーン（不要なリモート追跡ブランチ削除）ダイアログのコードビハインド。
+/// </summary>
+public partial class PruneRemote : UserControl
 {
     /// <summary>
-    ///     リモートプルーン（不要なリモート追跡ブランチ削除）ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class PruneRemote : UserControl
+    public PruneRemote()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public PruneRemote()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

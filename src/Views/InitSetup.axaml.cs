@@ -1,50 +1,49 @@
-using System;
+﻿using System;
 
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     初回起動セットアップ（言語・クローンディレクトリ選択）ダイアログのコードビハインド。
+/// </summary>
+public partial class InitSetup : UserControl
 {
     /// <summary>
-    ///     初回起動セットアップ（言語・クローンディレクトリ選択）ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class InitSetup : UserControl
+    public InitSetup()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public InitSetup()
+        InitializeComponent();
+    }
+
+    /// <summary>
+    ///     DefaultCloneDirの選択処理を行う。
+    /// </summary>
+    private async void SelectDefaultCloneDir(object _, RoutedEventArgs e)
+    {
+        var toplevel = TopLevel.GetTopLevel(this);
+        if (toplevel is null)
+            return;
+
+        var options = new FolderPickerOpenOptions() { AllowMultiple = false };
+        try
         {
-            InitializeComponent();
+            var selected = await toplevel.StorageProvider.OpenFolderPickerAsync(options);
+            if (selected.Count == 1)
+            {
+                var folder = selected[0];
+                var folderPath = folder is { Path: { IsAbsoluteUri: true } path } ? path.LocalPath : folder?.Path.ToString();
+                TxtDefaultCloneDir.Text = folderPath;
+            }
+        }
+        catch (Exception ex)
+        {
+            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCloneDir", ex.Message));
         }
 
-        /// <summary>
-        ///     DefaultCloneDirの選択処理を行う。
-        /// </summary>
-        private async void SelectDefaultCloneDir(object _, RoutedEventArgs e)
-        {
-            var toplevel = TopLevel.GetTopLevel(this);
-            if (toplevel == null)
-                return;
-
-            var options = new FolderPickerOpenOptions() { AllowMultiple = false };
-            try
-            {
-                var selected = await toplevel.StorageProvider.OpenFolderPickerAsync(options);
-                if (selected.Count == 1)
-                {
-                    var folder = selected[0];
-                    var folderPath = folder is { Path: { IsAbsoluteUri: true } path } ? path.LocalPath : folder?.Path.ToString();
-                    TxtDefaultCloneDir.Text = folderPath;
-                }
-            }
-            catch (Exception ex)
-            {
-                App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCloneDir", ex.Message));
-            }
-
-            e.Handled = true;
-        }
+        e.Handled = true;
     }
 }

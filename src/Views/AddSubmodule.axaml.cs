@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     サブモジュール追加ダイアログのコードビハインド。
+/// </summary>
+public partial class AddSubmodule : UserControl
 {
     /// <summary>
-    ///     サブモジュール追加ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class AddSubmodule : UserControl
+    public AddSubmodule()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public AddSubmodule()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

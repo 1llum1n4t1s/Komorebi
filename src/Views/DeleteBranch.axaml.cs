@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ブランチ削除ダイアログのコードビハインド。
+/// </summary>
+public partial class DeleteBranch : UserControl
 {
     /// <summary>
-    ///     ブランチ削除ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DeleteBranch : UserControl
+    public DeleteBranch()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DeleteBranch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

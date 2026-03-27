@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     特定リビジョンプッシュダイアログのコードビハインド。
+/// </summary>
+public partial class PushRevision : UserControl
 {
     /// <summary>
-    ///     特定リビジョンプッシュダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class PushRevision : UserControl
+    public PushRevision()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public PushRevision()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

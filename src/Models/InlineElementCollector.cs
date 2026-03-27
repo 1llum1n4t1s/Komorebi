@@ -1,41 +1,40 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Komorebi.Models
+namespace Komorebi.Models;
+
+/// <summary>
+///     インライン要素のコレクション。コミットメッセージ内のリンクやSHA参照を管理する。
+/// </summary>
+public class InlineElementCollector
 {
-    /// <summary>
-    ///     インライン要素のコレクション。コミットメッセージ内のリンクやSHA参照を管理する。
-    /// </summary>
-    public class InlineElementCollector
+    public int Count => _implementation.Count;
+    public InlineElement this[int index] => _implementation[index];
+
+    public InlineElement Intersect(int start, int length)
     {
-        public int Count => _implementation.Count;
-        public InlineElement this[int index] => _implementation[index];
-
-        public InlineElement Intersect(int start, int length)
+        foreach (var elem in _implementation)
         {
-            foreach (var elem in _implementation)
-            {
-                if (elem.IsIntersecting(start, length))
-                    return elem;
-            }
-
-            return null;
+            if (elem.IsIntersecting(start, length))
+                return elem;
         }
 
-        public void Add(InlineElement element)
-        {
-            _implementation.Add(element);
-        }
-
-        public void Sort()
-        {
-            _implementation.Sort((l, r) => l.Start.CompareTo(r.Start));
-        }
-
-        public void Clear()
-        {
-            _implementation.Clear();
-        }
-
-        private readonly List<InlineElement> _implementation = [];
+        return null;
     }
+
+    public void Add(InlineElement element)
+    {
+        _implementation.Add(element);
+    }
+
+    public void Sort()
+    {
+        _implementation.Sort((l, r) => l.Start.CompareTo(r.Start));
+    }
+
+    public void Clear()
+    {
+        _implementation.Clear();
+    }
+
+    private readonly List<InlineElement> _implementation = [];
 }

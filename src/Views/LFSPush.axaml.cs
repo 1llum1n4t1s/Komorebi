@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     Git LFSプッシュダイアログのコードビハインド。
+/// </summary>
+public partial class LFSPush : UserControl
 {
     /// <summary>
-    ///     Git LFSプッシュダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class LFSPush : UserControl
+    public LFSPush()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public LFSPush()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

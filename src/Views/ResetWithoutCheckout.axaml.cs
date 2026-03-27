@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     チェックアウトなしリセットダイアログのコードビハインド。
+/// </summary>
+public partial class ResetWithoutCheckout : UserControl
 {
     /// <summary>
-    ///     チェックアウトなしリセットダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class ResetWithoutCheckout : UserControl
+    public ResetWithoutCheckout()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public ResetWithoutCheckout()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

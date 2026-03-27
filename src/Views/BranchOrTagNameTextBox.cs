@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 
 using Avalonia.Controls;
@@ -6,76 +6,75 @@ using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ブランチ名またはタグ名入力用のバリデーション付きテキストボックス。
+/// </summary>
+public class BranchOrTagNameTextBox : TextBox
 {
+    protected override Type StyleKeyOverride => typeof(TextBox);
+
     /// <summary>
-    ///     ブランチ名またはタグ名入力用のバリデーション付きテキストボックス。
+    ///     コントロールが読み込まれた際の処理。
     /// </summary>
-    public class BranchOrTagNameTextBox : TextBox
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        protected override Type StyleKeyOverride => typeof(TextBox);
+        base.OnLoaded(e);
+        PastingFromClipboard += OnPastingFromClipboard;
+    }
 
-        /// <summary>
-        ///     コントロールが読み込まれた際の処理。
-        /// </summary>
-        protected override void OnLoaded(RoutedEventArgs e)
+    /// <summary>
+    ///     コントロールがアンロードされた際の処理。
+    /// </summary>
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        PastingFromClipboard -= OnPastingFromClipboard;
+        base.OnUnloaded(e);
+    }
+
+    /// <summary>
+    ///     TextInputイベントのハンドラ。
+    /// </summary>
+    protected override void OnTextInput(TextInputEventArgs e)
+    {
+        if (string.IsNullOrEmpty(e.Text))
+            return;
+
+        var builder = new StringBuilder(e.Text.Length);
+        var chars = e.Text.ToCharArray();
+        foreach (var ch in chars)
         {
-            base.OnLoaded(e);
-            PastingFromClipboard += OnPastingFromClipboard;
+            if (char.IsWhiteSpace(ch))
+                builder.Append('-');
+            else
+                builder.Append(ch);
         }
 
-        /// <summary>
-        ///     コントロールがアンロードされた際の処理。
-        /// </summary>
-        protected override void OnUnloaded(RoutedEventArgs e)
+        e.Text = builder.ToString();
+        base.OnTextInput(e);
+    }
+
+    /// <summary>
+    ///     PastingFromClipboardイベントのハンドラ。
+    /// </summary>
+    private async void OnPastingFromClipboard(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+
+        try
         {
-            PastingFromClipboard -= OnPastingFromClipboard;
-            base.OnUnloaded(e);
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+            if (clipboard is not null)
+            {
+                var text = await clipboard.TryGetTextAsync();
+                if (!string.IsNullOrEmpty(text))
+                    OnTextInput(new TextInputEventArgs() { Text = text });
+            }
         }
-
-        /// <summary>
-        ///     TextInputイベントのハンドラ。
-        /// </summary>
-        protected override void OnTextInput(TextInputEventArgs e)
+        catch
         {
-            if (string.IsNullOrEmpty(e.Text))
-                return;
-
-            var builder = new StringBuilder(e.Text.Length);
-            var chars = e.Text.ToCharArray();
-            foreach (var ch in chars)
-            {
-                if (char.IsWhiteSpace(ch))
-                    builder.Append('-');
-                else
-                    builder.Append(ch);
-            }
-
-            e.Text = builder.ToString();
-            base.OnTextInput(e);
-        }
-
-        /// <summary>
-        ///     PastingFromClipboardイベントのハンドラ。
-        /// </summary>
-        private async void OnPastingFromClipboard(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-
-            try
-            {
-                var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-                if (clipboard != null)
-                {
-                    var text = await clipboard.TryGetTextAsync();
-                    if (!string.IsNullOrEmpty(text))
-                        OnTextInput(new TextInputEventArgs() { Text = text });
-                }
-            }
-            catch
-            {
-                // Ignore exceptions
-            }
+            // Ignore exceptions
         }
     }
 }

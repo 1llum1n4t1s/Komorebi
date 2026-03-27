@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リポジトリノード削除確認ダイアログのコードビハインド。
+/// </summary>
+public partial class DeleteRepositoryNode : UserControl
 {
     /// <summary>
-    ///     リポジトリノード削除確認ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DeleteRepositoryNode : UserControl
+    public DeleteRepositoryNode()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DeleteRepositoryNode()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

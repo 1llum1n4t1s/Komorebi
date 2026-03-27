@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     タグ作成ダイアログのコードビハインド。
+/// </summary>
+public partial class CreateTag : UserControl
 {
     /// <summary>
-    ///     タグ作成ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CreateTag : UserControl
+    public CreateTag()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CreateTag()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

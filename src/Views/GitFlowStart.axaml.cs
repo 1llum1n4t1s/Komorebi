@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     Git Flow開始ダイアログのコードビハインド。
+/// </summary>
+public partial class GitFlowStart : UserControl
 {
     /// <summary>
-    ///     Git Flow開始ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class GitFlowStart : UserControl
+    public GitFlowStart()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public GitFlowStart()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

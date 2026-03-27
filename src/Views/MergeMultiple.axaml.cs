@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     複数ブランチマージダイアログのコードビハインド。
+/// </summary>
+public partial class MergeMultiple : UserControl
 {
     /// <summary>
-    ///     複数ブランチマージダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class MergeMultiple : UserControl
+    public MergeMultiple()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public MergeMultiple()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

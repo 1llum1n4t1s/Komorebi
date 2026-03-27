@@ -20,7 +20,7 @@ namespace Komorebi.Tests.Models
         [InlineData("")]
         [InlineData("   ")]
         [InlineData("\t\n")]
-        public void RegexString_NullOrWhitespace_SetsRegexNull(string pattern)
+        public void RegexString_NullOrWhitespace_SetsRegexNull(string? pattern)
         {
             var tracker = new IssueTracker();
             var ex = Record.Exception(() => tracker.RegexString = pattern);
@@ -158,7 +158,7 @@ namespace Komorebi.Tests.Models
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void Matches_EmptyTemplate_EarlyReturn(string template)
+        public void Matches_EmptyTemplate_EarlyReturn(string? template)
         {
             var tracker = new IssueTracker
             {

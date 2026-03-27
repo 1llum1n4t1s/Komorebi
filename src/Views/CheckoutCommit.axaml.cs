@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     コミットチェックアウトダイアログのコードビハインド。
+/// </summary>
+public partial class CheckoutCommit : UserControl
 {
     /// <summary>
-    ///     コミットチェックアウトダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CheckoutCommit : UserControl
+    public CheckoutCommit()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CheckoutCommit()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

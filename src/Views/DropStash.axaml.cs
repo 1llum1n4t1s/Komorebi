@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     スタッシュ削除確認ダイアログのコードビハインド。
+/// </summary>
+public partial class DropStash : UserControl
 {
     /// <summary>
-    ///     スタッシュ削除確認ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DropStash : UserControl
+    public DropStash()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DropStash()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

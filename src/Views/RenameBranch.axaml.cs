@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ブランチ名変更ダイアログのコードビハインド。
+/// </summary>
+public partial class RenameBranch : UserControl
 {
     /// <summary>
-    ///     ブランチ名変更ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class RenameBranch : UserControl
+    public RenameBranch()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public RenameBranch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

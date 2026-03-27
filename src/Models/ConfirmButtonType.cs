@@ -1,18 +1,17 @@
-﻿namespace Komorebi.Models
+﻿namespace Komorebi.Models;
+
+/// <summary>
+///     確認ダイアログのボタンタイプを表す列挙型。
+/// </summary>
+public enum ConfirmButtonType
 {
     /// <summary>
-    ///     確認ダイアログのボタンタイプを表す列挙型。
+    ///     OK/キャンセルボタンのペア。
     /// </summary>
-    public enum ConfirmButtonType
-    {
-        /// <summary>
-        ///     OK/キャンセルボタンのペア。
-        /// </summary>
-        OkCancel = 0,
+    OkCancel = 0,
 
-        /// <summary>
-        ///     はい/いいえボタンのペア。
-        /// </summary>
-        YesNo,
-    }
+    /// <summary>
+    ///     はい/いいえボタンのペア。
+    /// </summary>
+    YesNo,
 }

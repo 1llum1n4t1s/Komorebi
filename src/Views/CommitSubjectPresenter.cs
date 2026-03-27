@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -10,441 +10,440 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     コミットの件名行を表示するプレゼンタ。
+/// </summary>
+public partial class CommitSubjectPresenter : Control
 {
-    /// <summary>
-    ///     コミットの件名行を表示するプレゼンタ。
-    /// </summary>
-    public partial class CommitSubjectPresenter : Control
+    public static readonly StyledProperty<FontFamily> FontFamilyProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, FontFamily>(nameof(FontFamily));
+
+    public FontFamily FontFamily
     {
-        public static readonly StyledProperty<FontFamily> FontFamilyProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, FontFamily>(nameof(FontFamily));
+        get => GetValue(FontFamilyProperty);
+        set => SetValue(FontFamilyProperty, value);
+    }
 
-        public FontFamily FontFamily
+    public static readonly StyledProperty<FontFamily> CodeFontFamilyProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, FontFamily>(nameof(CodeFontFamily));
+
+    public FontFamily CodeFontFamily
+    {
+        get => GetValue(CodeFontFamilyProperty);
+        set => SetValue(CodeFontFamilyProperty, value);
+    }
+
+    public static readonly StyledProperty<double> FontSizeProperty =
+       TextBlock.FontSizeProperty.AddOwner<CommitSubjectPresenter>();
+
+    public double FontSize
+    {
+        get => GetValue(FontSizeProperty);
+        set => SetValue(FontSizeProperty, value);
+    }
+
+    public static readonly StyledProperty<FontWeight> FontWeightProperty =
+       TextBlock.FontWeightProperty.AddOwner<CommitSubjectPresenter>();
+
+    public FontWeight FontWeight
+    {
+        get => GetValue(FontWeightProperty);
+        set => SetValue(FontWeightProperty, value);
+    }
+
+    public static readonly StyledProperty<IBrush> InlineCodeBackgroundProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(InlineCodeBackground), Brushes.Transparent);
+
+    public IBrush InlineCodeBackground
+    {
+        get => GetValue(InlineCodeBackgroundProperty);
+        set => SetValue(InlineCodeBackgroundProperty, value);
+    }
+
+    public static readonly StyledProperty<IBrush> ForegroundProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(Foreground), Brushes.White);
+
+    public IBrush Foreground
+    {
+        get => GetValue(ForegroundProperty);
+        set => SetValue(ForegroundProperty, value);
+    }
+
+    public static readonly StyledProperty<IBrush> LinkForegroundProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(LinkForeground), Brushes.White);
+
+    public IBrush LinkForeground
+    {
+        get => GetValue(LinkForegroundProperty);
+        set => SetValue(LinkForegroundProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> ShowStrikethroughProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, bool>(nameof(ShowStrikethrough), false);
+
+    public bool ShowStrikethrough
+    {
+        get => GetValue(ShowStrikethroughProperty);
+        set => SetValue(ShowStrikethroughProperty, value);
+    }
+
+    public static readonly StyledProperty<string> SubjectProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, string>(nameof(Subject));
+
+    public string Subject
+    {
+        get => GetValue(SubjectProperty);
+        set => SetValue(SubjectProperty, value);
+    }
+
+    public static readonly StyledProperty<AvaloniaList<Models.IssueTracker>> IssueTrackersProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, AvaloniaList<Models.IssueTracker>>(nameof(IssueTrackers));
+
+    public AvaloniaList<Models.IssueTracker> IssueTrackers
+    {
+        get => GetValue(IssueTrackersProperty);
+        set => SetValue(IssueTrackersProperty, value);
+    }
+
+    /// <summary>
+    ///     コントロールの描画処理を行う。
+    /// </summary>
+    public override void Render(DrawingContext context)
+    {
+        if (_needRebuildInlines)
         {
-            get => GetValue(FontFamilyProperty);
-            set => SetValue(FontFamilyProperty, value);
+            _needRebuildInlines = false;
+            GenerateFormattedTextElements();
         }
 
-        public static readonly StyledProperty<FontFamily> CodeFontFamilyProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, FontFamily>(nameof(CodeFontFamily));
+        if (_inlines.Count == 0)
+            return;
 
-        public FontFamily CodeFontFamily
+        var ro = new RenderOptions()
         {
-            get => GetValue(CodeFontFamilyProperty);
-            set => SetValue(CodeFontFamilyProperty, value);
-        }
+            TextRenderingMode = TextRenderingMode.SubpixelAntialias,
+            EdgeMode = EdgeMode.Antialias
+        };
 
-        public static readonly StyledProperty<double> FontSizeProperty =
-           TextBlock.FontSizeProperty.AddOwner<CommitSubjectPresenter>();
-
-        public double FontSize
+        using (context.PushRenderOptions(ro))
         {
-            get => GetValue(FontSizeProperty);
-            set => SetValue(FontSizeProperty, value);
-        }
-
-        public static readonly StyledProperty<FontWeight> FontWeightProperty =
-           TextBlock.FontWeightProperty.AddOwner<CommitSubjectPresenter>();
-
-        public FontWeight FontWeight
-        {
-            get => GetValue(FontWeightProperty);
-            set => SetValue(FontWeightProperty, value);
-        }
-
-        public static readonly StyledProperty<IBrush> InlineCodeBackgroundProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(InlineCodeBackground), Brushes.Transparent);
-
-        public IBrush InlineCodeBackground
-        {
-            get => GetValue(InlineCodeBackgroundProperty);
-            set => SetValue(InlineCodeBackgroundProperty, value);
-        }
-
-        public static readonly StyledProperty<IBrush> ForegroundProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(Foreground), Brushes.White);
-
-        public IBrush Foreground
-        {
-            get => GetValue(ForegroundProperty);
-            set => SetValue(ForegroundProperty, value);
-        }
-
-        public static readonly StyledProperty<IBrush> LinkForegroundProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(LinkForeground), Brushes.White);
-
-        public IBrush LinkForeground
-        {
-            get => GetValue(LinkForegroundProperty);
-            set => SetValue(LinkForegroundProperty, value);
-        }
-
-        public static readonly StyledProperty<bool> ShowStrikethroughProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, bool>(nameof(ShowStrikethrough), false);
-
-        public bool ShowStrikethrough
-        {
-            get => GetValue(ShowStrikethroughProperty);
-            set => SetValue(ShowStrikethroughProperty, value);
-        }
-
-        public static readonly StyledProperty<string> SubjectProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, string>(nameof(Subject));
-
-        public string Subject
-        {
-            get => GetValue(SubjectProperty);
-            set => SetValue(SubjectProperty, value);
-        }
-
-        public static readonly StyledProperty<AvaloniaList<Models.IssueTracker>> IssueTrackersProperty =
-            AvaloniaProperty.Register<CommitSubjectPresenter, AvaloniaList<Models.IssueTracker>>(nameof(IssueTrackers));
-
-        public AvaloniaList<Models.IssueTracker> IssueTrackers
-        {
-            get => GetValue(IssueTrackersProperty);
-            set => SetValue(IssueTrackersProperty, value);
-        }
-
-        /// <summary>
-        ///     コントロールの描画処理を行う。
-        /// </summary>
-        public override void Render(DrawingContext context)
-        {
-            if (_needRebuildInlines)
-            {
-                _needRebuildInlines = false;
-                GenerateFormattedTextElements();
-            }
-
-            if (_inlines.Count == 0)
-                return;
-
-            var ro = new RenderOptions()
-            {
-                TextRenderingMode = TextRenderingMode.SubpixelAntialias,
-                EdgeMode = EdgeMode.Antialias
-            };
-
-            using (context.PushRenderOptions(ro))
-            {
-                var height = Bounds.Height;
-                var width = Bounds.Width;
-                var maxX = 0.0;
-                foreach (var inline in _inlines)
-                {
-                    if (inline.X > width)
-                        break;
-
-                    if (inline.Element is { Type: Models.InlineElementType.Code })
-                    {
-                        var rect = new Rect(inline.X, (height - inline.Text.Height - 2) * 0.5, inline.Text.WidthIncludingTrailingWhitespace + 8, inline.Text.Height + 2);
-                        var roundedRect = new RoundedRect(rect, new CornerRadius(4));
-                        context.DrawRectangle(InlineCodeBackground, null, roundedRect);
-                        context.DrawText(inline.Text, new Point(inline.X + 4, (height - inline.Text.Height) * 0.5));
-                        maxX = Math.Min(width, inline.X + inline.Text.WidthIncludingTrailingWhitespace + 8);
-                    }
-                    else
-                    {
-                        context.DrawText(inline.Text, new Point(inline.X, (height - inline.Text.Height) * 0.5));
-                        maxX = Math.Min(width, inline.X + inline.Text.WidthIncludingTrailingWhitespace);
-                    }
-                }
-
-                if (ShowStrikethrough)
-                    context.DrawLine(new Pen(Foreground), new Point(0, height * 0.5), new Point(maxX, height * 0.5));
-            }
-        }
-
-        /// <summary>
-        ///     プロパティが変更された際の処理。
-        /// </summary>
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-        {
-            base.OnPropertyChanged(change);
-
-            if (change.Property == SubjectProperty)
-            {
-                _needRebuildInlines = true;
-                GenerateInlineElements();
-                InvalidateVisual();
-            }
-            else if (change.Property == IssueTrackersProperty)
-            {
-                if (change.OldValue is AvaloniaList<Models.IssueTracker> oldValue)
-                    oldValue.CollectionChanged -= OnIssueTrackersChanged;
-                if (change.NewValue is AvaloniaList<Models.IssueTracker> newValue)
-                    newValue.CollectionChanged += OnIssueTrackersChanged;
-
-                OnIssueTrackersChanged(null, null);
-            }
-            else if (change.Property == FontFamilyProperty ||
-                change.Property == CodeFontFamilyProperty ||
-                change.Property == FontSizeProperty ||
-                change.Property == FontWeightProperty ||
-                change.Property == ForegroundProperty ||
-                change.Property == LinkForegroundProperty)
-            {
-                _needRebuildInlines = true;
-                InvalidateVisual();
-            }
-            else if (change.Property == InlineCodeBackgroundProperty ||
-                change.Property == ShowStrikethroughProperty)
-            {
-                InvalidateVisual();
-            }
-        }
-
-        /// <summary>
-        ///     ポインターが移動した際のイベント処理。
-        /// </summary>
-        protected override void OnPointerMoved(PointerEventArgs e)
-        {
-            base.OnPointerMoved(e);
-
-            var point = e.GetPosition(this);
+            var height = Bounds.Height;
+            var width = Bounds.Width;
+            var maxX = 0.0;
             foreach (var inline in _inlines)
             {
-                if (inline.Element is not { Type: Models.InlineElementType.Link } link)
-                    continue;
+                if (inline.X > width)
+                    break;
 
-                if (inline.X > point.X || inline.X + inline.Text.WidthIncludingTrailingWhitespace < point.X)
-                    continue;
-
-                _lastHover = link;
-                SetCurrentValue(CursorProperty, Cursor.Parse("Hand"));
-                ToolTip.SetTip(this, link.Link);
-                e.Handled = true;
-                return;
+                if (inline.Element is { Type: Models.InlineElementType.Code })
+                {
+                    var rect = new Rect(inline.X, (height - inline.Text.Height - 2) * 0.5, inline.Text.WidthIncludingTrailingWhitespace + 8, inline.Text.Height + 2);
+                    var roundedRect = new RoundedRect(rect, new CornerRadius(4));
+                    context.DrawRectangle(InlineCodeBackground, null, roundedRect);
+                    context.DrawText(inline.Text, new Point(inline.X + 4, (height - inline.Text.Height) * 0.5));
+                    maxX = Math.Min(width, inline.X + inline.Text.WidthIncludingTrailingWhitespace + 8);
+                }
+                else
+                {
+                    context.DrawText(inline.Text, new Point(inline.X, (height - inline.Text.Height) * 0.5));
+                    maxX = Math.Min(width, inline.X + inline.Text.WidthIncludingTrailingWhitespace);
+                }
             }
 
-            ClearHoveredIssueLink();
+            if (ShowStrikethrough)
+                context.DrawLine(new Pen(Foreground), new Point(0, height * 0.5), new Point(maxX, height * 0.5));
         }
+    }
 
-        /// <summary>
-        ///     ポインターが押された際のイベント処理。
-        /// </summary>
-        protected override void OnPointerPressed(PointerPressedEventArgs e)
-        {
-            base.OnPointerPressed(e);
+    /// <summary>
+    ///     プロパティが変更された際の処理。
+    /// </summary>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
 
-            if (_lastHover != null)
-                Native.OS.OpenBrowser(_lastHover.Link);
-        }
-
-        /// <summary>
-        ///     PointerExitedイベントのハンドラ。
-        /// </summary>
-        protected override void OnPointerExited(PointerEventArgs e)
-        {
-            base.OnPointerExited(e);
-            ClearHoveredIssueLink();
-        }
-
-        /// <summary>
-        ///     IssueTrackersChangedイベントのハンドラ。
-        /// </summary>
-        private void OnIssueTrackersChanged(object sender, NotifyCollectionChangedEventArgs e)
+        if (change.Property == SubjectProperty)
         {
             _needRebuildInlines = true;
             GenerateInlineElements();
             InvalidateVisual();
         }
-
-        /// <summary>
-        ///     GenerateInlineElementsの処理を行う。
-        /// </summary>
-        private void GenerateInlineElements()
+        else if (change.Property == IssueTrackersProperty)
         {
-            _elements.Clear();
-            ClearHoveredIssueLink();
+            if (change.OldValue is AvaloniaList<Models.IssueTracker> oldValue)
+                oldValue.CollectionChanged -= OnIssueTrackersChanged;
+            if (change.NewValue is AvaloniaList<Models.IssueTracker> newValue)
+                newValue.CollectionChanged += OnIssueTrackersChanged;
 
-            var subject = Subject;
-            if (string.IsNullOrEmpty(subject))
+            OnIssueTrackersChanged(null, null);
+        }
+        else if (change.Property == FontFamilyProperty ||
+            change.Property == CodeFontFamilyProperty ||
+            change.Property == FontSizeProperty ||
+            change.Property == FontWeightProperty ||
+            change.Property == ForegroundProperty ||
+            change.Property == LinkForegroundProperty)
+        {
+            _needRebuildInlines = true;
+            InvalidateVisual();
+        }
+        else if (change.Property == InlineCodeBackgroundProperty ||
+            change.Property == ShowStrikethroughProperty)
+        {
+            InvalidateVisual();
+        }
+    }
+
+    /// <summary>
+    ///     ポインターが移動した際のイベント処理。
+    /// </summary>
+    protected override void OnPointerMoved(PointerEventArgs e)
+    {
+        base.OnPointerMoved(e);
+
+        var point = e.GetPosition(this);
+        foreach (var inline in _inlines)
+        {
+            if (inline.Element is not { Type: Models.InlineElementType.Link } link)
+                continue;
+
+            if (inline.X > point.X || inline.X + inline.Text.WidthIncludingTrailingWhitespace < point.X)
+                continue;
+
+            _lastHover = link;
+            SetCurrentValue(CursorProperty, Cursor.Parse("Hand"));
+            ToolTip.SetTip(this, link.Link);
+            e.Handled = true;
+            return;
+        }
+
+        ClearHoveredIssueLink();
+    }
+
+    /// <summary>
+    ///     ポインターが押された際のイベント処理。
+    /// </summary>
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+
+        if (_lastHover is not null)
+            Native.OS.OpenBrowser(_lastHover.Link);
+    }
+
+    /// <summary>
+    ///     PointerExitedイベントのハンドラ。
+    /// </summary>
+    protected override void OnPointerExited(PointerEventArgs e)
+    {
+        base.OnPointerExited(e);
+        ClearHoveredIssueLink();
+    }
+
+    /// <summary>
+    ///     IssueTrackersChangedイベントのハンドラ。
+    /// </summary>
+    private void OnIssueTrackersChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        _needRebuildInlines = true;
+        GenerateInlineElements();
+        InvalidateVisual();
+    }
+
+    /// <summary>
+    ///     GenerateInlineElementsの処理を行う。
+    /// </summary>
+    private void GenerateInlineElements()
+    {
+        _elements.Clear();
+        ClearHoveredIssueLink();
+
+        var subject = Subject;
+        if (string.IsNullOrEmpty(subject))
+        {
+            _needRebuildInlines = true;
+            InvalidateVisual();
+            return;
+        }
+
+        var rules = IssueTrackers ?? [];
+        foreach (var rule in rules)
+            rule.Matches(_elements, subject);
+
+        if (subject.StartsWith('['))
+        {
+            var bracketIdx = subject.IndexOf(']');
+            if (bracketIdx > 1 && bracketIdx < 50 && _elements.Intersect(0, bracketIdx + 1) is null)
+                _elements.Add(new Models.InlineElement(Models.InlineElementType.Keyword, 0, bracketIdx + 1, string.Empty));
+        }
+        else
+        {
+            var colonIdx = subject.IndexOf(": ", StringComparison.Ordinal);
+            if (colonIdx > 0 && colonIdx < 32 && colonIdx < subject.Length - 3 && subject.IndexOf('"', 0, colonIdx) == -1 && _elements.Intersect(0, colonIdx) is null)
             {
-                _needRebuildInlines = true;
-                InvalidateVisual();
-                return;
-            }
-
-            var rules = IssueTrackers ?? [];
-            foreach (var rule in rules)
-                rule.Matches(_elements, subject);
-
-            if (subject.StartsWith('['))
-            {
-                var bracketIdx = subject.IndexOf(']');
-                if (bracketIdx > 1 && bracketIdx < 50 && _elements.Intersect(0, bracketIdx + 1) == null)
-                    _elements.Add(new Models.InlineElement(Models.InlineElementType.Keyword, 0, bracketIdx + 1, string.Empty));
+                _elements.Add(new Models.InlineElement(Models.InlineElementType.Keyword, 0, colonIdx + 1, string.Empty));
             }
             else
             {
-                var colonIdx = subject.IndexOf(": ", StringComparison.Ordinal);
-                if (colonIdx > 0 && colonIdx < 32 && colonIdx < subject.Length - 3 && subject.IndexOf('"', 0, colonIdx) == -1 && _elements.Intersect(0, colonIdx) == null)
+                var hyphenIdx = subject.IndexOf(" - ", StringComparison.Ordinal);
+                if (hyphenIdx > 0 && hyphenIdx < 32 && hyphenIdx < subject.Length - 4 && subject.IndexOf('"', 0, hyphenIdx) == -1 && _elements.Intersect(0, hyphenIdx) is null)
                 {
-                    _elements.Add(new Models.InlineElement(Models.InlineElementType.Keyword, 0, colonIdx + 1, string.Empty));
-                }
-                else
-                {
-                    var hyphenIdx = subject.IndexOf(" - ", StringComparison.Ordinal);
-                    if (hyphenIdx > 0 && hyphenIdx < 32 && hyphenIdx < subject.Length - 4 && subject.IndexOf('"', 0, hyphenIdx) == -1 && _elements.Intersect(0, hyphenIdx) == null)
-                    {
-                        _elements.Add(new Models.InlineElement(Models.InlineElementType.Keyword, 0, hyphenIdx, string.Empty));
-                    }
+                    _elements.Add(new Models.InlineElement(Models.InlineElementType.Keyword, 0, hyphenIdx, string.Empty));
                 }
             }
-
-            var codeMatches = REG_INLINECODE_FORMAT().Matches(subject);
-            foreach (Match match in codeMatches)
-            {
-                var start = match.Index;
-                var len = match.Length;
-                if (_elements.Intersect(start, len) != null)
-                    continue;
-
-                _elements.Add(new Models.InlineElement(Models.InlineElementType.Code, start, len, string.Empty));
-            }
-
-            _elements.Sort();
         }
 
-        /// <summary>
-        ///     GenerateFormattedTextElementsの処理を行う。
-        /// </summary>
-        private void GenerateFormattedTextElements()
+        var codeMatches = REG_INLINECODE_FORMAT().Matches(subject);
+        foreach (Match match in codeMatches)
         {
-            _inlines.Clear();
+            var start = match.Index;
+            var len = match.Length;
+            if (_elements.Intersect(start, len) is not null)
+                continue;
 
-            var subject = Subject;
-            if (string.IsNullOrEmpty(subject))
-                return;
+            _elements.Add(new Models.InlineElement(Models.InlineElementType.Code, start, len, string.Empty));
+        }
 
-            var fontFamily = FontFamily;
-            var codeFontFamily = CodeFontFamily;
-            var fontSize = FontSize;
-            var foreground = Foreground;
-            var linkForeground = LinkForeground;
-            var typeface = new Typeface(fontFamily, FontStyle.Normal, FontWeight);
-            var codeTypeface = new Typeface(codeFontFamily, FontStyle.Normal, FontWeight);
-            var pos = 0;
-            var x = 0.0;
-            for (var i = 0; i < _elements.Count; i++)
-            {
-                var elem = _elements[i];
-                if (elem.Start > pos)
-                {
-                    var normal = new FormattedText(
-                        subject.Substring(pos, elem.Start - pos),
-                        CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight,
-                        typeface,
-                        fontSize,
-                        foreground);
+        _elements.Sort();
+    }
 
-                    _inlines.Add(new Inline(x, normal, null));
-                    x += normal.WidthIncludingTrailingWhitespace;
-                }
+    /// <summary>
+    ///     GenerateFormattedTextElementsの処理を行う。
+    /// </summary>
+    private void GenerateFormattedTextElements()
+    {
+        _inlines.Clear();
 
-                if (elem.Type == Models.InlineElementType.Keyword)
-                {
-                    var keyword = new FormattedText(
-                        subject.Substring(elem.Start, elem.Length),
-                        CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight,
-                        /// <summary>
-                        ///     Typefaceの処理を行う。
-                        /// </summary>
-                        new Typeface(fontFamily, FontStyle.Normal, FontWeight.Bold),
-                        fontSize,
-                        foreground);
-                    _inlines.Add(new Inline(x, keyword, elem));
-                    x += keyword.WidthIncludingTrailingWhitespace;
-                }
-                else if (elem.Type == Models.InlineElementType.Link)
-                {
-                    var link = new FormattedText(
-                        subject.Substring(elem.Start, elem.Length),
-                        CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight,
-                        typeface,
-                        fontSize,
-                        linkForeground);
-                    _inlines.Add(new Inline(x, link, elem));
-                    x += link.WidthIncludingTrailingWhitespace;
-                }
-                else if (elem.Type == Models.InlineElementType.Code)
-                {
-                    var link = new FormattedText(
-                        subject.Substring(elem.Start + 1, elem.Length - 2),
-                        CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight,
-                        codeTypeface,
-                        fontSize - 0.5,
-                        foreground);
-                    _inlines.Add(new Inline(x, link, elem));
-                    x += link.WidthIncludingTrailingWhitespace + 8;
-                }
+        var subject = Subject;
+        if (string.IsNullOrEmpty(subject))
+            return;
 
-                pos = elem.Start + elem.Length;
-            }
-
-            if (pos < subject.Length)
+        var fontFamily = FontFamily;
+        var codeFontFamily = CodeFontFamily;
+        var fontSize = FontSize;
+        var foreground = Foreground;
+        var linkForeground = LinkForeground;
+        var typeface = new Typeface(fontFamily, FontStyle.Normal, FontWeight);
+        var codeTypeface = new Typeface(codeFontFamily, FontStyle.Normal, FontWeight);
+        var pos = 0;
+        var x = 0.0;
+        for (var i = 0; i < _elements.Count; i++)
+        {
+            var elem = _elements[i];
+            if (elem.Start > pos)
             {
                 var normal = new FormattedText(
-                        subject.Substring(pos),
-                        CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight,
-                        typeface,
-                        fontSize,
-                        foreground);
+                    subject.Substring(pos, elem.Start - pos),
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    typeface,
+                    fontSize,
+                    foreground);
 
                 _inlines.Add(new Inline(x, normal, null));
+                x += normal.WidthIncludingTrailingWhitespace;
             }
-        }
 
-        /// <summary>
-        ///     ClearHoveredIssueLinkの処理を行う。
-        /// </summary>
-        private void ClearHoveredIssueLink()
-        {
-            if (_lastHover != null)
+            if (elem.Type == Models.InlineElementType.Keyword)
             {
-                ToolTip.SetTip(this, null);
-                SetCurrentValue(CursorProperty, Cursor.Parse("Arrow"));
-                _lastHover = null;
+                var keyword = new FormattedText(
+                    subject.Substring(elem.Start, elem.Length),
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    /// <summary>
+                    ///     Typefaceの処理を行う。
+                    /// </summary>
+                    new Typeface(fontFamily, FontStyle.Normal, FontWeight.Bold),
+                    fontSize,
+                    foreground);
+                _inlines.Add(new Inline(x, keyword, elem));
+                x += keyword.WidthIncludingTrailingWhitespace;
             }
-        }
-
-        [GeneratedRegex(@"`.*?`")]
-        /// <summary>
-        ///     REG_INLINECODE_FORMATの処理を行う。
-        /// </summary>
-        private static partial Regex REG_INLINECODE_FORMAT();
-
-        /// <summary>
-        ///     Inlineクラス。
-        /// </summary>
-        private class Inline
-        {
-            public double X { get; set; } = 0;
-            public FormattedText Text { get; set; } = null;
-            public Models.InlineElement Element { get; set; } = null;
-
-            /// <summary>
-            ///     コンストラクタ。コンポーネントを初期化する。
-            /// </summary>
-            public Inline(double x, FormattedText text, Models.InlineElement elem)
+            else if (elem.Type == Models.InlineElementType.Link)
             {
-                X = x;
-                Text = text;
-                Element = elem;
+                var link = new FormattedText(
+                    subject.Substring(elem.Start, elem.Length),
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    typeface,
+                    fontSize,
+                    linkForeground);
+                _inlines.Add(new Inline(x, link, elem));
+                x += link.WidthIncludingTrailingWhitespace;
             }
+            else if (elem.Type == Models.InlineElementType.Code)
+            {
+                var link = new FormattedText(
+                    subject.Substring(elem.Start + 1, elem.Length - 2),
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    codeTypeface,
+                    fontSize - 0.5,
+                    foreground);
+                _inlines.Add(new Inline(x, link, elem));
+                x += link.WidthIncludingTrailingWhitespace + 8;
+            }
+
+            pos = elem.Start + elem.Length;
         }
 
-        private Models.InlineElementCollector _elements = new();
-        private Models.InlineElement _lastHover = null;
-        private List<Inline> _inlines = [];
-        private bool _needRebuildInlines = false;
+        if (pos < subject.Length)
+        {
+            var normal = new FormattedText(
+                    subject.Substring(pos),
+                    CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    typeface,
+                    fontSize,
+                    foreground);
+
+            _inlines.Add(new Inline(x, normal, null));
+        }
     }
+
+    /// <summary>
+    ///     ClearHoveredIssueLinkの処理を行う。
+    /// </summary>
+    private void ClearHoveredIssueLink()
+    {
+        if (_lastHover is not null)
+        {
+            ToolTip.SetTip(this, null);
+            SetCurrentValue(CursorProperty, Cursor.Parse("Arrow"));
+            _lastHover = null;
+        }
+    }
+
+    [GeneratedRegex(@"`.*?`")]
+    /// <summary>
+    ///     REG_INLINECODE_FORMATの処理を行う。
+    /// </summary>
+    private static partial Regex REG_INLINECODE_FORMAT();
+
+    /// <summary>
+    ///     Inlineクラス。
+    /// </summary>
+    private class Inline
+    {
+        public double X { get; set; } = 0;
+        public FormattedText Text { get; set; } = null;
+        public Models.InlineElement Element { get; set; } = null;
+
+        /// <summary>
+        ///     コンストラクタ。コンポーネントを初期化する。
+        /// </summary>
+        public Inline(double x, FormattedText text, Models.InlineElement elem)
+        {
+            X = x;
+            Text = text;
+            Element = elem;
+        }
+    }
+
+    private Models.InlineElementCollector _elements = new();
+    private Models.InlineElement _lastHover = null;
+    private List<Inline> _inlines = [];
+    private bool _needRebuildInlines = false;
 }

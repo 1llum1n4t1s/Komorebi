@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public class Stash
 {
-    public class Stash
-    {
-        public string Name { get; set; } = "";
-        public string SHA { get; set; } = "";
-        public List<string> Parents { get; set; } = [];
-        public ulong Time { get; set; } = 0;
-        public string Message { get; set; } = "";
-        public string Subject => (Message ?? "").Split('\n', 2)[0].Trim();
-    }
+    public string Name { get; set; } = "";
+    public string SHA { get; set; } = "";
+    public List<string> Parents { get; set; } = [];
+    public ulong Time { get; set; } = 0;
+    public string Message { get; set; } = "";
+    public string Subject => (Message ?? "").Split('\n', 2)[0].Trim();
 }

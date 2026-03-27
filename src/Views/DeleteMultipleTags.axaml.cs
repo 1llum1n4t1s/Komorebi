@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     複数タグ一括削除ダイアログのコードビハインド。
+/// </summary>
+public partial class DeleteMultipleTags : UserControl
 {
     /// <summary>
-    ///     複数タグ一括削除ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class DeleteMultipleTags : UserControl
+    public DeleteMultipleTags()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public DeleteMultipleTags()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

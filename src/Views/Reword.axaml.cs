@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     コミットメッセージ修正（reword）ダイアログのコードビハインド。
+/// </summary>
+public partial class Reword : UserControl
 {
     /// <summary>
-    ///     コミットメッセージ修正（reword）ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class Reword : UserControl
+    public Reword()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public Reword()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

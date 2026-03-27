@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     ワークツリー削除ダイアログのコードビハインド。
+/// </summary>
+public partial class RemoveWorktree : UserControl
 {
     /// <summary>
-    ///     ワークツリー削除ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class RemoveWorktree : UserControl
+    public RemoveWorktree()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public RemoveWorktree()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

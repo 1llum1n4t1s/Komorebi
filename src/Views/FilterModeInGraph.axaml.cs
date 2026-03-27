@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     グラフ内フィルターモード選択のコードビハインド。
+/// </summary>
+public partial class FilterModeInGraph : UserControl
 {
     /// <summary>
-    ///     グラフ内フィルターモード選択のコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class FilterModeInGraph : UserControl
+    public FilterModeInGraph()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public FilterModeInGraph()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

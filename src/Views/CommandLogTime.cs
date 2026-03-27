@@ -1,92 +1,91 @@
-using System;
+﻿using System;
 using System.Threading;
 
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     コマンドログのタイムスタンプを表示するコントロール。
+/// </summary>
+public class CommandLogTime : TextBlock
 {
+    protected override Type StyleKeyOverride => typeof(TextBlock);
+
     /// <summary>
-    ///     コマンドログのタイムスタンプを表示するコントロール。
+    ///     コントロールがアンロードされた際の処理。
     /// </summary>
-    public class CommandLogTime : TextBlock
+    protected override void OnUnloaded(RoutedEventArgs e)
     {
-        protected override Type StyleKeyOverride => typeof(TextBlock);
-
-        /// <summary>
-        ///     コントロールがアンロードされた際の処理。
-        /// </summary>
-        protected override void OnUnloaded(RoutedEventArgs e)
-        {
-            base.OnUnloaded(e);
-            StopTimer();
-        }
-
-        /// <summary>
-        ///     データコンテキストが変更された際の処理。
-        /// </summary>
-        protected override void OnDataContextChanged(EventArgs e)
-        {
-            base.OnDataContextChanged(e);
-
-            StopTimer();
-
-            if (DataContext is ViewModels.CommandLog log)
-                SetupCommandLog(log);
-            else
-                Text = string.Empty;
-        }
-
-        /// <summary>
-        ///     SetupCommandLogの処理を行う。
-        /// </summary>
-        private void SetupCommandLog(ViewModels.CommandLog log)
-        {
-            Text = GetDisplayText(log);
-            if (log.IsComplete)
-                return;
-
-            _refreshTimer = new Timer(_ =>
-            {
-                Dispatcher.UIThread.Invoke(() =>
-                {
-                    Text = GetDisplayText(log);
-                    if (log.IsComplete)
-                        StopTimer();
-                });
-            }, null, 0, 100);
-        }
-
-        /// <summary>
-        ///     StopTimerの処理を行う。
-        /// </summary>
-        private void StopTimer()
-        {
-            if (_refreshTimer is not null)
-            {
-                _refreshTimer.Dispose();
-                _refreshTimer = null;
-            }
-        }
-
-        /// <summary>
-        ///     GetDisplayTextの処理を行う。
-        /// </summary>
-        private static string GetDisplayText(ViewModels.CommandLog log)
-        {
-            var endTime = log.IsComplete ? log.EndTime : DateTime.Now;
-            var duration = endTime - log.StartTime;
-
-            if (duration.TotalMinutes >= 1)
-                return $"{duration.TotalMinutes:G3} min";
-
-            if (duration.TotalSeconds >= 1)
-                return $"{duration.TotalSeconds:G3} s";
-
-            return $"{duration.TotalMilliseconds:G3} ms";
-        }
-
-        private Timer _refreshTimer = null;
+        base.OnUnloaded(e);
+        StopTimer();
     }
+
+    /// <summary>
+    ///     データコンテキストが変更された際の処理。
+    /// </summary>
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        StopTimer();
+
+        if (DataContext is ViewModels.CommandLog log)
+            SetupCommandLog(log);
+        else
+            Text = string.Empty;
+    }
+
+    /// <summary>
+    ///     SetupCommandLogの処理を行う。
+    /// </summary>
+    private void SetupCommandLog(ViewModels.CommandLog log)
+    {
+        Text = GetDisplayText(log);
+        if (log.IsComplete)
+            return;
+
+        _refreshTimer = new Timer(_ =>
+        {
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                Text = GetDisplayText(log);
+                if (log.IsComplete)
+                    StopTimer();
+            });
+        }, null, 0, 100);
+    }
+
+    /// <summary>
+    ///     StopTimerの処理を行う。
+    /// </summary>
+    private void StopTimer()
+    {
+        if (_refreshTimer is not null)
+        {
+            _refreshTimer.Dispose();
+            _refreshTimer = null;
+        }
+    }
+
+    /// <summary>
+    ///     GetDisplayTextの処理を行う。
+    /// </summary>
+    private static string GetDisplayText(ViewModels.CommandLog log)
+    {
+        var endTime = log.IsComplete ? log.EndTime : DateTime.Now;
+        var duration = endTime - log.StartTime;
+
+        if (duration.TotalMinutes >= 1)
+            return $"{duration.TotalMinutes:G3} min";
+
+        if (duration.TotalSeconds >= 1)
+            return $"{duration.TotalSeconds:G3} s";
+
+        return $"{duration.TotalMilliseconds:G3} ms";
+    }
+
+    private Timer _refreshTimer = null;
 }

@@ -1,18 +1,17 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+/// <summary>
+///     リポジトリグループ作成ダイアログのコードビハインド。
+/// </summary>
+public partial class CreateGroup : UserControl
 {
     /// <summary>
-    ///     リポジトリグループ作成ダイアログのコードビハインド。
+    ///     コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public partial class CreateGroup : UserControl
+    public CreateGroup()
     {
-        /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
-        public CreateGroup()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
