@@ -27,7 +27,7 @@ internal static class ViewHelpers
         var options = new FilePickerOpenOptions()
         {
             AllowMultiple = false,
-            FileTypeFilter = [new FilePickerFileType("SSHKey") { Patterns = ["*.*"] }]
+            FileTypeFilter = [new FilePickerFileType("SSHKey") { Patterns = ["*"] }]
         };
 
         var sshDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ssh");
