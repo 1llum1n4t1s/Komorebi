@@ -10,8 +10,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     アプリケーションのメインランチャーViewModel。
-///     タブ管理、ワークスペース切り替え、リポジトリの開閉を担当する。
+/// アプリケーションのメインランチャーViewModel。
+/// タブ管理、ワークスペース切り替え、リポジトリの開閉を担当する。
 /// </summary>
 public class Launcher : ObservableObject
 {
@@ -55,8 +55,8 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。ワークスペースのリポジトリを復元し、
-    ///     起動引数で指定されたリポジトリがあればそれを開く。
+    /// コンストラクタ。ワークスペースのリポジトリを復元し、
+    /// 起動引数で指定されたリポジトリがあればそれを開く。
     /// </summary>
     public Launcher(string startupRepo)
     {
@@ -121,8 +121,8 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     指定されたワークスペースに切り替える。
-    ///     実行中タスクがある場合は中止する。現在のタブを閉じて新ワークスペースのリポジトリを開く。
+    /// 指定されたワークスペースに切り替える。
+    /// 実行中タスクがある場合は中止する。現在のタブを閉じて新ワークスペースのリポジトリを開く。
     /// </summary>
     public void SwitchWorkspace(Workspace to)
     {
@@ -237,8 +237,8 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     タブを閉じる。最後のタブの場合はリポジトリを閉じてWelcomeに戻るか、
-    ///     Welcomeならアプリケーションを終了する。
+    /// タブを閉じる。最後のタブの場合はリポジトリを閉じてWelcomeに戻るか、
+    /// Welcomeならアプリケーションを終了する。
     /// </summary>
     public void CloseTab(LauncherPage page)
     {
@@ -321,8 +321,8 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリをタブで開く。既に開いているタブがあればそちらに切り替える。
-    ///     pageがnullの場合は新規タブまたはアクティブタブを再利用する。
+    /// リポジトリをタブで開く。既に開いているタブがあればそちらに切り替える。
+    /// pageがnullの場合は新規タブまたはアクティブタブを再利用する。
     /// </summary>
     public void OpenRepositoryInTab(RepositoryNode node, LauncherPage page)
     {
@@ -391,9 +391,9 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     指定されたページIDに対して通知を配信する。
-    ///     UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
-    ///     該当ページが見つからない場合はアクティブページに追加する。
+    /// 指定されたページIDに対して通知を配信する。
+    /// UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
+    /// 該当ページが見つからない場合はアクティブページに追加する。
     /// </summary>
     public void DispatchNotification(string pageId, string message, bool isError, string hint = "")
     {
@@ -427,10 +427,10 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリの.gitディレクトリのパスを取得する。
-    ///     .gitがディレクトリなら直接返し、ファイルならリダイレクト先を解決する（worktree対応）。
+    /// リポジトリの.gitディレクトリのパスを取得する。
+    /// .gitがディレクトリなら直接返し、ファイルならリダイレクト先を解決する（worktree対応）。
     /// </summary>
-    private string GetRepositoryGitDir(string repo)
+    private static string GetRepositoryGitDir(string repo)
     {
         var fullpath = Path.Combine(repo, ".git");
 
@@ -450,7 +450,7 @@ public class Launcher : ObservableObject
         {
             var redirect = File.ReadAllText(fullpath).Trim();
             if (redirect.StartsWith("gitdir: ", StringComparison.Ordinal))
-                redirect = redirect.Substring(8);
+                redirect = redirect[8..];
 
             // 相対パスの場合は絶対パスに変換
             if (!Path.IsPathRooted(redirect))
@@ -467,8 +467,8 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     タブ内のリポジトリを閉じる。ポップアップのクリーンアップも行う。
-    ///     removeFromWorkspaceがtrueの場合はワークスペースからも削除する。
+    /// タブ内のリポジトリを閉じる。ポップアップのクリーンアップも行う。
+    /// removeFromWorkspaceがtrueの場合はワークスペースからも削除する。
     /// </summary>
     private void CloseRepositoryInTab(LauncherPage page, bool removeFromWorkspace = true)
     {
@@ -486,8 +486,8 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
-    ///     アクティブページ変更後の処理。ワークスペースのアクティブインデックスを更新し、
-    ///     ウィンドウタイトルを再構築する。
+    /// アクティブページ変更後の処理。ワークスペースのアクティブインデックスを更新し、
+    /// ウィンドウタイトルを再構築する。
     /// </summary>
     private void PostActivePageChanged()
     {

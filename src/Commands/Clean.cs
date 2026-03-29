@@ -1,13 +1,13 @@
 ﻿namespace Komorebi.Commands;
 
 /// <summary>
-///     作業ツリーから追跡されていないファイルを削除するgitコマンド。
-///     git clean を実行し、クリーンモードに応じて対象ファイルを変える。
+/// 作業ツリーから追跡されていないファイルを削除するgitコマンド。
+/// git clean を実行し、クリーンモードに応じて対象ファイルを変える。
 /// </summary>
 public class Clean : Command
 {
     /// <summary>
-    ///     Cleanコマンドを初期化する。
+    /// Cleanコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="mode">クリーンモード（未追跡のみ、無視ファイルのみ、全て）。</param>

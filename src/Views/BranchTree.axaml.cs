@@ -16,7 +16,7 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     BranchTreeNodeIconクラス。
+/// BranchTreeNodeIconクラス。
 /// </summary>
 public class BranchTreeNodeIcon : UserControl
 {
@@ -30,7 +30,7 @@ public class BranchTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -39,7 +39,7 @@ public class BranchTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -50,7 +50,7 @@ public class BranchTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     UpdateContentの処理を行う。
+    /// UpdateContentの処理を行う。
     /// </summary>
     private void UpdateContent()
     {
@@ -83,7 +83,7 @@ public class BranchTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     CreateContentの処理を行う。
+    /// CreateContentの処理を行う。
     /// </summary>
     private void CreateContent(Thickness margin, string iconKey, IBrush fill = null)
     {
@@ -108,14 +108,14 @@ public class BranchTreeNodeIcon : UserControl
 }
 
 /// <summary>
-///     BranchTreeNodeToggleButtonクラス。
+/// BranchTreeNodeToggleButtonクラス。
 /// </summary>
 public class BranchTreeNodeToggleButton : ToggleButton
 {
     protected override Type StyleKeyOverride => typeof(ToggleButton);
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -131,7 +131,7 @@ public class BranchTreeNodeToggleButton : ToggleButton
 }
 
 /// <summary>
-///     BranchTreeNodeTrackStatusPresenterクラス。
+/// BranchTreeNodeTrackStatusPresenterクラス。
 /// </summary>
 public class BranchTreeNodeTrackStatusPresenter : Control
 {
@@ -172,7 +172,7 @@ public class BranchTreeNodeTrackStatusPresenter : Control
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static BranchTreeNodeTrackStatusPresenter()
     {
@@ -187,7 +187,7 @@ public class BranchTreeNodeTrackStatusPresenter : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -201,7 +201,7 @@ public class BranchTreeNodeTrackStatusPresenter : Control
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -211,7 +211,7 @@ public class BranchTreeNodeTrackStatusPresenter : Control
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -226,9 +226,6 @@ public class BranchTreeNodeTrackStatusPresenter : Control
                     desc,
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
-                    /// <summary>
-                    ///     Typefaceの処理を行う。
-                    /// </summary>
                     new Typeface(FontFamily),
                     FontSize,
                     Foreground);
@@ -242,14 +239,14 @@ public class BranchTreeNodeTrackStatusPresenter : Control
 }
 
 /// <summary>
-///     BranchTreeNodeTrackStatusTooltipクラス。
+/// BranchTreeNodeTrackStatusTooltipクラス。
 /// </summary>
 public class BranchTreeNodeTrackStatusTooltip : TextBlock
 {
     protected override Type StyleKeyOverride => typeof(TextBlock);
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -275,14 +272,14 @@ public class BranchTreeNodeTrackStatusTooltip : TextBlock
 }
 
 /// <summary>
-///     BranchTreeNodeDescriptionクラス。
+/// BranchTreeNodeDescriptionクラス。
 /// </summary>
 public class BranchTreeNodeDescription : TextBlock
 {
     protected override Type StyleKeyOverride => typeof(TextBlock);
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public BranchTreeNodeDescription()
     {
@@ -290,7 +287,7 @@ public class BranchTreeNodeDescription : TextBlock
     }
 
     /// <summary>
-    ///     ビジュアルツリーにアタッチされた際の処理。
+    /// ビジュアルツリーにアタッチされた際の処理。
     /// </summary>
     protected override async void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
@@ -323,7 +320,7 @@ public class BranchTreeNodeDescription : TextBlock
 }
 
 /// <summary>
-///     ブランチツリービューのコードビハインド。
+/// ブランチツリービューのコードビハインド。
 /// </summary>
 public partial class BranchTree : UserControl
 {
@@ -370,7 +367,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public BranchTree()
     {
@@ -378,7 +375,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     の選択処理を行う。
+    /// の選択処理を行う。
     /// </summary>
     public void Select(Models.Branch branch)
     {
@@ -416,7 +413,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     UnselectAllの処理を行う。
+    /// UnselectAllの処理を行う。
     /// </summary>
     public void UnselectAll()
     {
@@ -424,7 +421,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     ToggleNodeIsExpandedの処理を行う。
+    /// ToggleNodeIsExpandedの処理を行う。
     /// </summary>
     public void ToggleNodeIsExpanded(ViewModels.BranchTreeNode node)
     {
@@ -466,7 +463,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     サイズが変更された際の処理。
+    /// サイズが変更された際の処理。
     /// </summary>
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
@@ -477,7 +474,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -503,7 +500,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     NodePointerPressedイベントのハンドラ。
+    /// NodePointerPressedイベントのハンドラ。
     /// </summary>
     private void OnNodePointerPressed(object sender, PointerPressedEventArgs e)
     {
@@ -528,7 +525,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     NodesSelectionChangedイベントのハンドラ。
+    /// NodesSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnNodesSelectionChanged(object _, SelectionChangedEventArgs e)
     {
@@ -579,7 +576,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     TreeContextRequestedイベントのハンドラ。
+    /// TreeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTreeContextRequested(object _1, ContextRequestedEventArgs _2)
     {
@@ -658,7 +655,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     TreeKeyDownイベントのハンドラ。
+    /// TreeKeyDownイベントのハンドラ。
     /// </summary>
     private void OnTreeKeyDown(object _, KeyEventArgs e)
     {
@@ -706,7 +703,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     DoubleTappedBranchNodeイベントのハンドラ。
+    /// DoubleTappedBranchNodeイベントのハンドラ。
     /// </summary>
     private async void OnDoubleTappedBranchNode(object sender, TappedEventArgs _)
     {
@@ -728,9 +725,9 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     MakeRowsの処理を行う。
+    /// MakeRowsの処理を行う。
     /// </summary>
-    private void MakeRows(List<ViewModels.BranchTreeNode> rows, List<ViewModels.BranchTreeNode> nodes, int depth)
+    private static void MakeRows(List<ViewModels.BranchTreeNode> rows, List<ViewModels.BranchTreeNode> nodes, int depth)
     {
         foreach (var node in nodes)
         {
@@ -746,9 +743,9 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     CollectBranchesInNodeの処理を行う。
+    /// CollectBranchesInNodeの処理を行う。
     /// </summary>
-    private void CollectBranchesInNode(List<Models.Branch> outs, ViewModels.BranchTreeNode node)
+    private static void CollectBranchesInNode(List<Models.Branch> outs, ViewModels.BranchTreeNode node)
     {
         if (node.Backend is Models.Branch branch && !outs.Contains(branch))
         {
@@ -761,15 +758,15 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     FindTreePathの処理を行う。
+    /// FindTreePathの処理を行う。
     /// </summary>
-    private void FindTreePath(List<ViewModels.BranchTreeNode> outPath, List<ViewModels.BranchTreeNode> collection, string path, int start)
+    private static void FindTreePath(List<ViewModels.BranchTreeNode> outPath, List<ViewModels.BranchTreeNode> collection, string path, int start)
     {
         if (start >= path.Length - 1)
             return;
 
         var sepIdx = path.IndexOf('/', start);
-        var name = sepIdx < 0 ? path.Substring(start) : path.Substring(start, sepIdx - start);
+        var name = sepIdx < 0 ? path[start..] : path[start..sepIdx];
         foreach (var node in collection)
         {
             if (node.Name.Equals(name, StringComparison.Ordinal))
@@ -781,9 +778,9 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     CreateContextMenuForLocalBranchの処理を行う。
+    /// CreateContextMenuForLocalBranchの処理を行う。
     /// </summary>
-    private ContextMenu CreateContextMenuForLocalBranch(ViewModels.Repository repo, Models.Branch branch)
+    private static ContextMenu CreateContextMenuForLocalBranch(ViewModels.Repository repo, Models.Branch branch)
     {
         var current = repo.CurrentBranch;
         var menu = new ContextMenu();
@@ -840,9 +837,6 @@ public partial class BranchTree : UserControl
             compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
             compareWith.Click += (_, _) =>
             {
-                /// <summary>
-                ///     CompareCommandPaletteの処理を行う。
-                /// </summary>
                 new ViewModels.CompareCommandPalette(repo, branch).Open();
             };
             menu.Items.Add(new MenuItem() { Header = "-" });
@@ -940,7 +934,7 @@ public partial class BranchTree : UserControl
                 if (selectedCommit is not null && !selectedCommit.SHA.Equals(branch.Head, StringComparison.Ordinal))
                 {
                     var move = new MenuItem();
-                    move.Header = App.Text("BranchCM.ResetToSelectedCommit", branch.Name, selectedCommit.SHA.Substring(0, 10));
+                    move.Header = App.Text("BranchCM.ResetToSelectedCommit", branch.Name, selectedCommit.SHA[..10]);
                     move.Icon = App.CreateMenuIcon("Icons.Reset");
                     move.Click += (_, e) =>
                     {
@@ -966,9 +960,6 @@ public partial class BranchTree : UserControl
             compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
             compareWith.Click += (_, _) =>
             {
-                /// <summary>
-                ///     CompareCommandPaletteの処理を行う。
-                /// </summary>
                 new ViewModels.CompareCommandPalette(repo, branch).Open();
             };
             menu.Items.Add(new MenuItem() { Header = "-" });
@@ -1125,9 +1116,9 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     CreateContextMenuForRemoteの処理を行う。
+    /// CreateContextMenuForRemoteの処理を行う。
     /// </summary>
-    private ContextMenu CreateContextMenuForRemote(ViewModels.Repository repo, Models.Remote remote)
+    private static ContextMenu CreateContextMenuForRemote(ViewModels.Repository repo, Models.Remote remote)
     {
         var menu = new ContextMenu();
 
@@ -1207,7 +1198,7 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     CreateContextMenuForRemoteBranchの処理を行う。
+    /// CreateContextMenuForRemoteBranchの処理を行う。
     /// </summary>
     public ContextMenu CreateContextMenuForRemoteBranch(ViewModels.Repository repo, Models.Branch branch)
     {
@@ -1281,9 +1272,6 @@ public partial class BranchTree : UserControl
             compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
             compareWith.Click += (_, _) =>
             {
-                /// <summary>
-                ///     CompareCommandPaletteの処理を行う。
-                /// </summary>
                 new ViewModels.CompareCommandPalette(repo, branch).Open();
             };
 
@@ -1391,9 +1379,9 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     TryToAddCustomActionsToBranchContextMenuの処理を行う。
+    /// TryToAddCustomActionsToBranchContextMenuの処理を行う。
     /// </summary>
-    private void TryToAddCustomActionsToBranchContextMenu(ViewModels.Repository repo, ContextMenu menu, Models.Branch branch)
+    private static void TryToAddCustomActionsToBranchContextMenu(ViewModels.Repository repo, ContextMenu menu, Models.Branch branch)
     {
         var actions = repo.GetCustomActions(Models.CustomActionScope.Branch);
         if (actions.Count == 0)
@@ -1423,9 +1411,9 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
-    ///     TryToAddCustomActionsToRemoteContextMenuの処理を行う。
+    /// TryToAddCustomActionsToRemoteContextMenuの処理を行う。
     /// </summary>
-    private void TryToAddCustomActionsToRemoteContextMenu(ViewModels.Repository repo, ContextMenu menu, Models.Remote remote)
+    private static void TryToAddCustomActionsToRemoteContextMenu(ViewModels.Repository repo, ContextMenu menu, Models.Remote remote)
     {
         var actions = repo.GetCustomActions(Models.CustomActionScope.Remote);
         if (actions.Count == 0)

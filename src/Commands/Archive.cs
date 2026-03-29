@@ -1,13 +1,13 @@
 ﻿namespace Komorebi.Commands;
 
 /// <summary>
-///     リポジトリの特定リビジョンをZIPアーカイブとして保存するgitコマンド。
-///     git archive --format=zip を実行する。
+/// リポジトリの特定リビジョンをZIPアーカイブとして保存するgitコマンド。
+/// git archive --format=zip を実行する。
 /// </summary>
 public class Archive : Command
 {
     /// <summary>
-    ///     Archiveコマンドを初期化する。
+    /// Archiveコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="revision">アーカイブ対象のリビジョン（ブランチ名、タグ名、SHA等）。</param>

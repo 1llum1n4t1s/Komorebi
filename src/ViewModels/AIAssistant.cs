@@ -9,13 +9,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     AIコミットメッセージアシスタントのViewModel。
-///     OpenAI APIを使用して変更内容からコミットメッセージを自動生成する。
+/// AIコミットメッセージアシスタントのViewModel。
+/// OpenAI APIを使用して変更内容からコミットメッセージを自動生成する。
 /// </summary>
 public class AIAssistant : ObservableObject
 {
     /// <summary>
-    ///     メッセージ生成中かどうかを示すフラグ。
+    /// メッセージ生成中かどうかを示すフラグ。
     /// </summary>
     public bool IsGenerating
     {
@@ -24,7 +24,7 @@ public class AIAssistant : ObservableObject
     }
 
     /// <summary>
-    ///     生成されたコミットメッセージのテキスト。
+    /// 生成されたコミットメッセージのテキスト。
     /// </summary>
     public string Text
     {
@@ -33,7 +33,7 @@ public class AIAssistant : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリ・AIサービス・変更リストを受け取り、即座に生成を開始する。
+    /// コンストラクタ。リポジトリ・AIサービス・変更リストを受け取り、即座に生成を開始する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="service">OpenAIサービス設定</param>
@@ -50,7 +50,7 @@ public class AIAssistant : ObservableObject
     }
 
     /// <summary>
-    ///     コミットメッセージを再生成する。実行中の生成をキャンセルしてから新たに開始する。
+    /// コミットメッセージを再生成する。実行中の生成をキャンセルしてから新たに開始する。
     /// </summary>
     public void Regen()
     {
@@ -66,7 +66,7 @@ public class AIAssistant : ObservableObject
     }
 
     /// <summary>
-    ///     生成されたコミットメッセージをリポジトリに適用する。
+    /// 生成されたコミットメッセージをリポジトリに適用する。
     /// </summary>
     public void Apply()
     {
@@ -75,7 +75,7 @@ public class AIAssistant : ObservableObject
     }
 
     /// <summary>
-    ///     生成処理をキャンセルする。
+    /// 生成処理をキャンセルする。
     /// </summary>
     public void Cancel()
     {
@@ -85,7 +85,7 @@ public class AIAssistant : ObservableObject
     }
 
     /// <summary>
-    ///     バックグラウンドタスクでAIコミットメッセージ生成を実行する。
+    /// バックグラウンドタスクでAIコミットメッセージ生成を実行する。
     /// </summary>
     private void Gen()
     {

@@ -5,12 +5,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リビジョンのファイル一覧表示のコードビハインド。
+/// リビジョンのファイル一覧表示のコードビハインド。
 /// </summary>
 public partial class RevisionFiles : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public RevisionFiles()
     {
@@ -18,7 +18,7 @@ public partial class RevisionFiles : UserControl
     }
 
     /// <summary>
-    ///     ToggleSearchイベントのハンドラ。
+    /// ToggleSearchイベントのハンドラ。
     /// </summary>
     private void OnToggleSearch(object _, RoutedEventArgs e)
     {
@@ -27,7 +27,7 @@ public partial class RevisionFiles : UserControl
     }
 
     /// <summary>
-    ///     SearchBoxKeyDownイベントのハンドラ。
+    /// SearchBoxKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnSearchBoxKeyDown(object _, KeyEventArgs e)
     {
@@ -57,7 +57,7 @@ public partial class RevisionFiles : UserControl
     }
 
     /// <summary>
-    ///     SearchBoxTextChangedイベントのハンドラ。
+    /// SearchBoxTextChangedイベントのハンドラ。
     /// </summary>
     private async void OnSearchBoxTextChanged(object _, TextChangedEventArgs e)
     {
@@ -66,7 +66,7 @@ public partial class RevisionFiles : UserControl
     }
 
     /// <summary>
-    ///     SearchSuggestionBoxKeyDownイベントのハンドラ。
+    /// SearchSuggestionBoxKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnSearchSuggestionBoxKeyDown(object _, KeyEventArgs e)
     {
@@ -88,7 +88,7 @@ public partial class RevisionFiles : UserControl
     }
 
     /// <summary>
-    ///     SearchSuggestionDoubleTappedイベントのハンドラ。
+    /// SearchSuggestionDoubleTappedイベントのハンドラ。
     /// </summary>
     private async void OnSearchSuggestionDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -107,7 +107,7 @@ public partial class RevisionFiles : UserControl
     }
 
     /// <summary>
-    ///     OpenFileWithDefaultEditorイベントのハンドラ。
+    /// OpenFileWithDefaultEditorイベントのハンドラ。
     /// </summary>
     private async void OnOpenFileWithDefaultEditor(object sender, RoutedEventArgs e)
     {

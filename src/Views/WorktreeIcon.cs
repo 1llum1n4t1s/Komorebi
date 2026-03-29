@@ -7,14 +7,14 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ワークツリーのアイコンコントロール。
+/// ワークツリーのアイコンコントロール。
 /// </summary>
 public class WorktreeIcon : Path
 {
     protected override Type StyleKeyOverride => typeof(Path);
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {

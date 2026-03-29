@@ -1,5 +1,3 @@
-using Xunit;
-
 namespace Komorebi.Tests.ViewModels
 {
     public class ConventionalCommitMessageBuilderTests

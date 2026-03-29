@@ -1,5 +1,4 @@
 using Komorebi.Models;
-using Xunit;
 
 namespace Komorebi.Tests.Models
 {
@@ -28,9 +27,9 @@ namespace Komorebi.Tests.Models
         [Fact]
         public void Supported_HasExpectedCount()
         {
-            // 15 locales as documented: de_DE, en_US, es_ES, fr_FR, id_ID, fil_PH, it_IT,
-            // pt_BR, uk_UA, ru_RU, zh_CN, zh_TW, ja_JP, ta_IN, ko_KR
-            Assert.Equal(15, Locale.Supported.Count);
+            // 17 locales: de_DE, en_US, es_ES, fr_FR, id_ID, fil_PH, it_IT,
+            // pt_BR, uk_UA, ru_RU, zh_CN, zh_TW, ja_JP, ta_IN, ko_KR, la, sa
+            Assert.Equal(17, Locale.Supported.Count);
         }
 
         [Fact]
@@ -82,16 +81,25 @@ namespace Komorebi.Tests.Models
         [Fact]
         public void Supported_AllKeysFollowLocaleFormat()
         {
-            // Keys should follow xx_YY or xxx_YY format (language_COUNTRY)
+            // Keys should follow xx_YY or xxx_YY format (language_COUNTRY) or
+            // a short language-only code (e.g., "la", "sa") for languages without country variant
             foreach (var locale in Locale.Supported)
             {
-                Assert.Contains("_", locale.Key);
-                var parts = locale.Key.Split('_');
-                Assert.Equal(2, parts.Length);
-                Assert.True(parts[0].Length >= 2 && parts[0].Length <= 3,
-                    $"Language code '{parts[0]}' in key '{locale.Key}' should be 2-3 chars");
-                Assert.Equal(2, parts[1].Length);
-                Assert.Equal(parts[1], parts[1].ToUpperInvariant());
+                if (locale.Key.Contains('_'))
+                {
+                    var parts = locale.Key.Split('_');
+                    Assert.Equal(2, parts.Length);
+                    Assert.True(parts[0].Length >= 2 && parts[0].Length <= 3,
+                        $"Language code '{parts[0]}' in key '{locale.Key}' should be 2-3 chars");
+                    Assert.Equal(2, parts[1].Length);
+                    Assert.Equal(parts[1], parts[1].ToUpperInvariant());
+                }
+                else
+                {
+                    // 言語コードのみ（la, sa等）
+                    Assert.True(locale.Key.Length >= 2 && locale.Key.Length <= 3,
+                        $"Language-only key '{locale.Key}' should be 2-3 chars");
+                }
             }
         }
 
@@ -140,7 +148,7 @@ namespace Komorebi.Tests.Models
             {
                 "de_DE", "en_US", "es_ES", "fr_FR", "id_ID", "fil_PH",
                 "it_IT", "pt_BR", "uk_UA", "ru_RU", "zh_CN", "zh_TW",
-                "ja_JP", "ta_IN", "ko_KR"
+                "ja_JP", "ta_IN", "ko_KR", "la", "sa"
             };
 
             var actualKeys = new HashSet<string>();

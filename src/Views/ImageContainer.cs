@@ -10,12 +10,12 @@ using Avalonia.Styling;
 namespace Komorebi.Views;
 
 /// <summary>
-///     画像コンテンツを表示するコンテナコントロール。
+/// 画像コンテンツを表示するコンテナコントロール。
 /// </summary>
 public class ImageContainer : Control
 {
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -26,13 +26,7 @@ public class ImageContainer : Control
             {
                 Children =
                 {
-                    /// <summary>
-                    ///     GeometryDrawingの処理を行う。
-                    /// </summary>
                     new GeometryDrawing() { Brush = maskBrush, Geometry = new RectangleGeometry(new Rect(0, 0, 12, 12)) },
-                    /// <summary>
-                    ///     GeometryDrawingの処理を行う。
-                    /// </summary>
                     new GeometryDrawing() { Brush = maskBrush, Geometry = new RectangleGeometry(new Rect(12, 12, 12, 12)) },
                 }
             };
@@ -51,7 +45,7 @@ public class ImageContainer : Control
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -64,17 +58,26 @@ public class ImageContainer : Control
         }
     }
 
+    /// <summary>
+    /// チェッカーボード背景用のブラシキャッシュ。テーマ変更時にリセットされる。
+    /// </summary>
     private DrawingBrush _bgBrush = null;
 }
 
 /// <summary>
-///     ImageViewクラス。
+/// 単一画像を表示するコントロール。利用可能領域に収まるようスケーリングする。
 /// </summary>
 public class ImageView : ImageContainer
 {
+    /// <summary>
+    /// 表示する画像のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Bitmap> ImageProperty =
         AvaloniaProperty.Register<ImageView, Bitmap>(nameof(Image));
 
+    /// <summary>
+    /// 表示する画像を取得・設定する。
+    /// </summary>
     public Bitmap Image
     {
         get => GetValue(ImageProperty);
@@ -82,7 +85,7 @@ public class ImageView : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -93,7 +96,7 @@ public class ImageView : ImageContainer
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -104,7 +107,7 @@ public class ImageView : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -122,31 +125,49 @@ public class ImageView : ImageContainer
 }
 
 /// <summary>
-///     ImageSwipeControlクラス。
+/// スワイプ操作で新旧画像を左右に分割表示するコントロール。
 /// </summary>
 public class ImageSwipeControl : ImageContainer
 {
+    /// <summary>
+    /// スワイプ分割位置（0.0〜1.0）のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<double> AlphaProperty =
         AvaloniaProperty.Register<ImageSwipeControl, double>(nameof(Alpha), 0.5);
 
+    /// <summary>
+    /// スワイプ分割位置を取得・設定する。0.0で全面新画像、1.0で全面旧画像。
+    /// </summary>
     public double Alpha
     {
         get => GetValue(AlphaProperty);
         set => SetValue(AlphaProperty, value);
     }
 
+    /// <summary>
+    /// 変更前の画像のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Bitmap> OldImageProperty =
         AvaloniaProperty.Register<ImageSwipeControl, Bitmap>(nameof(OldImage));
 
+    /// <summary>
+    /// 変更前の画像を取得・設定する。
+    /// </summary>
     public Bitmap OldImage
     {
         get => GetValue(OldImageProperty);
         set => SetValue(OldImageProperty, value);
     }
 
+    /// <summary>
+    /// 変更後の画像のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Bitmap> NewImageProperty =
         AvaloniaProperty.Register<ImageSwipeControl, Bitmap>(nameof(NewImage));
 
+    /// <summary>
+    /// 変更後の画像を取得・設定する。
+    /// </summary>
     public Bitmap NewImage
     {
         get => GetValue(NewImageProperty);
@@ -154,7 +175,7 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static ImageSwipeControl()
     {
@@ -163,7 +184,7 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -184,7 +205,7 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -203,7 +224,7 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     ポインターが離された際のイベント処理。
+    /// ポインターが離された際のイベント処理。
     /// </summary>
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
@@ -212,7 +233,7 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     ポインターが移動した際のイベント処理。
+    /// ポインターが移動した際のイベント処理。
     /// </summary>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
@@ -246,7 +267,7 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -265,9 +286,9 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     GetDesiredSizeの処理を行う。
+    /// GetDesiredSizeの処理を行う。
     /// </summary>
-    private Size GetDesiredSize(Size img, Size available)
+    private static Size GetDesiredSize(Size img, Size available)
     {
         var sw = available.Width / img.Width;
         var sh = available.Height / img.Height;
@@ -276,7 +297,7 @@ public class ImageSwipeControl : ImageContainer
     }
 
     /// <summary>
-    ///     RenderSingleSideの処理を行う。
+    /// RenderSingleSideの処理を行う。
     /// </summary>
     private void RenderSingleSide(DrawingContext context, Bitmap img, Rect clip)
     {
@@ -297,36 +318,61 @@ public class ImageSwipeControl : ImageContainer
             context.DrawImage(img, src, dst);
     }
 
+    /// <summary>
+    /// スライダーがポインター押下中かどうか。
+    /// </summary>
     private bool _pressedOnSlider = false;
+
+    /// <summary>
+    /// ポインターが直前にスライダー上にあったかどうか。
+    /// </summary>
     private bool _lastInSlider = false;
 }
 
 /// <summary>
-///     ImageBlendControlクラス。
+/// 新旧画像をアルファブレンドで合成表示するコントロール。
 /// </summary>
 public class ImageBlendControl : ImageContainer
 {
+    /// <summary>
+    /// ブレンド比率（0.0=旧画像のみ、1.0=新画像のみ）のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<double> AlphaProperty =
         AvaloniaProperty.Register<ImageBlendControl, double>(nameof(Alpha), 1.0);
 
+    /// <summary>
+    /// ブレンド比率を取得・設定する。
+    /// </summary>
     public double Alpha
     {
         get => GetValue(AlphaProperty);
         set => SetValue(AlphaProperty, value);
     }
 
+    /// <summary>
+    /// 変更前の画像のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Bitmap> OldImageProperty =
         AvaloniaProperty.Register<ImageBlendControl, Bitmap>(nameof(OldImage));
 
+    /// <summary>
+    /// 変更前の画像を取得・設定する。
+    /// </summary>
     public Bitmap OldImage
     {
         get => GetValue(OldImageProperty);
         set => SetValue(OldImageProperty, value);
     }
 
+    /// <summary>
+    /// 変更後の画像のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Bitmap> NewImageProperty =
         AvaloniaProperty.Register<ImageBlendControl, Bitmap>(nameof(NewImage));
 
+    /// <summary>
+    /// 変更後の画像を取得・設定する。
+    /// </summary>
     public Bitmap NewImage
     {
         get => GetValue(NewImageProperty);
@@ -334,7 +380,7 @@ public class ImageBlendControl : ImageContainer
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static ImageBlendControl()
     {
@@ -343,7 +389,7 @@ public class ImageBlendControl : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -382,7 +428,7 @@ public class ImageBlendControl : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -401,9 +447,9 @@ public class ImageBlendControl : ImageContainer
     }
 
     /// <summary>
-    ///     GetDesiredSizeの処理を行う。
+    /// GetDesiredSizeの処理を行う。
     /// </summary>
-    private Size GetDesiredSize(Size img, Size available)
+    private static Size GetDesiredSize(Size img, Size available)
     {
         var sw = available.Width / img.Width;
         var sh = available.Height / img.Height;
@@ -412,9 +458,9 @@ public class ImageBlendControl : ImageContainer
     }
 
     /// <summary>
-    ///     RenderSingleSideの処理を行う。
+    /// RenderSingleSideの処理を行う。
     /// </summary>
-    private void RenderSingleSide(DrawingContext context, Bitmap img, double w, double h, double alpha)
+    private static void RenderSingleSide(DrawingContext context, Bitmap img, double w, double h, double alpha)
     {
         var imgW = img.Size.Width;
         var imgH = img.Size.Height;
@@ -431,41 +477,63 @@ public class ImageBlendControl : ImageContainer
     }
 
     /// <summary>
-    ///     RenderOptionsの処理を行う。
+    /// RenderOptionsの処理を行う。
+    /// </summary>
+    /// <summary>
+    /// ソース描画用のレンダリングオプション。Sourceブレンドモードを使用。
     /// </summary>
     private static readonly RenderOptions RO_SRC = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Source, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
+
     /// <summary>
-    ///     RenderOptionsの処理を行う。
+    /// 加算合成用のレンダリングオプション。Plusブレンドモードを使用。
     /// </summary>
     private static readonly RenderOptions RO_DST = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Plus, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
 }
 
 /// <summary>
-///     ImageDifferenceControlクラス。
+/// 新旧画像の差分（Differenceブレンド）を表示するコントロール。
 /// </summary>
 public class ImageDifferenceControl : ImageContainer
 {
+    /// <summary>
+    /// 差分表示の比率（0.0=旧画像のみ、1.0=新画像のみ）のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<double> AlphaProperty =
         AvaloniaProperty.Register<ImageDifferenceControl, double>(nameof(Alpha), 1.0);
 
+    /// <summary>
+    /// 差分表示の比率を取得・設定する。
+    /// </summary>
     public double Alpha
     {
         get => GetValue(AlphaProperty);
         set => SetValue(AlphaProperty, value);
     }
 
+    /// <summary>
+    /// 変更前の画像のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Bitmap> OldImageProperty =
         AvaloniaProperty.Register<ImageDifferenceControl, Bitmap>(nameof(OldImage));
 
+    /// <summary>
+    /// 変更前の画像を取得・設定する。
+    /// </summary>
     public Bitmap OldImage
     {
         get => GetValue(OldImageProperty);
         set => SetValue(OldImageProperty, value);
     }
 
+    /// <summary>
+    /// 変更後の画像のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Bitmap> NewImageProperty =
         AvaloniaProperty.Register<ImageDifferenceControl, Bitmap>(nameof(NewImage));
 
+    /// <summary>
+    /// 変更後の画像を取得・設定する。
+    /// </summary>
     public Bitmap NewImage
     {
         get => GetValue(NewImageProperty);
@@ -473,7 +541,7 @@ public class ImageDifferenceControl : ImageContainer
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static ImageDifferenceControl()
     {
@@ -482,7 +550,7 @@ public class ImageDifferenceControl : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -521,7 +589,7 @@ public class ImageDifferenceControl : ImageContainer
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -540,9 +608,9 @@ public class ImageDifferenceControl : ImageContainer
     }
 
     /// <summary>
-    ///     GetDesiredSizeの処理を行う。
+    /// GetDesiredSizeの処理を行う。
     /// </summary>
-    private Size GetDesiredSize(Size img, Size available)
+    private static Size GetDesiredSize(Size img, Size available)
     {
         var sw = available.Width / img.Width;
         var sh = available.Height / img.Height;
@@ -551,9 +619,9 @@ public class ImageDifferenceControl : ImageContainer
     }
 
     /// <summary>
-    ///     RenderSingleSideの処理を行う。
+    /// RenderSingleSideの処理を行う。
     /// </summary>
-    private void RenderSingleSide(DrawingContext context, Bitmap img, double w, double h, double alpha)
+    private static void RenderSingleSide(DrawingContext context, Bitmap img, double w, double h, double alpha)
     {
         var imgW = img.Size.Width;
         var imgH = img.Size.Height;
@@ -570,11 +638,15 @@ public class ImageDifferenceControl : ImageContainer
     }
 
     /// <summary>
-    ///     RenderOptionsの処理を行う。
+    /// RenderOptionsの処理を行う。
+    /// </summary>
+    /// <summary>
+    /// ソース描画用のレンダリングオプション。Sourceブレンドモードを使用。
     /// </summary>
     private static readonly RenderOptions RO_SRC = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Source, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
+
     /// <summary>
-    ///     RenderOptionsの処理を行う。
+    /// 差分合成用のレンダリングオプション。Differenceブレンドモードを使用。
     /// </summary>
     private static readonly RenderOptions RO_DST = new RenderOptions() { BitmapBlendingMode = BitmapBlendingMode.Difference, BitmapInterpolationMode = BitmapInterpolationMode.HighQuality };
 }

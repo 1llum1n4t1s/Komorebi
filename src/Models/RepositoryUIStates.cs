@@ -8,8 +8,8 @@ using Avalonia.Collections;
 namespace Komorebi.Models;
 
 /// <summary>
-///     リポジトリのUI状態を保持するクラス。
-///     gitディレクトリ内の「komorebi.uistates」ファイルにシリアライズされる。
+/// リポジトリのUI状態を保持するクラス。
+/// gitディレクトリ内の「komorebi.uistates」ファイルにシリアライズされる。
 /// </summary>
 public class RepositoryUIStates
 {
@@ -266,7 +266,7 @@ public class RepositoryUIStates
     } = [];
 
     /// <summary>
-    ///     gitディレクトリからUI状態を読み込む
+    /// gitディレクトリからUI状態を読み込む
     /// </summary>
     /// <param name="gitDir">gitディレクトリのパス</param>
     /// <returns>読み込まれたUI状態</returns>
@@ -298,7 +298,7 @@ public class RepositoryUIStates
     }
 
     /// <summary>
-    ///     UI状態をファイルに保存してアンロードする
+    /// UI状態をファイルに保存してアンロードする
     /// </summary>
     /// <param name="lastCommitMessage">最後のコミットメッセージ</param>
     public void Unload(string lastCommitMessage)
@@ -316,7 +316,7 @@ public class RepositoryUIStates
     }
 
     /// <summary>
-    ///     指定パターンの履歴フィルターモードを取得する
+    /// 指定パターンの履歴フィルターモードを取得する
     /// </summary>
     /// <param name="pattern">フィルターパターン（nullの場合は最初のフィルターのモードを返す）</param>
     /// <returns>フィルターモード</returns>
@@ -344,7 +344,7 @@ public class RepositoryUIStates
     }
 
     /// <summary>
-    ///     履歴フィルターを更新する。異なるモードのフィルターがある場合は全フィルターをクリアする。
+    /// 履歴フィルターを更新する。異なるモードのフィルターがある場合は全フィルターをクリアする。
     /// </summary>
     /// <param name="pattern">フィルターパターン</param>
     /// <param name="type">フィルタータイプ</param>
@@ -447,7 +447,7 @@ public class RepositoryUIStates
     }
 
     /// <summary>
-    ///     現在のフィルター設定からgit logコマンドのパラメータ文字列を構築する
+    /// 現在のフィルター設定からgit logコマンドのパラメータ文字列を構築する
     /// </summary>
     /// <returns>git logのパラメータ文字列</returns>
     public string BuildHistoryParams()
@@ -553,5 +553,6 @@ public class RepositoryUIStates
         return builder.ToString();
     }
 
+    /// <summary>UI状態ファイルのフルパス</summary>
     private string _file = string.Empty;
 }

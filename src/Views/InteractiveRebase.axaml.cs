@@ -13,14 +13,17 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     InteractiveRebaseListBoxクラス。
+/// InteractiveRebaseListBoxクラス。
 /// </summary>
 public class InteractiveRebaseListBox : ListBox
 {
+    /// <summary>
+    /// スタイルキーをListBoxとしてオーバーライドする。
+    /// </summary>
     protected override Type StyleKeyOverride => typeof(ListBox);
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -92,22 +95,34 @@ public class InteractiveRebaseListBox : ListBox
 }
 
 /// <summary>
-///     InteractiveRebaseIndicatorクラス。
+/// InteractiveRebaseIndicatorクラス。
 /// </summary>
 public class InteractiveRebaseIndicator : Control
 {
+    /// <summary>
+    /// インジケーターの塗りつぶしブラシのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<IBrush> FillProperty =
         AvaloniaProperty.Register<InteractiveRebaseIndicator, IBrush>(nameof(Fill), Brushes.Transparent);
 
+    /// <summary>
+    /// インジケーターの塗りつぶしブラシを取得・設定する。
+    /// </summary>
     public IBrush Fill
     {
         get => GetValue(FillProperty);
         set => SetValue(FillProperty, value);
     }
 
+    /// <summary>
+    /// 保留中アイテムの種別を保持するスタイルプロパティ。描画形状を決定する。
+    /// </summary>
     public static readonly StyledProperty<Models.InteractiveRebasePendingType> PendingTypeProperty =
         AvaloniaProperty.Register<InteractiveRebaseIndicator, Models.InteractiveRebasePendingType>(nameof(PendingType));
 
+    /// <summary>
+    /// 保留中アイテムの種別を取得・設定する。
+    /// </summary>
     public Models.InteractiveRebasePendingType PendingType
     {
         get => GetValue(PendingTypeProperty);
@@ -115,7 +130,7 @@ public class InteractiveRebaseIndicator : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -169,7 +184,7 @@ public class InteractiveRebaseIndicator : Control
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -182,12 +197,12 @@ public class InteractiveRebaseIndicator : Control
 }
 
 /// <summary>
-///     インタラクティブリベースダイアログのコードビハインド。
+/// インタラクティブリベースダイアログのコードビハインド。
 /// </summary>
 public partial class InteractiveRebase : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public InteractiveRebase()
     {
@@ -197,7 +212,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     OpenCommitMessageEditorの処理を行う。
+    /// OpenCommitMessageEditorの処理を行う。
     /// </summary>
     public void OpenCommitMessageEditor(ViewModels.InteractiveRebaseItem item)
     {
@@ -217,7 +232,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     CloseWindowの処理を行う。
+    /// CloseWindowの処理を行う。
     /// </summary>
     private void CloseWindow(object _1, RoutedEventArgs _2)
     {
@@ -225,7 +240,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     RowsSelectionChangedイベントのハンドラ。
+    /// RowsSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnRowsSelectionChanged(object _, SelectionChangedEventArgs e)
     {
@@ -251,7 +266,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     RowPointerPressedイベントのハンドラ。
+    /// RowPointerPressedイベントのハンドラ。
     /// </summary>
     private async void OnRowPointerPressed(object sender, PointerPressedEventArgs e)
     {
@@ -284,7 +299,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     RowDragOverイベントのハンドラ。
+    /// RowDragOverイベントのハンドラ。
     /// </summary>
     private void OnRowDragOver(object sender, DragEventArgs e)
     {
@@ -308,7 +323,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     RowDragLeaveイベントのハンドラ。
+    /// RowDragLeaveイベントのハンドラ。
     /// </summary>
     private void OnRowDragLeave(object sender, DragEventArgs e)
     {
@@ -320,7 +335,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     RowDropイベントのハンドラ。
+    /// RowDropイベントのハンドラ。
     /// </summary>
     private void OnRowDrop(object sender, DragEventArgs e)
     {
@@ -360,7 +375,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     MoveSelectedUpイベントのハンドラ。
+    /// MoveSelectedUpイベントのハンドラ。
     /// </summary>
     private void OnMoveSelectedUp(object sender, RoutedEventArgs e)
     {
@@ -397,7 +412,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     MoveSelectedDownイベントのハンドラ。
+    /// MoveSelectedDownイベントのハンドラ。
     /// </summary>
     private void OnMoveSelectedDown(object sender, RoutedEventArgs e)
     {
@@ -434,7 +449,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     ShowActionsDropdownMenuイベントのハンドラ。
+    /// ShowActionsDropdownMenuイベントのハンドラ。
     /// </summary>
     private void OnShowActionsDropdownMenu(object sender, RoutedEventArgs e)
     {
@@ -462,7 +477,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     OpenCommitMessageEditorイベントのハンドラ。
+    /// OpenCommitMessageEditorイベントのハンドラ。
     /// </summary>
     private void OnOpenCommitMessageEditor(object sender, RoutedEventArgs e)
     {
@@ -473,7 +488,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     StartJobsイベントのハンドラ。
+    /// StartJobsイベントのハンドラ。
     /// </summary>
     private async void OnStartJobs(object _1, RoutedEventArgs _2)
     {
@@ -489,7 +504,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     CreateActionMenuItemの処理を行う。
+    /// CreateActionMenuItemの処理を行う。
     /// </summary>
     private void CreateActionMenuItem(MenuFlyout flyout, ViewModels.InteractiveRebaseItem item, Models.InteractiveRebaseAction action, IBrush iconBrush, string desc, string hotkey)
     {
@@ -497,29 +512,17 @@ public partial class InteractiveRebase : ChromelessWindow
         {
             ColumnDefinitions =
             [
-                /// <summary>
-                ///     ColumnDefinitionの処理を行う。
-                /// </summary>
-                new ColumnDefinition(64, GridUnitType.Pixel),
-                /// <summary>
-                ///     ColumnDefinitionの処理を行う。
-                /// </summary>
-                new ColumnDefinition(240, GridUnitType.Pixel),
+                new ColumnDefinition(64, GridUnitType.Pixel),   // アクション名表示列
+                new ColumnDefinition(240, GridUnitType.Pixel),  // 説明文表示列
             ],
             Children =
             {
-                /// <summary>
-                ///     TextBlockの処理を行う。
-                /// </summary>
                 new TextBlock()
                 {
                     [Grid.ColumnProperty] = 0,
                     Margin = new Thickness(4, 0),
                     Text = action.ToString()
                 },
-                /// <summary>
-                ///     TextBlockの処理を行う。
-                /// </summary>
                 new TextBlock()
                 {
                     [Grid.ColumnProperty] = 1,
@@ -539,7 +542,7 @@ public partial class InteractiveRebase : ChromelessWindow
     }
 
     /// <summary>
-    ///     ChangeItemsActionの処理を行う。
+    /// ChangeItemsActionの処理を行う。
     /// </summary>
     private void ChangeItemsAction(ViewModels.InteractiveRebaseItem target, Models.InteractiveRebaseAction action)
     {
@@ -566,9 +569,13 @@ public partial class InteractiveRebase : ChromelessWindow
             OpenCommitMessageEditor(items[0]);
     }
 
-    private bool _firstSelectionChangedHandled;
     /// <summary>
-    ///     DataFormatの処理を行う。
+    /// 初回の選択変更イベントが処理済みかどうか。
+    /// </summary>
+    private bool _firstSelectionChangedHandled;
+
+    /// <summary>
+    /// ドラッグ&amp;ドロップ時のアイテム識別用データフォーマット。
     /// </summary>
     private readonly DataFormat<string> _dndItemFormat = DataFormat.CreateStringApplicationFormat("komorebi-dnd-ir-item");
 }

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Komorebi.Models;
-using Xunit;
 
 namespace Komorebi.Tests.Models
 {
@@ -14,7 +12,7 @@ namespace Komorebi.Tests.Models
         private readonly TemplateEngine _engine = new();
         private readonly Branch _branch = new() { Name = "feature/test-branch" };
 
-        private IReadOnlyList<Change> MakeChanges(params string[] paths)
+        private static IReadOnlyList<Change> MakeChanges(params string[] paths)
         {
             var changes = new List<Change>();
             foreach (var p in paths)

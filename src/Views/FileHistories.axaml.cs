@@ -8,12 +8,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ファイル履歴ビューのコードビハインド。
+/// ファイル履歴ビューのコードビハインド。
 /// </summary>
 public partial class FileHistories : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public FileHistories()
     {
@@ -21,7 +21,7 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     PressCommitSHAイベントのハンドラ。
+    /// PressCommitSHAイベントのハンドラ。
     /// </summary>
     private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
     {
@@ -35,7 +35,7 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     ResetToSelectedRevisionイベントのハンドラ。
+    /// ResetToSelectedRevisionイベントのハンドラ。
     /// </summary>
     private async void OnResetToSelectedRevision(object sender, RoutedEventArgs e)
     {
@@ -49,7 +49,7 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     CloseNotifyPanelイベントのハンドラ。
+    /// CloseNotifyPanelイベントのハンドラ。
     /// </summary>
     private void OnCloseNotifyPanel(object _, PointerPressedEventArgs e)
     {
@@ -58,7 +58,7 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     SaveAsPatchイベントのハンドラ。
+    /// SaveAsPatchイベントのハンドラ。
     /// </summary>
     private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
     {
@@ -87,7 +87,7 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     CommitSubjectDataContextChangedイベントのハンドラ。
+    /// CommitSubjectDataContextChangedイベントのハンドラ。
     /// </summary>
     private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
     {
@@ -96,7 +96,7 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     CommitSubjectPointerMovedイベントのハンドラ。
+    /// CommitSubjectPointerMovedイベントのハンドラ。
     /// </summary>
     private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
     {
@@ -110,7 +110,7 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     OpenFileWithDefaultEditorイベントのハンドラ。
+    /// OpenFileWithDefaultEditorイベントのハンドラ。
     /// </summary>
     private async void OnOpenFileWithDefaultEditor(object sender, RoutedEventArgs e)
     {

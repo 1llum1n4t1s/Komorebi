@@ -4,19 +4,31 @@ using Avalonia.Interactivity;
 
 namespace Komorebi.Views;
 
+/// <summary>
+/// ランチャーページ切替コマンドパレ��トのコードビハイ��ド。
+/// </summary>
 public partial class LauncherPagesCommandPalette : UserControl
 {
+    /// <summary>
+    /// コン��トラクタ。コンポーネントを初期化する。
+    /// </summary>
     public LauncherPagesCommandPalette()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// コントロールが読み込まれた際の処理。フィルターテキストボックスにフォーカスする。
+    /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
         FilterTextBox.Focus(NavigationMethod.Directional);
     }
 
+    /// <summary>
+    /// キーが押された際のイベント処理。Enter/Up/Down/Tabでリスト間のフォーカス移動を制御する。
+    /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
@@ -94,6 +106,9 @@ public partial class LauncherPagesCommandPalette : UserControl
         }
     }
 
+    /// <summary>
+    /// ItemTappedイベントのハンドラ。
+    /// </summary>
     private void OnItemTapped(object sender, TappedEventArgs e)
     {
         if (DataContext is ViewModels.LauncherPagesCommandPalette vm)

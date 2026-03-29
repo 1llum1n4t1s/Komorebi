@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     複数ブランチマージダイアログのコードビハインド。
+/// 複数ブランチマージダイアログのコードビハインド。
 /// </summary>
 public partial class MergeMultiple : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public MergeMultiple()
     {

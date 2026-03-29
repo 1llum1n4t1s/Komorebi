@@ -184,7 +184,8 @@ dotnet_diagnostic.CA1820.severity = warning
 # CA1821: Remove empty finalizers
 dotnet_diagnostic.CA1821.severity = warning
 # CA1822: Mark members as static
-dotnet_diagnostic.CA1822.severity = suggestion
+# Komorebi本体のみerror扱い（depends/AvaloniaEdit/.editorconfigで上書きされる）
+dotnet_diagnostic.CA1822.severity = error
 # CA1823: Avoid unused private fields
 dotnet_diagnostic.CA1823.severity = warning
 dotnet_code_quality.CA1822.api_surface = private, internal

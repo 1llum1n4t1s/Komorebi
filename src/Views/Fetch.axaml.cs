@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     フェッチダイアログのコードビハインド。
+/// フェッチダイアログのコードビハインド。
 /// </summary>
 public partial class Fetch : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Fetch()
     {

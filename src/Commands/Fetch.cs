@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     リモートリポジトリから最新の情報を取得するgitコマンド。
-///     git fetch --progress --verbose を実行する。
+/// リモートリポジトリから最新の情報を取得するgitコマンド。
+/// git fetch --progress --verbose を実行する。
 /// </summary>
 public class Fetch : Command
 {
     /// <summary>
-    ///     タグ設定と強制オプション付きでFetchコマンドを初期化する。
+    /// タグ設定と強制オプション付きでFetchコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="remote">フェッチ元のリモート名。</param>
@@ -42,7 +42,7 @@ public class Fetch : Command
     }
 
     /// <summary>
-    ///     シンプルなFetchコマンドを初期化する（エラーを例外として上げない）。
+    /// シンプルなFetchコマンドを初期化する（エラーを例外として上げない）。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="remote">フェッチ元のリモート名。</param>
@@ -61,7 +61,7 @@ public class Fetch : Command
     }
 
     /// <summary>
-    ///     特定のリモートブランチをローカルブランチにフェッチするコンストラクタ。
+    /// 特定のリモートブランチをローカルブランチにフェッチするコンストラクタ。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="local">フェッチ先のローカルブランチ。</param>
@@ -78,13 +78,13 @@ public class Fetch : Command
     }
 
     /// <summary>
-    ///     SSH鍵を設定してからフェッチを実行する（基底クラスの共通メソッドを使用）。
+    /// SSH鍵を設定してからフェッチを実行する（基底クラスの共通メソッドを使用）。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public Task<bool> RunAsync() => ExecWithSSHKeyAsync(_remote);
 
     /// <summary>
-    ///     操作対象のリモート名。
+    /// 操作対象のリモート名。
     /// </summary>
     private readonly string _remote;
 }

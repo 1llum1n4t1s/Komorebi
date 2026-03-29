@@ -4,13 +4,24 @@ using System.Text.RegularExpressions;
 
 namespace Komorebi.Commands;
 
+/// <summary>
+/// amend時にステージング済み変更のファイルモード・オブジェクトハッシュを含む詳細情報を取得するクラス。
+/// git diff-index --cached -M を使用する。取得した情報はUpdateIndexInfoで復元に使用される。
+/// </summary>
 public partial class QueryStagedChangesWithAmend : Command
 {
+    /// <summary>追加・削除・変更・タイプ変更（A/D/M/T）のdiff-index出力行を解析する正規表現</summary>
     [GeneratedRegex(@"^:[\d]{6} ([\d]{6}) ([0-9a-f]{40}) [0-9a-f]{40} ([ADMT])\d{0,6}\t(.*)$")]
     private static partial Regex REG_FORMAT1();
+    /// <summary>リネーム・コピー（R/C）のdiff-index出力行を解析する正規表現（タブ区切りで旧パスと新パスを含む）</summary>
     [GeneratedRegex(@"^:[\d]{6} ([\d]{6}) ([0-9a-f]{40}) [0-9a-f]{40} ([RC])\d{0,6}\t(.*\t.*)$")]
     private static partial Regex REG_FORMAT2();
 
+    /// <summary>
+    /// コンストラクタ。親コミットとの差分からステージング済み変更の詳細を取得するコマンドを設定する。
+    /// </summary>
+    /// <param name="repo">リポジトリのパス</param>
+    /// <param name="parent">比較対象の親コミットSHA</param>
     public QueryStagedChangesWithAmend(string repo, string parent)
     {
         WorkingDirectory = repo;
@@ -19,6 +30,10 @@ public partial class QueryStagedChangesWithAmend : Command
         _parent = parent;
     }
 
+    /// <summary>
+    /// コマンドを同期的に実行し、amend用データ付きの変更リストを返す。
+    /// </summary>
+    /// <returns>ファイルモード・オブジェクトハッシュ付きの変更モデルリスト</returns>
     public List<Models.Change> GetResult()
     {
         var rs = ReadToEnd();
@@ -29,6 +44,7 @@ public partial class QueryStagedChangesWithAmend : Command
         var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         foreach (var line in lines)
         {
+            // まずリネーム/コピー用の正規表現で試行（タブ区切りパスを含む）
             var match = REG_FORMAT2().Match(line);
             if (match.Success)
             {
@@ -48,6 +64,7 @@ public partial class QueryStagedChangesWithAmend : Command
                 continue;
             }
 
+            // 通常の変更（A/D/M/T）用の正規表現で試行
             match = REG_FORMAT1().Match(line);
             if (match.Success)
             {
@@ -62,6 +79,7 @@ public partial class QueryStagedChangesWithAmend : Command
                     },
                 };
 
+                // 変更種別に応じてChangeStateを設定
                 var type = match.Groups[3].Value;
                 switch (type)
                 {
@@ -85,5 +103,6 @@ public partial class QueryStagedChangesWithAmend : Command
         return changes;
     }
 
+    /// <summary>比較対象の親コミットSHA</summary>
     private readonly string _parent;
 }

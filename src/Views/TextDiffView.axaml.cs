@@ -26,17 +26,17 @@ using AvaloniaEdit.Utils;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ThemedTextDiffPresenterクラス。
+/// ThemedTextDiffPresenterクラス。
 /// </summary>
 public class ThemedTextDiffPresenter : TextEditor
 {
     /// <summary>
-    ///     VerticalSeparatorMarginクラス。
+    /// VerticalSeparatorMarginクラス。
     /// </summary>
     public class VerticalSeparatorMargin : AbstractMargin
     {
         /// <summary>
-        ///     コントロールの描画処理を行う。
+        /// コントロールの描画処理を行う。
         /// </summary>
         public override void Render(DrawingContext context)
         {
@@ -49,7 +49,7 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの測定処理をオーバーライドする。
+        /// コントロールの測定処理をオーバーライドする。
         /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -58,12 +58,12 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     LineNumberMarginクラス。
+    /// LineNumberMarginクラス。
     /// </summary>
     public class LineNumberMargin : AbstractMargin
     {
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public LineNumberMargin(bool usePresenter, bool isOld)
         {
@@ -75,7 +75,7 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの描画処理を行う。
+        /// コントロールの描画処理を行う。
         /// </summary>
         public override void Render(DrawingContext context)
         {
@@ -119,17 +119,19 @@ public class ThemedTextDiffPresenter : TextEditor
             }
         }
 
+        /// <summary>プレゼンターのIsOldプロパティを参照するかどうか。</summary>
         private readonly bool _usePresenter;
+        /// <summary>旧側の行番号を表示するかどうか。</summary>
         private readonly bool _isOld;
     }
 
     /// <summary>
-    ///     LineModifyTypeMarginクラス。
+    /// LineModifyTypeMarginクラス。
     /// </summary>
     public class LineModifyTypeMargin : AbstractMargin
     {
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public LineModifyTypeMargin()
         {
@@ -138,7 +140,7 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの描画処理を行う。
+        /// コントロールの描画処理を行う。
         /// </summary>
         public override void Render(DrawingContext context)
         {
@@ -191,7 +193,7 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの測定処理をオーバーライドする。
+        /// コントロールの測定処理をオーバーライドする。
         /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -211,7 +213,7 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         /// <summary>
-        ///     データコンテキストが変更された際の処理。
+        /// データコンテキストが変更された際の処理。
         /// </summary>
         protected override void OnDataContextChanged(EventArgs e)
         {
@@ -221,14 +223,14 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     LineBackgroundRendererクラス。
+    /// LineBackgroundRendererクラス。
     /// </summary>
     public class LineBackgroundRenderer : IBackgroundRenderer
     {
         public KnownLayer Layer => KnownLayer.Background;
 
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public LineBackgroundRenderer(ThemedTextDiffPresenter presenter)
         {
@@ -236,7 +238,7 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         /// <summary>
-        ///     Drawの処理を行う。
+        /// Drawの処理を行う。
         /// </summary>
         public void Draw(TextView textView, DrawingContext drawingContext)
         {
@@ -325,7 +327,7 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         /// <summary>
-        ///     GetBrushByLineTypeの処理を行う。
+        /// GetBrushByLineTypeの処理を行う。
         /// </summary>
         private IBrush GetBrushByLineType(Models.TextDiffLineType type)
         {
@@ -338,16 +340,17 @@ public class ThemedTextDiffPresenter : TextEditor
             };
         }
 
+        /// <summary>描画対象のテキストDiffプレゼンター。</summary>
         private readonly ThemedTextDiffPresenter _presenter;
     }
 
     /// <summary>
-    ///     LineStyleTransformerクラス。
+    /// LineStyleTransformerクラス。
     /// </summary>
     public class LineStyleTransformer(ThemedTextDiffPresenter presenter) : DocumentColorizingTransformer
     {
         /// <summary>
-        ///     ColorizeLineの処理を行う。
+        /// ColorizeLineの処理を行う。
         /// </summary>
         protected override void ColorizeLine(DocumentLine line)
         {
@@ -506,7 +509,7 @@ public class ThemedTextDiffPresenter : TextEditor
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
-    ///     ThemedTextDiffPresenterの処理を行う。
+    /// ThemedTextDiffPresenterの処理を行う。
     /// </summary>
     public ThemedTextDiffPresenter(TextArea area, TextDocument doc) : base(area, doc)
     {
@@ -528,7 +531,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     GotoChangeの処理を行う。
+    /// GotoChangeの処理を行う。
     /// </summary>
     public void GotoChange(ViewModels.BlockNavigationDirection direction)
     {
@@ -544,7 +547,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -566,7 +569,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -586,7 +589,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -609,7 +612,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -648,7 +651,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -680,7 +683,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     サイズが変更された際の処理。
+    /// サイズが変更された際の処理。
     /// </summary>
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
@@ -694,14 +697,14 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     UpdateSelectedChunkの処理を行う。
+    /// UpdateSelectedChunkの処理を行う。
     /// </summary>
     protected virtual void UpdateSelectedChunk(double y)
     {
     }
 
     /// <summary>
-    ///     TextAreaKeyDownイベントのハンドラ。
+    /// TextAreaKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnTextAreaKeyDown(object sender, KeyEventArgs e)
     {
@@ -719,7 +722,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextAreaCaretPositionChangedイベントのハンドラ。
+    /// TextAreaCaretPositionChangedイベントのハンドラ。
     /// </summary>
     private void OnTextAreaCaretPositionChanged(object sender, EventArgs e)
     {
@@ -727,7 +730,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewContextRequestedイベントのハンドラ。
+    /// TextViewContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -752,7 +755,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewPointerChangedイベントのハンドラ。
+    /// TextViewPointerChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewPointerChanged(object sender, PointerEventArgs e)
     {
@@ -798,7 +801,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewPointerWheelChangedイベントのハンドラ。
+    /// TextViewPointerWheelChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewPointerWheelChanged(object sender, PointerWheelEventArgs e)
     {
@@ -813,7 +816,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewVisualLinesChangedイベントのハンドラ。
+    /// TextViewVisualLinesChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
     {
@@ -850,7 +853,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TrySetChunkの処理を行う。
+    /// TrySetChunkの処理を行う。
     /// </summary>
     protected void TrySetChunk(ViewModels.TextDiffSelectedChunk chunk)
     {
@@ -859,7 +862,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     Listの処理を行う。
+    /// Listの処理を行う。
     /// </summary>
     private List<Models.TextDiffLine> GetLines()
     {
@@ -873,7 +876,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     UpdateTextMateの処理を行う。
+    /// UpdateTextMateの処理を行う。
     /// </summary>
     private void UpdateTextMate()
     {
@@ -901,7 +904,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     AutoScrollToFirstChangeの処理を行う。
+    /// AutoScrollToFirstChangeの処理を行う。
     /// </summary>
     private void AutoScrollToFirstChange()
     {
@@ -930,7 +933,7 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
-    ///     CopyWithoutIndicatorsAsyncの処理を行う。
+    /// CopyWithoutIndicatorsAsyncの処理を行う。
     /// </summary>
     private async Task CopyWithoutIndicatorsAsync()
     {
@@ -1000,20 +1003,25 @@ public class ThemedTextDiffPresenter : TextEditor
         await App.CopyTextAsync(builder.ToString());
     }
 
+    /// <summary>サイズ変更イベントの初回実行済みフラグ。</summary>
     private bool _execSizeChanged;
+    /// <summary>TextMateシンタックスハイライト用インスタンス。</summary>
     private TextMate.Installation _textMate;
+    /// <summary>前回の選択範囲の開始位置。</summary>
     private TextLocation _lastSelectStart = TextLocation.Empty;
+    /// <summary>前回の選択範囲の終了位置。</summary>
     private TextLocation _lastSelectEnd = TextLocation.Empty;
+    /// <summary>行スタイル変換用トランスフォーマー。</summary>
     private LineStyleTransformer _lineStyleTransformer;
 }
 
 /// <summary>
-///     CombinedTextDiffPresenterクラス。
+/// CombinedTextDiffPresenterクラス。
 /// </summary>
 public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CombinedTextDiffPresenter() : base(new TextArea(), new TextDocument())
     {
@@ -1025,7 +1033,7 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -1040,7 +1048,7 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -1051,7 +1059,7 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -1089,7 +1097,7 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     UpdateSelectedChunkの処理を行う。
+    /// UpdateSelectedChunkの処理を行う。
     /// </summary>
     protected override void UpdateSelectedChunk(double y)
     {
@@ -1191,7 +1199,7 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     TextViewScrollChangedイベントのハンドラ。
+    /// TextViewScrollChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewScrollChanged(object sender, ScrollChangedEventArgs e)
     {
@@ -1199,16 +1207,18 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
             TrySetChunk(null);
     }
 
+    /// <summary>テキストビューのスクロールビューア参照。</summary>
+    /// <summary>テキストビューのスクロールビューア参照（Combined用）。</summary>
     private ScrollViewer _scrollViewer;
 }
 
 /// <summary>
-///     SingleSideTextDiffPresenterクラス。
+/// SingleSideTextDiffPresenterクラス。
 /// </summary>
 public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public SingleSideTextDiffPresenter() : base(new TextArea(), new TextDocument())
     {
@@ -1218,7 +1228,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -1234,7 +1244,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -1249,7 +1259,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -1264,7 +1274,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -1301,7 +1311,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     UpdateSelectedChunkの処理を行う。
+    /// UpdateSelectedChunkの処理を行う。
     /// </summary>
     protected override void UpdateSelectedChunk(double y)
     {
@@ -1406,7 +1416,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     TextViewScrollChangedイベントのハンドラ。
+    /// TextViewScrollChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewScrollChanged(object sender, ScrollChangedEventArgs e)
     {
@@ -1426,7 +1436,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     }
 
     /// <summary>
-    ///     BlockNavigationPropertyChangedイベントのハンドラ。
+    /// BlockNavigationPropertyChangedイベントのハンドラ。
     /// </summary>
     private void OnBlockNavigationPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
@@ -1434,11 +1444,12 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
             TextArea?.TextView?.Redraw();
     }
 
+    /// <summary>テキストビューのスクロールビューア参照（SingleSide用）。</summary>
     private ScrollViewer _scrollViewer;
 }
 
 /// <summary>
-///     TextDiffViewMinimapクラス。
+/// TextDiffViewMinimapクラス。
 /// </summary>
 public class TextDiffViewMinimap : Control
 {
@@ -1479,7 +1490,7 @@ public class TextDiffViewMinimap : Control
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static TextDiffViewMinimap()
     {
@@ -1491,7 +1502,7 @@ public class TextDiffViewMinimap : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -1529,7 +1540,7 @@ public class TextDiffViewMinimap : Control
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -1538,7 +1549,7 @@ public class TextDiffViewMinimap : Control
     }
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -1578,7 +1589,7 @@ public class TextDiffViewMinimap : Control
     }
 
     /// <summary>
-    ///     RenderSingleSideの処理を行う。
+    /// RenderSingleSideの処理を行う。
     /// </summary>
     private void RenderSingleSide(DrawingContext context, List<Models.TextDiffLine> lines, double x, double width)
     {
@@ -1602,7 +1613,7 @@ public class TextDiffViewMinimap : Control
     }
 
     /// <summary>
-    ///     RenderBlockの処理を行う。
+    /// RenderBlockの処理を行う。
     /// </summary>
     private void RenderBlock(DrawingContext context, Models.TextDiffLineType type, int start, int count, int total, double x, double width)
     {
@@ -1617,7 +1628,7 @@ public class TextDiffViewMinimap : Control
 }
 
 /// <summary>
-///     テキスト差分ビューのコードビハインド。
+/// テキスト差分ビューのコードビハインド。
 /// </summary>
 public partial class TextDiffView : UserControl
 {
@@ -1631,7 +1642,7 @@ public partial class TextDiffView : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public TextDiffView()
     {
@@ -1639,7 +1650,7 @@ public partial class TextDiffView : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -1662,7 +1673,7 @@ public partial class TextDiffView : UserControl
     }
 
     /// <summary>
-    ///     PointerExitedイベントのハンドラ。
+    /// PointerExitedイベントのハンドラ。
     /// </summary>
     protected override void OnPointerExited(PointerEventArgs e)
     {
@@ -1673,7 +1684,7 @@ public partial class TextDiffView : UserControl
     }
 
     /// <summary>
-    ///     StageChunkイベントのハンドラ。
+    /// StageChunkイベントのハンドラ。
     /// </summary>
     private async void OnStageChunk(object _1, RoutedEventArgs _2)
     {
@@ -1714,7 +1725,7 @@ public partial class TextDiffView : UserControl
     }
 
     /// <summary>
-    ///     UnstageChunkイベントのハンドラ。
+    /// UnstageChunkイベントのハンドラ。
     /// </summary>
     private async void OnUnstageChunk(object _1, RoutedEventArgs _2)
     {
@@ -1748,7 +1759,7 @@ public partial class TextDiffView : UserControl
     }
 
     /// <summary>
-    ///     DiscardChunkイベントのハンドラ。
+    /// DiscardChunkイベントのハンドラ。
     /// </summary>
     private async void OnDiscardChunk(object _1, RoutedEventArgs _2)
     {

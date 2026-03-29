@@ -7,13 +7,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     差分表示のコンテキストを管理するViewModel。
-///     テキスト差分、バイナリ差分、画像差分、LFS差分、サブモジュール差分など複数の形式に対応する。
+/// 差分表示のコンテキストを管理するViewModel。
+/// テキスト差分、バイナリ差分、画像差分、LFS差分、サブモジュール差分など複数の形式に対応する。
 /// </summary>
 public class DiffContext : ObservableObject
 {
     /// <summary>
-    ///     差分のタイトル（ファイルパスまたはリネーム情報）。
+    /// 差分のタイトル（ファイルパスまたはリネーム情報）。
     /// </summary>
     public string Title
     {
@@ -21,7 +21,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     空白文字の変更を無視するかどうか。変更時に差分を再読み込みする。
+    /// 空白文字の変更を無視するかどうか。変更時に差分を再読み込みする。
     /// </summary>
     public bool IgnoreWhitespace
     {
@@ -38,7 +38,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     ファイル全体を表示するかどうか。
+    /// ファイル全体を表示するかどうか。
     /// </summary>
     public bool ShowEntireFile
     {
@@ -57,7 +57,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     サイドバイサイド（左右分割）表示を使用するかどうか。
+    /// サイドバイサイド（左右分割）表示を使用するかどうか。
     /// </summary>
     public bool UseSideBySide
     {
@@ -76,7 +76,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     ファイルモード（パーミッション）の変更情報。
+    /// ファイルモード（パーミッション）の変更情報。
     /// </summary>
     public string FileModeChange
     {
@@ -85,7 +85,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     テキスト差分かどうか（テキストツールバーの表示制御に使用）。
+    /// テキスト差分かどうか（テキストツールバーの表示制御に使用）。
     /// </summary>
     public bool IsTextDiff
     {
@@ -94,7 +94,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     差分の表示コンテンツ（TextDiffContext、ImageDiff、BinaryDiff等）。
+    /// 差分の表示コンテンツ（TextDiffContext、ImageDiff、BinaryDiff等）。
     /// </summary>
     public object Content
     {
@@ -103,7 +103,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     統合差分のコンテキスト行数。
+    /// 統合差分のコンテキスト行数。
     /// </summary>
     public int UnifiedLines
     {
@@ -112,7 +112,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリパス、差分オプション、前回のコンテキスト（キャッシュ）を指定する。
+    /// コンストラクタ。リポジトリパス、差分オプション、前回のコンテキスト（キャッシュ）を指定する。
     /// </summary>
     public DiffContext(string repo, Models.DiffOption option, DiffContext previous = null)
     {
@@ -137,7 +137,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     コンテキスト行数を1増やして差分を再読み込みする。
+    /// コンテキスト行数を1増やして差分を再読み込みする。
     /// </summary>
     public void IncrUnified()
     {
@@ -146,7 +146,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     コンテキスト行数を1減らして差分を再読み込みする（最小4行）。
+    /// コンテキスト行数を1減らして差分を再読み込みする（最小4行）。
     /// </summary>
     public void DecrUnified()
     {
@@ -155,7 +155,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     外部マージツールで差分を開く。
+    /// 外部マージツールで差分を開く。
     /// </summary>
     public void OpenExternalMergeTool()
     {
@@ -163,7 +163,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     設定変更を検出し、必要に応じて差分コンテンツを再読み込みまたはモード切替する。
+    /// 設定変更を検出し、必要に応じて差分コンテンツを再読み込みまたはモード切替する。
     /// </summary>
     public void CheckSettings()
     {
@@ -183,8 +183,8 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     差分コンテンツを非同期で読み込む。
-    ///     テキスト差分、バイナリ差分、画像差分、LFS差分、サブモジュール差分を判別して適切な表示オブジェクトを生成する。
+    /// 差分コンテンツを非同期で読み込む。
+    /// テキスト差分、バイナリ差分、画像差分、LFS差分、サブモジュール差分を判別して適切な表示オブジェクトを生成する。
     /// </summary>
     private void LoadContent()
     {
@@ -230,7 +230,7 @@ public class DiffContext : ObservableObject
                             break;
                         }
 
-                        var sha = line.Content.Substring(18);
+                        var sha = line.Content[18..];
                         if (line.Type == Models.TextDiffLineType.Added)
                             submoduleDiff.New = await QuerySubmoduleRevisionAsync(submoduleRoot, sha).ConfigureAwait(false);
                         else if (line.Type == Models.TextDiffLineType.Deleted)
@@ -335,9 +335,9 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     サブモジュールのリビジョン情報を非同期で取得する。
+    /// サブモジュールのリビジョン情報を非同期で取得する。
     /// </summary>
-    private async Task<Models.RevisionSubmodule> QuerySubmoduleRevisionAsync(string repo, string sha)
+    private static async Task<Models.RevisionSubmodule> QuerySubmoduleRevisionAsync(string repo, string sha)
     {
         var commit = await new Commands.QuerySingleCommit(repo, sha).GetResultAsync().ConfigureAwait(false);
         if (commit is null)
@@ -352,7 +352,7 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     差分読み込みの状態情報。同一内容の再読み込みを防ぐキャッシュキーとして使用する。
+    /// 差分読み込みの状態情報。同一内容の再読み込みを防ぐキャッシュキーとして使用する。
     /// </summary>
     private class Info
     {

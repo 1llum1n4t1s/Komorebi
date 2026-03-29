@@ -12,14 +12,14 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     SubmoduleTreeNodeToggleButtonクラス。
+/// SubmoduleTreeNodeToggleButtonクラス。
 /// </summary>
 public class SubmoduleTreeNodeToggleButton : ToggleButton
 {
     protected override Type StyleKeyOverride => typeof(ToggleButton);
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -35,7 +35,7 @@ public class SubmoduleTreeNodeToggleButton : ToggleButton
 }
 
 /// <summary>
-///     SubmoduleTreeNodeIconクラス。
+/// SubmoduleTreeNodeIconクラス。
 /// </summary>
 public class SubmoduleTreeNodeIcon : UserControl
 {
@@ -49,7 +49,7 @@ public class SubmoduleTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -60,7 +60,7 @@ public class SubmoduleTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -69,7 +69,7 @@ public class SubmoduleTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     UpdateContentの処理を行う。
+    /// UpdateContentの処理を行う。
     /// </summary>
     private void UpdateContent()
     {
@@ -88,7 +88,7 @@ public class SubmoduleTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     CreateContentの処理を行う。
+    /// CreateContentの処理を行う。
     /// </summary>
     private void CreateContent(Thickness margin, string iconKey)
     {
@@ -108,7 +108,7 @@ public class SubmoduleTreeNodeIcon : UserControl
 }
 
 /// <summary>
-///     サブモジュール一覧ビューのコードビハインド。
+/// サブモジュール一覧ビューのコードビハインド。
 /// </summary>
 public partial class SubmodulesView : UserControl
 {
@@ -137,7 +137,7 @@ public partial class SubmodulesView : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public SubmodulesView()
     {
@@ -145,7 +145,7 @@ public partial class SubmodulesView : UserControl
     }
 
     /// <summary>
-    ///     ToggleNodeIsExpandedの処理を行う。
+    /// ToggleNodeIsExpandedの処理を行う。
     /// </summary>
     public void ToggleNodeIsExpanded(ViewModels.SubmoduleTreeNode node)
     {
@@ -158,7 +158,7 @@ public partial class SubmodulesView : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -182,7 +182,7 @@ public partial class SubmodulesView : UserControl
     }
 
     /// <summary>
-    ///     ItemDoubleTappedイベントのハンドラ。
+    /// ItemDoubleTappedイベントのハンドラ。
     /// </summary>
     private void OnItemDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -205,7 +205,7 @@ public partial class SubmodulesView : UserControl
     }
 
     /// <summary>
-    ///     ItemContextRequestedイベントのハンドラ。
+    /// ItemContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnItemContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -365,7 +365,7 @@ public partial class SubmodulesView : UserControl
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     private void OnKeyDown(object sender, KeyEventArgs e)
     {

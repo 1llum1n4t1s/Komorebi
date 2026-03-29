@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     スタッシュ全消去ダイアログのViewModel。
-///     git stash clearコマンドで全てのスタッシュを削除する。
+/// スタッシュ全消去ダイアログのViewModel。
+/// git stash clearコマンドで全てのスタッシュを削除する。
 /// </summary>
 public class ClearStashes : Popup
 {
     /// <summary>
-    ///     コンストラクタ。対象リポジトリを受け取って初期化する。
+    /// コンストラクタ。対象リポジトリを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public ClearStashes(Repository repo)
@@ -18,7 +18,7 @@ public class ClearStashes : Popup
     }
 
     /// <summary>
-    ///     確定処理。git stash clearコマンドを実行して全スタッシュを削除する。
+    /// 確定処理。git stash clearコマンドを実行して全スタッシュを削除する。
     /// </summary>
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()

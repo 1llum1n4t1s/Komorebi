@@ -6,12 +6,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リポジトリ設定（.git/config編集）ダイアログのコードビハインド。
+/// リポジトリ設定（.git/config編集）ダイアログのコードビハインド。
 /// </summary>
 public partial class RepositoryConfigure : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public RepositoryConfigure()
     {
@@ -20,7 +20,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられる際の処理。
+    /// ウィンドウが閉じられる際の処理。
     /// </summary>
     protected override async void OnClosing(WindowClosingEventArgs e)
     {
@@ -31,7 +31,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     ConventionalTypesFileの選択処理を行う。
+    /// ConventionalTypesFileの選択処理を行う。
     /// </summary>
     private async void SelectConventionalTypesFile(object sender, RoutedEventArgs e)
     {
@@ -49,7 +49,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     ExecutableForCustomActionの選択処理を行う。
+    /// ExecutableForCustomActionの選択処理を行う。
     /// </summary>
     private async void SelectExecutableForCustomAction(object sender, RoutedEventArgs e)
     {
@@ -67,7 +67,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     EditCustomActionControlsの処理を行う。
+    /// EditCustomActionControlsの処理を行う。
     /// </summary>
     private async void EditCustomActionControls(object sender, RoutedEventArgs e)
     {
@@ -84,7 +84,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     NewCustomIssueTrackerイベントのハンドラ。
+    /// NewCustomIssueTrackerイベントのハンドラ。
     /// </summary>
     private void OnNewCustomIssueTracker(object sender, RoutedEventArgs e)
     {
@@ -95,7 +95,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddGitHubIssueTrackerイベントのハンドラ。
+    /// AddGitHubIssueTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddGitHubIssueTracker(object sender, RoutedEventArgs e)
     {
@@ -119,7 +119,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddJiraIssueTrackerイベントのハンドラ。
+    /// AddJiraIssueTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddJiraIssueTracker(object sender, RoutedEventArgs e)
     {
@@ -135,7 +135,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddAzureWorkItemTrackerイベントのハンドラ。
+    /// AddAzureWorkItemTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddAzureWorkItemTracker(object sender, RoutedEventArgs e)
     {
@@ -151,7 +151,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddGitLabIssueTrackerイベントのハンドラ。
+    /// AddGitLabIssueTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddGitLabIssueTracker(object sender, RoutedEventArgs e)
     {
@@ -172,7 +172,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddGitLabMergeRequestTrackerイベントのハンドラ。
+    /// AddGitLabMergeRequestTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddGitLabMergeRequestTracker(object sender, RoutedEventArgs e)
     {
@@ -193,7 +193,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddGiteeIssueTrackerイベントのハンドラ。
+    /// AddGiteeIssueTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddGiteeIssueTracker(object sender, RoutedEventArgs e)
     {
@@ -217,7 +217,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddGiteePullRequestTrackerイベントのハンドラ。
+    /// AddGiteePullRequestTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddGiteePullRequestTracker(object sender, RoutedEventArgs e)
     {
@@ -241,7 +241,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddGerritChangeIdTrackerイベントのハンドラ。
+    /// AddGerritChangeIdTrackerイベントのハンドラ。
     /// </summary>
     private void OnAddGerritChangeIdTracker(object sender, RoutedEventArgs e)
     {
@@ -257,7 +257,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     /// <summary>
-    ///     RemoveIssueTrackerイベントのハンドラ。
+    /// RemoveIssueTrackerイベントのハンドラ。
     /// </summary>
     private void OnRemoveIssueTracker(object sender, RoutedEventArgs e)
     {

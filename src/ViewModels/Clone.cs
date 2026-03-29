@@ -7,15 +7,15 @@ using Avalonia.Threading;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリクローンダイアログのViewModel。
-///     git cloneコマンドでリモートリポジトリをローカルに複製する。
-///     クリップボードからのURL自動検出、SSH鍵対応、サブモジュール初期化に対応する。
+/// リポジトリクローンダイアログのViewModel。
+/// git cloneコマンドでリモートリポジトリをローカルに複製する。
+/// クリップボードからのURL自動検出、SSH鍵対応、サブモジュール初期化に対応する。
 /// </summary>
 public class Clone : Popup
 {
     /// <summary>
-    ///     リモートリポジトリのURL。バリデーション付き。
-    ///     SSH URLが設定された場合はUseSSHフラグを自動的にtrueにする。
+    /// リモートリポジトリのURL。バリデーション付き。
+    /// SSH URLが設定された場合はUseSSHフラグを自動的にtrueにする。
     /// </summary>
     [Required(ErrorMessage = "Remote URL is required")]
     [CustomValidation(typeof(Clone), nameof(ValidateRemote))]
@@ -31,7 +31,7 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     SSH接続を使用するかどうかのフラグ。
+    /// SSH接続を使用するかどうかのフラグ。
     /// </summary>
     public bool UseSSH
     {
@@ -40,7 +40,7 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     SSH秘密鍵のファイルパス。
+    /// SSH秘密鍵のファイルパス。
     /// </summary>
     public string SSHKey
     {
@@ -49,7 +49,7 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     クローン先の親フォルダパス。バリデーション付き。
+    /// クローン先の親フォルダパス。バリデーション付き。
     /// </summary>
     [Required(ErrorMessage = "Parent folder is required")]
     [CustomValidation(typeof(Clone), nameof(ValidateParentFolder))]
@@ -60,7 +60,7 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     ローカルフォルダ名（カスタム名を指定する場合）。
+    /// ローカルフォルダ名（カスタム名を指定する場合）。
     /// </summary>
     public string Local
     {
@@ -69,7 +69,7 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     git cloneコマンドの追加引数。
+    /// git cloneコマンドの追加引数。
     /// </summary>
     public string ExtraArgs
     {
@@ -78,7 +78,7 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     クローン後にサブモジュールを初期化・更新するかどうか。
+    /// クローン後にサブモジュールを初期化・更新するかどうか。
     /// </summary>
     public bool InitAndUpdateSubmodules
     {
@@ -87,9 +87,9 @@ public class Clone : Popup
     } = true;
 
     /// <summary>
-    ///     コンストラクタ。ページIDを受け取って初期化する。
-    ///     ワークスペースのデフォルトクローンディレクトリを設定し、
-    ///     クリップボードからリモートURLを自動検出する。
+    /// コンストラクタ。ページIDを受け取って初期化する。
+    /// ワークスペースのデフォルトクローンディレクトリを設定し、
+    /// クリップボードからリモートURLを自動検出する。
     /// </summary>
     /// <param name="pageId">クローン操作を行うページのID</param>
     public Clone(string pageId)
@@ -120,8 +120,8 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     リモートURLのカスタムバリデーション。
-    ///     有効なリモートリポジトリURL形式かどうかを検証する。
+    /// リモートURLのカスタムバリデーション。
+    /// 有効なリモートリポジトリURL形式かどうかを検証する。
     /// </summary>
     /// <param name="remote">検証対象のリモートURL</param>
     /// <param name="_">バリデーションコンテキスト（未使用）</param>
@@ -134,8 +134,8 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     親フォルダのカスタムバリデーション。
-    ///     指定パスが存在するディレクトリかどうかを検証する。
+    /// 親フォルダのカスタムバリデーション。
+    /// 指定パスが存在するディレクトリかどうかを検証する。
     /// </summary>
     /// <param name="folder">検証対象のフォルダパス</param>
     /// <param name="_">バリデーションコンテキスト（未使用）</param>
@@ -148,8 +148,8 @@ public class Clone : Popup
     }
 
     /// <summary>
-    ///     確定処理。git cloneコマンドを実行してリポジトリを複製する。
-    ///     クローン後はSSH鍵の設定、サブモジュール更新、リポジトリノード登録を行う。
+    /// 確定処理。git cloneコマンドを実行してリポジトリを複製する。
+    /// クローン後はSSH鍵の設定、サブモジュール更新、リポジトリノード登録を行う。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

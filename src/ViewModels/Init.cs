@@ -3,8 +3,8 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     Gitリポジトリの初期化（git init）を行うダイアログのViewModel。
-///     指定パスに新規リポジトリを作成する。
+/// Gitリポジトリの初期化（git init）を行うダイアログのViewModel。
+/// 指定パスに新規リポジトリを作成する。
 /// </summary>
 public class Init : Popup
 {
@@ -23,7 +23,7 @@ public class Init : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。ページID、パス、親ノード、理由を指定して初期化する。
+    /// コンストラクタ。ページID、パス、親ノード、理由を指定して初期化する。
     /// </summary>
     public Init(string pageId, string path, RepositoryNode parent, string reason)
     {
@@ -36,8 +36,8 @@ public class Init : Popup
     }
 
     /// <summary>
-    ///     確認ボタン押下時の処理。git initを実行し、
-    ///     成功時はリポジトリノードをPreferencesに登録してWelcome画面を更新する。
+    /// 確認ボタン押下時の処理。git initを実行し、
+    /// 成功時はリポジトリノードをPreferencesに登録してWelcome画面を更新する。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -63,7 +63,7 @@ public class Init : Popup
         return succ;
     }
 
-    private readonly string _pageId = null;
-    private string _targetPath = null;
-    private readonly RepositoryNode _parentNode = null;
+    private readonly string _pageId = null; // ページID
+    private string _targetPath = null; // 初期化対象パス
+    private readonly RepositoryNode _parentNode = null; // 親ノード
 }

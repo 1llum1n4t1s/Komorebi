@@ -3,13 +3,13 @@
 namespace Komorebi.Models;
 
 /// <summary>
-///     git resetコマンドのリセットモードを表すクラス。
-///     ワーキングツリーとインデックスへの影響度合いを定義する。
+/// git resetコマンドのリセットモードを表すクラス。
+/// ワーキングツリーとインデックスへの影響度合いを定義する。
 /// </summary>
 public class ResetMode(string n, string d, string a, string k, IBrush b)
 {
     /// <summary>
-    ///     サポートされているリセットモードの一覧。
+    /// サポートされているリセットモードの一覧。
     /// </summary>
     public static readonly ResetMode[] Supported =
     [
@@ -21,27 +21,27 @@ public class ResetMode(string n, string d, string a, string k, IBrush b)
     ];
 
     /// <summary>
-    ///     モードの表示名。
+    /// モードの表示名。
     /// </summary>
     public string Name { get; set; } = n;
 
     /// <summary>
-    ///     モードの説明文。
+    /// モードの説明文。
     /// </summary>
     public string Desc { get; set; } = d;
 
     /// <summary>
-    ///     gitコマンドに渡す引数文字列。
+    /// gitコマンドに渡す引数文字列。
     /// </summary>
     public string Arg { get; set; } = a;
 
     /// <summary>
-    ///     モードのキーボードショートカットキー。
+    /// モードのキーボードショートカットキー。
     /// </summary>
     public string Key { get; set; } = k;
 
     /// <summary>
-    ///     UIで使用するモードの表示色。
+    /// UIで使用するモードの表示色。
     /// </summary>
     public IBrush Color { get; set; } = b;
 }

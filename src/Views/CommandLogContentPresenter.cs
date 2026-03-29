@@ -14,17 +14,17 @@ using AvaloniaEdit.TextMate;
 namespace Komorebi.Views;
 
 /// <summary>
-///     Gitコマンドログの内容をフォーマットして表示するプレゼンタ。
+/// Gitコマンドログの内容をフォーマットして表示するプレゼンタ。
 /// </summary>
 public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
 {
     /// <summary>
-    ///     LineStyleTransformerクラス。
+    /// LineStyleTransformerクラス。
     /// </summary>
     public class LineStyleTransformer : DocumentColorizingTransformer
     {
         /// <summary>
-        ///     ColorizeLineの処理を行う。
+        /// ColorizeLineの処理を行う。
         /// </summary>
         protected override void ColorizeLine(DocumentLine line)
         {
@@ -91,7 +91,7 @@ public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
-    ///     CommandLogContentPresenterの処理を行う。
+    /// CommandLogContentPresenterの処理を行う。
     /// </summary>
     public CommandLogContentPresenter() : base(new TextArea(), new TextDocument())
     {
@@ -106,7 +106,7 @@ public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
     }
 
     /// <summary>
-    ///     ReceiveCommandLogイベントのハンドラ。
+    /// ReceiveCommandLogイベントのハンドラ。
     /// </summary>
     public void OnReceiveCommandLog(string line)
     {
@@ -116,7 +116,7 @@ public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -131,7 +131,7 @@ public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -147,7 +147,7 @@ public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

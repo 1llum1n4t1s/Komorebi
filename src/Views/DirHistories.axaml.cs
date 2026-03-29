@@ -5,12 +5,12 @@ using Avalonia.Input;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ディレクトリ履歴ビューのコードビハインド。
+/// ディレクトリ履歴ビューのコードビハインド。
 /// </summary>
 public partial class DirHistories : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public DirHistories()
     {
@@ -18,7 +18,7 @@ public partial class DirHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     PressCommitSHAイベントのハンドラ。
+    /// PressCommitSHAイベントのハンドラ。
     /// </summary>
     private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
     {
@@ -32,7 +32,7 @@ public partial class DirHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     CommitSubjectDataContextChangedイベントのハンドラ。
+    /// CommitSubjectDataContextChangedイベントのハンドラ。
     /// </summary>
     private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
     {
@@ -41,7 +41,7 @@ public partial class DirHistories : ChromelessWindow
     }
 
     /// <summary>
-    ///     CommitSubjectPointerMovedイベントのハンドラ。
+    /// CommitSubjectPointerMovedイベントのハンドラ。
     /// </summary>
     private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
     {

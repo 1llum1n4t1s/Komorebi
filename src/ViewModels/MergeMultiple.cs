@@ -89,7 +89,7 @@ public class MergeMultiple : Popup
     /// </summary>
     private List<string> ConvertTargetToMergeSources()
     {
-        var ret = new List<string>();
+        List<string> ret = [];
         foreach (var t in Targets)
         {
             if (t is Models.Branch branch)

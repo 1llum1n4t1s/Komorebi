@@ -9,14 +9,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリツリー内のノード（リポジトリまたはグループフォルダ）を表すViewModel。
-///     ウェルカム画面やランチャーのサイドバーに表示されるツリー構造の各項目を管理する。
+/// リポジトリツリー内のノード（リポジトリまたはグループフォルダ）を表すViewModel。
+/// ウェルカム画面やランチャーのサイドバーに表示されるツリー構造の各項目を管理する。
 /// </summary>
 public class RepositoryNode : ObservableObject
 {
     /// <summary>
-    ///     ノードの一意識別子。リポジトリの場合はフルパス、グループの場合はグループ名。
-    ///     パス区切り文字は正規化され、末尾のスラッシュは除去される。
+    /// ノードの一意識別子。リポジトリの場合はフルパス、グループの場合はグループ名。
+    /// パス区切り文字は正規化され、末尾のスラッシュは除去される。
     /// </summary>
     public string Id
     {
@@ -29,7 +29,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     ノードの表示名。UIに表示されるリポジトリ名またはグループ名。
+    /// ノードの表示名。UIに表示されるリポジトリ名またはグループ名。
     /// </summary>
     public string Name
     {
@@ -38,7 +38,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     ブックマークのインデックス。色分け用のブックマーク識別子（0はブックマークなし）。
+    /// ブックマークのインデックス。色分け用のブックマーク識別子（0はブックマークなし）。
     /// </summary>
     public int Bookmark
     {
@@ -47,7 +47,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     このノードがリポジトリかどうか。falseの場合はグループフォルダ。
+    /// このノードがリポジトリかどうか。falseの場合はグループフォルダ。
     /// </summary>
     public bool IsRepository
     {
@@ -56,7 +56,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     ツリー上でこのノードが展開されているかどうか。
+    /// ツリー上でこのノードが展開されているかどうか。
     /// </summary>
     public bool IsExpanded
     {
@@ -65,7 +65,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     検索フィルタリング時の表示/非表示状態。JSON保存対象外。
+    /// 検索フィルタリング時の表示/非表示状態。JSON保存対象外。
     /// </summary>
     [JsonIgnore]
     public bool IsVisible
@@ -75,7 +75,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリのパスが存在しない場合にtrueを返す。無効なリポジトリの検出に使用。
+    /// リポジトリのパスが存在しない場合にtrueを返す。無効なリポジトリの検出に使用。
     /// </summary>
     [JsonIgnore]
     public bool IsInvalid
@@ -84,7 +84,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     ツリー内のネスト深度。UIのインデント表示に使用。JSON保存対象外。
+    /// ツリー内のネスト深度。UIのインデント表示に使用。JSON保存対象外。
     /// </summary>
     [JsonIgnore]
     public int Depth
@@ -94,7 +94,7 @@ public class RepositoryNode : ObservableObject
     } = 0;
 
     /// <summary>
-    ///     リポジトリの現在のステータス（未コミットの変更数など）。
+    /// リポジトリの現在のステータス（未コミットの変更数など）。
     /// </summary>
     public Models.RepositoryStatus Status
     {
@@ -103,7 +103,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     子ノードのリスト。グループフォルダの場合に子リポジトリやサブグループを保持する。
+    /// 子ノードのリスト。グループフォルダの場合に子リポジトリやサブグループを保持する。
     /// </summary>
     public List<RepositoryNode> SubNodes
     {
@@ -112,7 +112,7 @@ public class RepositoryNode : ObservableObject
     } = [];
 
     /// <summary>
-    ///     ノードを開く。リポジトリの場合は新しいタブで開き、グループの場合は全子ノードを再帰的に開く。
+    /// ノードを開く。リポジトリの場合は新しいタブで開き、グループの場合は全子ノードを再帰的に開く。
     /// </summary>
     public void Open()
     {
@@ -127,7 +127,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     ノードの編集ダイアログを表示する。名前やパスの変更が可能。
+    /// ノードの編集ダイアログを表示する。名前やパスの変更が可能。
     /// </summary>
     public void Edit()
     {
@@ -137,7 +137,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     このノードの下にサブフォルダ（グループ）を作成するダイアログを表示する。
+    /// このノードの下にサブフォルダ（グループ）を作成するダイアログを表示する。
     /// </summary>
     public void AddSubFolder()
     {
@@ -147,7 +147,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     ノードを別のグループに移動するダイアログを表示する。
+    /// ノードを別のグループに移動するダイアログを表示する。
     /// </summary>
     public void Move()
     {
@@ -157,7 +157,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリをOSのファイルマネージャで開く。
+    /// リポジトリをOSのファイルマネージャで開く。
     /// </summary>
     public void OpenInFileManager()
     {
@@ -167,7 +167,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリのディレクトリでターミナルを開く。
+    /// リポジトリのディレクトリでターミナルを開く。
     /// </summary>
     public void OpenTerminal()
     {
@@ -177,7 +177,7 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     ノードの削除確認ダイアログを表示する。
+    /// ノードの削除確認ダイアログを表示する。
     /// </summary>
     public void Delete()
     {
@@ -187,9 +187,9 @@ public class RepositoryNode : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリのステータスを非同期に更新する。
-    ///     グループノードの場合は全子ノードを再帰的に更新する。
-    ///     強制更新でない場合、前回の更新から10秒以内の再更新はスキップする。
+    /// リポジトリのステータスを非同期に更新する。
+    /// グループノードの場合は全子ノードを再帰的に更新する。
+    /// 強制更新でない場合、前回の更新から10秒以内の再更新はスキップする。
     /// </summary>
     /// <param name="force">trueの場合、クールダウン期間を無視して強制更新する</param>
     /// <param name="token">キャンセルトークン</param>
@@ -205,7 +205,7 @@ public class RepositoryNode : ObservableObject
             if (SubNodes.Count > 0)
             {
                 // 列挙中のコレクション変更を回避するためコピーを作成
-                var nodes = new List<RepositoryNode>();
+                List<RepositoryNode> nodes = [];
                 nodes.AddRange(SubNodes);
 
                 foreach (var node in nodes)

@@ -1,17 +1,15 @@
-﻿using System.ComponentModel;
-
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 
 namespace Komorebi.Views;
 
 /// <summary>
-///     自動更新（Velopack）ダイアログのコードビハインド。
+/// 自動更新（Velopack）ダイアログのコードビハインド。
 /// </summary>
 public partial class SelfUpdate : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public SelfUpdate()
     {
@@ -20,7 +18,7 @@ public partial class SelfUpdate : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられる際の処理。
+    /// ウィンドウが閉じられる際の処理。
     /// </summary>
     protected override void OnClosing(WindowClosingEventArgs e)
     {
@@ -31,7 +29,7 @@ public partial class SelfUpdate : ChromelessWindow
     }
 
     /// <summary>
-    ///     CloseWindowの処理を行う。
+    /// CloseWindowの処理を行う。
     /// </summary>
     private void CloseWindow(object _1, RoutedEventArgs _2)
     {
@@ -39,7 +37,7 @@ public partial class SelfUpdate : ChromelessWindow
     }
 
     /// <summary>
-    ///     DownloadAndInstallの処理を行う。
+    /// DownloadAndInstallの処理を行う。
     /// </summary>
     private void DownloadAndInstall(object sender, RoutedEventArgs e)
     {
@@ -53,7 +51,7 @@ public partial class SelfUpdate : ChromelessWindow
     }
 
     /// <summary>
-    ///     IgnoreThisVelopackVersionの処理を行う。
+    /// IgnoreThisVelopackVersionの処理を行う。
     /// </summary>
     private void IgnoreThisVelopackVersion(object sender, RoutedEventArgs e)
     {

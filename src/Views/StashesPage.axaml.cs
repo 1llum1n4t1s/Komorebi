@@ -9,12 +9,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     スタッシュ一覧ページのコードビハインド。
+/// スタッシュ一覧ページのコードビハインド。
 /// </summary>
 public partial class StashesPage : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public StashesPage()
     {
@@ -22,7 +22,7 @@ public partial class StashesPage : UserControl
     }
 
     /// <summary>
-    ///     MainLayoutSizeChangedイベントのハンドラ。
+    /// MainLayoutSizeChangedイベントのハンドラ。
     /// </summary>
     private void OnMainLayoutSizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -38,7 +38,7 @@ public partial class StashesPage : UserControl
     }
 
     /// <summary>
-    ///     StashListKeyDownイベントのハンドラ。
+    /// StashListKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnStashListKeyDown(object sender, KeyEventArgs e)
     {
@@ -58,7 +58,7 @@ public partial class StashesPage : UserControl
     }
 
     /// <summary>
-    ///     StashContextRequestedイベントのハンドラ。
+    /// StashContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnStashContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -136,7 +136,7 @@ public partial class StashesPage : UserControl
     }
 
     /// <summary>
-    ///     StashDoubleTappedイベントのハンドラ。
+    /// StashDoubleTappedイベントのハンドラ。
     /// </summary>
     private void OnStashDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -148,7 +148,7 @@ public partial class StashesPage : UserControl
     }
 
     /// <summary>
-    ///     ChangeContextRequestedイベントのハンドラ。
+    /// ChangeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -261,7 +261,7 @@ public partial class StashesPage : UserControl
     }
 
     /// <summary>
-    ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+    /// ChangeCollectionViewKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
     {

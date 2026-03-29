@@ -4,13 +4,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     カスタムアクションコントロール設定のViewModel。
-///     カスタムアクションに使用するUIコントロール（テキストボックス等）の追加・削除・並び替えを管理する。
+/// カスタムアクションコントロール設定のViewModel。
+/// カスタムアクションに使用するUIコントロール（テキストボックス等）の追加・削除・並び替えを管理する。
 /// </summary>
 public class ConfigureCustomActionControls : ObservableObject
 {
     /// <summary>
-    ///     カスタムアクションコントロールのリスト。
+    /// カスタムアクションコントロールのリスト。
     /// </summary>
     public AvaloniaList<Models.CustomActionControl> Controls
     {
@@ -18,7 +18,7 @@ public class ConfigureCustomActionControls : ObservableObject
     }
 
     /// <summary>
-    ///     現在編集中のカスタムアクションコントロール。
+    /// 現在編集中のカスタムアクションコントロール。
     /// </summary>
     public Models.CustomActionControl Edit
     {
@@ -27,7 +27,7 @@ public class ConfigureCustomActionControls : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。カスタムアクションコントロールリストを受け取って初期化する。
+    /// コンストラクタ。カスタムアクションコントロールリストを受け取って初期化する。
     /// </summary>
     /// <param name="controls">カスタムアクションコントロールのリスト</param>
     public ConfigureCustomActionControls(AvaloniaList<Models.CustomActionControl> controls)
@@ -36,8 +36,8 @@ public class ConfigureCustomActionControls : ObservableObject
     }
 
     /// <summary>
-    ///     新しいカスタムアクションコントロールを追加する。
-    ///     デフォルトで「Unnamed」という名前のテキストボックスを作成し、編集対象に設定する。
+    /// 新しいカスタムアクションコントロールを追加する。
+    /// デフォルトで「Unnamed」という名前のテキストボックスを作成し、編集対象に設定する。
     /// </summary>
     public void Add()
     {
@@ -54,7 +54,7 @@ public class ConfigureCustomActionControls : ObservableObject
     }
 
     /// <summary>
-    ///     現在編集中のカスタムアクションコントロールを削除する。
+    /// 現在編集中のカスタムアクションコントロールを削除する。
     /// </summary>
     public void Remove()
     {
@@ -67,7 +67,7 @@ public class ConfigureCustomActionControls : ObservableObject
     }
 
     /// <summary>
-    ///     現在編集中のコントロールを1つ上に移動する。
+    /// 現在編集中のコントロールを1つ上に移動する。
     /// </summary>
     public void MoveUp()
     {
@@ -81,7 +81,7 @@ public class ConfigureCustomActionControls : ObservableObject
     }
 
     /// <summary>
-    ///     現在編集中のコントロールを1つ下に移動する。
+    /// 現在編集中のコントロールを1つ下に移動する。
     /// </summary>
     public void MoveDown()
     {

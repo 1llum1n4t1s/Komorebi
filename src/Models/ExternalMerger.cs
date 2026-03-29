@@ -8,7 +8,7 @@ using Avalonia.Platform;
 namespace Komorebi.Models;
 
 /// <summary>
-///     外部マージ/diffツールの定義。プラットフォームごとにサポートするツールのリストを保持する。
+/// 外部マージ/diffツールの定義。プラットフォームごとにサポートするツールのリストを保持する。
 /// </summary>
 /// <param name="icon">アイコンリソース名</param>
 /// <param name="name">ツールの表示名</param>
@@ -29,7 +29,7 @@ public class ExternalMerger(string icon, string name, string finder, string merg
     public string DiffCmd { get; } = diffCmd;
 
     /// <summary>
-    ///     ツールのアイコン画像（埋め込みリソースから読み込み）
+    /// ツールのアイコン画像（埋め込みリソースから読み込み）
     /// </summary>
     public Bitmap IconImage
     {
@@ -41,7 +41,7 @@ public class ExternalMerger(string icon, string name, string finder, string merg
     }
 
     /// <summary>
-    ///     プラットフォーム別のサポート対象マージツールリスト
+    /// プラットフォーム別のサポート対象マージツールリスト
     /// </summary>
     public static readonly List<ExternalMerger> Supported;
 
@@ -102,8 +102,8 @@ public class ExternalMerger(string icon, string name, string finder, string merg
     }
 
     /// <summary>
-    ///     実行ファイルを検索するためのパターン配列を取得する。
-    ///     Windowsではセミコロン区切りで複数パターン、他OSではファイル名のみ。
+    /// 実行ファイルを検索するためのパターン配列を取得する。
+    /// Windowsではセミコロン区切りで複数パターン、他OSではファイル名のみ。
     /// </summary>
     /// <returns>検索パターンの配列</returns>
     public string[] GetPatternsToFindExecFile()
@@ -116,7 +116,7 @@ public class ExternalMerger(string icon, string name, string finder, string merg
 }
 
 /// <summary>
-///     diff/マージツールの実行ファイルとコマンドテンプレートを保持するクラス
+/// diff/マージツールの実行ファイルとコマンドテンプレートを保持するクラス
 /// </summary>
 public class DiffMergeTool(string exec, string cmd)
 {

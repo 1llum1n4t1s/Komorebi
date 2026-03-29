@@ -4,8 +4,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     UIレイアウト情報を保持するクラス。
-///     ウィンドウサイズ、サイドバー幅、各パネルの分割幅などを管理する。
+/// UIレイアウト情報を保持するクラス。
+/// ウィンドウサイズ、サイドバー幅、各パネルの分割幅などを管理する。
 /// </summary>
 public class LayoutInfo : ObservableObject
 {

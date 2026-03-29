@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-
-using Xunit;
-
 namespace Komorebi.Tests.ViewModels
 {
     public class BranchTreeNodeTests

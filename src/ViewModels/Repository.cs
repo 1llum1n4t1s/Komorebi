@@ -13,9 +13,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリのメインViewModel。
-///     ブランチ、タグ、履歴、ワーキングコピー、スタッシュ、サブモジュール、
-///     ワークツリー、Bisect、LFS、Git Flow、カスタムアクション、自動フェッチ等を統合管理する。
+/// リポジトリのメインViewModel。
+/// ブランチ、タグ、履歴、ワーキングコピー、スタッシュ、サブモジュール、
+/// ワークツリー、Bisect、LFS、Git Flow、カスタムアクション、自動フェッチ等を統合管理する。
 /// </summary>
 public class Repository : ObservableObject, Models.IRepository
 {
@@ -481,7 +481,7 @@ public class Repository : ObservableObject, Models.IRepository
     } = [];
 
     /// <summary>
-    ///     コンストラクタ。リポジトリのパスを正規化し、ワークツリーの場合はcommondirを解決する。
+    /// コンストラクタ。リポジトリのパスを正規化し、ワークツリーの場合はcommondirを解決する。
     /// </summary>
     public Repository(bool isBare, string path, string gitDir)
     {
@@ -512,8 +512,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     リポジトリを開く。設定・UI状態の読み込み、ファイル監視の開始、
-    ///     各種ビューの初期化、自動フェッチタイマーの起動、全データの更新を行う。
+    /// リポジトリを開く。設定・UI状態の読み込み、ファイル監視の開始、
+    /// 各種ビューの初期化、自動フェッチタイマーの起動、全データの更新を行う。
     /// </summary>
     public void Open()
     {
@@ -552,8 +552,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     リポジトリを閉じる。全ての非同期タスクをキャンセルし、
-    ///     タイマー・ウォッチャー・ビューを解放してリソースをクリーンアップする。
+    /// リポジトリを閉じる。全ての非同期タスクをキャンセルし、
+    /// タイマー・ウォッチャー・ビューを解放してリソースをクリーンアップする。
     /// </summary>
     public void Close()
     {
@@ -742,8 +742,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     全データを一括更新する。コミット、ブランチ、タグ、サブモジュール、
-    ///     ワークツリー、ワーキングコピー、スタッシュ、課題トラッカー、Git Flow設定を再取得する。
+    /// 全データを一括更新する。コミット、ブランチ、タグ、サブモジュール、
+    /// ワークツリー、ワーキングコピー、スタッシュ、課題トラッカー、Git Flow設定を再取得する。
     /// </summary>
     public void RefreshAll()
     {
@@ -757,7 +757,7 @@ public class Repository : ObservableObject, Models.IRepository
 
         Task.Run(async () =>
         {
-            var issuetrackers = new List<Models.IssueTracker>();
+            List<Models.IssueTracker> issuetrackers = [];
             await new Commands.IssueTracker(FullPath, true).ReadAllAsync(issuetrackers, true).ConfigureAwait(false);
             await new Commands.IssueTracker(FullPath, false).ReadAllAsync(issuetrackers, false).ConfigureAwait(false);
             Dispatcher.UIThread.Post(() =>
@@ -1063,9 +1063,9 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     指定ブランチツリーノードの履歴フィルタモードを設定する。
-    ///     ブランチの場合は上流も連動、フォルダの場合は子ブランチのフィルタを削除する。
-    ///     親フォルダのフィルタモードもリセットする。
+    /// 指定ブランチツリーノードの履歴フィルタモードを設定する。
+    /// ブランチの場合は上流も連動、フォルダの場合は子ブランチのフィルタを削除する。
+    /// 親フォルダのフィルタモードもリセットする。
     /// </summary>
     public void SetBranchFilterMode(BranchTreeNode node, Models.FilterMode mode, bool clearExists, bool refresh)
     {
@@ -1106,7 +1106,7 @@ public class Repository : ObservableObject, Models.IRepository
             if (lastSepIdx <= 0)
                 break;
 
-            var parentPath = cur.Path.Substring(0, lastSepIdx);
+            var parentPath = cur.Path[..lastSepIdx];
             var parent = FindBranchNode(tree, parentPath);
             if (parent is null)
                 break;
@@ -1148,7 +1148,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>指定スコープのカスタムアクション一覧を取得する。グローバルとリポジトリ固有の両方を含む。</summary>
     public List<(Models.CustomAction, CustomActionContextMenuLabel)> GetCustomActions(Models.CustomActionScope scope)
     {
-        var actions = new List<(Models.CustomAction, CustomActionContextMenuLabel)>();
+        List<(Models.CustomAction, CustomActionContextMenuLabel)> actions = [];
 
         foreach (var act in Preferences.Instance.CustomActions)
         {
@@ -1166,8 +1166,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     Bisectサブコマンド（start/good/bad/reset等）を実行する。
-    ///     完了後にブランチを更新し、HEADにナビゲートする。
+    /// Bisectサブコマンド（start/good/bad/reset等）を実行する。
+    /// 完了後にブランチを更新し、HEADにナビゲートする。
     /// </summary>
     public async Task ExecBisectCommandAsync(string subcmd)
     {
@@ -1181,7 +1181,7 @@ public class Repository : ObservableObject, Models.IRepository
 
         var head = await new Commands.QueryRevisionByRefName(FullPath, "HEAD").GetResultAsync();
         var nlIdx = log.Content.IndexOf('\n');
-        var bisectMsg = nlIdx >= 0 ? log.Content.Substring(nlIdx).Trim() : log.Content.Trim();
+        var bisectMsg = nlIdx >= 0 ? log.Content[nlIdx..].Trim() : log.Content.Trim();
         if (!succ)
             App.RaiseException(FullPath, bisectMsg);
         else if (log.Content.Contains("is the first bad commit"))
@@ -1201,8 +1201,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     ブランチとリモートの一覧を非同期で再取得し、ブランチツリーを再構築する。
-    ///     前回の取得中タスクがあればキャンセルする。
+    /// ブランチとリモートの一覧を非同期で再取得し、ブランチツリーを再構築する。
+    /// 前回の取得中タスクがあればキャンセルする。
     /// </summary>
     public void RefreshBranches()
     {
@@ -1263,8 +1263,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     タグ一覧を非同期で再取得し、表示用タグリストを再構築する。
-    ///     前回の取得中タスクがあればキャンセルする。
+    /// タグ一覧を非同期で再取得し、表示用タグリストを再構築する。
+    /// 前回の取得中タスクがあればキャンセルする。
     /// </summary>
     public void RefreshTags()
     {
@@ -1290,8 +1290,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     コミット履歴を非同期で再取得し、コミットグラフを再構築する。
-    ///     フィルタ条件と最大件数を適用する。前回の取得中タスクがあればキャンセルする。
+    /// コミット履歴を非同期で再取得し、コミットグラフを再構築する。
+    /// フィルタ条件と最大件数を適用する。前回の取得中タスクがあればキャンセルする。
     /// </summary>
     public void RefreshCommits()
     {
@@ -1351,8 +1351,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     サブモジュール一覧を非同期で再取得する。
-    ///     .gitmodulesが存在しない場合はクリアし、変更がある場合のみUIを更新する。
+    /// サブモジュール一覧を非同期で再取得する。
+    /// .gitmodulesが存在しない場合はクリアし、変更がある場合のみUIを更新する。
     /// </summary>
     public void RefreshSubmodules()
     {
@@ -1388,7 +1388,7 @@ public class Repository : ObservableObject, Models.IRepository
                 bool hasChanged = _submodules.Count != submodules.Count;
                 if (!hasChanged)
                 {
-                    var old = new Dictionary<string, Models.Submodule>();
+                    Dictionary<string, Models.Submodule> old = [];
                     foreach (var module in _submodules)
                         old.Add(module.Path, module);
 
@@ -1420,8 +1420,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     ワーキングコピーの変更一覧を非同期で再取得する。
-    ///     ベアリポジトリの場合は何もしない。前回の取得中タスクがあればキャンセルする。
+    /// ワーキングコピーの変更一覧を非同期で再取得する。
+    /// ベアリポジトリの場合は何もしない。前回の取得中タスクがあればキャンセルする。
     /// </summary>
     public void RefreshWorkingCopyChanges()
     {
@@ -1468,8 +1468,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     スタッシュ一覧を非同期で再取得する。
-    ///     ベアリポジトリの場合は何もしない。前回の取得中タスクがあればキャンセルする。
+    /// スタッシュ一覧を非同期で再取得する。
+    /// ベアリポジトリの場合は何もしない。前回の取得中タスクがあればキャンセルする。
     /// </summary>
     public void RefreshStashes()
     {
@@ -1529,10 +1529,10 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     指定ブランチをチェックアウトする。
-    ///     ローカルブランチがワークツリーに紐付いている場合はワークツリーを開く。
-    ///     リモートブランチの場合はローカル追跡ブランチがあればそちらを使用し、
-    ///     なければ新規ブランチ作成ダイアログを表示する。
+    /// 指定ブランチをチェックアウトする。
+    /// ローカルブランチがワークツリーに紐付いている場合はワークツリーを開く。
+    /// リモートブランチの場合はローカル追跡ブランチがあればそちらを使用し、
+    /// なければ新規ブランチ作成ダイアログを表示する。
     /// </summary>
     public async Task CheckoutBranchAsync(Models.Branch branch)
     {
@@ -1655,8 +1655,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     更新可能なサブモジュールを自動更新する。
-    ///     設定で確認が有効な場合は確認ダイアログを表示する。
+    /// 更新可能なサブモジュールを自動更新する。
+    /// 設定で確認が有効な場合は確認ダイアログを表示する。
     /// </summary>
     public async Task AutoUpdateSubmodulesAsync(Models.ICommandLog log)
     {
@@ -1763,8 +1763,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     優先OpenAIサービスのリストを取得する。
-    ///     リポジトリ固有の設定があればそれを優先し、なければ全サービスを返す。
+    /// 優先OpenAIサービスのリストを取得する。
+    /// リポジトリ固有の設定があればそれを優先し、なければ全サービスを返す。
     /// </summary>
     public List<Models.OpenAIService> GetPreferredOpenAIServices()
     {
@@ -1776,7 +1776,7 @@ public class Repository : ObservableObject, Models.IRepository
             return [services[0]];
 
         var preferred = _settings.PreferredOpenAIService;
-        var all = new List<Models.OpenAIService>();
+        List<Models.OpenAIService> all = [];
         foreach (var service in services)
         {
             if (service.Name.Equals(preferred, StringComparison.Ordinal))
@@ -1803,8 +1803,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     指定コミットをパッチファイルとして保存する。
-    ///     ファイル名はインデックスとコミットサブジェクトから安全な文字列を生成する。
+    /// 指定コミットをパッチファイルとして保存する。
+    /// ファイル名はインデックスとコミットサブジェクトから安全な文字列を生成する。
     /// </summary>
     public async Task<bool> SaveCommitAsPatchAsync(Models.Commit commit, string folder, int index = 0)
     {
@@ -1856,9 +1856,9 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     ブランチとリモートからブランチツリーを構築する。
-    ///     フィルタが設定されている場合はフィルタに一致するブランチのみを含める。
-    ///     構築後にフィルタモードを適用する。
+    /// ブランチとリモートからブランチツリーを構築する。
+    /// フィルタが設定されている場合はフィルタに一致するブランチのみを含める。
+    /// 構築後にフィルタモードを適用する。
     /// </summary>
     private BranchTreeNode.Builder BuildBranchTree(List<Models.Branch> branches, List<Models.Remote> remotes, bool forceExpanded = false)
     {
@@ -1871,14 +1871,14 @@ public class Repository : ObservableObject, Models.IRepository
 
             // 再構築後のツリーから実際に展開されているパスを収集して保存する。
             // IsCurrentによる自動展開も含め、存在しないパスは自然に除外される。
-            var expanded = new List<string>();
+            List<string> expanded = [];
             BranchTreeNode.Builder.CollectExpandedPaths(builder.Locals, expanded);
             BranchTreeNode.Builder.CollectExpandedPaths(builder.Remotes, expanded);
             _uiStates.ExpandedBranchNodesInSideBar = expanded;
         }
         else
         {
-            var visibles = new List<Models.Branch>();
+            List<Models.Branch> visibles = [];
             foreach (var b in branches)
             {
                 if (b.FullName.Contains(_filter, StringComparison.OrdinalIgnoreCase))
@@ -1895,8 +1895,8 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     表示用タグコレクションを構築する。
-    ///     ソートモードに応じてソートし、フィルタを適用後、ツリーまたはリスト形式で返す。
+    /// 表示用タグコレクションを構築する。
+    /// ソートモードに応じてソートし、フィルタを適用後、ツリーまたはリスト形式で返す。
     /// </summary>
     private object BuildVisibleTags()
     {
@@ -1910,7 +1910,7 @@ public class Repository : ObservableObject, Models.IRepository
                 break;
         }
 
-        var visible = new List<Models.Tag>();
+        List<Models.Tag> visible = [];
         if (string.IsNullOrEmpty(_filter))
         {
             visible.AddRange(_tags);
@@ -1944,12 +1944,12 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     表示用サブモジュールコレクションを構築する。
-    ///     フィルタを適用後、ツリーまたはリスト形式で返す。
+    /// 表示用サブモジュールコレクションを構築する。
+    /// フィルタを適用後、ツリーまたはリスト形式で返す。
     /// </summary>
     private object BuildVisibleSubmodules()
     {
-        var visible = new List<Models.Submodule>();
+        List<Models.Submodule> visible = [];
         if (string.IsNullOrEmpty(_filter))
         {
             visible.AddRange(_submodules);
@@ -1984,7 +1984,7 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>ブランチツリーの各ノードにフィルタモードを再帰的に適用する。</summary>
-    private void UpdateBranchTreeFilterMode(List<BranchTreeNode> nodes, Dictionary<string, Models.FilterMode> map)
+    private static void UpdateBranchTreeFilterMode(List<BranchTreeNode> nodes, Dictionary<string, Models.FilterMode> map)
     {
         foreach (var node in nodes)
         {
@@ -2013,7 +2013,7 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>ブランチツリーの全ノードのフィルタモードをNoneに再帰的にリセットする。</summary>
-    private void ResetBranchTreeFilterMode(List<BranchTreeNode> nodes)
+    private static void ResetBranchTreeFilterMode(List<BranchTreeNode> nodes)
     {
         foreach (var node in nodes)
         {
@@ -2028,7 +2028,7 @@ public class Repository : ObservableObject, Models.IRepository
     {
         if (VisibleTags is TagCollectionAsTree tree)
         {
-            var filters = new Dictionary<string, Models.FilterMode>();
+            Dictionary<string, Models.FilterMode> filters = [];
             foreach (var node in tree.Tree)
                 node.UpdateFilterMode(filters);
         }
@@ -2040,7 +2040,7 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>指定パスに一致するブランチツリーノードを再帰的に検索する。見つからない場合はnull。</summary>
-    private BranchTreeNode FindBranchNode(List<BranchTreeNode> nodes, string path)
+    private static BranchTreeNode FindBranchNode(List<BranchTreeNode> nodes, string path)
     {
         if (string.IsNullOrEmpty(path))
             return null;
@@ -2075,9 +2075,9 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
-    ///     UIスレッド上で自動フェッチを実行する。
-    ///     設定の有効/無効、ロックファイルの存在、前回フェッチからの経過時間をチェックし、
-    ///     条件を満たした場合に全リモートまたはデフォルトリモートからフェッチする。
+    /// UIスレッド上で自動フェッチを実行する。
+    /// 設定の有効/無効、ロックファイルの存在、前回フェッチからの経過時間をチェックし、
+    /// 条件を満たした場合に全リモートまたはデフォルトリモートからフェッチする。
     /// </summary>
     private async Task AutoFetchOnUIThread()
     {
@@ -2103,7 +2103,7 @@ public class Repository : ObservableObject, Models.IRepository
             if (desire > now)
                 return;
 
-            var remotes = new List<string>();
+            List<string> remotes = [];
             foreach (var r in _remotes)
                 remotes.Add(r.Name);
 

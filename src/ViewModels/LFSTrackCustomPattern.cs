@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     LFSのカスタム追跡パターンを追加するダイアログのViewModel。
+/// LFSのカスタム追跡パターンを追加するダイアログのViewModel。
 /// </summary>
 public class LFSTrackCustomPattern : Popup
 {

@@ -13,9 +13,9 @@ using Pfim;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     画像ソースを管理するクラス。
-///     ファイル、Gitリビジョン、LFSオブジェクトから各種画像フォーマットを読み込む。
-///     対応形式: ICO, BMP, GIF, JPG, PNG, WebP, TGA, DDS, TIFF。
+/// 画像ソースを管理するクラス。
+/// ファイル、Gitリビジョン、LFSオブジェクトから各種画像フォーマットを読み込む。
+/// 対応形式: ICO, BMP, GIF, JPG, PNG, WebP, TGA, DDS, TIFF。
 /// </summary>
 public class ImageSource
 {
@@ -26,7 +26,7 @@ public class ImageSource
     public long Size { get; }
 
     /// <summary>
-    ///     コンストラクタ。ビットマップとファイルサイズを指定して初期化する。
+    /// コンストラクタ。ビットマップとファイルサイズを指定して初期化する。
     /// </summary>
     public ImageSource(Bitmap bitmap, long size)
     {
@@ -35,7 +35,7 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     ファイル拡張子に基づいて適切な画像デコーダを判定する。
+    /// ファイル拡張子に基づいて適切な画像デコーダを判定する。
     /// </summary>
     public static Models.ImageDecoder GetDecoder(string file)
     {
@@ -51,7 +51,7 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     ローカルファイルから画像を非同期で読み込む。
+    /// ローカルファイルから画像を非同期で読み込む。
     /// </summary>
     public static async Task<ImageSource> FromFileAsync(string fullpath, Models.ImageDecoder decoder)
     {
@@ -60,7 +60,7 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     Gitリビジョンから画像を非同期で読み込む。
+    /// Gitリビジョンから画像を非同期で読み込む。
     /// </summary>
     public static async Task<ImageSource> FromRevisionAsync(string repo, string revision, string file, Models.ImageDecoder decoder)
     {
@@ -69,8 +69,8 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     Git LFSオブジェクトから画像を非同期で読み込む。
-    ///     ローカルキャッシュがあればそれを使用し、なければリモートから取得する。
+    /// Git LFSオブジェクトから画像を非同期で読み込む。
+    /// ローカルキャッシュがあればそれを使用し、なければリモートから取得する。
     /// </summary>
     public static async Task<ImageSource> FromLFSObjectAsync(string repo, Models.LFSObject lfs, Models.ImageDecoder decoder)
     {
@@ -78,7 +78,7 @@ public class ImageSource
             return new ImageSource(null, 0);
 
         var commonDir = await new Commands.QueryGitCommonDir(repo).GetResultAsync().ConfigureAwait(false);
-        var localFile = Path.Combine(commonDir, "lfs", "objects", lfs.Oid.Substring(0, 2), lfs.Oid.Substring(2, 2), lfs.Oid);
+        var localFile = Path.Combine(commonDir, "lfs", "objects", lfs.Oid[..2], lfs.Oid[2..4], lfs.Oid);
         if (File.Exists(localFile))
             return await FromFileAsync(localFile, decoder).ConfigureAwait(false);
 
@@ -87,8 +87,8 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     ストリームからデコーダを使って画像を読み込む内部メソッド。
-    ///     デコーダ種別に応じて適切なデコード処理に振り分ける。
+    /// ストリームからデコーダを使って画像を読み込む内部メソッド。
+    /// デコーダ種別に応じて適切なデコード処理に振り分ける。
     /// </summary>
     private static ImageSource LoadFromStream(Stream stream, Models.ImageDecoder decoder)
     {
@@ -117,7 +117,7 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     Avaloniaのビルトインデコーダで画像を読み込む（ICO, BMP, GIF, JPG, PNG, WebP対応）。
+    /// Avaloniaのビルトインデコーダで画像を読み込む（ICO, BMP, GIF, JPG, PNG, WebP対応）。
     /// </summary>
     private static ImageSource DecodeWithAvalonia(Stream stream, long size)
     {
@@ -126,8 +126,8 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     Pfimライブラリを使用してTGA/DDS画像をデコードする。
-    ///     各ピクセルフォーマットに応じてAvaloniaのBitmapに変換する。
+    /// Pfimライブラリを使用してTGA/DDS画像をデコードする。
+    /// 各ピクセルフォーマットに応じてAvaloniaのBitmapに変換する。
     /// </summary>
     private static ImageSource DecodeWithPfim(Stream stream, long size)
     {
@@ -208,8 +208,8 @@ public class ImageSource
     }
 
     /// <summary>
-    ///     LibTiffを使用してTIFF画像をデコードする。
-    ///     RGBA形式でピクセルデータを読み込み、WritableBitmapに変換する。
+    /// LibTiffを使用してTIFF画像をデコードする。
+    /// RGBA形式でピクセルデータを読み込み、WritableBitmapに変換する。
     /// </summary>
     private static ImageSource DecodeWithTiff(Stream stream, long size)
     {

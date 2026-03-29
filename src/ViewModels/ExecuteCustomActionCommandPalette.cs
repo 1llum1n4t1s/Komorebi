@@ -5,14 +5,18 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コマンドパレットに表示されるカスタムアクションのエントリ。
+/// コマンドパレットに表示されるカスタムアクションのエントリ。
 /// </summary>
 public class ExecuteCustomActionCommandPaletteCmd
 {
+    /// <summary>カスタムアクションの定義。</summary>
     public Models.CustomAction Action { get; set; }
+    /// <summary>グローバルアクションかどうか。</summary>
     public bool IsGlobal { get; set; }
+    /// <summary>アクション名。</summary>
     public string Name { get => Action.Name; }
 
+    /// <summary>コンストラクタ。アクション定義とグローバルフラグを指定する。</summary>
     public ExecuteCustomActionCommandPaletteCmd(Models.CustomAction action, bool isGlobal)
     {
         Action = action;
@@ -21,13 +25,13 @@ public class ExecuteCustomActionCommandPaletteCmd
 }
 
 /// <summary>
-///     カスタムアクション実行用のコマンドパレットViewModel。
-///     フィルタ入力によるアクションの絞り込みと選択・実行を提供する。
+/// カスタムアクション実行用のコマンドパレットViewModel。
+/// フィルタ入力によるアクションの絞り込みと選択・実行を提供する。
 /// </summary>
 public class ExecuteCustomActionCommandPalette : ICommandPalette
 {
     /// <summary>
-    ///     フィルタ適用後の表示アクションリスト。
+    /// フィルタ適用後の表示アクションリスト。
     /// </summary>
     public List<ExecuteCustomActionCommandPaletteCmd> VisibleActions
     {
@@ -36,7 +40,7 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     現在選択されているアクション。
+    /// 現在選択されているアクション。
     /// </summary>
     public ExecuteCustomActionCommandPaletteCmd Selected
     {
@@ -45,7 +49,7 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ文字列。変更時に表示アクションを更新する。
+    /// フィルタ文字列。変更時に表示アクションを更新する。
     /// </summary>
     public string Filter
     {
@@ -58,7 +62,7 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリスコープのカスタムアクションを取得してソートする。
+    /// コンストラクタ。リポジトリスコープのカスタムアクションを取得してソートする。
     /// </summary>
     public ExecuteCustomActionCommandPalette(Repository repo)
     {
@@ -84,7 +88,7 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタをクリアする。
+    /// フィルタをクリアする。
     /// </summary>
     public void ClearFilter()
     {
@@ -92,7 +96,7 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択されたカスタムアクションを実行する。
+    /// 選択されたカスタムアクションを実行する。
     /// </summary>
     public async Task ExecAsync()
     {
@@ -105,7 +109,7 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ文字列に基づいて表示アクションリストを更新する。
+    /// フィルタ文字列に基づいて表示アクションリストを更新する。
     /// </summary>
     private void UpdateVisibleActions()
     {
@@ -116,7 +120,7 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
             return;
         }
 
-        var visible = new List<ExecuteCustomActionCommandPaletteCmd>();
+        List<ExecuteCustomActionCommandPaletteCmd> visible = [];
         foreach (var act in _actions)
         {
             if (act.Name.Contains(filter, StringComparison.OrdinalIgnoreCase))
@@ -133,9 +137,9 @@ public class ExecuteCustomActionCommandPalette : ICommandPalette
         Selected = autoSelected;
     }
 
-    private Repository _repo;
-    private List<ExecuteCustomActionCommandPaletteCmd> _actions = [];
-    private List<ExecuteCustomActionCommandPaletteCmd> _visibleActions = [];
-    private ExecuteCustomActionCommandPaletteCmd _selected = null;
-    private string _filter;
+    private Repository _repo; // 対象リポジトリ
+    private List<ExecuteCustomActionCommandPaletteCmd> _actions = []; // 全アクションリスト
+    private List<ExecuteCustomActionCommandPaletteCmd> _visibleActions = []; // フィルタ適用後のリスト
+    private ExecuteCustomActionCommandPaletteCmd _selected = null; // 選択中のアクション
+    private string _filter; // フィルタ文字列
 }

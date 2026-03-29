@@ -4,12 +4,12 @@ using Avalonia.Input;
 namespace Komorebi.Views;
 
 /// <summary>
-///     比較コマンドパレットのコードビハインド。
+/// 比較コマンドパレットのコードビハインド。
 /// </summary>
 public partial class CompareCommandPalette : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CompareCommandPalette()
     {
@@ -17,7 +17,7 @@ public partial class CompareCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -61,7 +61,7 @@ public partial class CompareCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     ItemTappedイベントのハンドラ。
+    /// ItemTappedイベントのハンドラ。
     /// </summary>
     private void OnItemTapped(object sender, TappedEventArgs e)
     {

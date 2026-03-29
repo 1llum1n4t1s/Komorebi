@@ -14,23 +14,26 @@ using AvaloniaEdit.TextMate;
 namespace Komorebi.Views;
 
 /// <summary>
-///     AIResponseViewクラス。
+/// AIResponseViewクラス。
 /// </summary>
 public class AIResponseView : TextEditor
 {
+    /// <summary>AI応答コンテンツを保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<string> ContentProperty =
         AvaloniaProperty.Register<AIResponseView, string>(nameof(Content), string.Empty);
 
+    /// <summary>AI応答のテキストコンテンツ。変更時にTextEditorのTextプロパティに反映される。</summary>
     public string Content
     {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
     }
 
+    /// <summary>スタイルキーをTextEditorに設定。</summary>
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public AIResponseView() : base(new TextArea(), new TextDocument())
     {
@@ -46,7 +49,7 @@ public class AIResponseView : TextEditor
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -62,7 +65,7 @@ public class AIResponseView : TextEditor
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -80,7 +83,7 @@ public class AIResponseView : TextEditor
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -91,7 +94,7 @@ public class AIResponseView : TextEditor
     }
 
     /// <summary>
-    ///     TextViewContextRequestedイベントのハンドラ。
+    /// TextViewContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -124,16 +127,17 @@ public class AIResponseView : TextEditor
         e.Handled = true;
     }
 
+    /// <summary>TextMateによるMarkdownシンタックスハイライト設定。</summary>
     private TextMate.Installation _textMate = null;
 }
 
 /// <summary>
-///     AIアシスタント（コミットメッセージ生成等）ダイアログのコードビハインド。
+/// AIアシスタント（コミットメッセージ生成等）ダイアログのコードビハインド。
 /// </summary>
 public partial class AIAssistant : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public AIAssistant()
     {
@@ -142,20 +146,20 @@ public partial class AIAssistant : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられる際の処理。
+    /// ウィンドウが閉じられる際の処理。
     /// </summary>
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
-        (DataContext as ViewModels.AIAssistant)?.Cancel();
+        if (DataContext is ViewModels.AIAssistant vmClosing) vmClosing.Cancel();
     }
 
     /// <summary>
-    ///     Applyイベントのハンドラ。
+    /// Applyイベントのハンドラ。
     /// </summary>
     private void OnApply(object sender, RoutedEventArgs e)
     {
-        (DataContext as ViewModels.AIAssistant)?.Apply();
+        if (DataContext is ViewModels.AIAssistant vm) vm.Apply();
         Close();
     }
 }

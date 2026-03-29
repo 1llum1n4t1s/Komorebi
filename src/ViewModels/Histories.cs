@@ -11,13 +11,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コミット履歴の表示・操作を管理するViewModel。
-///     コミットグラフ、bisect、コミット選択、ナビゲーションなどを提供する。
+/// コミット履歴の表示・操作を管理するViewModel。
+/// コミットグラフ、bisect、コミット選択、ナビゲーションなどを提供する。
 /// </summary>
 public class Histories : ObservableObject, IDisposable
 {
     /// <summary>
-    ///     履歴データの読み込み中かどうか。
+    /// 履歴データの読み込み中かどうか。
     /// </summary>
     public bool IsLoading
     {
@@ -26,7 +26,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     履歴グリッドで作者列を表示するかどうか。
+    /// 履歴グリッドで作者列を表示するかどうか。
     /// </summary>
     public bool IsAuthorColumnVisible
     {
@@ -42,7 +42,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     履歴グリッドでSHA列を表示するかどうか。
+    /// 履歴グリッドでSHA列を表示するかどうか。
     /// </summary>
     public bool IsSHAColumnVisible
     {
@@ -58,7 +58,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     履歴グリッドで日時列を表示するかどうか。
+    /// 履歴グリッドで日時列を表示するかどうか。
     /// </summary>
     public bool IsDateTimeColumnVisible
     {
@@ -74,7 +74,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     表示対象のコミット一覧。変更時に選択状態を復元する。
+    /// 表示対象のコミット一覧。変更時に選択状態を復元する。
     /// </summary>
     public List<Models.Commit> Commits
     {
@@ -91,7 +91,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットグラフの描画データ。
+    /// コミットグラフの描画データ。
     /// </summary>
     public Models.CommitGraph Graph
     {
@@ -100,7 +100,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     現在選択中のコミット。
+    /// 現在選択中のコミット。
     /// </summary>
     public Models.Commit SelectedCommit
     {
@@ -109,7 +109,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ナビゲーション操作のID。スクロール位置の同期に使用。
+    /// ナビゲーション操作のID。スクロール位置の同期に使用。
     /// </summary>
     public long NavigationId
     {
@@ -118,7 +118,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     詳細パネルに表示するコンテキスト（コミット詳細やリビジョン比較など）。
+    /// 詳細パネルに表示するコンテキスト（コミット詳細やリビジョン比較など）。
     /// </summary>
     public IDisposable DetailContext
     {
@@ -127,7 +127,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     bisect操作の状態情報。bisect中でなければnull。
+    /// bisect操作の状態情報。bisect中でなければnull。
     /// </summary>
     public Models.Bisect Bisect
     {
@@ -135,24 +135,28 @@ public class Histories : ObservableObject, IDisposable
         private set => SetProperty(ref _bisect, value);
     }
 
+    /// <summary>左パネルの幅。</summary>
     public GridLength LeftArea
     {
         get => _leftArea;
         set => SetProperty(ref _leftArea, value);
     }
 
+    /// <summary>右パネルの幅。</summary>
     public GridLength RightArea
     {
         get => _rightArea;
         set => SetProperty(ref _rightArea, value);
     }
 
+    /// <summary>上パネルの高さ。</summary>
     public GridLength TopArea
     {
         get => _topArea;
         set => SetProperty(ref _topArea, value);
     }
 
+    /// <summary>下パネルの高さ。</summary>
     public GridLength BottomArea
     {
         get => _bottomArea;
@@ -160,7 +164,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリを指定して履歴VMを初期化する。
+    /// コンストラクタ。リポジトリを指定して履歴VMを初期化する。
     /// </summary>
     public Histories(Repository repo)
     {
@@ -169,7 +173,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リソースを解放する。コミットリストやグラフデータをクリアする。
+    /// リソースを解放する。コミットリストやグラフデータをクリアする。
     /// </summary>
     public void Dispose()
     {
@@ -182,8 +186,8 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     bisect操作の状態を更新し、現在のbisect状態を返す。
-    ///     BISECT_STARTファイルの存在とrefs/bisect内の情報を確認する。
+    /// bisect操作の状態を更新し、現在のbisect状態を返す。
+    /// BISECT_STARTファイルの存在とrefs/bisect内の情報を確認する。
     /// </summary>
     public Models.BisectState UpdateBisectInfo()
     {
@@ -217,8 +221,8 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定されたSHAのコミットへナビゲーションする。
-    ///     表示中のコミットリストに存在しない場合は非同期で取得する。
+    /// 指定されたSHAのコミットへナビゲーションする。
+    /// 表示中のコミットリストに存在しない場合は非同期で取得する。
     /// </summary>
     public void NavigateTo(string commitSHA)
     {
@@ -258,8 +262,8 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットの選択状態を処理する。
-    ///     0件で詳細クリア、1件でコミット詳細表示、2件でリビジョン比較、3件以上でカウント表示。
+    /// コミットの選択状態を処理する。
+    /// 0件で詳細クリア、1件でコミット詳細表示、2件でリビジョン比較、3件以上でカウント表示。
     /// </summary>
     public void Select(IList commits)
     {
@@ -306,6 +310,9 @@ public class Histories : ObservableObject, IDisposable
         }
     }
 
+    /// <summary>
+    /// 指定SHAのコミットを非同期で取得する。
+    /// </summary>
     public async Task<Models.Commit> GetCommitAsync(string sha)
     {
         return await new Commands.QuerySingleCommit(_repo.FullPath, sha)
@@ -314,8 +321,8 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     デコレータ（ブランチ参照）をクリックしてブランチをチェックアウトする。
-    ///     ローカル/リモートブランチの状態に応じて適切な操作を実行する。
+    /// デコレータ（ブランチ参照）をクリックしてブランチをチェックアウトする。
+    /// ローカル/リモートブランチの状態に応じて適切な操作を実行する。
     /// </summary>
     public async Task<bool> CheckoutBranchByDecoratorAsync(Models.Decorator decorator)
     {
@@ -365,8 +372,8 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットに関連するブランチをチェックアウトする。
-    ///     ローカルブランチ優先、なければリモートブランチから新規作成を提案する。
+    /// コミットに関連するブランチをチェックアウトする。
+    /// ローカルブランチ優先、なければリモートブランチから新規作成を提案する。
     /// </summary>
     public async Task CheckoutBranchByCommitAsync(Models.Commit commit)
     {
@@ -414,7 +421,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定コミットをチェリーピックする。マージコミットの場合は親の選択が必要。
+    /// 指定コミットをチェリーピックする。マージコミットの場合は親の選択が必要。
     /// </summary>
     public async Task CherryPickAsync(Models.Commit commit)
     {
@@ -426,7 +433,7 @@ public class Histories : ObservableObject, IDisposable
             }
             else
             {
-                var parents = new List<Models.Commit>();
+                List<Models.Commit> parents = [];
                 foreach (var sha in commit.Parents)
                 {
                     var parent = _commits.Find(x => x.SHA == sha);
@@ -443,7 +450,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     HEADコミットのメッセージを書き換える（reword）。
+    /// HEADコミットのメッセージを書き換える（reword）。
     /// </summary>
     public async Task RewordHeadAsync(Models.Commit head)
     {
@@ -455,7 +462,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     HEADコミットを親コミットにスカッシュまたはフィックスアップする。
+    /// HEADコミットを親コミットにスカッシュまたはフィックスアップする。
     /// </summary>
     public async Task SquashOrFixupHeadAsync(Models.Commit head, bool fixup)
     {
@@ -481,7 +488,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     HEADコミットを削除（drop）する。親コミットへのリセットを行う。
+    /// HEADコミットを削除（drop）する。親コミットへのリセットを行う。
     /// </summary>
     public async Task DropHeadAsync(Models.Commit head)
     {
@@ -497,7 +504,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     対話的リベース（interactive rebase）を開始する。指定コミットとアクションで事前設定する。
+    /// 対話的リベース（interactive rebase）を開始する。指定コミットとアクションで事前設定する。
     /// </summary>
     public async Task InteractiveRebaseAsync(Models.Commit commit, Models.InteractiveRebaseAction act)
     {
@@ -516,7 +523,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットの完全なメッセージを非同期で取得する。
+    /// コミットの完全なメッセージを非同期で取得する。
     /// </summary>
     public async Task<string> GetCommitFullMessageAsync(Models.Commit commit)
     {
@@ -526,7 +533,7 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定コミットをHEADと比較する。HEADが見つからない場合は非同期で取得する。
+    /// 指定コミットをHEADと比較する。HEADが見つからない場合は非同期で取得する。
     /// </summary>
     public async Task<Models.Commit> CompareWithHeadAsync(Models.Commit commit)
     {
@@ -545,26 +552,26 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定コミットをワークツリー（作業ディレクトリ）と比較する。
+    /// 指定コミットをワークツリー（作業ディレクトリ）と比較する。
     /// </summary>
     public void CompareWithWorktree(Models.Commit commit)
     {
         DetailContext = new RevisionCompare(_repo, commit, null);
     }
 
-    private Repository _repo = null;
-    private CommitDetailSharedData _commitDetailSharedData = null;
-    private bool _isLoading = true;
-    private List<Models.Commit> _commits = new List<Models.Commit>();
-    private Models.CommitGraph _graph = null;
-    private Models.Commit _selectedCommit = null;
-    private Models.Bisect _bisect = null;
-    private long _navigationId = 0;
-    private IDisposable _detailContext = null;
-    private bool _ignoreSelectionChange = false;
+    private Repository _repo = null; // 対象リポジトリ
+    private CommitDetailSharedData _commitDetailSharedData = null; // コミット詳細の共有データ
+    private bool _isLoading = true; // 読み込み中フラグ
+    private List<Models.Commit> _commits = []; // コミット一覧
+    private Models.CommitGraph _graph = null; // コミットグラフ描画データ
+    private Models.Commit _selectedCommit = null; // 選択中のコミット
+    private Models.Bisect _bisect = null; // bisect状態
+    private long _navigationId = 0; // ナビゲーション操作ID
+    private IDisposable _detailContext = null; // 詳細パネルのコンテキスト
+    private bool _ignoreSelectionChange = false; // 選択変更イベントの一時抑制フラグ
 
-    private GridLength _leftArea = new GridLength(1, GridUnitType.Star);
-    private GridLength _rightArea = new GridLength(1, GridUnitType.Star);
-    private GridLength _topArea = new GridLength(1, GridUnitType.Star);
-    private GridLength _bottomArea = new GridLength(1, GridUnitType.Star);
+    private GridLength _leftArea = new GridLength(1, GridUnitType.Star); // 左パネル幅
+    private GridLength _rightArea = new GridLength(1, GridUnitType.Star); // 右パネル幅
+    private GridLength _topArea = new GridLength(1, GridUnitType.Star); // 上パネル高さ
+    private GridLength _bottomArea = new GridLength(1, GridUnitType.Star); // 下パネル高さ
 }

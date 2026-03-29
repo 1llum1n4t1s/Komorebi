@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     リポジトリノード移動ダイアログのコードビハインド。
+/// リポジトリノード移動ダイアログのコードビハインド。
 /// </summary>
 public partial class MoveRepositoryNode : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public MoveRepositoryNode()
     {

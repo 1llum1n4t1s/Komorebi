@@ -1,16 +1,15 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git rev-parse --git-common-dir を実行して、共通のgitディレクトリパスを取得するクラス。
-///     ワークツリー環境では、メインリポジトリの.gitディレクトリを返す。
+/// git rev-parse --git-common-dir を実行して、共通のgitディレクトリパスを取得するクラス。
+/// ワークツリー環境では、メインリポジトリの.gitディレクトリを返す。
 /// </summary>
 public class QueryGitCommonDir : Command
 {
     /// <summary>
-    ///     コンストラクタ。共通gitディレクトリを取得するコマンドを設定する。
+    /// コンストラクタ。共通gitディレクトリを取得するコマンドを設定する。
     /// </summary>
     /// <param name="workDir">作業ディレクトリのパス</param>
     public QueryGitCommonDir(string workDir)
@@ -21,7 +20,7 @@ public class QueryGitCommonDir : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、共通gitディレクトリの絶対パスを返す。
+    /// コマンドを非同期で実行し、共通gitディレクトリの絶対パスを返す。
     /// </summary>
     /// <returns>共通gitディレクトリの絶対パス。失敗時は空文字列</returns>
     public async Task<string> GetResultAsync()

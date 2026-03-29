@@ -303,8 +303,8 @@ public class MergeConflictEditor : ObservableObject
             return;
 
         var lines = content.Split('\n', StringSplitOptions.None);
-        var oursLines = new List<Models.ConflictLine>();
-        var theirsLines = new List<Models.ConflictLine>();
+        List<Models.ConflictLine> oursLines = [];
+        List<Models.ConflictLine> theirsLines = [];
         int oursLineNumber = 1;
         int theirsLineNumber = 1;
         int i = 0;
@@ -399,7 +399,7 @@ public class MergeConflictEditor : ObservableObject
     /// </summary>
     private void RefreshDisplayData()
     {
-        var resultLines = new List<Models.ConflictLine>();
+        List<Models.ConflictLine> resultLines = [];
         _lineStates.Clear();
 
         if (_oursLines is null || _oursLines.Count == 0)
@@ -535,7 +535,7 @@ public class MergeConflictEditor : ObservableObject
         SelectedChunk = null;
         ResultLines = resultLines;
 
-        var unsolved = new List<int>();
+        List<int> unsolved = [];
         for (var i = 0; i < _conflictRegions.Count; i++)
         {
             var r = _conflictRegions[i];

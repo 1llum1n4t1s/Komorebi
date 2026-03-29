@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     現在のブランチにおける指定タイムスタンプ以降のコミットハッシュを取得するクラス。
-///     マージ済みコミットの判定に使用される。
+/// 現在のブランチにおける指定タイムスタンプ以降のコミットハッシュを取得するクラス。
+/// マージ済みコミットの判定に使用される。
 /// </summary>
 public class QueryCurrentBranchCommitHashes : Command
 {
     /// <summary>
-    ///     コンストラクタ。指定タイムスタンプ以降のコミットSHAを取得するコマンドを設定する。
+    /// コンストラクタ。指定タイムスタンプ以降のコミットSHAを取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="sinceTimestamp">検索開始のUnixタイムスタンプ</param>
@@ -26,7 +26,7 @@ public class QueryCurrentBranchCommitHashes : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、コミットSHAのハッシュセットを返す。
+    /// コマンドを非同期で実行し、コミットSHAのハッシュセットを返す。
     /// </summary>
     /// <returns>コミットSHAのハッシュセット</returns>
     public async Task<HashSet<string>> GetResultAsync()

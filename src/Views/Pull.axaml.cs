@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     プルダイアログのコードビハインド。
+/// プルダイアログのコードビハインド。
 /// </summary>
 public partial class Pull : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Pull()
     {

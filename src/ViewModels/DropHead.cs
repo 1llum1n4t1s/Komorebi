@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     HEADコミットを破棄（ドロップ）するダイアログViewModel。
-///     ローカル変更がある場合は自動スタッシュを行い、ハードリセット後に復元する。
+/// HEADコミットを破棄（ドロップ）するダイアログViewModel。
+/// ローカル変更がある場合は自動スタッシュを行い、ハードリセット後に復元する。
 /// </summary>
 public class DropHead : Popup
 {
     /// <summary>
-    ///     破棄対象のコミット（現在のHEAD）。
+    /// 破棄対象のコミット（現在のHEAD）。
     /// </summary>
     public Models.Commit Target
     {
@@ -17,7 +17,7 @@ public class DropHead : Popup
     }
 
     /// <summary>
-    ///     新しいHEADとなる親コミット。
+    /// 新しいHEADとなる親コミット。
     /// </summary>
     public Models.Commit NewHead
     {
@@ -25,7 +25,7 @@ public class DropHead : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリ、破棄するコミット、新しいHEADを指定する。
+    /// コンストラクタ。対象リポジトリ、破棄するコミット、新しいHEADを指定する。
     /// </summary>
     public DropHead(Repository repo, Models.Commit target, Models.Commit parent)
     {
@@ -35,8 +35,8 @@ public class DropHead : Popup
     }
 
     /// <summary>
-    ///     HEADコミットの破棄を実行する確認アクション。
-    ///     ローカル変更がある場合は自動スタッシュ→ハードリセット→スタッシュ復元を行う。
+    /// HEADコミットの破棄を実行する確認アクション。
+    /// ローカル変更がある場合は自動スタッシュ→ハードリセット→スタッシュ復元を行う。
     /// </summary>
     public override async Task<bool> Sure()
     {

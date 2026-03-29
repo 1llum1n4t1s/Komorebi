@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリコマンドパレットの個々のコマンドを表すクラス。
-///     ラベル、検索キーワード、アイコン、実行アクションを保持する。
+/// リポジトリコマンドパレットの個々のコマンドを表すクラス。
+/// ラベル、検索キーワード、アイコン、実行アクションを保持する。
 /// </summary>
 public class RepositoryCommandPaletteCmd
 {
@@ -42,8 +42,8 @@ public class RepositoryCommandPaletteCmd
 }
 
 /// <summary>
-///     リポジトリ操作用のコマンドパレットViewModel。
-///     Blame、Checkout、Merge等のサブパレットや、Fetch、Push等の直接コマンドを提供する。
+/// リポジトリ操作用のコマンドパレットViewModel。
+/// Blame、Checkout、Merge等のサブパレットや、Fetch、Push等の直接コマンドを提供する。
 /// </summary>
 public class RepositoryCommandPalette : ICommandPalette
 {
@@ -73,8 +73,8 @@ public class RepositoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     コンストラクタ。サブコマンドパレット（Blame、Checkout等）と
-    ///     直接実行コマンド（Fetch、Push等）を登録し、ラベル順にソートする。
+    /// コンストラクタ。サブコマンドパレット（Blame、Checkout等）と
+    /// 直接実行コマンド（Fetch、Push等）を登録し、ラベル順にソートする。
     /// </summary>
     public RepositoryCommandPalette(Repository repo)
     {
@@ -110,8 +110,8 @@ public class RepositoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択中のコマンドを実行する。
-    ///     CloseBeforeExecがtrueの場合は実行前にパレットを閉じる。
+    /// 選択中のコマンドを実行する。
+    /// CloseBeforeExecがtrueの場合は実行前にパレットを閉じる。
     /// </summary>
     public void Exec()
     {
@@ -128,8 +128,8 @@ public class RepositoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタに基づいて表示対象コマンドを更新する。
-    ///     選択中のコマンドがフィルタ外になった場合は先頭を自動選択する。
+    /// フィルタに基づいて表示対象コマンドを更新する。
+    /// 選択中のコマンドがフィルタ外になった場合は先頭を自動選択する。
     /// </summary>
     private void UpdateVisible()
     {
@@ -139,7 +139,7 @@ public class RepositoryCommandPalette : ICommandPalette
         }
         else
         {
-            var visible = new List<RepositoryCommandPaletteCmd>();
+            List<RepositoryCommandPaletteCmd> visible = [];
 
             // ラベルまたはキーワードにフィルタ文字列を含むコマンドを収集
             foreach (var cmd in _cmds)

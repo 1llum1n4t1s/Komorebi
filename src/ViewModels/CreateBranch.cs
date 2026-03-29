@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     新しいブランチを作成するためのダイアログViewModel。
-///     ブランチ名のバリデーション、作成後のチェックアウト、ローカル変更の自動スタッシュなどを管理する。
+/// 新しいブランチを作成するためのダイアログViewModel。
+/// ブランチ名のバリデーション、作成後のチェックアウト、ローカル変更の自動スタッシュなどを管理する。
 /// </summary>
 public class CreateBranch : Popup
 {
     /// <summary>
-    ///     作成するブランチの名前。
-    ///     必須入力で、正規表現による書式チェックと既存ブランチとの重複チェックを行う。
+    /// 作成するブランチの名前。
+    /// 必須入力で、正規表現による書式チェックと既存ブランチとの重複チェックを行う。
     /// </summary>
     [Required(ErrorMessage = "Branch name is required!")]
     [RegularExpression(@"^[\w\-/\.#\+]+$", ErrorMessage = "Bad branch name format!")]
@@ -24,7 +24,7 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ブランチ作成の基点となるオブジェクト（ブランチ、コミット、またはタグ）。
+    /// ブランチ作成の基点となるオブジェクト（ブランチ、コミット、またはタグ）。
     /// </summary>
     public object BasedOn
     {
@@ -32,7 +32,7 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ローカルの変更を破棄するかどうか。
+    /// ローカルの変更を破棄するかどうか。
     /// </summary>
     public bool DiscardLocalChanges
     {
@@ -41,8 +41,8 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ブランチ作成後に自動的にチェックアウトするかどうか。
-    ///     リポジトリのUI状態に永続化される。
+    /// ブランチ作成後に自動的にチェックアウトするかどうか。
+    /// リポジトリのUI状態に永続化される。
     /// </summary>
     public bool CheckoutAfterCreated
     {
@@ -58,8 +58,8 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ブランチ作成後にリモートへプッシュするかどうか。
-    ///     リポジトリのUI状態に永続化される。
+    /// ブランチ作成後にリモートへプッシュするかどうか。
+    /// リポジトリのUI状態に永続化される。
     /// </summary>
     public bool PushAfterCreated
     {
@@ -75,7 +75,7 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ベアリポジトリかどうか。ベアリポジトリではチェックアウト不可。
+    /// ベアリポジトリかどうか。ベアリポジトリではチェックアウト不可。
     /// </summary>
     public bool IsBareRepository
     {
@@ -83,8 +83,8 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     既存の同名ブランチの上書きを許可するかどうか。
-    ///     変更時にブランチ名のバリデーションを再実行する。
+    /// 既存の同名ブランチの上書きを許可するかどうか。
+    /// 変更時にブランチ名のバリデーションを再実行する。
     /// </summary>
     public bool AllowOverwrite
     {
@@ -97,8 +97,8 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ブランチを基点として新しいブランチを作成するコンストラクタ。
-    ///     リモートブランチの場合、その名前をデフォルト名として設定する。
+    /// ブランチを基点として新しいブランチを作成するコンストラクタ。
+    /// リモートブランチの場合、その名前をデフォルト名として設定する。
     /// </summary>
     public CreateBranch(Repository repo, Models.Branch branch)
     {
@@ -113,7 +113,7 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     コミットを基点として新しいブランチを作成するコンストラクタ。
+    /// コミットを基点として新しいブランチを作成するコンストラクタ。
     /// </summary>
     public CreateBranch(Repository repo, Models.Commit commit)
     {
@@ -125,7 +125,7 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     タグを基点として新しいブランチを作成するコンストラクタ。
+    /// タグを基点として新しいブランチを作成するコンストラクタ。
     /// </summary>
     public CreateBranch(Repository repo, Models.Tag tag)
     {
@@ -137,8 +137,8 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ブランチ名の重複を検証するカスタムバリデーション。
-    ///     上書きが許可されていない場合、同名ブランチの存在をチェックする。
+    /// ブランチ名の重複を検証するカスタムバリデーション。
+    /// 上書きが許可されていない場合、同名ブランチの存在をチェックする。
     /// </summary>
     public static ValidationResult ValidateBranchName(string name, ValidationContext ctx)
     {
@@ -160,8 +160,8 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    ///     ブランチ作成を実行する確認アクション。
-    ///     チェックアウトが有効な場合、ローカル変更の自動スタッシュ、サブモジュール更新、上流ブランチ設定も行う。
+    /// ブランチ作成を実行する確認アクション。
+    /// チェックアウトが有効な場合、ローカル変更の自動スタッシュ、サブモジュール更新、上流ブランチ設定も行う。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -263,7 +263,7 @@ public class CreateBranch : Popup
 
             var folderEndIdx = fake.FullName.LastIndexOf('/');
             if (folderEndIdx > 10)
-                _repo.UIStates.ExpandedBranchNodesInSideBar.Add(fake.FullName.Substring(0, folderEndIdx));
+                _repo.UIStates.ExpandedBranchNodesInSideBar.Add(fake.FullName[..folderEndIdx]);
 
             if (_repo.HistoryFilterMode == Models.FilterMode.Included)
                 _repo.SetBranchFilterMode(fake, Models.FilterMode.Included, false, false);

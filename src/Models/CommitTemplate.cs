@@ -5,13 +5,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.Models;
 
 /// <summary>
-///     コミットメッセージのテンプレートを表すクラス。
-///     テンプレートエンジンを使用して変数を展開できる。
+/// コミットメッセージのテンプレートを表すクラス。
+/// テンプレートエンジンを使用して変数を展開できる。
 /// </summary>
 public class CommitTemplate : ObservableObject
 {
     /// <summary>
-    ///     テンプレートの名前。
+    /// テンプレートの名前。
     /// </summary>
     public string Name
     {
@@ -20,7 +20,7 @@ public class CommitTemplate : ObservableObject
     }
 
     /// <summary>
-    ///     テンプレートの内容（変数プレースホルダーを含む）。
+    /// テンプレートの内容（変数プレースホルダーを含む）。
     /// </summary>
     public string Content
     {
@@ -29,7 +29,7 @@ public class CommitTemplate : ObservableObject
     }
 
     /// <summary>
-    ///     テンプレートを適用し、変数を展開したメッセージを生成する。
+    /// テンプレートを適用し、変数を展開したメッセージを生成する。
     /// </summary>
     /// <param name="branch">現在のブランチ情報。</param>
     /// <param name="changes">現在の変更リスト。</param>

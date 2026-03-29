@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     新しいタグを作成するためのダイアログViewModel。
-///     注釈付きタグ・軽量タグの選択、GPG署名、リモートへのプッシュをサポートする。
+/// 新しいタグを作成するためのダイアログViewModel。
+/// 注釈付きタグ・軽量タグの選択、GPG署名、リモートへのプッシュをサポートする。
 /// </summary>
 public class CreateTag : Popup
 {
     /// <summary>
-    ///     タグ作成の基点となるオブジェクト（ブランチまたはコミット）。
+    /// タグ作成の基点となるオブジェクト（ブランチまたはコミット）。
     /// </summary>
     public object BasedOn
     {
@@ -20,7 +20,7 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     作成するタグの名前。必須入力で書式チェックと重複チェックを行う。
+    /// 作成するタグの名前。必須入力で書式チェックと重複チェックを行う。
     /// </summary>
     [Required(ErrorMessage = "Tag name is required!")]
     [RegularExpression(@"^(?!\.)(?!/)(?!.*\.$)(?!.*/$)(?!.*\.\.)[\w\-\+\./]+$", ErrorMessage = "Bad tag name format!")]
@@ -32,7 +32,7 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     注釈付きタグのメッセージ。
+    /// 注釈付きタグのメッセージ。
     /// </summary>
     public string Message
     {
@@ -41,7 +41,7 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     注釈付きタグとして作成するかどうか。UI状態に永続化される。
+    /// 注釈付きタグとして作成するかどうか。UI状態に永続化される。
     /// </summary>
     public bool Annotated
     {
@@ -57,7 +57,7 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     GPG署名でタグに署名するかどうか。
+    /// GPG署名でタグに署名するかどうか。
     /// </summary>
     public bool SignTag
     {
@@ -66,7 +66,7 @@ public class CreateTag : Popup
     } = false;
 
     /// <summary>
-    ///     タグ作成後にすべてのリモートへプッシュするかどうか。
+    /// タグ作成後にすべてのリモートへプッシュするかどうか。
     /// </summary>
     public bool PushToRemotes
     {
@@ -75,7 +75,7 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     ブランチを基点としてタグを作成するコンストラクタ。
+    /// ブランチを基点としてタグを作成するコンストラクタ。
     /// </summary>
     public CreateTag(Repository repo, Models.Branch branch)
     {
@@ -87,7 +87,7 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     コミットを基点としてタグを作成するコンストラクタ。
+    /// コミットを基点としてタグを作成するコンストラクタ。
     /// </summary>
     public CreateTag(Repository repo, Models.Commit commit)
     {
@@ -99,7 +99,7 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     タグ名の重複を検証するカスタムバリデーション。
+    /// タグ名の重複を検証するカスタムバリデーション。
     /// </summary>
     public static ValidationResult ValidateTagName(string name, ValidationContext ctx)
     {
@@ -113,8 +113,8 @@ public class CreateTag : Popup
     }
 
     /// <summary>
-    ///     タグ作成を実行する確認アクション。
-    ///     注釈付き/軽量タグの作成後、必要に応じてリモートへプッシュする。
+    /// タグ作成を実行する確認アクション。
+    /// 注釈付き/軽量タグの作成後、必要に応じてリモートへプッシュする。
     /// </summary>
     public override async Task<bool> Sure()
     {

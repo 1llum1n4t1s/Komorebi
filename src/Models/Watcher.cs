@@ -7,36 +7,42 @@ using System.Threading.Tasks;
 namespace Komorebi.Models;
 
 /// <summary>
-///     FileSystemWatcherによるリポジトリ監視クラス。
-///     ワーキングコピーとgitディレクトリの変更を検出し、
-///     タイマーベースのデバウンスでブランチ・タグ・スタッシュ・サブモジュール・ワーキングコピーを更新する。
+/// FileSystemWatcherによるリポジトリ監視クラス。
+/// ワーキングコピーとgitディレクトリの変更を検出し、
+/// タイマーベースのデバウンスでブランチ・タグ・スタッシュ・サブモジュール・ワーキングコピーを更新する。
 /// </summary>
 public class Watcher : IDisposable
 {
     /// <summary>
-    ///     監視を一時停止するためのロックコンテキスト。
-    ///     usingパターンでスレッドセーフにロック・アンロックを行う。
+    /// 監視を一時停止するためのロックコンテキスト。
+    /// usingパターンでスレッドセーフにロック・アンロックを行う。
     /// </summary>
     public class LockContext : IDisposable
     {
+        /// <summary>
+        /// ロックコンテキストを取得し、監視を一時停止する
+        /// </summary>
+        /// <param name="target">ロック対象のWatcher</param>
         public LockContext(Watcher target)
         {
             _target = target;
             Interlocked.Increment(ref _target._lockCount);
         }
 
+        /// <summary>ロックを解放し、監視を再開する</summary>
         public void Dispose()
         {
             Interlocked.Decrement(ref _target._lockCount);
         }
 
+        /// <summary>ロック対象のWatcherインスタンス</summary>
         private Watcher _target;
     }
 
     /// <summary>
-    ///     ファイル監視を初期化する。
-    ///     gitディレクトリがワーキングコピー内の場合は統合監視、
-    ///     分離している場合（ワークツリー等）は個別の監視を設定する。
+    /// ファイル監視を初期化する。
+    /// gitディレクトリがワーキングコピー内の場合は統合監視、
+    /// 分離している場合（ワークツリー等）は個別の監視を設定する。
     /// </summary>
     /// <param name="repo">監視対象のリポジトリ</param>
     /// <param name="fullpath">リポジトリのルートパス</param>
@@ -45,7 +51,7 @@ public class Watcher : IDisposable
     {
         _repo = repo;
         _root = new DirectoryInfo(fullpath).FullName;
-        _watchers = new List<FileSystemWatcher>();
+        _watchers = [];
 
         var testGitDir = new DirectoryInfo(Path.Combine(fullpath, ".git")).FullName;
         var desiredDir = new DirectoryInfo(gitDir).FullName;
@@ -163,8 +169,8 @@ public class Watcher : IDisposable
     }
 
     /// <summary>
-    ///     タイマーのティック処理。デバウンスされた更新要求を確認し、
-    ///     期限が到来したものについてリポジトリの各要素を更新する。
+    /// タイマーのティック処理。デバウンスされた更新要求を確認し、
+    /// 期限が到来したものについてリポジトリの各要素を更新する。
     /// </summary>
     private void Tick(object sender)
     {
@@ -257,8 +263,8 @@ public class Watcher : IDisposable
     }
 
     /// <summary>
-    ///     統合ウォッチャーのイベントハンドラー。
-    ///     .gitディレクトリ内の変更とワーキングコピーの変更を振り分ける。
+    /// 統合ウォッチャーのイベントハンドラー。
+    /// .gitディレクトリ内の変更とワーキングコピーの変更を振り分ける。
     /// </summary>
     private void OnRepositoryChanged(object o, FileSystemEventArgs e)
     {
@@ -270,7 +276,7 @@ public class Watcher : IDisposable
             return;
 
         if (name.StartsWith(".git/", StringComparison.Ordinal))
-            HandleGitDirFileChanged(name.Substring(5));
+            HandleGitDirFileChanged(name[5..]);
         else
             HandleWorkingCopyFileChanged(name, e.FullPath);
     }
@@ -301,9 +307,9 @@ public class Watcher : IDisposable
     }
 
     /// <summary>
-    ///     gitディレクトリ内のファイル変更を処理する。
-    ///     変更されたファイルのパスに応じて、適切な更新フラグを設定する。
-    ///     HEAD、refs/heads/*, refs/tags/*, refs/stash, modules/*, reftable/*等を監視する。
+    /// gitディレクトリ内のファイル変更を処理する。
+    /// 変更されたファイルのパスに応じて、適切な更新フラグを設定する。
+    /// HEAD、refs/heads/*, refs/tags/*, refs/stash, modules/*, reftable/*等を監視する。
     /// </summary>
     /// <param name="name">gitディレクトリからの相対パス</param>
     private void HandleGitDirFileChanged(string name)
@@ -359,9 +365,9 @@ public class Watcher : IDisposable
     }
 
     /// <summary>
-    ///     ワーキングコピー内のファイル変更を処理する。
-    ///     .gitmodulesの変更はサブモジュール更新をトリガーし、
-    ///     サブモジュール内の変更はサブモジュール更新のみ行う。
+    /// ワーキングコピー内のファイル変更を処理する。
+    /// .gitmodulesの変更はサブモジュール更新をトリガーし、
+    /// サブモジュール内の変更はサブモジュール更新のみ行う。
     /// </summary>
     /// <param name="name">リポジトリルートからの相対パス</param>
     /// <param name="fullpath">ファイルの絶対パス</param>
@@ -389,8 +395,8 @@ public class Watcher : IDisposable
     }
 
     /// <summary>
-    ///     指定フォルダがサブモジュール内にあるかどうかを再帰的に判定する。
-    ///     .gitファイル（ディレクトリではなくファイル）の存在でサブモジュールを検出する。
+    /// 指定フォルダがサブモジュール内にあるかどうかを再帰的に判定する。
+    /// .gitファイル（ディレクトリではなくファイル）の存在でサブモジュールを検出する。
     /// </summary>
     /// <param name="folder">判定対象のフォルダパス</param>
     /// <returns>サブモジュール内の場合true</returns>

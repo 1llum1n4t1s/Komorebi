@@ -5,12 +5,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リモートリポジトリ追加ダイアログのコードビハインド。
+/// リモートリポジトリ追加ダイアログのコードビハインド。
 /// </summary>
 public partial class AddRemote : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public AddRemote()
     {
@@ -18,7 +18,7 @@ public partial class AddRemote : UserControl
     }
 
     /// <summary>
-    ///     SSHKeyの選択処理を行う。
+    /// SSHKeyの選択処理を行う。
     /// </summary>
     private async void SelectSSHKey(object _, RoutedEventArgs e)
     {

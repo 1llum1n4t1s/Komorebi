@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     LFSオブジェクトのプル（ダウンロード＋チェックアウト）ダイアログのViewModel。
+/// LFSオブジェクトのプル（ダウンロード＋チェックアウト）ダイアログのViewModel。
 /// </summary>
 public class LFSPull : Popup
 {

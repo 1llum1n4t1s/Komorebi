@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     サブモジュール追加ダイアログのViewModel。
-///     リポジトリにgitサブモジュールを追加する操作を担当する。
+/// サブモジュール追加ダイアログのViewModel。
+/// リポジトリにgitサブモジュールを追加する操作を担当する。
 /// </summary>
 public class AddSubmodule : Popup
 {
     /// <summary>
-    ///     サブモジュールのリポジトリURL。必須入力でURL形式のバリデーション付き。
+    /// サブモジュールのリポジトリURL。必須入力でURL形式のバリデーション付き。
     /// </summary>
     [Required(ErrorMessage = "Url is required!!!")]
     [CustomValidation(typeof(AddSubmodule), nameof(ValidateURL))]
@@ -23,7 +23,7 @@ public class AddSubmodule : Popup
     }
 
     /// <summary>
-    ///     サブモジュールの相対パス。空の場合はURLからパス名を自動生成する。
+    /// サブモジュールの相対パス。空の場合はURLからパス名を自動生成する。
     /// </summary>
     public string RelativePath
     {
@@ -32,7 +32,7 @@ public class AddSubmodule : Popup
     }
 
     /// <summary>
-    ///     サブモジュールを再帰的にクローンするかどうかのフラグ。
+    /// サブモジュールを再帰的にクローンするかどうかのフラグ。
     /// </summary>
     public bool Recursive
     {
@@ -41,7 +41,7 @@ public class AddSubmodule : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリを受け取って初期化する。
+    /// コンストラクタ。対象リポジトリを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public AddSubmodule(Repository repo)
@@ -50,7 +50,7 @@ public class AddSubmodule : Popup
     }
 
     /// <summary>
-    ///     サブモジュールURLの形式を検証するバリデーションメソッド。
+    /// サブモジュールURLの形式を検証するバリデーションメソッド。
     /// </summary>
     /// <param name="url">検証するURL</param>
     /// <param name="ctx">バリデーションコンテキスト</param>
@@ -64,7 +64,7 @@ public class AddSubmodule : Popup
     }
 
     /// <summary>
-    ///     確定処理。git submodule addコマンドを実行してサブモジュールを追加する。
+    /// 確定処理。git submodule addコマンドを実行してサブモジュールを追加する。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

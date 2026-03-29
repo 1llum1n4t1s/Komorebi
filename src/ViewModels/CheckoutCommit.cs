@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コミットチェックアウトダイアログのViewModel。
-///     git checkoutコマンドで特定のコミットに切り替える（DetachedHEAD状態になる）。
+/// コミットチェックアウトダイアログのViewModel。
+/// git checkoutコマンドで特定のコミットに切り替える（DetachedHEAD状態になる）。
 /// </summary>
 public class CheckoutCommit : Popup
 {
     /// <summary>
-    ///     チェックアウト対象のコミット。
+    /// チェックアウト対象のコミット。
     /// </summary>
     public Models.Commit Commit
     {
@@ -17,7 +17,7 @@ public class CheckoutCommit : Popup
     }
 
     /// <summary>
-    ///     ローカル変更を破棄するかどうかのフラグ。
+    /// ローカル変更を破棄するかどうかのフラグ。
     /// </summary>
     public bool DiscardLocalChanges
     {
@@ -26,7 +26,7 @@ public class CheckoutCommit : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリとコミットを受け取って初期化する。
+    /// コンストラクタ。リポジトリとコミットを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="commit">チェックアウト対象のコミット</param>
@@ -38,8 +38,8 @@ public class CheckoutCommit : Popup
     }
 
     /// <summary>
-    ///     確定処理。指定コミットへのチェックアウトを実行する。
-    ///     必要に応じてスタッシュの保存・復元、サブモジュール更新を行う。
+    /// 確定処理。指定コミットへのチェックアウトを実行する。
+    /// 必要に応じてスタッシュの保存・復元、サブモジュール更新を行う。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

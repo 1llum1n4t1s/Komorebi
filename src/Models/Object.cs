@@ -1,54 +1,54 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     Gitオブジェクトの種類を表す列挙型。
+/// Gitオブジェクトの種類を表す列挙型。
 /// </summary>
 public enum ObjectType
 {
     /// <summary>
-    ///     種類不明。
+    /// 種類不明。
     /// </summary>
     None,
 
     /// <summary>
-    ///     ファイルの内容を格納するblobオブジェクト。
+    /// ファイルの内容を格納するblobオブジェクト。
     /// </summary>
     Blob,
 
     /// <summary>
-    ///     ディレクトリ構造を表すtreeオブジェクト。
+    /// ディレクトリ構造を表すtreeオブジェクト。
     /// </summary>
     Tree,
 
     /// <summary>
-    ///     注釈付きタグオブジェクト。
+    /// 注釈付きタグオブジェクト。
     /// </summary>
     Tag,
 
     /// <summary>
-    ///     コミットオブジェクト。
+    /// コミットオブジェクト。
     /// </summary>
     Commit,
 }
 
 /// <summary>
-///     Gitオブジェクトを表すクラス。
-///     SHA、種類、パス情報を保持する。
+/// Gitオブジェクトを表すクラス。
+/// SHA、種類、パス情報を保持する。
 /// </summary>
 public class Object
 {
     /// <summary>
-    ///     オブジェクトのSHAハッシュ。
+    /// オブジェクトのSHAハッシュ。
     /// </summary>
     public string SHA { get; set; }
 
     /// <summary>
-    ///     オブジェクトの種類。
+    /// オブジェクトの種類。
     /// </summary>
     public ObjectType Type { get; set; }
 
     /// <summary>
-    ///     オブジェクトのファイルパス。
+    /// オブジェクトのファイルパス。
     /// </summary>
     public string Path { get; set; }
 }

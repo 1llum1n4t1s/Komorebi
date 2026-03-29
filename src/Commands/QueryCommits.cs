@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git logコマンドを実行して、コミット履歴を取得するクラス。
-///     通常のログ取得と検索フィルタ付きログ取得の2つのモードをサポートする。
+/// git logコマンドを実行して、コミット履歴を取得するクラス。
+/// 通常のログ取得と検索フィルタ付きログ取得の2つのモードをサポートする。
 /// </summary>
 public class QueryCommits : Command
 {
     /// <summary>
-    ///     コンストラクタ（通常のログ取得用）。
+    /// コンストラクタ（通常のログ取得用）。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="limits">ログの範囲制限（例: HEAD~10..HEAD）</param>
@@ -28,8 +28,8 @@ public class QueryCommits : Command
     }
 
     /// <summary>
-    ///     コンストラクタ（検索フィルタ付きログ取得用）。
-    ///     著者、コミッター、メッセージ、パス、内容変更による検索をサポートする。
+    /// コンストラクタ（検索フィルタ付きログ取得用）。
+    /// 著者、コミッター、メッセージ、パス、内容変更による検索をサポートする。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="filter">検索フィルタ文字列</param>
@@ -74,8 +74,8 @@ public class QueryCommits : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、コミットのリストを返す。
-    ///     マージ済みフラグの設定も行う。
+    /// コマンドを非同期で実行し、コミットのリストを返す。
+    /// マージ済みフラグの設定も行う。
     /// </summary>
     /// <returns>コミットモデルのリスト</returns>
     public async Task<List<Models.Commit>> GetResultAsync()
@@ -126,7 +126,7 @@ public class QueryCommits : Command
     }
 
     /// <summary>
-    ///     ログ出力の1行を解析してCommitモデルを生成する。
+    /// ログ出力の1行を解析してCommitモデルを生成する。
     /// </summary>
     /// <param name="line">NULL区切りのコミット情報行</param>
     /// <returns>解析されたコミットモデル。無効な行の場合はnull</returns>

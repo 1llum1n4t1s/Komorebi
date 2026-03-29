@@ -7,13 +7,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コマンドログのViewModel。Models.ICommandLogインターフェースを実装する。
-///     gitコマンドの実行ログを蓄積し、UIに表示するためのスレッドセーフなログ管理を行う。
+/// コマンドログのViewModel。Models.ICommandLogインターフェースを実装する。
+/// gitコマンドの実行ログを蓄積し、UIに表示するためのスレッドセーフなログ管理を行う。
 /// </summary>
 public class CommandLog : ObservableObject, Models.ICommandLog
 {
     /// <summary>
-    ///     ログの名前（操作名）。
+    /// ログの名前（操作名）。
     /// </summary>
     public string Name
     {
@@ -22,7 +22,7 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     }
 
     /// <summary>
-    ///     ログの開始時刻。
+    /// ログの開始時刻。
     /// </summary>
     public DateTime StartTime
     {
@@ -30,7 +30,7 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     } = DateTime.Now;
 
     /// <summary>
-    ///     ログの終了時刻。Complete()呼び出し時に更新される。
+    /// ログの終了時刻。Complete()呼び出し時に更新される。
     /// </summary>
     public DateTime EndTime
     {
@@ -39,7 +39,7 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     } = DateTime.Now;
 
     /// <summary>
-    ///     ログが完了したかどうかのフラグ。
+    /// ログが完了したかどうかのフラグ。
     /// </summary>
     public bool IsComplete
     {
@@ -48,7 +48,7 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     } = false;
 
     /// <summary>
-    ///     ログの内容文字列。完了前はStringBuilderから動的に生成し、完了後はキャッシュされた文字列を返す。
+    /// ログの内容文字列。完了前はStringBuilderから動的に生成し、完了後はキャッシュされた文字列を返す。
     /// </summary>
     public string Content
     {
@@ -59,7 +59,7 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     }
 
     /// <summary>
-    ///     コンストラクタ。ログ名を受け取って初期化する。
+    /// コンストラクタ。ログ名を受け取って初期化する。
     /// </summary>
     /// <param name="name">ログの名前（操作名）</param>
     public CommandLog(string name)
@@ -68,7 +68,7 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     }
 
     /// <summary>
-    ///     ログ受信者を登録する。リアルタイムでログ行を受け取るレシーバーを追加する。
+    /// ログ受信者を登録する。リアルタイムでログ行を受け取るレシーバーを追加する。
     /// </summary>
     /// <param name="receiver">ログ受信者</param>
     public void Subscribe(Models.ICommandLogReceiver receiver)
@@ -77,7 +77,7 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     }
 
     /// <summary>
-    ///     ログ受信者の登録を解除する。
+    /// ログ受信者の登録を解除する。
     /// </summary>
     /// <param name="receiver">ログ受信者</param>
     public void Unsubscribe(Models.ICommandLogReceiver receiver)
@@ -86,8 +86,8 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     }
 
     /// <summary>
-    ///     ログに1行追加する。UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
-    ///     登録されている全レシーバーに新しい行を通知する。
+    /// ログに1行追加する。UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
+    /// 登録されている全レシーバーに新しい行を通知する。
     /// </summary>
     /// <param name="line">追加するログ行（nullの場合は空行）</param>
     public void AppendLine(string line = null)
@@ -110,8 +110,8 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     }
 
     /// <summary>
-    ///     ログを完了状態にする。StringBuilderの内容をキャッシュし、リソースを解放する。
-    ///     UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
+    /// ログを完了状態にする。StringBuilderの内容をキャッシュし、リソースを解放する。
+    /// UIスレッド以外から呼ばれた場合はUIスレッドにディスパッチする。
     /// </summary>
     public void Complete()
     {
@@ -141,5 +141,5 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     /// <summary>ログ蓄積用のStringBuilder</summary>
     private StringBuilder _builder = new StringBuilder();
     /// <summary>リアルタイムログ受信者のリスト</summary>
-    private List<Models.ICommandLogReceiver> _receivers = new List<Models.ICommandLogReceiver>();
+    private List<Models.ICommandLogReceiver> _receivers = [];
 }

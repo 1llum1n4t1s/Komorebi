@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     HEADコミットのメッセージを修正するポップアップダイアログのViewModel。
-///     git commit --amend を使用してコミットメッセージのみを変更する。
+/// HEADコミットのメッセージを修正するポップアップダイアログのViewModel。
+/// git commit --amend を使用してコミットメッセージのみを変更する。
 /// </summary>
 public class Reword : Popup
 {
     /// <summary>
-    ///     修正対象のHEADコミット。
+    /// 修正対象のHEADコミット。
     /// </summary>
     public Models.Commit Head
     {
@@ -19,7 +19,7 @@ public class Reword : Popup
     }
 
     /// <summary>
-    ///     新しいコミットメッセージ。空文字は許可されない。
+    /// 新しいコミットメッセージ。空文字は許可されない。
     /// </summary>
     [Required(ErrorMessage = "Commit message is required!!!")]
     public string Message
@@ -29,7 +29,7 @@ public class Reword : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリ、対象コミット、元のメッセージを受け取る。
+    /// コンストラクタ。リポジトリ、対象コミット、元のメッセージを受け取る。
     /// </summary>
     public Reword(Repository repo, Models.Commit head, string oldMessage)
     {
@@ -40,9 +40,9 @@ public class Reword : Popup
     }
 
     /// <summary>
-    ///     コミットメッセージの修正を実行する。
-    ///     メッセージが変更されていない場合は何もしない。
-    ///     ステージされた変更がある場合は自動スタッシュを行い、amend後にポップする。
+    /// コミットメッセージの修正を実行する。
+    /// メッセージが変更されていない場合は何もしない。
+    /// ステージされた変更がある場合は自動スタッシュを行い、amend後にポップする。
     /// </summary>
     public override async Task<bool> Sure()
     {

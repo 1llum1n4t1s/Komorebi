@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定ファイルがバイナリかどうかを判定するgitコマンド。
-///     git diff --numstat の出力パターンでバイナリを検出する。
+/// 指定ファイルがバイナリかどうかを判定するgitコマンド。
+/// git diff --numstat の出力パターンでバイナリを検出する。
 /// </summary>
 public partial class IsBinary : Command
 {
     /// <summary>
-    ///     バイナリファイル判定用の正規表現。
-    ///     numstatの出力が "- - filename" パターン（追加行・削除行が"-"）の場合バイナリと判定する。
+    /// バイナリファイル判定用の正規表現。
+    /// numstatの出力が "- - filename" パターン（追加行・削除行が"-"）の場合バイナリと判定する。
     /// </summary>
     [GeneratedRegex(@"^\-\s+\-\s+.*$")]
     private static partial Regex REG_TEST();
 
     /// <summary>
-    ///     IsBinaryコマンドを初期化する。
+    /// IsBinaryコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="commit">対象のコミットSHA。</param>
@@ -35,7 +35,7 @@ public partial class IsBinary : Command
     }
 
     /// <summary>
-    ///     バイナリ判定の結果を非同期で取得する。
+    /// バイナリ判定の結果を非同期で取得する。
     /// </summary>
     /// <returns>バイナリファイルであればtrue。</returns>
     public async Task<bool> GetResultAsync()

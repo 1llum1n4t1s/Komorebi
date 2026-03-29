@@ -16,7 +16,7 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ユーザーアバター画像（Gravatar/GitHub風/フォールバック）を描画するカスタムコントロール。
+/// ユーザーアバター画像（Gravatar/GitHub風/フォールバック）を描画するカスタムコントロール。
 /// </summary>
 public class Avatar : Control, Models.IAvatarHost
 {
@@ -39,7 +39,7 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Avatar()
     {
@@ -56,7 +56,7 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -162,7 +162,7 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     アバターリソース変更時のコールバック。対象ユーザーの場合は画像を更新する。
+    /// アバターリソース変更時のコールバック。対象ユーザーの場合は画像を更新する。
     /// </summary>
     public void OnAvatarResourceChanged(string email, Bitmap image)
     {
@@ -175,7 +175,7 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -186,7 +186,7 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -197,7 +197,7 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -222,8 +222,8 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     右クリック時のコンテキストメニューを構築して表示する。
-    ///     再取得・ローカルファイル読み込み・名前を付けて保存のメニュー項目を含む。
+    /// 右クリック時のコンテキストメニューを構築して表示する。
+    /// 再取得・ローカルファイル読み込み・名前を付けて保存のメニュー項目を含む。
     /// </summary>
     private void OnContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -320,9 +320,9 @@ public class Avatar : Control, Models.IAvatarHost
     }
 
     /// <summary>
-    ///     ユーザー名からフォールバック表示用のイニシャル文字列を生成する。
+    /// ユーザー名からフォールバック表示用のイニシャル文字列を生成する。
     /// </summary>
-    private string GetFallbackString(string name)
+    private static string GetFallbackString(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             return "?";
@@ -338,11 +338,11 @@ public class Avatar : Control, Models.IAvatarHost
             return $"{chars[0]}{chars[^1]}";
 
         // それ以外は名前の最初の1文字を返す
-        return name.Substring(0, 1);
+        return name[..1];
     }
 
     /// <summary>
-    ///     フォールバックアバターで使用するグラデーション色の配列。
+    /// フォールバックアバターで使用するグラデーション色の配列。
     /// </summary>
     private static readonly GradientStops[] FALLBACK_GRADIENTS = [
         new GradientStops() { new GradientStop(Colors.Orange, 0), new GradientStop(Color.FromRgb(255, 213, 134), 1) },

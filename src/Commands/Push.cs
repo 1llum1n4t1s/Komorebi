@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     リモートリポジトリにプッシュするgitコマンド。
-///     git push --progress --verbose を実行する。
+/// リモートリポジトリにプッシュするgitコマンド。
+/// git push --progress --verbose を実行する。
 /// </summary>
 public class Push : Command
 {
     /// <summary>
-    ///     ブランチプッシュ用のPushコマンドを初期化する。
+    /// ブランチプッシュ用のPushコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="local">プッシュ元のローカルブランチ名。</param>
@@ -54,7 +54,7 @@ public class Push : Command
     }
 
     /// <summary>
-    ///     参照のプッシュまたは削除用のPushコマンドを初期化する。
+    /// 参照のプッシュまたは削除用のPushコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="remote">プッシュ先のリモート名。</param>
@@ -83,13 +83,13 @@ public class Push : Command
     }
 
     /// <summary>
-    ///     SSH鍵を設定してからプッシュを実行する（基底クラスの共通メソッドを使用）。
+    /// SSH鍵を設定してからプッシュを実行する（基底クラスの共通メソッドを使用）。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public Task<bool> RunAsync() => ExecWithSSHKeyAsync(_remote);
 
     /// <summary>
-    ///     操作対象のリモート名。
+    /// 操作対象のリモート名。
     /// </summary>
     private readonly string _remote;
 }

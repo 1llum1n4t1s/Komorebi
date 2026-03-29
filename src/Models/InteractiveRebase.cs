@@ -3,7 +3,7 @@
 namespace Komorebi.Models;
 
 /// <summary>
-///     対話的リベースのアクション種別
+/// 対話的リベースのアクション種別
 /// </summary>
 public enum InteractiveRebaseAction
 {
@@ -22,7 +22,7 @@ public enum InteractiveRebaseAction
 }
 
 /// <summary>
-///     対話的リベースのコミット状態種別
+/// 対話的リベースのコミット状態種別
 /// </summary>
 public enum InteractiveRebasePendingType
 {
@@ -39,7 +39,7 @@ public enum InteractiveRebasePendingType
 }
 
 /// <summary>
-///     対話的リベース中のコミット情報
+/// 対話的リベース中のコミット情報
 /// </summary>
 public class InteractiveCommit
 {
@@ -48,7 +48,7 @@ public class InteractiveCommit
 }
 
 /// <summary>
-///     対話的リベースの個別ジョブ（1コミット分の操作定義）
+/// 対話的リベースの個別ジョブ（1コミット分の操作定義）
 /// </summary>
 public class InteractiveRebaseJob
 {
@@ -58,11 +58,11 @@ public class InteractiveRebaseJob
 }
 
 /// <summary>
-///     対話的リベースのジョブコレクション。ORIG_HEADとOnto情報も保持する。
+/// 対話的リベースのジョブコレクション。ORIG_HEADとOnto情報も保持する。
 /// </summary>
 public class InteractiveRebaseJobCollection
 {
     public string OrigHead { get; set; } = string.Empty;
     public string Onto { get; set; } = string.Empty;
-    public List<InteractiveRebaseJob> Jobs { get; set; } = new List<InteractiveRebaseJob>();
+    public List<InteractiveRebaseJob> Jobs { get; set; } = [];
 }

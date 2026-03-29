@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     チェリーピックダイアログのViewModel。
-///     git cherry-pickコマンドで指定コミットの変更を現在のブランチに適用する。
-///     マージコミットのチェリーピックにも対応する。
+/// チェリーピックダイアログのViewModel。
+/// git cherry-pickコマンドで指定コミットの変更を現在のブランチに適用する。
+/// マージコミットのチェリーピックにも対応する。
 /// </summary>
 public class CherryPick : Popup
 {
     /// <summary>
-    ///     チェリーピック対象のコミットリスト。
+    /// チェリーピック対象のコミットリスト。
     /// </summary>
     public List<Models.Commit> Targets
     {
@@ -20,7 +20,7 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     対象がマージコミットかどうかのフラグ。
+    /// 対象がマージコミットかどうかのフラグ。
     /// </summary>
     public bool IsMergeCommit
     {
@@ -29,7 +29,7 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     マージコミットの親コミットリスト。マージコミットの場合にメインラインを選択するために使用する。
+    /// マージコミットの親コミットリスト。マージコミットの場合にメインラインを選択するために使用する。
     /// </summary>
     public List<Models.Commit> ParentsForMergeCommit
     {
@@ -38,7 +38,7 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     マージコミットのメインライン番号（0始まり）。
+    /// マージコミットのメインライン番号（0始まり）。
     /// </summary>
     public int MainlineForMergeCommit
     {
@@ -47,7 +47,7 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     コミットメッセージにソース情報を追記するかどうか。
+    /// コミットメッセージにソース情報を追記するかどうか。
     /// </summary>
     public bool AppendSourceToMessage
     {
@@ -56,7 +56,7 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     チェリーピック後に自動コミットするかどうか。
+    /// チェリーピック後に自動コミットするかどうか。
     /// </summary>
     public bool AutoCommit
     {
@@ -65,7 +65,7 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     通常コミットのチェリーピック用コンストラクタ。
+    /// 通常コミットのチェリーピック用コンストラクタ。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="targets">チェリーピック対象のコミットリスト</param>
@@ -81,7 +81,7 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     マージコミットのチェリーピック用コンストラクタ。
+    /// マージコミットのチェリーピック用コンストラクタ。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="merge">マージコミット</param>
@@ -98,8 +98,8 @@ public class CherryPick : Popup
     }
 
     /// <summary>
-    ///     確定処理。git cherry-pickコマンドを実行する。
-    ///     マージコミットの場合は-mオプション付きで実行する。
+    /// 確定処理。git cherry-pickコマンドを実行する。
+    /// マージコミットの場合は-mオプション付きで実行する。
     /// </summary>
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()

@@ -7,23 +7,23 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     AIを使用してコミットメッセージを自動生成するクラス。
-///     各ファイルのdiff内容をAIに送信し、変更の要約とコミットサブジェクトを生成する。
-///     https://github.com/anjerodev/commitollama のC#実装。
+/// AIを使用してコミットメッセージを自動生成するクラス。
+/// 各ファイルのdiff内容をAIに送信し、変更の要約とコミットサブジェクトを生成する。
+/// https://github.com/anjerodev/commitollama のC#実装。
 /// </summary>
 /// <remarks>
-///     A C# version of https://github.com/anjerodev/commitollama
+/// A C# version of https://github.com/anjerodev/commitollama
 /// </remarks>
 public class GenerateCommitMessage
 {
     /// <summary>
-    ///     変更ファイルのdiff内容を取得するgitコマンド。
-    ///     git diff --no-color --no-ext-diff --diff-algorithm=minimal を実行する。
+    /// 変更ファイルのdiff内容を取得するgitコマンド。
+    /// git diff --no-color --no-ext-diff --diff-algorithm=minimal を実行する。
     /// </summary>
     public class GetDiffContent : Command
     {
         /// <summary>
-        ///     GetDiffContentコマンドを初期化する。
+        /// GetDiffContentコマンドを初期化する。
         /// </summary>
         /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
         /// <param name="opt">diff対象を指定するオプション。</param>
@@ -37,7 +37,7 @@ public class GenerateCommitMessage
         }
 
         /// <summary>
-        ///     diff内容を非同期で読み取る。
+        /// diff内容を非同期で読み取る。
         /// </summary>
         /// <returns>コマンドの実行結果。</returns>
         public async Task<Result> ReadAsync()
@@ -47,7 +47,7 @@ public class GenerateCommitMessage
     }
 
     /// <summary>
-    ///     GenerateCommitMessageを初期化する。
+    /// GenerateCommitMessageを初期化する。
     /// </summary>
     /// <param name="service">AIサービスの設定情報。</param>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
@@ -64,8 +64,8 @@ public class GenerateCommitMessage
     }
 
     /// <summary>
-    ///     コミットメッセージの生成を非同期で実行する。
-    ///     各変更ファイルのdiffをAIに送信して分析し、最終的にサブジェクト行を生成する。
+    /// コミットメッセージの生成を非同期で実行する。
+    /// 各変更ファイルのdiffをAIに送信して分析し、最終的にサブジェクト行を生成する。
     /// </summary>
     public async Task ExecAsync()
     {
@@ -135,27 +135,27 @@ public class GenerateCommitMessage
     }
 
     /// <summary>
-    ///     使用するAIサービスの設定。
+    /// 使用するAIサービスの設定。
     /// </summary>
     private Models.OpenAIService _service;
 
     /// <summary>
-    ///     リポジトリの作業ディレクトリパス。
+    /// リポジトリの作業ディレクトリパス。
     /// </summary>
     private string _repo;
 
     /// <summary>
-    ///     コミット対象の変更ファイルリスト。
+    /// コミット対象の変更ファイルリスト。
     /// </summary>
     private List<Models.Change> _changes;
 
     /// <summary>
-    ///     処理のキャンセルトークン。
+    /// 処理のキャンセルトークン。
     /// </summary>
     private CancellationToken _cancelToken;
 
     /// <summary>
-    ///     AIからの応答を受け取るコールバック。
+    /// AIからの応答を受け取るコールバック。
     /// </summary>
     private Action<string> _onResponse;
 }

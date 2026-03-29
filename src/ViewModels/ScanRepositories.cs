@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ディレクトリ内のGitリポジトリを自動スキャンするポップアップダイアログのViewModel。
-///     指定ディレクトリ配下を再帰的に探索し、未管理のリポジトリを発見してツリーに追加する。
+/// ディレクトリ内のGitリポジトリを自動スキャンするポップアップダイアログのViewModel。
+/// 指定ディレクトリ配下を再帰的に探索し、未管理のリポジトリを発見してツリーに追加する。
 /// </summary>
 public class ScanRepositories : Popup
 {
     /// <summary>
-    ///     カスタムディレクトリを使用するかどうか。falseの場合はプリセットから選択。
+    /// カスタムディレクトリを使用するかどうか。falseの場合はプリセットから選択。
     /// </summary>
     public bool UseCustomDir
     {
@@ -21,7 +21,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     ユーザーが指定したカスタムスキャンディレクトリのパス。
+    /// ユーザーが指定したカスタムスキャンディレクトリのパス。
     /// </summary>
     public string CustomDir
     {
@@ -30,7 +30,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     スキャン対象ディレクトリの選択肢リスト（ワークスペース/グローバル設定から取得）。
+    /// スキャン対象ディレクトリの選択肢リスト（ワークスペース/グローバル設定から取得）。
     /// </summary>
     public List<Models.ScanDir> ScanDirs
     {
@@ -38,7 +38,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     選択されたスキャンディレクトリ。
+    /// 選択されたスキャンディレクトリ。
     /// </summary>
     public Models.ScanDir Selected
     {
@@ -47,11 +47,11 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。ワークスペースとグローバル設定からスキャンディレクトリ候補を初期化する。
+    /// コンストラクタ。ワークスペースとグローバル設定からスキャンディレクトリ候補を初期化する。
     /// </summary>
     public ScanRepositories()
     {
-        ScanDirs = new List<Models.ScanDir>();
+        ScanDirs = [];
 
         var workspace = Preferences.Instance.GetActiveWorkspace();
         if (!string.IsNullOrEmpty(workspace.DefaultCloneDir))
@@ -69,8 +69,8 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     指定ディレクトリ内のGitリポジトリをスキャンしてツリーに追加する。
-    ///     ポップアップダイアログなしで直接実行されるスタティックメソッド。
+    /// 指定ディレクトリ内のGitリポジトリをスキャンしてツリーに追加する。
+    /// ポップアップダイアログなしで直接実行されるスタティックメソッド。
     /// </summary>
     public static async Task ScanDirectoryAsync(string rootDir)
     {
@@ -82,11 +82,11 @@ public class ScanRepositories : Popup
 
         try
         {
-            var managed = new HashSet<string>();
+            HashSet<string> managed = [];
             GetManagedRepositories(Preferences.Instance.RepositoryNodes, managed);
 
             var rootDirInfo = new DirectoryInfo(rootDir);
-            var found = new List<string>();
+            List<string> found = [];
 
             await GetUnmanagedRepositoriesAsync(rootDirInfo, found, managed, new EnumerationOptions()
             {
@@ -104,7 +104,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     スキャン操作を実行する。選択またはカスタム指定されたディレクトリを再帰的に探索する。
+    /// スキャン操作を実行する。選択またはカスタム指定されたディレクトリを再帰的に探索する。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -137,7 +137,7 @@ public class ScanRepositories : Popup
 
         var minDelay = Task.Delay(500);
         var rootDir = new DirectoryInfo(selectedDir);
-        var found = new List<string>();
+        List<string> found = [];
 
         await GetUnmanagedRepositoriesAsync(rootDir, found, _managed, new EnumerationOptions()
         {
@@ -155,7 +155,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     既に管理されているリポジトリのIDセットを再帰的に収集する。
+    /// 既に管理されているリポジトリのIDセットを再帰的に収集する。
     /// </summary>
     private static void GetManagedRepositories(List<RepositoryNode> group, HashSet<string> repos)
     {
@@ -169,8 +169,8 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     未管理のGitリポジトリを再帰的に検出する。最大深度5まで探索する。
-    ///     隠しディレクトリやnode_modulesはスキップする。
+    /// 未管理のGitリポジトリを再帰的に検出する。最大深度5まで探索する。
+    /// 隠しディレクトリやnode_modulesはスキップする。
     /// </summary>
     private static async Task GetUnmanagedRepositoriesAsync(DirectoryInfo dir, List<string> outs, HashSet<string> managed, EnumerationOptions opts, Action<string> onProgress = null, int depth = 0)
     {
@@ -214,7 +214,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     発見されたリポジトリをツリーに追加する。ディレクトリ構造に基づいてグループを自動作成する。
+    /// 発見されたリポジトリをツリーに追加する。ディレクトリ構造に基づいてグループを自動作成する。
     /// </summary>
     private static async Task AddFoundRepositories(DirectoryInfo rootDir, List<string> found)
     {
@@ -242,7 +242,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     パスに基づいてグループノードを再帰的に検索または作成する。
+    /// パスに基づいてグループノードを再帰的に検索または作成する。
     /// </summary>
     private static RepositoryNode FindOrCreateGroupRecursive(List<RepositoryNode> collection, string path)
     {
@@ -257,7 +257,7 @@ public class ScanRepositories : Popup
     }
 
     /// <summary>
-    ///     指定名のグループノードを検索し、存在しなければ新規作成する。
+    /// 指定名のグループノードを検索し、存在しなければ新規作成する。
     /// </summary>
     private static RepositoryNode FindOrCreateGroup(List<RepositoryNode> collection, string name)
     {

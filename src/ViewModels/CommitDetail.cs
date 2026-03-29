@@ -12,13 +12,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コミット詳細の共有データ。
-///     複数のCommitDetailインスタンス間でアクティブタブのインデックスを共有する。
+/// コミット詳細の共有データ。
+/// 複数のCommitDetailインスタンス間でアクティブタブのインデックスを共有する。
 /// </summary>
 public class CommitDetailSharedData
 {
     /// <summary>
-    ///     アクティブなタブのインデックス（0: 情報タブ、1: 変更タブ）。
+    /// アクティブなタブのインデックス（0: 情報タブ、1: 変更タブ）。
     /// </summary>
     public int ActiveTabIndex
     {
@@ -27,7 +27,7 @@ public class CommitDetailSharedData
     }
 
     /// <summary>
-    ///     コンストラクタ。設定に基づいてデフォルトのタブインデックスを設定する。
+    /// コンストラクタ。設定に基づいてデフォルトのタブインデックスを設定する。
     /// </summary>
     public CommitDetailSharedData()
     {
@@ -37,14 +37,14 @@ public class CommitDetailSharedData
 }
 
 /// <summary>
-///     コミット詳細ビューのViewModel。
-///     選択されたコミットの詳細情報（メッセージ、署名、変更ファイル、差分、
-///     リビジョンファイルの表示）を管理する。ファイルリセット操作も提供する。
+/// コミット詳細ビューのViewModel。
+/// 選択されたコミットの詳細情報（メッセージ、署名、変更ファイル、差分、
+/// リビジョンファイルの表示）を管理する。ファイルリセット操作も提供する。
 /// </summary>
 public partial class CommitDetail : ObservableObject, IDisposable
 {
     /// <summary>
-    ///     対象のリポジトリViewModel。
+    /// 対象のリポジトリViewModel。
     /// </summary>
     public Repository Repository
     {
@@ -52,7 +52,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     アクティブなタブのインデックス。変更タブに切り替え時、差分コンテキストを生成する。
+    /// アクティブなタブのインデックス。変更タブに切り替え時、差分コンテキストを生成する。
     /// </summary>
     public int ActiveTabIndex
     {
@@ -71,7 +71,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     表示対象のコミット。変更時に全データを再読み込みする。
+    /// 表示対象のコミット。変更時に全データを再読み込みする。
     /// </summary>
     public Models.Commit Commit
     {
@@ -88,7 +88,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットのフルメッセージ（インライン要素付き）。
+    /// コミットのフルメッセージ（インライン要素付き）。
     /// </summary>
     public Models.CommitFullMessage FullMessage
     {
@@ -97,7 +97,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットの署名情報（GPG/SSH署名）。
+    /// コミットの署名情報（GPG/SSH署名）。
     /// </summary>
     public Models.CommitSignInfo SignInfo
     {
@@ -106,7 +106,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットに関連するWebリンク一覧（イシュートラッカー等）。
+    /// コミットに関連するWebリンク一覧（イシュートラッカー等）。
     /// </summary>
     public List<Models.CommitLink> WebLinks
     {
@@ -115,7 +115,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     このコミットの子コミットSHAリスト。
+    /// このコミットの子コミットSHAリスト。
     /// </summary>
     public List<string> Children
     {
@@ -124,7 +124,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットの全変更ファイルリスト。
+    /// コミットの全変更ファイルリスト。
     /// </summary>
     public List<Models.Change> Changes
     {
@@ -133,7 +133,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示中変更ファイルリスト。
+    /// フィルタ適用後の表示中変更ファイルリスト。
     /// </summary>
     public List<Models.Change> VisibleChanges
     {
@@ -142,7 +142,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択中の変更ファイルリスト。変更時にDiffContextを更新する。
+    /// 選択中の変更ファイルリスト。変更時にDiffContextを更新する。
     /// </summary>
     public List<Models.Change> SelectedChanges
     {
@@ -161,7 +161,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     差分表示用のDiffContext。
+    /// 差分表示用のDiffContext。
     /// </summary>
     public DiffContext DiffContext
     {
@@ -170,7 +170,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更ファイルの検索フィルタ文字列。変更時に表示リストを更新する。
+    /// 変更ファイルの検索フィルタ文字列。変更時に表示リストを更新する。
     /// </summary>
     public string SearchChangeFilter
     {
@@ -184,7 +184,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイルビューアで表示中のファイルパス。
+    /// リビジョンファイルビューアで表示中のファイルパス。
     /// </summary>
     public string ViewRevisionFilePath
     {
@@ -193,8 +193,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイルビューアで表示中のファイル内容。
-    ///     テキスト、画像、バイナリ、LFS、サブモジュールなど複数の型を取り得る。
+    /// リビジョンファイルビューアで表示中のファイル内容。
+    /// テキスト、画像、バイナリ、LFS、サブモジュールなど複数の型を取り得る。
     /// </summary>
     public object ViewRevisionFileContent
     {
@@ -203,7 +203,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイル検索のフィルタ文字列。変更時にサジェストを更新する。
+    /// リビジョンファイル検索のフィルタ文字列。変更時にサジェストを更新する。
     /// </summary>
     public string RevisionFileSearchFilter
     {
@@ -217,7 +217,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイル検索のサジェストリスト。
+    /// リビジョンファイル検索のサジェストリスト。
     /// </summary>
     public List<string> RevisionFileSearchSuggestion
     {
@@ -226,7 +226,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイルをデフォルトエディタで開けるかどうか。
+    /// リビジョンファイルをデフォルトエディタで開けるかどうか。
     /// </summary>
     public bool CanOpenRevisionFileWithDefaultEditor
     {
@@ -235,7 +235,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     スクロール位置のオフセット。
+    /// スクロール位置のオフセット。
     /// </summary>
     public Vector ScrollOffset
     {
@@ -244,7 +244,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリと共有データを受け取って初期化する。
+    /// コンストラクタ。リポジトリと共有データを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="sharedData">タブインデックス共有データ（nullの場合は新規作成）</param>
@@ -257,7 +257,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リソースを解放する。全フィールドをnullに設定してGCを促進する。
+    /// リソースを解放する。全フィールドをnullに設定してGCを促進する。
     /// </summary>
     public void Dispose()
     {
@@ -278,7 +278,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定コミットSHAにナビゲートする。
+    /// 指定コミットSHAにナビゲートする。
     /// </summary>
     /// <param name="commitSHA">ナビゲート先のコミットSHA</param>
     public void NavigateTo(string commitSHA)
@@ -287,7 +287,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     このコミットを含む全参照（ブランチ・タグ）を非同期で取得する。
+    /// このコミットを含む全参照（ブランチ・タグ）を非同期で取得する。
     /// </summary>
     /// <returns>参照デコレータのリスト</returns>
     public async Task<List<Models.Decorator>> GetRefsContainsThisCommitAsync()
@@ -298,7 +298,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更ファイル検索フィルタをクリアする。
+    /// 変更ファイル検索フィルタをクリアする。
     /// </summary>
     public void ClearSearchChangeFilter()
     {
@@ -306,7 +306,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイル検索フィルタをクリアする。
+    /// リビジョンファイル検索フィルタをクリアする。
     /// </summary>
     public void ClearRevisionFileSearchFilter()
     {
@@ -314,7 +314,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイルのサジェストリストをキャンセル（非表示に）する。
+    /// リビジョンファイルのサジェストリストをキャンセル（非表示に）する。
     /// </summary>
     public void CancelRevisionFileSuggestions()
     {
@@ -322,7 +322,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定SHAのコミット情報を非同期で取得する。
+    /// 指定SHAのコミット情報を非同期で取得する。
     /// </summary>
     /// <param name="sha">取得対象のコミットSHA</param>
     /// <returns>コミット情報</returns>
@@ -334,7 +334,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リポジトリ内の相対パスから絶対パスを取得する。
+    /// リポジトリ内の相対パスから絶対パスを取得する。
     /// </summary>
     /// <param name="path">リポジトリ内の相対パス</param>
     /// <returns>絶対パス</returns>
@@ -344,7 +344,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     外部マージツールで変更を開く。
+    /// 外部マージツールで変更を開く。
     /// </summary>
     /// <param name="c">対象の変更ファイル</param>
     public void OpenChangeInMergeTool(Models.Change c)
@@ -353,7 +353,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択した変更をパッチファイルとして保存する。
+    /// 選択した変更をパッチファイルとして保存する。
     /// </summary>
     /// <param name="changes">パッチに含める変更ファイルリスト</param>
     /// <param name="saveTo">保存先のファイルパス</param>
@@ -370,8 +370,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定パスのファイルをこのコミットのリビジョンにリセットする。
-    ///     変更リスト内のファイルの場合は変更種別に応じた処理を行う。
+    /// 指定パスのファイルをこのコミットのリビジョンにリセットする。
+    /// 変更リスト内のファイルの場合は変更種別に応じた処理を行う。
     /// </summary>
     /// <param name="path">リセット対象のファイルパス</param>
     public async Task ResetToThisRevisionAsync(string path)
@@ -391,8 +391,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更ファイルをこのコミットのリビジョンにリセットする。
-    ///     変更種別（削除、リネーム、その他）に応じた処理を行う。
+    /// 変更ファイルをこのコミットのリビジョンにリセットする。
+    /// 変更種別（削除、リネーム、その他）に応じた処理を行う。
     /// </summary>
     /// <param name="change">リセット対象の変更ファイル</param>
     public async Task ResetToThisRevisionAsync(Models.Change change)
@@ -433,8 +433,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更ファイルを親コミットのリビジョンにリセットする。
-    ///     変更種別（追加、リネーム、その他）に応じた処理を行う。
+    /// 変更ファイルを親コミットのリビジョンにリセットする。
+    /// 変更種別（追加、リネーム、その他）に応じた処理を行う。
     /// </summary>
     /// <param name="change">リセット対象の変更ファイル</param>
     public async Task ResetToParentRevisionAsync(Models.Change change)
@@ -475,14 +475,14 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     複数ファイルをこのコミットのリビジョンに一括リセットする。
-    ///     削除対象とチェックアウト対象を分類して効率的に処理する。
+    /// 複数ファイルをこのコミットのリビジョンに一括リセットする。
+    /// 削除対象とチェックアウト対象を分類して効率的に処理する。
     /// </summary>
     /// <param name="changes">リセット対象の変更ファイルリスト</param>
     public async Task ResetMultipleToThisRevisionAsync(List<Models.Change> changes)
     {
-        var checkouts = new List<string>();
-        var removes = new List<string>();
+        List<string> checkouts = [];
+        List<string> removes = [];
 
         // 変更種別に応じて削除リストとチェックアウトリストに分類する
         foreach (var c in changes)
@@ -528,14 +528,14 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     複数ファイルを親コミットのリビジョンに一括リセットする。
-    ///     削除対象とチェックアウト対象を分類して効率的に処理する。
+    /// 複数ファイルを親コミットのリビジョンに一括リセットする。
+    /// 削除対象とチェックアウト対象を分類して効率的に処理する。
     /// </summary>
     /// <param name="changes">リセット対象の変更ファイルリスト</param>
     public async Task ResetMultipleToParentRevisionAsync(List<Models.Change> changes)
     {
-        var checkouts = new List<string>();
-        var removes = new List<string>();
+        List<string> checkouts = [];
+        List<string> removes = [];
 
         // 変更種別に応じて削除リストとチェックアウトリストに分類する
         foreach (var c in changes)
@@ -581,7 +581,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定フォルダ配下のリビジョンファイルオブジェクトを非同期で取得する。
+    /// 指定フォルダ配下のリビジョンファイルオブジェクトを非同期で取得する。
     /// </summary>
     /// <param name="parentFolder">親フォルダパス</param>
     /// <returns>リビジョンファイルオブジェクトのリスト</returns>
@@ -593,7 +593,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイルを表示する。ファイルの種別（Blob/Commit）に応じて表示内容を切り替える。
+    /// リビジョンファイルを表示する。ファイルの種別（Blob/Commit）に応じて表示内容を切り替える。
     /// </summary>
     /// <param name="file">表示対象のファイルオブジェクト（nullの場合は表示をクリア）</param>
     public async Task ViewRevisionFileAsync(Models.Object file)
@@ -622,7 +622,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイルを一時ファイルに保存して外部ツールまたはデフォルトエディタで開く。
+    /// リビジョンファイルを一時ファイルに保存して外部ツールまたはデフォルトエディタで開く。
     /// </summary>
     /// <param name="file">開くファイルのパス</param>
     /// <param name="tool">使用する外部ツール（nullの場合はデフォルトエディタ）</param>
@@ -647,7 +647,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイルを指定パスに保存する。
+    /// リビジョンファイルを指定パスに保存する。
     /// </summary>
     /// <param name="file">保存対象のファイルオブジェクト</param>
     /// <param name="saveTo">保存先のファイルパス</param>
@@ -659,8 +659,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットが変更された時に全データを再読み込みする。
-    ///     フルメッセージ、署名情報、子コミット、変更ファイル一覧を非同期で取得する。
+    /// コミットが変更された時に全データを再読み込みする。
+    /// フルメッセージ、署名情報、子コミット、変更ファイル一覧を非同期で取得する。
     /// </summary>
     private void Refresh()
     {
@@ -752,7 +752,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
             var visible = changes;
             if (!string.IsNullOrWhiteSpace(_searchChangeFilter))
             {
-                visible = new List<Models.Change>();
+                visible = [];
                 foreach (var c in changes)
                 {
                     if (c.Path.Contains(_searchChangeFilter, StringComparison.OrdinalIgnoreCase))
@@ -778,8 +778,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットメッセージ内のインライン要素（URL、コミットSHA、インラインコード）を解析する。
-    ///     イシュートラッカーのルールも適用する。
+    /// コミットメッセージ内のインライン要素（URL、コミットSHA、インラインコード）を解析する。
+    /// イシュートラッカーのルールも適用する。
     /// </summary>
     /// <param name="message">コミットメッセージ</param>
     /// <returns>インライン要素のコレクション</returns>
@@ -804,7 +804,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
             if (inlines.Intersect(start, len) is not null)
                 continue;
 
-            var url = message.Substring(start, len);
+            var url = message[start..(start + len)];
             if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 inlines.Add(new Models.InlineElement(Models.InlineElementType.Link, start, len, url));
         }
@@ -844,7 +844,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタに基づいて表示用変更ファイルリストを更新する。
+    /// フィルタに基づいて表示用変更ファイルリストを更新する。
     /// </summary>
     private void RefreshVisibleChanges()
     {
@@ -856,7 +856,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
         else
         {
             // パスにフィルタ文字列を含む変更のみ表示する
-            var visible = new List<Models.Change>();
+            List<Models.Change> visible = [];
             foreach (var c in _changes)
             {
                 if (c.Path.Contains(_searchChangeFilter, StringComparison.OrdinalIgnoreCase))
@@ -868,8 +868,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リビジョンファイル検索のサジェストリストを更新する。
-    ///     ファイル名リストが未取得の場合は非同期で取得する。
+    /// リビジョンファイル検索のサジェストリストを更新する。
+    /// ファイル名リストが未取得の場合は非同期で取得する。
     /// </summary>
     private void RefreshRevisionSearchSuggestion()
     {
@@ -921,12 +921,12 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタ文字列に基づいてサジェストリストを計算する。
-    ///     最大100件まで返す。
+    /// フィルタ文字列に基づいてサジェストリストを計算する。
+    /// 最大100件まで返す。
     /// </summary>
     private void CalcRevisionFileSearchSuggestion()
     {
-        var suggestion = new List<string>();
+        List<string> suggestion = [];
         foreach (var file in _revisionFiles)
         {
             // フィルタ文字列を含み、かつ完全一致ではないファイルをサジェストに追加する
@@ -943,8 +943,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     Blobオブジェクト（通常ファイル）の表示内容を設定する。
-    ///     バイナリ/テキスト/LFS/画像を判別して適切な表示モデルを生成する。
+    /// Blobオブジェクト（通常ファイル）の表示内容を設定する。
+    /// バイナリ/テキスト/LFS/画像を判別して適切な表示モデルを生成する。
     /// </summary>
     /// <param name="file">表示対象のファイルオブジェクト</param>
     private async Task SetViewingBlobAsync(Models.Object file)
@@ -995,8 +995,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     Commitオブジェクト（サブモジュール）の表示内容を設定する。
-    ///     サブモジュールのコミット情報とメッセージを取得して表示する。
+    /// Commitオブジェクト（サブモジュール）の表示内容を設定する。
+    /// サブモジュールのコミット情報とメッセージを取得して表示する。
     /// </summary>
     /// <param name="file">表示対象のファイルオブジェクト（サブモジュール）</param>
     private async Task SetViewingCommitAsync(Models.Object file)

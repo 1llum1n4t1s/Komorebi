@@ -10,12 +10,12 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リポジトリ操作ツールバーのコードビハインド。
+/// リポジトリ操作ツールバーのコードビハインド。
 /// </summary>
 public partial class RepositoryToolbar : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public RepositoryToolbar()
     {
@@ -23,7 +23,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenWithExternalToolsの処理を行う。
+    /// OpenWithExternalToolsの処理を行う。
     /// </summary>
     private void OpenWithExternalTools(object sender, RoutedEventArgs ev)
     {
@@ -144,7 +144,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenStatisticsの処理を行う。
+    /// OpenStatisticsの処理を行う。
     /// </summary>
     private async void OpenStatistics(object _, RoutedEventArgs e)
     {
@@ -156,7 +156,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenConfigureの処理を行う。
+    /// OpenConfigureの処理を行う。
     /// </summary>
     private async void OpenConfigure(object sender, RoutedEventArgs e)
     {
@@ -168,7 +168,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     Fetchの処理を行う。
+    /// Fetchの処理を行う。
     /// </summary>
     private async void Fetch(object sender, TappedEventArgs e)
     {
@@ -180,7 +180,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     FetchDirectlyByHotKeyの処理を行う。
+    /// FetchDirectlyByHotKeyの処理を行う。
     /// </summary>
     private async void FetchDirectlyByHotKey(object sender, RoutedEventArgs e)
     {
@@ -195,7 +195,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     Pullの処理を行う。
+    /// Pullの処理を行う。
     /// </summary>
     private async void Pull(object sender, TappedEventArgs e)
     {
@@ -207,7 +207,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     PullDirectlyByHotKeyの処理を行う。
+    /// PullDirectlyByHotKeyの処理を行う。
     /// </summary>
     private async void PullDirectlyByHotKey(object sender, RoutedEventArgs e)
     {
@@ -222,7 +222,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     Pushの処理を行う。
+    /// Pushの処理を行う。
     /// </summary>
     private async void Push(object sender, TappedEventArgs e)
     {
@@ -234,7 +234,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     PushDirectlyByHotKeyの処理を行う。
+    /// PushDirectlyByHotKeyの処理を行う。
     /// </summary>
     private async void PushDirectlyByHotKey(object sender, RoutedEventArgs e)
     {
@@ -249,7 +249,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     StashAllの処理を行う。
+    /// StashAllの処理を行う。
     /// </summary>
     private async void StashAll(object _, TappedEventArgs e)
     {
@@ -261,7 +261,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenGitFlowMenuの処理を行う。
+    /// OpenGitFlowMenuの処理を行う。
     /// </summary>
     private void OpenGitFlowMenu(object sender, RoutedEventArgs ev)
     {
@@ -330,7 +330,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenGitLFSMenuの処理を行う。
+    /// OpenGitLFSMenuの処理を行う。
     /// </summary>
     private void OpenGitLFSMenu(object sender, RoutedEventArgs ev)
     {
@@ -472,7 +472,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     StartBisectの処理を行う。
+    /// StartBisectの処理を行う。
     /// </summary>
     private async void StartBisect(object sender, RoutedEventArgs e)
     {
@@ -491,7 +491,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     Cleanupの処理を行う。
+    /// Cleanupの処理を行う。
     /// </summary>
     private async void Cleanup(object sender, RoutedEventArgs e)
     {
@@ -503,7 +503,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     ClearIndexCacheの処理を行う。
+    /// ClearIndexCacheの処理を行う。
     /// </summary>
     private async void ClearIndexCache(object sender, RoutedEventArgs e)
     {
@@ -515,7 +515,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenCustomActionMenuの処理を行う。
+    /// OpenCustomActionMenuの処理を行う。
     /// </summary>
     private void OpenCustomActionMenu(object sender, RoutedEventArgs ev)
     {
@@ -554,7 +554,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenGitLogsの処理を行う。
+    /// OpenGitLogsの処理を行う。
     /// </summary>
     private async void OpenGitLogs(object sender, RoutedEventArgs e)
     {
@@ -566,7 +566,7 @@ public partial class RepositoryToolbar : UserControl
     }
 
     /// <summary>
-    ///     ナビゲーション処理を行う。
+    /// ナビゲーション処理を行う。
     /// </summary>
     private void NavigateToHead(object sender, RoutedEventArgs e)
     {

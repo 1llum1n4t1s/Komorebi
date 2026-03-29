@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ファイルやディレクトリを移動（リネーム）するgitコマンド。
-///     git mv を実行する。
+/// ファイルやディレクトリを移動（リネーム）するgitコマンド。
+/// git mv を実行する。
 /// </summary>
 public class Move : Command
 {
     /// <summary>
-    ///     Moveコマンドを初期化する。
+    /// Moveコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="oldPath">移動元のファイルパス。</param>

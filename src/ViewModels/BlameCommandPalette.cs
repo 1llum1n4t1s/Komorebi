@@ -6,13 +6,13 @@ using Avalonia.Threading;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     BlameコマンドパレットのViewModel。
-///     リポジトリ内のファイル一覧から選択してblameビューを開くための検索パレット。
+/// BlameコマンドパレットのViewModel。
+/// リポジトリ内のファイル一覧から選択してblameビューを開くための検索パレット。
 /// </summary>
 public class BlameCommandPalette : ICommandPalette
 {
     /// <summary>
-    ///     ファイル一覧のロード中かどうかを示すフラグ。
+    /// ファイル一覧のロード中かどうかを示すフラグ。
     /// </summary>
     public bool IsLoading
     {
@@ -21,7 +21,7 @@ public class BlameCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示ファイルリスト。
+    /// フィルタ適用後の表示ファイルリスト。
     /// </summary>
     public List<string> VisibleFiles
     {
@@ -30,7 +30,7 @@ public class BlameCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     ファイル名フィルタ文字列。変更時に表示リストを更新する。
+    /// ファイル名フィルタ文字列。変更時に表示リストを更新する。
     /// </summary>
     public string Filter
     {
@@ -44,7 +44,7 @@ public class BlameCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択されたファイルパス。
+    /// 選択されたファイルパス。
     /// </summary>
     public string SelectedFile
     {
@@ -53,7 +53,7 @@ public class BlameCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリのHEADからファイル一覧をバックグラウンドで取得する。
+    /// コンストラクタ。リポジトリのHEADからファイル一覧をバックグラウンドで取得する。
     /// </summary>
     /// <param name="repo">リポジトリのフルパス</param>
     public BlameCommandPalette(string repo)
@@ -84,7 +84,7 @@ public class BlameCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ文字列をクリアする。
+    /// フィルタ文字列をクリアする。
     /// </summary>
     public void ClearFilter()
     {
@@ -92,7 +92,7 @@ public class BlameCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択したファイルでblameウィンドウを起動する。
+    /// 選択したファイルでblameウィンドウを起動する。
     /// </summary>
     public void Launch()
     {
@@ -107,7 +107,7 @@ public class BlameCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタに基づいて表示ファイルリストを更新する。
+    /// フィルタに基づいて表示ファイルリストを更新する。
     /// </summary>
     private void UpdateVisible()
     {
@@ -124,7 +124,7 @@ public class BlameCommandPalette : ICommandPalette
             else
             {
                 // フィルタに一致するファイルのみ抽出する
-                var visible = new List<string>();
+                List<string> visible = [];
 
                 foreach (var f in _repoFiles)
                 {

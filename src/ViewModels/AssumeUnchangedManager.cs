@@ -5,18 +5,18 @@ using Avalonia.Threading;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     「変更なしとみなす」ファイルの管理ViewModel。
-///     git update-index --assume-unchangedで設定されたファイルの一覧表示と解除を行う。
+/// 「変更なしとみなす」ファイルの管理ViewModel。
+/// git update-index --assume-unchangedで設定されたファイルの一覧表示と解除を行う。
 /// </summary>
 public class AssumeUnchangedManager
 {
     /// <summary>
-    ///     「変更なしとみなす」設定がされているファイルパスのリスト。
+    /// 「変更なしとみなす」設定がされているファイルパスのリスト。
     /// </summary>
     public AvaloniaList<string> Files { get; private set; }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリを受け取り、バックグラウンドでファイル一覧を取得する。
+    /// コンストラクタ。リポジトリを受け取り、バックグラウンドでファイル一覧を取得する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public AssumeUnchangedManager(Repository repo)
@@ -35,7 +35,7 @@ public class AssumeUnchangedManager
     }
 
     /// <summary>
-    ///     指定ファイルのassume-unchanged設定を解除する。
+    /// 指定ファイルのassume-unchanged設定を解除する。
     /// </summary>
     /// <param name="file">設定を解除するファイルパス</param>
     public async Task RemoveAsync(string file)

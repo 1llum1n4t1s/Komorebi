@@ -3,7 +3,7 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     LFSのプルーニング（不要オブジェクト削除）ダイアログのViewModel。
+/// LFSのプルーニング（不要オブジェクト削除）ダイアログのViewModel。
 /// </summary>
 public class LFSPrune : Popup
 {

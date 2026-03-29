@@ -1,5 +1,11 @@
 <Project>
   <PropertyGroup>
-    <Version>1.0.36</Version>
+    <Version>1.0.40</Version>
+    <!-- IDEコードスタイル分析（IDE0005等）をビルド時にも強制する -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <!-- IDE0005（不要なusing検出）にはドキュメント生成が必須 -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- XMLドキュメントコメント未記載の警告（CS1591）を抑制する -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 </Project>

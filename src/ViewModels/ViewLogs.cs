@@ -4,13 +4,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コマンドログ一覧を表示するViewModel。
-///     リポジトリで実行されたgitコマンドの履歴を閲覧・管理する。
+/// コマンドログ一覧を表示するViewModel。
+/// リポジトリで実行されたgitコマンドの履歴を閲覧・管理する。
 /// </summary>
 public class ViewLogs : ObservableObject
 {
     /// <summary>
-    ///     コマンドログのリスト。リポジトリのログコレクションを参照する。
+    /// コマンドログのリスト。リポジトリのログコレクションを参照する。
     /// </summary>
     public AvaloniaList<CommandLog> Logs
     {
@@ -18,7 +18,7 @@ public class ViewLogs : ObservableObject
     }
 
     /// <summary>
-    ///     現在選択されているコマンドログ。
+    /// 現在選択されているコマンドログ。
     /// </summary>
     public CommandLog SelectedLog
     {
@@ -27,7 +27,7 @@ public class ViewLogs : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリのログから初期選択を設定する。
+    /// コンストラクタ。リポジトリのログから初期選択を設定する。
     /// </summary>
     public ViewLogs(Repository repo)
     {
@@ -37,7 +37,7 @@ public class ViewLogs : ObservableObject
     }
 
     /// <summary>
-    ///     全てのログをクリアする。
+    /// 全てのログをクリアする。
     /// </summary>
     public void ClearAll()
     {

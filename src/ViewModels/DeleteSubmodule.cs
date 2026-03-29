@@ -3,12 +3,12 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     サブモジュールを完全に削除するためのダイアログViewModel。
+/// サブモジュールを完全に削除するためのダイアログViewModel。
 /// </summary>
 public class DeleteSubmodule : Popup
 {
     /// <summary>
-    ///     削除対象のサブモジュールパス。
+    /// 削除対象のサブモジュールパス。
     /// </summary>
     public string Submodule
     {
@@ -17,7 +17,7 @@ public class DeleteSubmodule : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリとサブモジュールパスを指定する。
+    /// コンストラクタ。対象リポジトリとサブモジュールパスを指定する。
     /// </summary>
     public DeleteSubmodule(Repository repo, string submodule)
     {
@@ -26,7 +26,7 @@ public class DeleteSubmodule : Popup
     }
 
     /// <summary>
-    ///     サブモジュール削除を実行する確認アクション。
+    /// サブモジュール削除を実行する確認アクション。
     /// </summary>
     public override async Task<bool> Sure()
     {

@@ -8,12 +8,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リポジトリメインビュー（ブランチ・履歴・ワーキングコピー）のコードビハインド。
+/// リポジトリメインビュー（ブランチ・履歴・ワーキングコピー）のコードビハインド。
 /// </summary>
 public partial class Repository : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Repository()
     {
@@ -21,7 +21,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -30,7 +30,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     ToggleFilterイベントのハンドラ。
+    /// ToggleFilterイベントのハンドラ。
     /// </summary>
     private void OnToggleFilter(object _, RoutedEventArgs e)
     {
@@ -39,7 +39,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     SearchCommitPanelPropertyChangedイベントのハンドラ。
+    /// SearchCommitPanelPropertyChangedイベントのハンドラ。
     /// </summary>
     private void OnSearchCommitPanelPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
@@ -48,7 +48,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     SearchKeyDownイベントのハンドラ。
+    /// SearchKeyDownイベントのハンドラ。
     /// </summary>
     private void OnSearchKeyDown(object _, KeyEventArgs e)
     {
@@ -78,7 +78,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     ClearSearchCommitFilterイベントのハンドラ。
+    /// ClearSearchCommitFilterイベントのハンドラ。
     /// </summary>
     private void OnClearSearchCommitFilter(object _, RoutedEventArgs e)
     {
@@ -90,7 +90,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     LocalBranchTreeSelectionChangedイベントのハンドラ。
+    /// LocalBranchTreeSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnLocalBranchTreeSelectionChanged(object _1, RoutedEventArgs _2)
     {
@@ -99,7 +99,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     RemoteBranchTreeSelectionChangedイベントのハンドラ。
+    /// RemoteBranchTreeSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnRemoteBranchTreeSelectionChanged(object _1, RoutedEventArgs _2)
     {
@@ -108,7 +108,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     TagsSelectionChangedイベントのハンドラ。
+    /// TagsSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnTagsSelectionChanged(object _1, RoutedEventArgs _2)
     {
@@ -117,7 +117,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     WorktreeContextRequestedイベントのハンドラ。
+    /// WorktreeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnWorktreeContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -191,7 +191,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     WorktreeDoubleTappedイベントのハンドラ。
+    /// WorktreeDoubleTappedイベントのハンドラ。
     /// </summary>
     private void OnWorktreeDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -202,7 +202,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     WorktreeListPropertyChangedイベントのハンドラ。
+    /// WorktreeListPropertyChangedイベントのハンドラ。
     /// </summary>
     private void OnWorktreeListPropertyChanged(object _, AvaloniaPropertyChangedEventArgs e)
     {
@@ -211,7 +211,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     ブランチツリーの全フォルダノードを展開するボタンのクリックハンドラ。
+    /// ブランチツリーの全フォルダノードを展開するボタンのクリックハンドラ。
     /// </summary>
     private void OnExpandAllBranchNodes(object sender, RoutedEventArgs e)
     {
@@ -220,7 +220,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     ブランチツリーの全フォルダノードを折りたたむボタンのクリックハンドラ。
+    /// ブランチツリーの全フォルダノードを折りたたむボタンのクリックハンドラ。
     /// </summary>
     private void OnCollapseAllBranchNodes(object sender, RoutedEventArgs e)
     {
@@ -229,7 +229,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     LeftSidebarRowsChangedイベントのハンドラ。
+    /// LeftSidebarRowsChangedイベントのハンドラ。
     /// </summary>
     private void OnLeftSidebarRowsChanged(object _, RoutedEventArgs e)
     {
@@ -238,7 +238,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     LeftSidebarSizeChangedイベントのハンドラ。
+    /// LeftSidebarSizeChangedイベントのハンドラ。
     /// </summary>
     private void OnLeftSidebarSizeChanged(object _, SizeChangedEventArgs e)
     {
@@ -247,7 +247,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     UpdateLeftSidebarLayoutの処理を行う。
+    /// UpdateLeftSidebarLayoutの処理を行う。
     /// </summary>
     private void UpdateLeftSidebarLayout()
     {
@@ -373,7 +373,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     SearchSuggestionBoxKeyDownイベントのハンドラ。
+    /// SearchSuggestionBoxKeyDownイベントのハンドラ。
     /// </summary>
     private void OnSearchSuggestionBoxKeyDown(object _, KeyEventArgs e)
     {
@@ -395,7 +395,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     SearchSuggestionDoubleTappedイベントのハンドラ。
+    /// SearchSuggestionDoubleTappedイベントのハンドラ。
     /// </summary>
     private void OnSearchSuggestionDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -413,7 +413,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     OpenAdvancedHistoriesOptionイベントのハンドラ。
+    /// OpenAdvancedHistoriesOptionイベントのハンドラ。
     /// </summary>
     private void OnOpenAdvancedHistoriesOption(object sender, RoutedEventArgs e)
     {
@@ -530,7 +530,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     OpenSortLocalBranchMenuイベントのハンドラ。
+    /// OpenSortLocalBranchMenuイベントのハンドラ。
     /// </summary>
     private void OnOpenSortLocalBranchMenu(object sender, RoutedEventArgs e)
     {
@@ -570,7 +570,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     OpenSortRemoteBranchMenuイベントのハンドラ。
+    /// OpenSortRemoteBranchMenuイベントのハンドラ。
     /// </summary>
     private void OnOpenSortRemoteBranchMenu(object sender, RoutedEventArgs e)
     {
@@ -610,7 +610,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     OpenSortTagMenuイベントのハンドラ。
+    /// OpenSortTagMenuイベントのハンドラ。
     /// </summary>
     private void OnOpenSortTagMenu(object sender, RoutedEventArgs e)
     {
@@ -650,7 +650,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     PruneWorktreesイベントのハンドラ。
+    /// PruneWorktreesイベントのハンドラ。
     /// </summary>
     private async void OnPruneWorktrees(object sender, RoutedEventArgs e)
     {
@@ -661,7 +661,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     SkipInProgressイベントのハンドラ。
+    /// SkipInProgressイベントのハンドラ。
     /// </summary>
     private async void OnSkipInProgress(object sender, RoutedEventArgs e)
     {
@@ -672,7 +672,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     ResolveInProgressイベントのハンドラ。
+    /// ResolveInProgressイベントのハンドラ。
     /// </summary>
     private void OnResolveInProgress(object sender, RoutedEventArgs e)
     {
@@ -683,7 +683,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     AbortInProgressイベントのハンドラ。
+    /// AbortInProgressイベントのハンドラ。
     /// </summary>
     private async void OnAbortInProgress(object sender, RoutedEventArgs e)
     {
@@ -694,7 +694,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     RemoveSelectedHistoryFilterイベントのハンドラ。
+    /// RemoveSelectedHistoryFilterイベントのハンドラ。
     /// </summary>
     private void OnRemoveSelectedHistoryFilter(object sender, RoutedEventArgs e)
     {
@@ -705,7 +705,7 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    ///     BisectCommandイベントのハンドラ。
+    /// BisectCommandイベントのハンドラ。
     /// </summary>
     private async void OnBisectCommand(object sender, RoutedEventArgs e)
     {

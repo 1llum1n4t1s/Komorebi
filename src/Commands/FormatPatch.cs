@@ -1,13 +1,13 @@
 ﻿namespace Komorebi.Commands;
 
 /// <summary>
-///     指定コミットからパッチファイルを生成するgitコマンド。
-///     git format-patch を実行し、メール送信可能な形式のパッチを作成する。
+/// 指定コミットからパッチファイルを生成するgitコマンド。
+/// git format-patch を実行し、メール送信可能な形式のパッチを作成する。
 /// </summary>
 public class FormatPatch : Command
 {
     /// <summary>
-    ///     FormatPatchコマンドを初期化する。
+    /// FormatPatchコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="commit">パッチ生成対象のコミットSHA。</param>

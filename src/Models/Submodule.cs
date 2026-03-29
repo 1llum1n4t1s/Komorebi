@@ -1,7 +1,7 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     サブモジュールの状態を表す列挙型
+/// サブモジュールの状態を表す列挙型
 /// </summary>
 public enum SubmoduleStatus
 {
@@ -18,7 +18,7 @@ public enum SubmoduleStatus
 }
 
 /// <summary>
-///     Gitサブモジュールの情報を保持するクラス
+/// Gitサブモジュールの情報を保持するクラス
 /// </summary>
 public class Submodule
 {

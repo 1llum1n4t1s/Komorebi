@@ -7,7 +7,7 @@ using Avalonia.Media;
 namespace Komorebi.Models;
 
 /// <summary>
-///     コミットグラフのレイアウト情報を保持するレコード。
+/// コミットグラフのレイアウト情報を保持するレコード。
 /// </summary>
 /// <param name="StartY">描画開始のY座標。</param>
 /// <param name="ClipWidth">クリッピング幅。</param>
@@ -15,18 +15,18 @@ namespace Komorebi.Models;
 public record CommitGraphLayout(double StartY, double ClipWidth, double RowHeight);
 
 /// <summary>
-///     コミット履歴のグラフ構造を解析・保持するクラス。
-///     パス、リンク、ドットの描画要素を生成する。
+/// コミット履歴のグラフ構造を解析・保持するクラス。
+/// パス、リンク、ドットの描画要素を生成する。
 /// </summary>
 public class CommitGraph
 {
     /// <summary>
-    ///     グラフ描画に使用するペンのリスト。
+    /// グラフ描画に使用するペンのリスト。
     /// </summary>
     public static List<Pen> Pens { get; } = [];
 
     /// <summary>
-    ///     デフォルトの色でペンを初期化する。
+    /// デフォルトの色でペンを初期化する。
     /// </summary>
     /// <param name="thickness">線の太さ（デフォルト: 2）。</param>
     public static void SetDefaultPens(double thickness = 2)
@@ -35,7 +35,7 @@ public class CommitGraph
     }
 
     /// <summary>
-    ///     指定した色と太さでペンを設定する。
+    /// 指定した色と太さでペンを設定する。
     /// </summary>
     /// <param name="colors">使用する色のリスト。</param>
     /// <param name="thickness">線の太さ。</param>
@@ -51,30 +51,30 @@ public class CommitGraph
     }
 
     /// <summary>
-    ///     グラフ上のブランチパス（折れ線）を表すクラス。
+    /// グラフ上のブランチパス（折れ線）を表すクラス。
     /// </summary>
     /// <param name="color">パスの色インデックス。</param>
     /// <param name="isMerged">マージ済みかどうか。</param>
     public class Path(int color, bool isMerged)
     {
         /// <summary>
-        ///     パスを構成する座標点のリスト。
+        /// パスを構成する座標点のリスト。
         /// </summary>
         public List<Point> Points { get; } = [];
 
         /// <summary>
-        ///     パスの色インデックス。
+        /// パスの色インデックス。
         /// </summary>
         public int Color { get; } = color;
 
         /// <summary>
-        ///     マージ済みパスかどうか。
+        /// マージ済みパスかどうか。
         /// </summary>
         public bool IsMerged { get; } = isMerged;
     }
 
     /// <summary>
-    ///     グラフ上のベジェ曲線リンク（マージ線）を表すクラス。
+    /// グラフ上のベジェ曲線リンク（マージ線）を表すクラス。
     /// </summary>
     public class Link
     {
@@ -91,7 +91,7 @@ public class CommitGraph
     }
 
     /// <summary>
-    ///     コミットドットの種類を表す列挙型。
+    /// コミットドットの種類を表す列挙型。
     /// </summary>
     public enum DotType
     {
@@ -104,7 +104,7 @@ public class CommitGraph
     }
 
     /// <summary>
-    ///     グラフ上のコミットドット（点）を表すクラス。
+    /// グラフ上のコミットドット（点）を表すクラス。
     /// </summary>
     public class Dot
     {
@@ -119,22 +119,22 @@ public class CommitGraph
     }
 
     /// <summary>
-    ///     グラフ内の全パス。
+    /// グラフ内の全パス。
     /// </summary>
     public List<Path> Paths { get; } = [];
 
     /// <summary>
-    ///     グラフ内の全リンク（マージ線）。
+    /// グラフ内の全リンク（マージ線）。
     /// </summary>
     public List<Link> Links { get; } = [];
 
     /// <summary>
-    ///     グラフ内の全コミットドット。
+    /// グラフ内の全コミットドット。
     /// </summary>
     public List<Dot> Dots { get; } = [];
 
     /// <summary>
-    ///     コミットリストからグラフ構造を解析・生成する。
+    /// コミットリストからグラフ構造を解析・生成する。
     /// </summary>
     /// <param name="commits">コミットのリスト。</param>
     /// <param name="firstParentOnlyEnabled">最初の親のみ表示モードかどうか。</param>
@@ -325,13 +325,13 @@ public class CommitGraph
     }
 
     /// <summary>
-    ///     グラフの色をキューで管理し、色の割り当てとリサイクルを行うクラス。
-    ///     HashSetで重複チェックをO(1)に改善（旧: Queue.Contains()はO(n)）。
+    /// グラフの色をキューで管理し、色の割り当てとリサイクルを行うクラス。
+    /// HashSetで重複チェックをO(1)に改善（旧: Queue.Contains()はO(n)）。
     /// </summary>
     private class ColorPicker
     {
         /// <summary>
-        ///     次の色インデックスを取得する。キューが空の場合は全色を補充する。
+        /// 次の色インデックスを取得する。キューが空の場合は全色を補充する。
         /// </summary>
         /// <returns>色インデックス。</returns>
         public int Next()
@@ -352,8 +352,8 @@ public class CommitGraph
         }
 
         /// <summary>
-        ///     使用済みの色インデックスをキューに戻す。
-        ///     HashSetでO(1)の重複チェック（旧: Queue.Contains()はO(n)）。
+        /// 使用済みの色インデックスをキューに戻す。
+        /// HashSetでO(1)の重複チェック（旧: Queue.Contains()はO(n)）。
         /// </summary>
         /// <param name="idx">リサイクルする色インデックス。</param>
         public void Recycle(int idx)
@@ -367,7 +367,7 @@ public class CommitGraph
     }
 
     /// <summary>
-    ///     パスの構築を補助するクラス。コミット間の経路を追跡する。
+    /// パスの構築を補助するクラス。コミット間の経路を追跡する。
     /// </summary>
     private class PathHelper
     {
@@ -384,7 +384,7 @@ public class CommitGraph
         public bool IsMerged => Path.IsMerged;
 
         /// <summary>
-        ///     開始点を指定してPathHelperを初期化する。
+        /// 開始点を指定してPathHelperを初期化する。
         /// </summary>
         /// <param name="next">次のコミットSHA。</param>
         /// <param name="isMerged">マージ済みかどうか。</param>
@@ -401,7 +401,7 @@ public class CommitGraph
         }
 
         /// <summary>
-        ///     開始点と到達点を指定してPathHelperを初期化する。
+        /// 開始点と到達点を指定してPathHelperを初期化する。
         /// </summary>
         /// <param name="next">次のコミットSHA。</param>
         /// <param name="isMerged">マージ済みかどうか。</param>
@@ -420,7 +420,7 @@ public class CommitGraph
         }
 
         /// <summary>
-        ///     この行を通過するパスを更新する（コミットなし）。
+        /// この行を通過するパスを更新する（コミットなし）。
         /// </summary>
         /// <param name="x">X座標。</param>
         /// <param name="y">Y座標。</param>
@@ -444,7 +444,7 @@ public class CommitGraph
         }
 
         /// <summary>
-        ///     この行にコミットがあるが終了しないパスを更新する。
+        /// この行にコミットがあるが終了しないパスを更新する。
         /// </summary>
         /// <param name="x">X座標。</param>
         /// <param name="y">Y座標。</param>
@@ -471,7 +471,7 @@ public class CommitGraph
         }
 
         /// <summary>
-        ///     この行にコミットがあり終了するパスを更新する。
+        /// この行にコミットがあり終了するパスを更新する。
         /// </summary>
         /// <param name="x">X座標。</param>
         /// <param name="y">Y座標。</param>
@@ -495,7 +495,7 @@ public class CommitGraph
         }
 
         /// <summary>
-        ///     現在のパスを終了し、終端から新しいマージ済みパスを開始する。
+        /// 現在のパスを終了し、終端から新しいマージ済みパスを開始する。
         /// </summary>
         public void ReplaceMerged()
         {

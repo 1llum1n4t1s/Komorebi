@@ -1,14 +1,14 @@
 ﻿namespace Komorebi.Commands;
 
 /// <summary>
-///     ファイルの「変更なし」フラグを設定/解除するgitコマンド。
-///     git update-index --assume-unchanged / --no-assume-unchanged を実行する。
-///     このフラグを設定すると、gitはファイルの変更を追跡しなくなる。
+/// ファイルの「変更なし」フラグを設定/解除するgitコマンド。
+/// git update-index --assume-unchanged / --no-assume-unchanged を実行する。
+/// このフラグを設定すると、gitはファイルの変更を追跡しなくなる。
 /// </summary>
 public class AssumeUnchanged : Command
 {
     /// <summary>
-    ///     AssumeUnchangedコマンドを初期化する。
+    /// AssumeUnchangedコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="file">対象ファイルのパス。</param>

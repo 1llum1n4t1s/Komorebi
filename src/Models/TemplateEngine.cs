@@ -7,9 +7,9 @@ using System.Text.RegularExpressions;
 namespace Komorebi.Models;
 
 /// <summary>
-///     コミットメッセージテンプレートエンジン。
-///     ${branch_name}、${files}、${pure_files}、${files_num}などの変数置換、
-///     ${files:N}形式のスライス、${name/正規表現/置換}形式の正規表現置換をサポートする。
+/// コミットメッセージテンプレートエンジン。
+/// ${branch_name}、${files}、${pure_files}、${files_num}などの変数置換、
+/// ${files:N}形式のスライス、${name/正規表現/置換}形式の正規表現置換をサポートする。
 /// </summary>
 public class TemplateEngine
 {
@@ -59,7 +59,7 @@ public class TemplateEngine
     private static readonly TimeSpan s_regexTimeout = TimeSpan.FromSeconds(1);
 
     /// <summary>
-    ///     テンプレート文字列を評価し、変数を展開した結果を返す
+    /// テンプレート文字列を評価し、変数を展開した結果を返す
     /// </summary>
     /// <param name="text">テンプレート文字列</param>
     /// <param name="branch">現在のブランチ</param>
@@ -136,7 +136,7 @@ public class TemplateEngine
     }
 
     /// <summary>
-    ///     テンプレート文字列全体をパースし、テキストトークンと変数トークンのリストを構築する
+    /// テンプレート文字列全体をパースし、テキストトークンと変数トークンのリストを構築する
     /// </summary>
     private void Parse()
     {

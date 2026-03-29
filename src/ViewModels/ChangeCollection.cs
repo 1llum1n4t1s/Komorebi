@@ -5,13 +5,13 @@ using Avalonia.Collections;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     変更ファイルをツリー形式で管理するコレクション。
-///     フォルダ階層を持つツリーノードと、フラットな行リストを保持する。
+/// 変更ファイルをツリー形式で管理するコレクション。
+/// フォルダ階層を持つツリーノードと、フラットな行リストを保持する。
 /// </summary>
 public class ChangeCollectionAsTree
 {
     /// <summary>ツリー構造のルートノードリスト</summary>
-    public List<ChangeTreeNode> Tree { get; set; } = new List<ChangeTreeNode>();
+    public List<ChangeTreeNode> Tree { get; set; } = [];
     /// <summary>ツリーを展開した行リスト（表示用）</summary>
     public AvaloniaList<ChangeTreeNode> Rows { get; set; } = new AvaloniaList<ChangeTreeNode>();
     /// <summary>選択された行のリスト</summary>
@@ -19,8 +19,8 @@ public class ChangeCollectionAsTree
 }
 
 /// <summary>
-///     変更ファイルをグリッド形式で管理するコレクション。
-///     フラットな変更リストとして扱う。
+/// 変更ファイルをグリッド形式で管理するコレクション。
+/// フラットな変更リストとして扱う。
 /// </summary>
 public class ChangeCollectionAsGrid
 {
@@ -31,8 +31,8 @@ public class ChangeCollectionAsGrid
 }
 
 /// <summary>
-///     変更ファイルをリスト形式で管理するコレクション。
-///     フラットな変更リストとして扱う。
+/// 変更ファイルをリスト形式で管理するコレクション。
+/// フラットな変更リストとして扱う。
 /// </summary>
 public class ChangeCollectionAsList
 {

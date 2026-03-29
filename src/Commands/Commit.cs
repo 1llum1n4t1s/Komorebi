@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ステージングされた変更をコミットするgitコマンド。
-///     git commit --file を使用し、一時ファイル経由でコミットメッセージを渡す。
+/// ステージングされた変更をコミットするgitコマンド。
+/// git commit --file を使用し、一時ファイル経由でコミットメッセージを渡す。
 /// </summary>
 public class Commit : Command
 {
     /// <summary>
-    ///     Commitコマンドを初期化する。
+    /// Commitコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="message">コミットメッセージ。</param>
@@ -61,8 +61,8 @@ public class Commit : Command
     }
 
     /// <summary>
-    ///     コミットを実行する。
-    ///     一時ファイルにメッセージを書き込み、git commitを実行後、一時ファイルを削除する。
+    /// コミットを実行する。
+    /// 一時ファイルにメッセージを書き込み、git commitを実行後、一時ファイルを削除する。
     /// </summary>
     /// <returns>コミットが成功した場合はtrue。</returns>
     public async Task<bool> RunAsync()
@@ -87,12 +87,12 @@ public class Commit : Command
     }
 
     /// <summary>
-    ///     コミットメッセージを格納する一時ファイルのパス。
+    /// コミットメッセージを格納する一時ファイルのパス。
     /// </summary>
     private readonly string _tmpFile;
 
     /// <summary>
-    ///     コミットメッセージの内容。
+    /// コミットメッセージの内容。
     /// </summary>
     private readonly string _message;
 }

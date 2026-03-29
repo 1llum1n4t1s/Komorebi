@@ -9,12 +9,12 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミットの参照（ブランチタグ・リモートブランチ等）ラベルを表示するプレゼンタ。
+/// コミットの参照（ブランチタグ・リモートブランチ等）ラベルを表示するプレゼンタ。
 /// </summary>
 public class CommitRefsPresenter : Control
 {
     /// <summary>
-    ///     RenderItemクラス。
+    /// RenderItemクラス。
     /// </summary>
     public class RenderItem
     {
@@ -90,7 +90,7 @@ public class CommitRefsPresenter : Control
     }
 
     /// <summary>
-    ///     CommitRefsPresenterの処理を行う。
+    /// CommitRefsPresenterの処理を行う。
     /// </summary>
     static CommitRefsPresenter()
     {
@@ -104,7 +104,7 @@ public class CommitRefsPresenter : Control
     }
 
     /// <summary>
-    ///     DecoratorAtの処理を行う。
+    /// DecoratorAtの処理を行う。
     /// </summary>
     public Models.Decorator DecoratorAt(Point point)
     {
@@ -120,7 +120,7 @@ public class CommitRefsPresenter : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -180,7 +180,7 @@ public class CommitRefsPresenter : Control
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -189,7 +189,7 @@ public class CommitRefsPresenter : Control
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {

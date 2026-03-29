@@ -7,12 +7,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ワークツリー追加ダイアログのコードビハインド。
+/// ワークツリー追加ダイアログのコードビハインド。
 /// </summary>
 public partial class AddWorktree : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public AddWorktree()
     {
@@ -20,7 +20,7 @@ public partial class AddWorktree : UserControl
     }
 
     /// <summary>
-    ///     Locationの選択処理を行う。
+    /// Locationの選択処理を行う。
     /// </summary>
     private async void SelectLocation(object _, RoutedEventArgs e)
     {

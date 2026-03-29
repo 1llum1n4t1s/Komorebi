@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ローカルブランチの上流（upstream）ブランチを設定するポップアップダイアログのViewModel。
-///     リモートブランチの選択または上流の解除を行う。
+/// ローカルブランチの上流（upstream）ブランチを設定するポップアップダイアログのViewModel。
+/// リモートブランチの選択または上流の解除を行う。
 /// </summary>
 public class SetUpstream : Popup
 {
     /// <summary>
-    ///     上流を設定するローカルブランチ。
+    /// 上流を設定するローカルブランチ。
     /// </summary>
     public Models.Branch Local
     {
@@ -19,7 +19,7 @@ public class SetUpstream : Popup
     }
 
     /// <summary>
-    ///     選択可能なリモートブランチのリスト。
+    /// 選択可能なリモートブランチのリスト。
     /// </summary>
     public List<Models.Branch> RemoteBranches
     {
@@ -28,7 +28,7 @@ public class SetUpstream : Popup
     }
 
     /// <summary>
-    ///     選択されたリモートブランチ。
+    /// 選択されたリモートブランチ。
     /// </summary>
     public Models.Branch SelectedRemoteBranch
     {
@@ -37,7 +37,7 @@ public class SetUpstream : Popup
     }
 
     /// <summary>
-    ///     上流設定を解除するかどうか。
+    /// 上流設定を解除するかどうか。
     /// </summary>
     public bool Unset
     {
@@ -46,7 +46,7 @@ public class SetUpstream : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。現在の上流設定またはブランチ名に基づいて初期選択を設定する。
+    /// コンストラクタ。現在の上流設定またはブランチ名に基づいて初期選択を設定する。
     /// </summary>
     public SetUpstream(Repository repo, Models.Branch local, List<Models.Branch> remoteBranches)
     {
@@ -71,7 +71,7 @@ public class SetUpstream : Popup
     }
 
     /// <summary>
-    ///     上流設定の変更を実行する。変更がない場合はスキップする。
+    /// 上流設定の変更を実行する。変更がない場合はスキップする。
     /// </summary>
     public override async Task<bool> Sure()
     {

@@ -7,12 +7,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     初回起動セットアップ（言語・クローンディレクトリ選択）ダイアログのコードビハインド。
+/// 初回起動セットアップ（言語・クローンディレクトリ選択）ダイアログのコードビハインド。
 /// </summary>
 public partial class InitSetup : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public InitSetup()
     {
@@ -20,7 +20,7 @@ public partial class InitSetup : UserControl
     }
 
     /// <summary>
-    ///     DefaultCloneDirの選択処理を行う。
+    /// DefaultCloneDirの選択処理を行う。
     /// </summary>
     private async void SelectDefaultCloneDir(object _, RoutedEventArgs e)
     {

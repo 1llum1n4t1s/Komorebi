@@ -5,8 +5,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     LFSで管理された画像ファイルの差分表示ViewModel。
-///     新旧のLFSオブジェクトから画像を非同期で読み込む。
+/// LFSで管理された画像ファイルの差分表示ViewModel。
+/// 新旧のLFSオブジェクトから画像を非同期で読み込む。
 /// </summary>
 public class LFSImageDiff : ObservableObject
 {
@@ -24,7 +24,7 @@ public class LFSImageDiff : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。バックグラウンドで新旧のLFSオブジェクトから画像を読み込む。
+    /// コンストラクタ。バックグラウンドで新旧のLFSオブジェクトから画像を読み込む。
     /// </summary>
     public LFSImageDiff(string repo, Models.LFSDiff lfs, Models.ImageDecoder decoder)
     {
@@ -47,5 +47,5 @@ public class LFSImageDiff : ObservableObject
         });
     }
 
-    private Models.ImageDiff _image;
+    private Models.ImageDiff _image; // デコード済み画像差分データ
 }

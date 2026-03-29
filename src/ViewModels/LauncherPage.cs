@@ -8,8 +8,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ランチャーの個別タブページを表すViewModel。
-///     リポジトリまたはWelcome画面のデータ、ポップアップ管理、通知、ダーティ状態を保持する。
+/// ランチャーの個別タブページを表すViewModel。
+/// リポジトリまたはWelcome画面のデータ、ポップアップ管理、通知、ダーティ状態を保持する。
 /// </summary>
 public class LauncherPage : ObservableObject
 {
@@ -79,8 +79,8 @@ public class LauncherPage : ObservableObject
     }
 
     /// <summary>
-    ///     ダーティ状態フラグを変更する。
-    ///     removeがtrueの場合はフラグを除去し、falseの場合は追加する。
+    /// ダーティ状態フラグを変更する。
+    /// removeがtrueの場合はフラグを除去し、falseの場合は追加する。
     /// </summary>
     public void ChangeDirtyState(Models.DirtyState flag, bool remove)
     {
@@ -105,8 +105,8 @@ public class LauncherPage : ObservableObject
     }
 
     /// <summary>
-    ///     ポップアップの確認処理を実行する。バリデーション後にSure()を呼び、
-    ///     成功すればポップアップを閉じる。例外はログに記録する。
+    /// ポップアップの確認処理を実行する。バリデーション後にSure()を呼び、
+    /// 成功すればポップアップを閉じる。例外はログに記録する。
     /// </summary>
     public async Task ProcessPopupAsync()
     {

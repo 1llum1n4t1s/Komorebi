@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -16,12 +15,12 @@ using Avalonia.Threading;
 namespace Komorebi.Models;
 
 /// <summary>
-///     アバター画像のリソース変更を通知するためのホストインターフェース
+/// アバター画像のリソース変更を通知するためのホストインターフェース
 /// </summary>
 public interface IAvatarHost
 {
     /// <summary>
-    ///     アバターリソースが変更された際に呼び出されるコールバック
+    /// アバターリソースが変更された際に呼び出されるコールバック
     /// </summary>
     /// <param name="email">変更対象のメールアドレス</param>
     /// <param name="image">新しいアバター画像（取得失敗時はnull）</param>
@@ -29,13 +28,13 @@ public interface IAvatarHost
 }
 
 /// <summary>
-///     ユーザーアバター画像の取得・キャッシュ・管理を行うシングルトンクラス。
-///     GravatarおよびGitHubアバターをサポートする。
+/// ユーザーアバター画像の取得・キャッシュ・管理を行うシングルトンクラス。
+/// GravatarおよびGitHubアバターをサポートする。
 /// </summary>
 public partial class AvatarManager
 {
     /// <summary>
-    ///     シングルトンインスタンスを取得する
+    /// シングルトンインスタンスを取得する
     /// </summary>
     public static AvatarManager Instance
     {
@@ -48,7 +47,7 @@ public partial class AvatarManager
     private static AvatarManager _instance = null;
 
     /// <summary>
-    ///     GitHubのnoreplyメールアドレスからユーザー名を抽出する正規表現
+    /// GitHubのnoreplyメールアドレスからユーザー名を抽出する正規表現
     /// </summary>
     [GeneratedRegex(@"^(?:(\d+)\+)?(.+?)@.+\.github\.com$")]
     private static partial Regex REG_GITHUB_USER_EMAIL();
@@ -59,17 +58,17 @@ public partial class AvatarManager
     /// <summary>アバター画像のローカルキャッシュディレクトリパス</summary>
     private string _storePath;
     /// <summary>アバター変更通知を受け取るホストのリスト</summary>
-    private List<IAvatarHost> _avatars = new List<IAvatarHost>();
+    private List<IAvatarHost> _avatars = [];
     /// <summary>メールアドレスをキーとしたアバター画像のキャッシュ</summary>
-    private Dictionary<string, Bitmap> _resources = new Dictionary<string, Bitmap>();
+    private Dictionary<string, Bitmap> _resources = [];
     /// <summary>ダウンロードリクエスト待ちのメールアドレスセット</summary>
-    private HashSet<string> _requesting = new HashSet<string>();
+    private HashSet<string> _requesting = [];
     /// <summary>デフォルトアバターとして登録済みのメールアドレスセット</summary>
-    private HashSet<string> _defaultAvatars = new HashSet<string>();
+    private HashSet<string> _defaultAvatars = [];
 
     /// <summary>
-    ///     アバターマネージャーを開始し、バックグラウンドでアバター取得ループを起動する。
-    ///     デフォルトアバター（GitHub, Unreal）の読み込みも行う。
+    /// アバターマネージャーを開始し、バックグラウンドでアバター取得ループを起動する。
+    /// デフォルトアバター（GitHub, Unreal）の読み込みも行う。
     /// </summary>
     public void Start()
     {
@@ -109,7 +108,7 @@ public partial class AvatarManager
                 {
                     var githubUser = matchGitHubUser.Groups[2].Value;
                     if (githubUser.EndsWith("[bot]", StringComparison.OrdinalIgnoreCase))
-                        githubUser = githubUser.Substring(0, githubUser.Length - 5);
+                        githubUser = githubUser[..^5];
 
                     url = $"https://avatars.githubusercontent.com/{githubUser}";
                 }
@@ -158,7 +157,7 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    ///     アバターリソース変更の通知を受け取るホストを登録する
+    /// アバターリソース変更の通知を受け取るホストを登録する
     /// </summary>
     /// <param name="host">登録するホスト</param>
     public void Subscribe(IAvatarHost host)
@@ -167,7 +166,7 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    ///     アバターリソース変更の通知登録を解除する
+    /// アバターリソース変更の通知登録を解除する
     /// </summary>
     /// <param name="host">解除するホスト</param>
     public void Unsubscribe(IAvatarHost host)
@@ -176,8 +175,8 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    ///     指定メールアドレスのアバター画像をリクエストする。
-    ///     キャッシュにあればそれを返し、なければバックグラウンドでダウンロードをキューに入れる。
+    /// 指定メールアドレスのアバター画像をリクエストする。
+    /// キャッシュにあればそれを返し、なければバックグラウンドでダウンロードをキューに入れる。
     /// </summary>
     /// <param name="email">対象のメールアドレス</param>
     /// <param name="forceRefetch">trueの場合、キャッシュを削除して再取得する</param>
@@ -230,7 +229,7 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    ///     ローカルファイルからアバター画像を設定する
+    /// ローカルファイルからアバター画像を設定する
     /// </summary>
     /// <param name="email">対象のメールアドレス</param>
     /// <param name="file">ローカル画像ファイルパス</param>
@@ -263,7 +262,7 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    ///     埋め込みリソースからデフォルトアバターを読み込む
+    /// 埋め込みリソースからデフォルトアバターを読み込む
     /// </summary>
     /// <param name="key">メールアドレスキー</param>
     /// <param name="img">リソース画像ファイル名</param>
@@ -275,7 +274,7 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    ///     メールアドレスのMD5ハッシュを計算する（Gravatar URL生成用）
+    /// メールアドレスのMD5ハッシュを計算する（Gravatar URL生成用）
     /// </summary>
     /// <param name="email">対象のメールアドレス</param>
     /// <returns>MD5ハッシュの16進数文字列</returns>
@@ -289,7 +288,7 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    ///     全登録ホストにアバターリソース変更を通知する
+    /// 全登録ホストにアバターリソース変更を通知する
     /// </summary>
     /// <param name="email">変更対象のメールアドレス</param>
     /// <param name="image">新しいアバター画像</param>

@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     差分ブロックのナビゲーション方向を定義する列挙型。
+/// 差分ブロックのナビゲーション方向を定義する列挙型。
 /// </summary>
 public enum BlockNavigationDirection
 {
@@ -20,20 +20,20 @@ public enum BlockNavigationDirection
 }
 
 /// <summary>
-///     差分ビューにおけるブロック（変更箇所のまとまり）間のナビゲーションを管理するViewModel。
-///     追加・削除行をブロックとしてグループ化し、ブロック間の移動をサポートする。
+/// 差分ビューにおけるブロック（変更箇所のまとまり）間のナビゲーションを管理するViewModel。
+/// 追加・削除行をブロックとしてグループ化し、ブロック間の移動をサポートする。
 /// </summary>
 public class BlockNavigation : ObservableObject
 {
     /// <summary>
-    ///     差分ブロックの開始行と終了行を表すレコード。
+    /// 差分ブロックの開始行と終了行を表すレコード。
     /// </summary>
     /// <param name="Start">ブロックの開始行番号</param>
     /// <param name="End">ブロックの終了行番号</param>
     public record Block(int Start, int End)
     {
         /// <summary>
-        ///     指定した行番号がこのブロック内に含まれるか判定する。
+        /// 指定した行番号がこのブロック内に含まれるか判定する。
         /// </summary>
         /// <param name="line">判定する行番号</param>
         /// <returns>ブロック内であればtrue</returns>
@@ -44,7 +44,7 @@ public class BlockNavigation : ObservableObject
     }
 
     /// <summary>
-    ///     現在のブロック位置を「N/M」形式で表示するインジケータ文字列。
+    /// 現在のブロック位置を「N/M」形式で表示するインジケータ文字列。
     /// </summary>
     public string Indicator
     {
@@ -61,7 +61,7 @@ public class BlockNavigation : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。差分行リストから変更ブロックを構築する。
+    /// コンストラクタ。差分行リストから変更ブロックを構築する。
     /// </summary>
     /// <param name="lines">テキスト差分の行リスト</param>
     /// <param name="cur">初期カーソル位置</param>
@@ -79,7 +79,7 @@ public class BlockNavigation : ObservableObject
         var lineIdx = 0;
         var blockStartIdx = 0;
         var isReadingBlock = false;
-        var blocks = new List<Block>();
+        List<Block> blocks = [];
 
         foreach (var line in lines)
         {
@@ -113,7 +113,7 @@ public class BlockNavigation : ObservableObject
     }
 
     /// <summary>
-    ///     現在のブロックインデックスを取得する。
+    /// 現在のブロックインデックスを取得する。
     /// </summary>
     /// <returns>現在のブロックインデックス</returns>
     public int GetCurrentBlockIndex()
@@ -122,7 +122,7 @@ public class BlockNavigation : ObservableObject
     }
 
     /// <summary>
-    ///     現在のブロックを取得する。
+    /// 現在のブロックを取得する。
     /// </summary>
     /// <returns>現在のBlockオブジェクト。ブロックがない場合はnull</returns>
     public Block GetCurrentBlock()
@@ -134,7 +134,7 @@ public class BlockNavigation : ObservableObject
     }
 
     /// <summary>
-    ///     指定方向にブロックを移動し、移動先のブロックを返す。
+    /// 指定方向にブロックを移動し、移動先のブロックを返す。
     /// </summary>
     /// <param name="direction">移動方向</param>
     /// <returns>移動先のBlockオブジェクト。ブロックがない場合はnull</returns>
@@ -158,7 +158,7 @@ public class BlockNavigation : ObservableObject
     }
 
     /// <summary>
-    ///     選択されたチャンクに基づいて現在位置を更新する。
+    /// 選択されたチャンクに基づいて現在位置を更新する。
     /// </summary>
     /// <param name="chunk">選択された差分チャンク</param>
     public void UpdateByChunk(TextDiffSelectedChunk chunk)
@@ -188,7 +188,7 @@ public class BlockNavigation : ObservableObject
     }
 
     /// <summary>
-    ///     キャレット位置に基づいて現在のブロックを更新する。
+    /// キャレット位置に基づいて現在のブロックを更新する。
     /// </summary>
     /// <param name="caretLine">キャレットの行番号</param>
     public void UpdateByCaretPosition(int caretLine)

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定リビジョンにおけるファイル内容をストリームとして取得する静的クラス。
-///     通常ファイルとLFSファイルの両方をサポートする。
+/// 指定リビジョンにおけるファイル内容をストリームとして取得する静的クラス。
+/// 通常ファイルとLFSファイルの両方をサポートする。
 /// </summary>
 public static class QueryFileContent
 {
     /// <summary>
-    ///     git show を使用して、指定リビジョンのファイル内容をストリームとして取得する。
+    /// git show を使用して、指定リビジョンのファイル内容をストリームとして取得する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="revision">対象リビジョン</param>
@@ -46,7 +46,7 @@ public static class QueryFileContent
     }
 
     /// <summary>
-    ///     git lfs smudge を使用して、LFSオブジェクトの実際のファイル内容をストリームとして取得する。
+    /// git lfs smudge を使用して、LFSオブジェクトの実際のファイル内容をストリームとして取得する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="oid">LFSオブジェクトのSHA256 OID</param>

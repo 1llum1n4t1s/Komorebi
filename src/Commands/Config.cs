@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     gitの設定値を読み書きするコマンド群。
-///     git config を実行し、ローカルまたはグローバル設定を操作する。
+/// gitの設定値を読み書きするコマンド群。
+/// git config を実行し、ローカルまたはグローバル設定を操作する。
 /// </summary>
 public class Config : Command
 {
     /// <summary>
-    ///     Configコマンドを初期化する。
+    /// Configコマンドを初期化する。
     /// </summary>
     /// <param name="repository">リポジトリパス。空の場合はグローバル設定として動作する。</param>
     public Config(string repository)
@@ -32,8 +32,8 @@ public class Config : Command
     }
 
     /// <summary>
-    ///     全ての設定値を同期的に読み取る。
-    ///     git config -l を実行し、キーと値のペアを辞書として返す。
+    /// 全ての設定値を同期的に読み取る。
+    /// git config -l を実行し、キーと値のペアを辞書として返す。
     /// </summary>
     /// <returns>設定キーと値の辞書。</returns>
     public Dictionary<string, string> ReadAll()
@@ -59,9 +59,9 @@ public class Config : Command
     }
 
     /// <summary>
-    ///     全ての設定値を非同期で読み取る。
-    ///     git config -l を実行し、キーと値のペアを辞書として返す。
-    ///     キーは小文字に正規化される。
+    /// 全ての設定値を非同期で読み取る。
+    /// git config -l を実行し、キーと値のペアを辞書として返す。
+    /// キーは小文字に正規化される。
     /// </summary>
     /// <returns>設定キー（小文字）と値の辞書。</returns>
     public async Task<Dictionary<string, string>> ReadAllAsync()
@@ -92,8 +92,8 @@ public class Config : Command
     }
 
     /// <summary>
-    ///     特定のキーの設定値を同期的に取得する。
-    ///     git config &lt;key&gt; を実行する。
+    /// 特定のキーの設定値を同期的に取得する。
+    /// git config &lt;key&gt; を実行する。
     /// </summary>
     /// <param name="key">設定キー名。</param>
     /// <returns>設定値の文字列。</returns>
@@ -105,8 +105,8 @@ public class Config : Command
     }
 
     /// <summary>
-    ///     特定のキーの設定値を非同期で取得する。
-    ///     git config &lt;key&gt; を実行する。
+    /// 特定のキーの設定値を非同期で取得する。
+    /// git config &lt;key&gt; を実行する。
     /// </summary>
     /// <param name="key">設定キー名。</param>
     /// <returns>設定値の文字列。</returns>
@@ -120,8 +120,8 @@ public class Config : Command
     }
 
     /// <summary>
-    ///     設定値を非同期で設定または削除する。
-    ///     git config [--local|--global] &lt;key&gt; &lt;value&gt; を実行する。
+    /// 設定値を非同期で設定または削除する。
+    /// git config [--local|--global] &lt;key&gt; &lt;value&gt; を実行する。
     /// </summary>
     /// <param name="key">設定キー名。</param>
     /// <param name="value">設定する値。空の場合はキーを削除する。</param>
@@ -143,7 +143,7 @@ public class Config : Command
     }
 
     /// <summary>
-    ///     ローカルリポジトリの設定かどうかを示すフラグ。
+    /// ローカルリポジトリの設定かどうかを示すフラグ。
     /// </summary>
     private bool _isLocal = false;
 }

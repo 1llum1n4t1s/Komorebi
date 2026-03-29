@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定されたコミットの子コミット（直接の後継）を検索するクラス。
-///     git rev-list --ancestry-path を使用して子コミットを特定する。
+/// 指定されたコミットの子コミット（直接の後継）を検索するクラス。
+/// git rev-list --ancestry-path を使用して子コミットを特定する。
 /// </summary>
 public class QueryCommitChildren : Command
 {
     /// <summary>
-    ///     コンストラクタ。指定されたコミットからの子孫パスを検索するコマンドを設定する。
+    /// コンストラクタ。指定されたコミットからの子孫パスを検索するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="commit">対象コミットのSHA</param>
@@ -26,7 +26,7 @@ public class QueryCommitChildren : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、子コミットのSHAリストを返す。
+    /// コマンドを非同期で実行し、子コミットのSHAリストを返す。
     /// </summary>
     /// <returns>子コミットのSHAリスト</returns>
     public async Task<List<string>> GetResultAsync()

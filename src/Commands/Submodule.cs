@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     サブモジュールの管理操作を提供するgitコマンド。
-///     git submodule のサブコマンドでサブモジュールの追加・更新・削除を行う。
+/// サブモジュールの管理操作を提供するgitコマンド。
+/// git submodule のサブコマンドでサブモジュールの追加・更新・削除を行う。
 /// </summary>
 public class Submodule : Command
 {
     /// <summary>
-    ///     Submoduleコマンドを初期化する。
+    /// Submoduleコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     public Submodule(string repo)
@@ -21,8 +21,8 @@ public class Submodule : Command
     }
 
     /// <summary>
-    ///     サブモジュールを追加する。
-    ///     git submodule add を実行し、必要に応じて再帰的に初期化する。
+    /// サブモジュールを追加する。
+    /// git submodule add を実行し、必要に応じて再帰的に初期化する。
     /// </summary>
     /// <param name="url">サブモジュールのURL。</param>
     /// <param name="relativePath">サブモジュールの配置先相対パス。</param>
@@ -47,8 +47,8 @@ public class Submodule : Command
     }
 
     /// <summary>
-    ///     サブモジュールのURLを変更する。
-    ///     git submodule set-url を実行する。
+    /// サブモジュールのURLを変更する。
+    /// git submodule set-url を実行する。
     /// </summary>
     /// <param name="path">サブモジュールのパス。</param>
     /// <param name="url">新しいURL。</param>
@@ -61,8 +61,8 @@ public class Submodule : Command
     }
 
     /// <summary>
-    ///     サブモジュールの追跡ブランチを設定する。
-    ///     git submodule set-branch を実行する。
+    /// サブモジュールの追跡ブランチを設定する。
+    /// git submodule set-branch を実行する。
     /// </summary>
     /// <param name="path">サブモジュールのパス。</param>
     /// <param name="branch">追跡するブランチ名。空の場合はデフォルトに戻す。</param>
@@ -80,8 +80,8 @@ public class Submodule : Command
     }
 
     /// <summary>
-    ///     サブモジュールを更新する。
-    ///     git submodule update --recursive を実行する。
+    /// サブモジュールを更新する。
+    /// git submodule update --recursive を実行する。
     /// </summary>
     /// <param name="modules">更新対象のサブモジュールパスのリスト。空の場合は全て更新。</param>
     /// <param name="init">未初期化のサブモジュールも初期化するかどうか。</param>
@@ -115,8 +115,8 @@ public class Submodule : Command
     }
 
     /// <summary>
-    ///     サブモジュールの登録を解除する。
-    ///     git submodule deinit を実行する。
+    /// サブモジュールの登録を解除する。
+    /// git submodule deinit を実行する。
     /// </summary>
     /// <param name="module">登録解除するサブモジュールのパス。</param>
     /// <param name="force">強制的に登録解除するかどうか。</param>
@@ -129,8 +129,8 @@ public class Submodule : Command
     }
 
     /// <summary>
-    ///     サブモジュールを完全に削除する。
-    ///     git rm -rf を実行してサブモジュールのファイルを削除する。
+    /// サブモジュールを完全に削除する。
+    /// git rm -rf を実行してサブモジュールのファイルを削除する。
     /// </summary>
     /// <param name="module">削除するサブモジュールのパス。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>

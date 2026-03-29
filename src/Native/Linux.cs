@@ -11,15 +11,15 @@ using Avalonia.Platform;
 namespace Komorebi.Native;
 
 /// <summary>
-///     Linux固有のバックエンド実装。
-///     xdg-openコマンド、PATH検索、AppImageポータブルモードに対応する。
+/// Linux固有のバックエンド実装。
+/// xdg-openコマンド、PATH検索、AppImageポータブルモードに対応する。
 /// </summary>
 [SupportedOSPlatform("linux")]
 internal class Linux : OS.IBackend
 {
     /// <summary>
-    ///     AvaloniaアプリケーションビルダーにLinux固有の設定を適用する。
-    ///     X11プラットフォームでIMEを有効化する。
+    /// AvaloniaアプリケーションビルダーにLinux固有の設定を適用する。
+    /// X11プラットフォームでIMEを有効化する。
     /// </summary>
     public void SetupApp(AppBuilder builder)
     {
@@ -28,8 +28,8 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     ウィンドウにLinux固有の設定を適用する。
-    ///     システムウィンドウフレーム使用設定に応じてクロムを切り替える。
+    /// ウィンドウにLinux固有の設定を適用する。
+    /// システムウィンドウフレーム使用設定に応じてクロムを切り替える。
     /// </summary>
     public void SetupWindow(Window window)
     {
@@ -49,8 +49,8 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     Linuxのアプリケーションデータディレクトリパスを返す。
-    ///     AppImageポータブルモード、~/.komorebi、旧設定ディレクトリからの移行に対応する。
+    /// Linuxのアプリケーションデータディレクトリパスを返す。
+    /// AppImageポータブルモード、~/.komorebi、旧設定ディレクトリからの移行に対応する。
     /// </summary>
     public string GetDataDir()
     {
@@ -87,7 +87,7 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     PATH環境変数からgit実行ファイルを検索する。
+    /// PATH環境変数からgit実行ファイルを検索する。
     /// </summary>
     public string FindGitExecutable()
     {
@@ -95,8 +95,8 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     指定されたシェル/ターミナルの実行ファイルをPATHから検索する。
-    ///     カスタムタイプの場合は空文字を返す。
+    /// 指定されたシェル/ターミナルの実行ファイルをPATHから検索する。
+    /// カスタムタイプの場合は空文字を返す。
     /// </summary>
     public string FindTerminal(Models.ShellOrTerminal shell)
     {
@@ -108,8 +108,8 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     外部マージ/diffツールの実行ファイルをLinuxシステムから検索する。
-    ///     PATH環境変数から検索する。
+    /// 外部マージ/diffツールの実行ファイルをLinuxシステムから検索する。
+    /// PATH環境変数から検索する。
     /// </summary>
     public string FindExternalMergerExecFile(string[] patterns)
     {
@@ -124,8 +124,8 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     Linuxにインストールされている外部エディタ/IDEを検出する。
-    ///     PATHから各エディタのコマンドを検索する。
+    /// Linuxにインストールされている外部エディタ/IDEを検出する。
+    /// PATHから各エディタのコマンドを検索する。
     /// </summary>
     public List<Models.ExternalTool> FindExternalTools()
     {
@@ -148,7 +148,7 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     BROWSER環境変数またはxdg-openでデフォルトブラウザを開く。
+    /// BROWSER環境変数またはxdg-openでデフォルトブラウザを開く。
     /// </summary>
     public void OpenBrowser(string url)
     {
@@ -160,8 +160,8 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     xdg-openでファイルマネージャーを開く。
-    ///     ファイルの場合はその親ディレクトリを開く。
+    /// xdg-openでファイルマネージャーを開く。
+    /// ファイルの場合はその親ディレクトリを開く。
     /// </summary>
     public void OpenInFileManager(string path)
     {
@@ -180,7 +180,7 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     指定された作業ディレクトリでターミナルを起動する。
+    /// 指定された作業ディレクトリでターミナルを起動する。
     /// </summary>
     public void OpenTerminal(string workdir, string args)
     {
@@ -204,7 +204,7 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     xdg-openでデフォルトアプリケーションでファイルを開く。
+    /// xdg-openでデフォルトアプリケーションでファイルを開く。
     /// </summary>
     public void OpenWithDefaultEditor(string file)
     {
@@ -222,9 +222,9 @@ internal class Linux : OS.IBackend
     }
 
     /// <summary>
-    ///     PATH環境変数および ~/.local/bin から実行ファイルを検索する。
+    /// PATH環境変数および ~/.local/bin から実行ファイルを検索する。
     /// </summary>
-    private string FindExecutable(string filename)
+    private static string FindExecutable(string filename)
     {
         // PATH環境変数の各ディレクトリを順に確認する
         var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;

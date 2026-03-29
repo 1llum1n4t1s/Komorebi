@@ -6,13 +6,15 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ウィンドウキャプションボタン（最小化・最大化・閉じる）のコードビハインド。
+/// ウィンドウキャプションボタン（最小化・最大化・閉じる）のコードビハインド。
 /// </summary>
 public partial class CaptionButtons : UserControl
 {
+    /// <summary>閉じるボタンのみ表示するかのスタイルプロパティ。</summary>
     public static readonly StyledProperty<bool> IsCloseButtonOnlyProperty =
         AvaloniaProperty.Register<CaptionButtons, bool>(nameof(IsCloseButtonOnly));
 
+    /// <summary>trueの場合、最小化・最大化ボタンを非表示にして閉じるボタンのみ表示する。</summary>
     public bool IsCloseButtonOnly
     {
         get => GetValue(IsCloseButtonOnlyProperty);
@@ -20,7 +22,7 @@ public partial class CaptionButtons : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CaptionButtons()
     {
@@ -28,7 +30,7 @@ public partial class CaptionButtons : UserControl
     }
 
     /// <summary>
-    ///     MinimizeWindowの処理を行う。
+    /// MinimizeWindowの処理を行う。
     /// </summary>
     private void MinimizeWindow(object _, RoutedEventArgs e)
     {
@@ -40,7 +42,7 @@ public partial class CaptionButtons : UserControl
     }
 
     /// <summary>
-    ///     ウィンドウの最大化と通常サイズを切り替える。
+    /// ウィンドウの最大化と通常サイズを切り替える。
     /// </summary>
     private void MaximizeOrRestoreWindow(object _, RoutedEventArgs e)
     {
@@ -52,7 +54,7 @@ public partial class CaptionButtons : UserControl
     }
 
     /// <summary>
-    ///     CloseWindowの処理を行う。
+    /// CloseWindowの処理を行う。
     /// </summary>
     private void CloseWindow(object _, RoutedEventArgs e)
     {

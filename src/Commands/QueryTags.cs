@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     タグ一覧を取得するクラス。
-///     git tag -l を使用して、名前、タイプ、SHA、作成者、日時、メッセージを取得する。
-///     レコード区切りにはランダムなバウンダリ文字列を使用する。
+/// タグ一覧を取得するクラス。
+/// git tag -l を使用して、名前、タイプ、SHA、作成者、日時、メッセージを取得する。
+/// レコード区切りにはランダムなバウンダリ文字列を使用する。
 /// </summary>
 public class QueryTags : Command
 {
     /// <summary>
-    ///     コンストラクタ。タグ一覧を取得するコマンドを設定する。
+    /// コンストラクタ。タグ一覧を取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     public QueryTags(string repo)
@@ -26,7 +26,7 @@ public class QueryTags : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、タグのリストを返す。
+    /// コマンドを非同期で実行し、タグのリストを返す。
     /// </summary>
     /// <returns>タグモデルのリスト</returns>
     public async Task<List<Models.Tag>> GetResultAsync()

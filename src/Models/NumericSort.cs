@@ -3,13 +3,13 @@
 namespace Komorebi.Models;
 
 /// <summary>
-///     数値を考慮した自然順ソートを提供する静的クラス。
-///     文字列中の数値部分を数値として比較する（例: "file2" &lt; "file10"）。
+/// 数値を考慮した自然順ソートを提供する静的クラス。
+/// 文字列中の数値部分を数値として比較する（例: "file2" &lt; "file10"）。
 /// </summary>
 public static class NumericSort
 {
     /// <summary>
-    ///     2つの文字列を数値を考慮して比較する。
+    /// 2つの文字列を数値を考慮して比較する。
     /// </summary>
     /// <param name="s1">比較する最初の文字列。</param>
     /// <param name="s2">比較する2番目の文字列。</param>
@@ -53,8 +53,8 @@ public static class NumericSort
             while (marker2 + subLen2 < len2 && char.IsAsciiDigit(s2[marker2 + subLen2]) == isDigit2)
                 subLen2++;
 
-            string sub1 = s1.Substring(marker1, subLen1);
-            string sub2 = s2.Substring(marker2, subLen2);
+            string sub1 = s1[marker1..(marker1 + subLen1)];
+            string sub2 = s2[marker2..(marker2 + subLen2)];
 
             marker1 += subLen1;
             marker2 += subLen2;

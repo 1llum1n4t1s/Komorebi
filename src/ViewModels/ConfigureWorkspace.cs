@@ -5,14 +5,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ワークスペース設定のViewModel。
-///     ワークスペースの追加・削除・並び替えを管理する。
-///     アクティブなワークスペースは削除不可。
+/// ワークスペース設定のViewModel。
+/// ワークスペースの追加・削除・並び替えを管理する。
+/// アクティブなワークスペースは削除不可。
 /// </summary>
 public class ConfigureWorkspace : ObservableObject
 {
     /// <summary>
-    ///     ワークスペースの一覧。
+    /// ワークスペースの一覧。
     /// </summary>
     public AvaloniaList<Workspace> Workspaces
     {
@@ -20,7 +20,7 @@ public class ConfigureWorkspace : ObservableObject
     }
 
     /// <summary>
-    ///     選択中のワークスペース。変更時に削除可能フラグを更新する。
+    /// 選択中のワークスペース。変更時に削除可能フラグを更新する。
     /// </summary>
     public Workspace Selected
     {
@@ -34,7 +34,7 @@ public class ConfigureWorkspace : ObservableObject
     }
 
     /// <summary>
-    ///     選択中のワークスペースが削除可能かどうか。
+    /// 選択中のワークスペースが削除可能かどうか。
     /// </summary>
     public bool CanDeleteSelected
     {
@@ -43,7 +43,7 @@ public class ConfigureWorkspace : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。設定からワークスペース一覧を読み込んで初期化する。
+    /// コンストラクタ。設定からワークスペース一覧を読み込んで初期化する。
     /// </summary>
     public ConfigureWorkspace()
     {
@@ -51,7 +51,7 @@ public class ConfigureWorkspace : ObservableObject
     }
 
     /// <summary>
-    ///     新しいワークスペースを追加する。現在日時をデフォルト名として使用する。
+    /// 新しいワークスペースを追加する。現在日時をデフォルト名として使用する。
     /// </summary>
     public void Add()
     {
@@ -64,7 +64,7 @@ public class ConfigureWorkspace : ObservableObject
     }
 
     /// <summary>
-    ///     選択中のワークスペースを削除する。アクティブなワークスペースは削除不可。
+    /// 選択中のワークスペースを削除する。アクティブなワークスペースは削除不可。
     /// </summary>
     public void Delete()
     {
@@ -77,7 +77,7 @@ public class ConfigureWorkspace : ObservableObject
     }
 
     /// <summary>
-    ///     選択中のワークスペースを1つ上に移動する。
+    /// 選択中のワークスペースを1つ上に移動する。
     /// </summary>
     public void MoveSelectedUp()
     {
@@ -96,7 +96,7 @@ public class ConfigureWorkspace : ObservableObject
     }
 
     /// <summary>
-    ///     選択中のワークスペースを1つ下に移動する。
+    /// 選択中のワークスペースを1つ下に移動する。
     /// </summary>
     public void MoveSelectedDown()
     {

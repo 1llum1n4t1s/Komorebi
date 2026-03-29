@@ -3,8 +3,8 @@
 namespace Komorebi.Models;
 
 /// <summary>
-///     テキストのインライン変更（行内差分）を表すクラス。
-///     Myersアルゴリズムを使用して、削除範囲と追加範囲を検出する。
+/// テキストのインライン変更（行内差分）を表すクラス。
+/// Myersアルゴリズムを使用して、削除範囲と追加範囲を検出する。
 /// </summary>
 public class TextInlineChange(int dp, int dc, int ap, int ac)
 {
@@ -61,8 +61,8 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
     }
 
     /// <summary>
-    ///     2つのテキストを比較し、インライン変更のリストを返す。
-    ///     テキストを単語/区切り文字単位のチャンクに分割し、Myersアルゴリズムで差分を検出する。
+    /// 2つのテキストを比較し、インライン変更のリストを返す。
+    /// テキストを単語/区切り文字単位のチャンクに分割し、Myersアルゴリズムで差分を検出する。
     /// </summary>
     /// <param name="oldValue">変更前のテキスト</param>
     /// <param name="newValue">変更後のテキスト</param>
@@ -128,8 +128,8 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
     }
 
     /// <summary>
-    ///     テキストを単語と区切り文字のチャンクに分割する。
-    ///     各チャンクにハッシュ値を割り当て、高速な比較を可能にする。
+    /// テキストを単語と区切り文字のチャンクに分割する。
+    /// 各チャンクにハッシュ値を割り当て、高速な比較を可能にする。
     /// </summary>
     /// <param name="hashes">テキスト→ハッシュ値のマップ</param>
     /// <param name="text">分割対象のテキスト</param>
@@ -147,19 +147,19 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
             if (delims.Contains(ch))
             {
                 if (start != i)
-                    AddChunk(chunks, hashes, text.Substring(start, i - start), start);
-                AddChunk(chunks, hashes, text.Substring(i, 1), i);
+                    AddChunk(chunks, hashes, text[start..i], start);
+                AddChunk(chunks, hashes, text[i..(i + 1)], i);
                 start = i + 1;
             }
         }
 
         if (start < size)
-            AddChunk(chunks, hashes, text.Substring(start), start);
+            AddChunk(chunks, hashes, text[start..], start);
         return chunks;
     }
 
     /// <summary>
-    ///     Myersアルゴリズムにより、新旧チャンク間の変更を再帰的に検出する
+    /// Myersアルゴリズムにより、新旧チャンク間の変更を再帰的に検出する
     /// </summary>
     private static void CheckModified(List<Chunk> chunksOld, int startOld, int endOld, List<Chunk> chunksNew, int startNew, int endNew, int[] forward, int[] reverse)
     {
@@ -216,7 +216,7 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
     }
 
     /// <summary>
-    ///     Myersアルゴリズムの前方・後方探索により、最短編集スクリプトを求める
+    /// Myersアルゴリズムの前方・後方探索により、最短編集スクリプトを求める
     /// </summary>
     private static EditResult CheckModifiedEdit(List<Chunk> chunksOld, int startOld, int endOld, List<Chunk> chunksNew, int startNew, int endNew, int[] forward, int[] reverse)
     {

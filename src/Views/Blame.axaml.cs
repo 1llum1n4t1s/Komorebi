@@ -18,17 +18,17 @@ using AvaloniaEdit.Utils;
 namespace Komorebi.Views;
 
 /// <summary>
-///     BlameTextEditorクラス。
+/// BlameTextEditorクラス。
 /// </summary>
 public class BlameTextEditor : TextEditor
 {
     /// <summary>
-    ///     CommitInfoMarginクラス。
+    /// CommitInfoMarginクラス。
     /// </summary>
     public class CommitInfoMargin : AbstractMargin
     {
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public CommitInfoMargin(BlameTextEditor editor)
         {
@@ -37,7 +37,7 @@ public class BlameTextEditor : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの描画処理を行う。
+        /// コントロールの描画処理を行う。
         /// </summary>
         public override void Render(DrawingContext context)
         {
@@ -106,7 +106,7 @@ public class BlameTextEditor : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの測定処理をオーバーライドする。
+        /// コントロールの測定処理をオーバーライドする。
         /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -165,7 +165,7 @@ public class BlameTextEditor : TextEditor
         }
 
         /// <summary>
-        ///     ポインターが移動した際のイベント処理。
+        /// ポインターが移動した際のイベント処理。
         /// </summary>
         protected override void OnPointerMoved(PointerEventArgs e)
         {
@@ -218,7 +218,7 @@ public class BlameTextEditor : TextEditor
         }
 
         /// <summary>
-        ///     ポインターが押された際のイベント処理。
+        /// ポインターが押された際のイベント処理。
         /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
@@ -262,16 +262,17 @@ public class BlameTextEditor : TextEditor
             }
         }
 
+        /// <summary>親のBlameTextEditorへの参照。</summary>
         private readonly BlameTextEditor _editor = null;
     }
 
     /// <summary>
-    ///     VerticalSeparatorMarginクラス。
+    /// VerticalSeparatorMarginクラス。
     /// </summary>
     public class VerticalSeparatorMargin : AbstractMargin
     {
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public VerticalSeparatorMargin(BlameTextEditor editor)
         {
@@ -279,7 +280,7 @@ public class BlameTextEditor : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの描画処理を行う。
+        /// コントロールの描画処理を行う。
         /// </summary>
         public override void Render(DrawingContext context)
         {
@@ -288,25 +289,27 @@ public class BlameTextEditor : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの測定処理をオーバーライドする。
+        /// コントロールの測定処理をオーバーライドする。
         /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             return new Size(1, 0);
         }
 
+        /// <summary>親のBlameTextEditorへの参照。</summary>
         private readonly BlameTextEditor _editor = null;
     }
 
     /// <summary>
-    ///     LineBackgroundRendererクラス。
+    /// LineBackgroundRendererクラス。
     /// </summary>
     public class LineBackgroundRenderer : IBackgroundRenderer
     {
+        /// <summary>背景レイヤーに描画する。</summary>
         public KnownLayer Layer => KnownLayer.Background;
 
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public LineBackgroundRenderer(BlameTextEditor owner)
         {
@@ -314,7 +317,7 @@ public class BlameTextEditor : TextEditor
         }
 
         /// <summary>
-        ///     Drawの処理を行う。
+        /// Drawの処理を行う。
         /// </summary>
         public void Draw(TextView textView, DrawingContext drawingContext)
         {
@@ -352,40 +355,48 @@ public class BlameTextEditor : TextEditor
             }
         }
 
+        /// <summary>親のBlameTextEditorへの参照。</summary>
         private readonly BlameTextEditor _owner;
     }
 
+    /// <summary>表示対象のファイルパスを保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<string> FileProperty =
         AvaloniaProperty.Register<BlameTextEditor, string>(nameof(File));
 
+    /// <summary>表示対象のファイルパス。シンタックスハイライトの文法選択に使用。</summary>
     public string File
     {
         get => GetValue(FileProperty);
         set => SetValue(FileProperty, value);
     }
 
+    /// <summary>Blameデータを保持するスタイル���ロパティ。</summary>
     public static readonly StyledProperty<Models.BlameData> BlameDataProperty =
         AvaloniaProperty.Register<BlameTextEditor, Models.BlameData>(nameof(BlameData));
 
+    /// <summary>各行のblame情報（コミットSHA・著者・日時など）を含むデータ。</summary>
     public Models.BlameData BlameData
     {
         get => GetValue(BlameDataProperty);
         set => SetValue(BlameDataProperty, value);
     }
 
+    /// <summary>タブ幅を保持するスタイ��プロパティ。</summary>
     public static readonly StyledProperty<int> TabWidthProperty =
         AvaloniaProperty.Register<BlameTextEditor, int>(nameof(TabWidth), 4);
 
+    /// <summary>タブ文字のインデント幅。</summary>
     public int TabWidth
     {
         get => GetValue(TabWidthProperty);
         set => SetValue(TabWidthProperty, value);
     }
 
+    /// <summary>スタイルキーをTextEditorに設定。</summary>
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
-    ///     BlameTextEditorの処理を行う。
+    /// BlameTextEditorの処理を行う。
     /// </summary>
     public BlameTextEditor() : base(new TextArea(), new TextDocument())
     {
@@ -411,7 +422,7 @@ public class BlameTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -430,7 +441,7 @@ public class BlameTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -459,7 +470,7 @@ public class BlameTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     TextAreaCaretPositionChangedイベントのハンドラ。
+    /// TextAreaCaretPositionChangedイベントのハンドラ。
     /// </summary>
     private void OnTextAreaCaretPositionChanged(object sender, EventArgs e)
     {
@@ -474,7 +485,7 @@ public class BlameTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     TextViewContextRequestedイベントのハンドラ。
+    /// TextViewContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -499,7 +510,7 @@ public class BlameTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     TextViewVisualLinesChangedイベントのハンドラ。
+    /// TextViewVisualLinesChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
     {
@@ -513,17 +524,20 @@ public class BlameTextEditor : TextEditor
         }
     }
 
+    /// <summary>TextMateによるシンタックスハイライト設定。</summary>
     private TextMate.Installation _textMate = null;
+
+    /// <summary>現在ハイライト中のコミットSHA。キャレット行のblame情報から取得。</summary>
     private string _highlight = string.Empty;
 }
 
 /// <summary>
-///     Blame（各行の変更者表示）ビューのコードビハインド。
+/// Blame（各行の変更者表示）ビューのコードビハインド。
 /// </summary>
 public partial class Blame : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Blame()
     {
@@ -531,7 +545,7 @@ public partial class Blame : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられた後の処理。
+    /// ウィンドウが閉じられた後の処理。
     /// </summary>
     protected override void OnClosed(EventArgs e)
     {
@@ -540,7 +554,7 @@ public partial class Blame : ChromelessWindow
     }
 
     /// <summary>
-    ///     ポインターが離された際のイベント処理。
+    /// ポインターが離された際のイベント処理。
     /// </summary>
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {

@@ -7,40 +7,64 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     検索キーワードのマッチ部分をハイライト表示するテキストブロック。
+/// 検索キーワードのマッチ部分をハイライト表示するテキストブロック。
 /// </summary>
 public class NameHighlightedTextBlock : Control
 {
+    /// <summary>
+    /// 表示テキストのスタイルプロパティ。$で囲まれた部分がハイライトされる。
+    /// </summary>
     public static readonly StyledProperty<string> TextProperty =
         AvaloniaProperty.Register<NameHighlightedTextBlock, string>(nameof(Text));
 
+    /// <summary>
+    /// 表示テキストを取得・設定する。
+    /// </summary>
     public string Text
     {
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
 
+    /// <summary>
+    /// フォントファミリーのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<FontFamily> FontFamilyProperty =
         TextBlock.FontFamilyProperty.AddOwner<NameHighlightedTextBlock>();
 
+    /// <summary>
+    /// フォントファミリーを取得・設定する。
+    /// </summary>
     public FontFamily FontFamily
     {
         get => GetValue(FontFamilyProperty);
         set => SetValue(FontFamilyProperty, value);
     }
 
+    /// <summary>
+    /// フォントサイズのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<double> FontSizeProperty =
        TextBlock.FontSizeProperty.AddOwner<NameHighlightedTextBlock>();
 
+    /// <summary>
+    /// フォントサイズを取得・設定する。
+    /// </summary>
     public double FontSize
     {
         get => GetValue(FontSizeProperty);
         set => SetValue(FontSizeProperty, value);
     }
 
+    /// <summary>
+    /// 前景色ブラシのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<IBrush> ForegroundProperty =
         TextBlock.ForegroundProperty.AddOwner<NameHighlightedTextBlock>();
 
+    /// <summary>
+    /// 前景色ブラシを取得・設定する。
+    /// </summary>
     public IBrush Foreground
     {
         get => GetValue(ForegroundProperty);
@@ -48,7 +72,7 @@ public class NameHighlightedTextBlock : Control
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static NameHighlightedTextBlock()
     {
@@ -56,7 +80,7 @@ public class NameHighlightedTextBlock : Control
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -78,7 +102,7 @@ public class NameHighlightedTextBlock : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {

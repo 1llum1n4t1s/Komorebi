@@ -9,7 +9,7 @@ using Avalonia.Threading;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミットのタイムスタンプを相対時間または絶対時間で表示するテキストブロック。
+/// コミットのタイムスタンプを相対時間または絶対時間で表示するテキストブロック。
 /// </summary>
 public class CommitTimeTextBlock : TextBlock
 {
@@ -52,7 +52,7 @@ public class CommitTimeTextBlock : TextBlock
     protected override Type StyleKeyOverride => typeof(TextBlock);
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -85,7 +85,7 @@ public class CommitTimeTextBlock : TextBlock
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -96,7 +96,7 @@ public class CommitTimeTextBlock : TextBlock
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -105,7 +105,7 @@ public class CommitTimeTextBlock : TextBlock
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -114,7 +114,7 @@ public class CommitTimeTextBlock : TextBlock
     }
 
     /// <summary>
-    ///     StartTimerの処理を行う。
+    /// StartTimerの処理を行う。
     /// </summary>
     private void StartTimer()
     {
@@ -135,7 +135,7 @@ public class CommitTimeTextBlock : TextBlock
     }
 
     /// <summary>
-    ///     StopTimerの処理を行う。
+    /// StopTimerの処理を行う。
     /// </summary>
     private void StopTimer()
     {
@@ -147,7 +147,7 @@ public class CommitTimeTextBlock : TextBlock
     }
 
     /// <summary>
-    ///     GetDisplayTextの処理を行う。
+    /// GetDisplayTextの処理を行う。
     /// </summary>
     private string GetDisplayText()
     {

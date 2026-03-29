@@ -1,13 +1,13 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     パッチ適用時の空白文字処理モードを表すクラス。
-///     git applyコマンドの--whitespaceオプションに対応する。
+/// パッチ適用時の空白文字処理モードを表すクラス。
+/// git applyコマンドの--whitespaceオプションに対応する。
 /// </summary>
 public class ApplyWhiteSpaceMode(string n, string d, string a)
 {
     /// <summary>
-    ///     サポートされている空白文字処理モードの一覧。
+    /// サポートされている空白文字処理モードの一覧。
     /// </summary>
     public static readonly ApplyWhiteSpaceMode[] Supported =
     [
@@ -18,17 +18,17 @@ public class ApplyWhiteSpaceMode(string n, string d, string a)
     ];
 
     /// <summary>
-    ///     モードの表示名。
+    /// モードの表示名。
     /// </summary>
     public string Name { get; set; } = n;
 
     /// <summary>
-    ///     モードの説明文。
+    /// モードの説明文。
     /// </summary>
     public string Desc { get; set; } = d;
 
     /// <summary>
-    ///     gitコマンドに渡す引数文字列。
+    /// gitコマンドに渡す引数文字列。
     /// </summary>
     public string Arg { get; set; } = a;
 }

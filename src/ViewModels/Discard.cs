@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     すべてのローカル変更を破棄するモード。追跡外ファイルと無視ファイルの含有オプション付き。
+/// すべてのローカル変更を破棄するモード。追跡外ファイルと無視ファイルの含有オプション付き。
 /// </summary>
 public class DiscardAllMode
 {
     /// <summary>
-    ///     追跡されていないファイルも破棄対象に含めるかどうか。
+    /// 追跡されていないファイルも破棄対象に含めるかどうか。
     /// </summary>
     public bool IncludeUntracked
     {
@@ -18,7 +18,7 @@ public class DiscardAllMode
     } = false;
 
     /// <summary>
-    ///     無視ファイルも破棄対象に含めるかどうか。
+    /// 無視ファイルも破棄対象に含めるかどうか。
     /// </summary>
     public bool IncludeIgnored
     {
@@ -28,12 +28,12 @@ public class DiscardAllMode
 }
 
 /// <summary>
-///     単一ファイルの変更を破棄するモード。対象ファイルのパスを保持する。
+/// 単一ファイルの変更を破棄するモード。対象ファイルのパスを保持する。
 /// </summary>
 public class DiscardSingleFile
 {
     /// <summary>
-    ///     破棄対象のファイルパス。
+    /// 破棄対象のファイルパス。
     /// </summary>
     public string Path
     {
@@ -43,12 +43,12 @@ public class DiscardSingleFile
 }
 
 /// <summary>
-///     複数ファイルの変更を破棄するモード。対象ファイル数を保持する。
+/// 複数ファイルの変更を破棄するモード。対象ファイル数を保持する。
 /// </summary>
 public class DiscardMultipleFiles
 {
     /// <summary>
-    ///     破棄対象のファイル数。
+    /// 破棄対象のファイル数。
     /// </summary>
     public int Count
     {
@@ -58,13 +58,13 @@ public class DiscardMultipleFiles
 }
 
 /// <summary>
-///     ローカル変更の破棄を確認するダイアログViewModel。
-///     全変更破棄、単一ファイル破棄、複数ファイル破棄の3つのモードに対応する。
+/// ローカル変更の破棄を確認するダイアログViewModel。
+/// 全変更破棄、単一ファイル破棄、複数ファイル破棄の3つのモードに対応する。
 /// </summary>
 public class Discard : Popup
 {
     /// <summary>
-    ///     破棄モード（DiscardAllMode / DiscardSingleFile / DiscardMultipleFiles）。
+    /// 破棄モード（DiscardAllMode / DiscardSingleFile / DiscardMultipleFiles）。
     /// </summary>
     public object Mode
     {
@@ -72,7 +72,7 @@ public class Discard : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。全変更破棄モードで初期化する。
+    /// コンストラクタ。全変更破棄モードで初期化する。
     /// </summary>
     public Discard(Repository repo)
     {
@@ -81,7 +81,7 @@ public class Discard : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。変更リストに応じて適切な破棄モードを選択する。
+    /// コンストラクタ。変更リストに応じて適切な破棄モードを選択する。
     /// </summary>
     public Discard(Repository repo, List<Models.Change> changes)
     {
@@ -97,8 +97,8 @@ public class Discard : Popup
     }
 
     /// <summary>
-    ///     変更破棄を実行する確認アクション。
-    ///     全変更破棄の場合はコミットメッセージもクリアする。
+    /// 変更破棄を実行する確認アクション。
+    /// 全変更破棄の場合はコミットメッセージもクリアする。
     /// </summary>
     public override async Task<bool> Sure()
     {

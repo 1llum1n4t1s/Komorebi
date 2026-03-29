@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     サブモジュールの状態を取得するクラス。
-///     git submodule status でステータスを取得し、.gitmodulesからURL・ブランチ情報を補完する。
-///     さらにNormalステータスのサブモジュールについてはローカル変更の有無も確認する。
+/// サブモジュールの状態を取得するクラス。
+/// git submodule status でステータスを取得し、.gitmodulesからURL・ブランチ情報を補完する。
+/// さらにNormalステータスのサブモジュールについてはローカル変更の有無も確認する。
 /// </summary>
 public partial class QuerySubmodules : Command
 {
@@ -24,7 +24,7 @@ public partial class QuerySubmodules : Command
     private static partial Regex REG_FORMAT_MODULE_INFO();
 
     /// <summary>
-    ///     コンストラクタ。サブモジュールステータスを取得するコマンドを設定する。
+    /// コンストラクタ。サブモジュールステータスを取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     public QuerySubmodules(string repo)
@@ -35,8 +35,8 @@ public partial class QuerySubmodules : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、サブモジュールのリストを返す。
-    ///     ステータス取得→.gitmodules解析→ローカル変更チェックの3段階で情報を収集する。
+    /// コマンドを非同期で実行し、サブモジュールのリストを返す。
+    /// ステータス取得→.gitmodules解析→ローカル変更チェックの3段階で情報を収集する。
     /// </summary>
     /// <returns>サブモジュールモデルのリスト</returns>
     public async Task<List<Models.Submodule>> GetResultAsync()
@@ -170,7 +170,7 @@ public partial class QuerySubmodules : Command
     }
 
     /// <summary>
-    ///     .gitmodulesから解析されたモジュール情報を保持する内部クラス。
+    /// .gitmodulesから解析されたモジュール情報を保持する内部クラス。
     /// </summary>
     private class ModuleInfo
     {

@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリグループ作成ダイアログのViewModel。
-///     サイドバーのリポジトリツリーに新しいグループノードを追加する。
+/// リポジトリグループ作成ダイアログのViewModel。
+/// サイドバーのリポジトリツリーに新しいグループノードを追加する。
 /// </summary>
 public class CreateGroup : Popup
 {
     /// <summary>
-    ///     グループ名。必須項目。
+    /// グループ名。必須項目。
     /// </summary>
     [Required(ErrorMessage = "Group name is required!")]
     public string Name
@@ -21,7 +21,7 @@ public class CreateGroup : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。親ノードを受け取って初期化する。
+    /// コンストラクタ。親ノードを受け取って初期化する。
     /// </summary>
     /// <param name="parent">グループを追加する親ノード（nullでルート直下）</param>
     public CreateGroup(RepositoryNode parent)
@@ -30,7 +30,7 @@ public class CreateGroup : Popup
     }
 
     /// <summary>
-    ///     確定処理。新しいグループノードを設定に追加する。
+    /// 確定処理。新しいグループノードを設定に追加する。
     /// </summary>
     /// <returns>常にtrue</returns>
     public override Task<bool> Sure()

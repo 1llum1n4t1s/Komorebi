@@ -1,7 +1,7 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     リポジトリの各種データ更新メソッドを定義するインターフェース
+/// リポジトリの各種データ更新メソッドを定義するインターフェース
 /// </summary>
 public interface IRepository
 {

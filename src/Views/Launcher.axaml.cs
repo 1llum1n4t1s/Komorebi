@@ -12,28 +12,43 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ランチャーメインウィンドウ（タブ管理・ホットキー処理）のコードビハインド。
+/// ランチャーメインウィンドウ（タブ管理・ホットキー処理）のコードビハインド。
 /// </summary>
 public partial class Launcher : ChromelessWindow
 {
+    /// <summary>
+    /// キャプション（タイトルバー）の高さを保持するスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<GridLength> CaptionHeightProperty =
         AvaloniaProperty.Register<Launcher, GridLength>(nameof(CaptionHeight));
 
+    /// <summary>
+    /// キャプションの高さを取得・設定する。
+    /// </summary>
     public GridLength CaptionHeight
     {
         get => GetValue(CaptionHeightProperty);
         set => SetValue(CaptionHeightProperty, value);
     }
 
+    /// <summary>
+    /// 左側にキャプションボタンを表示するかどうかのスタイルプロパティ。macOSで使用。
+    /// </summary>
     public static readonly StyledProperty<bool> HasLeftCaptionButtonProperty =
         AvaloniaProperty.Register<Launcher, bool>(nameof(HasLeftCaptionButton));
 
+    /// <summary>
+    /// 左側にキャプションボタンを表示するかどうかを取得・設定する。
+    /// </summary>
     public bool HasLeftCaptionButton
     {
         get => GetValue(HasLeftCaptionButtonProperty);
         set => SetValue(HasLeftCaptionButtonProperty, value);
     }
 
+    /// <summary>
+    /// 右側にキャプションボタンを表示するかどうかを取得する。WindowsおよびLinux（非システムフレーム時）で表示。
+    /// </summary>
     public bool HasRightCaptionButton
     {
         get
@@ -46,7 +61,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Launcher()
     {
@@ -111,7 +126,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウを最前面に表示する。
+    /// ウィンドウを最前面に表示する。
     /// </summary>
     public void BringToTop()
     {
@@ -123,7 +138,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが開かれた際の処理。
+    /// ウィンドウが開かれた際の処理。
     /// </summary>
     protected override void OnOpened(EventArgs e)
     {
@@ -136,7 +151,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -165,7 +180,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     サイズが変更された際の処理。
+    /// サイズが変更された際の処理。
     /// </summary>
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
@@ -181,7 +196,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override async void OnKeyDown(KeyEventArgs e)
     {
@@ -380,7 +395,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられる際の処理。
+    /// ウィンドウが閉じられる際の処理。
     /// </summary>
     protected override void OnClosing(WindowClosingEventArgs e)
     {
@@ -395,7 +410,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウ位置変更時のハンドラ。通常状態の場合のみ位置を設定に保存する。
+    /// ウィンドウ位置変更時のハンドラ。通常状態の場合のみ位置を設定に保存する。
     /// </summary>
     private void OnPositionChanged(object sender, PixelPointEventArgs e)
     {
@@ -408,7 +423,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     ワークスペース選択メニューを構築して表示する。
+    /// ワークスペース選択メニューを構築して表示する。
     /// </summary>
     private void OnOpenWorkspaceMenu(object sender, RoutedEventArgs e)
     {
@@ -475,7 +490,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     OpenPagesCommandPaletteイベントのハンドラ。
+    /// OpenPagesCommandPaletteイベントのハンドラ。
     /// </summary>
     private void OnOpenPagesCommandPalette(object sender, RoutedEventArgs e)
     {
@@ -485,7 +500,7 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    ///     CloseCommandPaletteイベントのハンドラ。
+    /// CloseCommandPaletteイベントのハンドラ。
     /// </summary>
     private void OnCloseCommandPalette(object sender, PointerPressedEventArgs e)
     {
@@ -494,5 +509,8 @@ public partial class Launcher : ChromelessWindow
         e.Handled = true;
     }
 
+    /// <summary>
+    /// 最小化前のウィンドウ状態を保持するフィールド。復元時に使用する。
+    /// </summary>
     private WindowState _lastWindowState = WindowState.Normal;
 }

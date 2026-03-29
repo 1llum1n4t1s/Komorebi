@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,33 +9,33 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     全てのgitコマンドの基底クラス。
-///     gitプロセスの起動、標準出力/エラーの取得、非同期実行などを提供する。
+/// 全てのgitコマンドの基底クラス。
+/// gitプロセスの起動、標準出力/エラーの取得、非同期実行などを提供する。
 /// </summary>
 public partial class Command
 {
     /// <summary>
-    ///     gitコマンドの実行結果を格納するクラス。
+    /// gitコマンドの実行結果を格納するクラス。
     /// </summary>
     public class Result
     {
         /// <summary>
-        ///     コマンドが成功したかどうかを示すフラグ。
+        /// コマンドが成功したかどうかを示すフラグ。
         /// </summary>
         public bool IsSuccess { get; set; } = false;
 
         /// <summary>
-        ///     標準出力の内容。
+        /// 標準出力の内容。
         /// </summary>
         public string StdOut { get; set; } = string.Empty;
 
         /// <summary>
-        ///     標準エラー出力の内容。
+        /// 標準エラー出力の内容。
         /// </summary>
         public string StdErr { get; set; } = string.Empty;
 
         /// <summary>
-        ///     失敗結果を生成するファクトリメソッド。
+        /// 失敗結果を生成するファクトリメソッド。
         /// </summary>
         /// <param name="reason">失敗理由の文字列。</param>
         /// <returns>エラーメッセージが設定された失敗結果。</returns>
@@ -44,7 +43,7 @@ public partial class Command
     }
 
     /// <summary>
-    ///     gitエディタの種別を定義する列挙型。
+    /// gitエディタの種別を定義する列挙型。
     /// </summary>
     public enum EditorType
     {
@@ -57,49 +56,49 @@ public partial class Command
     }
 
     /// <summary>
-    ///     コマンドの実行コンテキスト（通常はリポジトリパス）。エラー表示時に使用される。
+    /// コマンドの実行コンテキスト（通常はリポジトリパス）。エラー表示時に使用される。
     /// </summary>
     public string Context { get; set; } = string.Empty;
 
     /// <summary>
-    ///     gitコマンドを実行する作業ディレクトリ。
+    /// gitコマンドを実行する作業ディレクトリ。
     /// </summary>
     public string WorkingDirectory { get; set; } = null;
 
     /// <summary>
-    ///     使用するエディタの種別。デフォルトはCoreEditor。
+    /// 使用するエディタの種別。デフォルトはCoreEditor。
     /// </summary>
     public EditorType Editor { get; set; } = EditorType.CoreEditor;
 
     /// <summary>
-    ///     SSH認証に使用する秘密鍵のパス。
+    /// SSH認証に使用する秘密鍵のパス。
     /// </summary>
     public string SSHKey { get; set; } = string.Empty;
 
     /// <summary>
-    ///     gitコマンドに渡す引数文字列。
+    /// gitコマンドに渡す引数文字列。
     /// </summary>
     public string Args { get; set; } = string.Empty;
 
     // Only used in `ExecAsync` mode.
     /// <summary>
-    ///     非同期実行時のキャンセルトークン。ExecAsyncモードでのみ使用される。
+    /// 非同期実行時のキャンセルトークン。ExecAsyncモードでのみ使用される。
     /// </summary>
     public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
 
     /// <summary>
-    ///     エラー発生時に例外を上げるかどうかのフラグ。
+    /// エラー発生時に例外を上げるかどうかのフラグ。
     /// </summary>
     public bool RaiseError { get; set; } = true;
 
     /// <summary>
-    ///     コマンドログの出力先。nullの場合はログを記録しない。
+    /// コマンドログの出力先。nullの場合はログを記録しない。
     /// </summary>
     public Models.ICommandLog Log { get; set; } = null;
 
     /// <summary>
-    ///     gitコマンドを非同期で実行し、出力をストリーミングで処理する。
-    ///     主にfetch、push、pullなど長時間実行されるコマンドに使用する。
+    /// gitコマンドを非同期で実行し、出力をストリーミングで処理する。
+    /// 主にfetch、push、pullなど長時間実行されるコマンドに使用する。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> ExecAsync()
@@ -191,8 +190,8 @@ public partial class Command
     }
 
     /// <summary>
-    ///     gitコマンドを同期的に実行し、標準出力と標準エラーを全て読み取る。
-    ///     短時間で完了するコマンド（configの取得など）に使用する。
+    /// gitコマンドを同期的に実行し、標準出力と標準エラーを全て読み取る。
+    /// 短時間で完了するコマンド（configの取得など）に使用する。
     /// </summary>
     /// <returns>実行結果を含むResultオブジェクト。</returns>
     protected Result ReadToEnd()
@@ -224,8 +223,8 @@ public partial class Command
     }
 
     /// <summary>
-    ///     gitコマンドを非同期で実行し、標準出力と標準エラーを全て読み取る。
-    ///     ReadToEndの非同期版。
+    /// gitコマンドを非同期で実行し、標準出力と標準エラーを全て読み取る。
+    /// ReadToEndの非同期版。
     /// </summary>
     /// <returns>実行結果を含むResultオブジェクト。</returns>
     protected async Task<Result> ReadToEndAsync()
@@ -258,8 +257,8 @@ public partial class Command
     }
 
     /// <summary>
-    ///     gitプロセス起動用のProcessStartInfoを生成する。
-    ///     環境変数（SSH、ロケールなど）やエディタ設定も行う。
+    /// gitプロセス起動用のProcessStartInfoを生成する。
+    /// 環境変数（SSH、ロケールなど）やエディタ設定も行う。
     /// </summary>
     /// <param name="redirect">標準出力/エラーをリダイレクトするかどうか。</param>
     /// <returns>設定済みのProcessStartInfoオブジェクト。</returns>
@@ -337,11 +336,9 @@ public partial class Command
     }
 
     /// <summary>
-    ///     git diff/logの--name-status出力行をパースしてChangeオブジェクトに変換する共通メソッド。
-    ///     CompareRevisions/QueryFileHistoryの重複ロジックを統合。
+    /// git diff/logの--name-status出力行をパースしてChangeオブジェクトに変換する共通メソッド。
+    /// CompareRevisions/QueryFileHistoryの重複ロジックを統合。
     /// </summary>
-    /// <param name="line">name-status形式の1行（例: "M\tsrc/foo.cs"）。</param>
-    /// <returns>パース成功時はChangeオブジェクト、失敗時はnull。</returns>
     [GeneratedRegex(@"^([MAD])\s+(.+)$")]
     private static partial Regex REG_NAME_STATUS();
     [GeneratedRegex(@"^([CR])[0-9]{0,4}\s+(.+)$")]
@@ -359,8 +356,8 @@ public partial class Command
                 'D' => Models.ChangeState.Deleted,
                 _ => (Models.ChangeState?)null,
             };
-            if (state.HasValue)
-                return (match.Groups[2].Value, state.Value);
+            if (state is Models.ChangeState stateValue)
+                return (match.Groups[2].Value, stateValue);
         }
 
         match = REG_NAME_STATUS_RENAME().Match(line);
@@ -375,8 +372,8 @@ public partial class Command
     }
 
     /// <summary>
-    ///     git出力の相対パスをWorkingDirectoryを基準に絶対パスに解決する共通メソッド。
-    ///     QueryGitDir/QueryGitCommonDirの重複ロジックを統合。
+    /// git出力の相対パスをWorkingDirectoryを基準に絶対パスに解決する共通メソッド。
+    /// QueryGitDir/QueryGitCommonDirの重複ロジックを統合。
     /// </summary>
     /// <param name="path">gitから返されたパス（絶対or相対）。</param>
     /// <returns>絶対パス。</returns>
@@ -388,8 +385,8 @@ public partial class Command
     }
 
     /// <summary>
-    ///     リモートに紐づくSSH鍵を取得してから非同期実行する共通メソッド。
-    ///     Push/Pull/Fetchの重複ロジックを統合。
+    /// リモートに紐づくSSH鍵を取得してから非同期実行する共通メソッド。
+    /// Push/Pull/Fetchの重複ロジックを統合。
     /// </summary>
     /// <param name="remote">リモート名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -400,8 +397,8 @@ public partial class Command
     }
 
     /// <summary>
-    ///     プロセス出力の各行を処理し、ログへの記録とエラー収集を行う。
-    ///     進捗表示や不要な行はフィルタリングする。
+    /// プロセス出力の各行を処理し、ログへの記録とエラー収集を行う。
+    /// 進捗表示や不要な行はフィルタリングする。
     /// </summary>
     /// <param name="line">プロセスから出力された1行。</param>
     /// <param name="errs">エラーメッセージの収集リスト。</param>
@@ -435,23 +432,23 @@ public partial class Command
     }
 
     /// <summary>
-    ///     キャンセル時の安全なプロセス終了のためにプロセス参照を保持するクラス。
+    /// キャンセル時の安全なプロセス終了のためにプロセス参照を保持するクラス。
     /// </summary>
     private class CapturedProcess
     {
         /// <summary>
-        ///     キャプチャされたプロセスの参照。
+        /// キャプチャされたプロセスの参照。
         /// </summary>
         public Process Process { get; set; } = null;
     }
 
     /// <summary>
-    ///     自身の実行ファイルパスのキャッシュ（アプリ実行中は不変）。
+    /// 自身の実行ファイルパスのキャッシュ（アプリ実行中は不変）。
     /// </summary>
     private static readonly string s_selfExecFile = Process.GetCurrentProcess().MainModule!.FileName;
 
     /// <summary>
-    ///     進捗表示のパーセンテージパターンにマッチする正規表現。
+    /// 進捗表示のパーセンテージパターンにマッチする正規表現。
     /// </summary>
     [GeneratedRegex(@"\d+%")]
     private static partial Regex REG_PROGRESS();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -27,13 +26,21 @@ namespace Komorebi;
 public partial class App : Application
 {
     #region App Entry Point
+    /// <summary>
+    /// アプリケーションのエントリーポイント。
+    /// Velopack初期化 → ログ初期化 → 起動モード判定（リベースエディタ or 通常GUI）の順に処理する。
+    /// 未処理例外のクラッシュログ記録も設定する。
+    /// </summary>
     [STAThread]
     public static void Main(string[] args)
     {
+        // Velopackの自動更新フックを最初に実行する（更新適用後の再起動処理等）
         VelopackApp.Build().Run();
 
+        // アプリケーションデータディレクトリ（設定・ログ保存先）を初期化する
         Native.OS.SetupDataDir();
 
+        // ログシステムを初期化し、起動ログを記録する
         Models.Logger.Initialize(new Models.LoggerConfig
         {
             LogDirectory = Path.Combine(Native.OS.DataDir, "logs"),
@@ -41,11 +48,13 @@ public partial class App : Application
         });
         Models.Logger.LogStartup();
 
+        // AppDomain全体の未処理例外をクラッシュログに記録するハンドラを登録する
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
             Models.Logger.LogCrash(e.ExceptionObject as Exception, "AppDomain.UnhandledException");
         };
 
+        // Task内の未観測例外をクラッシュログに記録し、プロセス終了を防ぐ
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
             Models.Logger.LogCrash(e.Exception, "UnobservedTaskException");
@@ -54,6 +63,7 @@ public partial class App : Application
 
         try
         {
+            // 起動モードを判定する: リベースTodoエディタ → リベースメッセージエディタ → 通常GUI
             if (TryLaunchAsRebaseTodoEditor(args, out int exitTodo))
                 Environment.Exit(exitTodo);
             else if (TryLaunchAsRebaseMessageEditor(args, out int exitMessage))
@@ -77,24 +87,31 @@ public partial class App : Application
             Process.GetCurrentProcess().Kill();
     }
 
+    /// <summary>
+    /// Avaloniaアプリケーションビルダーを構成して返す。
+    /// プラットフォーム検出、フォント設定（Interをデフォルト、JetBrains Monoを等幅）、
+    /// OS固有の設定を適用する。
+    /// </summary>
     public static AppBuilder BuildAvaloniaApp()
     {
         var builder = AppBuilder.Configure<App>();
-        builder.UsePlatformDetect();
-        builder.LogToTrace();
-        builder.WithInterFont();
+        builder.UsePlatformDetect();        // 実行環境のOS・レンダラーを自動検出する
+        builder.LogToTrace();               // ログ出力をSystem.Diagnostics.Traceに転送する
+        builder.WithInterFont();            // Inter フォントを組み込みフォントとして登録する
         builder.With(new FontManagerOptions()
         {
-            DefaultFamilyName = "fonts:Inter#Inter"
+            DefaultFamilyName = "fonts:Inter#Inter"  // アプリ全体のデフォルトフォントをInterに設定する
         });
         builder.ConfigureFonts(manager =>
         {
+            // アプリ内蔵の等幅フォント（JetBrains Mono等）をフォントマネージャーに登録する
             var monospace = new EmbeddedFontCollection(
                 new Uri("fonts:Komorebi", UriKind.Absolute),
                 new Uri("avares://Komorebi/Resources/Fonts", UriKind.Absolute));
             manager.AddFontCollection(monospace);
         });
 
+        // OS固有のウィンドウ装飾やIME設定等を適用する
         Native.OS.SetupApp(builder);
         return builder;
     }
@@ -109,12 +126,20 @@ public partial class App : Application
     #endregion
 
     #region Utility Functions
+    /// <summary>
+    /// ViewModelオブジェクトに対応するViewコントロールを名前規約で自動解決して生成する。
+    /// 名前空間の ".ViewModels." を ".Views." に置換して対応するViewの型を探す。
+    /// </summary>
+    /// <param name="data">対応するViewを生成したいViewModelオブジェクト</param>
+    /// <returns>生成されたViewコントロール。対応するViewが見つからない場合はnull</returns>
     public static Control CreateViewForViewModel(object data)
     {
+        // ViewModelの完全修飾名を取得し、".ViewModels."を含むか確認する
         var dataTypeName = data.GetType().FullName;
         if (string.IsNullOrEmpty(dataTypeName) || !dataTypeName.Contains(".ViewModels.", StringComparison.Ordinal))
             return null;
 
+        // 名前空間の ".ViewModels." → ".Views." 置換でView型名を導出する
         var viewTypeName = dataTypeName.Replace(".ViewModels.", ".Views.");
         var viewType = Type.GetType(viewTypeName);
         if (viewType is not null)
@@ -123,8 +148,17 @@ public partial class App : Application
         return null;
     }
 
+    /// <summary>
+    /// ViewModelまたはウィンドウをモーダルダイアログとして表示する。
+    /// ViewModelが渡された場合は名前規約でViewを自動解決する。
+    /// ownerが省略された場合はメインウィンドウを親ウィンドウとする。
+    /// </summary>
+    /// <param name="data">表示するViewModelまたはChromelessWindowインスタンス</param>
+    /// <param name="owner">親ウィンドウ（省略時はメインウィンドウ）</param>
+    /// <returns>ダイアログが閉じるまで待機するTask</returns>
     public static Task ShowDialog(object data, Window owner = null)
     {
+        // 親ウィンドウが指定されていなければメインウィンドウを使用する
         if (owner is null)
         {
             if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } mainWindow })
@@ -133,9 +167,11 @@ public partial class App : Application
                 return null;
         }
 
+        // 既にChromelessWindowインスタンスならそのまま表示する
         if (data is Views.ChromelessWindow window)
             return window.ShowDialog(owner);
 
+        // ViewModelから名前規約でViewを自動生成し、DataContextを設定して表示する
         window = CreateViewForViewModel(data) as Views.ChromelessWindow;
         if (window is not null)
         {
@@ -146,8 +182,14 @@ public partial class App : Application
         return null;
     }
 
+    /// <summary>
+    /// ViewModelまたはウィンドウを非モーダル（独立）ウィンドウとして表示する。
+    /// 現在アクティブなウィンドウが存在するスクリーンの中央に配置する。
+    /// </summary>
+    /// <param name="data">表示するViewModelまたはChromelessWindowインスタンス</param>
     public static void ShowWindow(object data)
     {
+        // ViewModelからViewを自動解決する（既にウィンドウならそのまま使用する）
         if (data is not Views.ChromelessWindow window)
         {
             window = CreateViewForViewModel(data) as Views.ChromelessWindow;
@@ -157,11 +199,12 @@ public partial class App : Application
             window.DataContext = data;
         }
 
+        // do-whileブロックでウィンドウ位置の計算を行う（breakで中断可能にするため）
         do
         {
             if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { Windows: { Count: > 0 } windows })
             {
-                // Try to find the actived window (fall back to `MainWindow`)
+                // 現在アクティブなウィンドウを探す（見つからなければ先頭ウィンドウを使用する）
                 var actived = windows[0];
                 if (!actived.IsActive)
                 {
@@ -176,18 +219,18 @@ public partial class App : Application
                     }
                 }
 
-                // Get the screen where current window locates.
+                // アクティブウィンドウが表示されているスクリーンを取得する
                 var screen = actived.Screens.ScreenFromWindow(actived) ?? actived.Screens.Primary;
                 if (screen is null)
                     break;
 
-                // Calculate the startup position (Center Screen Mode) of target window
+                // 対象ウィンドウをスクリーンの作業領域中央に配置する座標を計算する
                 var rect = new PixelRect(PixelSize.FromSize(window.ClientSize, actived.DesktopScaling));
                 var centeredRect = screen.WorkingArea.CenterRect(rect);
                 if (actived.Screens.ScreenFromPoint(centeredRect.Position) is null)
                     break;
 
-                // Use the startup position
+                // 計算した位置を手動指定モードで適用する
                 window.WindowStartupLocation = WindowStartupLocation.Manual;
                 window.Position = centeredRect.Position;
             }
@@ -196,6 +239,12 @@ public partial class App : Application
         window.Show();
     }
 
+    /// <summary>
+    /// 確認ダイアログをモーダル表示し、ユーザーの応答（OK/キャンセル等）を待つ。
+    /// </summary>
+    /// <param name="message">表示するメッセージ</param>
+    /// <param name="buttonType">ボタンの種類（OkCancel等）</param>
+    /// <returns>ユーザーがOKを押した場合はtrue</returns>
     public static async Task<bool> AskConfirmAsync(string message, Models.ConfirmButtonType buttonType = Models.ConfirmButtonType.OkCancel)
     {
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
@@ -208,6 +257,14 @@ public partial class App : Application
         return false;
     }
 
+    /// <summary>
+    /// 空コミット確認ダイアログを表示する。
+    /// ステージに変更がない状態でコミットしようとした際に呼ばれ、
+    /// 「全てステージしてコミット」「選択をステージしてコミット」「空コミット」等の選択肢を提示する。
+    /// </summary>
+    /// <param name="hasLocalChanges">ワーキングツリーにローカル変更があるか</param>
+    /// <param name="hasSelectedUnstaged">未ステージの選択ファイルがあるか</param>
+    /// <returns>ユーザーの選択結果</returns>
     public static async Task<Models.ConfirmEmptyCommitResult> AskConfirmEmptyCommitAsync(bool hasLocalChanges, bool hasSelectedUnstaged)
     {
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
@@ -222,16 +279,28 @@ public partial class App : Application
         return Models.ConfirmEmptyCommitResult.Cancel;
     }
 
+    /// <summary>
+    /// gitコマンドのエラーをUIに通知する。
+    /// エラーメッセージからヒント（対処法）を自動検索し、あれば併せて表示する。
+    /// </summary>
+    /// <param name="context">エラーが発生したコンテキスト（リポジトリID等）</param>
+    /// <param name="message">gitから返されたエラーメッセージ</param>
     public static void RaiseException(string context, string message)
     {
         if (Current is App { _launcher: not null } app)
         {
+            // エラーメッセージからヒントキーを検索し、ローカライズされたヒント文字列を取得する
             var hintKey = Models.GitErrorHelper.GetHintKey(message);
             var hint = string.IsNullOrEmpty(hintKey) ? string.Empty : app.FindLocaleString(hintKey);
             app._launcher.DispatchNotification(context, message, true, hint);
         }
     }
 
+    /// <summary>
+    /// 情報通知をUIに送信する（エラーではない通常のメッセージ）。
+    /// </summary>
+    /// <param name="context">通知のコンテキスト（リポジトリID等）</param>
+    /// <param name="message">表示するメッセージ</param>
     public static void SendNotification(string context, string message)
     {
         if (Current is App { _launcher: not null } app)
@@ -239,8 +308,8 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     現在のロケールリソースから指定キーの文字列を取得する。
-    ///     キーが見つからない場合は空文字列を返す。
+    /// 現在のロケールリソースから指定キーの文字列を取得する。
+    /// キーが見つからない場合は空文字列を返す。
     /// </summary>
     private string FindLocaleString(string key)
     {
@@ -249,6 +318,12 @@ public partial class App : Application
         return string.Empty;
     }
 
+    /// <summary>
+    /// アプリケーションのロケール（表示言語）を切り替える。
+    /// App.axamlに登録されたResourceDictionaryをキーで検索し、
+    /// 現在のロケールと置き換える。
+    /// </summary>
+    /// <param name="localeKey">ロケールキー（例: "ja_JP", "en_US"）</param>
     public static void SetLocale(string localeKey)
     {
         if (Current is not App app ||
@@ -256,17 +331,19 @@ public partial class App : Application
             targetLocale == app._activeLocale)
             return;
 
+        // 現在適用中のロケールリソースを除去する
         if (app._activeLocale is not null)
             app.Resources.MergedDictionaries.Remove(app._activeLocale);
 
+        // 新しいロケールリソースを追加して保持する
         app.Resources.MergedDictionaries.Add(targetLocale);
         app._activeLocale = targetLocale;
     }
 
     /// <summary>
-    ///     アプリケーションのテーマを設定する。
-    ///     ベーステーマ（Light/Dark）を適用した上で、White/OneDark等のテーマ固有の色を上書きする。
-    ///     さらにユーザー定義のテーマオーバーライド（JSONファイル）があれば最後に適用する。
+    /// アプリケーションのテーマを設定する。
+    /// ベーステーマ（Light/Dark）を適用した上で、White/OneDark等のテーマ固有の色を上書きする。
+    /// さらにユーザー定義のテーマオーバーライド（JSONファイル）があれば最後に適用する。
     /// </summary>
     /// <param name="theme">テーマ名（Default, Dark, OneDark, Light, White）</param>
     /// <param name="themeOverridesFile">ユーザー定義テーマオーバーライドのJSONファイルパス（省略可）</param>
@@ -408,9 +485,9 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     テーマ名からAvaloniaのThemeVariant（Light/Dark/Default）に変換する。
-    ///     Light系テーマ（Light, White）はThemeVariant.Lightに、
-    ///     Dark系テーマ（Dark, OneDark）はThemeVariant.Darkにマッピングされる。
+    /// テーマ名からAvaloniaのThemeVariant（Light/Dark/Default）に変換する。
+    /// Light系テーマ（Light, White）はThemeVariant.Lightに、
+    /// Dark系テーマ（Dark, OneDark）はThemeVariant.Darkにマッピングされる。
     /// </summary>
     public static ThemeVariant ParseThemeVariant(string theme)
     {
@@ -426,26 +503,38 @@ public partial class App : Application
         return ThemeVariant.Default;
     }
 
+    /// <summary>
+    /// アプリケーションのデフォルトフォントと等幅フォントを設定する。
+    /// フォント名のバリデーション・正規化を行い、リソースディクショナリに登録する。
+    /// 等幅フォントが未指定の場合はJetBrains Monoをベースにフォールバックを構成する。
+    /// </summary>
+    /// <param name="defaultFont">UIデフォルトフォント名（カンマ区切りで複数指定可）</param>
+    /// <param name="monospaceFont">等幅フォント名（diff/blame表示用、カンマ区切りで複数指定可）</param>
     public static void SetFonts(string defaultFont, string monospaceFont)
     {
         if (Current is not App app)
             return;
 
+        // 前回適用したフォントオーバーライドを除去する
         if (app._fontsOverrides is not null)
         {
             app.Resources.MergedDictionaries.Remove(app._fontsOverrides);
             app._fontsOverrides = null;
         }
 
+        // フォント名を正規化する（余分な空白除去、存在確認、バンドルフォント解決）
         defaultFont = FixFontFamilyName(defaultFont);
         monospaceFont = FixFontFamilyName(monospaceFont);
 
         var resDic = new ResourceDictionary();
+
+        // デフォルトフォントが指定されていればリソースに登録する
         if (!string.IsNullOrEmpty(defaultFont))
             resDic.Add("Fonts.Default", new FontFamily(defaultFont));
 
         if (string.IsNullOrEmpty(monospaceFont))
         {
+            // 等幅フォント未指定: JetBrains Monoをベースにデフォルトフォントをフォールバックに追加する
             if (!string.IsNullOrEmpty(defaultFont))
             {
                 monospaceFont = $"fonts:Komorebi#JetBrains Mono,{defaultFont}";
@@ -454,12 +543,14 @@ public partial class App : Application
         }
         else
         {
+            // 等幅フォント指定あり: デフォルトフォントをフォールバックに追加する（未含時のみ）
             if (!string.IsNullOrEmpty(defaultFont) && !monospaceFont.Contains(defaultFont, StringComparison.Ordinal))
                 monospaceFont = $"{monospaceFont},{defaultFont}";
 
             resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
         }
 
+        // フォント設定が1つ以上あればリソースディクショナリとして登録する
         if (resDic.Count > 0)
         {
             app.Resources.MergedDictionaries.Add(resDic);
@@ -467,12 +558,20 @@ public partial class App : Application
         }
     }
 
+    /// <summary>
+    /// テキストをシステムクリップボードにコピーする。
+    /// </summary>
+    /// <param name="data">コピーするテキスト（nullの場合は空文字列をセットする）</param>
     public static async Task CopyTextAsync(string data)
     {
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard })
             await clipboard.SetTextAsync(data ?? "");
     }
 
+    /// <summary>
+    /// システムクリップボードからテキストを取得する。
+    /// </summary>
+    /// <returns>クリップボードのテキスト。取得できない場合はnull</returns>
     public static async Task<string> GetClipboardTextAsync()
     {
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard })
@@ -480,6 +579,14 @@ public partial class App : Application
         return null;
     }
 
+    /// <summary>
+    /// ローカライズされた文字列をキーで取得する。
+    /// キーには自動的に "Text." プレフィックスが付与される。
+    /// argsが指定された場合はstring.Formatでプレースホルダーを置換する。
+    /// </summary>
+    /// <param name="key">ロケールリソースのキー（"Text."プレフィックスなし）</param>
+    /// <param name="args">書式文字列の引数（{0}, {1}等の置換用）</param>
+    /// <returns>ローカライズ済み文字列。キーが見つからない場合は "Text.{key}" をそのまま返す</returns>
     public static string Text(string key, params object[] args)
     {
         var fmt = Current?.FindResource($"Text.{key}") as string;
@@ -492,6 +599,12 @@ public partial class App : Application
         return string.Format(fmt, args);
     }
 
+    /// <summary>
+    /// リソースキーからStreamGeometryアイコンを取得し、メニュー用のPathコントロールを生成する。
+    /// 12x12サイズでUniformストレッチに設定される。
+    /// </summary>
+    /// <param name="key">アイコンリソースのキー名</param>
+    /// <returns>アイコンを表示するPathコントロール</returns>
     public static Avalonia.Controls.Shapes.Path CreateMenuIcon(string key)
     {
         var icon = new Avalonia.Controls.Shapes.Path
@@ -507,15 +620,26 @@ public partial class App : Application
         return icon;
     }
 
+    /// <summary>
+    /// 現在のLauncherビューモデルインスタンスを取得する。
+    /// アプリケーションが初期化されていない場合はnullを返す。
+    /// </summary>
     public static ViewModels.Launcher GetLauncher()
     {
         return Current is App app ? app._launcher : null;
     }
 
+    /// <summary>
+    /// アプリケーションを指定の終了コードで終了する。
+    /// デスクトップライフタイムが利用可能な場合はメインウィンドウを閉じてから
+    /// シャットダウンし、そうでなければEnvironment.Exitで強制終了する。
+    /// </summary>
+    /// <param name="exitCode">プロセスの終了コード</param>
     public static void Quit(int exitCode)
     {
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            // 明示的シャットダウンモードに切り替えてメインウィンドウを閉じる
             desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             desktop.MainWindow?.Close();
             desktop.Shutdown(exitCode);
@@ -528,18 +652,29 @@ public partial class App : Application
     #endregion
 
     #region Overrides
+    /// <summary>
+    /// Avaloniaフレームワーク初期化時に呼ばれる。
+    /// AXAMLリソースのロード、設定の自動保存登録、ロケール・テーマ・フォントの初期適用を行う。
+    /// </summary>
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
 
+        // 設定変更時に自動保存するハンドラを登録する
         var pref = ViewModels.Preferences.Instance;
         pref.PropertyChanged += (_, _) => pref.Save();
 
+        // ユーザー設定に基づいてロケール・テーマ・フォントを初期適用する
         SetLocale(pref.Locale);
         SetTheme(pref.Theme, pref.ThemeOverrides);
         SetFonts(pref.DefaultFontFamily, pref.MonospaceFontFamily);
     }
 
+    /// <summary>
+    /// フレームワーク初期化完了後に呼ばれる。
+    /// 起動モードの判定（ファイル履歴ビューア、blameビューア、コアエディタ、askpass、通常GUI）と
+    /// IPC二重起動防止の初期化を行う。
+    /// </summary>
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -609,31 +744,45 @@ public partial class App : Application
     }
     #endregion
 
+    /// <summary>
+    /// 対話的リベースのTodoエディタモードとして起動を試みる。
+    /// gitが--rebase-todo-editorオプション付きで呼び出した場合に、
+    /// komorebi.interactive_rebaseファイルのジョブリストをgit-rebase-todoに書き出す。
+    /// </summary>
+    /// <param name="args">コマンドライン引数</param>
+    /// <param name="exitCode">エディタモードのプロセス終了コード</param>
+    /// <returns>リベースTodoエディタとして起動された場合はtrue</returns>
     private static bool TryLaunchAsRebaseTodoEditor(string[] args, out int exitCode)
     {
         exitCode = -1;
 
+        // --rebase-todo-editor引数が無ければ通常起動に移行する
         if (args.Length <= 1 || !args[0].Equals("--rebase-todo-editor", StringComparison.Ordinal))
             return false;
 
+        // 編集対象がgit-rebase-todoファイルであることを確認する
         var file = args[1];
         var filename = Path.GetFileName(file);
         if (!filename.Equals("git-rebase-todo", StringComparison.OrdinalIgnoreCase))
             return true;
 
+        // rebase-mergeディレクトリ内のファイルであることを確認する
         var dirInfo = new DirectoryInfo(Path.GetDirectoryName(file)!);
         if (!dirInfo.Exists || !dirInfo.Name.Equals("rebase-merge", StringComparison.Ordinal))
             return true;
 
+        // Komorebiが生成した対話的リベースジョブファイルが存在するか確認する
         var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "komorebi.interactive_rebase");
         if (!File.Exists(jobsFile))
             return true;
 
+        // ジョブファイルをデシリアライズし、各アクションをgit rebase-todoフォーマットで書き出す
         using var stream = File.OpenRead(jobsFile);
         var collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
         using var writer = new StreamWriter(file);
         foreach (var job in collection.Jobs)
         {
+            // アクション種別をgitの1文字コード（p=pick, e=edit, r=reword, s=squash, f=fixup, d=drop）に変換する
             var code = job.Action switch
             {
                 Models.InteractiveRebaseAction.Pick => 'p',
@@ -652,20 +801,31 @@ public partial class App : Application
         return true;
     }
 
+    /// <summary>
+    /// 対話的リベースのメッセージエディタモードとして起動を試みる。
+    /// gitがrewordアクション等でコミットメッセージ編集を要求した際に呼ばれ、
+    /// komorebi.interactive_rebaseファイルから該当コミットのメッセージをCOMMIT_EDITMSGに書き出す。
+    /// </summary>
+    /// <param name="args">コマンドライン引数</param>
+    /// <param name="exitCode">エディタモードのプロセス終了コード</param>
+    /// <returns>リベースメッセージエディタとして起動された場合はtrue</returns>
     private static bool TryLaunchAsRebaseMessageEditor(string[] args, out int exitCode)
     {
         exitCode = -1;
 
+        // --rebase-message-editor引数が無ければ通常起動に移行する
         if (args.Length <= 1 || !args[0].Equals("--rebase-message-editor", StringComparison.Ordinal))
             return false;
 
         exitCode = 0;
 
+        // 編集対象がCOMMIT_EDITMSGファイルであることを確認する
         var file = args[1];
         var filename = Path.GetFileName(file);
         if (!filename.Equals("COMMIT_EDITMSG", StringComparison.OrdinalIgnoreCase))
             return true;
 
+        // リベース状態管理ファイル群の存在を確認する
         var gitDir = Path.GetDirectoryName(file)!;
         var origHeadFile = Path.Combine(gitDir, "rebase-merge", "orig-head");
         var ontoFile = Path.Combine(gitDir, "rebase-merge", "onto");
@@ -674,6 +834,7 @@ public partial class App : Application
         if (!File.Exists(ontoFile) || !File.Exists(origHeadFile) || !File.Exists(doneFile) || !File.Exists(jobsFile))
             return true;
 
+        // ジョブファイルのonto/origHeadが現在のリベースセッションと一致するか確認する
         var origHead = File.ReadAllText(origHeadFile).Trim();
         var onto = File.ReadAllText(ontoFile).Trim();
         using var stream = File.OpenRead(jobsFile);
@@ -681,15 +842,18 @@ public partial class App : Application
         if (!collection.Onto.Equals(onto) || !collection.OrigHead.Equals(origHead))
             return true;
 
+        // doneファイルから最後に処理されたコミットのSHAを取得する
         var done = File.ReadAllText(doneFile).Trim().Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         if (done.Length == 0)
             return true;
 
+        // 最終行からコミットSHAを正規表現で抽出する
         var current = done[^1].Trim();
         var match = REG_REBASE_TODO().Match(current);
         if (!match.Success)
             return true;
 
+        // 該当SHAのジョブからメッセージを取得し、COMMIT_EDITMSGに書き出す
         var sha = match.Groups[1].Value;
         foreach (var job in collection.Jobs)
         {
@@ -703,6 +867,11 @@ public partial class App : Application
         return true;
     }
 
+    /// <summary>
+    /// ファイル履歴ビューアモードとして起動を試みる。
+    /// --file-historyオプション付きで起動された場合に、指定ファイルのgit履歴画面を表示する。
+    /// </summary>
+    /// <returns>ファイル履歴ビューアとして起動された場合はtrue</returns>
     private static bool TryLaunchAsFileHistoryViewer(IClassicDesktopStyleApplicationLifetime desktop)
     {
         var args = desktop.Args;
@@ -730,6 +899,11 @@ public partial class App : Application
         return true;
     }
 
+    /// <summary>
+    /// blameビューアモードとして起動を試みる。
+    /// --blameオプション付きで起動された場合に、指定ファイルのblame画面を表示する。
+    /// </summary>
+    /// <returns>blameビューアとして起動された場合はtrue</returns>
     private static bool TryLaunchAsBlameViewer(IClassicDesktopStyleApplicationLifetime desktop)
     {
         var args = desktop.Args;
@@ -766,8 +940,8 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     gitのcore.editorとして起動された場合の処理。
-    ///     対話的リベースなどでgitがコミットメッセージ編集を要求する際に呼ばれる。
+    /// gitのcore.editorとして起動された場合の処理。
+    /// 対話的リベースなどでgitがコミットメッセージ編集を要求する際に呼ばれる。
     /// </summary>
     /// <returns>core.editorモードとして起動された場合はtrue</returns>
     private static bool TryLaunchAsCoreEditor(IClassicDesktopStyleApplicationLifetime desktop)
@@ -792,8 +966,8 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     gitのaskpass（認証情報入力）として起動された場合の処理。
-    ///     環境変数 SOURCEGIT_LAUNCH_AS_ASKPASS=TRUE が設定されている場合に有効。
+    /// gitのaskpass（認証情報入力）として起動された場合の処理。
+    /// 環境変数 SOURCEGIT_LAUNCH_AS_ASKPASS=TRUE が設定されている場合に有効。
     /// </summary>
     /// <returns>askpassモードとして起動された場合はtrue</returns>
     private static bool TryLaunchAsAskpass(IClassicDesktopStyleApplicationLifetime desktop)
@@ -815,9 +989,9 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     通常モード（メインGUI）としてアプリケーションを起動する。
-    ///     外部ツールの初期化、ランチャーウィンドウの生成、初回起動セットアップ、
-    ///     および起動時の更新チェックを行う。
+    /// 通常モード（メインGUI）としてアプリケーションを起動する。
+    /// 外部ツールの初期化、ランチャーウィンドウの生成、初回起動セットアップ、
+    /// および起動時の更新チェックを行う。
     /// </summary>
     private void TryLaunchAsNormal(IClassicDesktopStyleApplicationLifetime desktop)
     {
@@ -860,7 +1034,7 @@ public partial class App : Application
 
 #if DEBUG
     /// <summary>
-    ///     CRDebuggerを初期化し、メインウィンドウの四隅ダブルクリックでトグルするハンドラを登録する。
+    /// CRDebuggerを初期化し、メインウィンドウの四隅ダブルクリックでトグルするハンドラを登録する。
     /// </summary>
     private static void InitCRDebugger(Window mainWindow)
     {
@@ -900,9 +1074,9 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     CRDebugger Optionsタブに表示される通知テスト用コンテナ。
-    ///     各シナリオをボタンから直接発火できる。
-    ///     CRDebuggerはリフレクションでインスタンスメソッドを検出するためstaticにできない。
+    /// CRDebugger Optionsタブに表示される通知テスト用コンテナ。
+    /// 各シナリオをボタンから直接発火できる。
+    /// CRDebuggerはリフレクションでインスタンスメソッドを検出するためstaticにできない。
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822")]
     private sealed class DebugNotificationTester
@@ -971,8 +1145,8 @@ public partial class App : Application
 #endif
 
     /// <summary>
-    ///     指定されたパスのリポジトリをタブで開く。
-    ///     既にアプリが起動中のとき、二重起動防止の仕組みから呼ばれる。
+    /// 指定されたパスのリポジトリをタブで開く。
+    /// 既にアプリが起動中のとき、二重起動防止の仕組みから呼ばれる。
     /// </summary>
     private void TryOpenRepository(string repo)
     {
@@ -1007,14 +1181,14 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     GitHubリリースから最新バージョンを確認し、更新がある場合はダイアログを表示する。
-    ///     バックグラウンドスレッドで非同期実行される。
+    /// GitHubリリースから最新バージョンを確認し、更新がある場合はダイアログを表示する。
+    /// バックグラウンドスレッドで非同期実行される。
     /// </summary>
     /// <param name="manually">
-    ///     true: 手動チェック（結果を常に表示、無視タグをスキップ）
-    ///     false: 自動チェック（更新がある場合のみ表示、無視タグを確認）
+    /// true: 手動チェック（結果を常に表示、無視タグをスキップ）
+    /// false: 自動チェック（更新がある場合のみ表示、無視タグを確認）
     /// </param>
-    private void Check4Update(bool manually = false)
+    private static void Check4Update(bool manually = false)
     {
         Task.Run(async () =>
         {
@@ -1065,7 +1239,7 @@ public partial class App : Application
     }
 
     /// <summary>
-    ///     更新チェック結果をUIスレッドでダイアログ表示する。
+    /// 更新チェック結果をUIスレッドでダイアログ表示する。
     /// </summary>
     /// <param name="data">表示データ（VelopackUpdate / AlreadyUpToDate / SelfUpdateFailed）</param>
     private static void ShowSelfUpdateResult(object data)
@@ -1083,27 +1257,40 @@ public partial class App : Application
         });
     }
 
+    /// <summary>
+    /// ユーザー入力のフォントファミリー名を正規化・検証する。
+    /// カンマ区切りの各フォント名について以下の処理を行う:
+    /// 1. 前後の空白をトリムし、連続する空白を1つに圧縮する
+    /// 2. システムフォントとしてパースを試み、タイプフェースが存在するか確認する
+    /// 3. システムフォントとして見つからない場合、バンドルフォント（fonts:Komorebi#プレフィックス）として再試行する
+    /// 無効なフォント名は静かに除外される。
+    /// </summary>
+    /// <param name="input">ユーザーが入力したフォントファミリー名（カンマ区切りで複数指定可）</param>
+    /// <returns>検証済みフォント名のカンマ区切り文字列。有効なフォントがない場合は空文字列</returns>
     private static string FixFontFamilyName(string input)
     {
         if (string.IsNullOrEmpty(input))
             return string.Empty;
 
+        // カンマで分割して各フォント名を個別に処理する
         var parts = input.Split(',');
         var trimmed = new List<string>();
 
         foreach (var part in parts)
         {
+            // 前後の空白をトリムし、空の要素はスキップする
             var t = part.Trim();
             if (string.IsNullOrEmpty(t))
                 continue;
 
+            // 連続する空白文字を1つに圧縮する（例: "Noto  Sans" → "Noto Sans"）
             var sb = new StringBuilder();
             var prevChar = '\0';
 
             foreach (var c in t)
             {
                 if (c == ' ' && prevChar == ' ')
-                    continue;
+                    continue;  // 連続空白の2文字目以降をスキップする
                 sb.Append(c);
                 prevChar = c;
             }
@@ -1111,9 +1298,11 @@ public partial class App : Application
             var name = sb.ToString();
             var added = false;
 
+            // まずシステムフォントとしてパースを試みる
             try
             {
                 var fontFamily = FontFamily.Parse(name);
+                // タイプフェース（Regular, Bold等）が1つ以上あれば有効なフォントと判定する
                 if (fontFamily.FamilyTypefaces.Count > 0)
                 {
                     trimmed.Add(name);
@@ -1122,14 +1311,15 @@ public partial class App : Application
             }
             catch
             {
-                // Ignore exceptions.
+                // フォントパースの例外は無視する（無効なフォント名として扱う）
             }
 
-            // Fallback: try as bundled font with fonts:Komorebi# prefix
+            // システムフォントとして見つからなかった場合、バンドルフォントとして再試行する
             if (!added && !name.StartsWith("fonts:", StringComparison.Ordinal))
             {
                 try
                 {
+                    // "fonts:Komorebi#" プレフィックスを付けてアプリ内蔵フォントとして解決を試みる
                     var bundledName = $"fonts:Komorebi#{name}";
                     var fontFamily = FontFamily.Parse(bundledName);
                     if (fontFamily.FamilyTypefaces.Count > 0)
@@ -1137,21 +1327,32 @@ public partial class App : Application
                 }
                 catch
                 {
-                    // Ignore exceptions.
+                    // バンドルフォントとしても見つからない場合は除外する
                 }
             }
         }
 
+        // 有効なフォントが1つ以上あればカンマ区切りで結合して返す
         return trimmed.Count > 0 ? string.Join(',', trimmed) : string.Empty;
     }
 
+    /// <summary>
+    /// リベースTodoファイルの各行からアクションコードとコミットSHAを抽出する正規表現。
+    /// 例: "pick abc1234 commit message" → グループ1="abc1234"
+    /// </summary>
     [GeneratedRegex(@"^[a-z]+\s+([a-fA-F0-9]{4,40})(\s+.*)?$")]
     private static partial Regex REG_REBASE_TODO();
 
+    /// <summary>二重起動防止用のIPCチャネル</summary>
     private Models.IpcChannel _ipcChannel = null;
+    /// <summary>ランチャー（メインウィンドウ）のビューモデル</summary>
     private ViewModels.Launcher _launcher = null;
+    /// <summary>現在適用中のロケールリソースディクショナリ</summary>
     private ResourceDictionary _activeLocale = null;
+    /// <summary>テーマ固有の色オーバーライド（White, OneDark等のビルトインテーマ色）</summary>
     private ResourceDictionary _themeColorOverrides = null;
+    /// <summary>ユーザー定義のテーマオーバーライド（JSONファイルから読み込んだカスタム色）</summary>
     private ResourceDictionary _themeOverrides = null;
+    /// <summary>ユーザー指定のフォントオーバーライド（デフォルト・等幅フォント設定）</summary>
     private ResourceDictionary _fontsOverrides = null;
 }

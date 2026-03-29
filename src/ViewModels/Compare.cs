@@ -8,14 +8,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リビジョン比較ビューのViewModel。
-///     2つのリビジョン（ブランチ、タグ、コミット）間の差分を表示し、
-///     ファイルのリセット操作やパッチ保存機能を提供する。
+/// リビジョン比較ビューのViewModel。
+/// 2つのリビジョン（ブランチ、タグ、コミット）間の差分を表示し、
+/// ファイルのリセット操作やパッチ保存機能を提供する。
 /// </summary>
 public class Compare : ObservableObject
 {
     /// <summary>
-    ///     変更一覧を読み込み中かどうかのフラグ。
+    /// 変更一覧を読み込み中かどうかのフラグ。
     /// </summary>
     public bool IsLoading
     {
@@ -24,7 +24,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     ファイルリセット操作が可能かどうか（ベアリポジトリでは不可）。
+    /// ファイルリセット操作が可能かどうか（ベアリポジトリでは不可）。
     /// </summary>
     public bool CanResetFiles
     {
@@ -32,7 +32,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     比較基準リビジョンの表示名。
+    /// 比較基準リビジョンの表示名。
     /// </summary>
     public string BaseName
     {
@@ -41,7 +41,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     比較対象リビジョンの表示名。
+    /// 比較対象リビジョンの表示名。
     /// </summary>
     public string ToName
     {
@@ -50,7 +50,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     比較基準リビジョンのコミット情報。
+    /// 比較基準リビジョンのコミット情報。
     /// </summary>
     public Models.Commit BaseHead
     {
@@ -59,7 +59,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     比較対象リビジョンのコミット情報。
+    /// 比較対象リビジョンのコミット情報。
     /// </summary>
     public Models.Commit ToHead
     {
@@ -68,7 +68,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     全変更ファイル数。
+    /// 全変更ファイル数。
     /// </summary>
     public int TotalChanges
     {
@@ -77,7 +77,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示中変更ファイルリスト。
+    /// フィルタ適用後の表示中変更ファイルリスト。
     /// </summary>
     public List<Models.Change> VisibleChanges
     {
@@ -86,7 +86,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     選択中の変更ファイルリスト。変更時にDiffContextを更新する。
+    /// 選択中の変更ファイルリスト。変更時にDiffContextを更新する。
     /// </summary>
     public List<Models.Change> SelectedChanges
     {
@@ -105,7 +105,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     変更ファイルの検索フィルタ文字列。変更時に表示リストを更新する。
+    /// 変更ファイルの検索フィルタ文字列。変更時に表示リストを更新する。
     /// </summary>
     public string SearchFilter
     {
@@ -119,7 +119,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     差分表示用のDiffContext。
+    /// 差分表示用のDiffContext。
     /// </summary>
     public DiffContext DiffContext
     {
@@ -128,7 +128,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリと比較対象の2つのオブジェクトを受け取って初期化する。
+    /// コンストラクタ。リポジトリと比較対象の2つのオブジェクトを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="based">比較基準のオブジェクト（ブランチ、タグ、コミット）</param>
@@ -149,7 +149,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     指定コミットSHAにナビゲートする。該当リポジトリのページでコミットを選択する。
+    /// 指定コミットSHAにナビゲートする。該当リポジトリのページでコミットを選択する。
     /// </summary>
     /// <param name="commitSHA">ナビゲート先のコミットSHA</param>
     public void NavigateTo(string commitSHA)
@@ -170,7 +170,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     比較基準と比較対象を入れ替える。
+    /// 比較基準と比較対象を入れ替える。
     /// </summary>
     public void Swap()
     {
@@ -187,7 +187,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     検索フィルタをクリアする。
+    /// 検索フィルタをクリアする。
     /// </summary>
     public void ClearSearchFilter()
     {
@@ -195,7 +195,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     指定パスの絶対パスを取得する。
+    /// 指定パスの絶対パスを取得する。
     /// </summary>
     /// <param name="path">リポジトリ内の相対パス</param>
     /// <returns>絶対パス</returns>
@@ -205,7 +205,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     外部差分ツールで変更を開く。
+    /// 外部差分ツールで変更を開く。
     /// </summary>
     /// <param name="change">対象の変更ファイル</param>
     public void OpenInExternalDiffTool(Models.Change change)
@@ -214,8 +214,8 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     ファイルを左側（基準リビジョン）の状態にリセットする。
-    ///     変更種別に応じてgit rmまたはgit checkoutを実行する。
+    /// ファイルを左側（基準リビジョン）の状態にリセットする。
+    /// 変更種別に応じてgit rmまたはgit checkoutを実行する。
     /// </summary>
     /// <param name="change">リセット対象の変更ファイル</param>
     public async Task ResetToLeftAsync(Models.Change change)
@@ -247,8 +247,8 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     ファイルを右側（対象リビジョン）の状態にリセットする。
-    ///     変更種別に応じてgit rmまたはgit checkoutを実行する。
+    /// ファイルを右側（対象リビジョン）の状態にリセットする。
+    /// 変更種別に応じてgit rmまたはgit checkoutを実行する。
     /// </summary>
     /// <param name="change">リセット対象の変更ファイル</param>
     public async Task ResetToRightAsync(Models.Change change)
@@ -277,14 +277,14 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     複数ファイルを左側（基準リビジョン）の状態にリセットする。
-    ///     削除対象とチェックアウト対象を分類して一括処理する。
+    /// 複数ファイルを左側（基準リビジョン）の状態にリセットする。
+    /// 削除対象とチェックアウト対象を分類して一括処理する。
     /// </summary>
     /// <param name="changes">リセット対象の変更ファイルリスト</param>
     public async Task ResetMultipleToLeftAsync(List<Models.Change> changes)
     {
-        var checkouts = new List<string>();
-        var removes = new List<string>();
+        List<string> checkouts = [];
+        List<string> removes = [];
 
         // 変更種別に応じて削除リストとチェックアウトリストに分類する
         foreach (var c in changes)
@@ -322,14 +322,14 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     複数ファイルを右側（対象リビジョン）の状態にリセットする。
-    ///     削除対象とチェックアウト対象を分類して一括処理する。
+    /// 複数ファイルを右側（対象リビジョン）の状態にリセットする。
+    /// 削除対象とチェックアウト対象を分類して一括処理する。
     /// </summary>
     /// <param name="changes">リセット対象の変更ファイルリスト</param>
     public async Task ResetMultipleToRightAsync(List<Models.Change> changes)
     {
-        var checkouts = new List<string>();
-        var removes = new List<string>();
+        List<string> checkouts = [];
+        List<string> removes = [];
 
         // 変更種別に応じて削除リストとチェックアウトリストに分類する
         foreach (var c in changes)
@@ -367,7 +367,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     選択した変更をパッチファイルとして保存する。
+    /// 選択した変更をパッチファイルとして保存する。
     /// </summary>
     /// <param name="changes">パッチに含める変更ファイルリスト</param>
     /// <param name="saveTo">保存先のファイルパス</param>
@@ -379,8 +379,8 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     差分データを非同期で再取得する。
-    ///     初回はコミット情報も取得し、変更ファイル一覧を読み込む。
+    /// 差分データを非同期で再取得する。
+    /// 初回はコミット情報も取得し、変更ファイル一覧を読み込む。
     /// </summary>
     private void Refresh()
     {
@@ -415,7 +415,7 @@ public class Compare : ObservableObject
             var visible = _changes;
             if (!string.IsNullOrWhiteSpace(_searchFilter))
             {
-                visible = new List<Models.Change>();
+                visible = [];
                 foreach (var c in _changes)
                 {
                     if (c.Path.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
@@ -440,7 +440,7 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     フィルタに基づいて表示用変更ファイルリストを更新する。
+    /// フィルタに基づいて表示用変更ファイルリストを更新する。
     /// </summary>
     private void RefreshVisible()
     {
@@ -455,7 +455,7 @@ public class Compare : ObservableObject
         else
         {
             // パスにフィルタ文字列を含む変更のみ表示する
-            var visible = new List<Models.Change>();
+            List<Models.Change> visible = [];
             foreach (var c in _changes)
             {
                 if (c.Path.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
@@ -467,29 +467,29 @@ public class Compare : ObservableObject
     }
 
     /// <summary>
-    ///     オブジェクトから表示名を取得する。
-    ///     ブランチならFriendlyName、タグならName、コミットなら短縮SHAを返す。
+    /// オブジェクトから表示名を取得する。
+    /// ブランチならFriendlyName、タグならName、コミットなら短縮SHAを返す。
     /// </summary>
     /// <param name="obj">ブランチ、タグ、またはコミットオブジェクト</param>
     /// <returns>表示名</returns>
-    private string GetName(object obj)
+    private static string GetName(object obj)
     {
         return obj switch
         {
             Models.Branch b => b.FriendlyName,
             Models.Tag t => t.Name,
-            Models.Commit c => c.SHA.Substring(0, 10),
+            Models.Commit c => c.SHA[..10],
             _ => "HEAD",
         };
     }
 
     /// <summary>
-    ///     オブジェクトからSHA値を取得する。
-    ///     ブランチならHead、タグならSHA、コミットならSHAを返す。
+    /// オブジェクトからSHA値を取得する。
+    /// ブランチならHead、タグならSHA、コミットならSHAを返す。
     /// </summary>
     /// <param name="obj">ブランチ、タグ、またはコミットオブジェクト</param>
     /// <returns>SHA値</returns>
-    private string GetSHA(object obj)
+    private static string GetSHA(object obj)
     {
         return obj switch
         {

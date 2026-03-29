@@ -1,5 +1,4 @@
 using Komorebi.Commands;
-using Xunit;
 
 namespace Komorebi.Tests.Commands
 {

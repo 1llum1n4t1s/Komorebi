@@ -3,12 +3,12 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     サブモジュールの初期化を解除（deinit）するためのダイアログViewModel。
+/// サブモジュールの初期化を解除（deinit）するためのダイアログViewModel。
 /// </summary>
 public class DeinitSubmodule : Popup
 {
     /// <summary>
-    ///     初期化解除対象のサブモジュールパス。
+    /// 初期化解除対象のサブモジュールパス。
     /// </summary>
     public string Submodule
     {
@@ -17,7 +17,7 @@ public class DeinitSubmodule : Popup
     }
 
     /// <summary>
-    ///     強制的に初期化解除するかどうか。
+    /// 強制的に初期化解除するかどうか。
     /// </summary>
     public bool Force
     {
@@ -26,7 +26,7 @@ public class DeinitSubmodule : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリとサブモジュールパスを指定する。
+    /// コンストラクタ。対象リポジトリとサブモジュールパスを指定する。
     /// </summary>
     public DeinitSubmodule(Repository repo, string submodule)
     {
@@ -36,7 +36,7 @@ public class DeinitSubmodule : Popup
     }
 
     /// <summary>
-    ///     サブモジュールの初期化解除を実行する確認アクション。
+    /// サブモジュールの初期化解除を実行する確認アクション。
     /// </summary>
     public override async Task<bool> Sure()
     {

@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     チェックアウトコマンドパレットのViewModel。
-///     ブランチ一覧をフィルタして素早くチェックアウトするための検索パレット。
+/// チェックアウトコマンドパレットのViewModel。
+/// ブランチ一覧をフィルタして素早くチェックアウトするための検索パレット。
 /// </summary>
 public class CheckoutCommandPalette : ICommandPalette
 {
     /// <summary>
-    ///     フィルタ適用後のブランチリスト。
+    /// フィルタ適用後のブランチリスト。
     /// </summary>
     public List<Models.Branch> Branches
     {
@@ -20,7 +20,7 @@ public class CheckoutCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択されたブランチ。
+    /// 選択されたブランチ。
     /// </summary>
     public Models.Branch SelectedBranch
     {
@@ -29,7 +29,7 @@ public class CheckoutCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     ブランチ名フィルタ文字列。変更時にブランチリストを更新する。
+    /// ブランチ名フィルタ文字列。変更時にブランチリストを更新する。
     /// </summary>
     public string Filter
     {
@@ -43,7 +43,7 @@ public class CheckoutCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリを受け取りブランチリストを初期化する。
+    /// コンストラクタ。リポジトリを受け取りブランチリストを初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public CheckoutCommandPalette(Repository repo)
@@ -53,7 +53,7 @@ public class CheckoutCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ文字列をクリアする。
+    /// フィルタ文字列をクリアする。
     /// </summary>
     public void ClearFilter()
     {
@@ -61,7 +61,7 @@ public class CheckoutCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択されたブランチのチェックアウトを実行する。
+    /// 選択されたブランチのチェックアウトを実行する。
     /// </summary>
     public async Task ExecAsync()
     {
@@ -75,8 +75,8 @@ public class CheckoutCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタに基づいてブランチリストを更新する。
-    ///     現在のブランチは除外し、ローカルブランチを先に表示する。
+    /// フィルタに基づいてブランチリストを更新する。
+    /// 現在のブランチは除外し、ローカルブランチを先に表示する。
     /// </summary>
     private void UpdateBranches()
     {
@@ -85,7 +85,7 @@ public class CheckoutCommandPalette : ICommandPalette
             return;
 
         // フィルタに一致するブランチを抽出する（現在のブランチは除外）
-        var branches = new List<Models.Branch>();
+        List<Models.Branch> branches = [];
         foreach (var b in _repo.Branches)
         {
             if (b == current)

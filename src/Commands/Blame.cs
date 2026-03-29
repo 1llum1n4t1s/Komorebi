@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git blameコマンドを実行し、ファイルの各行の変更履歴（著者・コミット情報）を取得するクラス。
+/// git blameコマンドを実行し、ファイルの各行の変更履歴（著者・コミット情報）を取得するクラス。
 /// </summary>
 public partial class Blame : Command
 {
     /// <summary>
-    ///     blame出力行を解析するための正規表現パターン。
-    ///     コミットSHA、ファイル名、著者名、タイムスタンプ、行内容を抽出する。
+    /// blame出力行を解析するための正規表現パターン。
+    /// コミットSHA、ファイル名、著者名、タイムスタンプ、行内容を抽出する。
     /// </summary>
     [GeneratedRegex(@"^\^?([0-9a-f]+)\s+(.*)\s+\((.*)\s+(\d+)\s+[\-\+]?\d+\s+\d+\) (.*)")]
     private static partial Regex REG_FORMAT();
 
     /// <summary>
-    ///     Blameコマンドのコンストラクタ。
+    /// Blameコマンドのコンストラクタ。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="file">対象ファイルのパス</param>
@@ -41,7 +41,7 @@ public partial class Blame : Command
     }
 
     /// <summary>
-    ///     blameコマンドを非同期で実行し、結果を解析して返す。
+    /// blameコマンドを非同期で実行し、結果を解析して返す。
     /// </summary>
     /// <returns>blame解析結果データ</returns>
     public async Task<Models.BlameData> ReadAsync()
@@ -54,7 +54,7 @@ public partial class Blame : Command
     }
 
     /// <summary>
-    ///     blame出力文字列を解析して、BlameDataモデルに変換する。
+    /// blame出力文字列を解析して、BlameDataモデルに変換する。
     /// </summary>
     /// <param name="output">git blameの標準出力</param>
     /// <returns>解析されたblameデータ</returns>

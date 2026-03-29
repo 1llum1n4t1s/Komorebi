@@ -5,7 +5,7 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミットグラフ（ブランチの分岐・マージ線）を描画するカスタムコントロール。
+/// コミットグラフ（ブランチの分岐・マージ線）を描画するカスタムコントロール。
 /// </summary>
 public class CommitGraph : Control
 {
@@ -46,7 +46,7 @@ public class CommitGraph : Control
     }
 
     /// <summary>
-    ///     静的コンストラクタ。描画に影響するプロパティを登録する。
+    /// 静的コンストラクタ。描画に影響するプロパティを登録する。
     /// </summary>
     static CommitGraph()
     {
@@ -59,7 +59,7 @@ public class CommitGraph : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -86,7 +86,7 @@ public class CommitGraph : Control
     }
 
     /// <summary>
-    ///     DrawCurvesの処理を行う。
+    /// DrawCurvesの処理を行う。
     /// </summary>
     private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
     {
@@ -216,7 +216,7 @@ public class CommitGraph : Control
     }
 
     /// <summary>
-    ///     DrawAnchorsの処理を行う。
+    /// DrawAnchorsの処理を行う。
     /// </summary>
     private void DrawAnchors(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
     {

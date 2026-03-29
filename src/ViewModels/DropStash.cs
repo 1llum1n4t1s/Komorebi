@@ -3,17 +3,17 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     スタッシュを削除するダイアログViewModel。
+/// スタッシュを削除するダイアログViewModel。
 /// </summary>
 public class DropStash : Popup
 {
     /// <summary>
-    ///     削除対象のスタッシュ。
+    /// 削除対象のスタッシュ。
     /// </summary>
     public Models.Stash Stash { get; }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリと削除するスタッシュを指定する。
+    /// コンストラクタ。対象リポジトリと削除するスタッシュを指定する。
     /// </summary>
     public DropStash(Repository repo, Models.Stash stash)
     {
@@ -22,7 +22,7 @@ public class DropStash : Popup
     }
 
     /// <summary>
-    ///     スタッシュ削除を実行する確認アクション。
+    /// スタッシュ削除を実行する確認アクション。
     /// </summary>
     public override async Task<bool> Sure()
     {

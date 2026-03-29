@@ -9,12 +9,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミット比較ダイアログのコードビハインド。
+/// コミット比較ダイアログのコードビハインド。
 /// </summary>
 public partial class Compare : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Compare()
     {
@@ -22,7 +22,7 @@ public partial class Compare : ChromelessWindow
     }
 
     /// <summary>
-    ///     ChangeContextRequestedイベントのハンドラ。
+    /// ChangeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -212,7 +212,7 @@ public partial class Compare : ChromelessWindow
     }
 
     /// <summary>
-    ///     PressedSHAイベントのハンドラ。
+    /// PressedSHAイベントのハンドラ。
     /// </summary>
     private void OnPressedSHA(object sender, PointerPressedEventArgs e)
     {
@@ -223,7 +223,7 @@ public partial class Compare : ChromelessWindow
     }
 
     /// <summary>
-    ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+    /// ChangeCollectionViewKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
     {

@@ -18,8 +18,8 @@ using TextMateSharp.Themes;
 namespace Komorebi.Models;
 
 /// <summary>
-///     TextMateの文法定義ユーティリティ。
-///     標準のTextMateSharpでサポートされない追加言語のスコープと文法を提供する。
+/// TextMateの文法定義ユーティリティ。
+/// 標準のTextMateSharpでサポートされない追加言語のスコープと文法を提供する。
 /// </summary>
 public static class GrammarUtility
 {
@@ -35,8 +35,8 @@ public static class GrammarUtility
     ];
 
     /// <summary>
-    ///     ファイル名からTextMateのスコープ名を取得する。
-    ///     追加文法を優先的にチェックし、見つからない場合は標準のレジストリにフォールバックする。
+    /// ファイル名からTextMateのスコープ名を取得する。
+    /// 追加文法を優先的にチェックし、見つからない場合は標準のレジストリにフォールバックする。
     /// </summary>
     /// <param name="file">ファイル名（拡張子から判定）</param>
     /// <param name="reg">標準のレジストリオプション</param>
@@ -65,8 +65,8 @@ public static class GrammarUtility
     }
 
     /// <summary>
-    ///     スコープ名から文法定義を取得する。
-    ///     追加文法はアプリケーションリソースから読み込む。
+    /// スコープ名から文法定義を取得する。
+    /// 追加文法はアプリケーションリソースから読み込む。
     /// </summary>
     /// <param name="scopeName">TextMateのスコープ名</param>
     /// <param name="reg">標準のレジストリオプション</param>
@@ -108,19 +108,25 @@ public static class GrammarUtility
 }
 
 /// <summary>
-///     IRegistryOptionsのラッパークラス。
-///     追加文法のサポートと最後に使用したスコープのキャッシュを提供する。
+/// IRegistryOptionsのラッパークラス。
+/// 追加文法のサポートと最後に使用したスコープのキャッシュを提供する。
 /// </summary>
 public class RegistryOptionsWrapper(ThemeName defaultTheme) : IRegistryOptions
 {
     /// <summary>最後に設定されたスコープ名（重複設定の回避に使用）</summary>
     public string LastScope { get; set; } = string.Empty;
 
+    /// <summary>スコープ名からテーマを取得する</summary>
     public IRawTheme GetTheme(string scopeName) => _backend.GetTheme(scopeName);
+    /// <summary>デフォルトテーマを取得する</summary>
     public IRawTheme GetDefaultTheme() => _backend.GetDefaultTheme();
+    /// <summary>指定テーマ名のテーマを読み込む</summary>
     public IRawTheme LoadTheme(ThemeName name) => _backend.LoadTheme(name);
+    /// <summary>スコープ名に対するインジェクション一覧を取得する</summary>
     public ICollection<string> GetInjections(string scopeName) => _backend.GetInjections(scopeName);
+    /// <summary>スコープ名から文法定義を取得する（追加文法対応）</summary>
     public IRawGrammar GetGrammar(string scopeName) => GrammarUtility.GetGrammar(scopeName, _backend);
+    /// <summary>ファイル名からスコープ名を取得する（追加文法対応）</summary>
     public string GetScope(string filename) => GrammarUtility.GetScope(filename, _backend);
 
     /// <summary>標準のTextMateSharpレジストリオプション</summary>
@@ -128,14 +134,14 @@ public class RegistryOptionsWrapper(ThemeName defaultTheme) : IRegistryOptions
 }
 
 /// <summary>
-///     TextMateシンタックスハイライトのヘルパークラス。
-///     エディターへのインストール、テーマ切替、ファイル種別に応じた文法設定を行う。
+/// TextMateシンタックスハイライトのヘルパークラス。
+/// エディターへのインストール、テーマ切替、ファイル種別に応じた文法設定を行う。
 /// </summary>
 public static class TextMateHelper
 {
     /// <summary>
-    ///     エディターにTextMateハイライトをインストールする。
-    ///     現在のアプリケーションテーマに応じてDarkPlus/LightPlusテーマを選択する。
+    /// エディターにTextMateハイライトをインストールする。
+    /// 現在のアプリケーションテーマに応じてDarkPlus/LightPlusテーマを選択する。
     /// </summary>
     /// <param name="editor">対象のテキストエディター</param>
     /// <returns>TextMateインストレーションインスタンス</returns>
@@ -147,7 +153,7 @@ public static class TextMateHelper
     }
 
     /// <summary>
-    ///     アプリケーションの現在のテーマに合わせてTextMateテーマを切り替える
+    /// アプリケーションの現在のテーマに合わせてTextMateテーマを切り替える
     /// </summary>
     /// <param name="installation">TextMateインストレーション</param>
     public static void SetThemeByApp(TextMate.Installation installation)
@@ -160,8 +166,8 @@ public static class TextMateHelper
     }
 
     /// <summary>
-    ///     ファイル名に基づいてTextMateの文法を設定する。
-    ///     スコープが変更された場合のみ再設定し、GCを実行する。
+    /// ファイル名に基づいてTextMateの文法を設定する。
+    /// スコープが変更された場合のみ再設定し、GCを実行する。
     /// </summary>
     /// <param name="installation">TextMateインストレーション</param>
     /// <param name="filePath">ファイルパス（拡張子から文法を判定）</param>

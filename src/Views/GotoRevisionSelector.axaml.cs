@@ -5,12 +5,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リビジョン移動セレクタのコードビハインド。
+/// リビジョン移動セレクタのコードビハインド。
 /// </summary>
 public partial class GotoRevisionSelector : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public GotoRevisionSelector()
     {
@@ -19,7 +19,7 @@ public partial class GotoRevisionSelector : ChromelessWindow
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -28,7 +28,7 @@ public partial class GotoRevisionSelector : ChromelessWindow
     }
 
     /// <summary>
-    ///     ListKeyDownイベントのハンドラ。
+    /// ListKeyDownイベントのハンドラ。
     /// </summary>
     private void OnListKeyDown(object sender, KeyEventArgs e)
     {
@@ -43,7 +43,7 @@ public partial class GotoRevisionSelector : ChromelessWindow
     }
 
     /// <summary>
-    ///     ListItemTappedイベントのハンドラ。
+    /// ListItemTappedイベントのハンドラ。
     /// </summary>
     private void OnListItemTapped(object sender, TappedEventArgs e)
     {

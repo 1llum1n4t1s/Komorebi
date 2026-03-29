@@ -20,37 +20,42 @@ using AvaloniaEdit.Utils;
 namespace Komorebi.Views;
 
 /// <summary>
-///     CommitMessageCodeCompletionDataクラス。
+/// CommitMessageCodeCompletionDataクラス。
 /// </summary>
 public class CommitMessageCodeCompletionData : ICompletionData
 {
+    /// <summary>補完候補のアイコン画像。未使用のためnullを返す。</summary>
     public IImage Image
     {
         get => null;
     }
 
+    /// <summary>補完候補のテキスト。</summary>
     public string Text
     {
         get;
     }
 
+    /// <summary>補完候補の表示コンテンツ。テキストをそのまま返す。</summary>
     public object Content
     {
         get => Text;
     }
 
+    /// <summary>補完候補の説明。未使用のためnullを返す。</summary>
     public object Description
     {
         get => null;
     }
 
+    /// <summary>補完候補の優先度。</summary>
     public double Priority
     {
         get => 0;
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitMessageCodeCompletionData(string text)
     {
@@ -58,7 +63,7 @@ public class CommitMessageCodeCompletionData : ICompletionData
     }
 
     /// <summary>
-    ///     Completeの処理を行う。
+    /// Completeの処理を行う。
     /// </summary>
     public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
     {
@@ -67,77 +72,92 @@ public class CommitMessageCodeCompletionData : ICompletionData
 }
 
 /// <summary>
-///     CommitMessageTextEditorクラス。
+/// CommitMessageTextEditorクラス。
 /// </summary>
 public class CommitMessageTextEditor : TextEditor
 {
+    /// <summary>コミットメッセージ本文を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<string> CommitMessageProperty =
         AvaloniaProperty.Register<CommitMessageTextEditor, string>(nameof(CommitMessage), string.Empty);
 
+    /// <summary>コミットメッセージ本文。</summary>
     public string CommitMessage
     {
         get => GetValue(CommitMessageProperty);
         set => SetValue(CommitMessageProperty, value);
     }
 
+    /// <summary>プレースホルダーテキストを保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<string> PlaceholderProperty =
         AvaloniaProperty.Register<CommitMessageTextEditor, string>(nameof(Placeholder), string.Empty);
 
+    /// <summary>入力がない時に表示するプレースホルダーテキスト。</summary>
     public string Placeholder
     {
         get => GetValue(PlaceholderProperty);
         set => SetValue(PlaceholderProperty, value);
     }
 
+    /// <summary>キャレットの現在列番号を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<int> ColumnProperty =
         AvaloniaProperty.Register<CommitMessageTextEditor, int>(nameof(Column), 1);
 
+    /// <summary>キャレットの現在列番号。ステータスバー表示に使用。</summary>
     public int Column
     {
         get => GetValue(ColumnProperty);
         set => SetValue(ColumnProperty, value);
     }
 
+    /// <summary>件名の文字数を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<int> SubjectLengthProperty =
         AvaloniaProperty.Register<CommitMessageTextEditor, int>(nameof(SubjectLength));
 
+    /// <summary>コミットメッセージ件名の文字数。</summary>
     public int SubjectLength
     {
         get => GetValue(SubjectLengthProperty);
         set => SetValue(SubjectLengthProperty, value);
     }
 
+    /// <summary>件名のガイドライン文字数を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<int> SubjectGuideLengthProperty =
         AvaloniaProperty.Register<CommitMessageTextEditor, int>(nameof(SubjectGuideLength));
 
+    /// <summary>件名の推奨最大文字数。超過時に警告アイコンが表示される。</summary>
     public int SubjectGuideLength
     {
         get => GetValue(SubjectGuideLengthProperty);
         set => SetValue(SubjectGuideLengthProperty, value);
     }
 
+    /// <summary>件名長警告アイコンの表示状態を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<bool> IsSubjectWarningIconVisibleProperty =
         AvaloniaProperty.Register<CommitMessageTextEditor, bool>(nameof(IsSubjectWarningIconVisible));
 
+    /// <summary>件名がガイドライン文字数を超えている場合にtrueとなる。</summary>
     public bool IsSubjectWarningIconVisible
     {
         get => GetValue(IsSubjectWarningIconVisibleProperty);
         set => SetValue(IsSubjectWarningIconVisibleProperty, value);
     }
 
+    /// <summary>件名と本文の区切り線のブラシを保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<IBrush> SubjectLineBrushProperty =
         AvaloniaProperty.Register<CommitMessageTextEditor, IBrush>(nameof(SubjectLineBrush), Brushes.Gray);
 
+    /// <summary>件名と本文を区切る破線のブラシ。</summary>
     public IBrush SubjectLineBrush
     {
         get => GetValue(SubjectLineBrushProperty);
         set => SetValue(SubjectLineBrushProperty, value);
     }
 
+    /// <summary>スタイルキーをTextEditorに設定。</summary>
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitMessageTextEditor() : base(new TextArea(), new TextDocument())
     {
@@ -155,7 +175,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -174,9 +194,6 @@ public class CommitMessageTextEditor : TextEditor
                     Placeholder,
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
-                    /// <summary>
-                    ///     Typefaceの処理を行う。
-                    /// </summary>
                     new Typeface(FontFamily),
                     FontSize,
                     Brushes.Gray);
@@ -221,7 +238,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -233,7 +250,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -245,7 +262,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -298,7 +315,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     テキストが変更された際の処理。
+    /// テキストが変更された際の処理。
     /// </summary>
     protected override void OnTextChanged(EventArgs e)
     {
@@ -329,7 +346,7 @@ public class CommitMessageTextEditor : TextEditor
             return;
         }
 
-        var word = Text.Substring(lineStart, caretOffset - lineStart);
+        var word = Text[lineStart..caretOffset];
         var matches = new List<CommitMessageCodeCompletionData>();
         foreach (var t in _trailers)
         {
@@ -358,7 +375,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     TextViewContextRequestedイベントのハンドラ。
+    /// TextViewContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -403,7 +420,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     TextViewVisualLinesChangedイベントのハンドラ。
+    /// TextViewVisualLinesChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
     {
@@ -411,7 +428,7 @@ public class CommitMessageTextEditor : TextEditor
     }
 
     /// <summary>
-    ///     CaretPositionChangedイベントのハンドラ。
+    /// CaretPositionChangedイベントのハンドラ。
     /// </summary>
     private void OnCaretPositionChanged(object sender, EventArgs e)
     {
@@ -419,6 +436,7 @@ public class CommitMessageTextEditor : TextEditor
         SetCurrentValue(ColumnProperty, col);
     }
 
+    /// <summary>コミットメッセージのトレーラー（Co-authored-by等）自動補完候補一覧。</summary>
     private readonly List<string> _trailers =
     [
         "Acked-by: ",
@@ -436,28 +454,37 @@ public class CommitMessageTextEditor : TextEditor
         "Signed-off-by: ",
     ];
 
+    /// <summary>CommitMessagePropertyの変更がエディタのテキスト変更によるものかを示すフラグ。</summary>
     private bool _isEditing = false;
+
+    /// <summary>件名（subject）の終了行番号。区切り線の描画位置に使用。</summary>
     private int _subjectEndLine = 0;
+
+    /// <summary>トレーラー自動補完ウィンドウ。</summary>
     private CompletionWindow _completionWnd = null;
 }
 
 /// <summary>
-///     コミットメッセージツールボックス（テンプレート等）のコードビハインド。
+/// コミットメッセージツールボックス（テンプレート等）のコードビハインド。
 /// </summary>
 public partial class CommitMessageToolBox : UserControl
 {
+    /// <summary>高度なオプション（テンプレート・AI・Conventional Commit）を表示するかのスタイルプロパティ。</summary>
     public static readonly StyledProperty<bool> ShowAdvancedOptionsProperty =
         AvaloniaProperty.Register<CommitMessageToolBox, bool>(nameof(ShowAdvancedOptions));
 
+    /// <summary>高度なオプション（テンプレート・AI・Conventional Commit）を表示するか。</summary>
     public bool ShowAdvancedOptions
     {
         get => GetValue(ShowAdvancedOptionsProperty);
         set => SetValue(ShowAdvancedOptionsProperty, value);
     }
 
+    /// <summary>コミットメッセージを保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<string> CommitMessageProperty =
         AvaloniaProperty.Register<CommitMessageToolBox, string>(nameof(CommitMessage), string.Empty);
 
+    /// <summary>コミットメッセージ本文。テンプレートやAI生成時に設定される。</summary>
     public string CommitMessage
     {
         get => GetValue(CommitMessageProperty);
@@ -465,7 +492,7 @@ public partial class CommitMessageToolBox : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitMessageToolBox()
     {
@@ -473,7 +500,7 @@ public partial class CommitMessageToolBox : UserControl
     }
 
     /// <summary>
-    ///     OpenCommitMessagePickerイベントのハンドラ。
+    /// OpenCommitMessagePickerイベントのハンドラ。
     /// </summary>
     private async void OnOpenCommitMessagePicker(object sender, RoutedEventArgs e)
     {
@@ -611,7 +638,7 @@ public partial class CommitMessageToolBox : UserControl
     }
 
     /// <summary>
-    ///     OpenOpenAIHelperイベントのハンドラ。
+    /// OpenOpenAIHelperイベントのハンドラ。
     /// </summary>
     private async void OnOpenOpenAIHelper(object sender, RoutedEventArgs e)
     {
@@ -666,7 +693,7 @@ public partial class CommitMessageToolBox : UserControl
     }
 
     /// <summary>
-    ///     OpenConventionalCommitHelperイベントのハンドラ。
+    /// OpenConventionalCommitHelperイベントのハンドラ。
     /// </summary>
     private void OnOpenConventionalCommitHelper(object _, RoutedEventArgs e)
     {

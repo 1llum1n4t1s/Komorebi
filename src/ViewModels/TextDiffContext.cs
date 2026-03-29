@@ -6,13 +6,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     テキスト差分ビューで選択されたチャンク（変更ブロック）の情報を保持するレコード。
-///     表示位置、行範囲、表示モード、サイド情報を含む。
+/// テキスト差分ビューで選択されたチャンク（変更ブロック）の情報を保持するレコード。
+/// 表示位置、行範囲、表示モード、サイド情報を含む。
 /// </summary>
 public record TextDiffSelectedChunk(double Y, double Height, int StartIdx, int EndIdx, bool Combined, bool IsOldSide)
 {
     /// <summary>
-    ///     2つのチャンク選択が異なるかどうかを判定する。
+    /// 2つのチャンク選択が異なるかどうかを判定する。
     /// </summary>
     public static bool IsChanged(TextDiffSelectedChunk oldValue, TextDiffSelectedChunk newValue)
     {
@@ -32,8 +32,8 @@ public record TextDiffSelectedChunk(double Y, double Height, int StartIdx, int E
 }
 
 /// <summary>
-///     テキスト差分表示のコンテキスト基底クラス。
-///     差分データ、スクロール位置、ブロックナビゲーション、選択チャンクを管理する。
+/// テキスト差分表示のコンテキスト基底クラス。
+/// 差分データ、スクロール位置、ブロックナビゲーション、選択チャンクを管理する。
 /// </summary>
 public class TextDiffContext : ObservableObject
 {
@@ -43,7 +43,7 @@ public class TextDiffContext : ObservableObject
     public Models.TextDiff Data => _data;
 
     /// <summary>
-    ///     差分ビューのスクロールオフセット。
+    /// 差分ビューのスクロールオフセット。
     /// </summary>
     public Vector ScrollOffset
     {
@@ -52,7 +52,7 @@ public class TextDiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     変更ブロック間のナビゲーション状態。
+    /// 変更ブロック間のナビゲーション状態。
     /// </summary>
     public BlockNavigation BlockNavigation
     {
@@ -61,7 +61,7 @@ public class TextDiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     現在表示されている行範囲。
+    /// 現在表示されている行範囲。
     /// </summary>
     public TextLineRange DisplayRange
     {
@@ -70,7 +70,7 @@ public class TextDiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     現在選択されている変更チャンク。
+    /// 現在選択されている変更チャンク。
     /// </summary>
     public TextDiffSelectedChunk SelectedChunk
     {
@@ -79,8 +79,8 @@ public class TextDiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     指定行インデックスを含む変更ブロック（ハンク）の行範囲を検索する。
-    ///     連続する通常行が2行以上あるか、インジケータ行がブロックの境界となる。
+    /// 指定行インデックスを含む変更ブロック（ハンク）の行範囲を検索する。
+    /// 連続する通常行が2行以上あるか、インジケータ行がブロックの境界となる。
     /// </summary>
     public (int, int) FindRangeByIndex(List<Models.TextDiffLine> lines, int lineIdx)
     {
@@ -152,7 +152,7 @@ public class TextDiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     サイドバイサイド表示かどうか。派生クラスでオーバーライドする。
+    /// サイドバイサイド表示かどうか。派生クラスでオーバーライドする。
     /// </summary>
     public virtual bool IsSideBySide()
     {
@@ -160,7 +160,7 @@ public class TextDiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     表示モードを切り替える。統合表示とサイドバイサイド表示を相互に変換する。
+    /// 表示モードを切り替える。統合表示とサイドバイサイド表示を相互に変換する。
     /// </summary>
     public virtual TextDiffContext SwitchMode()
     {
@@ -168,8 +168,8 @@ public class TextDiffContext : ObservableObject
     }
 
     /// <summary>
-    ///     前の差分コンテキストからスクロール位置やナビゲーション状態を引き継ぐ。
-    ///     同一ファイルの差分の場合のみ状態を保持する。
+    /// 前の差分コンテキストからスクロール位置やナビゲーション状態を引き継ぐ。
+    /// 同一ファイルの差分の場合のみ状態を保持する。
     /// </summary>
     protected void TryKeepPrevState(TextDiffContext prev, List<Models.TextDiffLine> lines)
     {
@@ -207,12 +207,12 @@ public class TextDiffContext : ObservableObject
 }
 
 /// <summary>
-///     統合（コンバインド）差分表示のコンテキスト。追加・削除行を1つのビューに表示する。
+/// 統合（コンバインド）差分表示のコンテキスト。追加・削除行を1つのビューに表示する。
 /// </summary>
 public class CombinedTextDiff : TextDiffContext
 {
     /// <summary>
-    ///     コンストラクタ。差分データと前のコンテキストから状態を初期化する。
+    /// コンストラクタ。差分データと前のコンテキストから状態を初期化する。
     /// </summary>
     public CombinedTextDiff(Models.DiffOption option, Models.TextDiff diff, TextDiffContext previous = null)
     {
@@ -223,7 +223,7 @@ public class CombinedTextDiff : TextDiffContext
     }
 
     /// <summary>
-    ///     サイドバイサイド表示に切り替える。
+    /// サイドバイサイド表示に切り替える。
     /// </summary>
     public override TextDiffContext SwitchMode()
     {
@@ -232,8 +232,8 @@ public class CombinedTextDiff : TextDiffContext
 }
 
 /// <summary>
-///     サイドバイサイド（左右分割）差分表示のコンテキスト。
-///     旧版と新版を左右に並べて表示する。
+/// サイドバイサイド（左右分割）差分表示のコンテキスト。
+/// 旧版と新版を左右に並べて表示する。
 /// </summary>
 public class TwoSideTextDiff : TextDiffContext
 {
@@ -243,7 +243,7 @@ public class TwoSideTextDiff : TextDiffContext
     public List<Models.TextDiffLine> New { get; } = [];
 
     /// <summary>
-    ///     コンストラクタ。統合差分データを左右分割形式に変換する。
+    /// コンストラクタ。統合差分データを左右分割形式に変換する。
     /// </summary>
     public TwoSideTextDiff(Models.DiffOption option, Models.TextDiff diff, TextDiffContext previous = null)
     {
@@ -276,7 +276,7 @@ public class TwoSideTextDiff : TextDiffContext
     }
 
     /// <summary>
-    ///     サイドバイサイド表示であることを示す。
+    /// サイドバイサイド表示であることを示す。
     /// </summary>
     public override bool IsSideBySide()
     {
@@ -284,7 +284,7 @@ public class TwoSideTextDiff : TextDiffContext
     }
 
     /// <summary>
-    ///     統合表示に切り替える。
+    /// 統合表示に切り替える。
     /// </summary>
     public override TextDiffContext SwitchMode()
     {
@@ -292,7 +292,7 @@ public class TwoSideTextDiff : TextDiffContext
     }
 
     /// <summary>
-    ///     片側の行範囲を統合差分の行範囲に変換する（単一サイド選択用）。
+    /// 片側の行範囲を統合差分の行範囲に変換する（単一サイド選択用）。
     /// </summary>
     public void GetCombinedRangeForSingleSide(ref int startLine, ref int endLine, bool isOldSide)
     {
@@ -334,8 +334,8 @@ public class TwoSideTextDiff : TextDiffContext
     }
 
     /// <summary>
-    ///     両側の行範囲を統合差分の行範囲に変換する（自動検出ハンク用）。
-    ///     最初の変更行を見つけてFindRangeByIndexでハンク範囲を取得する。
+    /// 両側の行範囲を統合差分の行範囲に変換する（自動検出ハンク用）。
+    /// 最初の変更行を見つけてFindRangeByIndexでハンク範囲を取得する。
     /// </summary>
     public void GetCombinedRangeForBothSides(ref int startLine, ref int endLine, bool isOldSide)
     {
@@ -363,8 +363,8 @@ public class TwoSideTextDiff : TextDiffContext
     }
 
     /// <summary>
-    ///     旧版と新版の行数を揃えるために空行を追加する。
-    ///     サイドバイサイド表示で左右の行を対応させるために必要。
+    /// 旧版と新版の行数を揃えるために空行を追加する。
+    /// サイドバイサイド表示で左右の行を対応させるために必要。
     /// </summary>
     private void FillEmptyLines()
     {

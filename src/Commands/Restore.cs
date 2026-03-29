@@ -1,13 +1,13 @@
 ﻿namespace Komorebi.Commands;
 
 /// <summary>
-///     作業ツリーのファイルを復元するgitコマンド。
-///     git restore を実行し、変更を破棄して最後のコミット状態に戻す。
+/// 作業ツリーのファイルを復元するgitコマンド。
+/// git restore を実行し、変更を破棄して最後のコミット状態に戻す。
 /// </summary>
 public class Restore : Command
 {
     /// <summary>
-    ///     Restoreコマンドを初期化する。
+    /// Restoreコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="pathspecFile">復元対象のファイルパスが記載されたファイルのパス。</param>

@@ -6,13 +6,22 @@ using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views;
 
+/// <summary>
+/// カスタムアクション実行ダイアログのコードビハインド。
+/// </summary>
 public partial class ExecuteCustomAction : UserControl
 {
+    /// <summary>
+    /// コンストラクタ。コンポーネントを初期化する。
+    /// </summary>
     public ExecuteCustomAction()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// パス選択ボタンのクリックイベントハンドラ。フォルダまたはファイルの選択ダイアログを表示する。
+    /// </summary>
     private async void SelectPath(object sender, RoutedEventArgs e)
     {
         var topLevel = TopLevel.GetTopLevel(this);

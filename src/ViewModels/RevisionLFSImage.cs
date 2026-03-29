@@ -5,13 +5,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     Git LFS管理下の画像ファイルを非同期で読み込み表示するViewModel。
-///     LFSオブジェクトからビットマップ画像を取得してUIに提供する。
+/// Git LFS管理下の画像ファイルを非同期で読み込み表示するViewModel。
+/// LFSオブジェクトからビットマップ画像を取得してUIに提供する。
 /// </summary>
 public class RevisionLFSImage : ObservableObject
 {
     /// <summary>
-    ///     LFSオブジェクト情報。ファイルサイズやOIDなどの情報を保持する。
+    /// LFSオブジェクト情報。ファイルサイズやOIDなどの情報を保持する。
     /// </summary>
     public Models.RevisionLFSObject LFS
     {
@@ -19,7 +19,7 @@ public class RevisionLFSImage : ObservableObject
     }
 
     /// <summary>
-    ///     読み込まれた画像データ。非同期読み込み完了後に設定される。
+    /// 読み込まれた画像データ。非同期読み込み完了後に設定される。
     /// </summary>
     public Models.RevisionImageFile Image
     {
@@ -28,7 +28,7 @@ public class RevisionLFSImage : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。LFSオブジェクトからバックグラウンドで画像を読み込む。
+    /// コンストラクタ。LFSオブジェクトからバックグラウンドで画像を読み込む。
     /// </summary>
     /// <param name="repo">リポジトリパス</param>
     /// <param name="file">ファイルパス</param>

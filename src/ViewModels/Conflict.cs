@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コンフリクト解決ビューのViewModel。
-///     コンフリクトが発生したファイルの解決操作（自分の変更を使用、相手の変更を使用、マージ）を提供する。
-///     チェリーピック、リベース、リバート、マージなど各種操作中のコンフリクトに対応する。
+/// コンフリクト解決ビューのViewModel。
+/// コンフリクトが発生したファイルの解決操作（自分の変更を使用、相手の変更を使用、マージ）を提供する。
+/// チェリーピック、リベース、リバート、マージなど各種操作中のコンフリクトに対応する。
 /// </summary>
 public class Conflict
 {
     /// <summary>
-    ///     コンフリクトマーカー（ファイル内のコンフリクト箇所を示す文字列）。
+    /// コンフリクトマーカー（ファイル内のコンフリクト箇所を示す文字列）。
     /// </summary>
     public string Marker
     {
@@ -19,7 +19,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     コンフリクトの説明テキスト。
+    /// コンフリクトの説明テキスト。
     /// </summary>
     public string Description
     {
@@ -27,7 +27,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     相手側の変更元情報（マージ元、チェリーピック元など）。
+    /// 相手側の変更元情報（マージ元、チェリーピック元など）。
     /// </summary>
     public object Theirs
     {
@@ -36,7 +36,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     自分側の変更元情報（通常はHEADコミット）。
+    /// 自分側の変更元情報（通常はHEADコミット）。
     /// </summary>
     public object Mine
     {
@@ -45,7 +45,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     コンフリクトが解決済みかどうかのフラグ。
+    /// コンフリクトが解決済みかどうかのフラグ。
     /// </summary>
     public bool IsResolved
     {
@@ -54,8 +54,8 @@ public class Conflict
     } = false;
 
     /// <summary>
-    ///     マージツールで解決可能かどうかのフラグ。
-    ///     両方で追加または両方で変更されたファイルのみマージ可能。
+    /// マージツールで解決可能かどうかのフラグ。
+    /// 両方で追加または両方で変更されたファイルのみマージ可能。
     /// </summary>
     public bool CanMerge
     {
@@ -64,8 +64,8 @@ public class Conflict
     } = false;
 
     /// <summary>
-    ///     コンストラクタ。リポジトリ、ワーキングコピー、コンフリクトファイルを受け取って初期化する。
-    ///     進行中の操作種別に応じてMine/Theirsを設定する。
+    /// コンストラクタ。リポジトリ、ワーキングコピー、コンフリクトファイルを受け取って初期化する。
+    /// 進行中の操作種別に応じてMine/Theirsを設定する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="wc">ワーキングコピーViewModel</param>
@@ -101,7 +101,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     相手側の変更を採用してコンフリクトを解決する。
+    /// 相手側の変更を採用してコンフリクトを解決する。
     /// </summary>
     public async Task UseTheirsAsync()
     {
@@ -109,7 +109,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     自分側の変更を採用してコンフリクトを解決する。
+    /// 自分側の変更を採用してコンフリクトを解決する。
     /// </summary>
     public async Task UseMineAsync()
     {
@@ -117,7 +117,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     内蔵マージエディタでコンフリクトを解決する。
+    /// 内蔵マージエディタでコンフリクトを解決する。
     /// </summary>
     public async Task MergeAsync()
     {
@@ -126,7 +126,7 @@ public class Conflict
     }
 
     /// <summary>
-    ///     外部マージツールでコンフリクトを解決する。
+    /// 外部マージツールでコンフリクトを解決する。
     /// </summary>
     public async Task MergeExternalAsync()
     {

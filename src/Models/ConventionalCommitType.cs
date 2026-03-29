@@ -5,33 +5,33 @@ using System.Text.Json;
 namespace Komorebi.Models;
 
 /// <summary>
-///     Conventional Commitsの型定義を表すクラス。
-///     コミットメッセージのプレフィックス（feat, fix等）とその説明を保持する。
+/// Conventional Commitsの型定義を表すクラス。
+/// コミットメッセージのプレフィックス（feat, fix等）とその説明を保持する。
 /// </summary>
 public class ConventionalCommitType
 {
     /// <summary>
-    ///     型の表示名（例: "Features", "Bug Fixes"）。
+    /// 型の表示名（例: "Features", "Bug Fixes"）。
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    ///     コミットメッセージに使用される型プレフィックス（例: "feat", "fix"）。
+    /// コミットメッセージに使用される型プレフィックス（例: "feat", "fix"）。
     /// </summary>
     public string Type { get; set; } = string.Empty;
 
     /// <summary>
-    ///     この型の説明文。
+    /// この型の説明文。
     /// </summary>
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
-    ///     短い説明の事前入力テキスト。
+    /// 短い説明の事前入力テキスト。
     /// </summary>
     public string PrefillShortDesc { get; set; } = string.Empty;
 
     /// <summary>
-    ///     ConventionalCommitTypeの新しいインスタンスを初期化する。
+    /// ConventionalCommitTypeの新しいインスタンスを初期化する。
     /// </summary>
     /// <param name="name">型の表示名。</param>
     /// <param name="type">コミットメッセージ用の型プレフィックス。</param>
@@ -44,7 +44,7 @@ public class ConventionalCommitType
     }
 
     /// <summary>
-    ///     カスタム定義ファイルまたはデフォルトからConventional Commit型リストを読み込む。
+    /// カスタム定義ファイルまたはデフォルトからConventional Commit型リストを読み込む。
     /// </summary>
     /// <param name="storageFile">カスタム定義のJSONファイルパス。</param>
     /// <returns>Conventional Commit型のリスト。</returns>

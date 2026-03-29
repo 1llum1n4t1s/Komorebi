@@ -9,13 +9,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     スタッシュ一覧ページのViewModel。
-///     スタッシュの検索、選択、変更内容の表示、適用、削除、ファイルのチェックアウトなどの操作を提供する。
+/// スタッシュ一覧ページのViewModel。
+/// スタッシュの検索、選択、変更内容の表示、適用、削除、ファイルのチェックアウトなどの操作を提供する。
 /// </summary>
 public class StashesPage : ObservableObject, IDisposable
 {
     /// <summary>
-    ///     全スタッシュのリスト。
+    /// 全スタッシュのリスト。
     /// </summary>
     public List<Models.Stash> Stashes
     {
@@ -28,7 +28,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示対象スタッシュリスト。
+    /// フィルタ適用後の表示対象スタッシュリスト。
     /// </summary>
     public List<Models.Stash> VisibleStashes
     {
@@ -41,7 +41,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     スタッシュメッセージの検索フィルタ。
+    /// スタッシュメッセージの検索フィルタ。
     /// </summary>
     public string SearchFilter
     {
@@ -54,7 +54,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択されたスタッシュ。選択時にバックグラウンドで変更内容を読み込む。
+    /// 選択されたスタッシュ。選択時にバックグラウンドで変更内容を読み込む。
     /// </summary>
     public Models.Stash SelectedStash
     {
@@ -76,7 +76,7 @@ public class StashesPage : ObservableObject, IDisposable
                             .ReadAsync()
                             .ConfigureAwait(false);
 
-                        var untracked = new List<Models.Change>();
+                        List<Models.Change> untracked = [];
                         if (value.Parents.Count == 3)
                         {
                             untracked = await new Commands.CompareRevisions(_repo.FullPath, Models.Commit.EmptyTreeSHA1, value.Parents[2])
@@ -104,7 +104,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択されたスタッシュの変更ファイルリスト。
+    /// 選択されたスタッシュの変更ファイルリスト。
     /// </summary>
     public List<Models.Change> Changes
     {
@@ -117,7 +117,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択された変更ファイルリスト。1件選択時に差分コンテキストを作成する。
+    /// 選択された変更ファイルリスト。1件選択時に差分コンテキストを作成する。
     /// </summary>
     public List<Models.Change> SelectedChanges
     {
@@ -137,7 +137,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     差分表示コンテキスト。
+    /// 差分表示コンテキスト。
     /// </summary>
     public DiffContext DiffContext
     {
@@ -146,7 +146,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリを設定する。
+    /// コンストラクタ。対象リポジトリを設定する。
     /// </summary>
     public StashesPage(Repository repo)
     {
@@ -154,7 +154,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リソースを解放する。
+    /// リソースを解放する。
     /// </summary>
     public void Dispose()
     {
@@ -168,18 +168,24 @@ public class StashesPage : ObservableObject, IDisposable
         _diffContext = null;
     }
 
+    /// <summary>
+    /// 検索フィルタをクリアして全スタッシュを表示する。
+    /// </summary>
     public void ClearSearchFilter()
     {
         SearchFilter = string.Empty;
     }
 
+    /// <summary>
+    /// 相対パスをリポジトリルートからの絶対パスに変換する。
+    /// </summary>
     public string GetAbsPath(string path)
     {
         return Native.OS.GetAbsPath(_repo.FullPath, path);
     }
 
     /// <summary>
-    ///     スタッシュを適用するダイアログを表示する。
+    /// スタッシュを適用するダイアログを表示する。
     /// </summary>
     public void Apply(Models.Stash stash)
     {
@@ -188,7 +194,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     スタッシュを削除するダイアログを表示する。
+    /// スタッシュを削除するダイアログを表示する。
     /// </summary>
     public void Drop(Models.Stash stash)
     {
@@ -197,11 +203,11 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     スタッシュの変更内容をパッチファイルとして保存する。
+    /// スタッシュの変更内容をパッチファイルとして保存する。
     /// </summary>
     public async Task SaveStashAsPatchAsync(Models.Stash stash, string saveTo)
     {
-        var opts = new List<Models.DiffOption>();
+        List<Models.DiffOption> opts = [];
         var changes = await new Commands.CompareRevisions(_repo.FullPath, $"{stash.SHA}^", stash.SHA)
             .ReadAsync()
             .ConfigureAwait(false);
@@ -227,7 +233,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     外部差分ツールで変更ファイルを開く。
+    /// 外部差分ツールで変更ファイルを開く。
     /// </summary>
     public void OpenChangeWithExternalDiffTool(Models.Change change)
     {
@@ -241,14 +247,14 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     スタッシュ内のファイルをワークツリーにチェックアウトする。
-    ///     未追跡、追加、変更の各種別に応じて適切な親コミットからチェックアウトする。
+    /// スタッシュ内のファイルをワークツリーにチェックアウトする。
+    /// 未追跡、追加、変更の各種別に応じて適切な親コミットからチェックアウトする。
     /// </summary>
     public async Task CheckoutFilesAsync(List<Models.Change> changes)
     {
-        var untracked = new List<string>();
-        var added = new List<string>();
-        var modified = new List<string>();
+        List<string> untracked = [];
+        List<string> added = [];
+        List<string> modified = [];
 
         foreach (var c in changes)
         {
@@ -281,14 +287,14 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択されたスタッシュ内の変更をパッチとして適用する。
+    /// 選択されたスタッシュ内の変更をパッチとして適用する。
     /// </summary>
     public async Task ApplySelectedChanges(List<Models.Change> changes)
     {
         if (_selectedStash is null)
             return;
 
-        var opts = new List<Models.DiffOption>();
+        List<Models.DiffOption> opts = [];
         foreach (var c in changes)
         {
             if (_untracked.Contains(c) && _selectedStash.Parents.Count == 3)
@@ -312,7 +318,7 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索フィルタに基づいて表示対象のスタッシュリストを更新する。
+    /// 検索フィルタに基づいて表示対象のスタッシュリストを更新する。
     /// </summary>
     private void RefreshVisible()
     {
@@ -322,7 +328,7 @@ public class StashesPage : ObservableObject, IDisposable
         }
         else
         {
-            var visible = new List<Models.Stash>();
+            List<Models.Stash> visible = [];
             foreach (var s in _stashes)
             {
                 if (s.Message.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))

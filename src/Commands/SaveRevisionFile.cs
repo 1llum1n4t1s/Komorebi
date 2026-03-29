@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定リビジョンのファイルをローカルに保存する静的クラス。
-///     LFSフィルタ対象の場合は lfs smudge を使用し、通常のファイルは git show で取得する。
+/// 指定リビジョンのファイルをローカルに保存する静的クラス。
+/// LFSフィルタ対象の場合は lfs smudge を使用し、通常のファイルは git show で取得する。
 /// </summary>
 public static class SaveRevisionFile
 {
     /// <summary>
-    ///     指定リビジョンのファイルを指定パスに保存する。
+    /// 指定リビジョンのファイルを指定パスに保存する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="revision">対象リビジョン</param>
@@ -41,7 +41,7 @@ public static class SaveRevisionFile
     }
 
     /// <summary>
-    ///     gitコマンドを実行し、標準出力をファイルに保存する。
+    /// gitコマンドを実行し、標準出力をファイルに保存する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="args">gitコマンドの引数</param>

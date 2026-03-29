@@ -7,14 +7,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コミット検索機能のコンテキストを管理するViewModel。
-///     SHA、メッセージ、作者、ファイルパスなど複数の検索メソッドをサポートし、
-///     検索結果のリストと選択状態を管理する。
+/// コミット検索機能のコンテキストを管理するViewModel。
+/// SHA、メッセージ、作者、ファイルパスなど複数の検索メソッドをサポートし、
+/// 検索結果のリストと選択状態を管理する。
 /// </summary>
 public class SearchCommitContext : ObservableObject, IDisposable
 {
     /// <summary>
-    ///     検索メソッド（SHA、メッセージ、作者、ファイルパスなど）のインデックス。
+    /// 検索メソッド（SHA、メッセージ、作者、ファイルパスなど）のインデックス。
     /// </summary>
     public int Method
     {
@@ -30,7 +30,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索フィルタ文字列。変更時にサジェストを更新する。
+    /// 検索フィルタ文字列。変更時にサジェストを更新する。
     /// </summary>
     public string Filter
     {
@@ -43,7 +43,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     現在のブランチのみを検索対象にするかどうか。
+    /// 現在のブランチのみを検索対象にするかどうか。
     /// </summary>
     public bool OnlySearchCurrentBranch
     {
@@ -56,7 +56,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ファイルパス検索時のオートコンプリート候補リスト。
+    /// ファイルパス検索時のオートコンプリート候補リスト。
     /// </summary>
     public List<string> Suggestions
     {
@@ -65,7 +65,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索クエリの実行中かどうか。
+    /// 検索クエリの実行中かどうか。
     /// </summary>
     public bool IsQuerying
     {
@@ -74,7 +74,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索結果のコミットリスト。
+    /// 検索結果のコミットリスト。
     /// </summary>
     public List<Models.Commit> Results
     {
@@ -83,7 +83,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択されたコミット。選択時に履歴画面をそのコミットにナビゲートする。
+    /// 選択されたコミット。選択時に履歴画面をそのコミットにナビゲートする。
     /// </summary>
     public Models.Commit Selected
     {
@@ -96,7 +96,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリを設定する。
+    /// コンストラクタ。対象リポジトリを設定する。
     /// </summary>
     public SearchCommitContext(Repository repo)
     {
@@ -104,7 +104,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リソースを解放する。
+    /// リソースを解放する。
     /// </summary>
     public void Dispose()
     {
@@ -115,7 +115,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索フィルタと結果をクリアする。
+    /// 検索フィルタと結果をクリアする。
     /// </summary>
     public void ClearFilter()
     {
@@ -125,7 +125,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     サジェスト候補をクリアする。
+    /// サジェスト候補をクリアする。
     /// </summary>
     public void ClearSuggestions()
     {
@@ -133,7 +133,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索を開始する。バックグラウンドスレッドでgitコマンドを実行し、結果をUIに反映する。
+    /// 検索を開始する。バックグラウンドスレッドでgitコマンドを実行し、結果をUIに反映する。
     /// </summary>
     public void StartSearch()
     {
@@ -148,7 +148,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
 
         Task.Run(async () =>
         {
-            var result = new List<Models.Commit>();
+            List<Models.Commit> result = [];
             var method = (Models.CommitSearchMethod)_method;
             var repoPath = _repo.FullPath;
 
@@ -208,7 +208,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索を終了してリソースを解放する。
+    /// 検索を終了してリソースを解放する。
     /// </summary>
     public void EndSearch()
     {
@@ -219,8 +219,8 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ファイルパス検索時のサジェスト候補を更新する。
-    ///     ワークツリーのファイル一覧を遅延取得し、フィルタにマッチするファイルを提示する。
+    /// ファイルパス検索時のサジェスト候補を更新する。
+    /// ワークツリーのファイル一覧を遅延取得し、フィルタにマッチするファイルを提示する。
     /// </summary>
     private void UpdateSuggestions()
     {
@@ -261,7 +261,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
             return;
         }
 
-        var matched = new List<string>();
+        List<string> matched = [];
         foreach (var file in _worktreeFiles)
         {
             if (file.Contains(_filter, StringComparison.OrdinalIgnoreCase) && file.Length != _filter.Length)

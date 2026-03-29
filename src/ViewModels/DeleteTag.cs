@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     タグを削除するためのダイアログViewModel。
-///     ローカル削除後にリモートからも削除するオプションを提供する。
+/// タグを削除するためのダイアログViewModel。
+/// ローカル削除後にリモートからも削除するオプションを提供する。
 /// </summary>
 public class DeleteTag : Popup
 {
     /// <summary>
-    ///     削除対象のタグ。
+    /// 削除対象のタグ。
     /// </summary>
     public Models.Tag Target
     {
@@ -18,7 +18,7 @@ public class DeleteTag : Popup
     }
 
     /// <summary>
-    ///     削除をリモートにもプッシュするかどうか。UI状態に永続化される。
+    /// 削除をリモートにもプッシュするかどうか。UI状態に永続化される。
     /// </summary>
     public bool PushToRemotes
     {
@@ -27,7 +27,7 @@ public class DeleteTag : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリと削除するタグを指定する。
+    /// コンストラクタ。対象リポジトリと削除するタグを指定する。
     /// </summary>
     public DeleteTag(Repository repo, Models.Tag tag)
     {
@@ -36,8 +36,8 @@ public class DeleteTag : Popup
     }
 
     /// <summary>
-    ///     タグ削除を実行する確認アクション。
-    ///     ローカルタグ削除後、リモートへの削除プッシュと履歴フィルタの除去を行う。
+    /// タグ削除を実行する確認アクション。
+    /// ローカルタグ削除後、リモートへの削除プッシュと履歴フィルタの除去を行う。
     /// </summary>
     public override async Task<bool> Sure()
     {

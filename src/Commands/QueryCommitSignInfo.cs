@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     コミットのGPG/SSH署名情報を取得するクラス。
-///     検証結果、署名者、鍵情報を返す。
+/// コミットのGPG/SSH署名情報を取得するクラス。
+/// 検証結果、署名者、鍵情報を返す。
 /// </summary>
 public class QueryCommitSignInfo : Command
 {
     /// <summary>
-    ///     コンストラクタ。署名検証情報を取得するコマンドを設定する。
+    /// コンストラクタ。署名検証情報を取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="sha">対象コミットのSHA</param>
@@ -27,7 +27,7 @@ public class QueryCommitSignInfo : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、署名検証情報を返す。
+    /// コマンドを非同期で実行し、署名検証情報を返す。
     /// </summary>
     /// <returns>署名情報。署名がない場合や失敗時はnull</returns>
     public async Task<Models.CommitSignInfo> GetResultAsync()

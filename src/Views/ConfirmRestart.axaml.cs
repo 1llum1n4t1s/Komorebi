@@ -5,12 +5,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     アプリケーション再起動確認ダイアログのコードビハインド。
+/// アプリケーション再起動確認ダイアログのコードビハインド。
 /// </summary>
 public partial class ConfirmRestart : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ConfirmRestart()
     {
@@ -18,7 +18,7 @@ public partial class ConfirmRestart : ChromelessWindow
     }
 
     /// <summary>
-    ///     Restartの処理を行う。
+    /// Restartの処理を行う。
     /// </summary>
     private void Restart(object _1, RoutedEventArgs _2)
     {

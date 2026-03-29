@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定コミットの変更を取り消す新しいコミットを作成するgitコマンド。
-///     git revert を実行する。
+/// 指定コミットの変更を取り消す新しいコミットを作成するgitコマンド。
+/// git revert を実行する。
 /// </summary>
 public class Revert : Command
 {
     /// <summary>
-    ///     Revertコマンドを初期化する。
+    /// Revertコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="commit">取り消し対象のコミットSHA。</param>

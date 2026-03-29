@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     インタラクティブリベース用のコミット一覧を取得するクラス。
-///     各コミットのフルメッセージ（本文含む）も取得する。
+/// インタラクティブリベース用のコミット一覧を取得するクラス。
+/// 各コミットのフルメッセージ（本文含む）も取得する。
 /// </summary>
 public class QueryCommitsForInteractiveRebase : Command
 {
     /// <summary>
-    ///     コンストラクタ。インタラクティブリベース対象のコミット範囲を設定する。
+    /// コンストラクタ。インタラクティブリベース対象のコミット範囲を設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="on">リベースの基点となるコミット/ブランチ</param>
@@ -27,7 +27,7 @@ public class QueryCommitsForInteractiveRebase : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、インタラクティブリベース用のコミットリストを返す。
+    /// コマンドを非同期で実行し、インタラクティブリベース用のコミットリストを返す。
     /// </summary>
     /// <returns>インタラクティブリベース用コミットのリスト</returns>
     public async Task<List<Models.InteractiveCommit>> GetResultAsync()
@@ -47,7 +47,7 @@ public class QueryCommitsForInteractiveRebase : Command
         var end = rs.StdOut.IndexOf('\n', start);
         while (end > 0)
         {
-            var line = rs.StdOut.Substring(start, end - start);
+            var line = rs.StdOut[start..end];
             switch (nextPartIdx)
             {
                 case 0:
@@ -77,12 +77,12 @@ public class QueryCommitsForInteractiveRebase : Command
                     var boundary = rs.StdOut.IndexOf(_boundary, end + 1, StringComparison.Ordinal);
                     if (boundary > end)
                     {
-                        current.Message = rs.StdOut.Substring(start, boundary - start - 1);
+                        current.Message = rs.StdOut[start..(boundary - 1)];
                         end = boundary + _boundary.Length;
                     }
                     else
                     {
-                        current.Message = rs.StdOut.Substring(start);
+                        current.Message = rs.StdOut[start..];
                         end = rs.StdOut.Length - 2;
                     }
 

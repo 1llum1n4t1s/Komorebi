@@ -5,12 +5,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     パッチ適用ダイアログのコードビハインド。
+/// パッチ適用ダイアログのコードビハインド。
 /// </summary>
 public partial class Apply : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Apply()
     {
@@ -18,7 +18,7 @@ public partial class Apply : UserControl
     }
 
     /// <summary>
-    ///     PatchFileの選択処理を行う。
+    /// PatchFileの選択処理を行う。
     /// </summary>
     private async void SelectPatchFile(object _, RoutedEventArgs e)
     {

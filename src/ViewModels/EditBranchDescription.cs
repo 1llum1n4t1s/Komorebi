@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ブランチの説明文を編集するダイアログViewModel。
-///     git config の branch.{name}.description を更新する。
+/// ブランチの説明文を編集するダイアログViewModel。
+/// git config の branch.{name}.description を更新する。
 /// </summary>
 public class EditBranchDescription : Popup
 {
     /// <summary>
-    ///     編集対象のブランチ。
+    /// 編集対象のブランチ。
     /// </summary>
     public Models.Branch Target
     {
@@ -18,7 +18,7 @@ public class EditBranchDescription : Popup
     }
 
     /// <summary>
-    ///     ブランチの説明文。UIでの編集対象。
+    /// ブランチの説明文。UIでの編集対象。
     /// </summary>
     public string Description
     {
@@ -27,7 +27,7 @@ public class EditBranchDescription : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリ、ブランチ、現在の説明文を指定する。
+    /// コンストラクタ。対象リポジトリ、ブランチ、現在の説明文を指定する。
     /// </summary>
     public EditBranchDescription(Repository repo, Models.Branch target, string desc)
     {
@@ -39,8 +39,8 @@ public class EditBranchDescription : Popup
     }
 
     /// <summary>
-    ///     説明文の保存を実行する確認アクション。
-    ///     変更がない場合は何もせずに成功を返す。
+    /// 説明文の保存を実行する確認アクション。
+    /// 変更がない場合は何もせずに成功を返す。
     /// </summary>
     public override async Task<bool> Sure()
     {

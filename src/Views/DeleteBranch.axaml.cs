@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     ブランチ削除ダイアログのコードビハインド。
+/// ブランチ削除ダイアログのコードビハインド。
 /// </summary>
 public partial class DeleteBranch : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public DeleteBranch()
     {

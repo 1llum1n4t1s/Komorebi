@@ -10,12 +10,12 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ワーキングコピー（ステージング・コミット）ビューのコードビハインド。
+/// ワーキングコピー（ステージング・コミット）ビューのコードビハインド。
 /// </summary>
 public partial class WorkingCopy : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public WorkingCopy()
     {
@@ -23,7 +23,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     MainLayoutSizeChangedイベントのハンドラ。
+    /// MainLayoutSizeChangedイベントのハンドラ。
     /// </summary>
     private void OnMainLayoutSizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -39,7 +39,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     OpenAssumeUnchangedイベントのハンドラ。
+    /// OpenAssumeUnchangedイベントのハンドラ。
     /// </summary>
     private async void OnOpenAssumeUnchanged(object sender, RoutedEventArgs e)
     {
@@ -51,7 +51,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     UnstagedContextRequestedイベントのハンドラ。
+    /// UnstagedContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnUnstagedContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -69,7 +69,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     StagedContextRequestedイベントのハンドラ。
+    /// StagedContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnStagedContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -87,7 +87,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     UnstagedChangeDoubleTappedイベントのハンドラ。
+    /// UnstagedChangeDoubleTappedイベントのハンドラ。
     /// </summary>
     private async void OnUnstagedChangeDoubleTapped(object _, RoutedEventArgs e)
     {
@@ -101,7 +101,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     StagedChangeDoubleTappedイベントのハンドラ。
+    /// StagedChangeDoubleTappedイベントのハンドラ。
     /// </summary>
     private async void OnStagedChangeDoubleTapped(object _, RoutedEventArgs e)
     {
@@ -115,7 +115,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     UnstagedKeyDownイベントのハンドラ。
+    /// UnstagedKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnUnstagedKeyDown(object _, KeyEventArgs e)
     {
@@ -162,7 +162,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     StagedKeyDownイベントのハンドラ。
+    /// StagedKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnStagedKeyDown(object _, KeyEventArgs e)
     {
@@ -204,7 +204,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     StageSelectedButtonClickedイベントのハンドラ。
+    /// StageSelectedButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnStageSelectedButtonClicked(object _, RoutedEventArgs e)
     {
@@ -219,7 +219,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     StageAllButtonClickedイベントのハンドラ。
+    /// StageAllButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnStageAllButtonClicked(object _, RoutedEventArgs e)
     {
@@ -230,7 +230,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     UnstageSelectedButtonClickedイベントのハンドラ。
+    /// UnstageSelectedButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnUnstageSelectedButtonClicked(object _, RoutedEventArgs e)
     {
@@ -245,7 +245,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     UnstageAllButtonClickedイベントのハンドラ。
+    /// UnstageAllButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnUnstageAllButtonClicked(object _, RoutedEventArgs e)
     {
@@ -256,7 +256,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     OpenExternalMergeToolAllConflictsイベントのハンドラ。
+    /// OpenExternalMergeToolAllConflictsイベントのハンドラ。
     /// </summary>
     private async void OnOpenExternalMergeToolAllConflicts(object _, RoutedEventArgs e)
     {
@@ -267,7 +267,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     Continueイベントのハンドラ。
+    /// Continueイベントのハンドラ。
     /// </summary>
     private async void OnContinue(object _, RoutedEventArgs e)
     {
@@ -278,7 +278,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     Commitイベントのハンドラ。
+    /// Commitイベントのハンドラ。
     /// </summary>
     private async void OnCommit(object _, RoutedEventArgs e)
     {
@@ -292,7 +292,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     CommitWithAutoStageイベントのハンドラ。
+    /// CommitWithAutoStageイベントのハンドラ。
     /// </summary>
     private async void OnCommitWithAutoStage(object _, RoutedEventArgs e)
     {
@@ -306,7 +306,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     CommitWithPushイベントのハンドラ。
+    /// CommitWithPushイベントのハンドラ。
     /// </summary>
     private async void OnCommitWithPush(object _, RoutedEventArgs e)
     {
@@ -320,7 +320,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     CreateContextMenuForUnstagedChangesの処理を行う。
+    /// CreateContextMenuForUnstagedChangesの処理を行う。
     /// </summary>
     private ContextMenu CreateContextMenuForUnstagedChanges(ViewModels.WorkingCopy vm, string selectedSingleFolder)
     {
@@ -985,7 +985,7 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     CreateContextMenuForStagedChangesの処理を行う。
+    /// CreateContextMenuForStagedChangesの処理を行う。
     /// </summary>
     public ContextMenu CreateContextMenuForStagedChanges(ViewModels.WorkingCopy vm, string selectedSingleFolder)
     {
@@ -1377,9 +1377,9 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     TryAddOpenFileToContextMenuの処理を行う。
+    /// TryAddOpenFileToContextMenuの処理を行う。
     /// </summary>
-    private void TryAddOpenFileToContextMenu(ContextMenu menu, string fullpath)
+    private static void TryAddOpenFileToContextMenu(ContextMenu menu, string fullpath)
     {
         var openWith = new MenuItem();
         openWith.Header = App.Text("Open");
@@ -1423,9 +1423,9 @@ public partial class WorkingCopy : UserControl
     }
 
     /// <summary>
-    ///     TryToAddCustomActionsToContextMenuの処理を行う。
+    /// TryToAddCustomActionsToContextMenuの処理を行う。
     /// </summary>
-    private void TryToAddCustomActionsToContextMenu(ViewModels.Repository repo, ContextMenu menu, string path)
+    private static void TryToAddCustomActionsToContextMenu(ViewModels.Repository repo, ContextMenu menu, string path)
     {
         var actions = repo.GetCustomActions(Models.CustomActionScope.File);
         if (actions.Count == 0)

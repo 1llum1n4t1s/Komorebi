@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ワークツリー追加ダイアログのViewModel。
-///     git worktree addコマンドで新しいワークツリーを作成する。
+/// ワークツリー追加ダイアログのViewModel。
+/// git worktree addコマンドで新しいワークツリーを作成する。
 /// </summary>
 public class AddWorktree : Popup
 {
     /// <summary>
-    ///     ワークツリーのパス。必須入力でパスの妥当性チェック付き。
+    /// ワークツリーのパス。必須入力でパスの妥当性チェック付き。
     /// </summary>
     [Required(ErrorMessage = "Worktree path is required!")]
     [CustomValidation(typeof(AddWorktree), nameof(ValidateWorktreePath))]
@@ -24,8 +24,8 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     新しいブランチを作成するかどうかのフラグ。
-    ///     切り替え時に選択ブランチをリセットする。
+    /// 新しいブランチを作成するかどうかのフラグ。
+    /// 切り替え時に選択ブランチをリセットする。
     /// </summary>
     public bool CreateNewBranch
     {
@@ -44,7 +44,7 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     ローカルブランチ名のリスト。
+    /// ローカルブランチ名のリスト。
     /// </summary>
     public List<string> LocalBranches
     {
@@ -53,7 +53,7 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     リモートブランチ名のリスト。
+    /// リモートブランチ名のリスト。
     /// </summary>
     public List<string> RemoteBranches
     {
@@ -62,7 +62,7 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     選択されたブランチ名。
+    /// 選択されたブランチ名。
     /// </summary>
     public string SelectedBranch
     {
@@ -71,8 +71,8 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     トラッキングブランチを設定するかどうかのフラグ。
-    ///     有効にするとトラッキングブランチを自動選択する。
+    /// トラッキングブランチを設定するかどうかのフラグ。
+    /// 有効にするとトラッキングブランチを自動選択する。
     /// </summary>
     public bool SetTrackingBranch
     {
@@ -86,7 +86,7 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     選択されたトラッキングブランチ名。
+    /// 選択されたトラッキングブランチ名。
     /// </summary>
     public string SelectedTrackingBranch
     {
@@ -95,7 +95,7 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリのブランチ一覧からローカル・リモートを分類して初期化する。
+    /// コンストラクタ。リポジトリのブランチ一覧からローカル・リモートを分類して初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public AddWorktree(Repository repo)
@@ -103,8 +103,8 @@ public class AddWorktree : Popup
         _repo = repo;
 
         // ブランチ一覧をローカルとリモートに振り分ける
-        LocalBranches = new List<string>();
-        RemoteBranches = new List<string>();
+        LocalBranches = [];
+        RemoteBranches = [];
         foreach (var branch in repo.Branches)
         {
             if (branch.IsLocal)
@@ -115,7 +115,7 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     ワークツリーパスが空でなく、指定ディレクトリが空であることを検証する。
+    /// ワークツリーパスが空でなく、指定ディレクトリが空であることを検証する。
     /// </summary>
     /// <param name="path">検証するパス</param>
     /// <param name="ctx">バリデーションコンテキスト</param>
@@ -147,7 +147,7 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     確定処理。git worktree addコマンドを実行してワークツリーを追加する。
+    /// 確定処理。git worktree addコマンドを実行してワークツリーを追加する。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()
@@ -172,8 +172,8 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    ///     トラッキングブランチを自動的に選択する。
-    ///     選択ブランチ名またはパス名に一致するリモートブランチを検索する。
+    /// トラッキングブランチを自動的に選択する。
+    /// 選択ブランチ名またはパス名に一致するリモートブランチを検索する。
     /// </summary>
     private void AutoSelectTrackingBranch()
     {

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     課題トラッカーの設定をgit configまたは専用ファイルで管理するコマンド群。
-///     コミットメッセージ中の課題番号パターンとURLテンプレートの読み書きを行う。
+/// 課題トラッカーの設定をgit configまたは専用ファイルで管理するコマンド群。
+/// コミットメッセージ中の課題番号パターンとURLテンプレートの読み書きを行う。
 /// </summary>
 public class IssueTracker : Command
 {
     /// <summary>
-    ///     IssueTrackerコマンドを初期化する。
+    /// IssueTrackerコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="isShared">trueの場合は共有ファイル(.issuetracker)に保存、falseの場合はローカルgit configに保存。</param>
@@ -37,8 +37,8 @@ public class IssueTracker : Command
     }
 
     /// <summary>
-    ///     全ての課題トラッカールールを非同期で読み取る。
-    ///     git config -l の出力からissuetracker.*キーをパースする。
+    /// 全ての課題トラッカールールを非同期で読み取る。
+    /// git config -l の出力からissuetracker.*キーをパースする。
     /// </summary>
     /// <param name="outs">読み取ったルールを追加する出力リスト。</param>
     /// <param name="isShared">共有設定かどうかを示すフラグ。</param>
@@ -73,7 +73,7 @@ public class IssueTracker : Command
                 {
                     var prefixLen = "issuetracker.".Length;
                     var suffixLen = ".regex".Length;
-                    var ruleName = key.Substring(prefixLen, key.Length - prefixLen - suffixLen);
+                    var ruleName = key[prefixLen..^suffixLen];
                     FindOrAdd(outs, ruleName, isShared).RegexString = value;
                 }
                 // .urlで終わるキーはURLテンプレートを設定する
@@ -81,7 +81,7 @@ public class IssueTracker : Command
                 {
                     var prefixLen = "issuetracker.".Length;
                     var suffixLen = ".url".Length;
-                    var ruleName = key.Substring(prefixLen, key.Length - prefixLen - suffixLen);
+                    var ruleName = key[prefixLen..^suffixLen];
                     FindOrAdd(outs, ruleName, isShared).URLTemplate = value;
                 }
             }
@@ -89,8 +89,8 @@ public class IssueTracker : Command
     }
 
     /// <summary>
-    ///     新しい課題トラッカールールを追加する。
-    ///     正規表現パターンとURLテンプレートの2つの設定を書き込む。
+    /// 新しい課題トラッカールールを追加する。
+    /// 正規表現パターンとURLテンプレートの2つの設定を書き込む。
     /// </summary>
     /// <param name="rule">追加するルール情報。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -111,7 +111,7 @@ public class IssueTracker : Command
     }
 
     /// <summary>
-    ///     課題トラッカールールの正規表現パターンを更新する。
+    /// 課題トラッカールールの正規表現パターンを更新する。
     /// </summary>
     /// <param name="rule">更新するルール情報。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -122,7 +122,7 @@ public class IssueTracker : Command
     }
 
     /// <summary>
-    ///     課題トラッカールールのURLテンプレートを更新する。
+    /// 課題トラッカールールのURLテンプレートを更新する。
     /// </summary>
     /// <param name="rule">更新するルール情報。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -133,8 +133,8 @@ public class IssueTracker : Command
     }
 
     /// <summary>
-    ///     課題トラッカールールを削除する。
-    ///     git config --remove-section で該当セクション全体を削除する。
+    /// 課題トラッカールールを削除する。
+    /// git config --remove-section で該当セクション全体を削除する。
     /// </summary>
     /// <param name="name">削除するルール名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -150,13 +150,13 @@ public class IssueTracker : Command
     }
 
     /// <summary>
-    ///     ルールリストから指定名のルールを検索し、見つからなければ新規作成して追加する。
+    /// ルールリストから指定名のルールを検索し、見つからなければ新規作成して追加する。
     /// </summary>
     /// <param name="rules">検索対象のルールリスト。</param>
     /// <param name="ruleName">検索するルール名。</param>
     /// <param name="isShared">共有設定かどうか。</param>
     /// <returns>見つかったまたは新規作成したルール。</returns>
-    private Models.IssueTracker FindOrAdd(List<Models.IssueTracker> rules, string ruleName, bool isShared)
+    private static Models.IssueTracker FindOrAdd(List<Models.IssueTracker> rules, string ruleName, bool isShared)
     {
         // 既存のルールから名前で検索する
         var rule = rules.Find(x => x.Name.Equals(ruleName, StringComparison.Ordinal));
@@ -170,12 +170,12 @@ public class IssueTracker : Command
     }
 
     /// <summary>
-    ///     設定ストレージファイルが存在するかどうか。
+    /// 設定ストレージファイルが存在するかどうか。
     /// </summary>
     private readonly bool _isStorageFileExists;
 
     /// <summary>
-    ///     git configコマンドの基本引数（スコープとファイル指定）。
+    /// git configコマンドの基本引数（スコープとファイル指定）。
     /// </summary>
     private readonly string _baseArg;
 }

@@ -5,12 +5,12 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     差分表示ビュー（テキスト/画像の差分切替）のコードビハインド。
+/// 差分表示ビュー（テキスト/画像の差分切替）のコードビハインド。
 /// </summary>
 public partial class DiffView : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public DiffView()
     {
@@ -18,7 +18,7 @@ public partial class DiffView : UserControl
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -29,7 +29,7 @@ public partial class DiffView : UserControl
     }
 
     /// <summary>
-    ///     GotoFirstChangeイベントのハンドラ。
+    /// GotoFirstChangeイベントのハンドラ。
     /// </summary>
     private void OnGotoFirstChange(object _, RoutedEventArgs e)
     {
@@ -38,7 +38,7 @@ public partial class DiffView : UserControl
     }
 
     /// <summary>
-    ///     GotoPrevChangeイベントのハンドラ。
+    /// GotoPrevChangeイベントのハンドラ。
     /// </summary>
     private void OnGotoPrevChange(object _, RoutedEventArgs e)
     {
@@ -47,7 +47,7 @@ public partial class DiffView : UserControl
     }
 
     /// <summary>
-    ///     GotoNextChangeイベントのハンドラ。
+    /// GotoNextChangeイベントのハンドラ。
     /// </summary>
     private void OnGotoNextChange(object _, RoutedEventArgs e)
     {
@@ -56,7 +56,7 @@ public partial class DiffView : UserControl
     }
 
     /// <summary>
-    ///     GotoLastChangeイベントのハンドラ。
+    /// GotoLastChangeイベントのハンドラ。
     /// </summary>
     private void OnGotoLastChange(object _, RoutedEventArgs e)
     {

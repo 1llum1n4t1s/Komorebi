@@ -7,12 +7,12 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ランチャーページ（各タブの内容表示）のコードビハインド。
+/// ランチャーページ（各タブの内容表示）のコードビハインド。
 /// </summary>
 public partial class LauncherPage : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public LauncherPage()
     {
@@ -20,7 +20,7 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
-    ///     PopupSureByHotKeyイベントのハンドラ。
+    /// PopupSureByHotKeyイベントのハンドラ。
     /// </summary>
     private async void OnPopupSureByHotKey(object sender, RoutedEventArgs e)
     {
@@ -57,7 +57,7 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
-    ///     PopupSureイベントのハンドラ。
+    /// PopupSureイベントのハンドラ。
     /// </summary>
     private async void OnPopupSure(object _, RoutedEventArgs e)
     {
@@ -68,7 +68,7 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
-    ///     PopupCancelイベントのハンドラ。
+    /// PopupCancelイベントのハンドラ。
     /// </summary>
     private void OnPopupCancel(object _, RoutedEventArgs e)
     {
@@ -79,7 +79,7 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
-    ///     MaskClickedイベントのハンドラ。
+    /// MaskClickedイベントのハンドラ。
     /// </summary>
     private void OnMaskClicked(object sender, PointerPressedEventArgs e)
     {
@@ -87,7 +87,7 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
-    ///     CopyNotificationイベントのハンドラ。
+    /// CopyNotificationイベントのハンドラ。
     /// </summary>
     private async void OnCopyNotification(object sender, RoutedEventArgs e)
     {
@@ -98,7 +98,7 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
-    ///     DismissNotificationイベントのハンドラ。
+    /// DismissNotificationイベントのハンドラ。
     /// </summary>
     private void OnDismissNotification(object sender, RoutedEventArgs e)
     {
@@ -110,7 +110,7 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
-    ///     ToolBarPointerPressedイベントのハンドラ。
+    /// ToolBarPointerPressedイベントのハンドラ。
     /// </summary>
     private void OnToolBarPointerPressed(object sender, PointerPressedEventArgs e)
     {

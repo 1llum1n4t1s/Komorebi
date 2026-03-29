@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     アーカイブ作成ダイアログのViewModel。
-///     git archiveコマンドで指定リビジョンのソースをZIPファイルにアーカイブする。
+/// アーカイブ作成ダイアログのViewModel。
+/// git archiveコマンドで指定リビジョンのソースをZIPファイルにアーカイブする。
 /// </summary>
 public class Archive : Popup
 {
     /// <summary>
-    ///     出力ファイルのパス。必須入力。
+    /// 出力ファイルのパス。必須入力。
     /// </summary>
     [Required(ErrorMessage = "Output file name is required")]
     public string SaveFile
@@ -22,7 +22,7 @@ public class Archive : Popup
     }
 
     /// <summary>
-    ///     アーカイブの基準となるオブジェクト（ブランチ、コミット、またはタグ）。
+    /// アーカイブの基準となるオブジェクト（ブランチ、コミット、またはタグ）。
     /// </summary>
     public object BasedOn
     {
@@ -31,7 +31,7 @@ public class Archive : Popup
     }
 
     /// <summary>
-    ///     ブランチを基準にアーカイブを作成するコンストラクタ。
+    /// ブランチを基準にアーカイブを作成するコンストラクタ。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="branch">アーカイブ対象のブランチ</param>
@@ -44,7 +44,7 @@ public class Archive : Popup
     }
 
     /// <summary>
-    ///     コミットを基準にアーカイブを作成するコンストラクタ。
+    /// コミットを基準にアーカイブを作成するコンストラクタ。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="commit">アーカイブ対象のコミット</param>
@@ -57,7 +57,7 @@ public class Archive : Popup
     }
 
     /// <summary>
-    ///     タグを基準にアーカイブを作成するコンストラクタ。
+    /// タグを基準にアーカイブを作成するコンストラクタ。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="tag">アーカイブ対象のタグ</param>
@@ -70,7 +70,7 @@ public class Archive : Popup
     }
 
     /// <summary>
-    ///     確定処理。git archiveコマンドを実行してZIPアーカイブを作成する。
+    /// 確定処理。git archiveコマンドを実行してZIPアーカイブを作成する。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

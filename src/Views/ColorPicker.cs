@@ -8,7 +8,7 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     色選択用のカスタムコントロール。
+/// 色選択用のカスタムコントロール。
 /// </summary>
 public class ColorPicker : Control
 {
@@ -87,7 +87,7 @@ public class ColorPicker : Control
     };
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static ColorPicker()
     {
@@ -95,7 +95,7 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -139,7 +139,7 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -153,7 +153,7 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -162,7 +162,7 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -170,7 +170,7 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -224,7 +224,7 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     UpdateColorsの処理を行う。
+    /// UpdateColorsの処理を行う。
     /// </summary>
     private void UpdateColors()
     {
@@ -240,9 +240,9 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     GetNextColorの処理を行う。
+    /// GetNextColorの処理を行う。
     /// </summary>
-    private Color GetNextColor(HsvColor c, double step)
+    private static Color GetNextColor(HsvColor c, double step)
     {
         var v = c.V;
         v += step;
@@ -253,36 +253,36 @@ public class ColorPicker : Control
     }
 
     /// <summary>
-    ///     Parseの処理を行う。
+    /// Parseの処理を行う。
     /// </summary>
     private BoxShadows _shadow = BoxShadows.Parse("0 0 6 0 #A9000000");
 
     /// <summary>
-    ///     Rectの処理を行う。
+    /// Rectの処理を行う。
     /// </summary>
     private Rect _colorTableRect = new Rect(0, 0, 32 * 8, 32 * 6);
     /// <summary>
-    ///     RoundedRectの処理を行う。
+    /// RoundedRectの処理を行う。
     /// </summary>
     private RoundedRect _darkestRect = new RoundedRect(new Rect(0, 200, 32, 32), new CornerRadius(4, 0, 0, 4));
     /// <summary>
-    ///     Rectの処理を行う。
+    /// Rectの処理を行う。
     /// </summary>
     private Rect _darkerRect = new Rect(32, 200, 32, 32);
     /// <summary>
-    ///     Rectの処理を行う。
+    /// Rectの処理を行う。
     /// </summary>
     private Rect _darkRect = new Rect(64, 200, 32, 32);
     /// <summary>
-    ///     Rectの処理を行う。
+    /// Rectの処理を行う。
     /// </summary>
     private Rect _lightRect = new Rect(160, 200, 32, 32);
     /// <summary>
-    ///     Rectの処理を行う。
+    /// Rectの処理を行う。
     /// </summary>
     private Rect _lighterRect = new Rect(192, 200, 32, 32);
     /// <summary>
-    ///     RoundedRectの処理を行う。
+    /// RoundedRectの処理を行う。
     /// </summary>
     private RoundedRect _lightestRect = new RoundedRect(new Rect(224, 200, 32, 32), new CornerRadius(0, 4, 4, 0));
     private Rect? _highlightedTableRect = null;

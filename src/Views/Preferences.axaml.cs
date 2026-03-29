@@ -10,37 +10,52 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     環境設定画面のコードビハインド。
+/// 環境設定画面のコードビハインド。
 /// </summary>
 public partial class Preferences : ChromelessWindow
 {
+    /// <summary>
+    /// gitのデフォルトユーザー名（user.name）。
+    /// </summary>
     public string DefaultUser
     {
         get;
         set;
     }
 
+    /// <summary>
+    /// gitのデフォルトメールアドレス（user.email）。
+    /// </summary>
     public string DefaultEmail
     {
         get;
         set;
     }
 
+    /// <summary>
+    /// 改行コード変換モード（core.autocrlf）のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.CRLFMode> CRLFModeProperty =
         AvaloniaProperty.Register<Preferences, Models.CRLFMode>(nameof(CRLFMode));
 
+    /// <summary>
+    /// 改行コード変換モードを取得・設定する。
+    /// </summary>
     public Models.CRLFMode CRLFMode
     {
         get => GetValue(CRLFModeProperty);
         set => SetValue(CRLFModeProperty, value);
     }
 
+    /// <summary>
+    /// CRLF強制変換（core.eol=crlf）のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> ForceEOLCRLFProperty =
         AvaloniaProperty.Register<Preferences, bool>(nameof(ForceEOLCRLF));
 
     /// <summary>
-    ///     core.eol=crlf: コミット時・チェックアウト時に両方CRLFに変換する。
-    ///     ONにすると自動CRLF変換（core.autocrlf）はFALSEに強制される。
+    /// core.eol=crlf: コミット時・チェックアウト時に両方CRLFに変換する。
+    /// ONにすると自動CRLF変換（core.autocrlf）はFALSEに強制される。
     /// </summary>
     public bool ForceEOLCRLF
     {
@@ -48,84 +63,135 @@ public partial class Preferences : ChromelessWindow
         set => SetValue(ForceEOLCRLFProperty, value);
     }
 
+    /// <summary>
+    /// フェッチ時にプルーンを実行するかどうか（fetch.prune）。
+    /// </summary>
     public bool EnablePruneOnFetch
     {
         get;
         set;
     }
 
+    /// <summary>
+    /// Gitバージョン文字列のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<string> GitVersionProperty =
         AvaloniaProperty.Register<Preferences, string>(nameof(GitVersion));
 
+    /// <summary>
+    /// Gitバージョン文字列を取得・設定する。
+    /// </summary>
     public string GitVersion
     {
         get => GetValue(GitVersionProperty);
         set => SetValue(GitVersionProperty, value);
     }
 
+    /// <summary>
+    /// Gitバージョン警告を表示するかどうかのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> ShowGitVersionWarningProperty =
         AvaloniaProperty.Register<Preferences, bool>(nameof(ShowGitVersionWarning));
 
+    /// <summary>
+    /// Gitバージョン警告を表示するかどうかを取得・設定する。最小バージョン未満でtrue。
+    /// </summary>
     public bool ShowGitVersionWarning
     {
         get => GetValue(ShowGitVersionWarningProperty);
         set => SetValue(ShowGitVersionWarningProperty, value);
     }
 
+    /// <summary>
+    /// GPGによるコミット署名を有効にするかどうか（commit.gpgsign）。
+    /// </summary>
     public bool EnableGPGCommitSigning
     {
         get;
         set;
     }
 
+    /// <summary>
+    /// GPGによるタグ署名を有効にするかどうか（tag.gpgsign）。
+    /// </summary>
     public bool EnableGPGTagSigning
     {
         get;
         set;
     }
 
+    /// <summary>
+    /// GPGフォーマット（openpgp/x509/ssh）のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.GPGFormat> GPGFormatProperty =
         AvaloniaProperty.Register<Preferences, Models.GPGFormat>(nameof(GPGFormat), Models.GPGFormat.Supported[0]);
 
+    /// <summary>
+    /// GPGフォーマットを取得・設定する。
+    /// </summary>
     public Models.GPGFormat GPGFormat
     {
         get => GetValue(GPGFormatProperty);
         set => SetValue(GPGFormatProperty, value);
     }
 
+    /// <summary>
+    /// GPG実行ファイルパスのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<string> GPGExecutableFileProperty =
         AvaloniaProperty.Register<Preferences, string>(nameof(GPGExecutableFile));
 
+    /// <summary>
+    /// GPG実行ファイルパスを取得・設定する。
+    /// </summary>
     public string GPGExecutableFile
     {
         get => GetValue(GPGExecutableFileProperty);
         set => SetValue(GPGExecutableFileProperty, value);
     }
 
+    /// <summary>
+    /// GPG署名鍵のID（user.signingkey）。
+    /// </summary>
     public string GPGUserKey
     {
         get;
         set;
     }
 
+    /// <summary>
+    /// HTTPS SSL証明書検証を有効にするかどうか（http.sslverify）。
+    /// </summary>
     public bool EnableHTTPSSLVerify
     {
         get;
         set;
     } = false;
 
+    /// <summary>
+    /// 選択中のOpenAIサービスのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.OpenAIService> SelectedOpenAIServiceProperty =
         AvaloniaProperty.Register<Preferences, Models.OpenAIService>(nameof(SelectedOpenAIService));
 
+    /// <summary>
+    /// 選択中のOpenAIサービスを取得・設定する。
+    /// </summary>
     public Models.OpenAIService SelectedOpenAIService
     {
         get => GetValue(SelectedOpenAIServiceProperty);
         set => SetValue(SelectedOpenAIServiceProperty, value);
     }
 
+    /// <summary>
+    /// 選択中のカスタムアクションのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.CustomAction> SelectedCustomActionProperty =
         AvaloniaProperty.Register<Preferences, Models.CustomAction>(nameof(SelectedCustomAction));
 
+    /// <summary>
+    /// 選択中のカスタムアクションを取得・設定する。
+    /// </summary>
     public Models.CustomAction SelectedCustomAction
     {
         get => GetValue(SelectedCustomActionProperty);
@@ -133,7 +199,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Preferences()
     {
@@ -180,7 +246,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override async void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -200,7 +266,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられる際の処理。
+    /// ウィンドウが閉じられる際の処理。
     /// </summary>
     protected override async void OnClosing(WindowClosingEventArgs e)
     {
@@ -243,7 +309,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     GitExecutableの選択処理を行う。
+    /// GitExecutableの選択処理を行う。
     /// </summary>
     private async void SelectGitExecutable(object _, RoutedEventArgs e)
     {
@@ -272,7 +338,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     DefaultCloneDirの選択処理を行う。
+    /// DefaultCloneDirの選択処理を行う。
     /// </summary>
     private async void SelectDefaultCloneDir(object _, RoutedEventArgs e)
     {
@@ -299,7 +365,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     GPGExecutableの選択処理を行う。
+    /// GPGExecutableの選択処理を行う。
     /// </summary>
     private async void SelectGPGExecutable(object _, RoutedEventArgs e)
     {
@@ -330,7 +396,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     ShellOrTerminalの選択処理を行う。
+    /// ShellOrTerminalの選択処理を行う。
     /// </summary>
     private async void SelectShellOrTerminal(object _, RoutedEventArgs e)
     {
@@ -364,7 +430,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     ExternalMergeToolの選択処理を行う。
+    /// ExternalMergeToolの選択処理を行う。
     /// </summary>
     private async void SelectExternalMergeTool(object _, RoutedEventArgs e)
     {
@@ -398,7 +464,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     SetIfChangedAsyncの処理を行う。
+    /// SetIfChangedAsyncの処理を行う。
     /// </summary>
     private static async Task SetIfChangedAsync(Dictionary<string, string> cached, string key, string value, string defValue)
     {
@@ -413,7 +479,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     UseNativeWindowFrameChangedイベントのハンドラ。
+    /// UseNativeWindowFrameChangedイベントのハンドラ。
     /// </summary>
     private async void OnUseNativeWindowFrameChanged(object sender, RoutedEventArgs e)
     {
@@ -427,7 +493,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     GitInstallPathChangedイベントのハンドラ。
+    /// GitInstallPathChangedイベントのハンドラ。
     /// </summary>
     private void OnGitInstallPathChanged(object sender, TextChangedEventArgs e)
     {
@@ -435,7 +501,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddOpenAIServiceイベントのハンドラ。
+    /// AddOpenAIServiceイベントのハンドラ。
     /// </summary>
     private void OnAddOpenAIService(object sender, RoutedEventArgs e)
     {
@@ -447,7 +513,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     RemoveSelectedOpenAIServiceイベントのハンドラ。
+    /// RemoveSelectedOpenAIServiceイベントのハンドラ。
     /// </summary>
     private void OnRemoveSelectedOpenAIService(object sender, RoutedEventArgs e)
     {
@@ -460,7 +526,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     AddCustomActionイベントのハンドラ。
+    /// AddCustomActionイベントのハンドラ。
     /// </summary>
     private void OnAddCustomAction(object sender, RoutedEventArgs e)
     {
@@ -472,7 +538,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     ExecutableForCustomActionの選択処理を行う。
+    /// ExecutableForCustomActionの選択処理を行う。
     /// </summary>
     private async void SelectExecutableForCustomAction(object sender, RoutedEventArgs e)
     {
@@ -497,7 +563,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     RemoveSelectedCustomActionイベントのハンドラ。
+    /// RemoveSelectedCustomActionイベントのハンドラ。
     /// </summary>
     private void OnRemoveSelectedCustomAction(object sender, RoutedEventArgs e)
     {
@@ -510,7 +576,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     MoveSelectedCustomActionUpイベントのハンドラ。
+    /// MoveSelectedCustomActionUpイベントのハンドラ。
     /// </summary>
     private void OnMoveSelectedCustomActionUp(object sender, RoutedEventArgs e)
     {
@@ -525,7 +591,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     MoveSelectedCustomActionDownイベントのハンドラ。
+    /// MoveSelectedCustomActionDownイベントのハンドラ。
     /// </summary>
     private void OnMoveSelectedCustomActionDown(object sender, RoutedEventArgs e)
     {
@@ -540,7 +606,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     EditCustomActionControlsの処理を行う。
+    /// EditCustomActionControlsの処理を行う。
     /// </summary>
     private async void EditCustomActionControls(object sender, RoutedEventArgs e)
     {
@@ -557,7 +623,7 @@ public partial class Preferences : ChromelessWindow
     }
 
     /// <summary>
-    ///     UpdateGitVersionの処理を行う。
+    /// UpdateGitVersionの処理を行う。
     /// </summary>
     private void UpdateGitVersion()
     {

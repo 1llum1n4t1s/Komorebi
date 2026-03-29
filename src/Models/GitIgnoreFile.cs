@@ -5,7 +5,7 @@ using Avalonia.Media;
 namespace Komorebi.Models;
 
 /// <summary>
-///     Git無視ファイル（.gitignoreまたはexclude）の種別と操作を管理するクラス
+/// Git無視ファイル（.gitignoreまたはexclude）の種別と操作を管理するクラス
 /// </summary>
 public class GitIgnoreFile
 {
@@ -22,7 +22,7 @@ public class GitIgnoreFile
     public IBrush Brush => IsShared ? Brushes.Green : Brushes.Gray;
 
     /// <summary>
-    ///     コンストラクタ
+    /// コンストラクタ
     /// </summary>
     /// <param name="isShared">共有ファイル(.gitignore)かどうか</param>
     public GitIgnoreFile(bool isShared)
@@ -31,7 +31,7 @@ public class GitIgnoreFile
     }
 
     /// <summary>
-    ///     実際のファイルシステム上のフルパスを取得する
+    /// 実際のファイルシステム上のフルパスを取得する
     /// </summary>
     /// <param name="repoPath">リポジトリのルートパス</param>
     /// <param name="gitDir">.gitディレクトリのパス</param>

@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     初回起動時のセットアップダイアログのViewModel。
-///     表示言語とデフォルトクローンディレクトリを設定する。
+/// 初回起動時のセットアップダイアログのViewModel。
+/// 表示言語とデフォルトクローンディレクトリを設定する。
 /// </summary>
 public class InitSetup : Popup
 {
     /// <summary>
-    ///     コンストラクタ。OS設定から検出されたロケールを初期値に設定する。
+    /// コンストラクタ。OS設定から検出されたロケールを初期値に設定する。
     /// </summary>
     public InitSetup()
     {
@@ -37,8 +37,8 @@ public class InitSetup : Popup
     }
 
     /// <summary>
-    ///     確認ボタン押下時の処理。ロケールとクローンディレクトリをPreferencesに保存し、
-    ///     指定ディレクトリ内のリポジトリを自動スキャンする。
+    /// 確認ボタン押下時の処理。ロケールとクローンディレクトリをPreferencesに保存し、
+    /// 指定ディレクトリ内のリポジトリを自動スキャンする。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -51,6 +51,6 @@ public class InitSetup : Popup
         return true;
     }
 
-    private string _selectedLocale;
-    private string _defaultCloneDir = string.Empty;
+    private string _selectedLocale; // 選択中のロケール
+    private string _defaultCloneDir = string.Empty; // デフォルトクローンディレクトリ
 }

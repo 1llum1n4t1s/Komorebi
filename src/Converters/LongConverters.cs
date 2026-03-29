@@ -3,15 +3,15 @@
 namespace Komorebi.Converters;
 
 /// <summary>
-///     long値を他の型に変換するコンバータのコレクション。
-///     XAMLバインディングで使用される。
+/// long値を他の型に変換するコンバータのコレクション。
+/// XAMLバインディングで使用される。
 /// </summary>
 public static class LongConverters
 {
     /// <summary>
-    ///     バイト数を人間が読みやすいファイルサイズ文字列に変換するコンバータ。
-    ///     B、KB、MB、GBの単位で自動的にフォーマットする。
-    ///     例: 1536 → "1.50 KB (1,536)"
+    /// バイト数を人間が読みやすいファイルサイズ文字列に変換するコンバータ。
+    /// B、KB、MB、GBの単位で自動的にフォーマットする。
+    /// 例: 1536 → "1.50 KB (1,536)"
     /// </summary>
     public static readonly FuncValueConverter<long, string> ToFileSize = new(bytes =>
     {
@@ -32,17 +32,17 @@ public static class LongConverters
     });
 
     /// <summary>
-    ///     1キロバイトのバイト数定数。
+    /// 1キロバイトのバイト数定数。
     /// </summary>
     private const double KB = 1024;
 
     /// <summary>
-    ///     1メガバイトのバイト数定数。
+    /// 1メガバイトのバイト数定数。
     /// </summary>
     private const double MB = 1024 * 1024;
 
     /// <summary>
-    ///     1ギガバイトのバイト数定数。
+    /// 1ギガバイトのバイト数定数。
     /// </summary>
     private const double GB = 1024 * 1024 * 1024;
 }

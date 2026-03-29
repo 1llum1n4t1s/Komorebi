@@ -13,13 +13,13 @@ using OpenAI.Chat;
 namespace Komorebi.Models;
 
 /// <summary>
-///     OpenAIストリーミングレスポンスのハンドラ。
-///     CoT（Chain of Thought）タグのフィルタリングと受信テキストの整形を行う。
+/// OpenAIストリーミングレスポンスのハンドラ。
+/// CoT（Chain of Thought）タグのフィルタリングと受信テキストの整形を行う。
 /// </summary>
 public partial class OpenAIResponse
 {
     /// <summary>
-    ///     レスポンスハンドラを初期化する
+    /// レスポンスハンドラを初期化する
     /// </summary>
     /// <param name="onUpdate">テキスト受信時のコールバック</param>
     public OpenAIResponse(Action<string> onUpdate)
@@ -28,7 +28,7 @@ public partial class OpenAIResponse
     }
 
     /// <summary>
-    ///     ストリーミングテキストを追加処理する。CoTタグをフィルタリングしつつテキストを蓄積する。
+    /// ストリーミングテキストを追加処理する。CoTタグをフィルタリングしつつテキストを蓄積する。
     /// </summary>
     /// <param name="text">受信したテキスト断片</param>
     public void Append(string text)
@@ -49,7 +49,7 @@ public partial class OpenAIResponse
         if (startIdx >= 0)
         {
             if (startIdx > 0)
-                OnReceive(buffer.Substring(0, startIdx));
+                OnReceive(buffer[..startIdx]);
 
             var endIdx = buffer.IndexOf('>', startIdx + 1);
             if (endIdx <= startIdx)
@@ -57,19 +57,19 @@ public partial class OpenAIResponse
                 if (buffer.Length - startIdx <= 15)
                     _thinkTail.Append(buffer.AsSpan(startIdx));
                 else
-                    OnReceive(buffer.Substring(startIdx));
+                    OnReceive(buffer[startIdx..]);
             }
             else if (endIdx < startIdx + 15)
             {
-                var tag = buffer.Substring(startIdx + 1, endIdx - startIdx - 1);
+                var tag = buffer[(startIdx + 1)..endIdx];
                 if (_thinkTags.Contains(tag))
                     _thinkTail.Append(buffer.AsSpan(startIdx));
                 else
-                    OnReceive(buffer.Substring(startIdx));
+                    OnReceive(buffer[startIdx..]);
             }
             else
             {
-                OnReceive(buffer.Substring(startIdx));
+                OnReceive(buffer[startIdx..]);
             }
         }
         else
@@ -79,7 +79,7 @@ public partial class OpenAIResponse
     }
 
     /// <summary>
-    ///     ストリーミング終了処理。未処理の残りテキストがあれば出力する。
+    /// ストリーミング終了処理。未処理の残りテキストがあれば出力する。
     /// </summary>
     public void End()
     {
@@ -91,7 +91,7 @@ public partial class OpenAIResponse
     }
 
     /// <summary>
-    ///     テキスト受信時の内部処理。先頭の空白を除去してからコールバックを呼ぶ。
+    /// テキスト受信時の内部処理。先頭の空白を除去してからコールバックを呼ぶ。
     /// </summary>
     private void OnReceive(string text)
     {
@@ -122,8 +122,8 @@ public partial class OpenAIResponse
 }
 
 /// <summary>
-///     OpenAI/Azure OpenAIサービスの設定と通信を管理するクラス。
-///     git diffの解析やコミットメッセージの生成プロンプトを保持する。
+/// OpenAI/Azure OpenAIサービスの設定と通信を管理するクラス。
+/// git diffの解析やコミットメッセージの生成プロンプトを保持する。
 /// </summary>
 public class OpenAIService : ObservableObject
 {
@@ -183,6 +183,9 @@ public class OpenAIService : ObservableObject
         set => SetProperty(ref _generateSubjectPrompt, value);
     }
 
+    /// <summary>
+    /// デフォルトのプロンプトでOpenAIServiceを初期化する
+    /// </summary>
     public OpenAIService()
     {
         AnalyzeDiffPrompt = """
@@ -217,7 +220,7 @@ public class OpenAIService : ObservableObject
     }
 
     /// <summary>
-    ///     AIサービスにチャットリクエストを送信し、レスポンスをストリーミングまたは一括で受信する
+    /// AIサービスにチャットリクエストを送信し、レスポンスをストリーミングまたは一括で受信する
     /// </summary>
     /// <param name="prompt">システムプロンプト</param>
     /// <param name="question">ユーザーの質問（diff内容など）</param>
@@ -272,12 +275,20 @@ public class OpenAIService : ObservableObject
         }
     }
 
+    /// <summary>サービス表示名のバッキングフィールド</summary>
     private string _name;
+    /// <summary>APIエンドポイントURLのバッキングフィールド</summary>
     private string _server;
+    /// <summary>APIキーのバッキングフィールド</summary>
     private string _apiKey;
+    /// <summary>APIキーを環境変数から読み取るかどうかのバッキングフィールド</summary>
     private bool _readApiKeyFromEnv = false;
+    /// <summary>AIモデル名のバッキングフィールド</summary>
     private string _model;
+    /// <summary>ストリーミングモードのバッキングフィールド</summary>
     private bool _streaming = true;
+    /// <summary>diff解析プロンプトのバッキングフィールド</summary>
     private string _analyzeDiffPrompt;
+    /// <summary>件名生成プロンプトのバッキングフィールド</summary>
     private string _generateSubjectPrompt;
 }

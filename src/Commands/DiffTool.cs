@@ -4,13 +4,13 @@ using System.Diagnostics;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     外部差分ツールを起動して差分を表示するgitコマンド。
-///     git difftool を実行する。
+/// 外部差分ツールを起動して差分を表示するgitコマンド。
+/// git difftool を実行する。
 /// </summary>
 public class DiffTool : Command
 {
     /// <summary>
-    ///     DiffToolコマンドを初期化する。
+    /// DiffToolコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="option">diff対象を指定するオプション。</param>
@@ -22,8 +22,8 @@ public class DiffTool : Command
     }
 
     /// <summary>
-    ///     外部差分ツールを起動する。
-    ///     設定に応じてカスタムツールまたはgit configのツールを使用する。
+    /// 外部差分ツールを起動する。
+    /// 設定に応じてカスタムツールまたはgit configのツールを使用する。
     /// </summary>
     public void Open()
     {
@@ -66,8 +66,8 @@ public class DiffTool : Command
     }
 
     /// <summary>
-    ///     git configに差分ツールが設定されているかを確認する。
-    ///     diff.guitool → merge.guitool → diff.tool → merge.tool の順に確認する。
+    /// git configに差分ツールが設定されているかを確認する。
+    /// diff.guitool → merge.guitool → diff.tool → merge.tool の順に確認する。
     /// </summary>
     /// <returns>有効な差分ツールが設定されていればtrue。</returns>
     private bool CheckGitConfiguration()
@@ -90,8 +90,8 @@ public class DiffTool : Command
     }
 
     /// <summary>
-    ///     CLIベースのツールかどうかを確認する。
-    ///     vimdiff/nvimdiffはGUIアプリで非対応のためエラーとする。
+    /// CLIベースのツールかどうかを確認する。
+    /// vimdiff/nvimdiffはGUIアプリで非対応のためエラーとする。
     /// </summary>
     /// <param name="tool">確認するツール名。</param>
     /// <returns>GUIで使用可能なツールであればtrue。</returns>
@@ -109,7 +109,7 @@ public class DiffTool : Command
     }
 
     /// <summary>
-    ///     diff対象のオプション。
+    /// diff対象のオプション。
     /// </summary>
     private Models.DiffOption _option;
 }

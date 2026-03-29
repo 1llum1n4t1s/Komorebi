@@ -8,14 +8,14 @@ using Avalonia.Threading;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コマンドログのタイムスタンプを表示するコントロール。
+/// コマンドログのタイムスタンプを表示するコントロール。
 /// </summary>
 public class CommandLogTime : TextBlock
 {
     protected override Type StyleKeyOverride => typeof(TextBlock);
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -24,7 +24,7 @@ public class CommandLogTime : TextBlock
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -39,7 +39,7 @@ public class CommandLogTime : TextBlock
     }
 
     /// <summary>
-    ///     SetupCommandLogの処理を行う。
+    /// SetupCommandLogの処理を行う。
     /// </summary>
     private void SetupCommandLog(ViewModels.CommandLog log)
     {
@@ -59,7 +59,7 @@ public class CommandLogTime : TextBlock
     }
 
     /// <summary>
-    ///     StopTimerの処理を行う。
+    /// StopTimerの処理を行う。
     /// </summary>
     private void StopTimer()
     {
@@ -71,7 +71,7 @@ public class CommandLogTime : TextBlock
     }
 
     /// <summary>
-    ///     GetDisplayTextの処理を行う。
+    /// GetDisplayTextの処理を行う。
     /// </summary>
     private static string GetDisplayText(ViewModels.CommandLog log)
     {

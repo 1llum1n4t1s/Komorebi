@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     あるコミットが別のコミットの祖先かどうかを判定するgitコマンド。
-///     git merge-base --is-ancestor を実行する。
+/// あるコミットが別のコミットの祖先かどうかを判定するgitコマンド。
+/// git merge-base --is-ancestor を実行する。
 /// </summary>
 public class IsAncestor : Command
 {
     /// <summary>
-    ///     IsAncestorコマンドを初期化する。
+    /// IsAncestorコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="checkPoint">祖先かどうかを確認するコミットSHA。</param>
@@ -24,7 +24,7 @@ public class IsAncestor : Command
     }
 
     /// <summary>
-    ///     祖先判定の結果を非同期で取得する。
+    /// 祖先判定の結果を非同期で取得する。
     /// </summary>
     /// <returns>checkPointがendPointの祖先であればtrue。</returns>
     public async Task<bool> GetResultAsync()

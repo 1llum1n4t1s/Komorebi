@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     スタッシュ（一時退避）操作を提供するgitコマンド。
-///     git stash のサブコマンドで変更の退避・復元・削除を行う。
+/// スタッシュ（一時退避）操作を提供するgitコマンド。
+/// git stash のサブコマンドで変更の退避・復元・削除を行う。
 /// </summary>
 public class Stash : Command
 {
     /// <summary>
-    ///     Stashコマンドを初期化する。
+    /// Stashコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     public Stash(string repo)
@@ -21,8 +21,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     全ての変更をスタッシュにプッシュする。
-    ///     git stash push を実行する。
+    /// 全ての変更をスタッシュにプッシュする。
+    /// git stash push を実行する。
     /// </summary>
     /// <param name="message">スタッシュのメッセージ。</param>
     /// <param name="includeUntracked">未追跡ファイルも含めるかどうか。</param>
@@ -52,8 +52,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     指定した変更ファイルのみをスタッシュにプッシュする。
-    ///     git stash push -- &lt;paths&gt; を実行する。
+    /// 指定した変更ファイルのみをスタッシュにプッシュする。
+    /// git stash push -- &lt;paths&gt; を実行する。
     /// </summary>
     /// <param name="message">スタッシュのメッセージ。</param>
     /// <param name="changes">退避する変更ファイルのリスト。</param>
@@ -84,8 +84,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     pathspec-from-fileを使用して変更をスタッシュにプッシュする。
-    ///     git stash push --pathspec-from-file を実行する。
+    /// pathspec-from-fileを使用して変更をスタッシュにプッシュする。
+    /// git stash push --pathspec-from-file を実行する。
     /// </summary>
     /// <param name="message">スタッシュのメッセージ。</param>
     /// <param name="pathspecFromFile">対象ファイルのパスが列挙されたファイルのパス。</param>
@@ -111,8 +111,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     ステージ済みの変更のみをスタッシュにプッシュする。
-    ///     git stash push --staged を実行する。
+    /// ステージ済みの変更のみをスタッシュにプッシュする。
+    /// git stash push --staged を実行する。
     /// </summary>
     /// <param name="message">スタッシュのメッセージ。</param>
     /// <param name="keepIndex">インデックスの内容を保持するかどうか。</param>
@@ -136,8 +136,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     スタッシュを適用する（スタッシュはリストに残る）。
-    ///     git stash apply を実行する。
+    /// スタッシュを適用する（スタッシュはリストに残る）。
+    /// git stash apply を実行する。
     /// </summary>
     /// <param name="name">適用するスタッシュ名（例: stash@{0}）。</param>
     /// <param name="restoreIndex">インデックスの状態も復元するかどうか。</param>
@@ -153,8 +153,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     スタッシュをポップする（適用してリストから削除）。
-    ///     git stash pop を実行する。
+    /// スタッシュをポップする（適用してリストから削除）。
+    /// git stash pop を実行する。
     /// </summary>
     /// <param name="name">ポップするスタッシュ名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -166,8 +166,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     スタッシュを個別に削除する。
-    ///     git stash drop を実行する。
+    /// スタッシュを個別に削除する。
+    /// git stash drop を実行する。
     /// </summary>
     /// <param name="name">削除するスタッシュ名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -179,8 +179,8 @@ public class Stash : Command
     }
 
     /// <summary>
-    ///     全てのスタッシュを削除する。
-    ///     git stash clear を実行する。
+    /// 全てのスタッシュを削除する。
+    /// git stash clear を実行する。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> ClearAsync()

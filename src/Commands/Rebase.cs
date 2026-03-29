@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     現在のブランチを指定ブランチ上にリベースするgitコマンド。
-///     git rebase を実行する。
+/// 現在のブランチを指定ブランチ上にリベースするgitコマンド。
+/// git rebase を実行する。
 /// </summary>
 public class Rebase : Command
 {
     /// <summary>
-    ///     Rebaseコマンドを初期化する。
+    /// Rebaseコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="basedOn">リベースの基準となるブランチ名またはコミットSHA。</param>

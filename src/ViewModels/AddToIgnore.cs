@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     .gitignoreへのパターン追加ダイアログのViewModel。
-///     指定したパターンを選択した無視ファイルに書き込む。
+/// .gitignoreへのパターン追加ダイアログのViewModel。
+/// 指定したパターンを選択した無視ファイルに書き込む。
 /// </summary>
 public class AddToIgnore : Popup
 {
     /// <summary>
-    ///     追加する無視パターン。必須入力。
+    /// 追加する無視パターン。必須入力。
     /// </summary>
     [Required(ErrorMessage = "Ignore pattern is required!")]
     public string Pattern
@@ -21,7 +21,7 @@ public class AddToIgnore : Popup
     }
 
     /// <summary>
-    ///     パターンの保存先ファイル（.gitignore等）。必須選択。
+    /// パターンの保存先ファイル（.gitignore等）。必須選択。
     /// </summary>
     [Required(ErrorMessage = "Storage file is required!!!")]
     public Models.GitIgnoreFile StorageFile
@@ -31,7 +31,7 @@ public class AddToIgnore : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリと初期パターンを受け取って初期化する。
+    /// コンストラクタ。リポジトリと初期パターンを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="pattern">初期の無視パターン</param>
@@ -44,7 +44,7 @@ public class AddToIgnore : Popup
     }
 
     /// <summary>
-    ///     確定処理。無視パターンを指定ファイルに追記する。
+    /// 確定処理。無視パターンを指定ファイルに追記する。
     /// </summary>
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()

@@ -1,14 +1,14 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     コミットのブックマーク（色マーカー）を管理する静的クラス。
-///     コミット履歴で特定のコミットに色ラベルを付けるために使用される。
+/// コミットのブックマーク（色マーカー）を管理する静的クラス。
+/// コミット履歴で特定のコミットに色ラベルを付けるために使用される。
 /// </summary>
 public static class Bookmarks
 {
     /// <summary>
-    ///     ブックマーク色のブラシ配列。
-    ///     インデックス0はnull（ブックマークなし）、1以降は各色。
+    /// ブックマーク色のブラシ配列。
+    /// インデックス0はnull（ブックマークなし）、1以降は各色。
     /// </summary>
     public static readonly Avalonia.Media.IBrush[] Brushes = [
         null,
@@ -22,7 +22,7 @@ public static class Bookmarks
     ];
 
     /// <summary>
-    ///     インデックスからブックマーク色のブラシを取得する。
+    /// インデックスからブックマーク色のブラシを取得する。
     /// </summary>
     /// <param name="i">ブックマーク色のインデックス。</param>
     /// <returns>対応するブラシ。範囲外の場合はnull。</returns>

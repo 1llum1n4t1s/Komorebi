@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using Komorebi.Commands;
-using Komorebi.Models;
-using Xunit;
 
 namespace Komorebi.Tests.Commands
 {

@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     汎用確認ダイアログのコードビハインド。
+/// 汎用確認ダイアログのコードビハインド。
 /// </summary>
 public partial class Confirm : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Confirm()
     {
@@ -16,7 +16,7 @@ public partial class Confirm : ChromelessWindow
     }
 
     /// <summary>
-    ///     SetDataの処理を行う。
+    /// SetDataの処理を行う。
     /// </summary>
     public void SetData(string message, Models.ConfirmButtonType buttonType)
     {
@@ -36,7 +36,7 @@ public partial class Confirm : ChromelessWindow
     }
 
     /// <summary>
-    ///     Sureの処理を行う。
+    /// Sureの処理を行う。
     /// </summary>
     private void Sure(object _1, RoutedEventArgs _2)
     {
@@ -44,7 +44,7 @@ public partial class Confirm : ChromelessWindow
     }
 
     /// <summary>
-    ///     CloseWindowの処理を行う。
+    /// CloseWindowの処理を行う。
     /// </summary>
     private void CloseWindow(object _1, RoutedEventArgs _2)
     {

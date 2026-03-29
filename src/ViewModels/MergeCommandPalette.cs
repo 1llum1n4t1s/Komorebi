@@ -82,7 +82,7 @@ public class MergeCommandPalette : ICommandPalette
             return;
 
         // 現在のブランチを除外し、フィルタに一致するブランチを収集
-        var branches = new List<Models.Branch>();
+        List<Models.Branch> branches = [];
         foreach (var b in _repo.Branches)
         {
             if (b == current)
@@ -115,7 +115,7 @@ public class MergeCommandPalette : ICommandPalette
     /// <summary>対象リポジトリ</summary>
     private Repository _repo = null;
     /// <summary>フィルタ適用後のブランチリスト</summary>
-    private List<Models.Branch> _branches = new List<Models.Branch>();
+    private List<Models.Branch> _branches = [];
     /// <summary>フィルタ文字列</summary>
     private string _filter = string.Empty;
     /// <summary>選択中のブランチ</summary>

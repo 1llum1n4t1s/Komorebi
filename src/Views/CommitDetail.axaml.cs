@@ -11,12 +11,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミット詳細表示パネルのコードビハインド。
+/// コミット詳細表示パネルのコードビハインド。
 /// </summary>
 public partial class CommitDetail : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitDetail()
     {
@@ -24,7 +24,7 @@ public partial class CommitDetail : UserControl
     }
 
     /// <summary>
-    ///     CreateChangeContextMenuByFolderの処理を行う。
+    /// CreateChangeContextMenuByFolderの処理を行う。
     /// </summary>
     public ContextMenu CreateChangeContextMenuByFolder(ViewModels.ChangeTreeNode node, List<Models.Change> changes)
     {
@@ -115,7 +115,7 @@ public partial class CommitDetail : UserControl
     }
 
     /// <summary>
-    ///     CreateMultipleChangesContextMenuの処理を行う。
+    /// CreateMultipleChangesContextMenuの処理を行う。
     /// </summary>
     public ContextMenu CreateMultipleChangesContextMenu(List<Models.Change> changes)
     {
@@ -217,7 +217,7 @@ public partial class CommitDetail : UserControl
     }
 
     /// <summary>
-    ///     CreateChangeContextMenuの処理を行う。
+    /// CreateChangeContextMenuの処理を行う。
     /// </summary>
     public ContextMenu CreateChangeContextMenu(Models.Change change)
     {
@@ -488,7 +488,7 @@ public partial class CommitDetail : UserControl
     }
 
     /// <summary>
-    ///     CommitListKeyDownイベントのハンドラ。
+    /// CommitListKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnCommitListKeyDown(object sender, KeyEventArgs e)
     {
@@ -520,7 +520,7 @@ public partial class CommitDetail : UserControl
     }
 
     /// <summary>
-    ///     ChangeDoubleTappedイベントのハンドラ。
+    /// ChangeDoubleTappedイベントのハンドラ。
     /// </summary>
     private void OnChangeDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -537,7 +537,7 @@ public partial class CommitDetail : UserControl
     }
 
     /// <summary>
-    ///     ChangeContextRequestedイベントのハンドラ。
+    /// ChangeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
     {

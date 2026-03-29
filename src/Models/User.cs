@@ -3,8 +3,8 @@
 namespace Komorebi.Models;
 
 /// <summary>
-///     Gitユーザー情報（名前とメールアドレス）を保持するクラス。
-///     スレッドセーフなキャッシュにより、同一ユーザーの重複インスタンスを防止する。
+/// Gitユーザー情報（名前とメールアドレス）を保持するクラス。
+/// スレッドセーフなキャッシュにより、同一ユーザーの重複インスタンスを防止する。
 /// </summary>
 public class User
 {
@@ -17,7 +17,7 @@ public class User
     public string Email { get; set; } = string.Empty;
 
     /// <summary>
-    ///     デフォルトコンストラクタ（User.Invalid専用）
+    /// デフォルトコンストラクタ（User.Invalid専用）
     /// </summary>
     public User()
     {
@@ -25,7 +25,7 @@ public class User
     }
 
     /// <summary>
-    ///     「名前±メールアドレス」形式の文字列からユーザーを生成する
+    /// 「名前±メールアドレス」形式の文字列からユーザーを生成する
     /// </summary>
     /// <param name="data">「名前±メールアドレス」形式の文字列</param>
     public User(string data)
@@ -47,18 +47,20 @@ public class User
         _hash = data.GetHashCode();
     }
 
+    /// <summary>名前とメールアドレスが一致するか判定する</summary>
     public override bool Equals(object obj)
     {
         return obj is User other && Name == other.Name && Email == other.Email;
     }
 
+    /// <summary>事前計算されたハッシュコードを返す</summary>
     public override int GetHashCode()
     {
         return _hash;
     }
 
     /// <summary>
-    ///     キャッシュからユーザーを検索するか、新規作成して追加する（スレッドセーフ）
+    /// キャッシュからユーザーを検索するか、新規作成して追加する（スレッドセーフ）
     /// </summary>
     /// <param name="data">「名前±メールアドレス」形式の文字列</param>
     /// <returns>対応するUserインスタンス</returns>
@@ -67,6 +69,7 @@ public class User
         return _caches.GetOrAdd(data, key => new User(key));
     }
 
+    /// <summary>「名前 &lt;メールアドレス&gt;」形式の文字列表現を返す</summary>
     public override string ToString()
     {
         return $"{Name} <{Email}>";

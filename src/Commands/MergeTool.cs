@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     マージツールを起動してコンフリクト解決を行うgitコマンド。
-///     git mergetool を実行する。
+/// マージツールを起動してコンフリクト解決を行うgitコマンド。
+/// git mergetool を実行する。
 /// </summary>
 public class MergeTool : Command
 {
     /// <summary>
-    ///     MergeToolコマンドを初期化する。
+    /// MergeToolコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="file">マージツールで開くファイルパス（空の場合は全てのコンフリクトファイル）。</param>
@@ -24,8 +24,8 @@ public class MergeTool : Command
     }
 
     /// <summary>
-    ///     マージツールを非同期で起動する。
-    ///     設定に応じてカスタムツールまたはgit configのツールを使用する。
+    /// マージツールを非同期で起動する。
+    /// 設定に応じてカスタムツールまたはgit configのツールを使用する。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> OpenAsync()
@@ -65,8 +65,8 @@ public class MergeTool : Command
     }
 
     /// <summary>
-    ///     git configにマージツールが設定されているかを確認する。
-    ///     merge.guitool → merge.tool の順に確認する。
+    /// git configにマージツールが設定されているかを確認する。
+    /// merge.guitool → merge.tool の順に確認する。
     /// </summary>
     /// <returns>有効なマージツールが設定されていればtrue。</returns>
     private async Task<bool> CheckGitConfigurationAsync()
@@ -96,7 +96,7 @@ public class MergeTool : Command
     }
 
     /// <summary>
-    ///     マージツールで開くファイルパス。
+    /// マージツールで開くファイルパス。
     /// </summary>
     private string _file;
 }

@@ -1,5 +1,4 @@
 using Komorebi.Models;
-using Xunit;
 
 namespace Komorebi.Tests.Models
 {
@@ -25,7 +24,7 @@ namespace Komorebi.Tests.Models
         }
 
         /// <adversarial category="boundary" severity="critical" />
-        /// <summary>2文字以下の入力で早期リターンすること（Length < 3チェック）</summary>
+        /// <summary>2文字以下の入力で早期リターンすること（Length &lt; 3チェック）</summary>
         [Theory]
         [InlineData("")]
         [InlineData("a")]

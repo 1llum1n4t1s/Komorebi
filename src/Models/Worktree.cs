@@ -1,38 +1,38 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     git worktree（ワークツリー）を表すクラス。
-///     リポジトリに関連付けられた作業ディレクトリの情報を保持する。
+/// git worktree（ワークツリー）を表すクラス。
+/// リポジトリに関連付けられた作業ディレクトリの情報を保持する。
 /// </summary>
 public class Worktree
 {
     /// <summary>
-    ///     ワークツリーに関連付けられたブランチ名。
+    /// ワークツリーに関連付けられたブランチ名。
     /// </summary>
     public string Branch { get; set; } = string.Empty;
 
     /// <summary>
-    ///     ワークツリーのフルパス。
+    /// ワークツリーのフルパス。
     /// </summary>
     public string FullPath { get; set; } = string.Empty;
 
     /// <summary>
-    ///     ワークツリーのHEADコミットSHA。
+    /// ワークツリーのHEADコミットSHA。
     /// </summary>
     public string Head { get; set; } = string.Empty;
 
     /// <summary>
-    ///     ベアリポジトリかどうか。
+    /// ベアリポジトリかどうか。
     /// </summary>
     public bool IsBare { get; set; } = false;
 
     /// <summary>
-    ///     HEADがデタッチド状態かどうか。
+    /// HEADがデタッチド状態かどうか。
     /// </summary>
     public bool IsDetached { get; set; } = false;
 
     /// <summary>
-    ///     ワークツリーがロックされているかどうか。
+    /// ワークツリーがロックされているかどうか。
     /// </summary>
     public bool IsLocked { get; set; } = false;
 }

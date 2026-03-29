@@ -4,12 +4,12 @@ using Avalonia.Input;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ファイル履歴コマンドパレットのコードビハインド。
+/// ファイル履歴コマンドパレットのコードビハインド。
 /// </summary>
 public partial class FileHistoryCommandPalette : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public FileHistoryCommandPalette()
     {
@@ -17,7 +17,7 @@ public partial class FileHistoryCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -61,7 +61,7 @@ public partial class FileHistoryCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     ItemTappedイベントのハンドラ。
+    /// ItemTappedイベントのハンドラ。
     /// </summary>
     private void OnItemTapped(object sender, TappedEventArgs e)
     {

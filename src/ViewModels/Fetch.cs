@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     git fetchを実行するダイアログViewModel。
-///     単一リモートまたは全リモートからのフェッチに対応し、タグ除外と強制フェッチのオプションを提供する。
+/// git fetchを実行するダイアログViewModel。
+/// 単一リモートまたは全リモートからのフェッチに対応し、タグ除外と強制フェッチのオプションを提供する。
 /// </summary>
 public class Fetch : Popup
 {
     /// <summary>
-    ///     リポジトリに設定されているリモート一覧。
+    /// リポジトリに設定されているリモート一覧。
     /// </summary>
     public List<Models.Remote> Remotes
     {
@@ -18,7 +18,7 @@ public class Fetch : Popup
     }
 
     /// <summary>
-    ///     「全リモートをフェッチ」オプションを表示するかどうか（リモートが2つ以上の場合）。
+    /// 「全リモートをフェッチ」オプションを表示するかどうか（リモートが2つ以上の場合）。
     /// </summary>
     public bool IsFetchAllRemoteVisible
     {
@@ -26,7 +26,7 @@ public class Fetch : Popup
     }
 
     /// <summary>
-    ///     全リモートからフェッチするかどうか。UI状態に永続化される。
+    /// 全リモートからフェッチするかどうか。UI状態に永続化される。
     /// </summary>
     public bool FetchAllRemotes
     {
@@ -39,7 +39,7 @@ public class Fetch : Popup
     }
 
     /// <summary>
-    ///     フェッチ対象として選択されたリモート。
+    /// フェッチ対象として選択されたリモート。
     /// </summary>
     public Models.Remote SelectedRemote
     {
@@ -48,7 +48,7 @@ public class Fetch : Popup
     }
 
     /// <summary>
-    ///     タグをフェッチしないかどうか。UI状態に永続化される。
+    /// タグをフェッチしないかどうか。UI状態に永続化される。
     /// </summary>
     public bool NoTags
     {
@@ -57,7 +57,7 @@ public class Fetch : Popup
     }
 
     /// <summary>
-    ///     強制フェッチを有効にするかどうか。UI状態に永続化される。
+    /// 強制フェッチを有効にするかどうか。UI状態に永続化される。
     /// </summary>
     public bool Force
     {
@@ -66,7 +66,7 @@ public class Fetch : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。指定リモートまたはデフォルトリモートを初期選択する。
+    /// コンストラクタ。指定リモートまたはデフォルトリモートを初期選択する。
     /// </summary>
     public Fetch(Repository repo, Models.Remote preferredRemote = null)
     {
@@ -90,8 +90,8 @@ public class Fetch : Popup
     }
 
     /// <summary>
-    ///     フェッチを実行する確認アクション。
-    ///     フェッチ後、現在HEADを表示中の場合はアップストリームHEADへナビゲートする。
+    /// フェッチを実行する確認アクション。
+    /// フェッチ後、現在HEADを表示中の場合はアップストリームHEADへナビゲートする。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -126,7 +126,7 @@ public class Fetch : Popup
             var upstream = _repo.CurrentBranch?.Upstream;
             if (!string.IsNullOrEmpty(upstream))
             {
-                var upstreamHead = await new Commands.QueryRevisionByRefName(_repo.FullPath, upstream.Substring(13)).GetResultAsync();
+                var upstreamHead = await new Commands.QueryRevisionByRefName(_repo.FullPath, upstream[13..]).GetResultAsync();
                 _repo.NavigateToCommit(upstreamHead, true);
             }
         }
@@ -135,6 +135,6 @@ public class Fetch : Popup
         return true;
     }
 
-    private readonly Repository _repo = null;
-    private bool _fetchAllRemotes = false;
+    private readonly Repository _repo = null; // 対象リポジトリ
+    private bool _fetchAllRemotes = false; // 全リモートフェッチフラグ
 }

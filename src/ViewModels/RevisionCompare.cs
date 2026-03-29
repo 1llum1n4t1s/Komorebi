@@ -9,13 +9,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     2つのリビジョン（コミット）間の差分比較を管理するViewModel。
-///     変更ファイルの一覧表示、検索フィルタリング、差分表示、ファイルリセット操作を提供する。
+/// 2つのリビジョン（コミット）間の差分比較を管理するViewModel。
+/// 変更ファイルの一覧表示、検索フィルタリング、差分表示、ファイルリセット操作を提供する。
 /// </summary>
 public class RevisionCompare : ObservableObject, IDisposable
 {
     /// <summary>
-    ///     比較データの読み込み中かどうか。
+    /// 比較データの読み込み中かどうか。
     /// </summary>
     public bool IsLoading
     {
@@ -24,7 +24,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     比較の開始ポイント（左側のリビジョン）。コミットまたはワークツリー。
+    /// 比較の開始ポイント（左側のリビジョン）。コミットまたはワークツリー。
     /// </summary>
     public object StartPoint
     {
@@ -33,7 +33,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     比較の終了ポイント（右側のリビジョン）。コミットまたはワークツリー。
+    /// 比較の終了ポイント（右側のリビジョン）。コミットまたはワークツリー。
     /// </summary>
     public object EndPoint
     {
@@ -42,7 +42,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     左側リビジョンの表示用説明文。
+    /// 左側リビジョンの表示用説明文。
     /// </summary>
     public string LeftSideDesc
     {
@@ -50,7 +50,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     右側リビジョンの表示用説明文。
+    /// 右側リビジョンの表示用説明文。
     /// </summary>
     public string RightSideDesc
     {
@@ -58,7 +58,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     左側リビジョンへのリセットが可能かどうか。ベアリポジトリでは不可。
+    /// 左側リビジョンへのリセットが可能かどうか。ベアリポジトリでは不可。
     /// </summary>
     public bool CanResetToLeft
     {
@@ -66,7 +66,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     右側リビジョンへのリセットが可能かどうか。
+    /// 右側リビジョンへのリセットが可能かどうか。
     /// </summary>
     public bool CanResetToRight
     {
@@ -74,7 +74,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     パッチとして保存可能かどうか。両方のポイントが設定されている必要がある。
+    /// パッチとして保存可能かどうか。両方のポイントが設定されている必要がある。
     /// </summary>
     public bool CanSaveAsPatch
     {
@@ -82,7 +82,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更ファイルの総数。
+    /// 変更ファイルの総数。
     /// </summary>
     public int TotalChanges
     {
@@ -91,7 +91,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示対象変更ファイルリスト。
+    /// フィルタ適用後の表示対象変更ファイルリスト。
     /// </summary>
     public List<Models.Change> VisibleChanges
     {
@@ -100,7 +100,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     現在選択されている変更ファイルリスト。1件選択時に差分コンテキストを更新する。
+    /// 現在選択されている変更ファイルリスト。1件選択時に差分コンテキストを更新する。
     /// </summary>
     public List<Models.Change> SelectedChanges
     {
@@ -123,7 +123,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更ファイルの検索フィルタ文字列。パスの部分一致で絞り込む。
+    /// 変更ファイルの検索フィルタ文字列。パスの部分一致で絞り込む。
     /// </summary>
     public string SearchFilter
     {
@@ -136,7 +136,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択されたファイルの差分表示コンテキスト。
+    /// 選択されたファイルの差分表示コンテキスト。
     /// </summary>
     public DiffContext DiffContext
     {
@@ -145,7 +145,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリと比較する2つのコミットを指定して差分比較を初期化する。
+    /// コンストラクタ。リポジトリと比較する2つのコミットを指定して差分比較を初期化する。
     /// </summary>
     /// <param name="repo">対象リポジトリ</param>
     /// <param name="startPoint">開始コミット（nullの場合はワークツリー）</param>
@@ -159,7 +159,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リソースを解放する。全てのリストとコンテキストをクリアする。
+    /// リソースを解放する。全てのリストとコンテキストをクリアする。
     /// </summary>
     public void Dispose()
     {
@@ -174,7 +174,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     外部差分ツールで変更ファイルを開く。
+    /// 外部差分ツールで変更ファイルを開く。
     /// </summary>
     public void OpenChangeWithExternalDiffTool(Models.Change change)
     {
@@ -183,7 +183,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定されたコミットSHAに履歴画面をナビゲートする。
+    /// 指定されたコミットSHAに履歴画面をナビゲートする。
     /// </summary>
     public void NavigateTo(string commitSHA)
     {
@@ -191,7 +191,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     比較の開始ポイントと終了ポイントを入れ替えて差分を再計算する。
+    /// 比較の開始ポイントと終了ポイントを入れ替えて差分を再計算する。
     /// </summary>
     public void Swap()
     {
@@ -203,7 +203,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     相対パスをリポジトリルートからの絶対パスに変換する。
+    /// 相対パスをリポジトリルートからの絶対パスに変換する。
     /// </summary>
     public string GetAbsPath(string path)
     {
@@ -211,8 +211,8 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定ファイルを左側リビジョンの状態にリセットする。
-    ///     追加されたファイルは削除、名前変更は元に戻す、それ以外はチェックアウトする。
+    /// 指定ファイルを左側リビジョンの状態にリセットする。
+    /// 追加されたファイルは削除、名前変更は元に戻す、それ以外はチェックアウトする。
     /// </summary>
     public async Task ResetToLeftAsync(Models.Change change)
     {
@@ -250,7 +250,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     指定ファイルを右側リビジョンの状態にリセットする。
+    /// 指定ファイルを右側リビジョンの状態にリセットする。
     /// </summary>
     public async Task ResetToRightAsync(Models.Change change)
     {
@@ -288,13 +288,13 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     複数ファイルを一括で左側リビジョンの状態にリセットする。
+    /// 複数ファイルを一括で左側リビジョンの状態にリセットする。
     /// </summary>
     public async Task ResetMultipleToLeftAsync(List<Models.Change> changes)
     {
         var sha = GetSHA(_startPoint);
-        var checkouts = new List<string>();
-        var removes = new List<string>();
+        List<string> checkouts = [];
+        List<string> removes = [];
 
         foreach (var c in changes)
         {
@@ -334,13 +334,13 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     複数ファイルを一括で右側リビジョンの状態にリセットする。
+    /// 複数ファイルを一括で右側リビジョンの状態にリセットする。
     /// </summary>
     public async Task ResetMultipleToRightAsync(List<Models.Change> changes)
     {
         var sha = GetSHA(_endPoint);
-        var checkouts = new List<string>();
-        var removes = new List<string>();
+        List<string> checkouts = [];
+        List<string> removes = [];
 
         foreach (var c in changes)
         {
@@ -380,7 +380,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更内容をパッチファイルとして保存する。
+    /// 変更内容をパッチファイルとして保存する。
     /// </summary>
     public async Task SaveChangesAsPatchAsync(List<Models.Change> changes, string saveTo)
     {
@@ -390,7 +390,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索フィルタをクリアして全ファイルを表示する。
+    /// 検索フィルタをクリアして全ファイルを表示する。
     /// </summary>
     public void ClearSearchFilter()
     {
@@ -398,7 +398,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     検索フィルタに基づいて表示対象の変更リストを更新する。
+    /// 検索フィルタに基づいて表示対象の変更リストを更新する。
     /// </summary>
     private void RefreshVisible()
     {
@@ -411,7 +411,7 @@ public class RevisionCompare : ObservableObject, IDisposable
         }
         else
         {
-            var visible = new List<Models.Change>();
+            List<Models.Change> visible = [];
             foreach (var c in _changes)
             {
                 if (c.Path.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
@@ -423,7 +423,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     バックグラウンドでリビジョン間の差分を取得し、UIを更新する。
+    /// バックグラウンドでリビジョン間の差分を取得し、UIを更新する。
     /// </summary>
     private void Refresh()
     {
@@ -459,17 +459,17 @@ public class RevisionCompare : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     オブジェクトからコミットSHAを取得する。コミットでない場合は空文字列を返す。
+    /// オブジェクトからコミットSHAを取得する。コミットでない場合は空文字列を返す。
     /// </summary>
-    private string GetSHA(object obj)
+    private static string GetSHA(object obj)
     {
         return obj is Models.Commit commit ? commit.SHA : string.Empty;
     }
 
     /// <summary>
-    ///     オブジェクトから表示用の説明文を取得する。コミットでない場合は「ワークツリー」を返す。
+    /// オブジェクトから表示用の説明文を取得する。コミットでない場合は「ワークツリー」を返す。
     /// </summary>
-    private string GetDesc(object obj)
+    private static string GetDesc(object obj)
     {
         return obj is Models.Commit commit ? commit.GetFriendlyName() : App.Text("Worktree");
     }

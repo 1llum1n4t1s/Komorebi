@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ブランチを削除するためのダイアログViewModel。
-///     ローカルブランチの削除時に、追跡リモートブランチも同時に削除するオプションを提供する。
+/// ブランチを削除するためのダイアログViewModel。
+/// ローカルブランチの削除時に、追跡リモートブランチも同時に削除するオプションを提供する。
 /// </summary>
 public class DeleteBranch : Popup
 {
     /// <summary>
-    ///     削除対象のブランチ。
+    /// 削除対象のブランチ。
     /// </summary>
     public Models.Branch Target
     {
@@ -17,7 +17,7 @@ public class DeleteBranch : Popup
     }
 
     /// <summary>
-    ///     追跡中のリモートブランチ（存在する場合）。
+    /// 追跡中のリモートブランチ（存在する場合）。
     /// </summary>
     public Models.Branch TrackingRemoteBranch
     {
@@ -25,7 +25,7 @@ public class DeleteBranch : Popup
     }
 
     /// <summary>
-    ///     追跡リモートブランチ削除オプションのツールチップテキスト。
+    /// 追跡リモートブランチ削除オプションのツールチップテキスト。
     /// </summary>
     public string DeleteTrackingRemoteTip
     {
@@ -34,7 +34,7 @@ public class DeleteBranch : Popup
     }
 
     /// <summary>
-    ///     追跡リモートブランチも同時に削除するかどうか。
+    /// 追跡リモートブランチも同時に削除するかどうか。
     /// </summary>
     public bool AlsoDeleteTrackingRemote
     {
@@ -43,7 +43,7 @@ public class DeleteBranch : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。ローカルブランチの場合、上流の追跡リモートブランチを自動検出する。
+    /// コンストラクタ。ローカルブランチの場合、上流の追跡リモートブランチを自動検出する。
     /// </summary>
     public DeleteBranch(Repository repo, Models.Branch branch)
     {
@@ -59,8 +59,8 @@ public class DeleteBranch : Popup
     }
 
     /// <summary>
-    ///     ブランチ削除を実行する確認アクション。
-    ///     ローカル/リモートブランチに応じた削除処理と履歴フィルタの除去を行う。
+    /// ブランチ削除を実行する確認アクション。
+    /// ローカル/リモートブランチに応じた削除処理と履歴フィルタの除去を行う。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -96,8 +96,8 @@ public class DeleteBranch : Popup
     }
 
     /// <summary>
-    ///     リモートブランチを削除する内部メソッド。
-    ///     リモートにブランチが存在する場合はpush --deleteで、存在しない場合はローカルの追跡参照を削除する。
+    /// リモートブランチを削除する内部メソッド。
+    /// リモートにブランチが存在する場合はpush --deleteで、存在しない場合はローカルの追跡参照を削除する。
     /// </summary>
     private async Task DeleteRemoteBranchAsync(Models.Branch branch, CommandLog log)
     {

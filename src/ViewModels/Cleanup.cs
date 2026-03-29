@@ -3,14 +3,14 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリクリーンアップダイアログのViewModel。
-///     git gc --aggressive とpruneコマンドでリポジトリを最適化する。
-///     ツールバーから即時実行され、進捗はダイアログで表示される。
+/// リポジトリクリーンアップダイアログのViewModel。
+/// git gc --aggressive とpruneコマンドでリポジトリを最適化する。
+/// ツールバーから即時実行され、進捗はダイアログで表示される。
 /// </summary>
 public class Cleanup : Popup
 {
     /// <summary>
-    ///     コンストラクタ。対象リポジトリを受け取って初期化する。
+    /// コンストラクタ。対象リポジトリを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public Cleanup(Repository repo)
@@ -19,8 +19,8 @@ public class Cleanup : Popup
     }
 
     /// <summary>
-    ///     確定処理。git gc --aggressiveコマンドを実行してリポジトリを最適化する。
-    ///     不要なオブジェクトの削除とパックファイルの再圧縮を行う。
+    /// 確定処理。git gc --aggressiveコマンドを実行してリポジトリを最適化する。
+    /// 不要なオブジェクトの削除とパックファイルの再圧縮を行う。
     /// </summary>
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()

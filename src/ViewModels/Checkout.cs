@@ -3,14 +3,14 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ブランチチェックアウトダイアログのViewModel。
-///     git checkoutコマンドで指定ブランチに切り替える。
-///     ローカル変更がある場合は自動スタッシュを行う。
+/// ブランチチェックアウトダイアログのViewModel。
+/// git checkoutコマンドで指定ブランチに切り替える。
+/// ローカル変更がある場合は自動スタッシュを行う。
 /// </summary>
 public class Checkout : Popup
 {
     /// <summary>
-    ///     チェックアウト対象のブランチ名。
+    /// チェックアウト対象のブランチ名。
     /// </summary>
     public string Branch
     {
@@ -18,7 +18,7 @@ public class Checkout : Popup
     }
 
     /// <summary>
-    ///     ローカル変更を破棄するかどうかのフラグ。
+    /// ローカル変更を破棄するかどうかのフラグ。
     /// </summary>
     public bool DiscardLocalChanges
     {
@@ -27,7 +27,7 @@ public class Checkout : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリとブランチ名を受け取って初期化する。
+    /// コンストラクタ。リポジトリとブランチ名を受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="branch">チェックアウト対象のブランチ名</param>
@@ -39,7 +39,7 @@ public class Checkout : Popup
     }
 
     /// <summary>
-    ///     ローカル変更がない場合はダイアログを表示せず直接実行可能かどうかを判定する。
+    /// ローカル変更がない場合はダイアログを表示せず直接実行可能かどうかを判定する。
     /// </summary>
     /// <returns>ローカル変更がなければtrue</returns>
     public override bool CanStartDirectly()
@@ -48,8 +48,8 @@ public class Checkout : Popup
     }
 
     /// <summary>
-    ///     確定処理。ブランチのチェックアウトを実行する。
-    ///     必要に応じてスタッシュの保存・復元、サブモジュール更新を行う。
+    /// 確定処理。ブランチのチェックアウトを実行する。
+    /// 必要に応じてスタッシュの保存・復元、サブモジュール更新を行う。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

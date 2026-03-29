@@ -8,12 +8,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ウェルカム画面ツールバーのコードビハインド。
+/// ウェルカム画面ツールバーのコードビハインド。
 /// </summary>
 public partial class WelcomeToolbar : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public WelcomeToolbar()
     {
@@ -21,7 +21,7 @@ public partial class WelcomeToolbar : UserControl
     }
 
     /// <summary>
-    ///     OpenLocalRepositoryの処理を行う。
+    /// OpenLocalRepositoryの処理を行う。
     /// </summary>
     private async void OpenLocalRepository(object _1, RoutedEventArgs e)
     {

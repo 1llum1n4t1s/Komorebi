@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     チェックアウト＆ファストフォワードダイアログのコードビハインド。
+/// チェックアウト＆ファストフォワードダイアログのコードビハインド。
 /// </summary>
 public partial class CheckoutAndFastForward : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CheckoutAndFastForward()
     {

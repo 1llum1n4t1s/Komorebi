@@ -1,13 +1,13 @@
 ﻿namespace Komorebi.Commands;
 
 /// <summary>
-///     リポジトリのガベージコレクションを実行するgitコマンド。
-///     git gc --prune=now を実行し、不要なオブジェクトを即時削除する。
+/// リポジトリのガベージコレクションを実行するgitコマンド。
+/// git gc --prune=now を実行し、不要なオブジェクトを即時削除する。
 /// </summary>
 public class GC : Command
 {
     /// <summary>
-    ///     GCコマンドを初期化する。
+    /// GCコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="aggressive">trueの場合、--aggressiveオプションでデルタ圧縮を最適化する。</param>

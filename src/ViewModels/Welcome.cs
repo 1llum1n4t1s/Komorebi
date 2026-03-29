@@ -10,8 +10,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ウェルカムページのViewModel。
-///     リポジトリツリーの表示、検索、ノード管理、クローン、初期化などの操作を提供する。
+/// ウェルカムページのViewModel。
+/// リポジトリツリーの表示、検索、ノード管理、クローン、初期化などの操作を提供する。
 /// </summary>
 public class Welcome : ObservableObject
 {
@@ -19,7 +19,7 @@ public class Welcome : ObservableObject
     public static Welcome Instance { get; } = new();
 
     /// <summary>
-    ///     表示用のフラット化されたリポジトリノード行リスト。
+    /// 表示用のフラット化されたリポジトリノード行リスト。
     /// </summary>
     public AvaloniaList<RepositoryNode> Rows
     {
@@ -28,7 +28,7 @@ public class Welcome : ObservableObject
     } = [];
 
     /// <summary>
-    ///     リポジトリの検索フィルタ文字列。変更時に自動的にリフレッシュされる。
+    /// リポジトリの検索フィルタ文字列。変更時に自動的にリフレッシュされる。
     /// </summary>
     public string SearchFilter
     {
@@ -41,7 +41,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。初期表示のためにリフレッシュを実行する。
+    /// コンストラクタ。初期表示のためにリフレッシュを実行する。
     /// </summary>
     public Welcome()
     {
@@ -49,7 +49,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリツリーの表示を更新する。検索フィルタに応じて可視性を設定し、行リストを再構築する。
+    /// リポジトリツリーの表示を更新する。検索フィルタに応じて可視性を設定し、行リストを再構築する。
     /// </summary>
     public void Refresh()
     {
@@ -66,15 +66,15 @@ public class Welcome : ObservableObject
                 SetVisibilityBySearch(node);
         }
 
-        var rows = new List<RepositoryNode>();
+        List<RepositoryNode> rows = [];
         MakeTreeRows(rows, Preferences.Instance.RepositoryNodes);
         Rows.Clear();
         Rows.AddRange(rows);
     }
 
     /// <summary>
-    ///     全リポジトリノードの状態を非同期で更新する。
-    ///     既に更新中の場合は重複実行を防止する。
+    /// 全リポジトリノードの状態を非同期で更新する。
+    /// 既に更新中の場合は重複実行を防止する。
     /// </summary>
     public async Task UpdateStatusAsync(bool force, CancellationToken? token)
     {
@@ -84,7 +84,7 @@ public class Welcome : ObservableObject
         _isUpdatingStatus = true;
 
         // 列挙中のコレクション変更を回避するためコピーを作成
-        var nodes = new List<RepositoryNode>();
+        List<RepositoryNode> nodes = [];
         nodes.AddRange(Preferences.Instance.RepositoryNodes);
 
         foreach (var node in nodes)
@@ -94,7 +94,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     ノードの展開/折りたたみを切り替え、行リストを更新する。
+    /// ノードの展開/折りたたみを切り替え、行リストを更新する。
     /// </summary>
     public void ToggleNodeIsExpanded(RepositoryNode node)
     {
@@ -108,7 +108,7 @@ public class Welcome : ObservableObject
         if (node.IsExpanded)
         {
             // 展開: 子ノードを行リストに挿入
-            var subrows = new List<RepositoryNode>();
+            List<RepositoryNode> subrows = [];
             MakeTreeRows(subrows, node.SubNodes, depth + 1);
             Rows.InsertRange(idx + 1, subrows);
         }
@@ -129,8 +129,8 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     指定パスからgitリポジトリのルートディレクトリを非同期で取得する。
-    ///     ベアリポジトリ、通常リポジトリの両方に対応する。
+    /// 指定パスからgitリポジトリのルートディレクトリを非同期で取得する。
+    /// ベアリポジトリ、通常リポジトリの両方に対応する。
     /// </summary>
     public async Task<string> GetRepositoryRootAsync(string path)
     {
@@ -164,7 +164,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     新しいgitリポジトリの初期化ダイアログを表示する。
+    /// 新しいgitリポジトリの初期化ダイアログを表示する。
     /// </summary>
     public void InitRepository(string path, RepositoryNode parent, string reason)
     {
@@ -180,7 +180,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリをツリーに追加し、オプションで開く。
+    /// リポジトリをツリーに追加し、オプションで開く。
     /// </summary>
     public async Task AddRepositoryAsync(string path, RepositoryNode parent, bool moveNode, bool open)
     {
@@ -192,7 +192,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリのクローンダイアログを表示する。
+    /// リポジトリのクローンダイアログを表示する。
     /// </summary>
     public void Clone()
     {
@@ -208,7 +208,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     ターミナルを開く。
+    /// ターミナルを開く。
     /// </summary>
     public void OpenTerminal()
     {
@@ -219,7 +219,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     デフォルトクローンディレクトリをスキャンしてリポジトリを検出するダイアログを表示する。
+    /// デフォルトクローンディレクトリをスキャンしてリポジトリを検出するダイアログを表示する。
     /// </summary>
     public void ScanDefaultCloneDir()
     {
@@ -235,7 +235,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     検索フィルタをクリアする。
+    /// 検索フィルタをクリアする。
     /// </summary>
     public void ClearSearchFilter()
     {
@@ -243,7 +243,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     ルートレベルに新しいグループノードを作成するダイアログを表示する。
+    /// ルートレベルに新しいグループノードを作成するダイアログを表示する。
     /// </summary>
     public void AddRootNode()
     {
@@ -253,7 +253,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     IDでリポジトリノードを再帰的に検索する。
+    /// IDでリポジトリノードを再帰的に検索する。
     /// </summary>
     public RepositoryNode FindNodeById(string id, RepositoryNode root = null)
     {
@@ -272,7 +272,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     指定ノードの親グループを再帰的に検索する。
+    /// 指定ノードの親グループを再帰的に検索する。
     /// </summary>
     public RepositoryNode FindParentGroup(RepositoryNode node, RepositoryNode group = null)
     {
@@ -294,7 +294,7 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     ノードを別の場所に移動し、表示をリフレッシュする。
+    /// ノードを別の場所に移動し、表示をリフレッシュする。
     /// </summary>
     public void MoveNode(RepositoryNode from, RepositoryNode to)
     {
@@ -303,9 +303,9 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     ノードとその子ノードの可視性を全てリセット（表示）する。
+    /// ノードとその子ノードの可視性を全てリセット（表示）する。
     /// </summary>
-    private void ResetVisibility(RepositoryNode node)
+    private static void ResetVisibility(RepositoryNode node)
     {
         node.IsVisible = true;
         foreach (var subNode in node.SubNodes)
@@ -313,8 +313,8 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     検索フィルタに基づいてノードの可視性を再帰的に設定する。
-    ///     グループノードは名前一致またはサブノードの可視性で判定する。
+    /// 検索フィルタに基づいてノードの可視性を再帰的に設定する。
+    /// グループノードは名前一致またはサブノードの可視性で判定する。
     /// </summary>
     private void SetVisibilityBySearch(RepositoryNode node)
     {
@@ -348,9 +348,9 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    ///     ツリーノードを再帰的にフラット行リストに変換する。可視ノードのみ含む。
+    /// ツリーノードを再帰的にフラット行リストに変換する。可視ノードのみ含む。
     /// </summary>
-    private void MakeTreeRows(List<RepositoryNode> rows, List<RepositoryNode> nodes, int depth = 0)
+    private static void MakeTreeRows(List<RepositoryNode> rows, List<RepositoryNode> nodes, int depth = 0)
     {
         foreach (var node in nodes)
         {

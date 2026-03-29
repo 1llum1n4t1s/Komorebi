@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     変更内容をパッチファイルとして保存する静的クラス。
-///     git diff を使用して、各変更のdiff出力をファイルに書き込む。
+/// 変更内容をパッチファイルとして保存する静的クラス。
+/// git diff を使用して、各変更のdiff出力をファイルに書き込む。
 /// </summary>
 public static class SaveChangesAsPatch
 {
     /// <summary>
-    ///     ローカルの変更をパッチファイルとして保存する。
+    /// ローカルの変更をパッチファイルとして保存する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="changes">保存対象の変更リスト</param>
@@ -35,7 +35,7 @@ public static class SaveChangesAsPatch
     }
 
     /// <summary>
-    ///     リビジョン間の比較結果をパッチファイルとして保存する。
+    /// リビジョン間の比較結果をパッチファイルとして保存する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="changes">保存対象の変更リスト</param>
@@ -58,7 +58,7 @@ public static class SaveChangesAsPatch
     }
 
     /// <summary>
-    ///     スタッシュの変更をパッチファイルとして保存する。
+    /// スタッシュの変更をパッチファイルとして保存する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="opts">diffオプションのリスト</param>
@@ -78,7 +78,7 @@ public static class SaveChangesAsPatch
     }
 
     /// <summary>
-    ///     単一の変更のdiff出力をストリームに書き込む。
+    /// 単一の変更のdiff出力をストリームに書き込む。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="opt">diffオプション</param>

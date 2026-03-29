@@ -7,8 +7,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     LFSファイルロックの管理画面ViewModel。
-///     ロック一覧の取得、個別・一括ロック解除を行う。
+/// LFSファイルロックの管理画面ViewModel。
+/// ロック一覧の取得、個別・一括ロック解除を行う。
 /// </summary>
 public class LFSLocks : ObservableObject
 {
@@ -45,7 +45,7 @@ public class LFSLocks : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。バックグラウンドでユーザー名とロック一覧を取得する。
+    /// コンストラクタ。バックグラウンドでユーザー名とロック一覧を取得する。
     /// </summary>
     public LFSLocks(Repository repo, string remote)
     {
@@ -90,7 +90,7 @@ public class LFSLocks : ObservableObject
         if (_isLoading || string.IsNullOrEmpty(_userName))
             return;
 
-        var locks = new List<string>();
+        List<string> locks = [];
         foreach (var lfsLock in _cachedLocks)
         {
             if (lfsLock.Owner.Name.Equals(_userName, StringComparison.Ordinal))
@@ -117,7 +117,7 @@ public class LFSLocks : ObservableObject
     /// <summary>フィルタ設定に基づいて表示対象のロック一覧を更新する。</summary>
     private void UpdateVisibleLocks()
     {
-        var visible = new List<Models.LFSLock>();
+        List<Models.LFSLock> visible = [];
 
         if (!_showOnlyMyLocks)
         {
@@ -135,12 +135,12 @@ public class LFSLocks : ObservableObject
         VisibleLocks = visible;
     }
 
-    private Repository _repo;
-    private string _remote;
-    private bool _isLoading = true;
-    private List<Models.LFSLock> _cachedLocks = [];
-    private List<Models.LFSLock> _visibleLocks = [];
-    private bool _showOnlyMyLocks = false;
-    private string _userName;
-    private bool _hasValidUsername;
+    private Repository _repo; // 対象リポジトリ
+    private string _remote; // リモート名
+    private bool _isLoading = true; // 読み込み中フラグ
+    private List<Models.LFSLock> _cachedLocks = []; // 全ロック一覧キャッシュ
+    private List<Models.LFSLock> _visibleLocks = []; // フィルタ適用後のロック一覧
+    private bool _showOnlyMyLocks = false; // 自分のロックのみ表示フラグ
+    private string _userName; // git config のユーザー名
+    private bool _hasValidUsername; // ユーザー名が有効かどうか
 }

@@ -1,12 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-
 using Avalonia;
 using Avalonia.Media;
 
 using Komorebi.Models;
-
-using Xunit;
 
 namespace Komorebi.Tests.Models
 {

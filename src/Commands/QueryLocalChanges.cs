@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git statusコマンドを実行して、ローカルの変更一覧（ステージング済み・未ステージング・未追跡）を取得するクラス。
-///     porcelain形式で出力を解析する。
+/// git statusコマンドを実行して、ローカルの変更一覧（ステージング済み・未ステージング・未追跡）を取得するクラス。
+/// porcelain形式で出力を解析する。
 /// </summary>
 public partial class QueryLocalChanges : Command
 {
     /// <summary>
-    ///     porcelain形式のstatus出力行を解析する正規表現。ステータスコードとファイルパスを抽出する。
+    /// porcelain形式のstatus出力行を解析する正規表現。ステータスコードとファイルパスを抽出する。
     /// </summary>
     [GeneratedRegex(@"^(\s?[\w\?]{1,4})\s+(.+)$")]
     internal static partial Regex REG_FORMAT();
 
     /// <summary>
-    ///     コンストラクタ。ローカル変更を取得するstatusコマンドを設定する。
+    /// コンストラクタ。ローカル変更を取得するstatusコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="includeUntracked">未追跡ファイルを含めるかどうか</param>
@@ -41,7 +41,7 @@ public partial class QueryLocalChanges : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、ローカル変更のリストを返す。
+    /// コマンドを非同期で実行し、ローカル変更のリストを返す。
     /// </summary>
     /// <returns>変更モデルのリスト</returns>
     public async Task<List<Models.Change>> GetResultAsync()
@@ -70,8 +70,8 @@ public partial class QueryLocalChanges : Command
     }
 
     /// <summary>
-    ///     porcelain形式の1行を解析して、変更モデルを生成する。
-    ///     ステータスコード（インデックス状態+ワークツリー状態）からChangeStateを設定する。
+    /// porcelain形式の1行を解析して、変更モデルを生成する。
+    /// ステータスコード（インデックス状態+ワークツリー状態）からChangeStateを設定する。
     /// </summary>
     /// <param name="line">porcelain形式のstatus出力行</param>
     /// <returns>変更モデル。無効な行の場合はnull</returns>

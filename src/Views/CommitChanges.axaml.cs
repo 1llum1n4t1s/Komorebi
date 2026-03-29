@@ -8,12 +8,12 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミットの変更ファイル一覧表示のコードビハインド。
+/// コミットの変更ファイル一覧表示のコードビハインド。
 /// </summary>
 public partial class CommitChanges : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitChanges()
     {
@@ -21,7 +21,7 @@ public partial class CommitChanges : UserControl
     }
 
     /// <summary>
-    ///     ChangeContextRequestedイベントのハンドラ。
+    /// ChangeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -44,7 +44,7 @@ public partial class CommitChanges : UserControl
     }
 
     /// <summary>
-    ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+    /// ChangeCollectionViewKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
     {

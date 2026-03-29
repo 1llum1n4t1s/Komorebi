@@ -4,13 +4,13 @@ using System.Collections.Generic;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     比較コマンドパレットのViewModel。
-///     ブランチやタグの一覧をフィルタして比較対象のリビジョンを素早く選択するための検索パレット。
+/// 比較コマンドパレットのViewModel。
+/// ブランチやタグの一覧をフィルタして比較対象のリビジョンを素早く選択するための検索パレット。
 /// </summary>
 public class CompareCommandPalette : ICommandPalette
 {
     /// <summary>
-    ///     比較の基準となるオブジェクト（ブランチ、タグ、コミット）。
+    /// 比較の基準となるオブジェクト（ブランチ、タグ、コミット）。
     /// </summary>
     public object BasedOn
     {
@@ -18,7 +18,7 @@ public class CompareCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     比較対象のオブジェクト（ブランチ、タグ、コミット）。
+    /// 比較対象のオブジェクト（ブランチ、タグ、コミット）。
     /// </summary>
     public object CompareTo
     {
@@ -27,7 +27,7 @@ public class CompareCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ適用後の参照リスト（ブランチとタグの混合リスト）。
+    /// フィルタ適用後の参照リスト（ブランチとタグの混合リスト）。
     /// </summary>
     public List<object> Refs
     {
@@ -36,7 +36,7 @@ public class CompareCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     参照名フィルタ文字列。変更時に参照リストを更新する。
+    /// 参照名フィルタ文字列。変更時に参照リストを更新する。
     /// </summary>
     public string Filter
     {
@@ -50,7 +50,7 @@ public class CompareCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリと基準オブジェクトを受け取り、参照リストを初期化する。
+    /// コンストラクタ。リポジトリと基準オブジェクトを受け取り、参照リストを初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="basedOn">比較の基準となるオブジェクト（nullの場合は現在のブランチ）</param>
@@ -62,7 +62,7 @@ public class CompareCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ文字列をクリアする。
+    /// フィルタ文字列をクリアする。
     /// </summary>
     public void ClearFilter()
     {
@@ -70,7 +70,7 @@ public class CompareCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     比較を実行する。リソースをクリアしてパレットを閉じ、比較ウィンドウを表示する。
+    /// 比較を実行する。リソースをクリアしてパレットを閉じ、比較ウィンドウを表示する。
     /// </summary>
     public void Launch()
     {
@@ -84,12 +84,12 @@ public class CompareCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタに基づいて参照リストを更新する。
-    ///     基準オブジェクトは除外し、ブランチを先に、タグを後に表示する。
+    /// フィルタに基づいて参照リストを更新する。
+    /// 基準オブジェクトは除外し、ブランチを先に、タグを後に表示する。
     /// </summary>
     private void UpdateRefs()
     {
-        var refs = new List<object>();
+        List<object> refs = [];
 
         // フィルタに一致するブランチを追加する（基準オブジェクトは除外）
         foreach (var b in _repo.Branches)

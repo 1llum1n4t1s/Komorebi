@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     対話的リベースを実行するgitコマンド。
-///     git rebase -i --autosquash を実行し、コミットの編集・並べ替え・統合を行う。
+/// 対話的リベースを実行するgitコマンド。
+/// git rebase -i --autosquash を実行し、コミットの編集・並べ替え・統合を行う。
 /// </summary>
 public class InteractiveRebase : Command
 {
     /// <summary>
-    ///     InteractiveRebaseコマンドを初期化する。
+    /// InteractiveRebaseコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="basedOn">リベースの基準となるコミットSHA。</param>

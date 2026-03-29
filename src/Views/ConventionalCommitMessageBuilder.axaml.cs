@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     Conventional Commitsメッセージ構築ダイアログのコードビハインド。
+/// Conventional Commitsメッセージ構築ダイアログのコードビハインド。
 /// </summary>
 public partial class ConventionalCommitMessageBuilder : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ConventionalCommitMessageBuilder()
     {
@@ -17,7 +17,7 @@ public partial class ConventionalCommitMessageBuilder : ChromelessWindow
     }
 
     /// <summary>
-    ///     ApplyClickedイベントのハンドラ。
+    /// ApplyClickedイベントのハンドラ。
     /// </summary>
     private void OnApplyClicked(object _, RoutedEventArgs e)
     {

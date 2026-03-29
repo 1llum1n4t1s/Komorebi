@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.Models;
 
 /// <summary>
-///     カスタムアクションの適用範囲を定義するenum
+/// カスタムアクションの適用範囲を定義するenum
 /// </summary>
 public enum CustomActionScope
 {
@@ -23,7 +23,7 @@ public enum CustomActionScope
 }
 
 /// <summary>
-///     カスタムアクションのUI入力コントロールの種類
+/// カスタムアクションのUI入力コントロールの種類
 /// </summary>
 public enum CustomActionControlType
 {
@@ -38,17 +38,17 @@ public enum CustomActionControlType
 }
 
 /// <summary>
-///     カスタムアクションの対象ファイルとリビジョン情報を保持するレコード
+/// カスタムアクションの対象ファイルとリビジョン情報を保持するレコード
 /// </summary>
 public record CustomActionTargetFile(string File, Commit Revision);
 
 /// <summary>
-///     カスタムアクションダイアログ内の個別入力コントロールの定義
+/// カスタムアクションダイアログ内の個別入力コントロールの定義
 /// </summary>
 public class CustomActionControl : ObservableObject
 {
     /// <summary>
-    ///     コントロールの種類（テキストボックス、パス選択、チェックボックス、コンボボックス）
+    /// コントロールの種類（テキストボックス、パス選択、チェックボックス、コンボボックス）
     /// </summary>
     public CustomActionControlType Type
     {
@@ -57,7 +57,7 @@ public class CustomActionControl : ObservableObject
     }
 
     /// <summary>
-    ///     コントロールのラベル文字列
+    /// コントロールのラベル文字列
     /// </summary>
     public string Label
     {
@@ -66,7 +66,7 @@ public class CustomActionControl : ObservableObject
     }
 
     /// <summary>
-    ///     コントロールの説明文
+    /// コントロールの説明文
     /// </summary>
     public string Description
     {
@@ -75,7 +75,7 @@ public class CustomActionControl : ObservableObject
     }
 
     /// <summary>
-    ///     文字列型の入力値（テキストボックス、パス選択、コンボボックス用）
+    /// 文字列型の入力値（テキストボックス、パス選択、コンボボックス用）
     /// </summary>
     public string StringValue
     {
@@ -84,7 +84,7 @@ public class CustomActionControl : ObservableObject
     }
 
     /// <summary>
-    ///     ブール型の入力値（チェックボックス用）
+    /// ブール型の入力値（チェックボックス用）
     /// </summary>
     public bool BoolValue
     {
@@ -100,12 +100,12 @@ public class CustomActionControl : ObservableObject
 }
 
 /// <summary>
-///     ユーザー定義のカスタムアクション。外部コマンドの実行を定義する。
+/// ユーザー定義のカスタムアクション。外部コマンドの実行を定義する。
 /// </summary>
 public class CustomAction : ObservableObject
 {
     /// <summary>
-    ///     カスタムアクションの表示名
+    /// カスタムアクションの表示名
     /// </summary>
     public string Name
     {
@@ -114,7 +114,7 @@ public class CustomAction : ObservableObject
     }
 
     /// <summary>
-    ///     アクションの適用範囲（リポジトリ、コミット、ブランチなど）
+    /// アクションの適用範囲（リポジトリ、コミット、ブランチなど）
     /// </summary>
     public CustomActionScope Scope
     {
@@ -123,7 +123,7 @@ public class CustomAction : ObservableObject
     }
 
     /// <summary>
-    ///     実行する外部コマンドの実行ファイルパス
+    /// 実行する外部コマンドの実行ファイルパス
     /// </summary>
     public string Executable
     {
@@ -132,7 +132,7 @@ public class CustomAction : ObservableObject
     }
 
     /// <summary>
-    ///     外部コマンドに渡す引数テンプレート
+    /// 外部コマンドに渡す引数テンプレート
     /// </summary>
     public string Arguments
     {
@@ -141,7 +141,7 @@ public class CustomAction : ObservableObject
     }
 
     /// <summary>
-    ///     ダイアログに表示するカスタムコントロールのリスト
+    /// ダイアログに表示するカスタムコントロールのリスト
     /// </summary>
     public AvaloniaList<CustomActionControl> Controls
     {
@@ -150,7 +150,7 @@ public class CustomAction : ObservableObject
     } = [];
 
     /// <summary>
-    ///     外部コマンドの終了を待機するかどうか
+    /// 外部コマンドの終了を待機するかどうか
     /// </summary>
     public bool WaitForExit
     {

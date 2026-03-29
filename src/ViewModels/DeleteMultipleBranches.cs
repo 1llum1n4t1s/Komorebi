@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     複数のブランチを一括削除するためのダイアログViewModel。
-///     ローカルブランチとリモートブランチの両方に対応する。
+/// 複数のブランチを一括削除するためのダイアログViewModel。
+/// ローカルブランチとリモートブランチの両方に対応する。
 /// </summary>
 public class DeleteMultipleBranches : Popup
 {
     /// <summary>
-    ///     削除対象のブランチリスト。
+    /// 削除対象のブランチリスト。
     /// </summary>
     public List<Models.Branch> Targets
     {
@@ -18,7 +18,7 @@ public class DeleteMultipleBranches : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリ、ブランチリスト、ローカルかどうかを指定する。
+    /// コンストラクタ。対象リポジトリ、ブランチリスト、ローカルかどうかを指定する。
     /// </summary>
     public DeleteMultipleBranches(Repository repo, List<Models.Branch> branches, bool isLocal)
     {
@@ -28,7 +28,7 @@ public class DeleteMultipleBranches : Popup
     }
 
     /// <summary>
-    ///     複数ブランチの一括削除を実行する確認アクション。
+    /// 複数ブランチの一括削除を実行する確認アクション。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -41,7 +41,7 @@ public class DeleteMultipleBranches : Popup
         // ローカルブランチの削除（独立した操作なので並列実行）
         if (_isLocal)
         {
-            var tasks = new List<Task>();
+            List<Task> tasks = [];
             foreach (var target in Targets)
                 tasks.Add(new Commands.Branch(_repo.FullPath, target.Name)
                     .Use(log)
@@ -50,7 +50,7 @@ public class DeleteMultipleBranches : Popup
         }
         else
         {
-            var tasks = new List<Task>();
+            List<Task> tasks = [];
             foreach (var target in Targets)
             {
                 tasks.Add(Task.Run(async () =>

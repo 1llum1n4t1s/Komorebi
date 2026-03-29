@@ -4,23 +4,23 @@ using System.Collections.Generic;
 namespace Komorebi.Models;
 
 /// <summary>
-///     コミットをWebブラウザで表示するためのURLリンク情報を表すクラス。
-///     各種Gitホスティングサービスに対応。
+/// コミットをWebブラウザで表示するためのURLリンク情報を表すクラス。
+/// 各種Gitホスティングサービスに対応。
 /// </summary>
 public class CommitLink
 {
     /// <summary>
-    ///     リンクの表示名（サービス名とリポジトリパス）。
+    /// リンクの表示名（サービス名とリポジトリパス）。
     /// </summary>
     public string Name { get; } = null;
 
     /// <summary>
-    ///     コミットURLのプレフィックス（SHAを末尾に追加して使用）。
+    /// コミットURLのプレフィックス（SHAを末尾に追加して使用）。
     /// </summary>
     public string URLPrefix { get; } = null;
 
     /// <summary>
-    ///     CommitLinkの新しいインスタンスを初期化する。
+    /// CommitLinkの新しいインスタンスを初期化する。
     /// </summary>
     /// <param name="name">リンクの表示名。</param>
     /// <param name="prefix">コミットURLのプレフィックス。</param>
@@ -31,7 +31,7 @@ public class CommitLink
     }
 
     /// <summary>
-    ///     リモートリポジトリのURLからコミットリンク一覧を生成する。
+    /// リモートリポジトリのURLからコミットリンク一覧を生成する。
     /// </summary>
     /// <param name="remotes">リモートリポジトリのリスト。</param>
     /// <returns>対応するコミットリンクのリスト。</returns>

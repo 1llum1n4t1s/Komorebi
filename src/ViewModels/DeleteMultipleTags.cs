@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     複数のタグを一括削除するためのダイアログViewModel。
-///     リモートからの削除オプションも提供する。
+/// 複数のタグを一括削除するためのダイアログViewModel。
+/// リモートからの削除オプションも提供する。
 /// </summary>
 public class DeleteMultipleTags : Popup
 {
     /// <summary>
-    ///     削除対象のタグリスト。
+    /// 削除対象のタグリスト。
     /// </summary>
     public List<Models.Tag> Tags
     {
@@ -18,7 +18,7 @@ public class DeleteMultipleTags : Popup
     }
 
     /// <summary>
-    ///     リモートからもタグを削除するかどうか。
+    /// リモートからもタグを削除するかどうか。
     /// </summary>
     public bool DeleteFromRemote
     {
@@ -27,7 +27,7 @@ public class DeleteMultipleTags : Popup
     } = false;
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリとタグリストを指定する。
+    /// コンストラクタ。対象リポジトリとタグリストを指定する。
     /// </summary>
     public DeleteMultipleTags(Repository repo, List<Models.Tag> tags)
     {
@@ -36,8 +36,8 @@ public class DeleteMultipleTags : Popup
     }
 
     /// <summary>
-    ///     複数タグの一括削除を実行する確認アクション。
-    ///     各タグをローカルで削除し、オプションで全リモートからも削除する。
+    /// 複数タグの一括削除を実行する確認アクション。
+    /// 各タグをローカルで削除し、オプションで全リモートからも削除する。
     /// </summary>
     public override async Task<bool> Sure()
     {

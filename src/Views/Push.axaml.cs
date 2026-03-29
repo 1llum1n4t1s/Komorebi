@@ -5,12 +5,12 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     プッシュダイアログのコードビハインド。
+/// プッシュダイアログのコードビハインド。
 /// </summary>
 public partial class Push : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Push()
     {
@@ -18,7 +18,7 @@ public partial class Push : UserControl
     }
 
     /// <summary>
-    ///     PushToNewBranchイベントのハンドラ。
+    /// PushToNewBranchイベントのハンドラ。
     /// </summary>
     private async void OnPushToNewBranch(object sender, RoutedEventArgs e)
     {

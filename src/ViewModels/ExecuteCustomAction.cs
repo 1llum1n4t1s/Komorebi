@@ -9,25 +9,29 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     カスタムアクションのコントロールパラメータのインターフェース。
+/// カスタムアクションのコントロールパラメータのインターフェース。
 /// </summary>
 public interface ICustomActionControlParameter
 {
     /// <summary>
-    ///     パラメータの値を取得する。
+    /// パラメータの値を取得する。
     /// </summary>
     string GetValue();
 }
 
 /// <summary>
-///     テキスト入力コントロールのパラメータ。
+/// テキスト入力コントロールのパラメータ。
 /// </summary>
 public class CustomActionControlTextBox : ICustomActionControlParameter
 {
+    /// <summary>ラベルテキスト。</summary>
     public string Label { get; set; }
+    /// <summary>プレースホルダーテキスト。</summary>
     public string Placeholder { get; set; }
+    /// <summary>入力テキスト。</summary>
     public string Text { get; set; }
 
+    /// <summary>コンストラクタ。ラベル、プレースホルダー、デフォルト値を指定する。</summary>
     public CustomActionControlTextBox(string label, string placeholder, string defaultValue)
     {
         Label = label + ":";
@@ -35,24 +39,30 @@ public class CustomActionControlTextBox : ICustomActionControlParameter
         Text = defaultValue;
     }
 
+    /// <summary>入力テキストを値として返す。</summary>
     public string GetValue() => Text;
 }
 
 /// <summary>
-///     ファイル/フォルダパス選択コントロールのパラメータ。
+/// ファイル/フォルダパス選択コントロールのパラメータ。
 /// </summary>
 public class CustomActionControlPathSelector : ObservableObject, ICustomActionControlParameter
 {
+    /// <summary>ラベルテキスト。</summary>
     public string Label { get; set; }
+    /// <summary>プレースホルダーテキスト。</summary>
     public string Placeholder { get; set; }
+    /// <summary>フォルダ選択モードかどうか。</summary>
     public bool IsFolder { get; set; }
 
+    /// <summary>選択されたパス。</summary>
     public string Path
     {
         get => _path;
         set => SetProperty(ref _path, value);
     }
 
+    /// <summary>コンストラクタ。ラベル、プレースホルダー、フォルダモード、デフォルト値を指定する。</summary>
     public CustomActionControlPathSelector(string label, string placeholder, bool isFolder, string defaultValue)
     {
         Label = label + ":";
@@ -61,21 +71,27 @@ public class CustomActionControlPathSelector : ObservableObject, ICustomActionCo
         _path = defaultValue;
     }
 
+    /// <summary>選択パスを値として返す。</summary>
     public string GetValue() => _path;
 
-    private string _path;
+    private string _path; // 選択されたパス
 }
 
 /// <summary>
-///     チェックボックスコントロールのパラメータ。チェック時に指定値を返す。
+/// チェックボックスコントロールのパラメータ。チェック時に指定値を返す。
 /// </summary>
 public class CustomActionControlCheckBox : ICustomActionControlParameter
 {
+    /// <summary>ラベルテキスト。</summary>
     public string Label { get; set; }
+    /// <summary>ツールチップテキスト。</summary>
     public string ToolTip { get; set; }
+    /// <summary>チェック時に返す値。</summary>
     public string CheckedValue { get; set; }
+    /// <summary>チェック状態。</summary>
     public bool IsChecked { get; set; }
 
+    /// <summary>コンストラクタ。ラベル、ツールチップ、チェック時の値、初期チェック状態を指定する。</summary>
     public CustomActionControlCheckBox(string label, string tooltip, string checkedValue, bool isChecked)
     {
         Label = label;
@@ -84,24 +100,32 @@ public class CustomActionControlCheckBox : ICustomActionControlParameter
         IsChecked = isChecked;
     }
 
+    /// <summary>チェック時はCheckedValue、未チェック時は空文字を返す。</summary>
     public string GetValue() => IsChecked ? CheckedValue : string.Empty;
 }
 
 /// <summary>
-///     ドロップダウン選択コントロールのパラメータ。パイプ区切りの選択肢リストを持つ。
+/// ドロップダウン選択コントロールのパラメータ。パイプ区切りの選択肢リストを持つ。
 /// </summary>
 public class CustomActionControlComboBox : ObservableObject, ICustomActionControlParameter
 {
+    /// <summary>ラベルテキスト。</summary>
     public string Label { get; set; }
+    /// <summary>説明テキスト。</summary>
     public string Description { get; set; }
+    /// <summary>選択肢リスト。</summary>
     public List<string> Options { get; set; } = [];
 
+    /// <summary>現在選択されている値。</summary>
     public string Value
     {
         get => _value;
         set => SetProperty(ref _value, value);
     }
 
+    /// <summary>
+    /// コンストラクタ。ラベル、説明、パイプ区切りの選択肢文字列を指定する。
+    /// </summary>
     public CustomActionControlComboBox(string label, string description, string options)
     {
         Label = label;
@@ -115,19 +139,20 @@ public class CustomActionControlComboBox : ObservableObject, ICustomActionContro
         }
     }
 
+    /// <summary>選択中の値を返す。</summary>
     public string GetValue() => _value;
 
-    private string _value = string.Empty;
+    private string _value = string.Empty; // 選択中の値
 }
 
 /// <summary>
-///     カスタムアクションを実行するダイアログViewModel。
-///     コントロールパラメータの値をプレースホルダーに置換してコマンドを実行する。
+/// カスタムアクションを実行するダイアログViewModel。
+/// コントロールパラメータの値をプレースホルダーに置換してコマンドを実行する。
 /// </summary>
 public class ExecuteCustomAction : Popup
 {
     /// <summary>
-    ///     実行するカスタムアクションの定義。
+    /// 実行するカスタムアクションの定義。
     /// </summary>
     public Models.CustomAction CustomAction
     {
@@ -135,7 +160,7 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     アクションのスコープ対象（ブランチ、コミット、タグ等）。
+    /// アクションのスコープ対象（ブランチ、コミット、タグ等）。
     /// </summary>
     public object Target
     {
@@ -143,7 +168,7 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     UIコントロールパラメータのリスト（テキストボックス、パス選択等）。
+    /// UIコントロールパラメータのリスト（テキストボックス、パス選択等）。
     /// </summary>
     public List<ICustomActionControlParameter> ControlParameters
     {
@@ -151,7 +176,7 @@ public class ExecuteCustomAction : Popup
     } = [];
 
     /// <summary>
-    ///     コンストラクタ。リポジトリ、カスタムアクション定義、スコープ対象を指定する。
+    /// コンストラクタ。リポジトリ、カスタムアクション定義、スコープ対象を指定する。
     /// </summary>
     public ExecuteCustomAction(Repository repo, Models.CustomAction action, object scopeTarget)
     {
@@ -162,8 +187,8 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     カスタムアクション実行の確認アクション。
-    ///     プレースホルダーをターゲット値とコントロールパラメータ値で置換してコマンドを起動する。
+    /// カスタムアクション実行の確認アクション。
+    /// プレースホルダーをターゲット値とコントロールパラメータ値で置換してコマンドを起動する。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -193,7 +218,7 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     カスタムアクション定義のコントロール設定からUIパラメータオブジェクトを生成する。
+    /// カスタムアクション定義のコントロール設定からUIパラメータオブジェクトを生成する。
     /// </summary>
     private void PrepareControlParameters()
     {
@@ -218,7 +243,7 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     文字列内のターゲット関連プレースホルダー（${REPO}, ${BRANCH}, ${SHA}等）を実際の値に置換する。
+    /// 文字列内のターゲット関連プレースホルダー（${REPO}, ${BRANCH}, ${SHA}等）を実際の値に置換する。
     /// </summary>
     private string PrepareStringByTarget(string org)
     {
@@ -236,7 +261,7 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     作業ディレクトリのパスをOS形式で取得する。
+    /// 作業ディレクトリのパスをOS形式で取得する。
     /// </summary>
     private string GetWorkdir()
     {
@@ -244,7 +269,7 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     外部プロセスをバックグラウンドで起動する（完了を待たない）。
+    /// 外部プロセスをバックグラウンドで起動する（完了を待たない）。
     /// </summary>
     private void Run(string args)
     {
@@ -266,7 +291,7 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    ///     外部プロセスを非同期で実行し、出力をログに記録する（完了を待つ）。
+    /// 外部プロセスを非同期で実行し、出力をログに記録する（完了を待つ）。
     /// </summary>
     private async Task RunAsync(string args, Models.ICommandLog log)
     {
@@ -321,5 +346,5 @@ public class ExecuteCustomAction : Popup
         }
     }
 
-    private readonly Repository _repo = null;
+    private readonly Repository _repo = null; // 対象リポジトリ
 }

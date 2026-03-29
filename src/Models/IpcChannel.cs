@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 namespace Komorebi.Models;
 
 /// <summary>
-///     名前付きパイプによるプロセス間通信チャネル。
-///     アプリケーションの多重起動防止と、既存インスタンスへのメッセージ送信を行う。
+/// 名前付きパイプによるプロセス間通信チャネル。
+/// アプリケーションの多重起動防止と、既存インスタンスへのメッセージ送信を行う。
 /// </summary>
 public class IpcChannel : IDisposable
 {
@@ -56,7 +56,7 @@ public class IpcChannel : IDisposable
     }
 
     /// <summary>
-    ///     最初のインスタンス（サーバー）にコマンドメッセージを送信する
+    /// 最初のインスタンス（サーバー）にコマンドメッセージを送信する
     /// </summary>
     /// <param name="cmd">送信するコマンド文字列</param>
     public void SendToFirstInstance(string cmd)

@@ -6,13 +6,19 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ポップアップ操作実行中ステータス表示のコードビハインド。
+/// ポップアップ操作実行中ステータス表示のコードビハインド。
 /// </summary>
 public partial class PopupRunningStatus : UserControl
 {
+    /// <summary>
+    /// 実行中の操作説明テキストのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<string> DescriptionProperty =
         AvaloniaProperty.Register<PopupRunningStatus, string>(nameof(Description));
 
+    /// <summary>
+    /// 実行中の操作説明テキストを取得・設定する。
+    /// </summary>
     public string Description
     {
         get => GetValue(DescriptionProperty);
@@ -20,7 +26,7 @@ public partial class PopupRunningStatus : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public PopupRunningStatus()
     {
@@ -28,7 +34,7 @@ public partial class PopupRunningStatus : UserControl
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -40,7 +46,7 @@ public partial class PopupRunningStatus : UserControl
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -49,7 +55,7 @@ public partial class PopupRunningStatus : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -65,7 +71,7 @@ public partial class PopupRunningStatus : UserControl
     }
 
     /// <summary>
-    ///     StartAnimの処理を行う。
+    /// StartAnimの処理を行う。
     /// </summary>
     private void StartAnim()
     {
@@ -74,7 +80,7 @@ public partial class PopupRunningStatus : UserControl
     }
 
     /// <summary>
-    ///     StopAnimの処理を行う。
+    /// StopAnimの処理を行う。
     /// </summary>
     private void StopAnim()
     {
@@ -84,5 +90,8 @@ public partial class PopupRunningStatus : UserControl
         ProgressBar.IsIndeterminate = false;
     }
 
+    /// <summary>
+    /// アンロード中かどうか。アンロード時のアニメーション開始を防止する。
+    /// </summary>
     private bool _isUnloading = false;
 }

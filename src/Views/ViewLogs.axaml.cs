@@ -4,12 +4,12 @@ using Avalonia.Input;
 namespace Komorebi.Views;
 
 /// <summary>
-///     Gitコマンドログ表示ビューのコードビハインド。
+/// Gitコマンドログ表示ビューのコードビハインド。
 /// </summary>
 public partial class ViewLogs : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ViewLogs()
     {
@@ -18,7 +18,7 @@ public partial class ViewLogs : ChromelessWindow
     }
 
     /// <summary>
-    ///     LogContextRequestedイベントのハンドラ。
+    /// LogContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnLogContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -52,7 +52,7 @@ public partial class ViewLogs : ChromelessWindow
     }
 
     /// <summary>
-    ///     LogKeyDownイベントのハンドラ。
+    /// LogKeyDownイベントのハンドラ。
     /// </summary>
     private void OnLogKeyDown(object _, KeyEventArgs e)
     {

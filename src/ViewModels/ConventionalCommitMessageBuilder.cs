@@ -9,14 +9,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     Conventional CommitsメッセージビルダーのViewModel。
-///     Conventional Commits仕様に従ったコミットメッセージを構築するためのフォーム。
-///     タイプ、スコープ、説明、詳細、破壊的変更、クローズイシューを入力する。
+/// Conventional CommitsメッセージビルダーのViewModel。
+/// Conventional Commits仕様に従ったコミットメッセージを構築するためのフォーム。
+/// タイプ、スコープ、説明、詳細、破壊的変更、クローズイシューを入力する。
 /// </summary>
 public class ConventionalCommitMessageBuilder : ObservableValidator
 {
     /// <summary>
-    ///     利用可能なコミットタイプのリスト（feat, fix, docs等）。
+    /// 利用可能なコミットタイプのリスト（feat, fix, docs等）。
     /// </summary>
     public List<Models.ConventionalCommitType> Types
     {
@@ -25,7 +25,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     } = [];
 
     /// <summary>
-    ///     選択されたコミットタイプ。変更時にプリフィル説明があれば自動設定する。
+    /// 選択されたコミットタイプ。変更時にプリフィル説明があれば自動設定する。
     /// </summary>
     [Required(ErrorMessage = "Type of changes can not be null")]
     public Models.ConventionalCommitType SelectedType
@@ -40,7 +40,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     }
 
     /// <summary>
-    ///     コミットのスコープ（影響範囲）。オプション。
+    /// コミットのスコープ（影響範囲）。オプション。
     /// </summary>
     public string Scope
     {
@@ -49,7 +49,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     }
 
     /// <summary>
-    ///     変更の短い説明。必須項目。
+    /// 変更の短い説明。必須項目。
     /// </summary>
     [Required(ErrorMessage = "Short description can not be empty")]
     public string Description
@@ -59,7 +59,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     }
 
     /// <summary>
-    ///     変更の詳細説明。オプション。
+    /// 変更の詳細説明。オプション。
     /// </summary>
     public string Detail
     {
@@ -68,7 +68,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     }
 
     /// <summary>
-    ///     破壊的変更の説明。設定するとタイプの後に「!」が付加される。
+    /// 破壊的変更の説明。設定するとタイプの後に「!」が付加される。
     /// </summary>
     public string BreakingChanges
     {
@@ -77,7 +77,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     }
 
     /// <summary>
-    ///     クローズするイシュー番号。
+    /// クローズするイシュー番号。
     /// </summary>
     public string ClosedIssue
     {
@@ -86,7 +86,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     }
 
     /// <summary>
-    ///     コンストラクタ。コミットタイプのオーバーライド設定と適用コールバックを受け取って初期化する。
+    /// コンストラクタ。コミットタイプのオーバーライド設定と適用コールバックを受け取って初期化する。
     /// </summary>
     /// <param name="conventionalTypesOverride">カスタムコミットタイプのJSON文字列（nullで標準タイプ）</param>
     /// <param name="onApply">メッセージ適用時のコールバック</param>
@@ -99,8 +99,8 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     }
 
     /// <summary>
-    ///     入力内容からConventional Commits形式のメッセージを構築して適用する。
-    ///     形式: type(scope)!: description
+    /// 入力内容からConventional Commits形式のメッセージを構築して適用する。
+    /// 形式: type(scope)!: description
     /// </summary>
     /// <returns>成功した場合はtrue、バリデーションエラーがある場合はfalse</returns>
     [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2026:RequiresUnreferencedCode")]

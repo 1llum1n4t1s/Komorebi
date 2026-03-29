@@ -5,13 +5,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.Models;
 
 /// <summary>
-///     課題トラッカーの設定を表すクラス。
-///     コミットメッセージ中の課題番号パターンをリンクに変換する。
+/// 課題トラッカーの設定を表すクラス。
+/// コミットメッセージ中の課題番号パターンをリンクに変換する。
 /// </summary>
 public class IssueTracker : ObservableObject
 {
     /// <summary>
-    ///     この課題トラッカー設定が共有設定かどうか。
+    /// この課題トラッカー設定が共有設定かどうか。
     /// </summary>
     public bool IsShared
     {
@@ -20,7 +20,7 @@ public class IssueTracker : ObservableObject
     }
 
     /// <summary>
-    ///     課題トラッカーの名前。
+    /// 課題トラッカーの名前。
     /// </summary>
     public string Name
     {
@@ -29,8 +29,8 @@ public class IssueTracker : ObservableObject
     }
 
     /// <summary>
-    ///     課題番号を検出する正規表現パターン文字列。
-    ///     設定時に正規表現のコンパイルを試みる。
+    /// 課題番号を検出する正規表現パターン文字列。
+    /// 設定時に正規表現のコンパイルを試みる。
     /// </summary>
     public string RegexString
     {
@@ -64,7 +64,7 @@ public class IssueTracker : ObservableObject
     }
 
     /// <summary>
-    ///     正規表現が有効かどうかを判定する。
+    /// 正規表現が有効かどうかを判定する。
     /// </summary>
     public bool IsRegexValid
     {
@@ -72,7 +72,7 @@ public class IssueTracker : ObservableObject
     }
 
     /// <summary>
-    ///     課題URLのテンプレート。$1, $2等のプレースホルダーが正規表現のグループに置換される。
+    /// 課題URLのテンプレート。$1, $2等のプレースホルダーが正規表現のグループに置換される。
     /// </summary>
     public string URLTemplate
     {
@@ -81,7 +81,7 @@ public class IssueTracker : ObservableObject
     }
 
     /// <summary>
-    ///     メッセージ中の課題番号パターンを検索し、リンク要素として追加する。
+    /// メッセージ中の課題番号パターンを検索し、リンク要素として追加する。
     /// </summary>
     /// <param name="outs">検出されたインライン要素を追加するコレクタ。</param>
     /// <param name="message">検索対象のメッセージ文字列。</param>

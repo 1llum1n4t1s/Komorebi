@@ -7,14 +7,14 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リポジトリコマンドパレットのアイコン表示コントロール。
+/// リポジトリコマンドパレットのアイコン表示コントロール。
 /// </summary>
 public class RepositoryCommandPaletteIcon : Path
 {
     protected override Type StyleKeyOverride => typeof(Path);
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {

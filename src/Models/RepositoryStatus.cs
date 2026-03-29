@@ -1,7 +1,7 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     リポジトリの現在の状態情報（ブランチ名、先行/後退コミット数、ローカル変更数）を保持するクラス
+/// リポジトリの現在の状態情報（ブランチ名、先行/後退コミット数、ローカル変更数）を保持するクラス
 /// </summary>
 public class RepositoryStatus
 {
@@ -23,6 +23,7 @@ public class RepositoryStatus
         }
     }
 
+    /// <summary>先行/後退コミット数の表示文字列（例: "3↑ 1↓"）</summary>
     public string TrackingDescription
     {
         get

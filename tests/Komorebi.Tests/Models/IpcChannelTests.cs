@@ -1,12 +1,6 @@
-using System;
-using System.IO;
 using System.IO.Pipes;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Komorebi.Models;
-
-using Xunit;
 
 namespace Komorebi.Tests.Models
 {
@@ -26,7 +20,7 @@ namespace Komorebi.Tests.Models
             catch { /* cleanup best-effort */ }
         }
 
-        private string UniquePipeName() => $"IpcTest_{Guid.NewGuid():N}";
+        private static string UniquePipeName() => $"IpcTest_{Guid.NewGuid():N}";
         private string LockPath() => Path.Combine(_tempDir, "process.lock");
 
         [Fact]

@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     インデックスキャッシュクリアダイアログのコードビハインド。
+/// インデックスキャッシュクリアダイアログのコードビハインド。
 /// </summary>
 public partial class ClearIndexCache : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ClearIndexCache()
     {

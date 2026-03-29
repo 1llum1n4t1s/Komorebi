@@ -1,16 +1,14 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Komorebi.Models;
+﻿namespace Komorebi.Models;
 
 /// <summary>
-///     gitのstderrメッセージをパターンマッチし、対応するローカライズキーを返すヘルパー。
-///     元の英語メッセージはそのまま表示し、翻訳+対処法をヒントとして追加表示する。
+/// gitのstderrメッセージをパターンマッチし、対応するローカライズキーを返すヘルパー。
+/// 元の英語メッセージはそのまま表示し、翻訳+対処法をヒントとして追加表示する。
 /// </summary>
 public static partial class GitErrorHelper
 {
     /// <summary>
-    ///     gitエラーメッセージに対応するローカライズキーを返す。
-    ///     該当パターンがない場合はnullを返す。
+    /// gitエラーメッセージに対応するローカライズキーを返す。
+    /// 該当パターンがない場合はnullを返す。
     /// </summary>
     public static string GetHintKey(string errorMessage)
     {

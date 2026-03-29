@@ -6,8 +6,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ワークツリーの表示情報を管理するViewModel。
-///     gitワークツリーの名前、ブランチ、パス、ロック状態などを提供する。
+/// ワークツリーの表示情報を管理するViewModel。
+/// gitワークツリーの名前、ブランチ、パス、ロック状態などを提供する。
 /// </summary>
 public class Worktree : ObservableObject
 {
@@ -27,7 +27,7 @@ public class Worktree : ObservableObject
     public string Branch { get; private set; }
 
     /// <summary>
-    ///     ワークツリーがロックされているかどうか。
+    /// ワークツリーがロックされているかどうか。
     /// </summary>
     public bool IsLocked
     {
@@ -41,7 +41,7 @@ public class Worktree : ObservableObject
     public string Head => Backend.Head;
 
     /// <summary>
-    ///     コンストラクタ。ワークツリーモデルから表示情報を初期化する。
+    /// コンストラクタ。ワークツリーモデルから表示情報を初期化する。
     /// </summary>
     public Worktree(DirectoryInfo repo, Models.Worktree wt, bool isMain, bool isLast)
     {
@@ -57,8 +57,8 @@ public class Worktree : ObservableObject
     }
 
     /// <summary>
-    ///     ワークツリーモデルリストからViewModel リストを構築する。
-    ///     ワークツリーが2つ以上ある場合のみリストを生成する。
+    /// ワークツリーモデルリストからViewModel リストを構築する。
+    /// ワークツリーが2つ以上ある場合のみリストを生成する。
     /// </summary>
     public static List<Worktree> Build(string repo, List<Models.Worktree> worktrees)
     {
@@ -66,7 +66,7 @@ public class Worktree : ObservableObject
             return [];
 
         var repoDir = new DirectoryInfo(repo);
-        var nodes = new List<Worktree>();
+        List<Worktree> nodes = [];
         // 最初のエントリはメインワークツリー
         nodes.Add(new(repoDir, worktrees[0], true, false));
         for (int i = 1; i < worktrees.Count; i++)
@@ -76,7 +76,7 @@ public class Worktree : ObservableObject
     }
 
     /// <summary>
-    ///     指定されたブランチがこのワークツリーにアタッチされているか判定する。
+    /// 指定されたブランチがこのワークツリーにアタッチされているか判定する。
     /// </summary>
     public bool IsAttachedTo(Models.Branch branch)
     {
@@ -89,17 +89,17 @@ public class Worktree : ObservableObject
     }
 
     /// <summary>
-    ///     リポジトリディレクトリとワークツリーのパスを比較して現在のワークツリーか判定する。
+    /// リポジトリディレクトリとワークツリーのパスを比較して現在のワークツリーか判定する。
     /// </summary>
-    private bool IsCurrentWorktree(DirectoryInfo repo, Models.Worktree wt)
+    private static bool IsCurrentWorktree(DirectoryInfo repo, Models.Worktree wt)
     {
         var wtDir = new DirectoryInfo(wt.FullPath);
         return wtDir.FullName.Equals(repo.FullName, StringComparison.Ordinal);
     }
 
     /// <summary>
-    ///     ワークツリーの表示名を生成する。
-    ///     メイン、デタッチドHEAD、ローカル/リモートブランチに応じて名前を決定する。
+    /// ワークツリーの表示名を生成する。
+    /// メイン、デタッチドHEAD、ローカル/リモートブランチに応じて名前を決定する。
     /// </summary>
     private string GenerateName()
     {
@@ -123,8 +123,8 @@ public class Worktree : ObservableObject
     }
 
     /// <summary>
-    ///     ワークツリーのブランチ表示名を生成する。
-    ///     ベア、デタッチド、不明、通常ブランチに応じた文字列を返す。
+    /// ワークツリーのブランチ表示名を生成する。
+    /// ベア、デタッチド、不明、通常ブランチに応じた文字列を返す。
     /// </summary>
     private string GenerateBranchName()
     {

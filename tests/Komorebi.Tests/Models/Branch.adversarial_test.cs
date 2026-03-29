@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Komorebi.Models;
-using Xunit;
 
 namespace Komorebi.Tests.Models
 {

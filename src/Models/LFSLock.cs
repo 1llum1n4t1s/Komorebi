@@ -3,7 +3,7 @@
 namespace Komorebi.Models;
 
 /// <summary>
-///     Git LFSロックの所有者情報
+/// Git LFSロックの所有者情報
 /// </summary>
 public class LFSLockOwner
 {
@@ -12,7 +12,7 @@ public class LFSLockOwner
 }
 
 /// <summary>
-///     Git LFSロック情報。ファイルのロック状態を表す。
+/// Git LFSロック情報。ファイルのロック状態を表す。
 /// </summary>
 public class LFSLock
 {

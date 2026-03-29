@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ローカルブランチとリモートブランチ間のトラッキング状態（ahead/behind）を取得するクラス。
-///     git rev-list --left-right を使用する。
+/// ローカルブランチとリモートブランチ間のトラッキング状態（ahead/behind）を取得するクラス。
+/// git rev-list --left-right を使用する。
 /// </summary>
 public class QueryTrackStatus : Command
 {
     /// <summary>
-    ///     コンストラクタ。作業ディレクトリを設定する。
+    /// コンストラクタ。作業ディレクトリを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     public QueryTrackStatus(string repo)
@@ -20,7 +20,7 @@ public class QueryTrackStatus : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、ローカルブランチのAhead/Behind情報を設定する。
+    /// コマンドを非同期で実行し、ローカルブランチのAhead/Behind情報を設定する。
     /// </summary>
     /// <param name="local">ローカルブランチ</param>
     /// <param name="remote">リモートブランチ</param>

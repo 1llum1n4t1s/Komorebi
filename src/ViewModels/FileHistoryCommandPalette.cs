@@ -6,13 +6,13 @@ using Avalonia.Threading;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ファイル履歴表示用のコマンドパレットViewModel。
-///     リポジトリ内のファイルをフィルタ検索し、選択ファイルの履歴を表示する。
+/// ファイル履歴表示用のコマンドパレットViewModel。
+/// リポジトリ内のファイルをフィルタ検索し、選択ファイルの履歴を表示する。
 /// </summary>
 public class FileHistoryCommandPalette : ICommandPalette
 {
     /// <summary>
-    ///     ファイル一覧の読み込み中かどうか。
+    /// ファイル一覧の読み込み中かどうか。
     /// </summary>
     public bool IsLoading
     {
@@ -21,7 +21,7 @@ public class FileHistoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示ファイルリスト。
+    /// フィルタ適用後の表示ファイルリスト。
     /// </summary>
     public List<string> VisibleFiles
     {
@@ -30,7 +30,7 @@ public class FileHistoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ文字列。変更時に表示ファイルリストを更新する。
+    /// フィルタ文字列。変更時に表示ファイルリストを更新する。
     /// </summary>
     public string Filter
     {
@@ -43,7 +43,7 @@ public class FileHistoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     現在選択されているファイルパス。
+    /// 現在選択されているファイルパス。
     /// </summary>
     public string SelectedFile
     {
@@ -52,7 +52,7 @@ public class FileHistoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリパスを指定し、非同期でHEADリビジョンのファイル一覧を取得する。
+    /// コンストラクタ。リポジトリパスを指定し、非同期でHEADリビジョンのファイル一覧を取得する。
     /// </summary>
     public FileHistoryCommandPalette(string repo)
     {
@@ -75,7 +75,7 @@ public class FileHistoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタをクリアする。
+    /// フィルタをクリアする。
     /// </summary>
     public void ClearFilter()
     {
@@ -83,7 +83,7 @@ public class FileHistoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択ファイルの履歴ウィンドウを開く。リソースをクリアしてパレットを閉じる。
+    /// 選択ファイルの履歴ウィンドウを開く。リソースをクリアしてパレットを閉じる。
     /// </summary>
     public void Launch()
     {
@@ -96,7 +96,7 @@ public class FileHistoryCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタ文字列に基づいて表示ファイルリストと選択状態を更新する。
+    /// フィルタ文字列に基づいて表示ファイルリストと選択状態を更新する。
     /// </summary>
     private void UpdateVisible()
     {
@@ -111,7 +111,7 @@ public class FileHistoryCommandPalette : ICommandPalette
             }
             else
             {
-                var visible = new List<string>();
+                List<string> visible = [];
 
                 foreach (var f in _repoFiles)
                 {

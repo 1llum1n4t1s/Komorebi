@@ -6,22 +6,22 @@ using Avalonia.Media;
 namespace Komorebi.Models;
 
 /// <summary>
-///     システムおよびバンドルされたフォントの一覧を管理する静的クラス
+/// システムおよびバンドルされたフォントの一覧を管理する静的クラス
 /// </summary>
 public static class InstalledFont
 {
     /// <summary>
-    ///     全フォントファミリ名の一覧（システム + バンドル）
+    /// 全フォントファミリ名の一覧（システム + バンドル）
     /// </summary>
     public static List<string> All { get; }
 
     /// <summary>
-    ///     等幅フォントファミリ名の一覧（システム + バンドル）
+    /// 等幅フォントファミリ名の一覧（システム + バンドル）
     /// </summary>
     public static List<string> Monospace { get; }
 
     /// <summary>
-    ///     src/Resources/Fonts/に含まれるバンドルフォントファミリ
+    /// src/Resources/Fonts/に含まれるバンドルフォントファミリ
     /// </summary>
     private static readonly HashSet<string> s_bundledAll = new(StringComparer.Ordinal)
     {
@@ -37,7 +37,7 @@ public static class InstalledFont
     };
 
     /// <summary>
-    ///     バンドルされた等幅フォントファミリ
+    /// バンドルされた等幅フォントファミリ
     /// </summary>
     private static readonly HashSet<string> s_bundledMono = new(StringComparer.Ordinal)
     {

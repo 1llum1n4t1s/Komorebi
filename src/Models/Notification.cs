@@ -1,7 +1,7 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     UIに表示する通知メッセージを保持するクラス
+/// UIに表示する通知メッセージを保持するクラス
 /// </summary>
 public class Notification
 {

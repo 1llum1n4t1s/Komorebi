@@ -12,7 +12,7 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミットメッセージをリッチテキスト（リンク・Issue参照等）で表示するプレゼンタ。
+/// コミットメッセージをリッチテキスト（リンク・Issue参照等）で表示するプレゼンタ。
 /// </summary>
 public class CommitMessagePresenter : SelectableTextBlock
 {
@@ -28,7 +28,7 @@ public class CommitMessagePresenter : SelectableTextBlock
     protected override Type StyleKeyOverride => typeof(SelectableTextBlock);
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -58,7 +58,7 @@ public class CommitMessagePresenter : SelectableTextBlock
             {
                 var link = links[i];
                 if (link.Start > pos)
-                    inlines.Add(new Run(message.Substring(pos, link.Start - pos)));
+                    inlines.Add(new Run(message[pos..link.Start]));
 
                 var cls = link.Type switch
                 {
@@ -68,7 +68,7 @@ public class CommitMessagePresenter : SelectableTextBlock
                     _ => "normal"
                 };
 
-                var run = new Run(message.Substring(link.Start, link.Length));
+                var run = new Run(message[link.Start..(link.Start + link.Length)]);
                 run.Classes.Add(cls);
                 inlines.Add(run);
 
@@ -76,14 +76,14 @@ public class CommitMessagePresenter : SelectableTextBlock
             }
 
             if (pos < message.Length)
-                inlines.Add(new Run(message.Substring(pos)));
+                inlines.Add(new Run(message[pos..]));
 
             Inlines.AddRange(inlines);
         }
     }
 
     /// <summary>
-    ///     ポインターが移動した際のイベント処理。
+    /// ポインターが移動した際のイベント処理。
     /// </summary>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
@@ -121,7 +121,7 @@ public class CommitMessagePresenter : SelectableTextBlock
     }
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -253,7 +253,7 @@ public class CommitMessagePresenter : SelectableTextBlock
     }
 
     /// <summary>
-    ///     PointerExitedイベントのハンドラ。
+    /// PointerExitedイベントのハンドラ。
     /// </summary>
     protected override void OnPointerExited(PointerEventArgs e)
     {
@@ -262,7 +262,7 @@ public class CommitMessagePresenter : SelectableTextBlock
     }
 
     /// <summary>
-    ///     ProcessHoverCommitLinkの処理を行う。
+    /// ProcessHoverCommitLinkの処理を行う。
     /// </summary>
     private void ProcessHoverCommitLink(Models.InlineElement link)
     {
@@ -298,7 +298,7 @@ public class CommitMessagePresenter : SelectableTextBlock
     }
 
     /// <summary>
-    ///     SetHoveredIssueLinkの処理を行う。
+    /// SetHoveredIssueLinkの処理を行う。
     /// </summary>
     private void SetHoveredIssueLink(Models.InlineElement link)
     {
@@ -315,7 +315,7 @@ public class CommitMessagePresenter : SelectableTextBlock
     }
 
     /// <summary>
-    ///     ClearHoveredIssueLinkの処理を行う。
+    /// ClearHoveredIssueLinkの処理を行う。
     /// </summary>
     private void ClearHoveredIssueLink()
     {
@@ -329,7 +329,7 @@ public class CommitMessagePresenter : SelectableTextBlock
 
     private Models.InlineElement _lastHover = null;
     /// <summary>
-    ///     Dictionaryの処理を行う。
+    /// Dictionaryの処理を行う。
     /// </summary>
     private Dictionary<string, Models.Commit> _inlineCommits = new();
 }

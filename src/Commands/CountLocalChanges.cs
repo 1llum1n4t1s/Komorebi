@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ローカルの変更ファイル数をカウントするgitコマンド。
-///     git status --porcelain を実行し、出力行数から変更数を算出する。
+/// ローカルの変更ファイル数をカウントするgitコマンド。
+/// git status --porcelain を実行し、出力行数から変更数を算出する。
 /// </summary>
 public class CountLocalChanges : Command
 {
     /// <summary>
-    ///     CountLocalChangesコマンドを初期化する。
+    /// CountLocalChangesコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="includeUntracked">未追跡ファイルを含めるかどうか。</param>
@@ -28,7 +28,7 @@ public class CountLocalChanges : Command
     }
 
     /// <summary>
-    ///     変更ファイル数を非同期で取得する。
+    /// 変更ファイル数を非同期で取得する。
     /// </summary>
     /// <returns>変更ファイルの数。エラー時は0を返す。</returns>
     public async Task<int> GetResultAsync()

@@ -6,31 +6,49 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     フィルターモード切替ボタンのコードビハインド。
+/// フィルターモード切替ボタンのコードビハインド。
 /// </summary>
 public partial class FilterModeSwitchButton : UserControl
 {
+    /// <summary>
+    /// 現在のフィルターモードを保持するスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.FilterMode> ModeProperty =
         AvaloniaProperty.Register<FilterModeSwitchButton, Models.FilterMode>(nameof(Mode));
 
+    /// <summary>
+    /// 現在のフィルターモードを取得・設定する。
+    /// </summary>
     public Models.FilterMode Mode
     {
         get => GetValue(ModeProperty);
         set => SetValue(ModeProperty, value);
     }
 
+    /// <summary>
+    /// フィルターモードがNoneの場合にもボタンを表示するかどうかのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> IsNoneVisibleProperty =
         AvaloniaProperty.Register<FilterModeSwitchButton, bool>(nameof(IsNoneVisible));
 
+    /// <summary>
+    /// フィルターモードがNoneの場合にもボタンを表示するかどうかを取得・設定する。
+    /// </summary>
     public bool IsNoneVisible
     {
         get => GetValue(IsNoneVisibleProperty);
         set => SetValue(IsNoneVisibleProperty, value);
     }
 
+    /// <summary>
+    /// コンテキストメニューが開いている状態かどうかのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> IsContextMenuOpeningProperty =
         AvaloniaProperty.Register<FilterModeSwitchButton, bool>(nameof(IsContextMenuOpening));
 
+    /// <summary>
+    /// コンテキストメニューが開いている状態かどうかを取得・設定する。
+    /// </summary>
     public bool IsContextMenuOpening
     {
         get => GetValue(IsContextMenuOpeningProperty);
@@ -38,7 +56,7 @@ public partial class FilterModeSwitchButton : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public FilterModeSwitchButton()
     {
@@ -47,7 +65,7 @@ public partial class FilterModeSwitchButton : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -63,7 +81,7 @@ public partial class FilterModeSwitchButton : UserControl
     }
 
     /// <summary>
-    ///     ChangeFilterModeButtonClickedイベントのハンドラ。
+    /// ChangeFilterModeButtonClickedイベントのハンドラ。
     /// </summary>
     private void OnChangeFilterModeButtonClicked(object sender, RoutedEventArgs e)
     {
@@ -88,7 +106,7 @@ public partial class FilterModeSwitchButton : UserControl
     }
 
     /// <summary>
-    ///     FillContextMenuForTagの処理を行う。
+    /// FillContextMenuForTagの処理を行う。
     /// </summary>
     private void FillContextMenuForTag(ContextMenu menu, ViewModels.Repository repo, Models.Tag tag, Models.FilterMode current)
     {
@@ -136,7 +154,7 @@ public partial class FilterModeSwitchButton : UserControl
     }
 
     /// <summary>
-    ///     FillContextMenuForBranchの処理を行う。
+    /// FillContextMenuForBranchの処理を行う。
     /// </summary>
     private void FillContextMenuForBranch(ContextMenu menu, ViewModels.Repository repo, ViewModels.BranchTreeNode node, Models.FilterMode current)
     {

@@ -91,7 +91,7 @@ public class Pull : Popup
             _selectedRemote = repo.Remotes.Find(x => x.Name == specifiedRemoteBranch.Remote);
             _selectedBranch = specifiedRemoteBranch;
 
-            var branches = new List<Models.Branch>();
+            List<Models.Branch> branches = [];
             foreach (var branch in _repo.Branches)
             {
                 if (branch.Remote == specifiedRemoteBranch.Remote)
@@ -110,7 +110,7 @@ public class Pull : Popup
                 var remoteNameEndIdx = Current.Upstream.IndexOf('/', 13);
                 if (remoteNameEndIdx > 0)
                 {
-                    var remoteName = Current.Upstream.Substring(13, remoteNameEndIdx - 13);
+                    var remoteName = Current.Upstream[13..remoteNameEndIdx];
                     autoSelectedRemote = _repo.Remotes.Find(x => x.Name == remoteName);
                 }
             }
@@ -204,7 +204,7 @@ public class Pull : Popup
     private void PostRemoteSelected()
     {
         var remoteName = _selectedRemote.Name;
-        var branches = new List<Models.Branch>();
+        List<Models.Branch> branches = [];
         foreach (var branch in _repo.Branches)
         {
             if (branch.Remote == remoteName)

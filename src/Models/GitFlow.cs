@@ -1,7 +1,7 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     Git Flowのブランチ種別を表すenum
+/// Git Flowのブランチ種別を表すenum
 /// </summary>
 public enum GitFlowBranchType
 {
@@ -16,8 +16,8 @@ public enum GitFlowBranchType
 }
 
 /// <summary>
-///     Git Flow設定を管理するクラス。
-///     マスター/開発ブランチ名やプレフィックスを保持する。
+/// Git Flow設定を管理するクラス。
+/// マスター/開発ブランチ名やプレフィックスを保持する。
 /// </summary>
 public class GitFlow
 {
@@ -33,7 +33,7 @@ public class GitFlow
     public string HotfixPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Git Flow設定が有効かどうか（全フィールドが入力済み）
+    /// Git Flow設定が有効かどうか（全フィールドが入力済み）
     /// </summary>
     public bool IsValid
     {
@@ -48,7 +48,7 @@ public class GitFlow
     }
 
     /// <summary>
-    ///     指定されたブランチ種別に対応するプレフィックスを取得する
+    /// 指定されたブランチ種別に対応するプレフィックスを取得する
     /// </summary>
     /// <param name="type">ブランチ種別</param>
     /// <returns>対応するプレフィックス文字列</returns>

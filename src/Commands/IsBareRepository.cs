@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定パスがベアリポジトリかどうかを判定するgitコマンド。
-///     git rev-parse --is-bare-repository を実行する。
+/// 指定パスがベアリポジトリかどうかを判定するgitコマンド。
+/// git rev-parse --is-bare-repository を実行する。
 /// </summary>
 public class IsBareRepository : Command
 {
     /// <summary>
-    ///     IsBareRepositoryコマンドを初期化する。
+    /// IsBareRepositoryコマンドを初期化する。
     /// </summary>
     /// <param name="path">判定対象のディレクトリパス。</param>
     public IsBareRepository(string path)
@@ -22,8 +22,8 @@ public class IsBareRepository : Command
     }
 
     /// <summary>
-    ///     ベアリポジトリ判定の結果を同期的に取得する。
-    ///     gitコマンド実行前にディレクトリ構造を事前チェックする。
+    /// ベアリポジトリ判定の結果を同期的に取得する。
+    /// gitコマンド実行前にディレクトリ構造を事前チェックする。
     /// </summary>
     /// <returns>ベアリポジトリであればtrue。</returns>
     public bool GetResult()
@@ -40,8 +40,8 @@ public class IsBareRepository : Command
     }
 
     /// <summary>
-    ///     ベアリポジトリ判定の結果を非同期で取得する。
-    ///     gitコマンド実行前にディレクトリ構造を事前チェックする。
+    /// ベアリポジトリ判定の結果を非同期で取得する。
+    /// gitコマンド実行前にディレクトリ構造を事前チェックする。
     /// </summary>
     /// <returns>ベアリポジトリであればtrue。</returns>
     public async Task<bool> GetResultAsync()

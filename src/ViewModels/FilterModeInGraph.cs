@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コミットグラフのフィルタモードを管理するViewModel。
-///     ブランチまたはタグに対して「含める」「除外する」「なし」のフィルタ状態を切り替える。
+/// コミットグラフのフィルタモードを管理するViewModel。
+/// ブランチまたはタグに対して「含める」「除外する」「なし」のフィルタ状態を切り替える。
 /// </summary>
 public class FilterModeInGraph : ObservableObject
 {
     /// <summary>
-    ///     フィルタに含まれているかどうか。trueで「含める」モード、falseで「なし」モードに切り替える。
+    /// フィルタに含まれているかどうか。trueで「含める」モード、falseで「なし」モードに切り替える。
     /// </summary>
     public bool IsFiltered
     {
@@ -18,7 +18,7 @@ public class FilterModeInGraph : ObservableObject
     }
 
     /// <summary>
-    ///     フィルタから除外されているかどうか。trueで「除外」モード、falseで「なし」モードに切り替える。
+    /// フィルタから除外されているかどうか。trueで「除外」モード、falseで「なし」モードに切り替える。
     /// </summary>
     public bool IsExcluded
     {
@@ -27,8 +27,8 @@ public class FilterModeInGraph : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリとフィルタ対象（ブランチまたはタグ）を指定する。
-    ///     現在のフィルタモードをUI状態から取得する。
+    /// コンストラクタ。リポジトリとフィルタ対象（ブランチまたはタグ）を指定する。
+    /// 現在のフィルタモードをUI状態から取得する。
     /// </summary>
     public FilterModeInGraph(Repository repo, object target)
     {
@@ -42,7 +42,7 @@ public class FilterModeInGraph : ObservableObject
     }
 
     /// <summary>
-    ///     フィルタモードを設定し、ブランチまたはタグに応じてリポジトリのフィルタを更新する。
+    /// フィルタモードを設定し、ブランチまたはタグに応じてリポジトリのフィルタを更新する。
     /// </summary>
     private void SetFilterMode(Models.FilterMode mode)
     {

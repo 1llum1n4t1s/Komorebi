@@ -1,13 +1,13 @@
 ﻿namespace Komorebi.Commands;
 
 /// <summary>
-///     ファイルをステージングエリア（インデックス）に追加するgitコマンド。
-///     git add --force --verbose --pathspec-from-file を実行する。
+/// ファイルをステージングエリア（インデックス）に追加するgitコマンド。
+/// git add --force --verbose --pathspec-from-file を実行する。
 /// </summary>
 public class Add : Command
 {
     /// <summary>
-    ///     Addコマンドを初期化する。
+    /// Addコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="pathspecFromFile">追加対象のファイルパスが記載されたファイルのパス。</param>

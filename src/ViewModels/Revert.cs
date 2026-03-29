@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     コミットのリバート操作を行うポップアップダイアログのViewModel。
-///     指定されたコミットの変更を打ち消す新しいコミットを作成する。
+/// コミットのリバート操作を行うポップアップダイアログのViewModel。
+/// 指定されたコミットの変更を打ち消す新しいコミットを作成する。
 /// </summary>
 public class Revert : Popup
 {
     /// <summary>
-    ///     リバート対象のコミット。
+    /// リバート対象のコミット。
     /// </summary>
     public Models.Commit Target
     {
@@ -17,7 +17,7 @@ public class Revert : Popup
     }
 
     /// <summary>
-    ///     リバート後に自動的にコミットするかどうか。
+    /// リバート後に自動的にコミットするかどうか。
     /// </summary>
     public bool AutoCommit
     {
@@ -26,7 +26,7 @@ public class Revert : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリとリバート対象コミットを受け取る。
+    /// コンストラクタ。リポジトリとリバート対象コミットを受け取る。
     /// </summary>
     /// <param name="repo">対象リポジトリ</param>
     /// <param name="target">リバート対象のコミット</param>
@@ -38,7 +38,7 @@ public class Revert : Popup
     }
 
     /// <summary>
-    ///     リバート操作を実行する。git revertコマンドを非同期で実行する。
+    /// リバート操作を実行する。git revertコマンドを非同期で実行する。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -57,5 +57,6 @@ public class Revert : Popup
         return true;
     }
 
+    /// <summary>対象リポジトリ</summary>
     private readonly Repository _repo = null;
 }

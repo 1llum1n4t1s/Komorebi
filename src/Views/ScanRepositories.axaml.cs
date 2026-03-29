@@ -7,12 +7,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リポジトリスキャン（ディスク検索）ダイアログのコードビハインド。
+/// リポジトリスキャン（ディスク検索）ダイアログのコードビハインド。
 /// </summary>
 public partial class ScanRepositories : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ScanRepositories()
     {
@@ -20,7 +20,7 @@ public partial class ScanRepositories : UserControl
     }
 
     /// <summary>
-    ///     SelectRootDirイベントのハンドラ。
+    /// SelectRootDirイベントのハンドラ。
     /// </summary>
     private async void OnSelectRootDir(object _, RoutedEventArgs e)
     {

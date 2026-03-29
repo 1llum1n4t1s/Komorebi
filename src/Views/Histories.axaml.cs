@@ -15,23 +15,32 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     HistoriesLayoutクラス。
+/// HistoriesLayoutクラス。
 /// </summary>
 public class HistoriesLayout : Grid
 {
+    /// <summary>
+    /// 水平レイアウトを使用するかどうかのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> UseHorizontalProperty =
         AvaloniaProperty.Register<HistoriesLayout, bool>(nameof(UseHorizontal));
 
+    /// <summary>
+    /// 水平レイアウトを使用するかどうかを取得・設定する。
+    /// </summary>
     public bool UseHorizontal
     {
         get => GetValue(UseHorizontalProperty);
         set => SetValue(UseHorizontalProperty, value);
     }
 
+    /// <summary>
+    /// スタイルキーをGridとしてオーバーライドする。
+    /// </summary>
     protected override Type StyleKeyOverride => typeof(Grid);
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -42,7 +51,7 @@ public class HistoriesLayout : Grid
     }
 
     /// <summary>
-    ///     ビジュアルツリーにアタッチされた際の処理。
+    /// ビジュアルツリーにアタッチされた際の処理。
     /// </summary>
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
@@ -51,7 +60,7 @@ public class HistoriesLayout : Grid
     }
 
     /// <summary>
-    ///     表示を更新する。
+    /// 表示を更新する。
     /// </summary>
     private void RefreshLayout()
     {
@@ -89,58 +98,94 @@ public class HistoriesLayout : Grid
 }
 
 /// <summary>
-///     コミット履歴一覧ビューのコードビハインド。
+/// コミット履歴一覧ビューのコードビハインド。
 /// </summary>
 public partial class Histories : UserControl
 {
+    /// <summary>
+    /// 現在のブランチを保持するスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.Branch> CurrentBranchProperty =
         AvaloniaProperty.Register<Histories, Models.Branch>(nameof(CurrentBranch));
 
+    /// <summary>
+    /// 現在のブランチを取得・設定する。
+    /// </summary>
     public Models.Branch CurrentBranch
     {
         get => GetValue(CurrentBranchProperty);
         set => SetValue(CurrentBranchProperty, value);
     }
 
+    /// <summary>
+    /// bisect状態を保持するスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.Bisect> BisectProperty =
         AvaloniaProperty.Register<Histories, Models.Bisect>(nameof(Bisect));
 
+    /// <summary>
+    /// bisect状態を取得・設定する。
+    /// </summary>
     public Models.Bisect Bisect
     {
         get => GetValue(BisectProperty);
         set => SetValue(BisectProperty, value);
     }
 
+    /// <summary>
+    /// 課題トラッカー一覧を保持するスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<AvaloniaList<Models.IssueTracker>> IssueTrackersProperty =
         AvaloniaProperty.Register<Histories, AvaloniaList<Models.IssueTracker>>(nameof(IssueTrackers));
 
+    /// <summary>
+    /// 課題トラッカー一覧を取得・設定する。
+    /// </summary>
     public AvaloniaList<Models.IssueTracker> IssueTrackers
     {
         get => GetValue(IssueTrackersProperty);
         set => SetValue(IssueTrackersProperty, value);
     }
 
+    /// <summary>
+    /// 現在のブランチのみをハイライト表示するかどうかのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> OnlyHighlightCurrentBranchProperty =
         AvaloniaProperty.Register<Histories, bool>(nameof(OnlyHighlightCurrentBranch), true);
 
+    /// <summary>
+    /// 現在のブランチのみをハイライト表示するかどうかを取得・設定する。
+    /// </summary>
     public bool OnlyHighlightCurrentBranch
     {
         get => GetValue(OnlyHighlightCurrentBranchProperty);
         set => SetValue(OnlyHighlightCurrentBranchProperty, value);
     }
 
+    /// <summary>
+    /// ナビゲーション識別子を保持するスタイルプロパティ。変更時にスクロール位置を更新する。
+    /// </summary>
     public static readonly StyledProperty<long> NavigationIdProperty =
         AvaloniaProperty.Register<Histories, long>(nameof(NavigationId));
 
+    /// <summary>
+    /// ナビゲーション識別子を取得・設定する。
+    /// </summary>
     public long NavigationId
     {
         get => GetValue(NavigationIdProperty);
         set => SetValue(NavigationIdProperty, value);
     }
 
+    /// <summary>
+    /// 先頭へスクロールボタンの表示状態を保持するスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> IsScrollToTopVisibleProperty =
         AvaloniaProperty.Register<Histories, bool>(nameof(IsScrollToTopVisible));
 
+    /// <summary>
+    /// 先頭へスクロールボタンの表示状態を取得・設定する。
+    /// </summary>
     public bool IsScrollToTopVisible
     {
         get => GetValue(IsScrollToTopVisibleProperty);
@@ -148,7 +193,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Histories()
     {
@@ -156,7 +201,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -170,7 +215,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CommitListLoadedイベントのハンドラ。
+    /// CommitListLoadedイベントのハンドラ。
     /// </summary>
     private void OnCommitListLoaded(object sender, RoutedEventArgs e)
     {
@@ -184,7 +229,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     GotoParentイベントのハンドラ。
+    /// GotoParentイベントのハンドラ。
     /// </summary>
     private async void OnGotoParent(object sender, RoutedEventArgs e)
     {
@@ -233,7 +278,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     GotoChildイベントのハンドラ。
+    /// GotoChildイベントのハンドラ。
     /// </summary>
     private async void OnGotoChild(object sender, RoutedEventArgs e)
     {
@@ -281,7 +326,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CommitListLayoutUpdatedイベントのハンドラ。
+    /// CommitListLayoutUpdatedイベントのハンドラ。
     /// </summary>
     private void OnCommitListLayoutUpdated(object _1, EventArgs _2)
     {
@@ -326,7 +371,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     ScrollToTopPointerPressedイベントのハンドラ。
+    /// ScrollToTopPointerPressedイベントのハンドラ。
     /// </summary>
     private void OnScrollToTopPointerPressed(object sender, PointerPressedEventArgs e)
     {
@@ -335,7 +380,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CommitListSelectionChangedイベントのハンドラ。
+    /// CommitListSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnCommitListSelectionChanged(object _, SelectionChangedEventArgs e)
     {
@@ -346,7 +391,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CommitListContextRequestedイベントのハンドラ。
+    /// CommitListContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnCommitListContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -433,7 +478,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CommitListKeyDownイベントのハンドラ。
+    /// CommitListKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnCommitListKeyDown(object sender, KeyEventArgs e)
     {
@@ -487,7 +532,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CommitListDoubleTappedイベントのハンドラ。
+    /// CommitListDoubleTappedイベントのハンドラ。
     /// </summary>
     private async void OnCommitListDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -512,7 +557,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CreateContextMenuForMultipleCommitsの処理を行う。
+    /// CreateContextMenuForMultipleCommitsの処理を行う。
     /// </summary>
     private ContextMenu CreateContextMenuForMultipleCommits(ViewModels.Repository repo, List<Models.Commit> selected)
     {
@@ -651,11 +696,12 @@ public partial class Histories : UserControl
         copyMessage.Icon = App.CreateMenuIcon("Icons.Message");
         copyMessage.Click += async (_, e) =>
         {
-            var vm = DataContext as ViewModels.Histories;
+            if (DataContext is not ViewModels.Histories vm)
+                return;
             var messages = new List<string>();
             foreach (var c in selected)
             {
-                var message = await vm!.GetCommitFullMessageAsync(c);
+                var message = await vm.GetCommitFullMessageAsync(c);
                 messages.Add(message);
             }
 
@@ -676,13 +722,12 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     CreateContextMenuForSingleCommitの処理を行う。
+    /// CreateContextMenuForSingleCommitの処理を行う。
     /// </summary>
     private ContextMenu CreateContextMenuForSingleCommit(ViewModels.Repository repo, Models.Commit commit)
     {
         var current = repo.CurrentBranch;
-        var vm = DataContext as ViewModels.Histories;
-        if (current is null || vm is null)
+        if (current is null || DataContext is not ViewModels.Histories vm)
             return null;
 
         var menu = new ContextMenu();
@@ -754,7 +799,7 @@ public partial class Histories : UserControl
         {
             var target = commit.GetFriendlyName();
             if (target.Length > 32)
-                target = commit.SHA.Substring(0, 10);
+                target = commit.SHA[..10];
 
             if (isHead)
             {
@@ -974,7 +1019,7 @@ public partial class Histories : UserControl
             {
                 var upstream = repo.Branches.Find(x => x.FullName.Equals(current.Upstream, StringComparison.Ordinal));
                 var pushRevision = new MenuItem();
-                pushRevision.Header = App.Text("CommitCM.PushRevision", commit.SHA.Substring(0, 10), upstream.FriendlyName);
+                pushRevision.Header = App.Text("CommitCM.PushRevision", commit.SHA[..10], upstream.FriendlyName);
                 pushRevision.Icon = App.CreateMenuIcon("Icons.Push");
                 pushRevision.Click += (_, e) =>
                 {
@@ -1153,9 +1198,9 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     FillCurrentBranchMenuの処理を行う。
+    /// FillCurrentBranchMenuの処理を行う。
     /// </summary>
-    private void FillCurrentBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch current)
+    private static void FillCurrentBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch current)
     {
         var submenu = new MenuItem();
         submenu.Icon = App.CreateMenuIcon("Icons.Branch");
@@ -1169,7 +1214,7 @@ public partial class Histories : UserControl
 
         if (!string.IsNullOrEmpty(current.Upstream) && current.Upstream.StartsWith("refs/remotes/", StringComparison.Ordinal))
         {
-            var upstream = current.Upstream.Substring(13);
+            var upstream = current.Upstream[13..];
 
             var fastForward = new MenuItem();
             fastForward.Header = App.Text("BranchCM.FastForward", upstream);
@@ -1257,9 +1302,9 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     FillOtherLocalBranchMenuの処理を行う。
+    /// FillOtherLocalBranchMenuの処理を行う。
     /// </summary>
-    private void FillOtherLocalBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
+    private static void FillOtherLocalBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
     {
         var submenu = new MenuItem();
         submenu.Icon = App.CreateMenuIcon("Icons.Branch");
@@ -1352,9 +1397,9 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     FillRemoteBranchMenuの処理を行う。
+    /// FillRemoteBranchMenuの処理を行う。
     /// </summary>
-    private void FillRemoteBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
+    private static void FillRemoteBranchMenu(ContextMenu menu, ViewModels.Repository repo, Models.Branch branch, Models.Branch current, bool merged)
     {
         var name = branch.FriendlyName;
 
@@ -1417,9 +1462,9 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    ///     FillTagMenuの処理を行う。
+    /// FillTagMenuの処理を行う。
     /// </summary>
-    private void FillTagMenu(ContextMenu menu, ViewModels.Repository repo, Models.Tag tag, Models.Branch current, bool merged)
+    private static void FillTagMenu(ContextMenu menu, ViewModels.Repository repo, Models.Tag tag, Models.Branch current, bool merged)
     {
         var submenu = new MenuItem();
         submenu.Header = tag.Name;
@@ -1483,7 +1528,18 @@ public partial class Histories : UserControl
         menu.Items.Add(submenu);
     }
 
+    /// <summary>
+    /// 前回のグラフ描画開始Y座標のキャッシュ。
+    /// </summary>
     private double _lastGraphStartY = 0;
+
+    /// <summary>
+    /// 前回のグラフクリップ幅のキャッシュ。
+    /// </summary>
     private double _lastGraphClipWidth = 0;
+
+    /// <summary>
+    /// 前回のグラフ行高さのキャッシュ。
+    /// </summary>
     private double _lastGraphRowHeight = 0;
 }

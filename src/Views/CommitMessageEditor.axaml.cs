@@ -7,10 +7,11 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミットメッセージエディタのコードビハインド。
+/// コミットメッセージエディタのコードビハインド。
 /// </summary>
 public partial class CommitMessageEditor : ChromelessWindow
 {
+    /// <summary>Conventional Commitの型一覧をカスタマイズするオーバーライド文字列。リポジトリ設定から読み込む。</summary>
     public string ConventionalTypesOverride
     {
         get;
@@ -18,7 +19,7 @@ public partial class CommitMessageEditor : ChromelessWindow
     } = string.Empty;
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitMessageEditor()
     {
@@ -26,7 +27,7 @@ public partial class CommitMessageEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     AsStandaloneの処理を行う。
+    /// AsStandaloneの処理を行う。
     /// </summary>
     public void AsStandalone(string file)
     {
@@ -56,7 +57,7 @@ public partial class CommitMessageEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     AsBuiltinの処理を行う。
+    /// AsBuiltinの処理を行う。
     /// </summary>
     public void AsBuiltin(string conventionalTypesOverride, string msg, Action<string> onSave)
     {
@@ -69,7 +70,7 @@ public partial class CommitMessageEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられた後の処理。
+    /// ウィンドウが閉じられた後の処理。
     /// </summary>
     protected override void OnClosed(EventArgs e)
     {
@@ -80,7 +81,7 @@ public partial class CommitMessageEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     SaveAndCloseの処理を行う。
+    /// SaveAndCloseの処理を行う。
     /// </summary>
     private void SaveAndClose(object _1, RoutedEventArgs _2)
     {
@@ -89,7 +90,7 @@ public partial class CommitMessageEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     CancelAndCloseの処理を行う。
+    /// CancelAndCloseの処理を行う。
     /// </summary>
     private void CancelAndClose(object _1, RoutedEventArgs _2)
     {
@@ -97,7 +98,12 @@ public partial class CommitMessageEditor : ChromelessWindow
         Close();
     }
 
+    /// <summary>コミットメッセージ保存時のコールバック。</summary>
     private Action<string> _onSave = null;
+
+    /// <summary>ウィンドウを閉じた際にアプリケーション全体を終了するかどうか。スタンドアロンモード時はtrue。</summary>
     private bool _shouldExitApp = true;
+
+    /// <summary>アプリケーション終了コード。キャンセル時は-1。</summary>
     private int _exitCode = 0;
 }

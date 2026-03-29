@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     スタッシュ一覧を取得するクラス。
-///     git stash list を使用して、SHA、親、タイムスタンプ、名前、メッセージを取得する。
+/// スタッシュ一覧を取得するクラス。
+/// git stash list を使用して、SHA、親、タイムスタンプ、名前、メッセージを取得する。
 /// </summary>
 public class QueryStashes : Command
 {
     /// <summary>
-    ///     コンストラクタ。スタッシュ一覧を取得するコマンドを設定する。
+    /// コンストラクタ。スタッシュ一覧を取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     public QueryStashes(string repo)
@@ -22,7 +22,7 @@ public class QueryStashes : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、スタッシュのリストを返す。
+    /// コマンドを非同期で実行し、スタッシュのリストを返す。
     /// </summary>
     /// <returns>スタッシュモデルのリスト</returns>
     public async Task<List<Models.Stash>> GetResultAsync()
@@ -44,7 +44,7 @@ public class QueryStashes : Command
             var end = item.IndexOf('\n', start);
             while (end > 0 && nextPartIdx < 4)
             {
-                var line = item.Substring(start, end - start);
+                var line = item[start..end];
 
                 switch (nextPartIdx)
                 {
@@ -74,7 +74,7 @@ public class QueryStashes : Command
 
             // 残りの部分はメッセージ本文
             if (start < item.Length)
-                current.Message = item.Substring(start);
+                current.Message = item[start..];
 
             outs.Add(current);
         }

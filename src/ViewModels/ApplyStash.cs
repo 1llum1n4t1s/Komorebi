@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     スタッシュ適用ダイアログのViewModel。
-///     保存されたスタッシュをワーキングコピーに適用する。
+/// スタッシュ適用ダイアログのViewModel。
+/// 保存されたスタッシュをワーキングコピーに適用する。
 /// </summary>
 public class ApplyStash : Popup
 {
     /// <summary>
-    ///     適用対象のスタッシュオブジェクト。
+    /// 適用対象のスタッシュオブジェクト。
     /// </summary>
     public Models.Stash Stash
     {
@@ -18,7 +18,7 @@ public class ApplyStash : Popup
     }
 
     /// <summary>
-    ///     インデックスの状態も復元するかどうかのフラグ。デフォルトはtrue。
+    /// インデックスの状態も復元するかどうかのフラグ。デフォルトはtrue。
     /// </summary>
     public bool RestoreIndex
     {
@@ -27,7 +27,7 @@ public class ApplyStash : Popup
     } = true;
 
     /// <summary>
-    ///     適用後にスタッシュを削除するかどうかのフラグ。デフォルトはfalse。
+    /// 適用後にスタッシュを削除するかどうかのフラグ。デフォルトはfalse。
     /// </summary>
     public bool DropAfterApply
     {
@@ -36,7 +36,7 @@ public class ApplyStash : Popup
     } = false;
 
     /// <summary>
-    ///     コンストラクタ。リポジトリと対象スタッシュを受け取って初期化する。
+    /// コンストラクタ。リポジトリと対象スタッシュを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="stash">適用するスタッシュ</param>
@@ -47,7 +47,7 @@ public class ApplyStash : Popup
     }
 
     /// <summary>
-    ///     確定処理。git stash applyを実行し、オプションで適用後に削除も行う。
+    /// 確定処理。git stash applyを実行し、オプションで適用後に削除も行う。
     /// </summary>
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()

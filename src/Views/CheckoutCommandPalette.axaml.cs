@@ -4,12 +4,12 @@ using Avalonia.Input;
 namespace Komorebi.Views;
 
 /// <summary>
-///     チェックアウトコマンドパレットのコードビハインド。
+/// チェックアウトコマンドパレットのコードビハインド。
 /// </summary>
 public partial class CheckoutCommandPalette : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CheckoutCommandPalette()
     {
@@ -17,7 +17,7 @@ public partial class CheckoutCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override async void OnKeyDown(KeyEventArgs e)
     {
@@ -61,7 +61,7 @@ public partial class CheckoutCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     ItemTappedイベントのハンドラ。
+    /// ItemTappedイベントのハンドラ。
     /// </summary>
     private async void OnItemTapped(object sender, TappedEventArgs e)
     {

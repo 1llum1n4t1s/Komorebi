@@ -3,7 +3,7 @@
 namespace Komorebi.Models;
 
 /// <summary>
-///     コミット履歴の表示オプションフラグ
+/// コミット履歴の表示オプションフラグ
 /// </summary>
 [Flags]
 public enum HistoryShowFlags

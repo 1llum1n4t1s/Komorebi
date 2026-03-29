@@ -5,12 +5,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リセットダイアログのコードビハインド。
+/// リセットダイアログのコードビハインド。
 /// </summary>
 public partial class Reset : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Reset()
     {
@@ -18,7 +18,7 @@ public partial class Reset : UserControl
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -28,7 +28,7 @@ public partial class Reset : UserControl
     }
 
     /// <summary>
-    ///     ResetModeKeyDownイベントのハンドラ。
+    /// ResetModeKeyDownイベントのハンドラ。
     /// </summary>
     private void OnResetModeKeyDown(object sender, KeyEventArgs e)
     {

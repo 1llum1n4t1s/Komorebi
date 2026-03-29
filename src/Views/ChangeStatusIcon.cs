@@ -9,7 +9,7 @@ using Avalonia.Styling;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ファイル変更ステータス（追加/変更/削除/名前変更等）のアイコンコントロール。
+/// ファイル変更ステータス（追加/変更/削除/名前変更等）のアイコンコントロール。
 /// </summary>
 public class ChangeStatusIcon : Control
 {
@@ -46,7 +46,7 @@ public class ChangeStatusIcon : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -85,7 +85,7 @@ public class ChangeStatusIcon : Control
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

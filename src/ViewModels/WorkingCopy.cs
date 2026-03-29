@@ -10,13 +10,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ワーキングコピー（作業ディレクトリ）のViewModel。
-///     ステージング、アンステージング、コミット、コンフリクト解決、マージ操作を管理する。
+/// ワーキングコピー（作業ディレクトリ）のViewModel。
+/// ステージング、アンステージング、コミット、コンフリクト解決、マージ操作を管理する。
 /// </summary>
 public class WorkingCopy : ObservableObject, IDisposable
 {
     /// <summary>
-    ///     対応するリポジトリViewModel。
+    /// 対応するリポジトリViewModel。
     /// </summary>
     public Repository Repository
     {
@@ -24,7 +24,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     未追跡ファイルを変更一覧に含めるかどうか。
+    /// 未追跡ファイルを変更一覧に含めるかどうか。
     /// </summary>
     public bool IncludeUntracked
     {
@@ -40,7 +40,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リモートが存在するかどうか。
+    /// リモートが存在するかどうか。
     /// </summary>
     public bool HasRemotes
     {
@@ -49,7 +49,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     未解決のコンフリクトが存在するかどうか。
+    /// 未解決のコンフリクトが存在するかどうか。
     /// </summary>
     public bool HasUnsolvedConflicts
     {
@@ -58,7 +58,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     進行中の操作コンテキスト（チェリーピック、リベース、リバート、マージ）。
+    /// 進行中の操作コンテキスト（チェリーピック、リベース、リバート、マージ）。
     /// </summary>
     public InProgressContext InProgressContext
     {
@@ -67,7 +67,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ステージング操作が実行中かどうか。
+    /// ステージング操作が実行中かどうか。
     /// </summary>
     public bool IsStaging
     {
@@ -76,7 +76,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     アンステージング操作が実行中かどうか。
+    /// アンステージング操作が実行中かどうか。
     /// </summary>
     public bool IsUnstaging
     {
@@ -85,7 +85,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミット操作が実行中かどうか。
+    /// コミット操作が実行中かどうか。
     /// </summary>
     public bool IsCommitting
     {
@@ -94,7 +94,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     Signed-off-byをコミットに付加するかどうか。
+    /// Signed-off-byをコミットに付加するかどうか。
     /// </summary>
     public bool EnableSignOff
     {
@@ -103,7 +103,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     pre-commitフックの検証をスキップするかどうか（--no-verify）。
+    /// pre-commitフックの検証をスキップするかどうか（--no-verify）。
     /// </summary>
     public bool NoVerifyOnCommit
     {
@@ -112,8 +112,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     直前のコミットを修正（amend）するかどうか。
-    ///     有効化時にHEADのコミットメッセージを読み込み、無効化時にメッセージをクリアする。
+    /// 直前のコミットを修正（amend）するかどうか。
+    /// 有効化時にHEADのコミットメッセージを読み込み、無効化時にメッセージをクリアする。
     /// </summary>
     public bool UseAmend
     {
@@ -152,7 +152,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     amend時にコミット作者をリセットするかどうか（--reset-author）。
+    /// amend時にコミット作者をリセットするかどうか（--reset-author）。
     /// </summary>
     public bool ResetAuthor
     {
@@ -161,7 +161,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更ファイルの表示フィルタ文字列。変更時にフィルタ結果を再計算する。
+    /// 変更ファイルの表示フィルタ文字列。変更時にフィルタ結果を再計算する。
     /// </summary>
     public string Filter
     {
@@ -182,7 +182,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     アンステージド（未ステージ）の変更リスト。
+    /// アンステージド（未ステージ）の変更リスト。
     /// </summary>
     public List<Models.Change> Unstaged
     {
@@ -191,7 +191,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示用アンステージド変更リスト。
+    /// フィルタ適用後の表示用アンステージド変更リスト。
     /// </summary>
     public List<Models.Change> VisibleUnstaged
     {
@@ -200,7 +200,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ステージド（ステージ済み）の変更リスト。
+    /// ステージド（ステージ済み）の変更リスト。
     /// </summary>
     public List<Models.Change> Staged
     {
@@ -209,7 +209,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタ適用後の表示用ステージド変更リスト。
+    /// フィルタ適用後の表示用ステージド変更リスト。
     /// </summary>
     public List<Models.Change> VisibleStaged
     {
@@ -218,8 +218,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択されたアンステージド変更リスト。
-    ///     選択変更時に対応する差分詳細を更新する。ステージド側の選択はクリアされる。
+    /// 選択されたアンステージド変更リスト。
+    /// 選択変更時に対応する差分詳細を更新する。ステージド側の選択はクリアされる。
     /// </summary>
     public List<Models.Change> SelectedUnstaged
     {
@@ -249,8 +249,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択されたステージド変更リスト。
-    ///     選択変更時に対応する差分詳細を更新する。アンステージド側の選択はクリアされる。
+    /// 選択されたステージド変更リスト。
+    /// 選択変更時に対応する差分詳細を更新する。アンステージド側の選択はクリアされる。
     /// </summary>
     public List<Models.Change> SelectedStaged
     {
@@ -280,7 +280,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択された変更の詳細コンテキスト（差分ビューまたはコンフリクトビュー）。
+    /// 選択された変更の詳細コンテキスト（差分ビューまたはコンフリクトビュー）。
     /// </summary>
     public object DetailContext
     {
@@ -289,7 +289,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットメッセージ。
+    /// コミットメッセージ。
     /// </summary>
     public string CommitMessage
     {
@@ -298,7 +298,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリViewModelを設定する。
+    /// コンストラクタ。リポジトリViewModelを設定する。
     /// </summary>
     public WorkingCopy(Repository repo)
     {
@@ -306,7 +306,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     リソースを解放する。進行中のマージメッセージがあればファイルに保存する。
+    /// リソースを解放する。進行中のマージメッセージがあればファイルに保存する。
     /// </summary>
     public void Dispose()
     {
@@ -341,8 +341,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更データを設定し、ステージド/アンステージドリストを更新する。
-    ///     変更がない場合は選択の再描画のみ行う。変更がある場合は前回の選択状態を可能な限り復元する。
+    /// 変更データを設定し、ステージド/アンステージドリストを更新する。
+    /// 変更がない場合は選択の再描画のみ行う。変更がある場合は前回の選択状態を可能な限り復元する。
     /// </summary>
     public void SetData(List<Models.Change> changes, CancellationToken cancellationToken)
     {
@@ -363,8 +363,8 @@ public class WorkingCopy : ObservableObject, IDisposable
         }
 
         // 前回の選択状態を記憶
-        var lastSelectedUnstaged = new HashSet<string>();
-        var lastSelectedStaged = new HashSet<string>();
+        HashSet<string> lastSelectedUnstaged = [];
+        HashSet<string> lastSelectedStaged = [];
         if (_selectedUnstaged is { Count: > 0 })
         {
             foreach (var c in _selectedUnstaged)
@@ -377,7 +377,7 @@ public class WorkingCopy : ObservableObject, IDisposable
         }
 
         // アンステージド変更を抽出
-        var unstaged = new List<Models.Change>();
+        List<Models.Change> unstaged = [];
         var hasConflict = false;
         foreach (var c in changes)
         {
@@ -401,7 +401,7 @@ public class WorkingCopy : ObservableObject, IDisposable
 
         // フィルタ適用と前回の選択を復元
         var visibleUnstaged = GetVisibleChanges(unstaged);
-        var selectedUnstaged = new List<Models.Change>();
+        List<Models.Change> selectedUnstaged = [];
         foreach (var c in visibleUnstaged)
         {
             if (lastSelectedUnstaged.Contains(c.Path))
@@ -411,7 +411,7 @@ public class WorkingCopy : ObservableObject, IDisposable
         var staged = GetStagedChanges(changes);
 
         var visibleStaged = GetVisibleChanges(staged);
-        var selectedStaged = new List<Models.Change>();
+        List<Models.Change> selectedStaged = [];
         foreach (var c in visibleStaged)
         {
             if (lastSelectedStaged.Contains(c.Path))
@@ -448,7 +448,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更をステージングする。コンフリクトが未解決の変更はスキップされる。
+    /// 変更をステージングする。コンフリクトが未解決の変更はスキップされる。
     /// </summary>
     public async Task StageChangesAsync(List<Models.Change> changes, Models.Change next)
     {
@@ -480,7 +480,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更をアンステージングする。amend中はupdate-index、通常時はgit resetを使用する。
+    /// 変更をアンステージングする。amend中はupdate-index、通常時はgit resetを使用する。
     /// </summary>
     public async Task UnstageChangesAsync(List<Models.Change> changes, Models.Change next)
     {
@@ -524,7 +524,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更をパッチファイルとして保存する。
+    /// 変更をパッチファイルとして保存する。
     /// </summary>
     public async Task SaveChangesToPatchAsync(List<Models.Change> changes, bool isUnstaged, string saveTo)
     {
@@ -534,7 +534,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更を破棄するダイアログを表示する。
+    /// 変更を破棄するダイアログを表示する。
     /// </summary>
     public void Discard(List<Models.Change> changes)
     {
@@ -543,7 +543,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     変更フィルタをクリアする。
+    /// 変更フィルタをクリアする。
     /// </summary>
     public void ClearFilter()
     {
@@ -551,15 +551,15 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンフリクトを「相手側（theirs）」で解決する。
-    ///     削除コンフリクトはファイルを削除し、その他はcheckout --theirsで解決する。
+    /// コンフリクトを「相手側（theirs）」で解決する。
+    /// 削除コンフリクトはファイルを削除し、その他はcheckout --theirsで解決する。
     /// </summary>
     public async Task UseTheirsAsync(List<Models.Change> changes)
     {
         using var lockWatcher = _repo.LockWatcher();
 
-        var files = new List<string>();
-        var needStage = new List<string>();
+        List<string> files = [];
+        List<string> needStage = [];
         var log = _repo.CreateLog("Use Theirs");
 
         foreach (var change in changes)
@@ -603,15 +603,15 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コンフリクトを「自分側（mine/ours）」で解決する。
-    ///     削除コンフリクトはファイルを削除し、その他はcheckout --oursで解決する。
+    /// コンフリクトを「自分側（mine/ours）」で解決する。
+    /// 削除コンフリクトはファイルを削除し、その他はcheckout --oursで解決する。
     /// </summary>
     public async Task UseMineAsync(List<Models.Change> changes)
     {
         using var lockWatcher = _repo.LockWatcher();
 
-        var files = new List<string>();
-        var needStage = new List<string>();
+        List<string> files = [];
+        List<string> needStage = [];
         var log = _repo.CreateLog("Use Mine");
 
         foreach (var change in changes)
@@ -655,7 +655,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     外部マージツールでコンフリクトを解決する。
+    /// 外部マージツールでコンフリクトを解決する。
     /// </summary>
     public async Task<bool> UseExternalMergeToolAsync(Models.Change change)
     {
@@ -663,7 +663,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     外部差分ツールで変更を表示する。
+    /// 外部差分ツールで変更を表示する。
     /// </summary>
     public void UseExternalDiffTool(Models.Change change, bool isUnstaged)
     {
@@ -671,8 +671,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     進行中のマージ/リベース/チェリーピック/リバートを続行する。
-    ///     コミットメッセージがあればMERGE_MSGに保存してから続行する。
+    /// 進行中のマージ/リベース/チェリーピック/リバートを続行する。
+    /// コミットメッセージがあればMERGE_MSGに保存してから続行する。
     /// </summary>
     public async Task ContinueMergeAsync()
     {
@@ -700,7 +700,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     進行中のマージ/リベース操作の現在のステップをスキップする。
+    /// 進行中のマージ/リベース操作の現在のステップをスキップする。
     /// </summary>
     public async Task SkipMergeAsync()
     {
@@ -723,7 +723,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     進行中のマージ/リベース操作を中止して元の状態に戻す。
+    /// 進行中のマージ/リベース操作を中止して元の状態に戻す。
     /// </summary>
     public async Task AbortMergeAsync()
     {
@@ -746,7 +746,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットメッセージテンプレートを適用する。
+    /// コミットメッセージテンプレートを適用する。
     /// </summary>
     public void ApplyCommitMessageTemplate(Models.CommitTemplate tmpl)
     {
@@ -754,7 +754,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットメッセージの履歴をクリアする（確認ダイアログ付き）。
+    /// コミットメッセージの履歴をクリアする（確認ダイアログ付き）。
     /// </summary>
     public async Task ClearCommitMessageHistoryAsync()
     {
@@ -764,7 +764,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     コミットを実行する。デタッチドHEAD確認、空コミット確認、自動ステージ、自動プッシュに対応する。
+    /// コミットを実行する。デタッチドHEAD確認、空コミット確認、自動ステージ、自動プッシュに対応する。
     /// </summary>
     public async Task CommitAsync(bool autoStage, bool autoPush)
     {
@@ -858,14 +858,14 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     フィルタ文字列に基づいて表示対象の変更リストを取得する。
+    /// フィルタ文字列に基づいて表示対象の変更リストを取得する。
     /// </summary>
     private List<Models.Change> GetVisibleChanges(List<Models.Change> changes)
     {
         if (string.IsNullOrEmpty(_filter))
             return changes;
 
-        var visible = new List<Models.Change>();
+        List<Models.Change> visible = [];
 
         foreach (var c in changes)
         {
@@ -877,14 +877,14 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ステージング可能な変更を取得する。未解決コンフリクトは解決済みのもののみ含める。
+    /// ステージング可能な変更を取得する。未解決コンフリクトは解決済みのもののみ含める。
     /// </summary>
     private async Task<List<Models.Change>> GetCanStageChangesAsync(List<Models.Change> changes)
     {
         if (!HasUnsolvedConflicts)
             return changes;
 
-        var outs = new List<Models.Change>();
+        List<Models.Change> outs = [];
         foreach (var c in changes)
         {
             if (c.IsConflicted)
@@ -908,7 +908,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ステージド変更リストを取得する。amend時はHEADとの差分を、通常時はインデックスの変更を返す。
+    /// ステージド変更リストを取得する。amend時はHEADとの差分を、通常時はインデックスの変更を返す。
     /// </summary>
     private List<Models.Change> GetStagedChanges(List<Models.Change> cached)
     {
@@ -919,7 +919,7 @@ public class WorkingCopy : ObservableObject, IDisposable
             return new Commands.QueryStagedChangesWithAmend(_repo.FullPath, head.Parents.Count == 0 ? Models.Commit.EmptyTreeSHA1 : $"{head.SHA}^").GetResult();
         }
 
-        var rs = new List<Models.Change>();
+        List<Models.Change> rs = [];
         foreach (var c in cached)
         {
             if (c.Index != Models.ChangeState.None)
@@ -929,7 +929,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     現在の選択状態に基づいて差分詳細を更新する。
+    /// 現在の選択状態に基づいて差分詳細を更新する。
     /// </summary>
     private void UpdateDetail()
     {
@@ -942,8 +942,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     gitディレクトリ内のファイルを検査して進行中の操作状態を更新する。
-    ///     チェリーピック、リベース、リバート、マージの各状態を検出する。
+    /// gitディレクトリ内のファイルを検査して進行中の操作状態を更新する。
+    /// チェリーピック、リベース、リバート、マージの各状態を検出する。
     /// </summary>
     private void UpdateInProgressState()
     {
@@ -980,7 +980,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     ファイルからコミットメッセージを読み込む。成功した場合trueを返す。
+    /// ファイルからコミットメッセージを読み込む。成功した場合trueを返す。
     /// </summary>
     private bool LoadCommitMessageFromFile(string file)
     {
@@ -996,8 +996,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     選択された変更に応じて詳細コンテキストを設定する。
-    ///     コンフリクトの場合はConflict、それ以外はDiffContextを生成する。
+    /// 選択された変更に応じて詳細コンテキストを設定する。
+    /// コンフリクトの場合はConflict、それ以外はDiffContextを生成する。
     /// </summary>
     private void SetDetail(Models.Change change, bool isUnstaged)
     {
@@ -1013,9 +1013,9 @@ public class WorkingCopy : ObservableObject, IDisposable
     }
 
     /// <summary>
-    ///     2つの変更リストが異なるかどうかを判定する。パス、インデックス、ワークツリー状態を比較する。
+    /// 2つの変更リストが異なるかどうかを判定する。パス、インデックス、ワークツリー状態を比較する。
     /// </summary>
-    private bool IsChanged(List<Models.Change> old, List<Models.Change> cur)
+    private static bool IsChanged(List<Models.Change> old, List<Models.Change> cur)
     {
         if (old.Count != cur.Count)
             return true;

@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     ブランチ作成ダイアログのコードビハインド。
+/// ブランチ作成ダイアログのコードビハインド。
 /// </summary>
 public partial class CreateBranch : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CreateBranch()
     {

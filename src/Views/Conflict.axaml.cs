@@ -6,12 +6,12 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コンフリクト解決ダイアログのコードビハインド。
+/// コンフリクト解決ダイアログのコードビハインド。
 /// </summary>
 public partial class Conflict : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Conflict()
     {
@@ -19,7 +19,7 @@ public partial class Conflict : UserControl
     }
 
     /// <summary>
-    ///     PressedSHAイベントのハンドラ。
+    /// PressedSHAイベントのハンドラ。
     /// </summary>
     private void OnPressedSHA(object sender, PointerPressedEventArgs e)
     {
@@ -31,7 +31,7 @@ public partial class Conflict : UserControl
     }
 
     /// <summary>
-    ///     UseTheirsイベントのハンドラ。
+    /// UseTheirsイベントのハンドラ。
     /// </summary>
     private async void OnUseTheirs(object _, RoutedEventArgs e)
     {
@@ -42,7 +42,7 @@ public partial class Conflict : UserControl
     }
 
     /// <summary>
-    ///     UseMineイベントのハンドラ。
+    /// UseMineイベントのハンドラ。
     /// </summary>
     private async void OnUseMine(object _, RoutedEventArgs e)
     {
@@ -53,7 +53,7 @@ public partial class Conflict : UserControl
     }
 
     /// <summary>
-    ///     Mergeイベントのハンドラ。
+    /// Mergeイベントのハンドラ。
     /// </summary>
     private async void OnMerge(object _, RoutedEventArgs e)
     {
@@ -64,7 +64,7 @@ public partial class Conflict : UserControl
     }
 
     /// <summary>
-    ///     MergeExternalイベントのハンドラ。
+    /// MergeExternalイベントのハンドラ。
     /// </summary>
     private async void OnMergeExternal(object _, RoutedEventArgs e)
     {

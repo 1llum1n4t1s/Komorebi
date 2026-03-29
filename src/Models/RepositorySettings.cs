@@ -11,8 +11,8 @@ using Avalonia.Collections;
 namespace Komorebi.Models;
 
 /// <summary>
-///     リポジトリ固有の設定を保持するクラス。
-///     gitの共通ディレクトリ内の「komorebi.settings」ファイルにシリアライズされる。
+/// リポジトリ固有の設定を保持するクラス。
+/// gitの共通ディレクトリ内の「komorebi.settings」ファイルにシリアライズされる。
 /// </summary>
 public class RepositorySettings
 {
@@ -87,7 +87,7 @@ public class RepositorySettings
     } = [];
 
     /// <summary>
-    ///     指定されたgit共通ディレクトリからリポジトリ設定を取得する（キャッシュ付き）
+    /// 指定されたgit共通ディレクトリからリポジトリ設定を取得する（キャッシュ付き）
     /// </summary>
     /// <param name="gitCommonDir">gitの共通ディレクトリパス</param>
     /// <returns>リポジトリ設定インスタンス</returns>
@@ -128,7 +128,7 @@ public class RepositorySettings
     }
 
     /// <summary>
-    ///     設定をファイルに非同期で保存する。内容が変更されていない場合は保存をスキップする。
+    /// 設定をファイルに非同期で保存する。内容が変更されていない場合は保存をスキップする。
     /// </summary>
     public async Task SaveAsync()
     {
@@ -149,7 +149,7 @@ public class RepositorySettings
     }
 
     /// <summary>
-    ///     コミットメッセージ履歴に追加する。既存の場合は先頭に移動し、最大10件を保持する。
+    /// コミットメッセージ履歴に追加する。既存の場合は先頭に移動し、最大10件を保持する。
     /// </summary>
     /// <param name="message">追加するコミットメッセージ</param>
     public void PushCommitMessage(string message)
@@ -212,7 +212,10 @@ public class RepositorySettings
         return builder.ToString();
     }
 
+    /// <summary>設定ファイルのキャッシュ（フルパス→設定インスタンス）</summary>
     private static Dictionary<string, RepositorySettings> _cache = new();
+    /// <summary>設定ファイルのフルパス</summary>
     private string _file = string.Empty;
+    /// <summary>最後に保存した内容のMD5ハッシュ（変更検出用）</summary>
     private string _orgHash = string.Empty;
 }

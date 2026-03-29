@@ -11,18 +11,25 @@ using Avalonia.Platform;
 namespace Komorebi.Models;
 
 /// <summary>
-///     外部エディタ/IDEツールを表すクラス。リポジトリを外部ツールで開く機能を提供する。
+/// 外部エディタ/IDEツールを表すクラス。リポジトリを外部ツールで開く機能を提供する。
 /// </summary>
 public class ExternalTool
 {
     /// <summary>
-    ///     外部ツールの起動オプション（ワークスペースファイル選択など）
+    /// 外部ツールの起動オプション（ワークスペースファイル選択など）
     /// </summary>
     public class LaunchOption
     {
+        /// <summary>オプションの表示タイトル</summary>
         public string Title { get; set; }
+        /// <summary>起動時のコマンドライン引数</summary>
         public string Args { get; set; }
 
+        /// <summary>
+        /// 起動オプションを初期化する
+        /// </summary>
+        /// <param name="title">表示タイトル</param>
+        /// <param name="args">コマンドライン引数</param>
         public LaunchOption(string title, string args)
         {
             Title = title;
@@ -38,7 +45,7 @@ public class ExternalTool
     public Bitmap IconImage { get; }
 
     /// <summary>
-    ///     外部ツールのコンストラクタ
+    /// 外部ツールのコンストラクタ
     /// </summary>
     /// <param name="name">表示名</param>
     /// <param name="icon">アイコンリソース名</param>
@@ -64,7 +71,7 @@ public class ExternalTool
     }
 
     /// <summary>
-    ///     指定リポジトリに対する起動オプションのリストを生成する
+    /// 指定リポジトリに対する起動オプションのリストを生成する
     /// </summary>
     /// <param name="repo">リポジトリパス</param>
     /// <returns>起動オプションのリスト（ない場合はnull）</returns>
@@ -74,7 +81,7 @@ public class ExternalTool
     }
 
     /// <summary>
-    ///     外部ツールを指定した引数で起動する
+    /// 外部ツールを指定した引数で起動する
     /// </summary>
     /// <param name="args">コマンドライン引数</param>
     public void Launch(string args)
@@ -90,11 +97,12 @@ public class ExternalTool
         }
     }
 
+    /// <summary>起動オプション生成関数</summary>
     private Func<string, List<LaunchOption>> _optionsGenerator = null;
 }
 
 /// <summary>
-///     Visual Studioのインストール済みインスタンス情報
+/// Visual Studioのインストール済みインスタンス情報
 /// </summary>
 public class VisualStudioInstance
 {
@@ -109,7 +117,7 @@ public class VisualStudioInstance
 }
 
 /// <summary>
-///     JetBrains Toolboxの状態情報（state.jsonのデシリアライズ用）
+/// JetBrains Toolboxの状態情報（state.jsonのデシリアライズ用）
 /// </summary>
 public class JetBrainsState
 {
@@ -118,57 +126,72 @@ public class JetBrainsState
     [JsonPropertyName("appVersion")]
     public string AppVersion { get; set; } = string.Empty;
     [JsonPropertyName("tools")]
-    public List<JetBrainsTool> Tools { get; set; } = new List<JetBrainsTool>();
+    public List<JetBrainsTool> Tools { get; set; } = [];
 }
 
 /// <summary>
-///     JetBrains Toolboxの個別ツール情報
+/// JetBrains Toolboxの個別ツール情報
 /// </summary>
 public class JetBrainsTool
 {
+    /// <summary>チャンネルID</summary>
     [JsonPropertyName("channelId")]
     public string ChannelId { get; set; }
+    /// <summary>ツールID（例: intellij, rider等）</summary>
     [JsonPropertyName("toolId")]
     public string ToolId { get; set; }
+    /// <summary>製品コード（例: RD, PS等）</summary>
     [JsonPropertyName("productCode")]
     public string ProductCode { get; set; }
+    /// <summary>リリースチャンネルタグ</summary>
     [JsonPropertyName("tag")]
     public string Tag { get; set; }
+    /// <summary>表示名</summary>
     [JsonPropertyName("displayName")]
     public string DisplayName { get; set; }
+    /// <summary>表示バージョン</summary>
     [JsonPropertyName("displayVersion")]
     public string DisplayVersion { get; set; }
+    /// <summary>ビルド番号</summary>
     [JsonPropertyName("buildNumber")]
     public string BuildNumber { get; set; }
+    /// <summary>インストール先ディレクトリ</summary>
     [JsonPropertyName("installLocation")]
     public string InstallLocation { get; set; }
+    /// <summary>起動コマンドファイル名</summary>
     [JsonPropertyName("launchCommand")]
     public string LaunchCommand { get; set; }
 }
 
 /// <summary>
-///     外部ツールのカスタマイズ設定（external_editors.jsonから読み込み）
+/// 外部ツールのカスタマイズ設定（external_editors.jsonから読み込み）
 /// </summary>
 public class ExternalToolCustomization
 {
+    /// <summary>ツール名からカスタム実行パスへのマッピング</summary>
     [JsonPropertyName("tools")]
-    public Dictionary<string, string> Tools { get; set; } = new Dictionary<string, string>();
+    public Dictionary<string, string> Tools { get; set; } = [];
+    /// <summary>検出対象から除外するツール名のリスト</summary>
     [JsonPropertyName("excludes")]
-    public List<string> Excludes { get; set; } = new List<string>();
+    public List<string> Excludes { get; set; } = [];
 }
 
 /// <summary>
-///     インストール済みの外部エディタ/IDEを自動検出するクラス。
-///     VS Code、JetBrains、Sublime Text等をサポートする。
+/// インストール済みの外部エディタ/IDEを自動検出するクラス。
+/// VS Code、JetBrains、Sublime Text等をサポートする。
 /// </summary>
 public class ExternalToolsFinder
 {
+    /// <summary>検出された外部ツールのリスト</summary>
     public List<ExternalTool> Tools
     {
         get;
         private set;
-    } = new List<ExternalTool>();
+    } = [];
 
+    /// <summary>
+    /// カスタム設定ファイルを読み込んで初期化する
+    /// </summary>
     public ExternalToolsFinder()
     {
         var customPathsConfig = Path.Combine(Native.OS.DataDir, "external_editors.json");
@@ -188,6 +211,13 @@ public class ExternalToolsFinder
         _customization ??= new ExternalToolCustomization();
     }
 
+    /// <summary>
+    /// 外部ツールの検出と登録を試みる。除外リストにある場合はスキップ。
+    /// </summary>
+    /// <param name="name">ツール名</param>
+    /// <param name="icon">アイコンリソース名</param>
+    /// <param name="finder">実行ファイルパスの検索関数</param>
+    /// <param name="optionsGenerator">起動オプション生成関数</param>
     public void TryAdd(string name, string icon, Func<string> finder, Func<string, List<ExternalTool.LaunchOption>> optionsGenerator = null)
     {
         if (_customization.Excludes.Contains(name))
@@ -205,36 +235,46 @@ public class ExternalToolsFinder
         }
     }
 
+    /// <summary>Visual Studio Codeの検出を試みる</summary>
     public void VSCode(Func<string> platformFinder)
     {
         TryAdd("Visual Studio Code", "vscode", platformFinder, GenerateVSCodeLaunchOptions);
     }
 
+    /// <summary>Visual Studio Code Insidersの検出を試みる</summary>
     public void VSCodeInsiders(Func<string> platformFinder)
     {
         TryAdd("Visual Studio Code - Insiders", "vscode_insiders", platformFinder, GenerateVSCodeLaunchOptions);
     }
 
+    /// <summary>VSCodiumの検出を試みる</summary>
     public void VSCodium(Func<string> platformFinder)
     {
         TryAdd("VSCodium", "codium", platformFinder, GenerateVSCodeLaunchOptions);
     }
 
+    /// <summary>Sublime Textの検出を試みる</summary>
     public void SublimeText(Func<string> platformFinder)
     {
         TryAdd("Sublime Text", "sublime_text", platformFinder);
     }
 
+    /// <summary>Zedエディタの検出を試みる</summary>
     public void Zed(Func<string> platformFinder)
     {
         TryAdd("Zed", "zed", platformFinder);
     }
 
+    /// <summary>Cursorエディタの検出を試みる</summary>
     public void Cursor(Func<string> platformFinder)
     {
         TryAdd("Cursor", "cursor", platformFinder);
     }
 
+    /// <summary>
+    /// JetBrains Toolboxからインストール済みIDEを検出して登録する
+    /// </summary>
+    /// <param name="platformFinder">Toolboxのデータディレクトリを返す関数</param>
     public void FindJetBrainsFromToolbox(Func<string> platformFinder)
     {
         var exclude = new List<string> { "fleet", "dotmemory", "dottrace", "resharper-u", "androidstudio" };
@@ -264,6 +304,12 @@ public class ExternalToolsFinder
         }
     }
 
+    /// <summary>
+    /// VS Code系エディタの起動オプションを生成する。
+    /// リポジトリ内の.code-workspaceファイルを検索してオプション化する。
+    /// </summary>
+    /// <param name="path">リポジトリパス</param>
+    /// <returns>ワークスペースファイルの起動オプションリスト</returns>
     private List<ExternalTool.LaunchOption> GenerateVSCodeLaunchOptions(string path)
     {
         var root = new DirectoryInfo(path);
@@ -276,12 +322,13 @@ public class ExternalToolsFinder
         {
             if (f.EndsWith(".code-workspace", StringComparison.OrdinalIgnoreCase))
             {
-                var display = f.Substring(prefixLen).TrimStart(Path.DirectorySeparatorChar);
+                var display = f[prefixLen..].TrimStart(Path.DirectorySeparatorChar);
                 options.Add(new(display, f.Quoted()));
             }
         }, 2);
         return options;
     }
 
+    /// <summary>カスタム設定（パス上書き・除外リスト）</summary>
     private ExternalToolCustomization _customization = null;
 }

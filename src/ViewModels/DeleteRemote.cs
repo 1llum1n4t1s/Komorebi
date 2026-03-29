@@ -3,12 +3,12 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リモートリポジトリの設定を削除するためのダイアログViewModel。
+/// リモートリポジトリの設定を削除するためのダイアログViewModel。
 /// </summary>
 public class DeleteRemote : Popup
 {
     /// <summary>
-    ///     削除対象のリモート。
+    /// 削除対象のリモート。
     /// </summary>
     public Models.Remote Remote
     {
@@ -17,7 +17,7 @@ public class DeleteRemote : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリと削除するリモートを指定する。
+    /// コンストラクタ。対象リポジトリと削除するリモートを指定する。
     /// </summary>
     public DeleteRemote(Repository repo, Models.Remote remote)
     {
@@ -26,7 +26,7 @@ public class DeleteRemote : Popup
     }
 
     /// <summary>
-    ///     リモート削除を実行する確認アクション。
+    /// リモート削除を実行する確認アクション。
     /// </summary>
     public override async Task<bool> Sure()
     {

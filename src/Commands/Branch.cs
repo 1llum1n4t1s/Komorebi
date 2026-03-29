@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ブランチの作成、リネーム、上流設定、削除を行うgitコマンド群。
-///     git branch の各種サブコマンドを実行する。
+/// ブランチの作成、リネーム、上流設定、削除を行うgitコマンド群。
+/// git branch の各種サブコマンドを実行する。
 /// </summary>
 public class Branch : Command
 {
     /// <summary>
-    ///     Branchコマンドを初期化する。
+    /// Branchコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="name">操作対象のブランチ名。</param>
@@ -22,8 +22,8 @@ public class Branch : Command
     }
 
     /// <summary>
-    ///     新しいブランチを作成する。
-    ///     git branch [-f] &lt;name&gt; &lt;basedOn&gt; を実行する。
+    /// 新しいブランチを作成する。
+    /// git branch [-f] &lt;name&gt; &lt;basedOn&gt; を実行する。
     /// </summary>
     /// <param name="basedOn">ブランチの基点となるリビジョン。</param>
     /// <param name="force">同名ブランチが存在する場合に強制的に再作成するかどうか。</param>
@@ -47,8 +47,8 @@ public class Branch : Command
     }
 
     /// <summary>
-    ///     ブランチ名を変更する。
-    ///     git branch -M &lt;oldName&gt; &lt;newName&gt; を実行する。
+    /// ブランチ名を変更する。
+    /// git branch -M &lt;oldName&gt; &lt;newName&gt; を実行する。
     /// </summary>
     /// <param name="to">新しいブランチ名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -60,8 +60,8 @@ public class Branch : Command
     }
 
     /// <summary>
-    ///     ブランチの上流（トラッキング）ブランチを設定または解除する。
-    ///     git branch &lt;name&gt; -u &lt;upstream&gt; または --unset-upstream を実行する。
+    /// ブランチの上流（トラッキング）ブランチを設定または解除する。
+    /// git branch &lt;name&gt; -u &lt;upstream&gt; または --unset-upstream を実行する。
     /// </summary>
     /// <param name="tracking">トラッキング先のリモートブランチ。nullの場合は上流を解除する。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -78,8 +78,8 @@ public class Branch : Command
     }
 
     /// <summary>
-    ///     ローカルブランチを強制削除する。
-    ///     git branch -D &lt;name&gt; を実行する。
+    /// ローカルブランチを強制削除する。
+    /// git branch -D &lt;name&gt; を実行する。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> DeleteLocalAsync()
@@ -90,8 +90,8 @@ public class Branch : Command
     }
 
     /// <summary>
-    ///     リモートトラッキングブランチのローカル参照を削除する。
-    ///     git branch -D -r &lt;remote&gt;/&lt;name&gt; を実行する。
+    /// リモートトラッキングブランチのローカル参照を削除する。
+    /// git branch -D -r &lt;remote&gt;/&lt;name&gt; を実行する。
     /// </summary>
     /// <param name="remote">リモート名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -103,7 +103,7 @@ public class Branch : Command
     }
 
     /// <summary>
-    ///     操作対象のブランチ名。
+    /// 操作対象のブランチ名。
     /// </summary>
     private readonly string _name;
 }

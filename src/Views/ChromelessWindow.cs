@@ -7,7 +7,7 @@ using Avalonia.Input;
 namespace Komorebi.Views;
 
 /// <summary>
-///     カスタムタイトルバーを持つクロムレスウィンドウの基底クラス。ESCで閉じる機能やズーム操作に対応。
+/// カスタムタイトルバーを持つクロムレスウィンドウの基底クラス。ESCで閉じる機能やズーム操作に対応。
 /// </summary>
 public class ChromelessWindow : Window
 {
@@ -34,7 +34,7 @@ public class ChromelessWindow : Window
     protected override Type StyleKeyOverride => typeof(Window);
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ChromelessWindow()
     {
@@ -46,7 +46,7 @@ public class ChromelessWindow : Window
     }
 
     /// <summary>
-    ///     ウィンドウのドラッグ移動を開始する。シングルクリック時のみ有効。
+    /// ウィンドウのドラッグ移動を開始する。シングルクリック時のみ有効。
     /// </summary>
     public void BeginMoveWindow(object _, PointerPressedEventArgs e)
     {
@@ -58,7 +58,7 @@ public class ChromelessWindow : Window
     }
 
     /// <summary>
-    ///     ウィンドウの最大化と通常サイズを切り替える。
+    /// ウィンドウの最大化と通常サイズを切り替える。
     /// </summary>
     public void MaximizeOrRestoreWindow(object _, TappedEventArgs e)
     {
@@ -71,7 +71,7 @@ public class ChromelessWindow : Window
     }
 
     /// <summary>
-    ///     テンプレート適用時の処理を行う。
+    /// テンプレート適用時の処理を行う。
     /// </summary>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -106,7 +106,7 @@ public class ChromelessWindow : Window
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -131,7 +131,7 @@ public class ChromelessWindow : Window
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -171,7 +171,7 @@ public class ChromelessWindow : Window
     }
 
     /// <summary>
-    ///     ウィンドウボーダーのポインター押下時にリサイズドラッグを開始する。
+    /// ウィンドウボーダーのポインター押下時にリサイズドラッグを開始する。
     /// </summary>
     private void OnWindowBorderPointerPressed(object sender, PointerPressedEventArgs e)
     {

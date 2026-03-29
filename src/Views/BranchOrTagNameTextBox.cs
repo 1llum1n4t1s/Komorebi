@@ -9,14 +9,14 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ブランチ名またはタグ名入力用のバリデーション付きテキストボックス。
+/// ブランチ名またはタグ名入力用のバリデーション付きテキストボックス。
 /// </summary>
 public class BranchOrTagNameTextBox : TextBox
 {
     protected override Type StyleKeyOverride => typeof(TextBox);
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -25,7 +25,7 @@ public class BranchOrTagNameTextBox : TextBox
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -34,7 +34,7 @@ public class BranchOrTagNameTextBox : TextBox
     }
 
     /// <summary>
-    ///     TextInputイベントのハンドラ。
+    /// TextInputイベントのハンドラ。
     /// </summary>
     protected override void OnTextInput(TextInputEventArgs e)
     {
@@ -56,7 +56,7 @@ public class BranchOrTagNameTextBox : TextBox
     }
 
     /// <summary>
-    ///     PastingFromClipboardイベントのハンドラ。
+    /// PastingFromClipboardイベントのハンドラ。
     /// </summary>
     private async void OnPastingFromClipboard(object sender, RoutedEventArgs e)
     {

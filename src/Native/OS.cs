@@ -11,77 +11,77 @@ using Avalonia.Controls;
 namespace Komorebi.Native;
 
 /// <summary>
-///     OS固有機能へのファサード（静的クラス）。
-///     プラットフォームごとの実装（Windows/MacOS/Linux）を <see cref="IBackend"/> インターフェース経由で切り替える。
+/// OS固有機能へのファサード（静的クラス）。
+/// プラットフォームごとの実装（Windows/MacOS/Linux）を <see cref="IBackend"/> インターフェース経由で切り替える。
 /// </summary>
 public static partial class OS
 {
     /// <summary>
-    ///     プラットフォーム固有の処理を定義するバックエンドインターフェース。
+    /// プラットフォーム固有の処理を定義するバックエンドインターフェース。
     /// </summary>
     public interface IBackend
     {
         /// <summary>
-        ///     Avaloniaアプリケーションビルダーにプラットフォーム固有の設定を適用する。
+        /// Avaloniaアプリケーションビルダーにプラットフォーム固有の設定を適用する。
         /// </summary>
         void SetupApp(AppBuilder builder);
 
         /// <summary>
-        ///     ウィンドウにプラットフォーム固有の設定（タイトルバー、フレーム等）を適用する。
+        /// ウィンドウにプラットフォーム固有の設定（タイトルバー、フレーム等）を適用する。
         /// </summary>
         void SetupWindow(Window window);
 
         /// <summary>
-        ///     アプリケーションデータディレクトリのパスを取得する。
+        /// アプリケーションデータディレクトリのパスを取得する。
         /// </summary>
         string GetDataDir();
 
         /// <summary>
-        ///     システム上のgit実行ファイルのパスを検索して返す。
+        /// システム上のgit実行ファイルのパスを検索して返す。
         /// </summary>
         string FindGitExecutable();
 
         /// <summary>
-        ///     指定されたシェル/ターミナルの実行ファイルパスを検索して返す。
+        /// 指定されたシェル/ターミナルの実行ファイルパスを検索して返す。
         /// </summary>
         string FindTerminal(Models.ShellOrTerminal shell);
 
         /// <summary>
-        ///     システムにインストールされている外部ツール（エディタ等）を検出して一覧を返す。
+        /// システムにインストールされている外部ツール（エディタ等）を検出して一覧を返す。
         /// </summary>
         List<Models.ExternalTool> FindExternalTools();
 
         /// <summary>
-        ///     外部マージ/diffツールの実行ファイルをシステムから検索する。
-        ///     レジストリ、Program Files、PATH等のプラットフォーム固有の方法で探索する。
+        /// 外部マージ/diffツールの実行ファイルをシステムから検索する。
+        /// レジストリ、Program Files、PATH等のプラットフォーム固有の方法で探索する。
         /// </summary>
         /// <param name="patterns">検索する実行ファイル名のパターン配列</param>
         /// <returns>見つかった実行ファイルのフルパス。見つからない場合はnull。</returns>
         string FindExternalMergerExecFile(string[] patterns);
 
         /// <summary>
-        ///     指定された作業ディレクトリでターミナルを開く。
+        /// 指定された作業ディレクトリでターミナルを開く。
         /// </summary>
         void OpenTerminal(string workdir, string args);
 
         /// <summary>
-        ///     ファイルマネージャーで指定パスを開く。
+        /// ファイルマネージャーで指定パスを開く。
         /// </summary>
         void OpenInFileManager(string path);
 
         /// <summary>
-        ///     デフォルトブラウザで指定URLを開く。
+        /// デフォルトブラウザで指定URLを開く。
         /// </summary>
         void OpenBrowser(string url);
 
         /// <summary>
-        ///     デフォルトエディタで指定ファイルを開く。
+        /// デフォルトエディタで指定ファイルを開く。
         /// </summary>
         void OpenWithDefaultEditor(string file);
     }
 
     /// <summary>
-    ///     アプリケーションデータの保存先ディレクトリパス。
+    /// アプリケーションデータの保存先ディレクトリパス。
     /// </summary>
     public static string DataDir
     {
@@ -90,7 +90,7 @@ public static partial class OS
     } = string.Empty;
 
     /// <summary>
-    ///     gitの実行ファイルパス。変更時にバージョン情報を自動更新する。
+    /// gitの実行ファイルパス。変更時にバージョン情報を自動更新する。
     /// </summary>
     public static string GitExecutable
     {
@@ -107,7 +107,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     gitのバージョン文字列（例: "2.44.0"）。
+    /// gitのバージョン文字列（例: "2.44.0"）。
     /// </summary>
     public static string GitVersionString
     {
@@ -116,7 +116,7 @@ public static partial class OS
     } = string.Empty;
 
     /// <summary>
-    ///     gitのバージョンを <see cref="Version"/> オブジェクトとして保持する。
+    /// gitのバージョンを <see cref="Version"/> オブジェクトとして保持する。
     /// </summary>
     public static Version GitVersion
     {
@@ -125,7 +125,7 @@ public static partial class OS
     } = new Version(0, 0, 0);
 
     /// <summary>
-    ///     git credential helperの名前（デフォルト: "manager"）。
+    /// git credential helperの名前（デフォルト: "manager"）。
     /// </summary>
     public static string CredentialHelper
     {
@@ -134,7 +134,7 @@ public static partial class OS
     } = "manager";
 
     /// <summary>
-    ///     使用するシェルまたはターミナルの実行ファイルパス。
+    /// 使用するシェルまたはターミナルの実行ファイルパス。
     /// </summary>
     public static string ShellOrTerminal
     {
@@ -143,7 +143,7 @@ public static partial class OS
     } = string.Empty;
 
     /// <summary>
-    ///     シェル/ターミナル起動時の追加引数。
+    /// シェル/ターミナル起動時の追加引数。
     /// </summary>
     public static string ShellOrTerminalArgs
     {
@@ -152,7 +152,7 @@ public static partial class OS
     } = string.Empty;
 
     /// <summary>
-    ///     検出された外部ツール（エディタ等）の一覧。
+    /// 検出された外部ツール（エディタ等）の一覧。
     /// </summary>
     public static List<Models.ExternalTool> ExternalTools
     {
@@ -161,7 +161,7 @@ public static partial class OS
     } = [];
 
     /// <summary>
-    ///     外部マージツールの種類インデックス（0から）。
+    /// 外部マージツールの種類インデックス（0から）。
     /// </summary>
     public static int ExternalMergerType
     {
@@ -170,7 +170,7 @@ public static partial class OS
     } = 0;
 
     /// <summary>
-    ///     外部マージツールの実行ファイルパス。
+    /// 外部マージツールの実行ファイルパス。
     /// </summary>
     public static string ExternalMergerExecFile
     {
@@ -179,7 +179,7 @@ public static partial class OS
     } = string.Empty;
 
     /// <summary>
-    ///     外部マージツールに渡すマージ用引数。
+    /// 外部マージツールに渡すマージ用引数。
     /// </summary>
     public static string ExternalMergeArgs
     {
@@ -188,7 +188,7 @@ public static partial class OS
     } = string.Empty;
 
     /// <summary>
-    ///     外部マージツールに渡すdiff用引数。
+    /// 外部マージツールに渡すdiff用引数。
     /// </summary>
     public static string ExternalDiffArgs
     {
@@ -197,7 +197,7 @@ public static partial class OS
     } = string.Empty;
 
     /// <summary>
-    ///     システムウィンドウフレームを使用するかどうか（Linux専用）。
+    /// システムウィンドウフレームを使用するかどうか（Linux専用）。
     /// </summary>
     public static bool UseSystemWindowFrame
     {
@@ -206,7 +206,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     静的コンストラクタ。実行中のOSに応じて適切なバックエンド実装を選択する。
+    /// 静的コンストラクタ。実行中のOSに応じて適切なバックエンド実装を選択する。
     /// </summary>
     static OS()
     {
@@ -222,7 +222,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     アプリケーションデータディレクトリを初期化する。存在しなければ作成する。
+    /// アプリケーションデータディレクトリを初期化する。存在しなければ作成する。
     /// </summary>
     public static void SetupDataDir()
     {
@@ -234,7 +234,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     Avaloniaアプリケーションビルダーにプラットフォーム固有の設定を適用する。
+    /// Avaloniaアプリケーションビルダーにプラットフォーム固有の設定を適用する。
     /// </summary>
     public static void SetupApp(AppBuilder builder)
     {
@@ -242,7 +242,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     システムにインストールされている外部ツールを検出して設定する。
+    /// システムにインストールされている外部ツールを検出して設定する。
     /// </summary>
     public static void SetupExternalTools()
     {
@@ -250,7 +250,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     ウィンドウにプラットフォーム固有の設定を適用する。
+    /// ウィンドウにプラットフォーム固有の設定を適用する。
     /// </summary>
     public static void SetupForWindow(Window window)
     {
@@ -258,7 +258,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     システム上のgit実行ファイルを検索して返す。
+    /// システム上のgit実行ファイルを検索して返す。
     /// </summary>
     public static string FindGitExecutable()
     {
@@ -266,7 +266,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     指定されたシェル/ターミナルが利用可能かテストする。
+    /// 指定されたシェル/ターミナルが利用可能かテストする。
     /// </summary>
     public static bool TestShellOrTerminal(Models.ShellOrTerminal shell)
     {
@@ -274,7 +274,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     使用するシェル/ターミナルを設定する。
+    /// 使用するシェル/ターミナルを設定する。
     /// </summary>
     public static void SetShellOrTerminal(Models.ShellOrTerminal shell)
     {
@@ -284,7 +284,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     外部diffまたはマージツールの設定情報を取得する。
+    /// 外部diffまたはマージツールの設定情報を取得する。
     /// </summary>
     /// <param name="onlyDiff">trueの場合はdiff用引数を、falseの場合はマージ用引数を使用する。</param>
     /// <returns>ツール情報。設定が無効な場合はnull。</returns>
@@ -302,7 +302,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     選択中のマージツールタイプに基づいて実行ファイルパスを自動選択する。
+    /// 選択中のマージツールタイプに基づいて実行ファイルパスを自動選択する。
     /// </summary>
     public static void AutoSelectExternalMergeToolExecFile()
     {
@@ -342,7 +342,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     ファイルマネージャーで指定パスを開く。
+    /// ファイルマネージャーで指定パスを開く。
     /// </summary>
     public static void OpenInFileManager(string path)
     {
@@ -350,7 +350,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     デフォルトブラウザで指定URLを開く。
+    /// デフォルトブラウザで指定URLを開く。
     /// </summary>
     public static void OpenBrowser(string url)
     {
@@ -358,8 +358,8 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     指定された作業ディレクトリでターミナルを開く。
-    ///     ターミナルが未設定の場合はエラーを表示する。
+    /// 指定された作業ディレクトリでターミナルを開く。
+    /// ターミナルが未設定の場合はエラーを表示する。
     /// </summary>
     public static void OpenTerminal(string workdir)
     {
@@ -371,7 +371,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     デフォルトエディタで指定ファイルを開く。
+    /// デフォルトエディタで指定ファイルを開く。
     /// </summary>
     public static void OpenWithDefaultEditor(string file)
     {
@@ -379,8 +379,8 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     ルートパスとサブパスを結合して絶対パスを返す。
-    ///     Windows環境ではスラッシュをバックスラッシュに変換する。
+    /// ルートパスとサブパスを結合して絶対パスを返す。
+    /// Windows環境ではスラッシュをバックスラッシュに変換する。
     /// </summary>
     public static string GetAbsPath(string root, string sub)
     {
@@ -393,8 +393,8 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     パスのホームディレクトリ部分を "~" に置換した相対パスを返す。
-    ///     Windows環境ではそのまま返す。
+    /// パスのホームディレクトリ部分を "~" に置換した相対パスを返す。
+    /// Windows環境ではそのまま返す。
     /// </summary>
     public static string GetRelativePathToHome(string path)
     {
@@ -412,7 +412,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     git実行ファイルからバージョン情報を取得して更新する。
+    /// git実行ファイルからバージョン情報を取得して更新する。
     /// </summary>
     private static void UpdateGitVersion()
     {
@@ -452,7 +452,7 @@ public static partial class OS
                     var minor = int.Parse(match.Groups[2].Value);
                     var build = int.Parse(match.Groups[3].Value);
                     GitVersion = new Version(major, minor, build);
-                    GitVersionString = GitVersionString.Substring(11).Trim();
+                    GitVersionString = GitVersionString[11..].Trim();
                 }
             }
         }
@@ -463,7 +463,7 @@ public static partial class OS
     }
 
     /// <summary>
-    ///     gitバージョン文字列からバージョン番号を抽出する正規表現。
+    /// gitバージョン文字列からバージョン番号を抽出する正規表現。
     /// </summary>
     [GeneratedRegex(@"^git version[\s\w]*(\d+)\.(\d+)[\.\-](\d+).*$")]
     private static partial Regex REG_GIT_VERSION();

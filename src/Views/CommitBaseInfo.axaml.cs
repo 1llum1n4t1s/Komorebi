@@ -9,49 +9,59 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミット基本情報（著者・日付・ハッシュ等）表示のコードビハインド。
+/// コミット基本情報（著者・日付・ハッシュ等）表示のコードビハインド。
 /// </summary>
 public partial class CommitBaseInfo : UserControl
 {
+    /// <summary>コミットの完全なメッセージ（件名+本文）を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<Models.CommitFullMessage> FullMessageProperty =
         AvaloniaProperty.Register<CommitBaseInfo, Models.CommitFullMessage>(nameof(FullMessage));
 
+    /// <summary>コミットの完全なメッセージ。</summary>
     public Models.CommitFullMessage FullMessage
     {
         get => GetValue(FullMessageProperty);
         set => SetValue(FullMessageProperty, value);
     }
 
+    /// <summary>コミットの署名情報を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<Models.CommitSignInfo> SignInfoProperty =
         AvaloniaProperty.Register<CommitBaseInfo, Models.CommitSignInfo>(nameof(SignInfo));
 
+    /// <summary>コミットのGPG/SSH署名検証情報。</summary>
     public Models.CommitSignInfo SignInfo
     {
         get => GetValue(SignInfoProperty);
         set => SetValue(SignInfoProperty, value);
     }
 
+    /// <summary>「含まれるブランチ/タグ」ボタンの表示を制御するスタイルプロパティ。</summary>
     public static readonly StyledProperty<bool> SupportsContainsInProperty =
         AvaloniaProperty.Register<CommitBaseInfo, bool>(nameof(SupportsContainsIn));
 
+    /// <summary>「含まれるブランチ/タグ」機能をサポートするかどうか。</summary>
     public bool SupportsContainsIn
     {
         get => GetValue(SupportsContainsInProperty);
         set => SetValue(SupportsContainsInProperty, value);
     }
 
+    /// <summary>外部Webリンク一覧を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<List<Models.CommitLink>> WebLinksProperty =
         AvaloniaProperty.Register<CommitBaseInfo, List<Models.CommitLink>>(nameof(WebLinks));
 
+    /// <summary>コミットSHAに対応する外部サービスへのリンク一覧。</summary>
     public List<Models.CommitLink> WebLinks
     {
         get => GetValue(WebLinksProperty);
         set => SetValue(WebLinksProperty, value);
     }
 
+    /// <summary>子コミットのSHA一覧を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<List<string>> ChildrenProperty =
         AvaloniaProperty.Register<CommitBaseInfo, List<string>>(nameof(Children));
 
+    /// <summary>このコミットの子コミットSHA一覧。</summary>
     public List<string> Children
     {
         get => GetValue(ChildrenProperty);
@@ -59,7 +69,7 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitBaseInfo()
     {
@@ -67,7 +77,7 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
-    ///     CopyCommitSHAイベントのハンドラ。
+    /// CopyCommitSHAイベントのハンドラ。
     /// </summary>
     private async void OnCopyCommitSHA(object sender, RoutedEventArgs e)
     {
@@ -78,7 +88,7 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
-    ///     OpenWebLinkイベントのハンドラ。
+    /// OpenWebLinkイベントのハンドラ。
     /// </summary>
     private void OnOpenWebLink(object sender, RoutedEventArgs e)
     {
@@ -115,7 +125,7 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
-    ///     OpenContainsInイベントのハンドラ。
+    /// OpenContainsInイベントのハンドラ。
     /// </summary>
     private async void OnOpenContainsIn(object sender, RoutedEventArgs e)
     {
@@ -133,7 +143,7 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
-    ///     SHAPointerEnteredイベントのハンドラ。
+    /// SHAPointerEnteredイベントのハンドラ。
     /// </summary>
     private async void OnSHAPointerEntered(object sender, PointerEventArgs e)
     {
@@ -152,7 +162,7 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
-    ///     SHAPressedイベントのハンドラ。
+    /// SHAPressedイベントのハンドラ。
     /// </summary>
     private void OnSHAPressed(object sender, PointerPressedEventArgs e)
     {
@@ -166,7 +176,7 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
-    ///     UserContextRequestedイベントのハンドラ。
+    /// UserContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnUserContextRequested(object sender, ContextRequestedEventArgs e)
     {

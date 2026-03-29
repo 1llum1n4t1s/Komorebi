@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     パッチファイルを適用するgitコマンド。
-///     git apply を実行し、空白処理やオプションを指定できる。
+/// パッチファイルを適用するgitコマンド。
+/// git apply を実行し、空白処理やオプションを指定できる。
 /// </summary>
 public class Apply : Command
 {
     /// <summary>
-    ///     Applyコマンドを初期化する。
+    /// Applyコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="file">適用するパッチファイルのパス。</param>

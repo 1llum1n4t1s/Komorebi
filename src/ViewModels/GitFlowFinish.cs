@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     Git Flowブランチの完了（finish）操作を行うダイアログのViewModel。
-///     feature/release/hotfixブランチをメインブランチにマージして完了させる。
+/// Git Flowブランチの完了（finish）操作を行うダイアログのViewModel。
+/// feature/release/hotfixブランチをメインブランチにマージして完了させる。
 /// </summary>
 public class GitFlowFinish : Popup
 {
     /// <summary>
-    ///     完了対象のブランチ。
+    /// 完了対象のブランチ。
     /// </summary>
     public Models.Branch Branch
     {
@@ -17,7 +17,7 @@ public class GitFlowFinish : Popup
     }
 
     /// <summary>
-    ///     Git Flowブランチの種類（feature/release/hotfix）。
+    /// Git Flowブランチの種類（feature/release/hotfix）。
     /// </summary>
     public Models.GitFlowBranchType Type
     {
@@ -26,7 +26,7 @@ public class GitFlowFinish : Popup
     }
 
     /// <summary>
-    ///     マージ時にスカッシュ（コミットを1つにまとめる）するかどうか。
+    /// マージ時にスカッシュ（コミットを1つにまとめる）するかどうか。
     /// </summary>
     public bool Squash
     {
@@ -35,7 +35,7 @@ public class GitFlowFinish : Popup
     } = false;
 
     /// <summary>
-    ///     完了後に自動的にリモートへプッシュするかどうか。
+    /// 完了後に自動的にリモートへプッシュするかどうか。
     /// </summary>
     public bool AutoPush
     {
@@ -44,7 +44,7 @@ public class GitFlowFinish : Popup
     } = false;
 
     /// <summary>
-    ///     完了後もブランチを削除せず保持するかどうか。
+    /// 完了後もブランチを削除せず保持するかどうか。
     /// </summary>
     public bool KeepBranch
     {
@@ -53,7 +53,7 @@ public class GitFlowFinish : Popup
     } = false;
 
     /// <summary>
-    ///     コンストラクタ。リポジトリ、対象ブランチ、ブランチ種別を指定して初期化する。
+    /// コンストラクタ。リポジトリ、対象ブランチ、ブランチ種別を指定して初期化する。
     /// </summary>
     public GitFlowFinish(Repository repo, Models.Branch branch, Models.GitFlowBranchType type)
     {
@@ -63,7 +63,7 @@ public class GitFlowFinish : Popup
     }
 
     /// <summary>
-    ///     確認ボタン押下時の処理。Git Flowのfinishコマンドを実行する。
+    /// 確認ボタン押下時の処理。Git Flowのfinishコマンドを実行する。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -75,7 +75,7 @@ public class GitFlowFinish : Popup
 
         // ブランチ名からプレフィックスを除去して短縮名を取得
         var prefix = _repo.GitFlow.GetPrefix(Type);
-        var name = Branch.Name.StartsWith(prefix) ? Branch.Name.Substring(prefix.Length) : Branch.Name;
+        var name = Branch.Name.StartsWith(prefix) ? Branch.Name[prefix.Length..] : Branch.Name;
         var succ = await Commands.GitFlow.FinishAsync(_repo.FullPath, Type, name, Squash, AutoPush, KeepBranch, log);
 
         log.Complete();

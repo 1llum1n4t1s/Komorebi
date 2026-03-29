@@ -12,7 +12,7 @@ using SkiaSharp;
 namespace Komorebi.Models;
 
 /// <summary>
-///     統計の表示モード
+/// 統計の表示モード
 /// </summary>
 public enum StatisticsMode
 {
@@ -25,7 +25,7 @@ public enum StatisticsMode
 }
 
 /// <summary>
-///     統計レポートにおける著者ごとのコミット数情報
+/// 統計レポートにおける著者ごとのコミット数情報
 /// </summary>
 public class StatisticsAuthor(User user, int count)
 {
@@ -36,8 +36,8 @@ public class StatisticsAuthor(User user, int count)
 }
 
 /// <summary>
-///     特定期間のコミット統計レポート。
-///     チャートデータとユーザー別フィルタリングを管理する。
+/// 特定期間のコミット統計レポート。
+/// チャートデータとユーザー別フィルタリングを管理する。
 /// </summary>
 public class StatisticsReport
 {
@@ -55,7 +55,7 @@ public class StatisticsReport
     public StatisticsAuthor SelectedAuthor { get => _selectedAuthor; set => ChangeAuthor(value); }
 
     /// <summary>
-    ///     統計レポートを初期化する。モードに応じてX軸のサンプルデータを準備する。
+    /// 統計レポートを初期化する。モードに応じてX軸のサンプルデータを準備する。
     /// </summary>
     /// <param name="mode">統計モード（全期間/今月/今週）</param>
     /// <param name="start">期間の開始日時</param>
@@ -93,7 +93,7 @@ public class StatisticsReport
     }
 
     /// <summary>
-    ///     コミットをレポートに追加する。日時とユーザーの集計マップを更新する。
+    /// コミットをレポートに追加する。日時とユーザーの集計マップを更新する。
     /// </summary>
     /// <param name="time">コミットの日時</param>
     /// <param name="author">コミットの著者</param>
@@ -134,7 +134,7 @@ public class StatisticsReport
     }
 
     /// <summary>
-    ///     データ収集を完了し、チャート用のシリーズデータを構築する
+    /// データ収集を完了し、チャート用のシリーズデータを構築する
     /// </summary>
     public void Complete()
     {
@@ -163,7 +163,7 @@ public class StatisticsReport
     }
 
     /// <summary>
-    ///     チャートの塗りつぶし色を変更する。著者選択時はメインシリーズを半透明にする。
+    /// チャートの塗りつぶし色を変更する。著者選択時はメインシリーズを半透明にする。
     /// </summary>
     /// <param name="color">ARGB色値</param>
     public void ChangeColor(uint color)
@@ -180,7 +180,7 @@ public class StatisticsReport
     }
 
     /// <summary>
-    ///     選択著者を変更し、その著者のコミットデータを追加シリーズとして表示する
+    /// 選択著者を変更し、その著者のコミットデータを追加シリーズとして表示する
     /// </summary>
     /// <param name="author">選択する著者（nullで全体表示に戻す）</param>
     public void ChangeAuthor(StatisticsAuthor author)
@@ -230,7 +230,7 @@ public class StatisticsReport
 }
 
 /// <summary>
-///     コミット統計を集計するクラス。全期間・今月・今週の3つのレポートを管理する。
+/// コミット統計を集計するクラス。全期間・今月・今週の3つのレポートを管理する。
 /// </summary>
 public class Statistics
 {
@@ -242,7 +242,7 @@ public class Statistics
     public StatisticsReport Week { get; }
 
     /// <summary>
-    ///     統計を初期化する。現在の日時から今週・今月の開始日を計算する。
+    /// 統計を初期化する。現在の日時から今週・今月の開始日を計算する。
     /// </summary>
     public Statistics()
     {
@@ -257,14 +257,14 @@ public class Statistics
     }
 
     /// <summary>
-    ///     コミットを統計に追加する。期間に応じた各レポートに振り分ける。
+    /// コミットを統計に追加する。期間に応じた各レポートに振り分ける。
     /// </summary>
     /// <param name="author">「名前±メールアドレス」形式の著者文字列</param>
     /// <param name="timestamp">UNIXタイムスタンプ</param>
     public void AddCommit(string author, double timestamp)
     {
         var emailIdx = author.IndexOf('±');
-        var email = author.Substring(emailIdx + 1).ToLower(CultureInfo.CurrentCulture);
+        var email = author[(emailIdx + 1)..].ToLower(CultureInfo.CurrentCulture);
         if (!_users.TryGetValue(email, out var user))
         {
             user = User.FindOrAdd(author);
@@ -282,7 +282,7 @@ public class Statistics
     }
 
     /// <summary>
-    ///     全レポートのデータ収集を完了し、チャートデータを構築する
+    /// 全レポートのデータ収集を完了し、チャートデータを構築する
     /// </summary>
     public void Complete()
     {

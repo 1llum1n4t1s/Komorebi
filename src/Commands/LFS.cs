@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     Git LFS (Large File Storage) の各種操作を提供するコマンドクラス。
-///     git lfs のサブコマンドを使用してLFSのインストール、追跡、同期、ロック管理を行う。
+/// Git LFS (Large File Storage) の各種操作を提供するコマンドクラス。
+/// git lfs のサブコマンドを使用してLFSのインストール、追跡、同期、ロック管理を行う。
 /// </summary>
 public class LFS : Command
 {
     /// <summary>
-    ///     LFSコマンドを初期化する。
+    /// LFSコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     public LFS(string repo)
@@ -22,8 +22,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     Git LFSをリポジトリにインストールする。
-    ///     git lfs install --local を実行する。
+    /// Git LFSをリポジトリにインストールする。
+    /// git lfs install --local を実行する。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> InstallAsync()
@@ -34,8 +34,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     指定パターンのファイルをLFS追跡対象に追加する。
-    ///     git lfs track を実行する。
+    /// 指定パターンのファイルをLFS追跡対象に追加する。
+    /// git lfs track を実行する。
     /// </summary>
     /// <param name="pattern">追跡パターン（例: "*.psd"）。</param>
     /// <param name="isFilenameMode">ファイル名モードで追跡するかどうか。</param>
@@ -56,8 +56,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     リモートからLFSオブジェクトをフェッチする。
-    ///     git lfs fetch を実行する。
+    /// リモートからLFSオブジェクトをフェッチする。
+    /// git lfs fetch を実行する。
     /// </summary>
     /// <param name="remote">フェッチ元のリモート名。</param>
     public async Task FetchAsync(string remote)
@@ -68,8 +68,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     リモートからLFSオブジェクトをプルする。
-    ///     git lfs pull を実行する。
+    /// リモートからLFSオブジェクトをプルする。
+    /// git lfs pull を実行する。
     /// </summary>
     /// <param name="remote">プル元のリモート名。</param>
     public async Task PullAsync(string remote)
@@ -80,8 +80,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     リモートにLFSオブジェクトをプッシュする。
-    ///     git lfs push を実行する。
+    /// リモートにLFSオブジェクトをプッシュする。
+    /// git lfs push を実行する。
     /// </summary>
     /// <param name="remote">プッシュ先のリモート名。</param>
     public async Task PushAsync(string remote)
@@ -92,8 +92,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     不要なLFSオブジェクトを削除する。
-    ///     git lfs prune を実行する。
+    /// 不要なLFSオブジェクトを削除する。
+    /// git lfs prune を実行する。
     /// </summary>
     public async Task PruneAsync()
     {
@@ -103,8 +103,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     リモートのLFSファイルロック一覧を取得する。
-    ///     git lfs locks --json を実行してJSON形式で結果を取得する。
+    /// リモートのLFSファイルロック一覧を取得する。
+    /// git lfs locks --json を実行してJSON形式で結果を取得する。
     /// </summary>
     /// <param name="remote">対象のリモート名。</param>
     /// <returns>LFSロック情報のリスト。</returns>
@@ -132,8 +132,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     リモートのLFSファイルをロックする。
-    ///     git lfs lock を実行する。
+    /// リモートのLFSファイルをロックする。
+    /// git lfs lock を実行する。
     /// </summary>
     /// <param name="remote">対象のリモート名。</param>
     /// <param name="file">ロックするファイルパス。</param>
@@ -146,8 +146,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     リモートのLFSファイルロックを解除する。
-    ///     git lfs unlock を実行する。
+    /// リモートのLFSファイルロックを解除する。
+    /// git lfs unlock を実行する。
     /// </summary>
     /// <param name="remote">対象のリモート名。</param>
     /// <param name="file">ロック解除するファイルパス。</param>
@@ -169,8 +169,8 @@ public class LFS : Command
     }
 
     /// <summary>
-    ///     複数のLFSファイルロックを一括解除する。
-    ///     git lfs unlock を複数ファイル指定で実行する。
+    /// 複数のLFSファイルロックを一括解除する。
+    /// git lfs unlock を複数ファイル指定で実行する。
     /// </summary>
     /// <param name="remote">対象のリモート名。</param>
     /// <param name="files">ロック解除するファイルパスのリスト。</param>

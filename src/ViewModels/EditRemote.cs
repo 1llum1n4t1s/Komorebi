@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リモートリポジトリの設定を編集するダイアログViewModel。
-///     名前、URL、SSH鍵の変更に対応し、バリデーション付き。
+/// リモートリポジトリの設定を編集するダイアログViewModel。
+/// 名前、URL、SSH鍵の変更に対応し、バリデーション付き。
 /// </summary>
 public class EditRemote : Popup
 {
     /// <summary>
-    ///     リモート名。一意性とフォーマットのバリデーション付き。
+    /// リモート名。一意性とフォーマットのバリデーション付き。
     /// </summary>
     [Required(ErrorMessage = "Remote name is required!!!")]
     [RegularExpression(@"^[\w\-\.]+$", ErrorMessage = "Bad remote name format!!!")]
@@ -23,7 +23,7 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     リモートURL。変更時にSSH判定を自動更新する。
+    /// リモートURL。変更時にSSH判定を自動更新する。
     /// </summary>
     [Required(ErrorMessage = "Remote URL is required!!!")]
     [CustomValidation(typeof(EditRemote), nameof(ValidateRemoteURL))]
@@ -38,7 +38,7 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     SSH接続を使用するかどうか。変更時にSSH鍵のバリデーションを再実行する。
+    /// SSH接続を使用するかどうか。変更時にSSH鍵のバリデーションを再実行する。
     /// </summary>
     public bool UseSSH
     {
@@ -51,7 +51,7 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     SSH秘密鍵のファイルパス。ファイル存在チェックのバリデーション付き。
+    /// SSH秘密鍵のファイルパス。ファイル存在チェックのバリデーション付き。
     /// </summary>
     [CustomValidation(typeof(EditRemote), nameof(ValidateSSHKey))]
     public string SSHKey
@@ -61,7 +61,7 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリとリモート設定を指定する。SSH使用時はSSH鍵を読み込む。
+    /// コンストラクタ。対象リポジトリとリモート設定を指定する。SSH使用時はSSH鍵を読み込む。
     /// </summary>
     public EditRemote(Repository repo, Models.Remote remote)
     {
@@ -76,7 +76,7 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     リモート名の一意性を検証するバリデーター。
+    /// リモート名の一意性を検証するバリデーター。
     /// </summary>
     public static ValidationResult ValidateRemoteName(string name, ValidationContext ctx)
     {
@@ -93,7 +93,7 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     リモートURLのフォーマットと一意性を検証するバリデーター。
+    /// リモートURLのフォーマットと一意性を検証するバリデーター。
     /// </summary>
     public static ValidationResult ValidateRemoteURL(string url, ValidationContext ctx)
     {
@@ -113,7 +113,7 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     SSH秘密鍵ファイルの存在を検証するバリデーター。
+    /// SSH秘密鍵ファイルの存在を検証するバリデーター。
     /// </summary>
     public static ValidationResult ValidateSSHKey(string sshkey, ValidationContext ctx)
     {
@@ -127,8 +127,8 @@ public class EditRemote : Popup
     }
 
     /// <summary>
-    ///     リモート設定の変更を実行する確認アクション。
-    ///     名前変更、URL変更、プッシュURL同期、SSH鍵設定を順に行う。
+    /// リモート設定の変更を実行する確認アクション。
+    /// 名前変更、URL変更、プッシュURL同期、SSH鍵設定を順に行う。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -161,10 +161,10 @@ public class EditRemote : Popup
         return true;
     }
 
-    private readonly Repository _repo = null;
-    private readonly Models.Remote _remote = null;
-    private string _name = null;
-    private string _url = null;
-    private bool _useSSH = false;
-    private string _sshkey = string.Empty;
+    private readonly Repository _repo = null; // 対象リポジトリ
+    private readonly Models.Remote _remote = null; // 編集対象のリモート
+    private string _name = null; // リモート名
+    private string _url = null; // リモートURL
+    private bool _useSSH = false; // SSH使用フラグ
+    private string _sshkey = string.Empty; // SSH秘密鍵パス
 }

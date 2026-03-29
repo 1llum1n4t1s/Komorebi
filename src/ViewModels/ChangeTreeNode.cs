@@ -5,8 +5,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     変更ファイルツリーのノードを表すViewModel。
-///     フォルダノードとファイルノードの両方を表現し、ツリー構造を構築する。
+/// 変更ファイルツリーのノードを表すViewModel。
+/// フォルダノードとファイルノードの両方を表現し、ツリー構造を構築する。
 /// </summary>
 public class ChangeTreeNode : ObservableObject
 {
@@ -19,10 +19,10 @@ public class ChangeTreeNode : ObservableObject
     /// <summary>関連する変更オブジェクト（フォルダノードの場合はnull）</summary>
     public Models.Change Change { get; set; } = null;
     /// <summary>子ノードのリスト</summary>
-    public List<ChangeTreeNode> Children { get; set; } = new List<ChangeTreeNode>();
+    public List<ChangeTreeNode> Children { get; set; } = [];
 
     /// <summary>
-    ///     このノードがフォルダかどうか（Changeがnullならフォルダ）。
+    /// このノードがフォルダかどうか（Changeがnullならフォルダ）。
     /// </summary>
     public bool IsFolder
     {
@@ -30,7 +30,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     コンフリクトマーカーを表示するかどうか。
+    /// コンフリクトマーカーを表示するかどうか。
     /// </summary>
     public bool ShowConflictMarker
     {
@@ -38,7 +38,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     コンフリクトマーカーの文字列。
+    /// コンフリクトマーカーの文字列。
     /// </summary>
     public string ConflictMarker
     {
@@ -46,7 +46,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     ツリーノードの展開状態。
+    /// ツリーノードの展開状態。
     /// </summary>
     public bool IsExpanded
     {
@@ -55,7 +55,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     変更ファイルからファイルノードを作成するコンストラクタ。
+    /// 変更ファイルからファイルノードを作成するコンストラクタ。
     /// </summary>
     /// <param name="c">変更オブジェクト</param>
     public ChangeTreeNode(Models.Change c)
@@ -67,7 +67,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     フォルダノードを作成するコンストラクタ。
+    /// フォルダノードを作成するコンストラクタ。
     /// </summary>
     /// <param name="path">フォルダパス</param>
     /// <param name="isExpanded">初期展開状態</param>
@@ -79,7 +79,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     変更リストからツリー構造を構築する。
+    /// 変更リストからツリー構造を構築する。
     /// </summary>
     /// <param name="changes">変更ファイルのリスト</param>
     /// <param name="folded">折りたたみ状態のフォルダパスセット</param>
@@ -87,8 +87,8 @@ public class ChangeTreeNode : ObservableObject
     /// <returns>構築されたツリーノードのルートリスト</returns>
     public static List<ChangeTreeNode> Build(IList<Models.Change> changes, HashSet<string> folded, bool compactFolders)
     {
-        var nodes = new List<ChangeTreeNode>();
-        var folders = new Dictionary<string, ChangeTreeNode>();
+        List<ChangeTreeNode> nodes = [];
+        Dictionary<string, ChangeTreeNode> folders = [];
 
         foreach (var c in changes)
         {
@@ -105,7 +105,7 @@ public class ChangeTreeNode : ObservableObject
 
                 while (sepIdx != -1)
                 {
-                    var folder = c.Path.Substring(0, sepIdx);
+                    var folder = c.Path[..sepIdx];
                     if (folders.TryGetValue(folder, out var value))
                     {
                         // 既存フォルダを再利用する
@@ -150,7 +150,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     フォルダノードをコレクション内のファイルノードの前に挿入する。
+    /// フォルダノードをコレクション内のファイルノードの前に挿入する。
     /// </summary>
     /// <param name="collection">挿入先のノードリスト</param>
     /// <param name="subFolder">挿入するフォルダノード</param>
@@ -169,7 +169,7 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     単一子フォルダを親フォルダに結合して表示名を圧縮する。
+    /// 単一子フォルダを親フォルダに結合して表示名を圧縮する。
     /// </summary>
     /// <param name="node">圧縮対象のノード</param>
     private static void Compact(ChangeTreeNode node)
@@ -201,8 +201,8 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     ノードリストをソートし、各ノードに深さを設定する。
-    ///     フォルダが先、コンフリクトファイルが次に、その後名前順でソートする。
+    /// ノードリストをソートし、各ノードに深さを設定する。
+    /// フォルダが先、コンフリクトファイルが次に、その後名前順でソートする。
     /// </summary>
     /// <param name="nodes">ソート対象のノードリスト</param>
     /// <param name="depth">現在の深さ</param>

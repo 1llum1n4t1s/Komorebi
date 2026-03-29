@@ -7,7 +7,7 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     git bisect状態を示すインジケータコントロール。
+/// git bisect状態を示すインジケータコントロール。
 /// </summary>
 public class BisectStateIndicator : Control
 {
@@ -39,7 +39,7 @@ public class BisectStateIndicator : Control
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static BisectStateIndicator()
     {
@@ -48,7 +48,7 @@ public class BisectStateIndicator : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -75,7 +75,7 @@ public class BisectStateIndicator : Control
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -84,7 +84,7 @@ public class BisectStateIndicator : Control
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -116,7 +116,7 @@ public class BisectStateIndicator : Control
     }
 
     /// <summary>
-    ///     LoadIconの処理を行う。
+    /// LoadIconの処理を行う。
     /// </summary>
     private Geometry LoadIcon(string key)
     {
@@ -135,7 +135,7 @@ public class BisectStateIndicator : Control
     }
 
     /// <summary>
-    ///     RenderImplの処理を行う。
+    /// RenderImplの処理を行う。
     /// </summary>
     private void RenderImpl(DrawingContext context, IBrush brush, Geometry icon, double x)
     {

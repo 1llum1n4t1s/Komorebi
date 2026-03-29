@@ -7,7 +7,7 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミット操作の進行状態（マージ中・リベース中等）を示すインジケータ。
+/// コミット操作の進行状態（マージ中・リベース中等）を示すインジケータ。
 /// </summary>
 public class CommitStatusIndicator : Control
 {
@@ -46,7 +46,7 @@ public class CommitStatusIndicator : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -57,7 +57,7 @@ public class CommitStatusIndicator : Control
     }
 
     /// <summary>
-    ///     コントロールの測定処理をオーバーライドする。
+    /// コントロールの測定処理をオーバーライドする。
     /// </summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -81,7 +81,7 @@ public class CommitStatusIndicator : Control
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -90,7 +90,7 @@ public class CommitStatusIndicator : Control
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

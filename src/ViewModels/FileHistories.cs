@@ -10,15 +10,27 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels;
 
+/// <summary>
+/// ファイル履歴の特定リビジョンにおけるファイル情報。
+/// パス、コンテンツ、デフォルトエディタで開けるかどうかを保持する。
+/// </summary>
 public class FileHistoriesRevisionFile(string path, object content = null, bool canOpenWithDefaultEditor = false)
 {
+    /// <summary>ファイルパス。</summary>
     public string Path { get; set; } = path;
+    /// <summary>ファイルの内容（テキスト、画像、バイナリ等の型で格納）。</summary>
     public object Content { get; set; } = content;
+    /// <summary>デフォルトエディタで開けるかどうか。</summary>
     public bool CanOpenWithDefaultEditor { get; set; } = canOpenWithDefaultEditor;
 }
 
+/// <summary>
+/// 単一リビジョンのファイル履歴表示ViewModel。
+/// diff表示モードとファイル内容表示モードの切り替えに対応する。
+/// </summary>
 public class FileHistoriesSingleRevision : ObservableObject
 {
+    /// <summary>diff表示モードかどうか。切り替え時にコンテンツを再読み込みする。</summary>
     public bool IsDiffMode
     {
         get => _isDiffMode;
@@ -29,12 +41,16 @@ public class FileHistoriesSingleRevision : ObservableObject
         }
     }
 
+    /// <summary>表示中のコンテンツ（DiffContextまたはFileHistoriesRevisionFile）。</summary>
     public object ViewContent
     {
         get => _viewContent;
         set => SetProperty(ref _viewContent, value);
     }
 
+    /// <summary>
+    /// コンストラクタ。リポジトリパス、対象リビジョン、前回のdiffモード状態を指定する。
+    /// </summary>
     public FileHistoriesSingleRevision(string repo, Models.FileVersion revision, bool prevIsDiffMode)
     {
         _repo = repo;
@@ -46,6 +62,9 @@ public class FileHistoriesSingleRevision : ObservableObject
         RefreshViewContent();
     }
 
+    /// <summary>
+    /// 作業ディレクトリのファイルを選択中のリビジョンにリセットする。
+    /// </summary>
     public async Task<bool> ResetToSelectedRevisionAsync()
     {
         return await new Commands.Checkout(_repo)
@@ -53,6 +72,9 @@ public class FileHistoriesSingleRevision : ObservableObject
             .ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// 選択リビジョンのファイルを一時ファイルに保存し、デフォルトエディタで開く。
+    /// </summary>
     public async Task OpenWithDefaultEditorAsync()
     {
         if (_viewContent is not FileHistoriesRevisionFile { CanOpenWithDefaultEditor: true })
@@ -70,6 +92,10 @@ public class FileHistoriesSingleRevision : ObservableObject
         Native.OS.OpenWithDefaultEditor(tmpFile);
     }
 
+    /// <summary>
+    /// 表示モードに応じてコンテンツを再読み込みする。
+    /// diffモードではDiffContextを、ファイルモードではリビジョンのファイル内容を取得する。
+    /// </summary>
     private void RefreshViewContent()
     {
         if (_isDiffMode)
@@ -95,6 +121,10 @@ public class FileHistoriesSingleRevision : ObservableObject
         });
     }
 
+    /// <summary>
+    /// Gitオブジェクトの種類（Blob/Commit）に応じてファイルコンテンツを取得する。
+    /// バイナリ、画像、LFS、テキスト、サブモジュールの各形式に対応する。
+    /// </summary>
     private async Task<object> GetRevisionFileContentAsync(Models.Object obj)
     {
         if (obj.Type == Models.ObjectType.Blob)
@@ -154,33 +184,43 @@ public class FileHistoriesSingleRevision : ObservableObject
         return new FileHistoriesRevisionFile(_file);
     }
 
-    private string _repo = null;
-    private string _file = null;
-    private Models.FileVersion _revision = null;
-    private bool _isDiffMode = false;
-    private object _viewContent = null;
+    private string _repo = null; // リポジトリパス
+    private string _file = null; // 対象ファイルパス
+    private Models.FileVersion _revision = null; // 対象リビジョン
+    private bool _isDiffMode = false; // diff表示モードフラグ
+    private object _viewContent = null; // 現在の表示コンテンツ
 }
 
+/// <summary>
+/// 2つのリビジョン間のファイル比較ViewModel。
+/// 開始・終了リビジョンを指定してdiff表示を行う。
+/// </summary>
 public class FileHistoriesCompareRevisions : ObservableObject
 {
+    /// <summary>比較の開始リビジョン。</summary>
     public Models.FileVersion StartPoint
     {
         get => _startPoint;
         set => SetProperty(ref _startPoint, value);
     }
 
+    /// <summary>比較の終了リビジョン。</summary>
     public Models.FileVersion EndPoint
     {
         get => _endPoint;
         set => SetProperty(ref _endPoint, value);
     }
 
+    /// <summary>diff表示コンテキスト。</summary>
     public DiffContext ViewContent
     {
         get => _viewContent;
         set => SetProperty(ref _viewContent, value);
     }
 
+    /// <summary>
+    /// コンストラクタ。リポジトリパスと比較対象の2つのリビジョンを指定する。
+    /// </summary>
     public FileHistoriesCompareRevisions(string repo, Models.FileVersion start, Models.FileVersion end)
     {
         _repo = repo;
@@ -189,12 +229,14 @@ public class FileHistoriesCompareRevisions : ObservableObject
         _viewContent = new(_repo, new(start, end));
     }
 
+    /// <summary>開始・終了リビジョンを入れ替えて比較を再実行する。</summary>
     public void Swap()
     {
         (StartPoint, EndPoint) = (_endPoint, _startPoint);
         ViewContent = new(_repo, new(_startPoint, _endPoint), _viewContent);
     }
 
+    /// <summary>比較結果をパッチファイルとして保存する。</summary>
     public async Task<bool> SaveAsPatch(string saveTo)
     {
         return await Commands.SaveChangesAsPatch
@@ -202,44 +244,57 @@ public class FileHistoriesCompareRevisions : ObservableObject
             .ConfigureAwait(false);
     }
 
-    private string _repo = null;
-    private Models.FileVersion _startPoint = null;
-    private Models.FileVersion _endPoint = null;
-    private List<Models.Change> _changes = [];
-    private DiffContext _viewContent = null;
+    private string _repo = null; // リポジトリパス
+    private Models.FileVersion _startPoint = null; // 比較開始リビジョン
+    private Models.FileVersion _endPoint = null; // 比較終了リビジョン
+    private List<Models.Change> _changes = []; // 変更ファイルリスト
+    private DiffContext _viewContent = null; // diff表示コンテキスト
 }
 
+/// <summary>
+/// ファイル履歴画面のメインViewModel。
+/// 特定ファイルの全リビジョンを一覧表示し、選択に応じて詳細・比較を表示する。
+/// </summary>
 public class FileHistories : ObservableObject
 {
+    /// <summary>画面タイトル（ファイルパス、オプションでコミットSHA付き）。</summary>
     public string Title
     {
         get;
     }
 
+    /// <summary>リビジョン一覧の読み込み中かどうか。</summary>
     public bool IsLoading
     {
         get => _isLoading;
         private set => SetProperty(ref _isLoading, value);
     }
 
+    /// <summary>ファイルのリビジョン一覧。</summary>
     public List<Models.FileVersion> Revisions
     {
         get => _revisions;
         set => SetProperty(ref _revisions, value);
     }
 
+    /// <summary>選択中のリビジョン。1つ選択で詳細表示、2つ選択で比較表示。</summary>
     public AvaloniaList<Models.FileVersion> SelectedRevisions
     {
         get;
         set;
     } = [];
 
+    /// <summary>詳細パネルのコンテンツ（単一リビジョン表示または比較表示）。</summary>
     public object ViewContent
     {
         get => _viewContent;
         private set => SetProperty(ref _viewContent, value);
     }
 
+    /// <summary>
+    /// コンストラクタ。リポジトリパス、ファイルパス、オプションでコミットSHAを指定する。
+    /// バックグラウンドでリビジョン一覧を取得する。
+    /// </summary>
     public FileHistories(string repo, string file, string commit = null)
     {
         if (!string.IsNullOrEmpty(commit))
@@ -278,6 +333,9 @@ public class FileHistories : ObservableObject
         };
     }
 
+    /// <summary>
+    /// 指定リビジョンのコミットへメインのリポジトリビューでナビゲートする。
+    /// </summary>
     public void NavigateToCommit(Models.FileVersion revision)
     {
         var launcher = App.GetLauncher();
@@ -294,6 +352,9 @@ public class FileHistories : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 指定リビジョンのコミットの完全なメッセージを取得する（キャッシュ付き）。
+    /// </summary>
     public string GetCommitFullMessage(Models.FileVersion revision)
     {
         var sha = revision.SHA;
@@ -305,10 +366,10 @@ public class FileHistories : ObservableObject
         return msg;
     }
 
-    private readonly string _repo = null;
-    private bool _isLoading = true;
-    private bool _prevIsDiffMode = true;
-    private List<Models.FileVersion> _revisions = null;
-    private Dictionary<string, string> _fullCommitMessages = new();
-    private object _viewContent = null;
+    private readonly string _repo = null; // リポジトリパス
+    private bool _isLoading = true; // 読み込み中フラグ
+    private bool _prevIsDiffMode = true; // 前回のdiffモード状態
+    private List<Models.FileVersion> _revisions = null; // リビジョン一覧
+    private Dictionary<string, string> _fullCommitMessages = new(); // コミットメッセージキャッシュ
+    private object _viewContent = null; // 詳細パネルのコンテンツ
 }

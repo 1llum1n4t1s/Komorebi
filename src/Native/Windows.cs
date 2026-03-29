@@ -15,14 +15,14 @@ using Avalonia.Threading;
 namespace Komorebi.Native;
 
 /// <summary>
-///     Windows固有のバックエンド実装。
-///     レジストリ検索、DWM API、Shell APIなどWindows固有のAPIを使用する。
+/// Windows固有のバックエンド実装。
+/// レジストリ検索、DWM API、Shell APIなどWindows固有のAPIを使用する。
 /// </summary>
 [SupportedOSPlatform("windows")]
 internal class Windows : OS.IBackend
 {
     /// <summary>
-    ///     DWM（Desktop Window Manager）のマージン構造体。ウィンドウフレーム拡張に使用する。
+    /// DWM（Desktop Window Manager）のマージン構造体。ウィンドウフレーム拡張に使用する。
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct MARGINS
@@ -34,38 +34,38 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     DWMフレームをクライアント領域に拡張するWin32 API。
+    /// DWMフレームをクライアント領域に拡張するWin32 API。
     /// </summary>
     [DllImport("dwmapi.dll")]
     private static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
 
     /// <summary>
-    ///     PATH環境変数から実行ファイルを検索するWin32 API。
+    /// PATH環境変数から実行ファイルを検索するWin32 API。
     /// </summary>
     [DllImport("shlwapi.dll", CharSet = CharSet.Unicode, SetLastError = false)]
     private static extern bool PathFindOnPath([In, Out] StringBuilder pszFile, [In] string[] ppszOtherDirs);
 
     /// <summary>
-    ///     ファイルパスからアイテムIDリストを作成するShell API。
+    /// ファイルパスからアイテムIDリストを作成するShell API。
     /// </summary>
     [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = false)]
     private static extern IntPtr ILCreateFromPathW(string pszPath);
 
     /// <summary>
-    ///     アイテムIDリストを解放するShell API。
+    /// アイテムIDリストを解放するShell API。
     /// </summary>
     [DllImport("shell32.dll", SetLastError = false)]
     private static extern void ILFree(IntPtr pidl);
 
     /// <summary>
-    ///     エクスプローラーでフォルダを開いてアイテムを選択するShell API。
+    /// エクスプローラーでフォルダを開いてアイテムを選択するShell API。
     /// </summary>
     [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = false)]
     private static extern int SHOpenFolderAndSelectItems(IntPtr pidlFolder, int cild, IntPtr apidl, int dwFlags);
 
     /// <summary>
-    ///     AvaloniaアプリケーションビルダーにWindows固有の設定を適用する。
-    ///     Windows 10ではドロップシャドウの問題を修正する。
+    /// AvaloniaアプリケーションビルダーにWindows固有の設定を適用する。
+    /// Windows 10ではドロップシャドウの問題を修正する。
     /// </summary>
     public void SetupApp(AppBuilder builder)
     {
@@ -78,7 +78,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     ウィンドウにWindows固有のクロムレス設定を適用する。
+    /// ウィンドウにWindows固有のクロムレス設定を適用する。
     /// </summary>
     public void SetupWindow(Window window)
     {
@@ -89,8 +89,8 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     アプリケーションデータディレクトリのパスを返す。
-    ///     ポータブルモード（実行ファイル横のdataフォルダ）を優先する。
+    /// アプリケーションデータディレクトリのパスを返す。
+    /// ポータブルモード（実行ファイル横のdataフォルダ）を優先する。
     /// </summary>
     public string GetDataDir()
     {
@@ -107,7 +107,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     Windowsレジストリおよびパス検索でgit実行ファイルを探す。
+    /// Windowsレジストリおよびパス検索でgit実行ファイルを探す。
     /// </summary>
     public string FindGitExecutable()
     {
@@ -133,8 +133,8 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     指定されたシェル/ターミナルの実行ファイルパスを検索する。
-    ///     git-bash、PowerShell、cmd、Windows Terminalに対応する。
+    /// 指定されたシェル/ターミナルの実行ファイルパスを検索する。
+    /// git-bash、PowerShell、cmd、Windows Terminalに対応する。
     /// </summary>
     public string FindTerminal(Models.ShellOrTerminal shell)
     {
@@ -186,12 +186,8 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     Windowsにインストールされている外部エディタ/IDEを検出する。
-    ///     VSCode、Cursor、JetBrains、Sublime Text、Visual Studio、Zedに対応する。
-    /// </summary>
-    /// <summary>
-    ///     外部マージ/diffツールの実行ファイルをWindowsシステムから検索する。
-    ///     App Pathsレジストリ → Program Files → PATH環境変数の順に探索する。
+    /// 外部マージ/diffツールの実行ファイルをWindowsシステムから検索する。
+    /// App Pathsレジストリ → Program Files → PATH環境変数の順に探索する。
     /// </summary>
     /// <param name="patterns">検索する実行ファイル名の配列（例: "WinMergeU.exe"）</param>
     /// <returns>見つかった実行ファイルのフルパス。見つからない場合はnull。</returns>
@@ -218,6 +214,10 @@ internal class Windows : OS.IBackend
         return null;
     }
 
+    /// <summary>
+    /// Windowsにインストールされている外部エディタ/IDEを検出する。
+    /// VSCode、Cursor、JetBrains、Sublime Text、Visual Studio、Zedに対応する。
+    /// </summary>
     public List<Models.ExternalTool> FindExternalTools()
     {
         var localAppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -235,7 +235,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     Windowsのcmd /c startコマンドでデフォルトブラウザを開く。
+    /// Windowsのcmd /c startコマンドでデフォルトブラウザを開く。
     /// </summary>
     public void OpenBrowser(string url)
     {
@@ -245,7 +245,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     指定された作業ディレクトリでターミナルを起動する。
+    /// 指定された作業ディレクトリでターミナルを起動する。
     /// </summary>
     public void OpenTerminal(string workdir, string args)
     {
@@ -269,7 +269,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     エクスプローラーで指定パスを開く。ファイルの場合はそのファイルを選択状態にする。
+    /// エクスプローラーで指定パスを開く。ファイルの場合はそのファイルを選択状態にする。
     /// </summary>
     public void OpenInFileManager(string path)
     {
@@ -300,7 +300,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     Windowsのcmd /c startコマンドでデフォルトエディタを開く。
+    /// Windowsのcmd /c startコマンドでデフォルトエディタを開く。
     /// </summary>
     public void OpenWithDefaultEditor(string file)
     {
@@ -312,10 +312,10 @@ internal class Windows : OS.IBackend
 
     #region HELPER_METHODS
     /// <summary>
-    ///     Windows 10でのウィンドウフレーム描画問題を修正する。
-    ///     DWM APIを使ってフレームをクライアント領域に拡張する。
+    /// Windows 10でのウィンドウフレーム描画問題を修正する。
+    /// DWM APIを使ってフレームをクライアント領域に拡張する。
     /// </summary>
-    private void FixWindowFrameOnWin10(Window w)
+    private static void FixWindowFrameOnWin10(Window w)
     {
         // レンダリングフレームでDWMフレーム拡張を実行する
         Dispatcher.UIThread.Post(() =>
@@ -330,7 +330,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     指定パス内のVisual Studioソリューションファイルを検索して起動オプション一覧を生成する。
+    /// 指定パス内のVisual Studioソリューションファイルを検索して起動オプション一覧を生成する。
     /// </summary>
     private List<Models.ExternalTool.LaunchOption> GenerateVSProjectLaunchOptions(string path)
     {
@@ -346,7 +346,7 @@ internal class Windows : OS.IBackend
             if (f.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) ||
                 f.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
             {
-                var display = f.Substring(prefixLen).TrimStart(Path.DirectorySeparatorChar);
+                var display = f[prefixLen..].TrimStart(Path.DirectorySeparatorChar);
                 options.Add(new(display, f.Quoted()));
             }
         });
@@ -361,9 +361,9 @@ internal class Windows : OS.IBackend
     private const string RegistryUninstallPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\";
 
     /// <summary>
-    ///     WindowsレジストリからDisplayIconを検索する共通メソッド。
-    ///     システムインストール（LocalMachine）とユーザーインストール（CurrentUser）の両方を確認する。
-    ///     3メソッド（FindVSCode/FindVSCodeInsiders/FindVSCodium）の重複を統合。
+    /// WindowsレジストリからDisplayIconを検索する共通メソッド。
+    /// システムインストール（LocalMachine）とユーザーインストール（CurrentUser）の両方を確認する。
+    /// 3メソッド（FindVSCode/FindVSCodeInsiders/FindVSCodium）の重複を統合。
     /// </summary>
     /// <param name="systemGuid">システムインストールのレジストリGUID。</param>
     /// <param name="userGuid">ユーザーインストールのレジストリGUID。</param>
@@ -396,8 +396,8 @@ internal class Windows : OS.IBackend
         => FindRegistryDisplayIcon("{88DA3577-054F-4CA1-8122-7D820494CFFB}", "{2E1F05D1-C245-4562-81EE-28188DB6FD17}");
 
     /// <summary>
-    ///     WindowsレジストリからSublime Textのインストールパスを検索する。
-    ///     バージョン3と4の両方を確認する。using でリソースリークを防止。
+    /// WindowsレジストリからSublime Textのインストールパスを検索する。
+    /// バージョン3と4の両方を確認する。using でリソースリークを防止。
     /// </summary>
     private string FindSublimeText()
     {
@@ -419,8 +419,8 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     vswhereツールを使用してVisual Studioのインストールを検出する。
-    ///     プレリリース版も含めて検索する。
+    /// vswhereツールを使用してVisual Studioのインストールを検出する。
+    /// プレリリース版も含めて検索する。
     /// </summary>
     private void FindVisualStudio(Models.ExternalToolsFinder finder)
     {
@@ -464,7 +464,7 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     WindowsレジストリおよびPATHからZedエディタを検索する。
+    /// WindowsレジストリおよびPATHからZedエディタを検索する。
     /// </summary>
     private string FindZed()
     {
@@ -488,12 +488,12 @@ internal class Windows : OS.IBackend
 
     #region EXTERNAL_MERGER_FINDER
     /// <summary>
-    ///     App Pathsレジストリから実行ファイルのパスを検索する。
-    ///     WinMerge等のアプリケーションはここに登録している。
+    /// App Pathsレジストリから実行ファイルのパスを検索する。
+    /// WinMerge等のアプリケーションはここに登録している。
     /// </summary>
     /// <param name="exeName">実行ファイル名（例: "WinMergeU.exe"）</param>
     /// <returns>見つかった場合はフルパス、見つからない場合はnull。</returns>
-    private string FindExecFileFromAppPaths(string exeName)
+    private static string FindExecFileFromAppPaths(string exeName)
     {
         try
         {
@@ -514,12 +514,12 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     Program Filesディレクトリから実行ファイルを検索する。
-    ///     1階層目のサブフォルダのみを対象として高速に探索する。
+    /// Program Filesディレクトリから実行ファイルを検索する。
+    /// 1階層目のサブフォルダのみを対象として高速に探索する。
     /// </summary>
     /// <param name="exeName">実行ファイル名（例: "WinMergeU.exe"）</param>
     /// <returns>見つかった場合はフルパス、見つからない場合はnull。</returns>
-    private string FindExecFileFromProgramFiles(string exeName)
+    private static string FindExecFileFromProgramFiles(string exeName)
     {
         // Program Files と Program Files (x86) の両方を確認する
         var programDirs = new[]
@@ -553,11 +553,11 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    ///     PATH環境変数から実行ファイルを検索する。
+    /// PATH環境変数から実行ファイルを検索する。
     /// </summary>
     /// <param name="exeName">実行ファイル名（例: "WinMergeU.exe"）</param>
     /// <returns>見つかった場合はフルパス、見つからない場合はnull。</returns>
-    private string FindExecFileFromPath(string exeName)
+    private static string FindExecFileFromPath(string exeName)
     {
         var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
         var paths = pathVariable.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);

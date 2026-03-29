@@ -10,12 +10,12 @@ using Avalonia.Platform.Storage;
 namespace Komorebi.Views;
 
 /// <summary>
-///     リビジョン比較ビューのコードビハインド。
+/// リビジョン比較ビューのコードビハインド。
 /// </summary>
 public partial class RevisionCompare : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public RevisionCompare()
     {
@@ -23,7 +23,7 @@ public partial class RevisionCompare : UserControl
     }
 
     /// <summary>
-    ///     ChangeContextRequestedイベントのハンドラ。
+    /// ChangeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnChangeContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -207,7 +207,7 @@ public partial class RevisionCompare : UserControl
     }
 
     /// <summary>
-    ///     PressedSHAイベントのハンドラ。
+    /// PressedSHAイベントのハンドラ。
     /// </summary>
     private void OnPressedSHA(object sender, PointerPressedEventArgs e)
     {
@@ -218,7 +218,7 @@ public partial class RevisionCompare : UserControl
     }
 
     /// <summary>
-    ///     SaveAsPatchイベントのハンドラ。
+    /// SaveAsPatchイベントのハンドラ。
     /// </summary>
     private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
     {
@@ -249,7 +249,7 @@ public partial class RevisionCompare : UserControl
     }
 
     /// <summary>
-    ///     ChangeCollectionViewKeyDownイベントのハンドラ。
+    /// ChangeCollectionViewKeyDownイベントのハンドラ。
     /// </summary>
     private async void OnChangeCollectionViewKeyDown(object sender, KeyEventArgs e)
     {

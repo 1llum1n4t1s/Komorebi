@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git remote -v を実行して、リモートリポジトリの一覧を取得するクラス。
+/// git remote -v を実行して、リモートリポジトリの一覧を取得するクラス。
 /// </summary>
 public partial class QueryRemotes : Command
 {
     /// <summary>
-    ///     remote -v の出力行からリモート名とURLを抽出する正規表現。
+    /// remote -v の出力行からリモート名とURLを抽出する正規表現。
     /// </summary>
     [GeneratedRegex(@"^([\w\.\-]+)\s*(\S+).*$")]
     private static partial Regex REG_REMOTE();
 
     /// <summary>
-    ///     コンストラクタ。リモート一覧を取得するコマンドを設定する。
+    /// コンストラクタ。リモート一覧を取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     public QueryRemotes(string repo)
@@ -28,7 +28,7 @@ public partial class QueryRemotes : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、リモートリポジトリのリストを返す。
+    /// コマンドを非同期で実行し、リモートリポジトリのリストを返す。
     /// </summary>
     /// <returns>リモートモデルのリスト</returns>
     public async Task<List<Models.Remote>> GetResultAsync()
@@ -61,7 +61,7 @@ public partial class QueryRemotes : Command
                 var hostEnd = remote.URL.IndexOf(':', 4);
                 if (hostEnd > 4)
                 {
-                    var host = remote.URL.Substring(4, hostEnd - 4);
+                    var host = remote.URL[4..hostEnd];
                     Models.HTTPSValidator.Add(host);
                 }
             }

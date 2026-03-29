@@ -9,14 +9,14 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     RepositoryTreeNodeToggleButtonクラス。
+/// RepositoryTreeNodeToggleButtonクラス。
 /// </summary>
 public class RepositoryTreeNodeToggleButton : ToggleButton
 {
     protected override Type StyleKeyOverride => typeof(ToggleButton);
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -29,14 +29,14 @@ public class RepositoryTreeNodeToggleButton : ToggleButton
 }
 
 /// <summary>
-///     RepositoryListBoxクラス。
+/// RepositoryListBoxクラス。
 /// </summary>
 public class RepositoryListBox : ListBox
 {
     protected override Type StyleKeyOverride => typeof(ListBox);
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -68,12 +68,12 @@ public class RepositoryListBox : ListBox
 }
 
 /// <summary>
-///     ウェルカム画面（リポジトリ一覧・クローン）のコードビハインド。
+/// ウェルカム画面（リポジトリ一覧・クローン）のコードビハインド。
 /// </summary>
 public partial class Welcome : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public Welcome()
     {
@@ -81,7 +81,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override async void OnLoaded(RoutedEventArgs e)
     {
@@ -91,7 +91,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -101,7 +101,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -124,7 +124,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     TreeNodeContextRequestedイベントのハンドラ。
+    /// TreeNodeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs ev)
     {
@@ -233,7 +233,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     PointerPressedTreeNodeイベントのハンドラ。
+    /// PointerPressedTreeNodeイベントのハンドラ。
     /// </summary>
     private void OnPointerPressedTreeNode(object sender, PointerPressedEventArgs e)
     {
@@ -251,7 +251,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     PointerReleasedOnTreeNodeイベントのハンドラ。
+    /// PointerReleasedOnTreeNodeイベントのハンドラ。
     /// </summary>
     private void OnPointerReleasedOnTreeNode(object _1, PointerReleasedEventArgs _2)
     {
@@ -260,7 +260,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     PointerMovedOverTreeNodeイベントのハンドラ。
+    /// PointerMovedOverTreeNodeイベントのハンドラ。
     /// </summary>
     private async void OnPointerMovedOverTreeNode(object sender, PointerEventArgs e)
     {
@@ -281,7 +281,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     TreeViewLostFocusイベントのハンドラ。
+    /// TreeViewLostFocusイベントのハンドラ。
     /// </summary>
     private void OnTreeViewLostFocus(object _1, RoutedEventArgs _2)
     {
@@ -290,7 +290,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     DragOverTreeViewの処理を行う。
+    /// DragOverTreeViewの処理を行う。
     /// </summary>
     private void DragOverTreeView(object sender, DragEventArgs e)
     {
@@ -307,7 +307,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     DropOnTreeViewの処理を行う。
+    /// DropOnTreeViewの処理を行う。
     /// </summary>
     private async void DropOnTreeView(object sender, DragEventArgs e)
     {
@@ -343,7 +343,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     DragOverTreeNodeの処理を行う。
+    /// DragOverTreeNodeの処理を行う。
     /// </summary>
     private void DragOverTreeNode(object sender, DragEventArgs e)
     {
@@ -358,7 +358,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     DropOnTreeNodeの処理を行う。
+    /// DropOnTreeNodeの処理を行う。
     /// </summary>
     private async void DropOnTreeNode(object sender, DragEventArgs e)
     {
@@ -408,7 +408,7 @@ public partial class Welcome : UserControl
     }
 
     /// <summary>
-    ///     DoubleTappedTreeNodeイベントのハンドラ。
+    /// DoubleTappedTreeNodeイベントのハンドラ。
     /// </summary>
     private void OnDoubleTappedTreeNode(object sender, TappedEventArgs e)
     {
@@ -423,18 +423,14 @@ public partial class Welcome : UserControl
         }
     }
 
+    /// <summary>ツリーノードがポインター押下中かどうか。</summary>
     private bool _pressedTreeNode = false;
-    /// <summary>
-    ///     Pointの処理を行う。
-    /// </summary>
+    /// <summary>ツリーノードのポインター押下位置。</summary>
     private Point _pressedTreeNodePosition = new Point();
+    /// <summary>ドラッグ操作が開始されたかどうか。</summary>
     private bool _startDragTreeNode = false;
-    /// <summary>
-    ///     DataFormatの処理を行う。
-    /// </summary>
+    /// <summary>リポジトリノードのドラッグ＆ドロップ用データフォーマット。</summary>
     private readonly DataFormat<string> _dndRepoNode = DataFormat.CreateStringApplicationFormat("komorebi-dnd-repo-node");
-    /// <summary>
-    ///     CancellationTokenSourceの処理を行う。
-    /// </summary>
+    /// <summary>非同期処理のキャンセル用トークンソース。</summary>
     private CancellationTokenSource _cancellation = new CancellationTokenSource();
 }

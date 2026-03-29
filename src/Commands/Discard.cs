@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ローカルの変更を破棄するための静的ユーティリティクラス。
-///     全変更の一括破棄と、選択した変更のみの破棄をサポートする。
+/// ローカルの変更を破棄するための静的ユーティリティクラス。
+/// 全変更の一括破棄と、選択した変更のみの破棄をサポートする。
 /// </summary>
 public static class Discard
 {
     /// <summary>
-    ///     全てのローカル変更（ステージ済み・未ステージ）を破棄する。
-    ///     未追跡ファイルの削除とgit reset --hardの組み合わせで実現する。
+    /// 全てのローカル変更（ステージ済み・未ステージ）を破棄する。
+    /// 未追跡ファイルの削除とgit reset --hardの組み合わせで実現する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="includeUntracked">未追跡ファイルも削除するかどうか。</param>
@@ -64,8 +64,8 @@ public static class Discard
     }
 
     /// <summary>
-    ///     選択した変更のみを破棄する（未ステージの変更のみ対象）。
-    ///     未追跡ファイルは直接削除し、変更されたファイルはgit restoreで復元する。
+    /// 選択した変更のみを破棄する（未ステージの変更のみ対象）。
+    /// 未追跡ファイルは直接削除し、変更されたファイルはgit restoreで復元する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="changes">破棄対象の変更リスト。</param>

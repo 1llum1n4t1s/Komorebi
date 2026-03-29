@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     Git LFSプルダイアログのコードビハインド。
+/// Git LFSプルダイアログのコードビハインド。
 /// </summary>
 public partial class LFSPull : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public LFSPull()
     {

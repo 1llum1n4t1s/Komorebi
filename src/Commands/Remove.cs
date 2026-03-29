@@ -4,13 +4,13 @@ using System.Text;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ファイルをインデックスと作業ツリーから削除するgitコマンド。
-///     git rm -f を実行する。
+/// ファイルをインデックスと作業ツリーから削除するgitコマンド。
+/// git rm -f を実行する。
 /// </summary>
 public class Remove : Command
 {
     /// <summary>
-    ///     Removeコマンドを初期化する。
+    /// Removeコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="files">削除対象のファイルパスのリスト。</param>

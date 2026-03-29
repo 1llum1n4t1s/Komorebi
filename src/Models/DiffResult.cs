@@ -6,7 +6,7 @@ using Avalonia.Media.Imaging;
 namespace Komorebi.Models;
 
 /// <summary>
-///     テキストdiffの行タイプを表すenum
+/// テキストdiffの行タイプを表すenum
 /// </summary>
 public enum TextDiffLineType
 {
@@ -23,7 +23,7 @@ public enum TextDiffLineType
 }
 
 /// <summary>
-///     テキスト内の文字範囲を表すクラス（ハイライト用）
+/// テキスト内の文字範囲を表すクラス（ハイライト用）
 /// </summary>
 /// <param name="p">開始位置</param>
 /// <param name="n">文字数</param>
@@ -36,21 +36,37 @@ public class TextRange(int p, int n)
 }
 
 /// <summary>
-///     テキストdiffの1行分のデータを保持するクラス
+/// テキストdiffの1行分のデータを保持するクラス
 /// </summary>
 public class TextDiffLine
 {
+    /// <summary>行の種別（追加/削除/通常等）</summary>
     public TextDiffLineType Type { get; set; } = TextDiffLineType.None;
+    /// <summary>行の内容テキスト</summary>
     public string Content { get; set; } = "";
+    /// <summary>変更前ファイルの行番号（0は未設定）</summary>
     public int OldLineNumber { get; set; } = 0;
+    /// <summary>変更後ファイルの行番号（0は未設定）</summary>
     public int NewLineNumber { get; set; } = 0;
-    public List<TextRange> Highlights { get; set; } = new List<TextRange>();
+    /// <summary>行内のハイライト範囲リスト（差分ハイライト用）</summary>
+    public List<TextRange> Highlights { get; set; } = [];
+    /// <summary>ファイル末尾に改行がないことを示すフラグ</summary>
     public bool NoNewLineEndOfFile { get; set; } = false;
 
+    /// <summary>変更前の行番号表示文字列（未設定時は空文字）</summary>
     public string OldLine => OldLineNumber == 0 ? string.Empty : OldLineNumber.ToString();
+    /// <summary>変更後の行番号表示文字列（未設定時は空文字）</summary>
     public string NewLine => NewLineNumber == 0 ? string.Empty : NewLineNumber.ToString();
 
+    /// <summary>デフォルトコンストラクタ</summary>
     public TextDiffLine() { }
+    /// <summary>
+    /// 全プロパティを指定してdiff行を生成する
+    /// </summary>
+    /// <param name="type">行の種別</param>
+    /// <param name="content">行の内容</param>
+    /// <param name="oldLine">変更前の行番号</param>
+    /// <param name="newLine">変更後の行番号</param>
     public TextDiffLine(TextDiffLineType type, string content, int oldLine, int newLine)
     {
         Type = type;
@@ -61,25 +77,40 @@ public class TextDiffLine
 }
 
 /// <summary>
-///     テキストdiffの選択範囲を保持するクラス。パッチ生成時に使用。
+/// テキストdiffの選択範囲を保持するクラス。パッチ生成時に使用。
 /// </summary>
 public class TextDiffSelection
 {
+    /// <summary>選択範囲の開始行</summary>
     public int StartLine { get; set; } = 0;
+    /// <summary>選択範囲の終了行</summary>
     public int EndLine { get; set; } = 0;
+    /// <summary>選択範囲内に変更があるかどうか</summary>
     public bool HasChanges { get; set; } = false;
+    /// <summary>選択範囲外の無視された追加行数</summary>
     public int IgnoredAdds { get; set; } = 0;
+    /// <summary>選択範囲外の無視された削除行数</summary>
     public int IgnoredDeletes { get; set; } = 0;
 }
 
 /// <summary>
-///     テキスト形式のdiff結果。行単位のdiffデータとパッチ生成機能を提供する。
+/// テキスト形式のdiff結果。行単位のdiffデータとパッチ生成機能を提供する。
 /// </summary>
 public partial class TextDiff
 {
-    public List<TextDiffLine> Lines { get; set; } = new List<TextDiffLine>();
+    /// <summary>diff結果の全行リスト</summary>
+    public List<TextDiffLine> Lines { get; set; } = [];
+    /// <summary>最大行番号（UI表示の桁数計算用）</summary>
     public int MaxLineNumber = 0;
 
+    /// <summary>
+    /// 指定範囲の選択情報を生成する。パッチ生成時に選択行の統計を計算する。
+    /// </summary>
+    /// <param name="startLine">選択開始行（1始まり）</param>
+    /// <param name="endLine">選択終了行（1始まり）</param>
+    /// <param name="isCombined">結合表示モードかどうか</param>
+    /// <param name="isOldSide">変更前（左側）の選択かどうか</param>
+    /// <returns>選択範囲情報</returns>
     public TextDiffSelection MakeSelection(int startLine, int endLine, bool isCombined, bool isOldSide)
     {
         var rs = new TextDiffSelection();
@@ -119,6 +150,14 @@ public partial class TextDiff
         return rs;
     }
 
+    /// <summary>
+    /// 新規ファイルの選択範囲からパッチを生成する
+    /// </summary>
+    /// <param name="change">変更情報</param>
+    /// <param name="fileBlobGuid">ファイルのBlobハッシュ</param>
+    /// <param name="selection">選択範囲</param>
+    /// <param name="revert">取り消しパッチかどうか</param>
+    /// <param name="output">出力ファイルパス</param>
     public void GenerateNewPatchFromSelection(Change change, string fileBlobGuid, TextDiffSelection selection, bool revert, string output)
     {
         var isTracked = !string.IsNullOrEmpty(fileBlobGuid);
@@ -168,6 +207,14 @@ public partial class TextDiff
         writer.Flush();
     }
 
+    /// <summary>
+    /// 既存ファイルの選択範囲からパッチを生成する（統合diff表示用）
+    /// </summary>
+    /// <param name="change">変更情報</param>
+    /// <param name="fileTreeGuid">ファイルのツリーハッシュ</param>
+    /// <param name="selection">選択範囲</param>
+    /// <param name="revert">取り消しパッチかどうか</param>
+    /// <param name="output">出力ファイルパス</param>
     public void GeneratePatchFromSelection(Change change, string fileTreeGuid, TextDiffSelection selection, bool revert, string output)
     {
         var orgFile = !string.IsNullOrEmpty(change.OriginalPath) ? change.OriginalPath : change.Path;
@@ -283,6 +330,15 @@ public partial class TextDiff
         writer.Flush();
     }
 
+    /// <summary>
+    /// 既存ファイルの選択範囲からパッチを生成する（左右分割diff表示用）
+    /// </summary>
+    /// <param name="change">変更情報</param>
+    /// <param name="fileTreeGuid">ファイルのツリーハッシュ</param>
+    /// <param name="selection">選択範囲</param>
+    /// <param name="revert">取り消しパッチかどうか</param>
+    /// <param name="isOldSide">変更前（左側）からの選択かどうか</param>
+    /// <param name="output">出力ファイルパス</param>
     public void GeneratePatchFromSelectionSingleSide(Change change, string fileTreeGuid, TextDiffSelection selection, bool revert, bool isOldSide, string output)
     {
         var orgFile = !string.IsNullOrEmpty(change.OriginalPath) ? change.OriginalPath : change.Path;
@@ -435,6 +491,10 @@ public partial class TextDiff
         writer.Flush();
     }
 
+    /// <summary>
+    /// ハンクヘッダー（@@行）を処理し、行数を再計算してパッチに書き込む（統合表示用）
+    /// </summary>
+    /// <returns>パッチに出力する行がある場合はtrue</returns>
     private bool ProcessIndicatorForPatch(StreamWriter writer, TextDiffLine indicator, int idx, int start, int end, int ignoreRemoves, int ignoreAdds, bool revert, bool tailed)
     {
         var match = REG_INDICATOR().Match(indicator.Content);
@@ -504,6 +564,10 @@ public partial class TextDiff
         return true;
     }
 
+    /// <summary>
+    /// ハンクヘッダー（@@行）を処理し、行数を再計算してパッチに書き込む（分割表示用）
+    /// </summary>
+    /// <returns>パッチに出力する行がある場合はtrue</returns>
     private bool ProcessIndicatorForPatchSingleSide(StreamWriter writer, TextDiffLine indicator, int idx, int start, int end, int ignoreRemoves, int ignoreAdds, bool revert, bool isOldSide, bool tailed)
     {
         var match = REG_INDICATOR().Match(indicator.Content);
@@ -584,6 +648,12 @@ public partial class TextDiff
         return true;
     }
 
+    /// <summary>
+    /// パッチファイルに1行を書き込む（プレフィックス + 内容 + 改行なし通知）
+    /// </summary>
+    /// <param name="writer">出力先のStreamWriter</param>
+    /// <param name="prefix">行頭文字（' ', '+', '-'）</param>
+    /// <param name="line">diff行データ</param>
     private static void WriteLine(StreamWriter writer, char prefix, TextDiffLine line)
     {
         writer.WriteLine($"{prefix}{line.Content}");
@@ -592,12 +662,13 @@ public partial class TextDiff
             writer.WriteLine("\\ No newline at end of file");
     }
 
+    /// <summary>ハンクヘッダーから開始行番号を抽出する正規表現</summary>
     [GeneratedRegex(@"^@@ \-(\d+),?\d* \+(\d+),?\d* @@")]
     private static partial Regex REG_INDICATOR();
 }
 
 /// <summary>
-///     Git LFSオブジェクトのdiff結果
+/// Git LFSオブジェクトのdiff結果
 /// </summary>
 public class LFSDiff
 {
@@ -608,7 +679,7 @@ public class LFSDiff
 }
 
 /// <summary>
-///     バイナリファイルのdiff結果（サイズ情報のみ）
+/// バイナリファイルのdiff結果（サイズ情報のみ）
 /// </summary>
 public class BinaryDiff
 {
@@ -619,27 +690,33 @@ public class BinaryDiff
 }
 
 /// <summary>
-///     画像ファイルのdiff結果。変更前後の画像データとサイズ情報を保持する。
+/// 画像ファイルのdiff結果。変更前後の画像データとサイズ情報を保持する。
 /// </summary>
 public class ImageDiff
 {
+    /// <summary>変更前の画像データ</summary>
     public Bitmap Old { get; set; } = null;
+    /// <summary>変更後の画像データ</summary>
     public Bitmap New { get; set; } = null;
 
+    /// <summary>変更前のファイルサイズ（バイト）</summary>
     public long OldFileSize { get; set; } = 0;
+    /// <summary>変更後のファイルサイズ（バイト）</summary>
     public long NewFileSize { get; set; } = 0;
 
+    /// <summary>変更前の画像サイズ表示文字列（"幅 x 高さ"形式）</summary>
     public string OldImageSize => Old is not null ? $"{Old.PixelSize.Width} x {Old.PixelSize.Height}" : "0 x 0";
+    /// <summary>変更後の画像サイズ表示文字列（"幅 x 高さ"形式）</summary>
     public string NewImageSize => New is not null ? $"{New.PixelSize.Width} x {New.PixelSize.Height}" : "0 x 0";
 }
 
 /// <summary>
-///     変更なしまたは改行コードのみの変更を表すマーカークラス
+/// 変更なしまたは改行コードのみの変更を表すマーカークラス
 /// </summary>
 public class NoOrEOLChange;
 
 /// <summary>
-///     サブモジュールのdiff結果。変更前後のサブモジュール情報を保持する。
+/// サブモジュールのdiff結果。変更前後のサブモジュール情報を保持する。
 /// </summary>
 public class SubmoduleDiff
 {
@@ -650,19 +727,30 @@ public class SubmoduleDiff
 }
 
 /// <summary>
-///     diff操作の総合結果を保持するクラス。テキスト、バイナリ、LFS各種diffの結果を含む。
+/// diff操作の総合結果を保持するクラス。テキスト、バイナリ、LFS各種diffの結果を含む。
 /// </summary>
 public class DiffResult
 {
+    /// <summary>バイナリファイルかどうか</summary>
     public bool IsBinary { get; set; } = false;
+    /// <summary>Git LFSオブジェクトかどうか</summary>
     public bool IsLFS { get; set; } = false;
+    /// <summary>変更前のBlobハッシュ</summary>
     public string OldHash { get; set; } = string.Empty;
+    /// <summary>変更後のBlobハッシュ</summary>
     public string NewHash { get; set; } = string.Empty;
+    /// <summary>変更前のファイルモード（パーミッション）</summary>
     public string OldMode { get; set; } = string.Empty;
+    /// <summary>変更後のファイルモード（パーミッション）</summary>
     public string NewMode { get; set; } = string.Empty;
+    /// <summary>テキストdiffの結果（バイナリの場合はnull）</summary>
     public TextDiff TextDiff { get; set; } = null;
+    /// <summary>LFS diffの結果（LFSでない場合はnull）</summary>
     public LFSDiff LFSDiff { get; set; } = null;
 
+    /// <summary>
+    /// ファイルモードの変更を表す文字列（例: "100644 → 100755"）。変更なしの場合は空文字。
+    /// </summary>
     public string FileModeChange
     {
         get

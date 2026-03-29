@@ -3,14 +3,14 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     インデックスキャッシュクリアダイアログのViewModel。
-///     git rm -r --cached . と git add . を実行してインデックスを再構築する。
-///     .gitignoreの変更を反映させる場合などに使用する。
+/// インデックスキャッシュクリアダイアログのViewModel。
+/// git rm -r --cached . と git add . を実行してインデックスを再構築する。
+/// .gitignoreの変更を反映させる場合などに使用する。
 /// </summary>
 public class ClearIndexCache : Popup
 {
     /// <summary>
-    ///     コンストラクタ。対象リポジトリを受け取って初期化する。
+    /// コンストラクタ。対象リポジトリを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public ClearIndexCache(Repository repo)
@@ -19,9 +19,9 @@ public class ClearIndexCache : Popup
     }
 
     /// <summary>
-    ///     確定処理。インデックスキャッシュをクリアして再追加する。
-    ///     git rm -r --cached . で全ファイルをインデックスから削除し、
-    ///     git add . で再追加することでインデックスを再構築する。
+    /// 確定処理。インデックスキャッシュをクリアして再追加する。
+    /// git rm -r --cached . で全ファイルをインデックスから削除し、
+    /// git add . で再追加することでインデックスを再構築する。
     /// </summary>
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()

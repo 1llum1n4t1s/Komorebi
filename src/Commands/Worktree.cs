@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ワークツリーの管理操作を提供するgitコマンド。
-///     git worktree のサブコマンドでワークツリーの一覧取得・追加・削除・ロック管理を行う。
+/// ワークツリーの管理操作を提供するgitコマンド。
+/// git worktree のサブコマンドでワークツリーの一覧取得・追加・削除・ロック管理を行う。
 /// </summary>
 public class Worktree : Command
 {
     /// <summary>
-    ///     Worktreeコマンドを初期化する。
+    /// Worktreeコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     public Worktree(string repo)
@@ -22,8 +22,8 @@ public class Worktree : Command
     }
 
     /// <summary>
-    ///     全てのワークツリーを一覧取得する。
-    ///     git worktree list --porcelain を実行してパースする。
+    /// 全てのワークツリーを一覧取得する。
+    /// git worktree list --porcelain を実行してパースする。
     /// </summary>
     /// <returns>ワークツリー情報のリスト。</returns>
     public async Task<List<Models.Worktree>> ReadAllAsync()
@@ -82,8 +82,8 @@ public class Worktree : Command
     }
 
     /// <summary>
-    ///     新しいワークツリーを追加する。
-    ///     git worktree add を実行する。
+    /// 新しいワークツリーを追加する。
+    /// git worktree add を実行する。
     /// </summary>
     /// <param name="fullpath">ワークツリーの作成先フルパス。</param>
     /// <param name="name">チェックアウトするブランチ名。</param>
@@ -119,8 +119,8 @@ public class Worktree : Command
     }
 
     /// <summary>
-    ///     無効なワークツリー情報を削除する。
-    ///     git worktree prune を実行する。
+    /// 無効なワークツリー情報を削除する。
+    /// git worktree prune を実行する。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> PruneAsync()
@@ -131,8 +131,8 @@ public class Worktree : Command
     }
 
     /// <summary>
-    ///     ワークツリーをロックする。
-    ///     git worktree lock を実行する。
+    /// ワークツリーをロックする。
+    /// git worktree lock を実行する。
     /// </summary>
     /// <param name="fullpath">ロックするワークツリーのフルパス。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -144,8 +144,8 @@ public class Worktree : Command
     }
 
     /// <summary>
-    ///     ワークツリーのロックを解除する。
-    ///     git worktree unlock を実行する。
+    /// ワークツリーのロックを解除する。
+    /// git worktree unlock を実行する。
     /// </summary>
     /// <param name="fullpath">ロック解除するワークツリーのフルパス。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -157,8 +157,8 @@ public class Worktree : Command
     }
 
     /// <summary>
-    ///     ワークツリーを削除する。
-    ///     git worktree remove を実行する。
+    /// ワークツリーを削除する。
+    /// git worktree remove を実行する。
     /// </summary>
     /// <param name="fullpath">削除するワークツリーのフルパス。</param>
     /// <param name="force">強制削除するかどうか。</param>

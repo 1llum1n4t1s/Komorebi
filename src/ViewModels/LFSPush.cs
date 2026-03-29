@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     LFSオブジェクトのプッシュ（アップロード）ダイアログのViewModel。
+/// LFSオブジェクトのプッシュ（アップロード）ダイアログのViewModel。
 /// </summary>
 public class LFSPush : Popup
 {

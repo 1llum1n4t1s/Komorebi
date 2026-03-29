@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     リモートリポジトリの管理操作を提供するgitコマンド。
-///     git remote のサブコマンドでリモートの追加・削除・名前変更・URL設定を行う。
+/// リモートリポジトリの管理操作を提供するgitコマンド。
+/// git remote のサブコマンドでリモートの追加・削除・名前変更・URL設定を行う。
 /// </summary>
 public class Remote : Command
 {
     /// <summary>
-    ///     Remoteコマンドを初期化する。
+    /// Remoteコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     public Remote(string repo)
@@ -19,8 +19,8 @@ public class Remote : Command
     }
 
     /// <summary>
-    ///     新しいリモートを追加する。
-    ///     git remote add を実行する。
+    /// 新しいリモートを追加する。
+    /// git remote add を実行する。
     /// </summary>
     /// <param name="name">リモート名。</param>
     /// <param name="url">リモートURL。</param>
@@ -33,8 +33,8 @@ public class Remote : Command
     }
 
     /// <summary>
-    ///     リモートを削除する。
-    ///     git remote remove を実行する。
+    /// リモートを削除する。
+    /// git remote remove を実行する。
     /// </summary>
     /// <param name="name">削除するリモート名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -46,8 +46,8 @@ public class Remote : Command
     }
 
     /// <summary>
-    ///     リモートの名前を変更する。
-    ///     git remote rename を実行する。
+    /// リモートの名前を変更する。
+    /// git remote rename を実行する。
     /// </summary>
     /// <param name="name">現在のリモート名。</param>
     /// <param name="to">新しいリモート名。</param>
@@ -60,8 +60,8 @@ public class Remote : Command
     }
 
     /// <summary>
-    ///     リモートの古い追跡ブランチを削除する。
-    ///     git remote prune を実行する。
+    /// リモートの古い追跡ブランチを削除する。
+    /// git remote prune を実行する。
     /// </summary>
     /// <param name="name">プルーニング対象のリモート名。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -73,8 +73,8 @@ public class Remote : Command
     }
 
     /// <summary>
-    ///     リモートのURLを取得する。
-    ///     git remote get-url を実行する。
+    /// リモートのURLを取得する。
+    /// git remote get-url を実行する。
     /// </summary>
     /// <param name="name">リモート名。</param>
     /// <param name="isPush">プッシュ用URLを取得するかどうか。</param>
@@ -89,8 +89,8 @@ public class Remote : Command
     }
 
     /// <summary>
-    ///     リモートのURLを設定する。
-    ///     git remote set-url を実行する。
+    /// リモートのURLを設定する。
+    /// git remote set-url を実行する。
     /// </summary>
     /// <param name="name">リモート名。</param>
     /// <param name="url">設定するURL。</param>
@@ -104,8 +104,8 @@ public class Remote : Command
     }
 
     /// <summary>
-    ///     リモートに指定ブランチが存在するかを確認する。
-    ///     git ls-remote を実行して結果を確認する。
+    /// リモートに指定ブランチが存在するかを確認する。
+    /// git ls-remote を実行して結果を確認する。
     /// </summary>
     /// <param name="remote">確認するリモート名。</param>
     /// <param name="branch">確認するブランチ名。</param>

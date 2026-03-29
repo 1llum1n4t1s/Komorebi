@@ -4,12 +4,12 @@ using Avalonia.Input;
 namespace Komorebi.Views;
 
 /// <summary>
-///     マージコマンドパレットのコードビハインド。
+/// マージコマンドパレットのコードビハインド。
 /// </summary>
 public partial class MergeCommandPalette : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public MergeCommandPalette()
     {
@@ -17,7 +17,7 @@ public partial class MergeCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -61,7 +61,7 @@ public partial class MergeCommandPalette : UserControl
     }
 
     /// <summary>
-    ///     ItemTappedイベントのハンドラ。
+    /// ItemTappedイベントのハンドラ。
     /// </summary>
     private void OnItemTapped(object sender, TappedEventArgs e)
     {

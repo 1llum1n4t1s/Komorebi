@@ -8,14 +8,23 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels;
 
+/// <summary>
+/// タグのツールチップ表示用データ。注釈付きタグの作成者やメッセージを保持する。
+/// </summary>
 public class TagToolTip
 {
+    /// <summary>タグ名。</summary>
     public string Name { get; private set; }
+    /// <summary>注釈付きタグかどうか。</summary>
     public bool IsAnnotated { get; private set; }
+    /// <summary>タグの作成者。</summary>
     public Models.User Creator { get; private set; }
+    /// <summary>タグの作成日時（Unix時間）。</summary>
     public ulong CreatorDate { get; private set; }
+    /// <summary>タグのメッセージ。</summary>
     public string Message { get; private set; }
 
+    /// <summary>タグモデルからツールチップデータを構築する。</summary>
     public TagToolTip(Models.Tag t)
     {
         Name = t.Name;
@@ -26,49 +35,66 @@ public class TagToolTip
     }
 }
 
+/// <summary>
+/// タグツリー内のノード。フォルダまたはタグ自体を表す。
+/// パスの区切り文字に基づいて階層構造を形成する。
+/// </summary>
 public class TagTreeNode : ObservableObject
 {
+    /// <summary>ノードのフルパス。</summary>
     public string FullPath { get; private set; }
+    /// <summary>ツリー内のネスト深度。</summary>
     public int Depth { get; private set; } = 0;
+    /// <summary>対応するタグモデル。フォルダノードの場合はnull。</summary>
     public Models.Tag Tag { get; private set; } = null;
+    /// <summary>タグのツールチップ情報。</summary>
     public TagToolTip ToolTip { get; private set; } = null;
+    /// <summary>子ノードのリスト。</summary>
     public List<TagTreeNode> Children { get; private set; } = [];
+    /// <summary>配下のタグ数カウンタ。</summary>
     public int Counter { get; set; } = 0;
 
+    /// <summary>フォルダノードかどうか（Tagがnullならフォルダ）。</summary>
     public bool IsFolder
     {
         get => Tag is null;
     }
 
+    /// <summary>選択状態かどうか。</summary>
     public bool IsSelected
     {
         get;
         set;
     }
 
+    /// <summary>フィルタモード（表示/除外/なし）。</summary>
     public Models.FilterMode FilterMode
     {
         get => _filterMode;
         set => SetProperty(ref _filterMode, value);
     }
 
+    /// <summary>角丸半径。連続選択時のUI表示に使用。</summary>
     public CornerRadius CornerRadius
     {
         get => _cornerRadius;
         set => SetProperty(ref _cornerRadius, value);
     }
 
+    /// <summary>ツリーノードが展開されているかどうか。</summary>
     public bool IsExpanded
     {
         get => _isExpanded;
         set => SetProperty(ref _isExpanded, value);
     }
 
+    /// <summary>子タグ数の表示文字列。0の場合は空文字。</summary>
     public string TagsCount
     {
         get => Counter > 0 ? $"({Counter})" : string.Empty;
     }
 
+    /// <summary>タグノードのコンストラクタ。</summary>
     public TagTreeNode(Models.Tag t, int depth)
     {
         FullPath = t.Name;
@@ -78,6 +104,7 @@ public class TagTreeNode : ObservableObject
         IsExpanded = false;
     }
 
+    /// <summary>フォルダノードのコンストラクタ。</summary>
     public TagTreeNode(string path, bool isExpanded, int depth)
     {
         FullPath = path;
@@ -86,6 +113,7 @@ public class TagTreeNode : ObservableObject
         Counter = 1;
     }
 
+    /// <summary>フィルタモードを再帰的に更新する。</summary>
     public void UpdateFilterMode(Dictionary<string, Models.FilterMode> filters)
     {
         if (Tag is null)
@@ -99,10 +127,14 @@ public class TagTreeNode : ObservableObject
         }
     }
 
+    /// <summary>
+    /// タグリストからツリー構造を構築する。
+    /// パスの区切り文字に基づいてフォルダ階層を生成する。
+    /// </summary>
     public static List<TagTreeNode> Build(List<Models.Tag> tags, HashSet<string> expanded)
     {
-        var nodes = new List<TagTreeNode>();
-        var folders = new Dictionary<string, TagTreeNode>();
+        List<TagTreeNode> nodes = [];
+        Dictionary<string, TagTreeNode> folders = [];
 
         foreach (var tag in tags)
         {
@@ -150,6 +182,7 @@ public class TagTreeNode : ObservableObject
         return nodes;
     }
 
+    /// <summary>フォルダノードをコレクション内の適切な位置（非フォルダノードの前）に挿入する。</summary>
     private static void InsertFolder(List<TagTreeNode> collection, TagTreeNode subFolder)
     {
         for (int i = 0; i < collection.Count; i++)
@@ -169,32 +202,40 @@ public class TagTreeNode : ObservableObject
     private bool _isExpanded = true;
 }
 
+/// <summary>
+/// タグをフラットリスト表示する際の各項目を表すViewModel。
+/// </summary>
 public class TagListItem : ObservableObject
 {
+    /// <summary>対応するタグモデル。</summary>
     public Models.Tag Tag
     {
         get;
         set;
     }
 
+    /// <summary>選択状態かどうか。</summary>
     public bool IsSelected
     {
         get;
         set;
     }
 
+    /// <summary>フィルタモード（表示/除外/なし）。</summary>
     public Models.FilterMode FilterMode
     {
         get => _filterMode;
         set => SetProperty(ref _filterMode, value);
     }
 
+    /// <summary>タグのツールチップ情報。</summary>
     public TagToolTip ToolTip
     {
         get;
         set;
     }
 
+    /// <summary>角丸半径。連続選択時のUI表示に使用。</summary>
     public CornerRadius CornerRadius
     {
         get => _cornerRadius;
@@ -205,20 +246,26 @@ public class TagListItem : ObservableObject
     private CornerRadius _cornerRadius = new CornerRadius(4);
 }
 
+/// <summary>
+/// タグをフラットリスト形式で表示するコレクション。
+/// </summary>
 public class TagCollectionAsList
 {
+    /// <summary>タグ項目のフラットリスト。</summary>
     public List<TagListItem> TagItems
     {
         get;
         set;
     } = [];
 
+    /// <summary>タグリストからフラットコレクションを構築する。</summary>
     public TagCollectionAsList(List<Models.Tag> tags)
     {
         foreach (var tag in tags)
             TagItems.Add(new TagListItem() { Tag = tag, ToolTip = new TagToolTip(tag) });
     }
 
+    /// <summary>全項目の選択状態をクリアする。</summary>
     public void ClearSelection()
     {
         foreach (var item in TagItems)
@@ -228,9 +275,10 @@ public class TagCollectionAsList
         }
     }
 
+    /// <summary>選択項目のリストに基づいて選択状態と角丸を更新する。</summary>
     public void UpdateSelection(IList selectedItems)
     {
-        var set = new HashSet<string>();
+        HashSet<string> set = [];
         foreach (var item in selectedItems)
         {
             if (item is TagListItem tagItem)
@@ -243,6 +291,7 @@ public class TagCollectionAsList
             item.IsSelected = set.Contains(item.Tag.Name);
             if (item.IsSelected)
             {
+                // 連続選択時は角丸を調整して視覚的にグループ化
                 if (last is { IsSelected: true })
                 {
                     last.CornerRadius = new CornerRadius(last.CornerRadius.TopLeft, 0);
@@ -263,23 +312,30 @@ public class TagCollectionAsList
     }
 }
 
+/// <summary>
+/// タグをツリー形式で表示するコレクション。
+/// 展開状態を保持しながらツリーとフラット行リストを管理する。
+/// </summary>
 public class TagCollectionAsTree
 {
+    /// <summary>ツリーのルートノードリスト。</summary>
     public List<TagTreeNode> Tree
     {
         get;
         set;
     } = [];
 
+    /// <summary>展開状態に基づくフラット化された行リスト（UIバインディング用）。</summary>
     public AvaloniaList<TagTreeNode> Rows
     {
         get;
         set;
     } = [];
 
+    /// <summary>タグリストからツリーコレクションを構築する。以前の展開状態を引き継ぐ。</summary>
     public static TagCollectionAsTree Build(List<Models.Tag> tags, TagCollectionAsTree old)
     {
-        var oldExpanded = new HashSet<string>();
+        HashSet<string> oldExpanded = [];
         if (old is not null)
         {
             foreach (var row in old.Rows)
@@ -292,13 +348,14 @@ public class TagCollectionAsTree
         var collection = new TagCollectionAsTree();
         collection.Tree = TagTreeNode.Build(tags, oldExpanded);
 
-        var rows = new List<TagTreeNode>();
+        List<TagTreeNode> rows = [];
         MakeTreeRows(rows, collection.Tree);
         collection.Rows.AddRange(rows);
 
         return collection;
     }
 
+    /// <summary>ノードの展開/折りたたみを切り替え、行リストを更新する。</summary>
     public void ToggleExpand(TagTreeNode node)
     {
         node.IsExpanded = !node.IsExpanded;
@@ -311,7 +368,7 @@ public class TagCollectionAsTree
 
         if (node.IsExpanded)
         {
-            var subrows = new List<TagTreeNode>();
+            List<TagTreeNode> subrows = [];
             MakeTreeRows(subrows, node.Children);
             rows.InsertRange(idx + 1, subrows);
         }
@@ -330,15 +387,17 @@ public class TagCollectionAsTree
         }
     }
 
+    /// <summary>全ノードの選択状態を再帰的にクリアする。</summary>
     public void ClearSelection()
     {
         foreach (var node in Tree)
             ClearSelectionRecursively(node);
     }
 
+    /// <summary>選択項目のリストに基づいて選択状態と角丸を更新する。</summary>
     public void UpdateSelection(IList selectedItems)
     {
-        var set = new HashSet<string>();
+        HashSet<string> set = [];
         foreach (var item in selectedItems)
         {
             if (item is TagTreeNode node)
@@ -370,6 +429,7 @@ public class TagCollectionAsTree
         }
     }
 
+    /// <summary>ツリーノードを再帰的にフラット行リストに変換する。展開されたフォルダの子のみ含む。</summary>
     private static void MakeTreeRows(List<TagTreeNode> rows, List<TagTreeNode> nodes)
     {
         foreach (var node in nodes)
@@ -383,6 +443,7 @@ public class TagCollectionAsTree
         }
     }
 
+    /// <summary>ノードの選択状態を再帰的にクリアする。</summary>
     private static void ClearSelectionRecursively(TagTreeNode node)
     {
         if (node.IsSelected)

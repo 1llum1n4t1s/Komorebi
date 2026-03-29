@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リモートリポジトリ追加ダイアログのViewModel。
-///     新しいリモートの名前・URL・SSH鍵を設定してリポジトリに追加する。
+/// リモートリポジトリ追加ダイアログのViewModel。
+/// 新しいリモートの名前・URL・SSH鍵を設定してリポジトリに追加する。
 /// </summary>
 public class AddRemote : Popup
 {
     /// <summary>
-    ///     リモート名。バリデーション付きで、英数字・ハイフン・ドット・アンダースコアのみ許可。
+    /// リモート名。バリデーション付きで、英数字・ハイフン・ドット・アンダースコアのみ許可。
     /// </summary>
     [Required(ErrorMessage = "Remote name is required!!!")]
     [RegularExpression(@"^[\w\-\.]+$", ErrorMessage = "Bad remote name format!!!")]
@@ -23,7 +23,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     リモートリポジトリのURL。設定時にSSH接続かどうかを自動判定する。
+    /// リモートリポジトリのURL。設定時にSSH接続かどうかを自動判定する。
     /// </summary>
     [Required(ErrorMessage = "Remote URL is required!!!")]
     [CustomValidation(typeof(AddRemote), nameof(ValidateRemoteURL))]
@@ -39,7 +39,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     SSH接続を使用するかどうかのフラグ。変更時にSSH鍵のバリデーションを再実行する。
+    /// SSH接続を使用するかどうかのフラグ。変更時にSSH鍵のバリデーションを再実行する。
     /// </summary>
     public bool UseSSH
     {
@@ -53,7 +53,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     SSH秘密鍵のファイルパス。SSH接続時に使用される。
+    /// SSH秘密鍵のファイルパス。SSH接続時に使用される。
     /// </summary>
     [CustomValidation(typeof(AddRemote), nameof(ValidateSSHKey))]
     public string SSHKey
@@ -63,7 +63,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。対象リポジトリを受け取って初期化する。
+    /// コンストラクタ。対象リポジトリを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public AddRemote(Repository repo)
@@ -72,7 +72,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     リモート名の重複チェックを行うバリデーションメソッド。
+    /// リモート名の重複チェックを行うバリデーションメソッド。
     /// </summary>
     /// <param name="name">検証するリモート名</param>
     /// <param name="ctx">バリデーションコンテキスト</param>
@@ -91,7 +91,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     リモートURLの形式と重複チェックを行うバリデーションメソッド。
+    /// リモートURLの形式と重複チェックを行うバリデーションメソッド。
     /// </summary>
     /// <param name="url">検証するURL</param>
     /// <param name="ctx">バリデーションコンテキスト</param>
@@ -114,7 +114,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     SSH秘密鍵ファイルの存在チェックを行うバリデーションメソッド。
+    /// SSH秘密鍵ファイルの存在チェックを行うバリデーションメソッド。
     /// </summary>
     /// <param name="sshkey">検証するSSH鍵ファイルパス</param>
     /// <param name="ctx">バリデーションコンテキスト</param>
@@ -132,7 +132,7 @@ public class AddRemote : Popup
     }
 
     /// <summary>
-    ///     確定処理。リモートを追加し、SSH鍵の設定とフェッチを実行する。
+    /// 確定処理。リモートを追加し、SSH鍵の設定とフェッチを実行する。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

@@ -8,13 +8,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリの統計情報（コントリビューション履歴）を表示するViewModel。
-///     全期間、月間、週間のレポートを切り替えて表示できる。
+/// リポジトリの統計情報（コントリビューション履歴）を表示するViewModel。
+/// 全期間、月間、週間のレポートを切り替えて表示できる。
 /// </summary>
 public class Statistics : ObservableObject
 {
     /// <summary>
-    ///     統計データの読み込み中かどうか。
+    /// 統計データの読み込み中かどうか。
     /// </summary>
     public bool IsLoading
     {
@@ -23,7 +23,7 @@ public class Statistics : ObservableObject
     }
 
     /// <summary>
-    ///     選択されたレポート期間のインデックス（0=全期間, 1=月間, 2=週間）。
+    /// 選択されたレポート期間のインデックス（0=全期間, 1=月間, 2=週間）。
     /// </summary>
     public int SelectedIndex
     {
@@ -36,7 +36,7 @@ public class Statistics : ObservableObject
     }
 
     /// <summary>
-    ///     現在選択されているレポートデータ。設定時に著者選択をリセットする。
+    /// 現在選択されているレポートデータ。設定時に著者選択をリセットする。
     /// </summary>
     public Models.StatisticsReport SelectedReport
     {
@@ -50,7 +50,7 @@ public class Statistics : ObservableObject
     }
 
     /// <summary>
-    ///     統計グラフに使用するサンプルカラー（ARGB値）。変更時にブラシとレポートの色を更新する。
+    /// 統計グラフに使用するサンプルカラー（ARGB値）。変更時にブラシとレポートの色を更新する。
     /// </summary>
     public uint SampleColor
     {
@@ -68,7 +68,7 @@ public class Statistics : ObservableObject
     }
 
     /// <summary>
-    ///     SampleColorから生成されるブラシ。UIのカラーインジケーターに使用する。
+    /// SampleColorから生成されるブラシ。UIのカラーインジケーターに使用する。
     /// </summary>
     public IBrush SampleBrush
     {
@@ -76,7 +76,7 @@ public class Statistics : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。バックグラウンドで統計データを非同期読み込みする。
+    /// コンストラクタ。バックグラウンドで統計データを非同期読み込みする。
     /// </summary>
     public Statistics(string repo)
     {
@@ -95,7 +95,7 @@ public class Statistics : ObservableObject
     }
 
     /// <summary>
-    ///     選択された期間に応じてレポートデータを切り替える。
+    /// 選択された期間に応じてレポートデータを切り替える。
     /// </summary>
     private void RefreshReport()
     {

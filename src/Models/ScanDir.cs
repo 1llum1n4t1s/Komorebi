@@ -1,7 +1,7 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     リポジトリスキャン対象ディレクトリの情報（パスと説明）を保持するレコード
+/// リポジトリスキャン対象ディレクトリの情報（パスと説明）を保持するレコード
 /// </summary>
 public record ScanDir(string path, string desc)
 {

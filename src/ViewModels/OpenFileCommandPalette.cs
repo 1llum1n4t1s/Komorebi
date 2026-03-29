@@ -117,7 +117,7 @@ public class OpenFileCommandPalette : ICommandPalette
             else
             {
                 // フィルタ文字列で大文字小文字を無視して絞り込み
-                var visible = new List<string>();
+                List<string> visible = [];
 
                 foreach (var f in _repoFiles)
                 {

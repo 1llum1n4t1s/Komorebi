@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     マージコンフリクトが解決済みかどうかを判定するgitコマンド。
-///     git diff --check を実行してコンフリクトマーカーの有無を確認する。
+/// マージコンフリクトが解決済みかどうかを判定するgitコマンド。
+/// git diff --check を実行してコンフリクトマーカーの有無を確認する。
 /// </summary>
 public class IsConflictResolved : Command
 {
     /// <summary>
-    ///     IsConflictResolvedコマンドを初期化する。
+    /// IsConflictResolvedコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="change">コンフリクト確認対象の変更ファイル。</param>
@@ -27,7 +27,7 @@ public class IsConflictResolved : Command
     }
 
     /// <summary>
-    ///     コンフリクト解決判定の結果を同期的に取得する。
+    /// コンフリクト解決判定の結果を同期的に取得する。
     /// </summary>
     /// <returns>コンフリクトが解決済みであればtrue。</returns>
     public bool GetResult()
@@ -37,7 +37,7 @@ public class IsConflictResolved : Command
     }
 
     /// <summary>
-    ///     コンフリクト解決判定の結果を非同期で取得する。
+    /// コンフリクト解決判定の結果を非同期で取得する。
     /// </summary>
     /// <returns>コンフリクトが解決済みであればtrue。</returns>
     public async Task<bool> GetResultAsync()

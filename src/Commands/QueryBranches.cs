@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git branchコマンドを実行して、ローカルブランチとリモートブランチの一覧を取得するクラス。
+/// git branchコマンドを実行して、ローカルブランチとリモートブランチの一覧を取得するクラス。
 /// </summary>
 public class QueryBranches : Command
 {
@@ -19,7 +19,7 @@ public class QueryBranches : Command
     private const string PREFIX_DETACHED_FROM = "(HEAD detached from";
 
     /// <summary>
-    ///     コンストラクタ。カスタムフォーマットでブランチ情報を取得するコマンドを設定する。
+    /// コンストラクタ。カスタムフォーマットでブランチ情報を取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     public QueryBranches(string repo)
@@ -31,8 +31,8 @@ public class QueryBranches : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、ブランチ一覧を返す。
-    ///     ローカルブランチとリモートブランチの追跡状態も解決する。
+    /// コマンドを非同期で実行し、ブランチ一覧を返す。
+    /// ローカルブランチとリモートブランチの追跡状態も解決する。
     /// </summary>
     /// <returns>ブランチモデルのリスト</returns>
     public async Task<List<Models.Branch>> GetResultAsync()
@@ -85,7 +85,7 @@ public class QueryBranches : Command
     }
 
     /// <summary>
-    ///     ブランチ情報の1行を解析してBranchモデルを生成する。
+    /// ブランチ情報の1行を解析してBranchモデルを生成する。
     /// </summary>
     /// <param name="line">NULL区切りのブランチ情報行</param>
     /// <param name="mismatched">追跡状態が不一致のブランチ名を記録するセット</param>

@@ -7,13 +7,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ディレクトリの履歴（コミット一覧）を表示するためのViewModel。
-///     指定ディレクトリに関連するコミットを取得し、コミット詳細を表示する。
+/// ディレクトリの履歴（コミット一覧）を表示するためのViewModel。
+/// 指定ディレクトリに関連するコミットを取得し、コミット詳細を表示する。
 /// </summary>
 public class DirHistories : ObservableObject
 {
     /// <summary>
-    ///     表示タイトル（ディレクトリパスとオプションのリビジョン）。
+    /// 表示タイトル（ディレクトリパスとオプションのリビジョン）。
     /// </summary>
     public string Title
     {
@@ -21,7 +21,7 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
-    ///     コミット履歴を読み込み中かどうか。
+    /// コミット履歴を読み込み中かどうか。
     /// </summary>
     public bool IsLoading
     {
@@ -30,7 +30,7 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
-    ///     取得されたコミットのリスト。
+    /// 取得されたコミットのリスト。
     /// </summary>
     public List<Models.Commit> Commits
     {
@@ -39,7 +39,7 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
-    ///     選択されたコミット。変更時にコミット詳細を更新する。
+    /// 選択されたコミット。変更時にコミット詳細を更新する。
     /// </summary>
     public Models.Commit SelectedCommit
     {
@@ -52,7 +52,7 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
-    ///     選択コミットの詳細情報ViewModel。
+    /// 選択コミットの詳細情報ViewModel。
     /// </summary>
     public CommitDetail Detail
     {
@@ -60,7 +60,7 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。非同期でディレクトリに関連するコミット一覧を取得する。
+    /// コンストラクタ。非同期でディレクトリに関連するコミット一覧を取得する。
     /// </summary>
     public DirHistories(Repository repo, string dir, string revision = null)
     {
@@ -98,7 +98,7 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
-    ///     メインのリポジトリビューで指定コミットへナビゲートする。
+    /// メインのリポジトリビューで指定コミットへナビゲートする。
     /// </summary>
     public void NavigateToCommit(Models.Commit commit)
     {
@@ -106,7 +106,7 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
-    ///     コミットの完全なメッセージを取得する（キャッシュ付き）。
+    /// コミットの完全なメッセージを取得する（キャッシュ付き）。
     /// </summary>
     public string GetCommitFullMessage(Models.Commit commit)
     {

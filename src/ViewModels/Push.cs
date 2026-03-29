@@ -151,7 +151,7 @@ public class Push : Popup
         _repo = repo;
 
         // すべてのローカルブランチを収集し、現在のブランチを特定
-        LocalBranches = new List<Models.Branch>();
+        LocalBranches = [];
         Models.Branch current = null;
         foreach (var branch in _repo.Branches)
         {
@@ -227,7 +227,7 @@ public class Push : Popup
             Name = name,
             Remote = _selectedRemote.Name,
         };
-        var collection = new List<Models.Branch>();
+        List<Models.Branch> collection = [];
         collection.AddRange(_remoteBranches);
         collection.Add(fake);
         RemoteBranches = collection;
@@ -278,7 +278,7 @@ public class Push : Popup
     private void AutoSelectBranchByRemote()
     {
         // 選択されたリモートに属するブランチを収集
-        var branches = new List<Models.Branch>();
+        List<Models.Branch> branches = [];
         foreach (var branch in _repo.Branches)
         {
             if (branch.Remote == _selectedRemote.Name)

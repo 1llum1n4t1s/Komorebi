@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     サブモジュールURL変更ダイアログのViewModel。
-///     既存サブモジュールのリモートURLを変更する。
+/// サブモジュールURL変更ダイアログのViewModel。
+/// 既存サブモジュールのリモートURLを変更する。
 /// </summary>
 public class ChangeSubmoduleUrl : Popup
 {
     /// <summary>
-    ///     対象のサブモジュール。
+    /// 対象のサブモジュール。
     /// </summary>
     public Models.Submodule Submodule
     {
@@ -19,7 +19,7 @@ public class ChangeSubmoduleUrl : Popup
     }
 
     /// <summary>
-    ///     新しいサブモジュールURL。必須入力で形式バリデーション付き。
+    /// 新しいサブモジュールURL。必須入力で形式バリデーション付き。
     /// </summary>
     [Required(ErrorMessage = "Url is required!!!")]
     [CustomValidation(typeof(ChangeSubmoduleUrl), nameof(ValidateUrl))]
@@ -30,7 +30,7 @@ public class ChangeSubmoduleUrl : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリとサブモジュールを受け取って初期化する。
+    /// コンストラクタ。リポジトリとサブモジュールを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="submodule">URL変更対象のサブモジュール</param>
@@ -42,7 +42,7 @@ public class ChangeSubmoduleUrl : Popup
     }
 
     /// <summary>
-    ///     URLの形式を検証するバリデーションメソッド。
+    /// URLの形式を検証するバリデーションメソッド。
     /// </summary>
     /// <param name="url">検証するURL</param>
     /// <param name="ctx">バリデーションコンテキスト</param>
@@ -56,7 +56,7 @@ public class ChangeSubmoduleUrl : Popup
     }
 
     /// <summary>
-    ///     確定処理。サブモジュールのURLが変更されていれば、git submodule set-urlを実行する。
+    /// 確定処理。サブモジュールのURLが変更されていれば、git submodule set-urlを実行する。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

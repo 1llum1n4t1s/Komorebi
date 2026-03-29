@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     進行中のGit操作（cherry-pick, rebase, revert, merge）の基底クラス。
-///     continue/skip/abort操作を共通で提供する。
+/// 進行中のGit操作（cherry-pick, rebase, revert, merge）の基底クラス。
+/// continue/skip/abort操作を共通で提供する。
 /// </summary>
 public abstract class InProgressContext
 {
@@ -51,8 +51,8 @@ public abstract class InProgressContext
 }
 
 /// <summary>
-///     進行中のcherry-pick操作のコンテキスト。
-///     CHERRY_PICK_HEADファイルからチェリーピック対象のコミット情報を取得する。
+/// 進行中のcherry-pick操作のコンテキスト。
+/// CHERRY_PICK_HEADファイルからチェリーピック対象のコミット情報を取得する。
 /// </summary>
 public class CherryPickInProgress : InProgressContext
 {
@@ -69,8 +69,8 @@ public class CherryPickInProgress : InProgressContext
     }
 
     /// <summary>
-    ///     コンストラクタ。CHERRY_PICK_HEADからコミット情報を読み込み、
-    ///     continue/skip/abortコマンドを構成する。
+    /// コンストラクタ。CHERRY_PICK_HEADからコミット情報を読み込み、
+    /// continue/skip/abortコマンドを構成する。
     /// </summary>
     public CherryPickInProgress(Repository repo)
     {
@@ -105,8 +105,8 @@ public class CherryPickInProgress : InProgressContext
 }
 
 /// <summary>
-///     進行中のrebase操作のコンテキスト。
-///     rebase-merge/rebase-applyディレクトリから進捗情報を読み込む。
+/// 進行中のrebase操作のコンテキスト。
+/// rebase-merge/rebase-applyディレクトリから進捗情報を読み込む。
 /// </summary>
 public class RebaseInProgress : InProgressContext
 {
@@ -151,8 +151,8 @@ public class RebaseInProgress : InProgressContext
     public override bool HasProgress => TotalSteps > 0;
 
     /// <summary>
-    ///     コンストラクタ。rebase-merge/rebase-applyディレクトリから
-    ///     進捗・ブランチ名・停止位置・onto情報を読み込む。
+    /// コンストラクタ。rebase-merge/rebase-applyディレクトリから
+    /// 進捗・ブランチ名・停止位置・onto情報を読み込む。
     /// </summary>
     public RebaseInProgress(Repository repo)
     {
@@ -208,9 +208,9 @@ public class RebaseInProgress : InProgressContext
         // head-nameファイルからブランチ名を取得し、refs/heads/等のプレフィックスを除去
         HeadName = File.ReadAllText(Path.Combine(repo.GitDir, "rebase-merge", "head-name")).Trim();
         if (HeadName.StartsWith("refs/heads/"))
-            HeadName = HeadName.Substring("refs/heads/".Length);
+            HeadName = HeadName["refs/heads/".Length..];
         else if (HeadName.StartsWith("refs/tags/"))
-            HeadName = HeadName.Substring("refs/tags/".Length);
+            HeadName = HeadName["refs/tags/".Length..];
 
         var stoppedSHAPath = Path.Combine(repo.GitDir, "rebase-merge", "stopped-sha");
         var stoppedSHA = File.Exists(stoppedSHAPath)
@@ -227,8 +227,8 @@ public class RebaseInProgress : InProgressContext
 }
 
 /// <summary>
-///     進行中のrevert操作のコンテキスト。
-///     REVERT_HEADファイルからリバート対象のコミット情報を取得する。
+/// 進行中のrevert操作のコンテキスト。
+/// REVERT_HEADファイルからリバート対象のコミット情報を取得する。
 /// </summary>
 public class RevertInProgress : InProgressContext
 {
@@ -239,8 +239,8 @@ public class RevertInProgress : InProgressContext
     }
 
     /// <summary>
-    ///     コンストラクタ。REVERT_HEADからコミット情報を読み込み、
-    ///     continue/skip/abortコマンドを構成する。
+    /// コンストラクタ。REVERT_HEADからコミット情報を読み込み、
+    /// continue/skip/abortコマンドを構成する。
     /// </summary>
     public RevertInProgress(Repository repo)
     {
@@ -273,8 +273,8 @@ public class RevertInProgress : InProgressContext
 }
 
 /// <summary>
-///     進行中のmerge操作のコンテキスト。
-///     MERGE_HEADファイルからマージ元のコミット情報を取得する。
+/// 進行中のmerge操作のコンテキスト。
+/// MERGE_HEADファイルからマージ元のコミット情報を取得する。
 /// </summary>
 public class MergeInProgress : InProgressContext
 {
@@ -297,8 +297,8 @@ public class MergeInProgress : InProgressContext
     }
 
     /// <summary>
-    ///     コンストラクタ。MERGE_HEADからマージ元コミット情報を読み込み、
-    ///     continue/abortコマンドを構成する（マージにはskipがない）。
+    /// コンストラクタ。MERGE_HEADからマージ元コミット情報を読み込み、
+    /// continue/abortコマンドを構成する（マージにはskipがない）。
     /// </summary>
     public MergeInProgress(Repository repo)
     {

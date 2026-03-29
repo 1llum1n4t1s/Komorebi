@@ -4,12 +4,12 @@ using Avalonia.Controls;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミット間の関連追跡ビューのコードビハインド。
+/// コミット間の関連追跡ビューのコードビハインド。
 /// </summary>
 public partial class CommitRelationTracking : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public CommitRelationTracking()
     {
@@ -17,7 +17,7 @@ public partial class CommitRelationTracking : UserControl
     }
 
     /// <summary>
-    ///     SetDataAsyncの処理を行う。
+    /// SetDataAsyncの処理を行う。
     /// </summary>
     public async Task SetDataAsync(ViewModels.CommitDetail detail)
     {

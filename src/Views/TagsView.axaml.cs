@@ -13,14 +13,14 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     TagTreeNodeToggleButtonクラス。
+/// TagTreeNodeToggleButtonクラス。
 /// </summary>
 public class TagTreeNodeToggleButton : ToggleButton
 {
     protected override Type StyleKeyOverride => typeof(ToggleButton);
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -36,7 +36,7 @@ public class TagTreeNodeToggleButton : ToggleButton
 }
 
 /// <summary>
-///     TagTreeNodeIconクラス。
+/// TagTreeNodeIconクラス。
 /// </summary>
 public class TagTreeNodeIcon : UserControl
 {
@@ -50,7 +50,7 @@ public class TagTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -59,7 +59,7 @@ public class TagTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -70,7 +70,7 @@ public class TagTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     UpdateContentの処理を行う。
+    /// UpdateContentの処理を行う。
     /// </summary>
     private void UpdateContent()
     {
@@ -89,7 +89,7 @@ public class TagTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     CreateContentの処理を行う。
+    /// CreateContentの処理を行う。
     /// </summary>
     private void CreateContent(Thickness margin, string iconKey, bool stroke)
     {
@@ -118,7 +118,7 @@ public class TagTreeNodeIcon : UserControl
 }
 
 /// <summary>
-///     タグ一覧ビューのコードビハインド。
+/// タグ一覧ビューのコードビハインド。
 /// </summary>
 public partial class TagsView : UserControl
 {
@@ -156,7 +156,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public TagsView()
     {
@@ -164,7 +164,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     UnselectAllの処理を行う。
+    /// UnselectAllの処理を行う。
     /// </summary>
     public void UnselectAll()
     {
@@ -174,7 +174,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     ToggleNodeIsExpandedの処理を行う。
+    /// ToggleNodeIsExpandedの処理を行う。
     /// </summary>
     public void ToggleNodeIsExpanded(ViewModels.TagTreeNode node)
     {
@@ -187,7 +187,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -211,7 +211,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     ItemDoubleTappedイベントのハンドラ。
+    /// ItemDoubleTappedイベントのハンドラ。
     /// </summary>
     private async void OnItemDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -232,7 +232,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     ItemPointerPressedイベントのハンドラ。
+    /// ItemPointerPressedイベントのハンドラ。
     /// </summary>
     private void OnItemPointerPressed(object sender, PointerPressedEventArgs e)
     {
@@ -257,7 +257,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     TagsContextMenuRequestedイベントのハンドラ。
+    /// TagsContextMenuRequestedイベントのハンドラ。
     /// </summary>
     private void OnTagsContextMenuRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -324,9 +324,6 @@ public partial class TagsView : UserControl
             compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
             compareWith.Click += (_, _) =>
             {
-                /// <summary>
-                ///     CompareCommandPaletteの処理を行う。
-                /// </summary>
                 new ViewModels.CompareCommandPalette(repo, tag).Open();
             };
 
@@ -460,7 +457,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     選択項目が変更された際の処理。
+    /// 選択項目が変更された際の処理。
     /// </summary>
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs _)
     {
@@ -486,7 +483,7 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
@@ -513,9 +510,9 @@ public partial class TagsView : UserControl
     }
 
     /// <summary>
-    ///     CollectTagsInNodeの処理を行う。
+    /// CollectTagsInNodeの処理を行う。
     /// </summary>
-    private void CollectTagsInNode(ViewModels.TagTreeNode node, List<Models.Tag> outs)
+    private static void CollectTagsInNode(ViewModels.TagTreeNode node, List<Models.Tag> outs)
     {
         if (node.Tag is { } tag)
         {

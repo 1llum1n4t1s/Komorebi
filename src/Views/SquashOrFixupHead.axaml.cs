@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     HEADコミットのスカッシュ/フィックスアップダイアログのコードビハインド。
+/// HEADコミットのスカッシュ/フィックスアップダイアログのコードビハインド。
 /// </summary>
 public partial class SquashOrFixupHead : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public SquashOrFixupHead()
     {

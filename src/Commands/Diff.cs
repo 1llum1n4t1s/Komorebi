@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git diffコマンドを実行し、テキスト差分・バイナリ差分・LFS差分を解析するクラス。
+/// git diffコマンドを実行し、テキスト差分・バイナリ差分・LFS差分を解析するクラス。
 /// </summary>
 public partial class Diff : Command
 {
     /// <summary>
-    ///     差分のハンクヘッダー（@@ -old,count +new,count @@）を解析する正規表現。
+    /// 差分のハンクヘッダー（@@ -old,count +new,count @@）を解析する正規表現。
     /// </summary>
     [GeneratedRegex(@"^@@ \-(\d+),?\d* \+(\d+),?\d* @@")]
     private static partial Regex REG_INDICATOR();
 
     /// <summary>
-    ///     indexヘッダー（旧ハッシュ..新ハッシュ）を解析する正規表現。
+    /// indexヘッダー（旧ハッシュ..新ハッシュ）を解析する正規表現。
     /// </summary>
     [GeneratedRegex(@"^index\s([0-9a-f]{6,40})\.\.([0-9a-f]{6,40})(\s[1-9]{6})?")]
     private static partial Regex REG_HASH_CHANGE();
@@ -32,7 +32,7 @@ public partial class Diff : Command
     private const string PREFIX_LFS_MODIFY = " version https://git-lfs.github.com/spec/";
 
     /// <summary>
-    ///     Diffコマンドのコンストラクタ。
+    /// Diffコマンドのコンストラクタ。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="opt">差分オプション（比較対象の指定）</param>
@@ -57,7 +57,7 @@ public partial class Diff : Command
     }
 
     /// <summary>
-    ///     diffコマンドを非同期で実行し、差分結果を返す。
+    /// diffコマンドを非同期で実行し、差分結果を返す。
     /// </summary>
     /// <returns>差分解析結果</returns>
     public async Task<Models.DiffResult> ReadAsync()
@@ -85,7 +85,7 @@ public partial class Diff : Command
     }
 
     /// <summary>
-    ///     diff出力文字列を解析して、DiffResultモデルに変換する。
+    /// diff出力文字列を解析して、DiffResultモデルに変換する。
     /// </summary>
     /// <param name="text">git diffの標準出力</param>
     /// <returns>解析された差分結果</returns>
@@ -126,7 +126,7 @@ public partial class Diff : Command
     }
 
     /// <summary>
-    ///     diff出力の1行を解析し、結果モデルに追加する。
+    /// diff出力の1行を解析し、結果モデルに追加する。
     /// </summary>
     /// <param name="line">diff出力の1行</param>
     /// <param name="result">解析結果の蓄積先</param>
@@ -310,8 +310,8 @@ public partial class Diff : Command
     }
 
     /// <summary>
-    ///     バッファに蓄積された削除行と追加行のインラインハイライトを計算し、結果に追加する。
-    ///     削除行と追加行が同数の場合、対応する行同士でインライン差分を検出する。
+    /// バッファに蓄積された削除行と追加行のインラインハイライトを計算し、結果に追加する。
+    /// 削除行と追加行が同数の場合、対応する行同士でインライン差分を検出する。
     /// </summary>
     /// <param name="result">差分結果の蓄積先</param>
     /// <param name="deleted">蓄積された削除行</param>

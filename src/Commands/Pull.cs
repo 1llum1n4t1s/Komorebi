@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     リモートリポジトリからプル（フェッチ＋マージ/リベース）するgitコマンド。
-///     git pull --verbose --progress を実行する。
+/// リモートリポジトリからプル（フェッチ＋マージ/リベース）するgitコマンド。
+/// git pull --verbose --progress を実行する。
 /// </summary>
 public class Pull : Command
 {
     /// <summary>
-    ///     Pullコマンドを初期化する。
+    /// Pullコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="remote">プル元のリモート名。</param>
@@ -39,13 +39,13 @@ public class Pull : Command
     }
 
     /// <summary>
-    ///     SSH鍵を設定してからプルを実行する（基底クラスの共通メソッドを使用）。
+    /// SSH鍵を設定してからプルを実行する（基底クラスの共通メソッドを使用）。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public Task<bool> RunAsync() => ExecWithSSHKeyAsync(_remote);
 
     /// <summary>
-    ///     操作対象のリモート名。
+    /// 操作対象のリモート名。
     /// </summary>
     private readonly string _remote;
 }

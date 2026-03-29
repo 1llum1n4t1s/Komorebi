@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     Git Flowの初期化ダイアログのViewModel。
-///     master/develop/feature/release/hotfix/tagの各プレフィックスを設定してGit Flowを構成する。
+/// Git Flowの初期化ダイアログのViewModel。
+/// master/develop/feature/release/hotfix/tagの各プレフィックスを設定してGit Flowを構成する。
 /// </summary>
 public partial class InitGitFlow : Popup
 {
@@ -72,13 +72,13 @@ public partial class InitGitFlow : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。ローカルブランチからmasterブランチ名の初期値を自動判定する。
+    /// コンストラクタ。ローカルブランチからmasterブランチ名の初期値を自動判定する。
     /// </summary>
     public InitGitFlow(Repository repo)
     {
         _repo = repo;
 
-        var localBranches = new List<string>();
+        List<string> localBranches = [];
         foreach (var branch in repo.Branches)
         {
             if (branch.IsLocal)
@@ -96,7 +96,7 @@ public partial class InitGitFlow : Popup
     }
 
     /// <summary>
-    ///     master/developブランチ名の重複チェックバリデーション。
+    /// master/developブランチ名の重複チェックバリデーション。
     /// </summary>
     public static ValidationResult ValidateBaseBranch(string _, ValidationContext ctx)
     {
@@ -110,7 +110,7 @@ public partial class InitGitFlow : Popup
     }
 
     /// <summary>
-    ///     タグプレフィックスの形式チェックバリデーション（空の場合は許可）。
+    /// タグプレフィックスの形式チェックバリデーション（空の場合は許可）。
     /// </summary>
     public static ValidationResult ValidateTagPrefix(string tagPrefix, ValidationContext ctx)
     {
@@ -121,7 +121,7 @@ public partial class InitGitFlow : Popup
     }
 
     /// <summary>
-    ///     確認ボタン押下時の処理。必要なブランチを作成してからGit Flowを初期化する。
+    /// 確認ボタン押下時の処理。必要なブランチを作成してからGit Flowを初期化する。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -188,11 +188,11 @@ public partial class InitGitFlow : Popup
         return succ;
     }
 
-    private readonly Repository _repo;
-    private string _master;
-    private string _develop = "develop";
-    private string _featurePrefix = "feature/";
-    private string _releasePrefix = "release/";
-    private string _hotfixPrefix = "hotfix/";
-    private string _tagPrefix = string.Empty;
+    private readonly Repository _repo; // 対象リポジトリ
+    private string _master; // masterブランチ名
+    private string _develop = "develop"; // developブランチ名
+    private string _featurePrefix = "feature/"; // featureプレフィックス
+    private string _releasePrefix = "release/"; // releaseプレフィックス
+    private string _hotfixPrefix = "hotfix/"; // hotfixプレフィックス
+    private string _tagPrefix = string.Empty; // タグプレフィックス
 }

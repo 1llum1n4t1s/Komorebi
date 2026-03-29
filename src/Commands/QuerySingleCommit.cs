@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定SHAの単一コミットの詳細情報を取得するクラス。
-///     git show を使用して、SHA、親、デコレーション、著者、コミッター、件名を取得する。
+/// 指定SHAの単一コミットの詳細情報を取得するクラス。
+/// git show を使用して、SHA、親、デコレーション、著者、コミッター、件名を取得する。
 /// </summary>
 public class QuerySingleCommit : Command
 {
     /// <summary>
-    ///     コンストラクタ。指定SHAのコミット詳細を取得するコマンドを設定する。
+    /// コンストラクタ。指定SHAのコミット詳細を取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="sha">対象コミットのSHA</param>
@@ -23,7 +23,7 @@ public class QuerySingleCommit : Command
     }
 
     /// <summary>
-    ///     コマンドを同期的に実行し、コミットモデルを返す。
+    /// コマンドを同期的に実行し、コミットモデルを返す。
     /// </summary>
     /// <returns>コミットモデル。失敗時はnull</returns>
     public Models.Commit GetResult()
@@ -33,7 +33,7 @@ public class QuerySingleCommit : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、コミットモデルを返す。
+    /// コマンドを非同期で実行し、コミットモデルを返す。
     /// </summary>
     /// <returns>コミットモデル。失敗時はnull</returns>
     public async Task<Models.Commit> GetResultAsync()
@@ -43,11 +43,11 @@ public class QuerySingleCommit : Command
     }
 
     /// <summary>
-    ///     コマンド結果を解析してCommitモデルを生成する。
+    /// コマンド結果を解析してCommitモデルを生成する。
     /// </summary>
     /// <param name="rs">コマンド実行結果</param>
     /// <returns>コミットモデル。失敗時はnull</returns>
-    private Models.Commit Parse(Result rs)
+    private static Models.Commit Parse(Result rs)
     {
         if (!rs.IsSuccess || string.IsNullOrEmpty(rs.StdOut))
             return null;

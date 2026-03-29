@@ -8,8 +8,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     リポジトリ設定ダイアログのViewModel。
-///     ユーザー情報、GPG署名、プロキシ、課題トラッカー、カスタムアクション等を管理する。
+/// リポジトリ設定ダイアログのViewModel。
+/// ユーザー情報、GPG署名、プロキシ、課題トラッカー、カスタムアクション等を管理する。
 /// </summary>
 public class RepositoryConfigure : ObservableObject
 {
@@ -193,15 +193,15 @@ public class RepositoryConfigure : ObservableObject
     }
 
     /// <summary>
-    ///     コンストラクタ。git configから現在の設定値を読み込み、
-    ///     リモート一覧・OpenAIサービス一覧・課題トラッカーを初期化する。
+    /// コンストラクタ。git configから現在の設定値を読み込み、
+    /// リモート一覧・OpenAIサービス一覧・課題トラッカーを初期化する。
     /// </summary>
     public RepositoryConfigure(Repository repo)
     {
         _repo = repo;
 
         // リモート名一覧を構築
-        Remotes = new List<string>();
+        Remotes = [];
         foreach (var remote in _repo.Remotes)
             Remotes.Add(remote.Name);
 
@@ -268,7 +268,7 @@ public class RepositoryConfigure : ObservableObject
     /// <summary>リモートのWeb閲覧用URLの一覧を取得する。</summary>
     public List<string> GetRemoteVisitUrls()
     {
-        var outs = new List<string>();
+        List<string> outs = [];
         foreach (var remote in _repo.Remotes)
         {
             if (remote.TryGetVisitURL(out var url))
@@ -329,8 +329,8 @@ public class RepositoryConfigure : ObservableObject
     }
 
     /// <summary>
-    ///     設定をgit configとリポジトリ設定ファイルに保存する。
-    ///     変更があったキーのみを書き込む。
+    /// 設定をgit configとリポジトリ設定ファイルに保存する。
+    /// 変更があったキーのみを書き込む。
     /// </summary>
     public async Task SaveAsync()
     {
@@ -354,13 +354,13 @@ public class RepositoryConfigure : ObservableObject
     }
 
     /// <summary>
-    ///     課題トラッカーの変更差分を計算し、追加・更新・削除をgit configに適用する。
-    ///     共有/ローカルの切り替えも処理する。
+    /// 課題トラッカーの変更差分を計算し、追加・更新・削除をgit configに適用する。
+    /// 共有/ローカルの切り替えも処理する。
     /// </summary>
     private async Task ApplyIssueTrackerChangesAsync()
     {
         var changed = false;
-        var oldRules = new Dictionary<string, Models.IssueTracker>();
+        Dictionary<string, Models.IssueTracker> oldRules = [];
         foreach (var rule in _repo.IssueTrackers)
             oldRules.Add(rule.Name, rule);
 

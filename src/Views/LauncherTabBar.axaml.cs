@@ -10,13 +10,19 @@ using Avalonia.Styling;
 namespace Komorebi.Views;
 
 /// <summary>
-///     LauncherTabSizeBoxクラス。
+/// LauncherTabSizeBoxクラス。
 /// </summary>
 public class LauncherTabSizeBox : Border
 {
+    /// <summary>
+    /// 固定幅を使用するかどうかのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> UseFixedWidthProperty =
         AvaloniaProperty.Register<LauncherTabSizeBox, bool>(nameof(UseFixedWidth), true);
 
+    /// <summary>
+    /// 固定幅を使用するかどうかを取得・設定する。trueの場合は200px固定。
+    /// </summary>
     public bool UseFixedWidth
     {
         get => GetValue(UseFixedWidthProperty);
@@ -24,17 +30,20 @@ public class LauncherTabSizeBox : Border
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public LauncherTabSizeBox()
     {
         Width = 200;
     }
 
+    /// <summary>
+    /// スタイルキーをBorderとしてオーバーライドする。
+    /// </summary>
     protected override Type StyleKeyOverride => typeof(Border);
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -51,13 +60,19 @@ public class LauncherTabSizeBox : Border
 }
 
 /// <summary>
-///     ランチャーのタブバーコントロールのコードビハインド。
+/// ランチャーのタブバーコントロールのコードビハインド。
 /// </summary>
 public partial class LauncherTabBar : UserControl
 {
+    /// <summary>
+    /// タブスクロールボタンの表示状態を保持するスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<bool> IsScrollerVisibleProperty =
         AvaloniaProperty.Register<LauncherTabBar, bool>(nameof(IsScrollerVisible));
 
+    /// <summary>
+    /// タブスクロールボタンの表示状態を取得・設定する。タブ幅がビューポートを超える場合にtrue。
+    /// </summary>
     public bool IsScrollerVisible
     {
         get => GetValue(IsScrollerVisibleProperty);
@@ -65,7 +80,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public LauncherTabBar()
     {
@@ -73,7 +88,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -172,7 +187,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -183,7 +198,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     ScrollTabsの処理を行う。
+    /// ScrollTabsの処理を行う。
     /// </summary>
     private void ScrollTabs(object _, PointerWheelEventArgs e)
     {
@@ -198,7 +213,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     ScrollTabsLeftの処理を行う。
+    /// ScrollTabsLeftの処理を行う。
     /// </summary>
     private void ScrollTabsLeft(object _, RoutedEventArgs e)
     {
@@ -207,7 +222,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     ScrollTabsRightの処理を行う。
+    /// ScrollTabsRightの処理を行う。
     /// </summary>
     private void ScrollTabsRight(object _, RoutedEventArgs e)
     {
@@ -216,7 +231,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     TabsLayoutUpdatedイベントのハンドラ。
+    /// TabsLayoutUpdatedイベントのハンドラ。
     /// </summary>
     private void OnTabsLayoutUpdated(object _1, EventArgs _2)
     {
@@ -225,7 +240,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     TabsSelectionChangedイベントのハンドラ。
+    /// TabsSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnTabsSelectionChanged(object _1, SelectionChangedEventArgs _2)
     {
@@ -233,7 +248,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     PointerPressedTabイベントのハンドラ。
+    /// PointerPressedTabイベントのハンドラ。
     /// </summary>
     private void OnPointerPressedTab(object sender, PointerPressedEventArgs e)
     {
@@ -242,7 +257,7 @@ public partial class LauncherTabBar : UserControl
             var point = e.GetCurrentPoint(border);
             if (point.Properties.IsMiddleButtonPressed && border.DataContext is ViewModels.LauncherPage page)
             {
-                (DataContext as ViewModels.Launcher)?.CloseTab(page);
+                if (DataContext is ViewModels.Launcher vm) vm.CloseTab(page);
                 e.Handled = true;
             }
             else
@@ -255,7 +270,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     PointerReleasedTabイベントのハンドラ。
+    /// PointerReleasedTabイベントのハンドラ。
     /// </summary>
     private void OnPointerReleasedTab(object _1, PointerReleasedEventArgs _2)
     {
@@ -264,7 +279,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     PointerMovedOverTabイベントのハンドラ。
+    /// PointerMovedOverTabイベントのハンドラ。
     /// </summary>
     private async void OnPointerMovedOverTab(object sender, PointerEventArgs e)
     {
@@ -285,7 +300,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     DropTabの処理を行う。
+    /// DropTabの処理を行う。
     /// </summary>
     private void DropTab(object sender, DragEventArgs e)
     {
@@ -322,7 +337,7 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     TabContextRequestedイベントのハンドラ。
+    /// TabContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTabContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -451,21 +466,35 @@ public partial class LauncherTabBar : UserControl
     }
 
     /// <summary>
-    ///     CloseTabイベントのハンドラ。
+    /// CloseTabイベントのハンドラ。
     /// </summary>
     private void OnCloseTab(object sender, RoutedEventArgs e)
     {
         if (sender is Button btn && DataContext is ViewModels.Launcher vm)
-            vm.CloseTab(btn.DataContext as ViewModels.LauncherPage);
+        {
+            if (btn.DataContext is ViewModels.LauncherPage page) vm.CloseTab(page);
+        }
 
         e.Handled = true;
     }
 
-    private bool _pressedTab = false;
-    private Point _pressedTabPosition = new();
-    private bool _startDragTab = false;
     /// <summary>
-    ///     DataFormatの処理を行う。
+    /// タブがポインター押下中かどうか。
+    /// </summary>
+    private bool _pressedTab = false;
+
+    /// <summary>
+    /// タブが押下された位置。ドラッグ判定に使用する。
+    /// </summary>
+    private Point _pressedTabPosition = new();
+
+    /// <summary>
+    /// タブのドラッグ操作が開始されたかどうか。
+    /// </summary>
+    private bool _startDragTab = false;
+
+    /// <summary>
+    /// タブのドラッグ&amp;ドロップ時の識別用データフォーマット。
     /// </summary>
     private readonly DataFormat<string> _dndMainTabFormat = DataFormat.CreateStringApplicationFormat("komorebi-dnd-main-tab");
 }

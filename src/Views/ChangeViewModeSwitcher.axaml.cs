@@ -5,13 +5,15 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     変更ビューモード切替コントロールのコードビハインド。
+/// 変更ビューモード切替コントロールのコードビハインド。
 /// </summary>
 public partial class ChangeViewModeSwitcher : UserControl
 {
+    /// <summary>変更ビューモードを保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<Models.ChangeViewMode> ViewModeProperty =
         AvaloniaProperty.Register<ChangeViewModeSwitcher, Models.ChangeViewMode>(nameof(ViewMode));
 
+    /// <summary>現在の変更ビューモード（リスト/グリッド/ツリー）。</summary>
     public Models.ChangeViewMode ViewMode
     {
         get => GetValue(ViewModeProperty);
@@ -19,7 +21,7 @@ public partial class ChangeViewModeSwitcher : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ChangeViewModeSwitcher()
     {
@@ -27,7 +29,7 @@ public partial class ChangeViewModeSwitcher : UserControl
     }
 
     /// <summary>
-    ///     SwitchToListの処理を行う。
+    /// SwitchToListの処理を行う。
     /// </summary>
     private void SwitchToList(object sender, RoutedEventArgs e)
     {
@@ -36,7 +38,7 @@ public partial class ChangeViewModeSwitcher : UserControl
     }
 
     /// <summary>
-    ///     SwitchToGridの処理を行う。
+    /// SwitchToGridの処理を行う。
     /// </summary>
     private void SwitchToGrid(object sender, RoutedEventArgs e)
     {
@@ -45,7 +47,7 @@ public partial class ChangeViewModeSwitcher : UserControl
     }
 
     /// <summary>
-    ///     SwitchToTreeの処理を行う。
+    /// SwitchToTreeの処理を行う。
     /// </summary>
     private void SwitchToTree(object sender, RoutedEventArgs e)
     {

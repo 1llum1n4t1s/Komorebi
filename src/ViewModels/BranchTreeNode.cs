@@ -6,9 +6,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ブランチツリーのノードを表すViewModel。
-///     ローカル・リモートブランチをツリー構造で表示するために使用される。
-///     フォルダノードとブランチノードの両方を表現する。
+/// ブランチツリーのノードを表すViewModel。
+/// ローカル・リモートブランチをツリー構造で表示するために使用される。
+/// フォルダノードとブランチノードの両方を表現する。
 /// </summary>
 public class BranchTreeNode : ObservableObject
 {
@@ -25,12 +25,12 @@ public class BranchTreeNode : ObservableObject
     /// <summary>選択状態</summary>
     public bool IsSelected { get; set; } = false;
     /// <summary>子ノードのリスト</summary>
-    public List<BranchTreeNode> Children { get; private set; } = new List<BranchTreeNode>();
+    public List<BranchTreeNode> Children { get; private set; } = [];
     /// <summary>配下のブランチ数カウンター</summary>
     public int Counter { get; set; } = 0;
 
     /// <summary>
-    ///     グラフ表示のフィルタモード。
+    /// グラフ表示のフィルタモード。
     /// </summary>
     public Models.FilterMode FilterMode
     {
@@ -39,7 +39,7 @@ public class BranchTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     ツリーノードの展開状態。
+    /// ツリーノードの展開状態。
     /// </summary>
     public bool IsExpanded
     {
@@ -48,7 +48,7 @@ public class BranchTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     ノードの角丸半径。UI表示用。
+    /// ノードの角丸半径。UI表示用。
     /// </summary>
     public CornerRadius CornerRadius
     {
@@ -57,7 +57,7 @@ public class BranchTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     このノードがブランチ（フォルダではない）かどうか。
+    /// このノードがブランチ（フォルダではない）かどうか。
     /// </summary>
     public bool IsBranch
     {
@@ -65,7 +65,7 @@ public class BranchTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     このノードが現在チェックアウト中のブランチかどうか。
+    /// このノードが現在チェックアウト中のブランチかどうか。
     /// </summary>
     public bool IsCurrent
     {
@@ -73,7 +73,7 @@ public class BranchTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     上流ブランチが削除済みであることを示すヒントを表示するかどうか。
+    /// 上流ブランチが削除済みであることを示すヒントを表示するかどうか。
     /// </summary>
     public bool ShowUpstreamGoneTip
     {
@@ -81,7 +81,7 @@ public class BranchTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     配下のブランチ数を括弧付きで表示する文字列。0の場合は空文字。
+    /// 配下のブランチ数を括弧付きで表示する文字列。0の場合は空文字。
     /// </summary>
     public string BranchesCount
     {
@@ -96,8 +96,8 @@ public class BranchTreeNode : ObservableObject
     private CornerRadius _cornerRadius = new CornerRadius(4);
 
     /// <summary>
-    ///     ブランチツリーを構築するビルダークラス。
-    ///     ブランチリストとリモートリストからツリー構造を生成する。
+    /// ブランチツリーを構築するビルダークラス。
+    /// ブランチリストとリモートリストからツリー構造を生成する。
     /// </summary>
     public class Builder
     {
@@ -107,7 +107,7 @@ public class BranchTreeNode : ObservableObject
         public List<BranchTreeNode> Remotes { get; } = [];
 
         /// <summary>
-        ///     コンストラクタ。ローカル・リモートそれぞれのソートモードを受け取る。
+        /// コンストラクタ。ローカル・リモートそれぞれのソートモードを受け取る。
         /// </summary>
         /// <param name="localSortMode">ローカルブランチのソートモード</param>
         /// <param name="remoteSortMode">リモートブランチのソートモード</param>
@@ -118,7 +118,7 @@ public class BranchTreeNode : ObservableObject
         }
 
         /// <summary>
-        ///     展開済みノードのパスリストを設定する。
+        /// 展開済みノードのパスリストを設定する。
         /// </summary>
         /// <param name="expanded">展開済みノードのパスリスト</param>
         public void SetExpandedNodes(List<string> expanded)
@@ -128,14 +128,14 @@ public class BranchTreeNode : ObservableObject
         }
 
         /// <summary>
-        ///     ブランチとリモートのリストからツリー構造を構築する。
+        /// ブランチとリモートのリストからツリー構造を構築する。
         /// </summary>
         /// <param name="branches">ブランチリスト</param>
         /// <param name="remotes">リモートリスト</param>
         /// <param name="bForceExpanded">全ノードを強制展開するかどうか</param>
         public void Run(List<Models.Branch> branches, List<Models.Remote> remotes, bool bForceExpanded)
         {
-            var folders = new Dictionary<string, BranchTreeNode>();
+            Dictionary<string, BranchTreeNode> folders = [];
 
             // リモートノードをルートレベルに追加する
             var fakeRemoteTime = (ulong)remotes.Count;
@@ -191,8 +191,8 @@ public class BranchTreeNode : ObservableObject
         }
 
         /// <summary>
-        ///     ブランチをツリーノードとして構築する。
-        ///     パス区切り「/」でフォルダ階層を自動生成する。
+        /// ブランチをツリーノードとして構築する。
+        /// パス区切り「/」でフォルダ階層を自動生成する。
         /// </summary>
         /// <param name="branch">対象のブランチ</param>
         /// <param name="roots">追加先のルートノードリスト</param>
@@ -224,8 +224,8 @@ public class BranchTreeNode : ObservableObject
 
             while (sepIdx != -1)
             {
-                var folder = string.Concat(prefix, "/", branch.Name.Substring(0, sepIdx));
-                var name = branch.Name.Substring(start, sepIdx - start);
+                var folder = string.Concat(prefix, "/", branch.Name[..sepIdx]);
+                var name = branch.Name[start..sepIdx];
                 if (folders.TryGetValue(folder, out var val))
                 {
                     // 既存フォルダのカウンターとタイムスタンプを更新する
@@ -281,11 +281,11 @@ public class BranchTreeNode : ObservableObject
         }
 
         /// <summary>
-        ///     ノードリストを名前順で再帰的にソートする。
-        ///     DetachedHeadは常に先頭、フォルダはブランチより前に配置する。
+        /// ノードリストを名前順で再帰的にソートする。
+        /// DetachedHeadは常に先頭、フォルダはブランチより前に配置する。
         /// </summary>
         /// <param name="nodes">ソート対象のノードリスト</param>
-        private void SortNodesByName(List<BranchTreeNode> nodes)
+        private static void SortNodesByName(List<BranchTreeNode> nodes)
         {
             nodes.Sort((l, r) =>
             {
@@ -306,11 +306,11 @@ public class BranchTreeNode : ObservableObject
         }
 
         /// <summary>
-        ///     ノードリストをコミット日時順で再帰的にソートする。
-        ///     DetachedHeadは常に先頭、同じ日時の場合は名前で比較する。
+        /// ノードリストをコミット日時順で再帰的にソートする。
+        /// DetachedHeadは常に先頭、同じ日時の場合は名前で比較する。
         /// </summary>
         /// <param name="nodes">ソート対象のノードリスト</param>
-        private void SortNodesByTime(List<BranchTreeNode> nodes)
+        private static void SortNodesByTime(List<BranchTreeNode> nodes)
         {
             nodes.Sort((l, r) =>
             {
@@ -341,7 +341,7 @@ public class BranchTreeNode : ObservableObject
         }
 
         /// <summary>
-        ///     構築済みツリーから展開中のフォルダノードのパスを収集する。
+        /// 構築済みツリーから展開中のフォルダノードのパスを収集する。
         /// </summary>
         /// <param name="nodes">対象のノードリスト</param>
         /// <param name="result">収集先のリスト</param>
@@ -364,6 +364,6 @@ public class BranchTreeNode : ObservableObject
         /// <summary>リモートブランチのソートモード</summary>
         private readonly Models.BranchSortMode _remoteSortMode;
         /// <summary>展開済みノードのパスセット</summary>
-        private readonly HashSet<string> _expanded = new HashSet<string>();
+        private readonly HashSet<string> _expanded = [];
     }
 }

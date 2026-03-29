@@ -4,13 +4,13 @@ using System.Text;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     ブランチのマージを実行するgitコマンド。
-///     git merge --progress を実行する。
+/// ブランチのマージを実行するgitコマンド。
+/// git merge --progress を実行する。
 /// </summary>
 public class Merge : Command
 {
     /// <summary>
-    ///     単一ソースからのマージコマンドを初期化する。
+    /// 単一ソースからのマージコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="source">マージ元のブランチ名またはコミットSHA。</param>
@@ -41,7 +41,7 @@ public class Merge : Command
     }
 
     /// <summary>
-    ///     複数ターゲットのマージコマンドを初期化する（オクトパスマージ対応）。
+    /// 複数ターゲットのマージコマンドを初期化する（オクトパスマージ対応）。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="targets">マージ対象のブランチ名またはコミットSHAのリスト。</param>

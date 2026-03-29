@@ -1,5 +1,4 @@
 using Komorebi.Models;
-using Xunit;
 
 namespace Komorebi.Tests.Models
 {

@@ -5,13 +5,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     ワークスペースの設定と状態を管理するViewModel。
-///     複数のリポジトリをグループ化し、起動時の復元や配色を設定する。
+/// ワークスペースの設定と状態を管理するViewModel。
+/// 複数のリポジトリをグループ化し、起動時の復元や配色を設定する。
 /// </summary>
 public class Workspace : ObservableObject
 {
     /// <summary>
-    ///     ワークスペースの表示名。
+    /// ワークスペースの表示名。
     /// </summary>
     public string Name
     {
@@ -20,8 +20,8 @@ public class Workspace : ObservableObject
     }
 
     /// <summary>
-    ///     ワークスペースのテーマカラー（ARGB値）。
-    ///     変更時にBrushプロパティの更新通知も発行する。
+    /// ワークスペースのテーマカラー（ARGB値）。
+    /// 変更時にBrushプロパティの更新通知も発行する。
     /// </summary>
     public uint Color
     {
@@ -35,16 +35,16 @@ public class Workspace : ObservableObject
     }
 
     /// <summary>
-    ///     このワークスペースに属するリポジトリパスのリスト。
+    /// このワークスペースに属するリポジトリパスのリスト。
     /// </summary>
     public List<string> Repositories
     {
         get;
         set;
-    } = new List<string>();
+    } = [];
 
     /// <summary>
-    ///     アクティブなリポジトリタブのインデックス。
+    /// アクティブなリポジトリタブのインデックス。
     /// </summary>
     public int ActiveIdx
     {
@@ -53,7 +53,7 @@ public class Workspace : ObservableObject
     } = 0;
 
     /// <summary>
-    ///     このワークスペースが現在アクティブかどうか。
+    /// このワークスペースが現在アクティブかどうか。
     /// </summary>
     public bool IsActive
     {
@@ -62,7 +62,7 @@ public class Workspace : ObservableObject
     }
 
     /// <summary>
-    ///     アプリ起動時にこのワークスペースを自動復元するかどうか。
+    /// アプリ起動時にこのワークスペースを自動復元するかどうか。
     /// </summary>
     public bool RestoreOnStartup
     {
@@ -71,7 +71,7 @@ public class Workspace : ObservableObject
     }
 
     /// <summary>
-    ///     このワークスペースのデフォルトクローン先ディレクトリ。
+    /// このワークスペースのデフォルトクローン先ディレクトリ。
     /// </summary>
     public string DefaultCloneDir
     {
@@ -80,7 +80,7 @@ public class Workspace : ObservableObject
     }
 
     /// <summary>
-    ///     カラー値から生成されるブラシ（UI表示用）。
+    /// カラー値から生成されるブラシ（UI表示用）。
     /// </summary>
     public IBrush Brush
     {

@@ -4,14 +4,14 @@ using Avalonia.Media;
 namespace Komorebi.Converters;
 
 /// <summary>
-///     リポジトリのダーティ状態を表示用の値に変換するコンバータのコレクション。
-///     XAMLバインディングで使用される。
+/// リポジトリのダーティ状態を表示用の値に変換するコンバータのコレクション。
+/// XAMLバインディングで使用される。
 /// </summary>
 public static class DirtyStateConverters
 {
     /// <summary>
-    ///     ダーティ状態をブラシ色に変換するコンバータ。
-    ///     ローカル変更あり → グレー、プル/プッシュ待ち → ロイヤルブルー、それ以外 → 透明を返す。
+    /// ダーティ状態をブラシ色に変換するコンバータ。
+    /// ローカル変更あり → グレー、プル/プッシュ待ち → ロイヤルブルー、それ以外 → 透明を返す。
     /// </summary>
     public static readonly FuncValueConverter<Models.DirtyState, IBrush> ToBrush =
         new FuncValueConverter<Models.DirtyState, IBrush>(v =>
@@ -29,8 +29,8 @@ public static class DirtyStateConverters
         });
 
     /// <summary>
-    ///     ダーティ状態をローカライズされた説明文字列に変換するコンバータ。
-    ///     各状態に応じたテキストを「 ・ 」付きで返す。
+    /// ダーティ状態をローカライズされた説明文字列に変換するコンバータ。
+    /// 各状態に応じたテキストを「 ・ 」付きで返す。
     /// </summary>
     public static readonly FuncValueConverter<Models.DirtyState, string> ToDesc =
         new FuncValueConverter<Models.DirtyState, string>(v =>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     リポジトリの全体的なステータス（現在ブランチ、ahead/behind数、ローカル変更数）を取得するクラス。
+/// リポジトリの全体的なステータス（現在ブランチ、ahead/behind数、ローカル変更数）を取得するクラス。
 /// </summary>
 public partial class QueryRepositoryStatus : Command
 {
@@ -18,7 +18,7 @@ public partial class QueryRepositoryStatus : Command
     private static partial Regex REG_BEHIND();
 
     /// <summary>
-    ///     コンストラクタ。リポジトリステータスを取得するコマンドの基本設定を行う。
+    /// コンストラクタ。リポジトリステータスを取得するコマンドの基本設定を行う。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     public QueryRepositoryStatus(string repo)
@@ -28,8 +28,8 @@ public partial class QueryRepositoryStatus : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、リポジトリのステータス情報を返す。
-    ///     現在ブランチ、ahead/behind数、ローカル変更数を取得する。
+    /// コマンドを非同期で実行し、リポジトリのステータス情報を返す。
+    /// 現在ブランチ、ahead/behind数、ローカル変更数を取得する。
     /// </summary>
     /// <returns>リポジトリステータスモデル。失敗時はnull</returns>
     public async Task<Models.RepositoryStatus> GetResultAsync()
@@ -60,11 +60,11 @@ public partial class QueryRepositoryStatus : Command
     }
 
     /// <summary>
-    ///     追跡状態文字列からahead/behind数を解析する。
+    /// 追跡状態文字列からahead/behind数を解析する。
     /// </summary>
     /// <param name="status">設定先のリポジトリステータス</param>
     /// <param name="input">追跡状態文字列（例: "ahead 3, behind 2"）</param>
-    private void ParseTrackStatus(Models.RepositoryStatus status, string input)
+    private static void ParseTrackStatus(Models.RepositoryStatus status, string input)
     {
         var aheadMatch = REG_AHEAD().Match(input);
         if (aheadMatch.Success)

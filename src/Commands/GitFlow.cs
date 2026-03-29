@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     Git Flowワークフローの各種操作を提供する静的クラス。
-///     git flow の初期化、ブランチの開始・完了を実行する。
+/// Git Flowワークフローの各種操作を提供する静的クラス。
+/// git flow の初期化、ブランチの開始・完了を実行する。
 /// </summary>
 public static class GitFlow
 {
     /// <summary>
-    ///     Git Flowを初期化する。
-    ///     ブランチ名とプレフィックスをgit configに設定し、git flow init -d を実行する。
+    /// Git Flowを初期化する。
+    /// ブランチ名とプレフィックスをgit configに設定し、git flow init -d を実行する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="master">メインブランチ名（例: master, main）。</param>
@@ -44,8 +44,8 @@ public static class GitFlow
     }
 
     /// <summary>
-    ///     Git Flowブランチを新規に開始する。
-    ///     git flow &lt;type&gt; start &lt;name&gt; を実行する。
+    /// Git Flowブランチを新規に開始する。
+    /// git flow &lt;type&gt; start &lt;name&gt; を実行する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="type">ブランチの種類（Feature, Release, Hotfix）。</param>
@@ -79,8 +79,8 @@ public static class GitFlow
     }
 
     /// <summary>
-    ///     Git Flowブランチを完了（マージ）する。
-    ///     git flow &lt;type&gt; finish [options] &lt;name&gt; を実行する。
+    /// Git Flowブランチを完了（マージ）する。
+    /// git flow &lt;type&gt; finish [options] &lt;name&gt; を実行する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="type">ブランチの種類（Feature, Release, Hotfix）。</param>

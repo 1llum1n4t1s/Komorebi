@@ -6,7 +6,7 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     アプリケーションの情報画面（バージョン、リリース日、著作権などを表示する）。
+/// アプリケーションの情報画面（バージョン、リリース日、著作権などを表示する）。
 /// </summary>
 public partial class About : ChromelessWindow
 {
@@ -47,7 +47,7 @@ public partial class About : ChromelessWindow
     }
 
     /// <summary>
-    ///     現在のバージョンに対応するGitHubリリースノートをブラウザで開く。
+    /// 現在のバージョンに対応するGitHubリリースノートをブラウザで開く。
     /// </summary>
     private void OnVisitReleaseNotes(object _, RoutedEventArgs e)
     {
@@ -56,7 +56,7 @@ public partial class About : ChromelessWindow
     }
 
     /// <summary>
-    ///     プロジェクトのWebサイトをブラウザで開く。
+    /// プロジェクトのWebサイトをブラウザで開く。
     /// </summary>
     private void OnVisitWebsite(object _, RoutedEventArgs e)
     {
@@ -65,7 +65,7 @@ public partial class About : ChromelessWindow
     }
 
     /// <summary>
-    ///     ソースコードリポジトリをブラウザで開く。
+    /// ソースコードリポジトリをブラウザで開く。
     /// </summary>
     private void OnVisitSourceCode(object _, RoutedEventArgs e)
     {

@@ -11,15 +11,15 @@ using Avalonia.Platform;
 namespace Komorebi.Native;
 
 /// <summary>
-///     macOS固有のバックエンド実装。
-///     Homebrewのパス修正、macOS標準コマンド（open等）を使用する。
+/// macOS固有のバックエンド実装。
+/// Homebrewのパス修正、macOS標準コマンド（open等）を使用する。
 /// </summary>
 [SupportedOSPlatform("macOS")]
 internal class MacOS : OS.IBackend
 {
     /// <summary>
-    ///     AvaloniaアプリケーションビルダーにmacOS固有の設定を適用する。
-    ///     デフォルトメニュー項目を無効化し、PATH環境変数を修正する。
+    /// AvaloniaアプリケーションビルダーにmacOS固有の設定を適用する。
+    /// デフォルトメニュー項目を無効化し、PATH環境変数を修正する。
     /// </summary>
     public void SetupApp(AppBuilder builder)
     {
@@ -49,8 +49,8 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     ウィンドウにmacOS固有のクロム設定を適用する。
-    ///     システムクロム（信号機ボタン）を使用する。
+    /// ウィンドウにmacOS固有のクロム設定を適用する。
+    /// システムクロム（信号機ボタン）を使用する。
     /// </summary>
     public void SetupWindow(Window window)
     {
@@ -59,8 +59,8 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSのアプリケーションデータディレクトリパスを返す。
-    ///     ~/Library/Application Support/Komorebi を使用する。
+    /// macOSのアプリケーションデータディレクトリパスを返す。
+    /// ~/Library/Application Support/Komorebi を使用する。
     /// </summary>
     public string GetDataDir()
     {
@@ -70,8 +70,8 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSの一般的なパスからgit実行ファイルを検索する。
-    ///     /usr/bin、/usr/local/bin、Homebrewのパスを順に確認する。
+    /// macOSの一般的なパスからgit実行ファイルを検索する。
+    /// /usr/bin、/usr/local/bin、Homebrewのパスを順に確認する。
     /// </summary>
     public string FindGitExecutable()
     {
@@ -91,7 +91,7 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSのターミナルアプリの実行パスを返す。
+    /// macOSのターミナルアプリの実行パスを返す。
     /// </summary>
     public string FindTerminal(Models.ShellOrTerminal shell)
     {
@@ -99,8 +99,8 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     外部マージ/diffツールの実行ファイルをmacOSシステムから検索する。
-    ///     パターンに一致するファイルが存在するか確認する。
+    /// 外部マージ/diffツールの実行ファイルをmacOSシステムから検索する。
+    /// パターンに一致するファイルが存在するか確認する。
     /// </summary>
     public string FindExternalMergerExecFile(string[] patterns)
     {
@@ -124,8 +124,8 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSにインストールされている外部エディタ/IDEを検出する。
-    ///     /Applications 配下のアプリケーションバンドルを確認する。
+    /// macOSにインストールされている外部エディタ/IDEを検出する。
+    /// /Applications 配下のアプリケーションバンドルを確認する。
     /// </summary>
     public List<Models.ExternalTool> FindExternalTools()
     {
@@ -143,7 +143,7 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSのopenコマンドでデフォルトブラウザを開く。
+    /// macOSのopenコマンドでデフォルトブラウザを開く。
     /// </summary>
     public void OpenBrowser(string url)
     {
@@ -151,8 +151,8 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSのopenコマンドでFinderを開く。
-    ///     ファイルの場合は -R オプションで親フォルダ内のファイルを選択表示する。
+    /// macOSのopenコマンドでFinderを開く。
+    /// ファイルの場合は -R オプションで親フォルダ内のファイルを選択表示する。
     /// </summary>
     public void OpenInFileManager(string path)
     {
@@ -163,7 +163,7 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSのopenコマンドで指定ターミナルアプリを起動する。
+    /// macOSのopenコマンドで指定ターミナルアプリを起動する。
     /// </summary>
     public void OpenTerminal(string workdir, string _)
     {
@@ -174,7 +174,7 @@ internal class MacOS : OS.IBackend
     }
 
     /// <summary>
-    ///     macOSのopenコマンドでデフォルトアプリケーションでファイルを開く。
+    /// macOSのopenコマンドでデフォルトアプリケーションでファイルを開く。
     /// </summary>
     public void OpenWithDefaultEditor(string file)
     {

@@ -24,17 +24,17 @@ using AvaloniaEdit.Utils;
 namespace Komorebi.Views;
 
 /// <summary>
-///     MergeConflictTextPresenterクラス。
+/// MergeConflictTextPresenterクラス。
 /// </summary>
 public class MergeConflictTextPresenter : TextEditor
 {
     /// <summary>
-    ///     LineNumberMarginクラス。
+    /// LineNumberMarginクラス。
     /// </summary>
     public class LineNumberMargin : AbstractMargin
     {
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public LineNumberMargin(MergeConflictTextPresenter presenter)
         {
@@ -44,7 +44,7 @@ public class MergeConflictTextPresenter : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの描画処理を行う。
+        /// コントロールの描画処理を行う。
         /// </summary>
         public override void Render(DrawingContext context)
         {
@@ -83,7 +83,7 @@ public class MergeConflictTextPresenter : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの測定処理をオーバーライドする。
+        /// コントロールの測定処理をオーバーライドする。
         /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -102,16 +102,19 @@ public class MergeConflictTextPresenter : TextEditor
             return new Size(test.Width, 0);
         }
 
+        /// <summary>
+        /// 親のテキストプレゼンター参照。
+        /// </summary>
         private readonly MergeConflictTextPresenter _presenter;
     }
 
     /// <summary>
-    ///     VerticalSeparatorMarginクラス。
+    /// 行番号マージンとテキスト領域の間の垂直区切り線。
     /// </summary>
     public class VerticalSeparatorMargin : AbstractMargin
     {
         /// <summary>
-        ///     コントロールの描画処理を行う。
+        /// コントロールの描画処理を行う。
         /// </summary>
         public override void Render(DrawingContext context)
         {
@@ -120,7 +123,7 @@ public class MergeConflictTextPresenter : TextEditor
         }
 
         /// <summary>
-        ///     コントロールの測定処理をオーバーライドする。
+        /// コントロールの測定処理をオーバーライドする。
         /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -129,12 +132,12 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     ConflictMarkerTransformerクラス。
+    /// コンフリクトマーカー行をイタリック・グレーで表示する行変換器。
     /// </summary>
     public class ConflictMarkerTransformer : DocumentColorizingTransformer
     {
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public ConflictMarkerTransformer(MergeConflictTextPresenter presenter)
         {
@@ -142,7 +145,7 @@ public class MergeConflictTextPresenter : TextEditor
         }
 
         /// <summary>
-        ///     ColorizeLineの処理を行う。
+        /// ColorizeLineの処理を行う。
         /// </summary>
         protected override void ColorizeLine(DocumentLine line)
         {
@@ -161,18 +164,24 @@ public class MergeConflictTextPresenter : TextEditor
             }
         }
 
+        /// <summary>
+        /// 親のテキストプレゼンター参照。
+        /// </summary>
         private readonly MergeConflictTextPresenter _presenter;
     }
 
     /// <summary>
-    ///     LineBackgroundRendererクラス。
+    /// コンフリクト行の背景色（Ours/Theirs/解決済み/未解決）を描画するレンダラー。
     /// </summary>
     public class LineBackgroundRenderer : IBackgroundRenderer
     {
+        /// <summary>
+        /// 描画レイヤーを取得する。背景レイヤーで描画する。
+        /// </summary>
         public KnownLayer Layer => KnownLayer.Background;
 
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public LineBackgroundRenderer(MergeConflictTextPresenter presenter)
         {
@@ -180,7 +189,7 @@ public class MergeConflictTextPresenter : TextEditor
         }
 
         /// <summary>
-        ///     Drawの処理を行う。
+        /// Drawの処理を行う。
         /// </summary>
         public void Draw(TextView textView, DrawingContext drawingContext)
         {
@@ -241,85 +250,139 @@ public class MergeConflictTextPresenter : TextEditor
             }
         }
 
+        /// <summary>
+        /// 親のテキストプレゼンター参照。
+        /// </summary>
         private readonly MergeConflictTextPresenter _presenter;
     }
 
+    /// <summary>
+    /// ファイル名のスタイルプロパティ。TextMate文法の判定に使用する。
+    /// </summary>
     public static readonly StyledProperty<string> FileNameProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, string>(nameof(FileName), string.Empty);
 
+    /// <summary>
+    /// ファイル名を取得・設定する。
+    /// </summary>
     public string FileName
     {
         get => GetValue(FileNameProperty);
         set => SetValue(FileNameProperty, value);
     }
 
+    /// <summary>
+    /// パネル種別（Ours/Theirs/Result）のスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.ConflictPanelType> PanelTypeProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, Models.ConflictPanelType>(nameof(PanelType));
 
+    /// <summary>
+    /// パネル種別を取得・設定する。
+    /// </summary>
     public Models.ConflictPanelType PanelType
     {
         get => GetValue(PanelTypeProperty);
         set => SetValue(PanelTypeProperty, value);
     }
 
+    /// <summary>
+    /// コンフリクト行データのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<List<Models.ConflictLine>> LinesProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, List<Models.ConflictLine>>(nameof(Lines));
 
+    /// <summary>
+    /// コンフリクト行データを取得・設定する。
+    /// </summary>
     public List<Models.ConflictLine> Lines
     {
         get => GetValue(LinesProperty);
         set => SetValue(LinesProperty, value);
     }
 
+    /// <summary>
+    /// 最大行番号のスタイルプロパティ。行番号マージンの幅計算に使用する。
+    /// </summary>
     public static readonly StyledProperty<int> MaxLineNumberProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, int>(nameof(MaxLineNumber));
 
+    /// <summary>
+    /// 最大行番号を取得・設定する。
+    /// </summary>
     public int MaxLineNumber
     {
         get => GetValue(MaxLineNumberProperty);
         set => SetValue(MaxLineNumberProperty, value);
     }
 
+    /// <summary>
+    /// Ours側コンテンツの背景色ブラシのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<IBrush> OursContentBackgroundProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, IBrush>(nameof(OursContentBackground), new SolidColorBrush(Color.FromArgb(60, 0, 255, 0)));
 
+    /// <summary>
+    /// Ours側コンテンツの背景色ブラシを取得・設定する。
+    /// </summary>
     public IBrush OursContentBackground
     {
         get => GetValue(OursContentBackgroundProperty);
         set => SetValue(OursContentBackgroundProperty, value);
     }
 
+    /// <summary>
+    /// Theirs側コンテンツの背景色ブラシのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<IBrush> TheirsContentBackgroundProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, IBrush>(nameof(TheirsContentBackground), new SolidColorBrush(Color.FromArgb(60, 255, 0, 0)));
 
+    /// <summary>
+    /// Theirs側コンテンツの背景色ブラシを取得・設定する。
+    /// </summary>
     public IBrush TheirsContentBackground
     {
         get => GetValue(TheirsContentBackgroundProperty);
         set => SetValue(TheirsContentBackgroundProperty, value);
     }
 
+    /// <summary>
+    /// 選択中のコンフリクトチャンクのスタイルプロパティ。
+    /// </summary>
     public static readonly StyledProperty<Models.ConflictSelectedChunk> SelectedChunkProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, Models.ConflictSelectedChunk>(nameof(SelectedChunk));
 
+    /// <summary>
+    /// 選択中のコンフリクトチャンクを取得・設定する。
+    /// </summary>
     public Models.ConflictSelectedChunk SelectedChunk
     {
         get => GetValue(SelectedChunkProperty);
         set => SetValue(SelectedChunkProperty, value);
     }
 
+    /// <summary>
+    /// 現在表示中の行範囲のスタイルプロパティ。ミニマップの表示位置に使用する。
+    /// </summary>
     public static readonly StyledProperty<ViewModels.TextLineRange> DisplayRangeProperty =
         AvaloniaProperty.Register<MergeConflictTextPresenter, ViewModels.TextLineRange>(nameof(DisplayRange));
 
+    /// <summary>
+    /// 現在表示中の行範囲を取得・設定する。
+    /// </summary>
     public ViewModels.TextLineRange DisplayRange
     {
         get => GetValue(DisplayRangeProperty);
         set => SetValue(DisplayRangeProperty, value);
     }
 
+    /// <summary>
+    /// スタイルキーをTextEditorとしてオーバーライドする。
+    /// </summary>
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
-    ///     MergeConflictTextPresenterの処理を行う。
+    /// MergeConflictTextPresenterの処理を行う。
     /// </summary>
     public MergeConflictTextPresenter() : base(new TextArea(), new TextDocument())
     {
@@ -338,7 +401,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     テンプレート適用時の処理を行う。
+    /// テンプレート適用時の処理を行う。
     /// </summary>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -353,7 +416,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -374,7 +437,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -394,7 +457,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -413,7 +476,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     UpdateContentの処理を行う。
+    /// UpdateContentの処理を行う。
     /// </summary>
     private void UpdateContent()
     {
@@ -444,7 +507,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewContextRequestedイベントのハンドラ。
+    /// TextViewContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -469,7 +532,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewPointerChangedイベントのハンドラ。
+    /// TextViewPointerChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewPointerChanged(object sender, PointerEventArgs e)
     {
@@ -483,7 +546,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewPointerWheelChangedイベントのハンドラ。
+    /// TextViewPointerWheelChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewPointerWheelChanged(object sender, PointerWheelEventArgs e)
     {
@@ -498,7 +561,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewVisualLinesChangedイベントのハンドラ。
+    /// TextViewVisualLinesChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewVisualLinesChanged(object sender, EventArgs e)
     {
@@ -532,7 +595,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     TextViewScrollChangedイベントのハンドラ。
+    /// TextViewScrollChangedイベントのハンドラ。
     /// </summary>
     private void OnTextViewScrollChanged(object sender, ScrollChangedEventArgs e)
     {
@@ -552,7 +615,7 @@ public class MergeConflictTextPresenter : TextEditor
     }
 
     /// <summary>
-    ///     UpdateSelectedChunkPositionの処理を行う。
+    /// UpdateSelectedChunkPositionの処理を行う。
     /// </summary>
     private void UpdateSelectedChunkPosition(ViewModels.MergeConflictEditor vm, double y)
     {
@@ -615,27 +678,46 @@ public class MergeConflictTextPresenter : TextEditor
         vm.SelectedChunk = null;
     }
 
+    /// <summary>
+    /// TextMateシンタックスハイライトのインスタンス。
+    /// </summary>
     private TextMate.Installation _textMate;
+
+    /// <summary>
+    /// テキストエディタ内部のScrollViewerキャッシュ。
+    /// </summary>
     private ScrollViewer _scrollViewer;
 }
 
 /// <summary>
-///     MergeConflictMinimapクラス。
+/// MergeConflictMinimapクラス。
 /// </summary>
 public class MergeConflictMinimap : Control
 {
+    /// <summary>
+    /// 現在表示中の行範囲のスタイルプロパティ。ビューポート位置の描画に使用する。
+    /// </summary>
     public static readonly StyledProperty<ViewModels.TextLineRange> DisplayRangeProperty =
         AvaloniaProperty.Register<MergeConflictMinimap, ViewModels.TextLineRange>(nameof(DisplayRange));
 
+    /// <summary>
+    /// 現在表示中の行範囲を取得・設定する。
+    /// </summary>
     public ViewModels.TextLineRange DisplayRange
     {
         get => GetValue(DisplayRangeProperty);
         set => SetValue(DisplayRangeProperty, value);
     }
 
+    /// <summary>
+    /// 未解決コンフリクト数のスタイルプロパティ。再描画トリガーに使用する。
+    /// </summary>
     public static readonly StyledProperty<int> UnsolvedCountProperty =
         AvaloniaProperty.Register<MergeConflictMinimap, int>(nameof(UnsolvedCount));
 
+    /// <summary>
+    /// 未解決コンフリクト数を取得・設定する。
+    /// </summary>
     public int UnsolvedCount
     {
         get => GetValue(UnsolvedCountProperty);
@@ -643,7 +725,7 @@ public class MergeConflictMinimap : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -681,7 +763,7 @@ public class MergeConflictMinimap : Control
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -694,7 +776,7 @@ public class MergeConflictMinimap : Control
     }
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -723,12 +805,12 @@ public class MergeConflictMinimap : Control
 }
 
 /// <summary>
-///     マージコンフリクトエディタのコードビハインド。
+/// マージコンフリクトエディタのコードビハインド。
 /// </summary>
 public partial class MergeConflictEditor : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public MergeConflictEditor()
     {
@@ -736,7 +818,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -747,7 +829,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられる際の処理。
+    /// ウィンドウが閉じられる際の処理。
     /// </summary>
     protected override async void OnClosing(WindowClosingEventArgs e)
     {
@@ -776,7 +858,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     ウィンドウが閉じられた後の処理。
+    /// ウィンドウが閉じられた後の処理。
     /// </summary>
     protected override void OnClosed(EventArgs e)
     {
@@ -785,7 +867,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     ViewModelPropertyChangedイベントのハンドラ。
+    /// ViewModelPropertyChangedイベントのハンドラ。
     /// </summary>
     private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
@@ -794,7 +876,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     GotoPrevConflictイベントのハンドラ。
+    /// GotoPrevConflictイベントのハンドラ。
     /// </summary>
     private void OnGotoPrevConflict(object sender, RoutedEventArgs e)
     {
@@ -840,7 +922,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     GotoNextConflictイベントのハンドラ。
+    /// GotoNextConflictイベントのハンドラ。
     /// </summary>
     private void OnGotoNextConflict(object sender, RoutedEventArgs e)
     {
@@ -886,7 +968,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     SaveAndStageイベントのハンドラ。
+    /// SaveAndStageイベントのハンドラ。
     /// </summary>
     private async void OnSaveAndStage(object sender, RoutedEventArgs e)
     {
@@ -902,7 +984,7 @@ public partial class MergeConflictEditor : ChromelessWindow
     }
 
     /// <summary>
-    ///     UpdatePopupVisibilityの処理を行う。
+    /// UpdatePopupVisibilityの処理を行う。
     /// </summary>
     private void UpdatePopupVisibility()
     {
@@ -952,5 +1034,8 @@ public partial class MergeConflictEditor : ChromelessWindow
         }
     }
 
+    /// <summary>
+    /// ウィンドウを強制的に閉じるかどうか。確認ダイアログをスキップする。
+    /// </summary>
     private bool _forceClose = false;
 }

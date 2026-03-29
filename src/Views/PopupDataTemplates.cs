@@ -5,13 +5,22 @@ using Avalonia.VisualTree;
 
 namespace Komorebi.Views;
 
+/// <summary>
+/// ポップアップViewModel→View自動解決用のデータテンプレート。命名規則でビューを生成する。
+/// </summary>
 public class PopupDataTemplates : IDataTemplate
 {
+    /// <summary>
+    /// 指定されたデータがこのテンプレートに一致するかを判定する。Popup派生クラスに一致。
+    /// </summary>
     public bool Match(object data)
     {
         return data is ViewModels.Popup;
     }
 
+    /// <summary>
+    /// ViewModelに対応するViewを生成し、最初のフォーカス可能な入力要素にフォーカスする。
+    /// </summary>
     public Control Build(object param)
     {
         var control = App.CreateViewForViewModel(param);

@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     リモートリポジトリをローカルにクローンするgitコマンド。
-///     git clone --progress --verbose を実行する。
+/// リモートリポジトリをローカルにクローンするgitコマンド。
+/// git clone --progress --verbose を実行する。
 /// </summary>
 public class Clone : Command
 {
     /// <summary>
-    ///     Cloneコマンドを初期化する。
+    /// Cloneコマンドを初期化する。
     /// </summary>
     /// <param name="ctx">エラー表示用のコンテキスト文字列。</param>
     /// <param name="path">クローン先の親ディレクトリパス。</param>

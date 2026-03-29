@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     git update-index --index-info を使用してインデックスを更新するクラス。
-///     amend時にステージング情報を復元するために使用する。
+/// git update-index --index-info を使用してインデックスを更新するクラス。
+/// amend時にステージング情報を復元するために使用する。
 /// </summary>
 public class UpdateIndexInfo
 {
     /// <summary>
-    ///     コンストラクタ。変更リストからインデックス更新用のパッチデータを構築する。
+    /// コンストラクタ。変更リストからインデックス更新用のパッチデータを構築する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="changes">インデックスに反映する変更リスト</param>
@@ -62,7 +62,7 @@ public class UpdateIndexInfo
     }
 
     /// <summary>
-    ///     パッチデータを標準入力経由で git update-index に渡して実行する。
+    /// パッチデータを標準入力経由で git update-index に渡して実行する。
     /// </summary>
     /// <returns>成功時true</returns>
     public async Task<bool> ExecAsync()

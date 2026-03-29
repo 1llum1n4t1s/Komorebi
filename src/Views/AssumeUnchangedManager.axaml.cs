@@ -4,12 +4,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     assume-unchanged管理ダイアログのコードビハインド。
+/// assume-unchanged管理ダイアログのコードビハインド。
 /// </summary>
 public partial class AssumeUnchangedManager : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public AssumeUnchangedManager()
     {
@@ -18,7 +18,7 @@ public partial class AssumeUnchangedManager : ChromelessWindow
     }
 
     /// <summary>
-    ///     RemoveButtonClickedイベントのハンドラ。
+    /// RemoveButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnRemoveButtonClicked(object sender, RoutedEventArgs e)
     {

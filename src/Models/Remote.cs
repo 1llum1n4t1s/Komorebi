@@ -6,8 +6,8 @@ using System.Web;
 namespace Komorebi.Models;
 
 /// <summary>
-///     Gitリモートリポジトリの情報を保持するクラス。
-///     URLの検証、訪問URL・PR作成URLの生成を行う。
+/// Gitリモートリポジトリの情報を保持するクラス。
+/// URLの検証、訪問URL・PR作成URLの生成を行う。
 /// </summary>
 public partial class Remote
 {
@@ -45,7 +45,7 @@ public partial class Remote
     public string URL { get; set; }
 
     /// <summary>
-    ///     指定URLがSSH形式かどうかを判定する
+    /// 指定URLがSSH形式かどうかを判定する
     /// </summary>
     /// <param name="url">検証対象のURL</param>
     /// <returns>SSH形式の場合true</returns>
@@ -61,7 +61,7 @@ public partial class Remote
     }
 
     /// <summary>
-    ///     指定URLが有効なGitリモートURL形式かどうかを判定する
+    /// 指定URLが有効なGitリモートURL形式かどうかを判定する
     /// </summary>
     /// <param name="url">検証対象のURL</param>
     /// <returns>有効なURL形式の場合true</returns>
@@ -83,7 +83,7 @@ public partial class Remote
     }
 
     /// <summary>
-    ///     リモートURLからブラウザで訪問可能なHTTP(S) URLを生成する
+    /// リモートURLからブラウザで訪問可能なHTTP(S) URLを生成する
     /// </summary>
     /// <param name="url">生成された訪問URL</param>
     /// <returns>URL生成に成功した場合true</returns>
@@ -95,7 +95,7 @@ public partial class Remote
         {
             try
             {
-                var uri = new Uri(URL.EndsWith(".git", StringComparison.Ordinal) ? URL.Substring(0, URL.Length - 4) : URL);
+                var uri = new Uri(URL.EndsWith(".git", StringComparison.Ordinal) ? URL[..^4] : URL);
                 if (uri.Port != 80 && uri.Port != 443)
                     url = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.LocalPath}";
                 else
@@ -123,8 +123,8 @@ public partial class Remote
     }
 
     /// <summary>
-    ///     各ホスティングサービスに応じたPR作成URLを生成する。
-    ///     GitHub、GitLab、Gitee、Bitbucket、Gitea、Azure DevOpsに対応。
+    /// 各ホスティングサービスに応じたPR作成URLを生成する。
+    /// GitHub、GitLab、Gitee、Bitbucket、Gitea、Azure DevOpsに対応。
     /// </summary>
     /// <param name="url">生成されたPR作成URL</param>
     /// <param name="mergeBranch">マージ元のブランチ名</param>

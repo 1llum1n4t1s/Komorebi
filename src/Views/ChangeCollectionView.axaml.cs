@@ -13,14 +13,15 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     ChangeTreeNodeToggleButtonクラス。
+/// ChangeTreeNodeToggleButtonクラス。
 /// </summary>
 public class ChangeTreeNodeToggleButton : ToggleButton
 {
+    /// <summary>スタイルキーをToggleButtonに設定。</summary>
     protected override Type StyleKeyOverride => typeof(ToggleButton);
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -36,14 +37,15 @@ public class ChangeTreeNodeToggleButton : ToggleButton
 }
 
 /// <summary>
-///     ChangeCollectionContainerクラス。
+/// ChangeCollectionContainerクラス。
 /// </summary>
 public class ChangeCollectionContainer : ListBox
 {
+    /// <summary>スタイルキーをListBoxに設定。</summary>
     protected override Type StyleKeyOverride => typeof(ListBox);
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -63,58 +65,70 @@ public class ChangeCollectionContainer : ListBox
 }
 
 /// <summary>
-///     変更ファイルコレクションビューのコードビハインド。
+/// 変更ファイルコレクションビューのコードビハインド。
 /// </summary>
 public partial class ChangeCollectionView : UserControl
 {
+    /// <summary>ステージ前（WorkTree）の変更かどうかを保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<bool> IsUnstagedChangeProperty =
         AvaloniaProperty.Register<ChangeCollectionView, bool>(nameof(IsUnstagedChange));
 
+    /// <summary>ステージ前の変更であるかどうか。ツールチップ表示時の状態説明に影響する。</summary>
     public bool IsUnstagedChange
     {
         get => GetValue(IsUnstagedChangeProperty);
         set => SetValue(IsUnstagedChangeProperty, value);
     }
 
+    /// <summary>変更ファイルの表示モード（ツリー/グリッド/リスト）を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<Models.ChangeViewMode> ViewModeProperty =
         AvaloniaProperty.Register<ChangeCollectionView, Models.ChangeViewMode>(nameof(ViewMode), Models.ChangeViewMode.Tree);
 
+    /// <summary>変更ファイルの表示モード。</summary>
     public Models.ChangeViewMode ViewMode
     {
         get => GetValue(ViewModeProperty);
         set => SetValue(ViewModeProperty, value);
     }
 
+    /// <summary>フォルダのコンパクト表示を有効にするかのスタイルプロパティ。</summary>
     public static readonly StyledProperty<bool> EnableCompactFoldersProperty =
         AvaloniaProperty.Register<ChangeCollectionView, bool>(nameof(EnableCompactFolders));
 
+    /// <summary>子が1つだけのフォルダを連結して表示するかどうか。</summary>
     public bool EnableCompactFolders
     {
         get => GetValue(EnableCompactFoldersProperty);
         set => SetValue(EnableCompactFoldersProperty, value);
     }
 
+    /// <summary>変更ファイル一覧を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<List<Models.Change>> ChangesProperty =
         AvaloniaProperty.Register<ChangeCollectionView, List<Models.Change>>(nameof(Changes));
 
+    /// <summary>表示対象の変更ファイル一覧。</summary>
     public List<Models.Change> Changes
     {
         get => GetValue(ChangesProperty);
         set => SetValue(ChangesProperty, value);
     }
 
+    /// <summary>選択中の変更ファイル一覧を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<List<Models.Change>> SelectedChangesProperty =
         AvaloniaProperty.Register<ChangeCollectionView, List<Models.Change>>(nameof(SelectedChanges));
 
+    /// <summary>現在選択中の変更ファイル一覧。</summary>
     public List<Models.Change> SelectedChanges
     {
         get => GetValue(SelectedChangesProperty);
         set => SetValue(SelectedChangesProperty, value);
     }
 
+    /// <summary>変更ファイルがダブルタップされた際のルーティングイベント。</summary>
     public static readonly RoutedEvent<RoutedEventArgs> ChangeDoubleTappedEvent =
         RoutedEvent.Register<ChangeCollectionView, RoutedEventArgs>(nameof(ChangeDoubleTapped), RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
 
+    /// <summary>変更ファイルがダブルタップされた際に発火するイベント。</summary>
     public event EventHandler<RoutedEventArgs> ChangeDoubleTapped
     {
         add { AddHandler(ChangeDoubleTappedEvent, value); }
@@ -122,7 +136,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public ChangeCollectionView()
     {
@@ -130,7 +144,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     ToggleNodeIsExpandedの処理を行う。
+    /// ToggleNodeIsExpandedの処理を行う。
     /// </summary>
     public void ToggleNodeIsExpanded(ViewModels.ChangeTreeNode node)
     {
@@ -167,7 +181,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     GetNextChangeWithoutSelectionの処理を行う。
+    /// GetNextChangeWithoutSelectionの処理を行う。
     /// </summary>
     public Models.Change GetNextChangeWithoutSelection()
     {
@@ -232,7 +246,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     TakeFocusの処理を行う。
+    /// TakeFocusの処理を行う。
     /// </summary>
     public void TakeFocus()
     {
@@ -242,7 +256,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -260,7 +274,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     RowDataContextChangedイベントのハンドラ。
+    /// RowDataContextChangedイベントのハンドラ。
     /// </summary>
     private void OnRowDataContextChanged(object sender, EventArgs e)
     {
@@ -285,7 +299,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     RowDoubleTappedイベントのハンドラ。
+    /// RowDoubleTappedイベントのハンドラ。
     /// </summary>
     private void OnRowDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -312,7 +326,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     RowSelectionChangedイベントのハンドラ。
+    /// RowSelectionChangedイベントのハンドラ。
     /// </summary>
     private void OnRowSelectionChanged(object sender, SelectionChangedEventArgs _)
     {
@@ -358,9 +372,9 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     MakeTreeRowsの処理を行う。
+    /// MakeTreeRowsの処理を行う。
     /// </summary>
-    private void MakeTreeRows(List<ViewModels.ChangeTreeNode> rows, List<ViewModels.ChangeTreeNode> nodes)
+    private static void MakeTreeRows(List<ViewModels.ChangeTreeNode> rows, List<ViewModels.ChangeTreeNode> nodes)
     {
         foreach (var node in nodes)
         {
@@ -374,7 +388,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     UpdateDataSourceの処理を行う。
+    /// UpdateDataSourceの処理を行う。
     /// </summary>
     private void UpdateDataSource(bool onlyViewModeChange)
     {
@@ -446,7 +460,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     UpdateSelectionの処理を行う。
+    /// UpdateSelectionの処理を行う。
     /// </summary>
     private void UpdateSelection()
     {
@@ -491,9 +505,9 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     CollectChangesInNodeの処理を行う。
+    /// CollectChangesInNodeの処理を行う。
     /// </summary>
-    private void CollectChangesInNode(List<Models.Change> outs, ViewModels.ChangeTreeNode node)
+    private static void CollectChangesInNode(List<Models.Change> outs, ViewModels.ChangeTreeNode node)
     {
         if (node.IsFolder)
         {
@@ -507,7 +521,7 @@ public partial class ChangeCollectionView : UserControl
     }
 
     /// <summary>
-    ///     UpdateRowTipsの処理を行う。
+    /// UpdateRowTipsの処理を行う。
     /// </summary>
     private void UpdateRowTips(Control control, Models.Change change)
     {
@@ -524,5 +538,6 @@ public partial class ChangeCollectionView : UserControl
         ToolTip.SetTip(control, tip);
     }
 
+    /// <summary>選択変更イベントの再入を防止するフラグ。</summary>
     private bool _disableSelectionChangingEvent = false;
 }

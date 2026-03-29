@@ -7,37 +7,37 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     サブモジュールツリーのノード。フォルダまたはサブモジュール自体を表す。
+/// サブモジュールツリーのノード。フォルダまたはサブモジュール自体を表す。
 /// </summary>
 public class SubmoduleTreeNode : ObservableObject
 {
     /// <summary>
-    ///     ノードのフルパス。
+    /// ノードのフルパス。
     /// </summary>
     public string FullPath { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     ツリー内のネスト深度。
+    /// ツリー内のネスト深度。
     /// </summary>
     public int Depth { get; private set; } = 0;
 
     /// <summary>
-    ///     対応するサブモジュールモデル。フォルダノードの場合はnull。
+    /// 対応するサブモジュールモデル。フォルダノードの場合はnull。
     /// </summary>
     public Models.Submodule Module { get; private set; } = null;
 
     /// <summary>
-    ///     子ノードのリスト。
+    /// 子ノードのリスト。
     /// </summary>
     public List<SubmoduleTreeNode> Children { get; private set; } = [];
 
     /// <summary>
-    ///     配下のサブモジュール数カウンタ。
+    /// 配下のサブモジュール数カウンタ。
     /// </summary>
     public int Counter = 0;
 
     /// <summary>
-    ///     フォルダノードかどうか（Moduleがnullならフォルダ）。
+    /// フォルダノードかどうか（Moduleがnullならフォルダ）。
     /// </summary>
     public bool IsFolder
     {
@@ -45,7 +45,7 @@ public class SubmoduleTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     ツリーノードが展開されているかどうか。
+    /// ツリーノードが展開されているかどうか。
     /// </summary>
     public bool IsExpanded
     {
@@ -54,7 +54,7 @@ public class SubmoduleTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     子要素数の表示文字列。0の場合は空文字。
+    /// 子要素数の表示文字列。0の場合は空文字。
     /// </summary>
     public string ChildCounter
     {
@@ -62,7 +62,7 @@ public class SubmoduleTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     サブモジュールが未コミットの変更を持つかどうか。
+    /// サブモジュールが未コミットの変更を持つかどうか。
     /// </summary>
     public bool IsDirty
     {
@@ -70,7 +70,7 @@ public class SubmoduleTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     サブモジュールノードのコンストラクタ。
+    /// サブモジュールノードのコンストラクタ。
     /// </summary>
     public SubmoduleTreeNode(Models.Submodule module, int depth)
     {
@@ -81,7 +81,7 @@ public class SubmoduleTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     フォルダノードのコンストラクタ。
+    /// フォルダノードのコンストラクタ。
     /// </summary>
     public SubmoduleTreeNode(string path, int depth, bool isExpanded)
     {
@@ -92,13 +92,13 @@ public class SubmoduleTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     サブモジュールリストからツリー構造を構築する。
-    ///     パスの区切り文字に基づいてフォルダ階層を生成する。
+    /// サブモジュールリストからツリー構造を構築する。
+    /// パスの区切り文字に基づいてフォルダ階層を生成する。
     /// </summary>
     public static List<SubmoduleTreeNode> Build(IList<Models.Submodule> submodules, HashSet<string> expanded)
     {
-        var nodes = new List<SubmoduleTreeNode>();
-        var folders = new Dictionary<string, SubmoduleTreeNode>();
+        List<SubmoduleTreeNode> nodes = [];
+        Dictionary<string, SubmoduleTreeNode> folders = [];
 
         foreach (var module in submodules)
         {
@@ -152,7 +152,7 @@ public class SubmoduleTreeNode : ObservableObject
     }
 
     /// <summary>
-    ///     フォルダノードをコレクション内の適切な位置（非フォルダノードの前）に挿入する。
+    /// フォルダノードをコレクション内の適切な位置（非フォルダノードの前）に挿入する。
     /// </summary>
     private static void InsertFolder(List<SubmoduleTreeNode> collection, SubmoduleTreeNode subFolder)
     {
@@ -172,13 +172,13 @@ public class SubmoduleTreeNode : ObservableObject
 }
 
 /// <summary>
-///     サブモジュールをツリー形式で表示するコレクション。
-///     展開状態を保持しながらツリーとフラット行リストを管理する。
+/// サブモジュールをツリー形式で表示するコレクション。
+/// 展開状態を保持しながらツリーとフラット行リストを管理する。
 /// </summary>
 public class SubmoduleCollectionAsTree
 {
     /// <summary>
-    ///     ツリーのルートノードリスト。
+    /// ツリーのルートノードリスト。
     /// </summary>
     public List<SubmoduleTreeNode> Tree
     {
@@ -187,7 +187,7 @@ public class SubmoduleCollectionAsTree
     } = [];
 
     /// <summary>
-    ///     展開状態に基づくフラット化された行リスト（UIバインディング用）。
+    /// 展開状態に基づくフラット化された行リスト（UIバインディング用）。
     /// </summary>
     public AvaloniaList<SubmoduleTreeNode> Rows
     {
@@ -196,11 +196,11 @@ public class SubmoduleCollectionAsTree
     } = [];
 
     /// <summary>
-    ///     サブモジュールリストからツリーコレクションを構築する。以前の展開状態を引き継ぐ。
+    /// サブモジュールリストからツリーコレクションを構築する。以前の展開状態を引き継ぐ。
     /// </summary>
     public static SubmoduleCollectionAsTree Build(List<Models.Submodule> submodules, SubmoduleCollectionAsTree old)
     {
-        var oldExpanded = new HashSet<string>();
+        HashSet<string> oldExpanded = [];
         if (old is not null)
         {
             foreach (var row in old.Rows)
@@ -213,7 +213,7 @@ public class SubmoduleCollectionAsTree
         var collection = new SubmoduleCollectionAsTree();
         collection.Tree = SubmoduleTreeNode.Build(submodules, oldExpanded);
 
-        var rows = new List<SubmoduleTreeNode>();
+        List<SubmoduleTreeNode> rows = [];
         MakeTreeRows(rows, collection.Tree);
         collection.Rows.AddRange(rows);
 
@@ -221,7 +221,7 @@ public class SubmoduleCollectionAsTree
     }
 
     /// <summary>
-    ///     ノードの展開/折りたたみを切り替え、行リストを更新する。
+    /// ノードの展開/折りたたみを切り替え、行リストを更新する。
     /// </summary>
     public void ToggleExpand(SubmoduleTreeNode node)
     {
@@ -236,7 +236,7 @@ public class SubmoduleCollectionAsTree
         if (node.IsExpanded)
         {
             // 展開: 子ノードを行リストに挿入
-            var subrows = new List<SubmoduleTreeNode>();
+            List<SubmoduleTreeNode> subrows = [];
             MakeTreeRows(subrows, node.Children);
             rows.InsertRange(idx + 1, subrows);
         }
@@ -257,7 +257,7 @@ public class SubmoduleCollectionAsTree
     }
 
     /// <summary>
-    ///     ツリーノードを再帰的にフラット行リストに変換する。展開されたフォルダの子のみ含む。
+    /// ツリーノードを再帰的にフラット行リストに変換する。展開されたフォルダの子のみ含む。
     /// </summary>
     private static void MakeTreeRows(List<SubmoduleTreeNode> rows, List<SubmoduleTreeNode> nodes)
     {
@@ -274,12 +274,12 @@ public class SubmoduleCollectionAsTree
 }
 
 /// <summary>
-///     サブモジュールをフラットリスト形式で表示するコレクション。
+/// サブモジュールをフラットリスト形式で表示するコレクション。
 /// </summary>
 public class SubmoduleCollectionAsList
 {
     /// <summary>
-    ///     サブモジュールのフラットリスト。
+    /// サブモジュールのフラットリスト。
     /// </summary>
     public List<Models.Submodule> Submodules
     {

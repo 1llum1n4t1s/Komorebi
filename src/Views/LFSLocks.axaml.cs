@@ -4,12 +4,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     Git LFSロック管理ダイアログのコードビハインド。
+/// Git LFSロック管理ダイアログのコードビハインド。
 /// </summary>
 public partial class LFSLocks : ChromelessWindow
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public LFSLocks()
     {
@@ -18,7 +18,7 @@ public partial class LFSLocks : ChromelessWindow
     }
 
     /// <summary>
-    ///     UnlockButtonClickedイベントのハンドラ。
+    /// UnlockButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnUnlockButtonClicked(object sender, RoutedEventArgs e)
     {
@@ -29,7 +29,7 @@ public partial class LFSLocks : ChromelessWindow
     }
 
     /// <summary>
-    ///     ForceUnlockButtonClickedイベントのハンドラ。
+    /// ForceUnlockButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnForceUnlockButtonClicked(object sender, RoutedEventArgs e)
     {
@@ -40,7 +40,7 @@ public partial class LFSLocks : ChromelessWindow
     }
 
     /// <summary>
-    ///     UnlockAllMyLocksButtonClickedイベントのハンドラ。
+    /// UnlockAllMyLocksButtonClickedイベントのハンドラ。
     /// </summary>
     private async void OnUnlockAllMyLocksButtonClicked(object sender, RoutedEventArgs e)
     {

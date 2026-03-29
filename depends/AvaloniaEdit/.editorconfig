@@ -1,0 +1,6 @@
+# AvaloniaEdit（gitサブモジュール）固有の設定
+# ルートの.editorconfigからCA1822=errorが伝播するのを抑制する
+
+[*.cs]
+# CA1822: 外部ライブラリのため抑制する
+dotnet_diagnostic.CA1822.severity = suggestion

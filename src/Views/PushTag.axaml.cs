@@ -3,12 +3,12 @@
 namespace Komorebi.Views;
 
 /// <summary>
-///     タグプッシュダイアログのコードビハインド。
+/// タグプッシュダイアログのコードビハインド。
 /// </summary>
 public partial class PushTag : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public PushTag()
     {

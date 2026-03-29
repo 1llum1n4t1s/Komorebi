@@ -3,13 +3,13 @@
 namespace Komorebi.Commands;
 
 /// <summary>
-///     指定コミットの変更を現在のブランチに適用するgitコマンド。
-///     git cherry-pick を実行する。
+/// 指定コミットの変更を現在のブランチに適用するgitコマンド。
+/// git cherry-pick を実行する。
 /// </summary>
 public class CherryPick : Command
 {
     /// <summary>
-    ///     CherryPickコマンドを初期化する。
+    /// CherryPickコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="commits">チェリーピック対象のコミットSHA（スペース区切りで複数指定可）。</param>

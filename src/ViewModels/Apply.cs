@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     パッチ適用ダイアログのViewModel。
-///     git applyコマンドでパッチファイルをリポジトリに適用する。
+/// パッチ適用ダイアログのViewModel。
+/// git applyコマンドでパッチファイルをリポジトリに適用する。
 /// </summary>
 public class Apply : Popup
 {
     /// <summary>
-    ///     適用するパッチファイルのパス。必須入力でファイル存在チェック付き。
+    /// 適用するパッチファイルのパス。必須入力でファイル存在チェック付き。
     /// </summary>
     [Required(ErrorMessage = "Patch file is required!!!")]
     [CustomValidation(typeof(Apply), nameof(ValidatePatchFile))]
@@ -22,7 +22,7 @@ public class Apply : Popup
     }
 
     /// <summary>
-    ///     空白の違いを無視するかどうかのフラグ。
+    /// 空白の違いを無視するかどうかのフラグ。
     /// </summary>
     public bool IgnoreWhiteSpace
     {
@@ -31,7 +31,7 @@ public class Apply : Popup
     }
 
     /// <summary>
-    ///     選択された空白処理モード。
+    /// 選択された空白処理モード。
     /// </summary>
     public Models.ApplyWhiteSpaceMode SelectedWhiteSpaceMode
     {
@@ -40,7 +40,7 @@ public class Apply : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリを受け取り、デフォルトの空白処理モードを設定する。
+    /// コンストラクタ。リポジトリを受け取り、デフォルトの空白処理モードを設定する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     public Apply(Repository repo)
@@ -52,7 +52,7 @@ public class Apply : Popup
     }
 
     /// <summary>
-    ///     パッチファイルの存在を検証するバリデーションメソッド。
+    /// パッチファイルの存在を検証するバリデーションメソッド。
     /// </summary>
     /// <param name="file">検証するファイルパス</param>
     /// <param name="_">バリデーションコンテキスト（未使用）</param>
@@ -66,7 +66,7 @@ public class Apply : Popup
     }
 
     /// <summary>
-    ///     確定処理。git applyコマンドを実行してパッチを適用する。
+    /// 確定処理。git applyコマンドを実行してパッチを適用する。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

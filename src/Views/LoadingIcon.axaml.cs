@@ -6,12 +6,12 @@ using Avalonia.Interactivity;
 namespace Komorebi.Views;
 
 /// <summary>
-///     読み込み中アニメーションアイコンのコードビハインド。
+/// 読み込み中アニメーションアイコンのコードビハインド。
 /// </summary>
 public partial class LoadingIcon : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public LoadingIcon()
     {
@@ -20,7 +20,7 @@ public partial class LoadingIcon : UserControl
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -31,7 +31,7 @@ public partial class LoadingIcon : UserControl
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -40,7 +40,7 @@ public partial class LoadingIcon : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -56,7 +56,7 @@ public partial class LoadingIcon : UserControl
     }
 
     /// <summary>
-    ///     StartAnimの処理を行う。
+    /// StartAnimの処理を行う。
     /// </summary>
     private void StartAnim()
     {
@@ -64,7 +64,7 @@ public partial class LoadingIcon : UserControl
     }
 
     /// <summary>
-    ///     StopAnimの処理を行う。
+    /// StopAnimの処理を行う。
     /// </summary>
     private void StopAnim()
     {

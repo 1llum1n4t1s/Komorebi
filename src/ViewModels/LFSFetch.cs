@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     LFSオブジェクトのフェッチ（ダウンロード）ダイアログのViewModel。
-///     指定リモートからLFSオブジェクトを取得する。
+/// LFSオブジェクトのフェッチ（ダウンロード）ダイアログのViewModel。
+/// 指定リモートからLFSオブジェクトを取得する。
 /// </summary>
 public class LFSFetch : Popup
 {

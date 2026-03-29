@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     更新可能なサブモジュールの一覧を取得するクラス。
-///     git submodule status を使用して、変更または未初期化のサブモジュールを検出する。
+/// 更新可能なサブモジュールの一覧を取得するクラス。
+/// git submodule status を使用して、変更または未初期化のサブモジュールを検出する。
 /// </summary>
 public partial class QueryUpdatableSubmodules : Command
 {
@@ -16,7 +16,7 @@ public partial class QueryUpdatableSubmodules : Command
     private static partial Regex REG_FORMAT_STATUS();
 
     /// <summary>
-    ///     コンストラクタ。更新可能なサブモジュールを取得するコマンドを設定する。
+    /// コンストラクタ。更新可能なサブモジュールを取得するコマンドを設定する。
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="includeUninited">未初期化のサブモジュールも含めるかどうか</param>
@@ -30,7 +30,7 @@ public partial class QueryUpdatableSubmodules : Command
     }
 
     /// <summary>
-    ///     コマンドを非同期で実行し、更新可能なサブモジュールのパスリストを返す。
+    /// コマンドを非同期で実行し、更新可能なサブモジュールのパスリストを返す。
     /// </summary>
     /// <returns>サブモジュールパスのリスト</returns>
     public async Task<List<string>> GetResultAsync()

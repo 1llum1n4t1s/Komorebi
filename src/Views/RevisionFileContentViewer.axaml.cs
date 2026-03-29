@@ -14,7 +14,7 @@ using AvaloniaEdit.TextMate;
 namespace Komorebi.Views;
 
 /// <summary>
-///     RevisionTextFileViewクラス。
+/// RevisionTextFileViewクラス。
 /// </summary>
 public class RevisionTextFileView : TextEditor
 {
@@ -39,7 +39,7 @@ public class RevisionTextFileView : TextEditor
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public RevisionTextFileView() : base(new TextArea(), new TextDocument())
     {
@@ -59,7 +59,7 @@ public class RevisionTextFileView : TextEditor
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -70,7 +70,7 @@ public class RevisionTextFileView : TextEditor
     }
 
     /// <summary>
-    ///     コントロールがアンロードされた際の処理。
+    /// コントロールがアンロードされた際の処理。
     /// </summary>
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -88,7 +88,7 @@ public class RevisionTextFileView : TextEditor
     }
 
     /// <summary>
-    ///     データコンテキストが変更された際の処理。
+    /// データコンテキストが変更された際の処理。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -107,7 +107,7 @@ public class RevisionTextFileView : TextEditor
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -120,7 +120,7 @@ public class RevisionTextFileView : TextEditor
     }
 
     /// <summary>
-    ///     TextViewContextRequestedイベントのハンドラ。
+    /// TextViewContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -154,7 +154,7 @@ public class RevisionTextFileView : TextEditor
     }
 
     /// <summary>
-    ///     UpdateTextMateの処理を行う。
+    /// UpdateTextMateの処理を行う。
     /// </summary>
     private void UpdateTextMate()
     {
@@ -179,12 +179,12 @@ public class RevisionTextFileView : TextEditor
 }
 
 /// <summary>
-///     リビジョンのファイル内容ビューアのコードビハインド。
+/// リビジョンのファイル内容ビューアのコードビハインド。
 /// </summary>
 public partial class RevisionFileContentViewer : UserControl
 {
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public RevisionFileContentViewer()
     {

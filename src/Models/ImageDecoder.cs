@@ -1,7 +1,7 @@
 ﻿namespace Komorebi.Models;
 
 /// <summary>
-///     画像デコーダーの種別。画像diff表示時に使用するデコーダーを指定する。
+/// 画像デコーダーの種別。画像diff表示時に使用するデコーダーを指定する。
 /// </summary>
 public enum ImageDecoder
 {

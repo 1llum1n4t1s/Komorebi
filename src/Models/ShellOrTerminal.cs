@@ -7,8 +7,8 @@ using Avalonia.Platform;
 namespace Komorebi.Models;
 
 /// <summary>
-///     シェルまたはターミナルアプリケーションの定義クラス。
-///     プラットフォームごとにサポートされるターミナルのリストを提供する。
+/// シェルまたはターミナルアプリケーションの定義クラス。
+/// プラットフォームごとにサポートされるターミナルのリストを提供する。
 /// </summary>
 public class ShellOrTerminal
 {
@@ -35,7 +35,7 @@ public class ShellOrTerminal
     public static readonly List<ShellOrTerminal> Supported;
 
     /// <summary>
-    ///     静的コンストラクタ。プラットフォームに応じたターミナルリストを初期化する。
+    /// 静的コンストラクタ。プラットフォームに応じたターミナルリストを初期化する。
     /// </summary>
     static ShellOrTerminal()
     {
@@ -84,7 +84,7 @@ public class ShellOrTerminal
     }
 
     /// <summary>
-    ///     コンストラクタ
+    /// コンストラクタ
     /// </summary>
     /// <param name="type">種別識別子</param>
     /// <param name="name">表示名</param>

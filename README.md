@@ -57,7 +57,7 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 | OS | アーキテクチャ | 備考 |
 |----|------------|------|
 | Windows 10 以降 | x64, arm64 | |
-| macOS 13.0 以降 | x64 (Intel), arm64 (Apple Silicon) | |
+| macOS 13.0 以降 | arm64 (Apple Silicon) | |
 | Linux | x64, arm64 | Debian 12 (X11 / Wayland) で動作確認済み |
 
 **前提条件**: Git 2.25.1 以上
@@ -200,7 +200,7 @@ VS Code / VS Code Insiders / VSCodium / Cursor / Sublime Text / Zed / Visual Stu
 |----|-------------|
 | Windows | Git Bash / PowerShell / CMD / Windows Terminal |
 | macOS | Terminal.app / iTerm2 / Warp / Ghostty / kitty |
-| Linux | GNOME Terminal / Konsole / XFCE4 Terminal / Foot / WezTerm / Ghostty / kitty 等 |
+| Linux | GNOME Terminal / Konsole / XFCE4 Terminal / LXTerminal / Deepin Terminal / MATE Terminal / Foot / WezTerm / Ptyxis / Ghostty / kitty / Custom |
 
 ---
 

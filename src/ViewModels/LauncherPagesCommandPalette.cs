@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     タブ切り替え用のコマンドパレットViewModel。
-///     開いているタブと未開封のリポジトリを検索・切り替えできる。
+/// タブ切り替え用のコマンドパレットViewModel。
+/// 開いているタブと未開封のリポジトリを検索・切り替えできる。
 /// </summary>
 public class LauncherPagesCommandPalette : ICommandPalette
 {
@@ -57,7 +57,7 @@ public class LauncherPagesCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     コンストラクタ。既に開いているリポジトリのIDを記録し、初期表示を構築する。
+    /// コンストラクタ。既に開いているリポジトリのIDを記録し、初期表示を構築する。
     /// </summary>
     public LauncherPagesCommandPalette(Launcher launcher)
     {
@@ -79,7 +79,7 @@ public class LauncherPagesCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     選択されたタブに切り替えるか、リポジトリを新しいタブで開く。
+    /// 選択されたタブに切り替えるか、リポジトリを新しいタブで開く。
     /// </summary>
     public void OpenOrSwitchTo()
     {
@@ -95,15 +95,15 @@ public class LauncherPagesCommandPalette : ICommandPalette
     }
 
     /// <summary>
-    ///     フィルタに基づいて表示対象のタブとリポジトリを更新し、
-    ///     自動選択ロジックで適切な項目を選択する。
+    /// フィルタに基づいて表示対象のタブとリポジトリを更新し、
+    /// 自動選択ロジックで適切な項目を選択する。
     /// </summary>
     private void UpdateVisible()
     {
-        var pages = new List<LauncherPage>();
+        List<LauncherPage> pages = [];
         CollectVisiblePages(pages);
 
-        var repos = new List<RepositoryNode>();
+        List<RepositoryNode> repos = [];
         CollectVisibleRepository(repos, Preferences.Instance.RepositoryNodes);
 
         var autoSelectPage = _selectedPage;
@@ -208,7 +208,7 @@ public class LauncherPagesCommandPalette : ICommandPalette
     }
 
     private Launcher _launcher = null;
-    private HashSet<string> _opened = new HashSet<string>();
+    private HashSet<string> _opened = [];
     private List<LauncherPage> _visiblePages = [];
     private List<RepositoryNode> _visibleRepos = [];
     private string _searchFilter = string.Empty;

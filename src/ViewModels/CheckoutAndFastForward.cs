@@ -3,13 +3,13 @@
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     チェックアウトとファストフォワードを同時に行うダイアログのViewModel。
-///     ローカルブランチをリモートブランチの最新にファストフォワードしてからチェックアウトする。
+/// チェックアウトとファストフォワードを同時に行うダイアログのViewModel。
+/// ローカルブランチをリモートブランチの最新にファストフォワードしてからチェックアウトする。
 /// </summary>
 public class CheckoutAndFastForward : Popup
 {
     /// <summary>
-    ///     チェックアウト対象のローカルブランチ。
+    /// チェックアウト対象のローカルブランチ。
     /// </summary>
     public Models.Branch LocalBranch
     {
@@ -17,7 +17,7 @@ public class CheckoutAndFastForward : Popup
     }
 
     /// <summary>
-    ///     ファストフォワード元のリモートブランチ。
+    /// ファストフォワード元のリモートブランチ。
     /// </summary>
     public Models.Branch RemoteBranch
     {
@@ -25,7 +25,7 @@ public class CheckoutAndFastForward : Popup
     }
 
     /// <summary>
-    ///     ローカル変更を破棄するかどうかのフラグ。
+    /// ローカル変更を破棄するかどうかのフラグ。
     /// </summary>
     public bool DiscardLocalChanges
     {
@@ -34,7 +34,7 @@ public class CheckoutAndFastForward : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリ・ローカルブランチ・リモートブランチを受け取って初期化する。
+    /// コンストラクタ。リポジトリ・ローカルブランチ・リモートブランチを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="localBranch">チェックアウト対象のローカルブランチ</param>
@@ -47,8 +47,8 @@ public class CheckoutAndFastForward : Popup
     }
 
     /// <summary>
-    ///     確定処理。チェックアウトとファストフォワードを実行する。
-    ///     必要に応じてスタッシュの保存・復元、サブモジュール更新を行う。
+    /// 確定処理。チェックアウトとファストフォワードを実行する。
+    /// 必要に応じてスタッシュの保存・復元、サブモジュール更新を行う。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()

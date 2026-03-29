@@ -17,14 +17,14 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
-///     RevisionFileTreeNodeToggleButtonクラス。
+/// RevisionFileTreeNodeToggleButtonクラス。
 /// </summary>
 public class RevisionFileTreeNodeToggleButton : ToggleButton
 {
     protected override Type StyleKeyOverride => typeof(ToggleButton);
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override async void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -41,7 +41,7 @@ public class RevisionFileTreeNodeToggleButton : ToggleButton
 }
 
 /// <summary>
-///     RevisionTreeNodeIconクラス。
+/// RevisionTreeNodeIconクラス。
 /// </summary>
 public class RevisionTreeNodeIcon : UserControl
 {
@@ -64,7 +64,7 @@ public class RevisionTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     static RevisionTreeNodeIcon()
     {
@@ -73,7 +73,7 @@ public class RevisionTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     UpdateContentの処理を行う。
+    /// UpdateContentの処理を行う。
     /// </summary>
     private void UpdateContent()
     {
@@ -100,7 +100,7 @@ public class RevisionTreeNodeIcon : UserControl
     }
 
     /// <summary>
-    ///     CreateContentの処理を行う。
+    /// CreateContentの処理を行う。
     /// </summary>
     private void CreateContent(string iconKey, Thickness margin, IBrush fill = null)
     {
@@ -126,14 +126,14 @@ public class RevisionTreeNodeIcon : UserControl
 }
 
 /// <summary>
-///     RevisionFileRowsListBoxクラス。
+/// RevisionFileRowsListBoxクラス。
 /// </summary>
 public class RevisionFileRowsListBox : ListBox
 {
     protected override Type StyleKeyOverride => typeof(ListBox);
 
     /// <summary>
-    ///     キーが押された際のイベント処理。
+    /// キーが押された際のイベント処理。
     /// </summary>
     protected override async void OnKeyDown(KeyEventArgs e)
     {
@@ -209,7 +209,7 @@ public class RevisionFileRowsListBox : ListBox
 }
 
 /// <summary>
-///     リビジョンのファイルツリービューのコードビハインド。
+/// リビジョンのファイルツリービューのコードビハインド。
 /// </summary>
 public partial class RevisionFileTreeView : UserControl
 {
@@ -234,7 +234,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     コンストラクタ。コンポーネントを初期化する。
+    /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
     public RevisionFileTreeView()
     {
@@ -242,7 +242,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     SetSearchResultAsyncの処理を行う。
+    /// SetSearchResultAsyncの処理を行う。
     /// </summary>
     public async Task SetSearchResultAsync(string file)
     {
@@ -256,8 +256,7 @@ public partial class RevisionFileTreeView : UserControl
         }
         else
         {
-            var vm = DataContext as ViewModels.CommitDetail;
-            if (vm?.Commit is null)
+            if (DataContext is not ViewModels.CommitDetail vm || vm.Commit is null)
                 return;
 
             var objects = await vm.GetRevisionFilesUnderFolderAsync(file);
@@ -307,7 +306,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     ToggleNodeIsExpandedAsyncの処理を行う。
+    /// ToggleNodeIsExpandedAsyncの処理を行う。
     /// </summary>
     public async Task ToggleNodeIsExpandedAsync(ViewModels.RevisionFileTreeNode node)
     {
@@ -347,7 +346,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override async void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -366,7 +365,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     コントロールが読み込まれた際の処理。
+    /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override async void OnLoaded(RoutedEventArgs e)
     {
@@ -377,7 +376,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     TreeNodeContextRequestedイベントのハンドラ。
+    /// TreeNodeContextRequestedイベントのハンドラ。
     /// </summary>
     private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs e)
     {
@@ -396,7 +395,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     TreeNodeDoubleTappedイベントのハンドラ。
+    /// TreeNodeDoubleTappedイベントのハンドラ。
     /// </summary>
     private async void OnTreeNodeDoubleTapped(object sender, TappedEventArgs e)
     {
@@ -411,7 +410,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     RowsSelectionChangedイベントのハンドラ。
+    /// RowsSelectionChangedイベントのハンドラ。
     /// </summary>
     private async void OnRowsSelectionChanged(object sender, SelectionChangedEventArgs _)
     {
@@ -425,7 +424,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     Taskの処理を行う。
+    /// Taskの処理を行う。
     /// </summary>
     private async Task<List<ViewModels.RevisionFileTreeNode>> GetChildrenOfTreeNodeAsync(ViewModels.RevisionFileTreeNode node)
     {
@@ -450,9 +449,9 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     MakeRowsの処理を行う。
+    /// MakeRowsの処理を行う。
     /// </summary>
-    private void MakeRows(List<ViewModels.RevisionFileTreeNode> rows, List<ViewModels.RevisionFileTreeNode> nodes, int depth)
+    private static void MakeRows(List<ViewModels.RevisionFileTreeNode> rows, List<ViewModels.RevisionFileTreeNode> nodes, int depth)
     {
         foreach (var node in nodes)
         {
@@ -467,9 +466,9 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     SortNodesの処理を行う。
+    /// SortNodesの処理を行う。
     /// </summary>
-    private void SortNodes(List<ViewModels.RevisionFileTreeNode> nodes)
+    private static void SortNodes(List<ViewModels.RevisionFileTreeNode> nodes)
     {
         nodes.Sort((l, r) =>
         {
@@ -480,7 +479,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     ReloadTreeDataの処理を行う。
+    /// ReloadTreeDataの処理を行う。
     /// </summary>
     private async Task ReloadTreeData(ViewModels.CommitDetail vm)
     {
@@ -518,9 +517,9 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     CreateRevisionFileContextMenuByFolderの処理を行う。
+    /// CreateRevisionFileContextMenuByFolderの処理を行う。
     /// </summary>
-    private ContextMenu CreateRevisionFileContextMenuByFolder(ViewModels.Repository repo, ViewModels.CommitDetail vm, Models.Commit commit, string path)
+    private static ContextMenu CreateRevisionFileContextMenuByFolder(ViewModels.Repository repo, ViewModels.CommitDetail vm, Models.Commit commit, string path)
     {
         var fullPath = Native.OS.GetAbsPath(repo.FullPath, path);
         var explore = new MenuItem();
@@ -573,7 +572,7 @@ public partial class RevisionFileTreeView : UserControl
     }
 
     /// <summary>
-    ///     CreateRevisionFileContextMenuの処理を行う。
+    /// CreateRevisionFileContextMenuの処理を行う。
     /// </summary>
     private ContextMenu CreateRevisionFileContextMenu(ViewModels.Repository repo, ViewModels.CommitDetail vm, Models.Commit commit, Models.Object file)
     {
@@ -821,8 +820,12 @@ public partial class RevisionFileTreeView : UserControl
         return menu;
     }
 
+    /// <summary>ファイルツリーのルートノード一覧。</summary>
     private List<ViewModels.RevisionFileTreeNode> _tree = [];
+    /// <summary>選択変更イベントの抑制フラグ。</summary>
     private bool _disableSelectionChangingEvent = false;
+    /// <summary>検索結果のツリーノード一覧。</summary>
     private List<ViewModels.RevisionFileTreeNode> _searchResult = [];
+    /// <summary>ツリーデータのリロード中フラグ。</summary>
     private bool _isReloadingTreeData = false;
 }

@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 namespace Komorebi.Commands;
 
 /// <summary>
-///     タグの作成・削除を行うgitコマンド。
-///     git tag を実行する。
+/// タグの作成・削除を行うgitコマンド。
+/// git tag を実行する。
 /// </summary>
 public class Tag : Command
 {
     /// <summary>
-    ///     Tagコマンドを初期化する。
+    /// Tagコマンドを初期化する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="name">タグ名。</param>
@@ -23,8 +23,8 @@ public class Tag : Command
     }
 
     /// <summary>
-    ///     軽量タグを作成する。
-    ///     git tag --no-sign を実行する。
+    /// 軽量タグを作成する。
+    /// git tag --no-sign を実行する。
     /// </summary>
     /// <param name="basedOn">タグを付けるコミットSHA。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
@@ -36,8 +36,8 @@ public class Tag : Command
     }
 
     /// <summary>
-    ///     注釈付きタグを作成する。
-    ///     git tag -a を実行する。メッセージは一時ファイル経由で渡す。
+    /// 注釈付きタグを作成する。
+    /// git tag -a を実行する。メッセージは一時ファイル経由で渡す。
     /// </summary>
     /// <param name="basedOn">タグを付けるコミットSHA。</param>
     /// <param name="message">タグメッセージ。</param>
@@ -83,8 +83,8 @@ public class Tag : Command
     }
 
     /// <summary>
-    ///     タグを削除する。
-    ///     git tag --delete を実行する。
+    /// タグを削除する。
+    /// git tag --delete を実行する。
     /// </summary>
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> DeleteAsync()
@@ -95,7 +95,7 @@ public class Tag : Command
     }
 
     /// <summary>
-    ///     操作対象のタグ名。
+    /// 操作対象のタグ名。
     /// </summary>
     private readonly string _name;
 }

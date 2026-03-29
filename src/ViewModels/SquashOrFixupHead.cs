@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-///     HEADコミットのSquashまたはFixup操作を行うポップアップダイアログのViewModel。
-///     対象コミットまでソフトリセットし、新しいメッセージでコミットし直す。
+/// HEADコミットのSquashまたはFixup操作を行うポップアップダイアログのViewModel。
+/// 対象コミットまでソフトリセットし、新しいメッセージでコミットし直す。
 /// </summary>
 public class SquashOrFixupHead : Popup
 {
     /// <summary>
-    ///     Fixupモードかどうか。falseの場合はSquashモード。
+    /// Fixupモードかどうか。falseの場合はSquashモード。
     /// </summary>
     public bool IsFixupMode
     {
@@ -18,7 +18,7 @@ public class SquashOrFixupHead : Popup
     }
 
     /// <summary>
-    ///     Squash/Fixup対象のコミット。
+    /// Squash/Fixup対象のコミット。
     /// </summary>
     public Models.Commit Target
     {
@@ -26,7 +26,7 @@ public class SquashOrFixupHead : Popup
     }
 
     /// <summary>
-    ///     新しいコミットメッセージ。
+    /// 新しいコミットメッセージ。
     /// </summary>
     [Required(ErrorMessage = "Commit message is required!!!")]
     public string Message
@@ -36,7 +36,7 @@ public class SquashOrFixupHead : Popup
     }
 
     /// <summary>
-    ///     現在のブランチにupstreamが設定されているかどうか。
+    /// 現在のブランチにupstreamが設定されているかどうか。
     /// </summary>
     public bool HasUpstream
     {
@@ -44,7 +44,7 @@ public class SquashOrFixupHead : Popup
     }
 
     /// <summary>
-    ///     操作完了後に強制プッシュするかどうか。
+    /// 操作完了後に強制プッシュするかどうか。
     /// </summary>
     public bool ForcePushAfterDone
     {
@@ -53,7 +53,7 @@ public class SquashOrFixupHead : Popup
     }
 
     /// <summary>
-    ///     コンストラクタ。リポジトリ、対象コミット、メッセージ、モードを受け取る。
+    /// コンストラクタ。リポジトリ、対象コミット、メッセージ、モードを受け取る。
     /// </summary>
     public SquashOrFixupHead(Repository repo, Models.Commit target, string message, bool fixup)
     {
@@ -68,8 +68,8 @@ public class SquashOrFixupHead : Popup
     }
 
     /// <summary>
-    ///     Squash/Fixup操作を実行する。
-    ///     ステージされた変更がある場合は自動スタッシュし、ソフトリセット後にamendコミットを行う。
+    /// Squash/Fixup操作を実行する。
+    /// ステージされた変更がある場合は自動スタッシュし、ソフトリセット後にamendコミットを行う。
     /// </summary>
     public override async Task<bool> Sure()
     {

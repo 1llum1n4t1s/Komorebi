@@ -13,7 +13,7 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
-///     コミットの件名行を表示するプレゼンタ。
+/// コミットの件名行を表示するプレゼンタ。
 /// </summary>
 public partial class CommitSubjectPresenter : Control
 {
@@ -108,7 +108,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     コントロールの描画処理を行う。
+    /// コントロールの描画処理を行う。
     /// </summary>
     public override void Render(DrawingContext context)
     {
@@ -158,7 +158,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     プロパティが変更された際の処理。
+    /// プロパティが変更された際の処理。
     /// </summary>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -197,7 +197,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     ポインターが移動した際のイベント処理。
+    /// ポインターが移動した際のイベント処理。
     /// </summary>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
@@ -223,7 +223,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     ポインターが押された際のイベント処理。
+    /// ポインターが押された際のイベント処理。
     /// </summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -234,7 +234,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     PointerExitedイベントのハンドラ。
+    /// PointerExitedイベントのハンドラ。
     /// </summary>
     protected override void OnPointerExited(PointerEventArgs e)
     {
@@ -243,7 +243,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     IssueTrackersChangedイベントのハンドラ。
+    /// IssueTrackersChangedイベントのハンドラ。
     /// </summary>
     private void OnIssueTrackersChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
@@ -253,7 +253,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     GenerateInlineElementsの処理を行う。
+    /// GenerateInlineElementsの処理を行う。
     /// </summary>
     private void GenerateInlineElements()
     {
@@ -310,7 +310,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     GenerateFormattedTextElementsの処理を行う。
+    /// GenerateFormattedTextElementsの処理を行う。
     /// </summary>
     private void GenerateFormattedTextElements()
     {
@@ -335,7 +335,7 @@ public partial class CommitSubjectPresenter : Control
             if (elem.Start > pos)
             {
                 var normal = new FormattedText(
-                    subject.Substring(pos, elem.Start - pos),
+                    subject[pos..elem.Start],
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     typeface,
@@ -349,12 +349,9 @@ public partial class CommitSubjectPresenter : Control
             if (elem.Type == Models.InlineElementType.Keyword)
             {
                 var keyword = new FormattedText(
-                    subject.Substring(elem.Start, elem.Length),
+                    subject[elem.Start..(elem.Start + elem.Length)],
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
-                    /// <summary>
-                    ///     Typefaceの処理を行う。
-                    /// </summary>
                     new Typeface(fontFamily, FontStyle.Normal, FontWeight.Bold),
                     fontSize,
                     foreground);
@@ -364,7 +361,7 @@ public partial class CommitSubjectPresenter : Control
             else if (elem.Type == Models.InlineElementType.Link)
             {
                 var link = new FormattedText(
-                    subject.Substring(elem.Start, elem.Length),
+                    subject[elem.Start..(elem.Start + elem.Length)],
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     typeface,
@@ -376,7 +373,7 @@ public partial class CommitSubjectPresenter : Control
             else if (elem.Type == Models.InlineElementType.Code)
             {
                 var link = new FormattedText(
-                    subject.Substring(elem.Start + 1, elem.Length - 2),
+                    subject[(elem.Start + 1)..(elem.Start + elem.Length - 1)],
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     codeTypeface,
@@ -392,7 +389,7 @@ public partial class CommitSubjectPresenter : Control
         if (pos < subject.Length)
         {
             var normal = new FormattedText(
-                    subject.Substring(pos),
+                    subject[pos..],
                     CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     typeface,
@@ -404,7 +401,7 @@ public partial class CommitSubjectPresenter : Control
     }
 
     /// <summary>
-    ///     ClearHoveredIssueLinkの処理を行う。
+    /// ClearHoveredIssueLinkの処理を行う。
     /// </summary>
     private void ClearHoveredIssueLink()
     {
@@ -416,14 +413,14 @@ public partial class CommitSubjectPresenter : Control
         }
     }
 
-    [GeneratedRegex(@"`.*?`")]
     /// <summary>
-    ///     REG_INLINECODE_FORMATの処理を行う。
+    /// インラインコード（バッククォート囲み）を検出する正規表現。
     /// </summary>
+    [GeneratedRegex(@"`.*?`")]
     private static partial Regex REG_INLINECODE_FORMAT();
 
     /// <summary>
-    ///     Inlineクラス。
+    /// Inlineクラス。
     /// </summary>
     private class Inline
     {
@@ -432,7 +429,7 @@ public partial class CommitSubjectPresenter : Control
         public Models.InlineElement Element { get; set; } = null;
 
         /// <summary>
-        ///     コンストラクタ。コンポーネントを初期化する。
+        /// コンストラクタ。コンポーネントを初期化する。
         /// </summary>
         public Inline(double x, FormattedText text, Models.InlineElement elem)
         {
