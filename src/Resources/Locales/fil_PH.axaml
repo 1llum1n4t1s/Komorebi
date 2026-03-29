@@ -40,6 +40,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Rebisyon:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Archive</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">Nagbago ang SSH key ng remote host mula sa huling koneksyon. Maaaring muling na-install ang server o na-update ang key nito. Kumpirmahin sa iyong administrator bago magpatuloy.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">Ito ang unang pagkonekta sa host na ito. I-verify ang fingerprint bago i-click ang OK upang idagdag ito sa mga kilalang host.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">Ilagay ang passphrase ng iyong SSH private key para sa authentication.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">Ilagay ang password ng remote repository para sa authentication.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Ilagay ang passphrase:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">MGA FILE NA ITINUTURING NA HINDI NAGBAGO</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">WALANG MGA FILE NA ITINUTURING NA HINDI NAGBAGO</x:String>
@@ -1139,5 +1143,7 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Nabigo ang clean/smudge filter. Suriin ang .gitattributes at ang filter configuration.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Tinanggihan ng git hook ang operasyon. Suriin ang hook script o gamitin ang '--no-verify' para i-bypass (mag-ingat).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Hindi nai-apply nang maayos ang patch. Maaaring nagbago na ang target files. Subukang ayusin nang manu-mano.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">Nagbago ang SSH key ng remote host mula sa huling koneksyon. Maaaring muling na-install ang server o na-update ang key nito. Alisin ang lumang key mula sa ~/.ssh/known_hosts at subukan ulit.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Nabigo ang SSH host key verification. Maaaring wala ang host sa iyong ~/.ssh/known_hosts file. Subukang kumonekta mula sa terminal upang idagdag ang host key, o suriin ang iyong SSH configuration.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree conflict: maaaring naka-checkout na ang branch sa ibang lugar. Suriin gamit ang 'git worktree list'.</x:String>
 </ResourceDictionary>

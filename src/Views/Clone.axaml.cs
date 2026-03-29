@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
@@ -51,19 +52,9 @@ public partial class Clone : UserControl
     /// </summary>
     private async void SelectSSHKey(object _, RoutedEventArgs e)
     {
-        var toplevel = TopLevel.GetTopLevel(this);
-        if (toplevel is null)
-            return;
-
-        var options = new FilePickerOpenOptions()
-        {
-            AllowMultiple = false,
-            FileTypeFilter = [new FilePickerFileType("SSHKey") { Patterns = ["*.*"] }]
-        };
-
-        var selected = await toplevel.StorageProvider.OpenFilePickerAsync(options);
-        if (selected.Count == 1)
-            TxtSshKey.Text = selected[0].Path.LocalPath;
+        var path = await ViewHelpers.SelectSSHKeyFileAsync(this);
+        if (path is not null)
+            TxtSshKey.Text = path;
 
         e.Handled = true;
     }

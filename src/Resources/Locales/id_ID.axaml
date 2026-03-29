@@ -43,6 +43,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Revisi:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Arsip</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">Kunci SSH host remote telah berubah sejak koneksi terakhir. Server mungkin telah diinstal ulang atau kuncinya diperbarui. Verifikasi dengan administrator Anda sebelum melanjutkan.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">Ini adalah koneksi pertama ke host ini. Verifikasi fingerprint sudah benar sebelum mengklik OK untuk menambahkannya ke known hosts.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">Masukkan passphrase kunci privat SSH Anda untuk autentikasi.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">Masukkan kata sandi repository remote untuk autentikasi.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Masukkan passphrase:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">BERKAS DIASUMSIKAN TIDAK BERUBAH</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">TIDAK ADA BERKAS YANG DIASUMSIKAN TIDAK BERUBAH</x:String>
@@ -1142,5 +1146,7 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Filter clean/smudge gagal. Periksa .gitattributes dan konfigurasi filter.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Hook git menolak operasi. Periksa skrip hook atau gunakan '--no-verify' untuk melewati (dengan hati-hati).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Patch tidak dapat diterapkan dengan bersih. File target mungkin telah berubah. Coba selesaikan secara manual.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">Kunci SSH host remote telah berubah sejak koneksi terakhir. Server mungkin telah diinstal ulang atau kuncinya diperbarui. Hapus kunci lama dari ~/.ssh/known_hosts dan coba lagi.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Verifikasi kunci host SSH gagal. Host mungkin tidak terdaftar di file ~/.ssh/known_hosts Anda. Coba hubungkan melalui terminal terlebih dahulu untuk menambahkan kunci host, atau periksa konfigurasi SSH Anda.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Konflik worktree: branch mungkin sudah di-checkout di tempat lain. Periksa dengan 'git worktree list'.</x:String>
 </ResourceDictionary>

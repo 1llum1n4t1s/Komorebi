@@ -43,6 +43,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Revision:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Archiv erstellen</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi-Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">Der SSH-Schlüssel des Remote-Hosts hat sich seit der letzten Verbindung geändert. Der Server wurde möglicherweise neu installiert oder sein Schlüssel wurde aktualisiert. Überprüfen Sie dies bei Ihrem Administrator, bevor Sie fortfahren.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">Dies ist die erste Verbindung zu diesem Host. Überprüfen Sie den Fingerabdruck, bevor Sie auf OK klicken, um ihn zu den bekannten Hosts hinzuzufügen.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">Geben Sie die Passphrase Ihres privaten SSH-Schlüssels zur Authentifizierung ein.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">Geben Sie das Passwort für das Remote-Repository zur Authentifizierung ein.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Passphrase eingeben:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">ALS UNVERÄNDERT ANGENOMMENE DATEIEN</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">KEINE ALS UNVERÄNDERT ANGENOMMENEN DATEIEN</x:String>
@@ -1142,5 +1146,7 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Ein Clean-/Smudge-Filter ist fehlgeschlagen. Überprüfen Sie .gitattributes und die Filterkonfiguration.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Ein Git-Hook hat die Operation abgelehnt. Überprüfen Sie das Hook-Skript oder verwenden Sie '--no-verify' (mit Vorsicht).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Patch konnte nicht sauber angewendet werden. Die Zieldateien haben sich möglicherweise geändert. Versuchen Sie eine manuelle Lösung.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">Der SSH-Schlüssel des Remote-Hosts hat sich seit der letzten Verbindung geändert. Der Server wurde möglicherweise neu installiert oder sein Schlüssel wurde aktualisiert. Entfernen Sie den alten Schlüssel aus ~/.ssh/known_hosts und versuchen Sie es erneut.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH-Hostschlüssel-Verifizierung fehlgeschlagen. Der Host ist möglicherweise nicht in Ihrer ~/.ssh/known_hosts-Datei registriert. Verbinden Sie sich zuerst über das Terminal, um den Hostschlüssel hinzuzufügen, oder überprüfen Sie Ihre SSH-Konfiguration.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree-Konflikt: Der Branch ist möglicherweise bereits anderswo ausgecheckt. Prüfen Sie mit 'git worktree list'.</x:String>
 </ResourceDictionary>

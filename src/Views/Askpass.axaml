@@ -39,6 +39,28 @@
         <TextBlock x:Name="TxtDescription" Text="{DynamicResource Text.Askpass.Passphrase}" TextWrapping="Wrap"/>
       </Border>
 
+      <!-- ヒント（翻訳+対処法） -->
+      <Border x:Name="HintBorder"
+              Margin="16,16,16,0"
+              Padding="8"
+              CornerRadius="4"
+              Background="#1A4FC3F7"
+              BorderBrush="#504FC3F7"
+              BorderThickness="1"
+              IsVisible="False">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <Path Width="14" Height="14"
+                Data="{StaticResource Icons.Info}"
+                Fill="#4FC3F7"
+                VerticalAlignment="Top"
+                Margin="0,2,0,0"/>
+          <TextBlock x:Name="TxtHint"
+                     Foreground="#4FC3F7"
+                     FontSize="12"
+                     TextWrapping="Wrap"/>
+        </StackPanel>
+      </Border>
+
       <TextBox x:Name="TxtPassphrase"
                Margin="16"
                MinWidth="300"
@@ -55,8 +77,9 @@
         </TextBox.InnerRightContent>
       </TextBox>
 
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-        <Button Classes="flat primary"
+      <StackPanel Margin="0,12,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Button x:Name="BtnOk"
+                Classes="flat primary"
                 Width="80"
                 Content="{DynamicResource Text.Sure}"
                 Click="EnterPassword"

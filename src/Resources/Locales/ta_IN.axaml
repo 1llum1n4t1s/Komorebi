@@ -43,6 +43,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">திருத்தம்:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">காப்பகம்</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">மூலஅறிவிலி கடவுகேள்</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">தொலைநிலை ஹோஸ்டின் SSH விசை கடைசி இணைப்பிலிருந்து மாறியுள்ளது. சர்வர் மறுநிறுவப்பட்டிருக்கலாம் அல்லது அதன் விசை புதுப்பிக்கப்பட்டிருக்கலாம். தொடர்வதற்கு முன் உங்கள் நிர்வாகியிடம் சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">இந்த ஹோஸ்டுடன் முதல் முறை இணைக்கிறீர்கள். கைரேகை சரியானது என்பதை உறுதிப்படுத்திய பிறகு OK கிளிக் செய்து அறியப்பட்ட ஹோஸ்டுகளில் சேர்க்கவும்.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">அங்கீகாரத்திற்காக உங்கள் SSH தனிப்பட்ட விசையின் கடவுச்சொற்றொடரை உள்ளிடவும்.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">அங்கீகாரத்திற்காக தொலைநிலை களஞ்சியத்தின் கடவுச்சொல்லை உள்ளிடவும்.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">கடவுச்சொல்லை உள்ளிடு:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">கோப்புகள் மாற்றப்படவில்லை எனக் கருதப்படுகிறது</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">எந்த கோப்புகளும் மாற்றப்படவில்லை எனக் கருதப்படுகிறது</x:String>
@@ -1142,5 +1146,7 @@
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">clean/smudge வடிகட்டி தோல்வியடைந்தது. .gitattributes மற்றும் வடிகட்டி அமைப்பை சரிபார்க்கவும்.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">git hook செயலை நிராகரித்தது. hook ஸ்கிரிப்ட்டை சரிபார்க்கவும் அல்லது '--no-verify' பயன்படுத்தி புறக்கணிக்கவும் (எச்சரிக்கையுடன்).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">இணைப்பை சரியாக பயன்படுத்த இயலவில்லை. இலக்கு கோப்புகள் மாறியிருக்கலாம். கைமுறையாக தீர்க்க முயற்சிக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">தொலைநிலை ஹோஸ்டின் SSH விசை கடைசி இணைப்பிலிருந்து மாறியுள்ளது. சர்வர் மறுநிறுவப்பட்டிருக்கலாம் அல்லது அதன் விசை புதுப்பிக்கப்பட்டிருக்கலாம். ~/.ssh/known_hosts இலிருந்து பழைய விசையை நீக்கிவிட்டு மீண்டும் முயற்சிக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH ஹோஸ்ட் விசை சரிபார்ப்பு தோல்வியடைந்தது. ஹோஸ்ட் உங்கள் ~/.ssh/known_hosts கோப்பில் பதிவு செய்யப்படாமல் இருக்கலாம். ஹோஸ்ட் விசையைச் சேர்க்க முதலில் டெர்மினல் வழியாக இணைக்கவும், அல்லது SSH அமைப்புகளை சரிபார்க்கவும்.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree முரண்பாடு: கிளை வேறு இடத்தில் ஏற்கனவே சரிபார்க்கப்பட்டிருக்கலாம். 'git worktree list' பயன்படுத்தி சரிபார்க்கவும்.</x:String>
 </ResourceDictionary>

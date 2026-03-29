@@ -43,6 +43,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">指定的提交：</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">存档</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">远程主机的SSH密钥自上次连接以来已更改。服务器可能已重新安装或其密钥已更新。请在继续之前与管理员确认。</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">这是首次连接此主机。请确认指纹正确后点击"确定"将其添加到已知主机列表。</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">请输入SSH私钥的密码短语进行身份验证。</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">请输入远程仓库的密码进行身份验证。</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">请输入密码 ：</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">不跟踪更改的文件</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">没有不跟踪更改的文件</x:String>
@@ -1142,5 +1146,7 @@
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">clean/smudge过滤器执行失败。请检查 .gitattributes 和过滤器配置。</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">git钩子拒绝了操作。请检查钩子脚本，或使用 '--no-verify' 绕过（请谨慎）。</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">补丁无法干净地应用。目标文件可能已更改。请尝试手动解决。</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">远程主机的SSH密钥自上次连接以来已更改。服务器可能已重新安装或其密钥已更新。请从 ~/.ssh/known_hosts 中删除旧密钥后重试。</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH主机密钥验证失败。该主机可能未注册在 ~/.ssh/known_hosts 文件中。请先通过终端连接以添加主机密钥，或检查您的SSH配置。</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">工作树冲突：该分支可能已在其他位置检出。使用 'git worktree list' 检查。</x:String>
 </ResourceDictionary>

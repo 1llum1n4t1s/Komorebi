@@ -219,6 +219,8 @@ public partial class Preferences : ChromelessWindow
                 GPGUserKey = signingKey;
             if (config.TryGetValue("core.autocrlf", out var crlf))
                 CRLFMode = Models.CRLFMode.Supported.Find(x => x.Value == crlf);
+            else
+                CRLFMode = Models.CRLFMode.Supported.Find(x => x.Value == (OperatingSystem.IsWindows() ? "true" : "false"));
             if (config.TryGetValue("core.eol", out var eol))
                 ForceEOLCRLF = eol == "crlf";
             if (config.TryGetValue("fetch.prune", out var pruneOnFetch))
@@ -280,7 +282,7 @@ public partial class Preferences : ChromelessWindow
         await SetIfChangedAsync(config, "user.email", DefaultEmail, "");
         await SetIfChangedAsync(config, "user.signingkey", GPGUserKey, "");
         await SetIfChangedAsync(config, "core.eol", ForceEOLCRLF ? "crlf" : "", "");
-        await SetIfChangedAsync(config, "core.autocrlf", CRLFMode?.Value, null);
+        await SetIfChangedAsync(config, "core.autocrlf", CRLFMode?.Value, OperatingSystem.IsWindows() ? "true" : "false");
         await SetIfChangedAsync(config, "fetch.prune", EnablePruneOnFetch ? "true" : "false", "false");
         await SetIfChangedAsync(config, "commit.gpgsign", EnableGPGCommitSigning ? "true" : "false", "false");
         await SetIfChangedAsync(config, "tag.gpgsign", EnableGPGTagSigning ? "true" : "false", "false");

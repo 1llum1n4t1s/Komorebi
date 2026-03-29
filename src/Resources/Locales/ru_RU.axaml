@@ -43,6 +43,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Ревизия:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Архив</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Спросить разрешения Komorebi</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">SSH-ключ удалённого хоста изменился с момента последнего подключения. Сервер мог быть переустановлен или его ключ был обновлён. Уточните у администратора, прежде чем продолжить.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">Это первое подключение к данному хосту. Убедитесь, что отпечаток ключа верен, прежде чем нажать OK для добавления в известные хосты.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">Введите парольную фразу вашего закрытого SSH-ключа для аутентификации.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">Введите пароль удалённого репозитория для аутентификации.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Введите парольную фразу:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">НЕОТСЛЕЖИВАЕМЫЕ ФАЙЛЫ</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">СПИСОК ПУСТ</x:String>
@@ -1142,5 +1146,7 @@
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Ошибка фильтра clean/smudge. Проверьте .gitattributes и настройку фильтров.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Git-хук отклонил операцию. Проверьте скрипт хука или используйте '--no-verify' для обхода (с осторожностью).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Патч не удалось применить чисто. Целевые файлы могли измениться. Попробуйте разрешить вручную.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">SSH-ключ удалённого хоста изменился с момента последнего подключения. Сервер мог быть переустановлен или его ключ был обновлён. Удалите старый ключ из ~/.ssh/known_hosts и повторите попытку.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Проверка ключа SSH-хоста не удалась. Хост может быть не зарегистрирован в файле ~/.ssh/known_hosts. Попробуйте сначала подключиться через терминал, чтобы добавить ключ хоста, или проверьте настройки SSH.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Конфликт worktree: ветка может быть уже извлечена в другом месте. Проверьте с помощью 'git worktree list'.</x:String>
 </ResourceDictionary>

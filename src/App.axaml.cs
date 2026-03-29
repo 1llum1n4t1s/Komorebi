@@ -981,6 +981,7 @@ public partial class App : Application
         {
             var askpass = new Views.Askpass();
             askpass.TxtDescription.Text = args[0];
+            askpass.SetHint(args[0]);
             desktop.MainWindow = askpass;
             return true;
         }
@@ -1050,8 +1051,9 @@ public partial class App : Application
         CRDebugger.Avalonia.CRDebuggerAvaloniaExtensions.UseAvalonia(options);
         CRDebugger.Core.CRDebugger.Initialize(options);
 
-        // Optionsタブに通知テスト用コンテナを登録する
+        // Optionsタブにテスト用コンテナを登録する
         CRDebugger.Core.CRDebugger.AddOptionContainer(new DebugNotificationTester());
+        CRDebugger.Core.CRDebugger.AddOptionContainer(new DebugAskpassTester());
 
         // 画面の四隅（40x40px）のダブルクリックでデバッガーをトグルする
         const double cornerSize = 40;
@@ -1140,6 +1142,68 @@ public partial class App : Application
                 message,
                 isError,
                 hint);
+        }
+    }
+
+    /// <summary>
+    /// Askpassダイアログの表示確認用テスター。
+    /// 各種SSHプロンプトパターン（ホスト鍵確認、パスフレーズ、パスワード）を
+    /// Askpassダイアログとしてプレビュー表示する。
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822")]
+    private sealed class DebugAskpassTester
+    {
+        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
+        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔑 初回ホスト鍵確認")]
+        [CRDebugger.Core.Options.Attributes.CRSortOrder(1)]
+        public void ShowHostKeyNew()
+        {
+            ShowAskpass(
+                "The authenticity of host 'github.com (64:ff9b::141b:b171)' can't be established.\n" +
+                "ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU\n" +
+                "This key is not known by any other names.\n" +
+                "Are you sure you want to continue connecting (yes/no/[fingerprint])?");
+        }
+
+        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
+        [CRDebugger.Core.Options.Attributes.CRAction(Label = "⚠️ ホスト鍵変更警告")]
+        [CRDebugger.Core.Options.Attributes.CRSortOrder(2)]
+        public void ShowHostKeyChanged()
+        {
+            ShowAskpass(
+                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
+                "@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @\n" +
+                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
+                "IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!\n" +
+                "Host key for github.com has changed and you have requested strict checking.\n" +
+                "Host key verification failed.");
+        }
+
+        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
+        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔐 パスフレーズ入力")]
+        [CRDebugger.Core.Options.Attributes.CRSortOrder(3)]
+        public void ShowPassphrase()
+        {
+            ShowAskpass("Enter passphrase for key '/Users/user/.ssh/id_ed25519': ");
+        }
+
+        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
+        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔒 パスワード入力")]
+        [CRDebugger.Core.Options.Attributes.CRSortOrder(4)]
+        public void ShowPassword()
+        {
+            ShowAskpass("Password for 'https://user@github.com': ");
+        }
+
+        private static void ShowAskpass(string message)
+        {
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                var askpass = new Views.Askpass { IsPreview = true };
+                askpass.TxtDescription.Text = message;
+                askpass.SetHint(message);
+                askpass.Show();
+            });
         }
     }
 #endif

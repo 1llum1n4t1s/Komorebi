@@ -17,8 +17,8 @@ public static partial class GitErrorHelper
 
         // index.lock: 他のgitプロセスが実行中、またはクラッシュ後のロック残留
         if (errorMessage.Contains("index.lock", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("Unable to create", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains(".lock", System.StringComparison.OrdinalIgnoreCase))
+            (errorMessage.Contains("Unable to create", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains(".lock", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.IndexLock";
 
         // マージコンフリクト
@@ -36,14 +36,14 @@ public static partial class GitErrorHelper
         // リモートにpushが拒否された（non-fast-forward）
         if (errorMessage.Contains("non-fast-forward", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("Updates were rejected", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("rejected]", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("fetch first", System.StringComparison.OrdinalIgnoreCase))
+            (errorMessage.Contains("rejected]", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("fetch first", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.PushRejected";
 
         // 未コミット変更があるため操作できない
         if (errorMessage.Contains("uncommitted changes", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("local changes", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("overwritten", System.StringComparison.OrdinalIgnoreCase) ||
+            (errorMessage.Contains("local changes", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("overwritten", System.StringComparison.OrdinalIgnoreCase)) ||
             errorMessage.Contains("Please commit your changes", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("Please, commit your changes", System.StringComparison.OrdinalIgnoreCase))
             return "Text.GitError.UncommittedChanges";
@@ -51,8 +51,8 @@ public static partial class GitErrorHelper
         // 認証失敗
         if (errorMessage.Contains("Authentication failed", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("could not read Username", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("Permission denied", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("publickey", System.StringComparison.OrdinalIgnoreCase) ||
+            (errorMessage.Contains("Permission denied", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("publickey", System.StringComparison.OrdinalIgnoreCase)) ||
             errorMessage.Contains("fatal: could not read Password", System.StringComparison.OrdinalIgnoreCase))
             return "Text.GitError.AuthFailed";
 
@@ -77,8 +77,8 @@ public static partial class GitErrorHelper
         if (errorMessage.Contains("Connection timed out", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("Connection refused", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("Could not connect", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("unable to access", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("SSL", System.StringComparison.OrdinalIgnoreCase) ||
+            (errorMessage.Contains("unable to access", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("SSL", System.StringComparison.OrdinalIgnoreCase)) ||
             errorMessage.Contains("Network is unreachable", System.StringComparison.OrdinalIgnoreCase))
             return "Text.GitError.NetworkError";
 
@@ -100,8 +100,8 @@ public static partial class GitErrorHelper
 
         // LFS
         if (errorMessage.Contains("git-lfs", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("lfs", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("not installed", System.StringComparison.OrdinalIgnoreCase))
+            (errorMessage.Contains("lfs", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("not installed", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.LfsError";
 
         // ファイルが大きすぎる
@@ -132,8 +132,8 @@ public static partial class GitErrorHelper
         // 浅いクローン（shallow clone）の制限
         if (errorMessage.Contains("shallow update not allowed", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("shallow clone", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("grafted", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("shallow", System.StringComparison.OrdinalIgnoreCase))
+            (errorMessage.Contains("grafted", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("shallow", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.ShallowClone";
 
         // ディスク容量不足
@@ -172,15 +172,15 @@ public static partial class GitErrorHelper
 
         // スタッシュ関連エラー
         if (errorMessage.Contains("No stash entries found", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("Too few arguments", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("stash", System.StringComparison.OrdinalIgnoreCase))
+            (errorMessage.Contains("Too few arguments", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("stash", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.StashError";
 
         // クリーンフィルター/smudgeフィルターエラー
         if (errorMessage.Contains("clean filter", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("smudge filter", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("external filter", System.StringComparison.OrdinalIgnoreCase) &&
-            errorMessage.Contains("failed", System.StringComparison.OrdinalIgnoreCase))
+            (errorMessage.Contains("external filter", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("failed", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.FilterError";
 
         // hookの実行失敗
@@ -196,12 +196,53 @@ public static partial class GitErrorHelper
             errorMessage.Contains("error: could not apply", System.StringComparison.OrdinalIgnoreCase))
             return "Text.GitError.PatchFailed";
 
+        // SSHホスト鍵変更警告（中間者攻撃の可能性）
+        if (errorMessage.Contains("REMOTE HOST IDENTIFICATION HAS CHANGED", System.StringComparison.OrdinalIgnoreCase) ||
+            (errorMessage.Contains("host key", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("has changed", System.StringComparison.OrdinalIgnoreCase)))
+            return "Text.GitError.HostKeyChanged";
+
+        // SSHホスト鍵検証失敗（known_hostsに未登録、または接続拒否）
+        if (errorMessage.Contains("Host key verification failed", System.StringComparison.OrdinalIgnoreCase))
+            return "Text.GitError.HostKeyVerifyFailed";
+
         // worktree関連のエラー
         if (errorMessage.Contains("worktree", System.StringComparison.OrdinalIgnoreCase) &&
             (errorMessage.Contains("already checked out", System.StringComparison.OrdinalIgnoreCase) ||
              errorMessage.Contains("is already linked", System.StringComparison.OrdinalIgnoreCase) ||
              errorMessage.Contains("locked", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.WorktreeError";
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    /// SSHのaskpassメッセージに対応するローカライズキーを返す。
+    /// 該当パターンがない場合は空文字を返す。
+    /// </summary>
+    public static string GetAskpassHintKey(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+            return string.Empty;
+
+        // ホスト鍵変更警告（中間者攻撃の可能性）
+        if (message.Contains("REMOTE HOST IDENTIFICATION HAS CHANGED", System.StringComparison.OrdinalIgnoreCase) ||
+            message.Contains("Host key verification failed", System.StringComparison.OrdinalIgnoreCase))
+            return "Text.Askpass.Hint.HostKeyChanged";
+
+        // 初回接続時のホスト鍵確認
+        if (message.Contains("authenticity", System.StringComparison.OrdinalIgnoreCase) &&
+            (message.Contains("can't be established", System.StringComparison.OrdinalIgnoreCase) ||
+             message.Contains("continue connecting", System.StringComparison.OrdinalIgnoreCase)))
+            return "Text.Askpass.Hint.HostKeyNew";
+
+        // パスフレーズ入力
+        if (message.Contains("passphrase", System.StringComparison.OrdinalIgnoreCase))
+            return "Text.Askpass.Hint.Passphrase";
+
+        // パスワード入力
+        if (message.Contains("password", System.StringComparison.OrdinalIgnoreCase))
+            return "Text.Askpass.Hint.Password";
 
         return string.Empty;
     }

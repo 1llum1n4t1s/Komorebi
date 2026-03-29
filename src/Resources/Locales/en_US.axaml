@@ -39,6 +39,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Revision:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Archive</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">The remote host's SSH key has changed since the last connection. The server may have been reinstalled or its key was rotated. Verify with your administrator before continuing.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">This is the first time connecting to this host. Verify the fingerprint is correct before clicking OK to add it to your known hosts.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">Enter the passphrase for your SSH private key to authenticate.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">Enter the password for the remote repository to authenticate.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Enter passphrase:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">FILES ASSUME UNCHANGED</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">NO FILES ASSUMED AS UNCHANGED</x:String>
@@ -1142,5 +1146,7 @@ Reason: {1}</x:String>
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">A clean/smudge filter failed. Check your .gitattributes and filter configuration.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">A git hook rejected the operation. Check the hook script or use '--no-verify' to bypass (with caution).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Patch could not be applied cleanly. The target files may have changed. Try resolving manually.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">The remote host's SSH key has changed since the last connection. The server may have been reinstalled or its key was rotated. Remove the old key from ~/.ssh/known_hosts and try again.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH host key verification failed. The host may not be in your ~/.ssh/known_hosts file. Try connecting via terminal first to add the host key, or check your SSH configuration.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree conflict: the branch may already be checked out elsewhere. Use 'git worktree list' to check.</x:String>
 </ResourceDictionary>

@@ -43,6 +43,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Révision :</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Archiver</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">La clé SSH de l'hôte distant a changé depuis la dernière connexion. Le serveur a peut-être été réinstallé ou sa clé a été mise à jour. Vérifiez auprès de votre administrateur avant de continuer.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">C'est la première connexion à cet hôte. Vérifiez que l'empreinte est correcte avant de cliquer sur OK pour l'ajouter aux hôtes connus.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">Saisissez la phrase de passe de votre clé privée SSH pour vous authentifier.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">Saisissez le mot de passe du dépôt distant pour vous authentifier.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Saisir la phrase secrète :</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">FICHIERS PRÉSUMÉS INCHANGÉS</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">PAS DE FICHIERS PRÉSUMÉS INCHANGÉS</x:String>
@@ -1142,5 +1146,7 @@ Raison : {1}</x:String>
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Un filtre clean/smudge a échoué. Vérifiez .gitattributes et la configuration du filtre.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Un hook git a rejeté l'opération. Vérifiez le script du hook ou utilisez '--no-verify' pour contourner (avec prudence).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Le patch n'a pas pu être appliqué proprement. Les fichiers cibles ont peut-être changé. Essayez de résoudre manuellement.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">La clé SSH de l'hôte distant a changé depuis la dernière connexion. Le serveur a peut-être été réinstallé ou sa clé a été mise à jour. Supprimez l'ancienne clé de ~/.ssh/known_hosts et réessayez.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">La vérification de la clé de l'hôte SSH a échoué. L'hôte n'est peut-être pas dans votre fichier ~/.ssh/known_hosts. Essayez de vous connecter d'abord via le terminal pour ajouter la clé de l'hôte, ou vérifiez votre configuration SSH.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflit de worktree : la branche est peut-être déjà extraite ailleurs. Vérifiez avec 'git worktree list'.</x:String>
 </ResourceDictionary>

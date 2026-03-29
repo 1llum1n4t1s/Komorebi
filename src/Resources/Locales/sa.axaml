@@ -40,6 +40,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">संशोधनम्:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">संग्रहणम्</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi कूटशब्दप्रश्नः</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">दूरस्थसेवकस्य SSH-कुञ्चिका अन्तिमसंयोजनात् परिवर्तिता अस्ति। सेवकः पुनः स्थापितः स्यात् अथवा तस्य कुञ्चिका नवीकृता स्यात्। प्रशासकेन सह पुष्टिं कुरुत अग्रे गन्तुम्।</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">अयम् अस्य सेवकस्य प्रथमः सम्बन्धः। अङ्गुलिचिह्नं सम्यक् अस्ति इति सुनिश्चित्य OK इति क्लिक् कुरुत ज्ञातसेवकेषु योजयितुम्।</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">प्रमाणीकरणार्थं स्वस्य SSH-गोपनीयकुञ्चिकायाः कूटशब्दं प्रविशतु।</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">प्रमाणीकरणार्थं दूरस्थभण्डारस्य कूटशब्दं प्रविशतु।</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">कूटवाक्यं प्रविष्टं कुरुत:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">अपरिवर्तितमिति गृहीताः सञ्चिकाः</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">अपरिवर्तितमिति गृहीताः सञ्चिकाः नास्ति</x:String>
@@ -1139,5 +1143,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">clean/smudge शोधकं विफलम्। .gitattributes शोधकसंस्थापनं च परीक्षयतु।</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">git अङ्कुशः कार्यं प्रत्याख्यातवान्। अङ्कुशलिपिं परीक्षयतु अथवा '--no-verify' अतिक्रमणाय उपयुज्यताम् (सावधानतया)।</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">सर्तुरा शुद्धतया प्रयोजयितुं न शक्यते। लक्ष्यसञ्चिकाः परिवर्तिताः स्युः। हस्तेन समाधातुं प्रयतताम्।</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">दूरस्थसेवकस्य SSH-कुञ्चिका अन्तिमसंयोजनात् परिवर्तिता अस्ति। सेवकः पुनः स्थापितः स्यात् अथवा तस्य कुञ्चिका नवीकृता स्यात्। ~/.ssh/known_hosts इत्यस्मात् पुरातनां कुञ्चिकां निराकुरुत पुनः प्रयतताम्।</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH-सेवककुञ्चिकायाः सत्यापनं विफलम्। सेवकः ~/.ssh/known_hosts सञ्चिकायां पञ्जीकृतः न स्यात्। टर्मिनल-माध्यमेन प्रथमं संयोजयतु सेवककुञ्चिकां योजयितुम्, अथवा SSH-विन्यासं परीक्षतु।</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">कार्यवृक्षसङ्घर्षः: शाखा अन्यत्र पूर्वमेव निष्कासिता स्यात्। 'git worktree list' इत्यनेन परीक्षयतु।</x:String>
 </ResourceDictionary>

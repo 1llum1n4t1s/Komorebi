@@ -40,6 +40,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Revisio:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Archivum</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">Clavis SSH hospitis remoti mutata est ab ultima connexione. Minister fortasse reinstallatus est vel clavis eius renovata est. Apud administratorem tuum verifica antequam procedas.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">Haec est prima connexio ad hunc hospitem. Verifica impressionem digitalem rectam esse antequam OK premas ut eum ad hospites notos addas.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">Insere tesseram clavis privatae SSH tuae ad authenticandum.</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">Insere tesseram repositorii remoti ad authenticandum.</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Inscribe tesseram:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">DOCUMENTA IMMUTATA PUTATA</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">NULLA DOCUMENTA IMMUTATA PUTATA</x:String>
@@ -1139,5 +1143,7 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">Filtrum clean/smudge defecit. Verifica .gitattributes et configurationem filtri.</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">Uncus git operationem reiecit. Verifica scriptum unci vel utere '--no-verify' ad praetereundum (caute).</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">Sartura munde applicari non potuit. Fasciculi destinationis mutati esse possunt. Tempta manualiter solvere.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">Clavis SSH hospitis remoti mutata est ab ultima connexione. Minister fortasse reinstallatus est vel clavis eius renovata est. Clavem veterem ex ~/.ssh/known_hosts remove et iterum conare.</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Verificatio clavis hospitis SSH defecit. Hospes fortasse in archivo ~/.ssh/known_hosts non registratus est. Per terminale primum conectere conare ut clavem hospitis addas, vel configurationem SSH tuam inspice.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflictus worktree: ramus iam alibi extractus esse potest. Verifica cum 'git worktree list'.</x:String>
 </ResourceDictionary>

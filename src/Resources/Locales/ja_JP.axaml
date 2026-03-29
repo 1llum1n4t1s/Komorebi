@@ -43,6 +43,10 @@
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">リビジョン:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">アーカイブ化</x:String>
   <x:String x:Key="Text.Askpass" xml:space="preserve">Komorebi Askpass</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyChanged" xml:space="preserve">リモートホストのSSHキーが前回の接続時から変更されています。サーバーの再インストールやキーの更新が行われた可能性があります。続行する前に管理者に確認してください。</x:String>
+  <x:String x:Key="Text.Askpass.Hint.HostKeyNew" xml:space="preserve">このホストへの初回接続です。フィンガープリントが正しいことを確認してから「OK」を押して既知のホストに追加してください。</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Passphrase" xml:space="preserve">認証のためSSH秘密鍵のパスフレーズを入力してください。</x:String>
+  <x:String x:Key="Text.Askpass.Hint.Password" xml:space="preserve">認証のためリモートリポジトリのパスワードを入力してください。</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">パスフレーズを入力:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">未変更と見なしたファイル</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">未変更と見なしたファイルはありません</x:String>
@@ -1142,5 +1146,7 @@
   <x:String x:Key="Text.GitError.FilterError" xml:space="preserve">clean/smudgeフィルターが失敗しました。.gitattributesとフィルター設定を確認してください。</x:String>
   <x:String x:Key="Text.GitError.HookFailed" xml:space="preserve">gitフックが操作を拒否しました。フックスクリプトを確認するか、'--no-verify' でバイパスしてください（注意して使用）。</x:String>
   <x:String x:Key="Text.GitError.PatchFailed" xml:space="preserve">パッチを正常に適用できませんでした。対象ファイルが変更されている可能性があります。手動で解決してください。</x:String>
+  <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">リモートホストのSSHキーが前回の接続時から変更されています。サーバーの再インストールやキーの更新が行われた可能性があります。~/.ssh/known_hostsから古いキーを削除してから再試行してください。</x:String>
+  <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSHホスト鍵の検証に失敗しました。ホストが ~/.ssh/known_hosts に登録されていない可能性があります。ターミナルから一度接続してホスト鍵を追加するか、SSH設定を確認してください。</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">ワークツリーの競合: ブランチが別の場所で既にチェックアウトされている可能性があります。'git worktree list' で確認してください。</x:String>
 </ResourceDictionary>
