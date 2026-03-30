@@ -1,0 +1,63 @@
+# CodeRabbit AI Code Review 設定
+# https://docs.coderabbit.ai/reference/configuration
+language: "ja-JP"
+
+tone_instructions: >
+  レビューは日本語で行ってください。
+  Avalonia UI (WPFではない) のベストプラクティスに従っているか確認してください。
+
+reviews:
+  # レビュープロファイル: "chill"（穏やか）or "assertive"（厳格）
+  profile: "chill"
+
+  # PR作成時 & push時に自動レビュー
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    ignore_title_keywords:
+      - "WIP"
+      - "wip"
+      - "Draft"
+
+  high_level_summary: true
+  collapse_walkthrough: true
+
+  # パスベースのレビュー指示
+  path_instructions:
+    - path: "src/Commands/**/*.cs"
+      instructions: >
+        git CLIラッパー。Command.csのベースクラスパターンに従っているか確認。
+        stdout/stderrの並列読み取り、一時ファイルのtry/finally クリーンアップ、
+        独立コマンドのTask.WhenAll並列実行を確認。
+    - path: "src/ViewModels/**/*.cs"
+      instructions: >
+        MVVM ViewModelクラス。ObservableObject継承、immutableパターン、
+        Popup派生クラスのSure()オーバーライドでのLockWatcher使用を確認。
+    - path: "src/Views/**/*.axaml"
+      instructions: >
+        Avalonia AXAML。compiled bindings (x:DataType) の使用必須。
+        WPF構文（Trigger/DataTrigger, Visibility.Collapsed）を使わないこと。
+    - path: "src/Views/**/*.axaml.cs"
+      instructions: >
+        コードビハインド。ロジックはViewModelに置き、ここではUI操作のみ。
+    - path: "tests/**/*.cs"
+      instructions: >
+        xUnit v3 テスト。テストカバレッジ80%以上を目標。
+        Arrange-Act-Assert パターンに従っているか確認。
+
+  # レビュー対象外のパス
+  path_filters:
+    - "!depends/**"
+    - "!build/resources/**"
+    - "!src/Resources/Fonts/**"
+    - "!src/Resources/Locales/**"
+    - "!**/*.Designer.cs"
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  learnings:
+    scope: "auto"
