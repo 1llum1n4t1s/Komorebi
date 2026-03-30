@@ -1,7 +1,7 @@
 name: Trigger AI Reviews
 on:
   pull_request:
-    types: [opened, ready_for_review, synchronize]
+    types: [synchronize]
 
 jobs:
   trigger-reviews:
