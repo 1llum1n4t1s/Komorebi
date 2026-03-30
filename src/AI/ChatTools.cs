@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using OpenAI.Chat;
@@ -11,7 +10,7 @@ public static class ChatTools
     public static readonly ChatTool GetDetailChangesInFile = ChatTool.CreateFunctionTool(
         "GetDetailChangesInFile",
         "Get the detailed changes in the specified file in the specified repository.",
-        BinaryData.FromBytes(Encoding.UTF8.GetBytes("""
+        BinaryData.FromString("""
         {
             "type": "object",
             "properties": {
