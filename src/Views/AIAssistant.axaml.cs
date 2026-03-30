@@ -9,7 +9,6 @@ using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
-using AvaloniaEdit.Rendering;
 using AvaloniaEdit.TextMate;
 
 namespace Komorebi.Views;
@@ -162,5 +161,16 @@ public partial class AIAssistant : ChromelessWindow
     {
         if (DataContext is ViewModels.AIAssistant vm) vm.Apply();
         Close();
+    }
+
+    /// <summary>
+    /// 再生成ボタンクリックのハンドラ。
+    /// </summary>
+    private void OnRegenClicked(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.AIAssistant vm)
+            vm.Regen();
+
+        e.Handled = true;
     }
 }

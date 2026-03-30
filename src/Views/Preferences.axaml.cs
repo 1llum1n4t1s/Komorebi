@@ -171,13 +171,13 @@ public partial class Preferences : ChromelessWindow
     /// <summary>
     /// 選択中のOpenAIサービスのスタイルプロパティ。
     /// </summary>
-    public static readonly StyledProperty<Models.OpenAIService> SelectedOpenAIServiceProperty =
-        AvaloniaProperty.Register<Preferences, Models.OpenAIService>(nameof(SelectedOpenAIService));
+    public static readonly StyledProperty<AI.Service> SelectedOpenAIServiceProperty =
+        AvaloniaProperty.Register<Preferences, AI.Service>(nameof(SelectedOpenAIService));
 
     /// <summary>
     /// 選択中のOpenAIサービスを取得・設定する。
     /// </summary>
-    public Models.OpenAIService SelectedOpenAIService
+    public AI.Service SelectedOpenAIService
     {
         get => GetValue(SelectedOpenAIServiceProperty);
         set => SetValue(SelectedOpenAIServiceProperty, value);
@@ -507,7 +507,7 @@ public partial class Preferences : ChromelessWindow
     /// </summary>
     private void OnAddOpenAIService(object sender, RoutedEventArgs e)
     {
-        var service = new Models.OpenAIService() { Name = "Unnamed Service" };
+        var service = new AI.Service() { Name = "Unnamed Service" };
         ViewModels.Preferences.Instance.OpenAIServices.Add(service);
         SelectedOpenAIService = service;
 

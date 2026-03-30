@@ -543,7 +543,7 @@ public class Preferences : ObservableObject
     } = [];
 
     /// <summary>OpenAI/AI APIサービスの設定一覧。AIコミットメッセージ生成に使用する。</summary>
-    public AvaloniaList<Models.OpenAIService> OpenAIServices
+    public AvaloniaList<AI.Service> OpenAIServices
     {
         get;
         set;
@@ -580,7 +580,6 @@ public class Preferences : ObservableObject
             if (w.IsActive)
                 return w;
         }
-    }
 
         // ワークスペースが存在しない場合はデフォルトを作成
         if (Workspaces.Count == 0)

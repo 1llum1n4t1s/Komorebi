@@ -40,6 +40,15 @@ public class Apply : Popup
     }
 
     /// <summary>
+    /// 3-wayマージを使用するかどうか。
+    /// </summary>
+    public bool ThreeWayMerge
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// コンストラクタ。リポジトリを受け取り、デフォルトの空白処理モードを設定する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
@@ -79,7 +88,8 @@ public class Apply : Popup
         Use(log);
 
         // git applyコマンドを実行してパッチを適用する
-        var succ = await new Commands.Apply(_repo.FullPath, _patchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, null)
+        var extra = ThreeWayMerge ? "--3way" : string.Empty;
+        var succ = await new Commands.Apply(_repo.FullPath, _patchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
             .Use(log)
             .ExecAsync();
 

@@ -11,6 +11,14 @@ namespace Komorebi.ViewModels;
 public class EditRepositoryNode : Popup
 {
     /// <summary>
+    /// 表示用のターゲット名（リポジトリならID、グループなら名前）。
+    /// </summary>
+    public string Target
+    {
+        get;
+    }
+
+    /// <summary>
     /// ノードのID。
     /// </summary>
     public string Id
@@ -65,6 +73,8 @@ public class EditRepositoryNode : Popup
         _name = node.Name;
         _isRepository = node.IsRepository;
         _bookmark = node.Bookmark;
+
+        Target = node.IsRepository ? node.Id : node.Name;
 
         Bookmarks = [];
         for (var i = 0; i < Models.Bookmarks.Brushes.Length; i++)

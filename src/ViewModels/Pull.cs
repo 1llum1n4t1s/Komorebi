@@ -58,13 +58,21 @@ public class Pull : Popup
     }
 
     /// <summary>
-    /// ローカルの変更を破棄してからプルするかどうか。
+    /// ローカル変更があるかどうか。
     /// </summary>
-    public bool DiscardLocalChanges
+    public bool HasLocalChanges
+    {
+        get => _repo.LocalChangesCount > 0;
+    }
+
+    /// <summary>
+    /// ローカル変更の扱い方。
+    /// </summary>
+    public Models.DealWithLocalChanges DealWithLocalChanges
     {
         get;
         set;
-    } = false;
+    } = Models.DealWithLocalChanges.DoNothing;
 
     /// <summary>
     /// マージの代わりにリベースを使用するかどうか。リポジトリのUI状態と連動する。
@@ -150,12 +158,11 @@ public class Pull : Popup
         var needPopStash = false;
         if (changes > 0)
         {
-            if (DiscardLocalChanges)
+            if (DealWithLocalChanges == Models.DealWithLocalChanges.DoNothing)
             {
-                // ローカル変更を破棄
-                await Commands.Discard.AllAsync(_repo.FullPath, false, false, log);
+                // 何もしない
             }
-            else
+            else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
             {
                 // 自動スタッシュでローカル変更を一時保存
                 var succ = await new Commands.Stash(_repo.FullPath).Use(log).PushAsync("PULL_AUTO_STASH", false);
@@ -166,6 +173,11 @@ public class Pull : Popup
                 }
 
                 needPopStash = true;
+            }
+            else
+            {
+                // ローカル変更を破棄
+                await Commands.Discard.AllAsync(_repo.FullPath, false, false, log);
             }
         }
 

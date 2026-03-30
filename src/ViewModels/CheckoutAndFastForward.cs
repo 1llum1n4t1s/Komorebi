@@ -25,9 +25,17 @@ public class CheckoutAndFastForward : Popup
     }
 
     /// <summary>
-    /// ローカル変更を破棄するかどうかのフラグ。
+    /// ローカル変更があるかどうか。
     /// </summary>
-    public bool DiscardLocalChanges
+    public bool HasLocalChanges
+    {
+        get => _repo.LocalChangesCount > 0;
+    }
+
+    /// <summary>
+    /// ローカル変更の扱い方。
+    /// </summary>
+    public Models.DealWithLocalChanges DealWithLocalChanges
     {
         get;
         set;
@@ -44,6 +52,7 @@ public class CheckoutAndFastForward : Popup
         _repo = repo;
         LocalBranch = localBranch;
         RemoteBranch = remoteBranch;
+        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
     }
 
     /// <summary>
@@ -75,30 +84,40 @@ public class CheckoutAndFastForward : Popup
         var succ = false;
         var needPopStash = false;
 
-        // ローカル変更を破棄しない場合、自動スタッシュを行う
-        if (!DiscardLocalChanges)
+        if (DealWithLocalChanges == Models.DealWithLocalChanges.DoNothing)
+        {
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .BranchAsync(LocalBranch.Name, RemoteBranch.Head, false, true);
+        }
+        else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
         {
             var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
             if (changes > 0)
             {
-                // ローカル変更を一時的にスタッシュに保存する
                 succ = await new Commands.Stash(_repo.FullPath)
                     .Use(log)
                     .PushAsync("CHECKOUT_AND_FASTFORWARD_AUTO_STASH", false);
                 if (!succ)
                 {
                     log.Complete();
+                    _repo.MarkWorkingCopyDirtyManually();
                     return false;
                 }
 
                 needPopStash = true;
             }
-        }
 
-        // git checkoutコマンドでブランチ切り替えとファストフォワードを同時実行する
-        succ = await new Commands.Checkout(_repo.FullPath)
-            .Use(log)
-            .BranchAsync(LocalBranch.Name, RemoteBranch.Head, DiscardLocalChanges, true);
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .BranchAsync(LocalBranch.Name, RemoteBranch.Head, false, true);
+        }
+        else
+        {
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .BranchAsync(LocalBranch.Name, RemoteBranch.Head, true, true);
+        }
 
         if (succ)
         {

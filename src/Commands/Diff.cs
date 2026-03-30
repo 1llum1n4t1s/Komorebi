@@ -306,10 +306,6 @@ public partial class Diff : Command
             {
                 last.NoNewLineEndOfFile = true;
             }
-            else if (line.Equals("\\ No newline at end of file", StringComparison.Ordinal))
-            {
-                _last.NoNewLineEndOfFile = true;
-            }
         }
     }
 

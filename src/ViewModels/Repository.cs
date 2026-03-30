@@ -1554,7 +1554,7 @@ public class Repository : ObservableObject, Models.IRepository
 
         if (branch.IsLocal)
         {
-            await ShowAndStartPopupAsync(new Checkout(this, branch.Name));
+            await ShowAndStartPopupAsync(new Checkout(this, branch));
         }
         else
         {
@@ -1766,7 +1766,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// 優先OpenAIサービスのリストを取得する。
     /// リポジトリ固有の設定があればそれを優先し、なければ全サービスを返す。
     /// </summary>
-    public List<Models.OpenAIService> GetPreferredOpenAIServices()
+    public List<AI.Service> GetPreferredOpenAIServices()
     {
         var services = Preferences.Instance.OpenAIServices;
         if (services is null || services.Count == 0)
@@ -1776,7 +1776,7 @@ public class Repository : ObservableObject, Models.IRepository
             return [services[0]];
 
         var preferred = _settings.PreferredOpenAIService;
-        List<Models.OpenAIService> all = [];
+        List<AI.Service> all = [];
         foreach (var service in services)
         {
             if (service.Name.Equals(preferred, StringComparison.Ordinal))

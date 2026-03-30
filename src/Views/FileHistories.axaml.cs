@@ -22,6 +22,35 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
+    /// リビジョンリストのItemsSourceが変更された際、最初のアイテムを自動選択する。
+    /// </summary>
+    private void OnRevisionsPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ListBox.ItemsSourceProperty &&
+            sender is ListBox { Items: { Count: > 0 } } listBox)
+            listBox.SelectedIndex = 0;
+    }
+
+    /// <summary>
+    /// リビジョンリストの選択が変更された際のハンドラ。
+    /// </summary>
+    private void OnRevisionsSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (sender is ListBox listBox && DataContext is ViewModels.FileHistories vm)
+        {
+            vm.SelectedRevisions.Clear();
+            if (listBox.SelectedItems is { } selected)
+            {
+                foreach (var item in selected)
+                {
+                    if (item is Models.FileVersion ver)
+                        vm.SelectedRevisions.Add(ver);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// PressCommitSHAイベントのハンドラ。
     /// </summary>
     private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
