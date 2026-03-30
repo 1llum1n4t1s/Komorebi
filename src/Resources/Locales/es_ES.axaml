@@ -875,7 +875,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Forzar push después de completar</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">En:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clave Privada SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Ruta de almacenamiento de la clave privada SSH</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Ruta de la clave privada (no .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Ha seleccionado una clave pública (.pub). Seleccione la clave privada (el archivo sin extensión .pub).</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">INICIAR</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Incluir archivos no rastreados</x:String>

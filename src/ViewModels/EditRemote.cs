@@ -121,6 +121,9 @@ public class EditRemote : Popup
         {
             if (!File.Exists(sshkey))
                 return new ValidationResult("Given SSH private key can NOT be found!");
+
+            if (sshkey.EndsWith(".pub", System.StringComparison.OrdinalIgnoreCase))
+                return new ValidationResult(App.Text("SSHKey.PublicKeySelected"));
         }
 
         return ValidationResult.Success;

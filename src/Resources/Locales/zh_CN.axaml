@@ -875,7 +875,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">完成后强制推送</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">父提交：</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH密钥 ：</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">SSH密钥文件</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">私钥路径（不是 .pub）</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">您选择了公钥（.pub）。请选择私钥（没有 .pub 扩展名的文件）。</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">开    始</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">贮藏(stash)</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">包含未跟踪的文件</x:String>

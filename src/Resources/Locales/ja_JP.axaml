@@ -875,7 +875,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">実行後に強制プッシュする</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">統合先:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH の秘密鍵:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">SSH の秘密鍵が保管されているパス</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">秘密鍵のパス（.pub ではない方）</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">公開鍵（.pub）が選択されました。秘密鍵（.pub が付かない方のファイル）を選択してください。</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">開始</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">スタッシュ</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">未追跡のファイルを含める</x:String>

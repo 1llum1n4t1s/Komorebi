@@ -875,7 +875,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Примусово надіслати після завершення</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">До:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватний ключ SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Шлях до сховища приватного ключа SSH</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Шлях до приватного ключа (не .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Ви обрали відкритий ключ (.pub). Оберіть приватний ключ (файл без розширення .pub).</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">ПОЧАТИ</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash (Сховати)</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Включити невідстежувані файли</x:String>

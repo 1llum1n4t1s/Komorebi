@@ -872,7 +872,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">I-force push pagkatapos</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Sa:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH Private Key:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Path ng imbakan ng pribadong SSH key</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Path ng private key (hindi .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Pumili ka ng public key (.pub). Piliin ang private key (ang file na walang .pub extension).</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">SIMULAN</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Isama ang mga untracked na file</x:String>

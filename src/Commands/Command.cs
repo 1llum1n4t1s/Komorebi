@@ -289,10 +289,17 @@ public partial class Command
         if (!OperatingSystem.IsLinux())
             start.Environment.Add("DISPLAY", "required");
 
-        // If an SSH private key was provided, sets the environment.
-        // SSH秘密鍵が指定されている場合、GIT_SSH_COMMANDを設定する
-        if (!start.Environment.ContainsKey("GIT_SSH_COMMAND") && !string.IsNullOrEmpty(SSHKey))
-            start.Environment.Add("GIT_SSH_COMMAND", $"ssh -i '{SSHKey}' -F '/dev/null'");
+        // GIT_SSH_COMMANDを設定する
+        // StrictHostKeyChecking=accept-new: 新しいホスト鍵は自動承認、変更された鍵は拒否（TOFU）
+        // macOSのApple版OpenSSHはSSH_ASKPASSの応答をホスト鍵確認に適用しないため、
+        // このオプションでAskpassダイアログを経由せずに新しいホスト鍵を受け入れる
+        if (!start.Environment.ContainsKey("GIT_SSH_COMMAND"))
+        {
+            var sshCmd = string.IsNullOrEmpty(SSHKey)
+                ? "ssh -o StrictHostKeyChecking=accept-new"
+                : $"ssh -i '{SSHKey}' -o StrictHostKeyChecking=accept-new -F '/dev/null'";
+            start.Environment.Add("GIT_SSH_COMMAND", sshCmd);
+        }
 
         // Force using en_US.UTF-8 locale
         // Linuxの場合、ロケールをCに強制してgit出力を英語にする

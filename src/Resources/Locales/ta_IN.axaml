@@ -875,7 +875,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">முடிந்த பிறகு கட்டாய புஷ்</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">உள்ளே:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">பாஓடு தனியார் திறவுகோல்:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">தனியார் பாஓடு திறவுகோல் கடை பாதை</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">தனிப்பட்ட விசை பாதை (.pub அல்ல)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">நீங்கள் பொது விசையை (.pub) தேர்ந்தெடுத்தீர்கள். தனிப்பட்ட விசையை (.pub நீட்டிப்பு இல்லாத கோப்பு) தேர்ந்தெடுக்கவும்.</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">தொடங்கு</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">பதுக்கிவை</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">கண்காணிக்கப்படாத கோப்புகளைச் சேர்</x:String>

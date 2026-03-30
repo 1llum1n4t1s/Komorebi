@@ -875,7 +875,8 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Esegui push forzato al termine</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Chiave Privata SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Percorso per la chiave SSH privata</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Percorso della chiave privata (non .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Hai selezionato una chiave pubblica (.pub). Seleziona la chiave privata (il file senza estensione .pub).</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">AVVIA</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stasha</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Includi file non tracciati</x:String>

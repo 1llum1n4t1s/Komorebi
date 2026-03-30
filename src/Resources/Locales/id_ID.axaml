@@ -875,7 +875,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Paksa push setelah selesai</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ke:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Kunci SSH Privat:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Jalur penyimpanan kunci SSH privat</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Path kunci privat (bukan .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Anda memilih kunci publik (.pub). Pilih kunci privat (file tanpa ekstensi .pub).</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">MULAI</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Termasuk berkas yang tidak dilacak</x:String>

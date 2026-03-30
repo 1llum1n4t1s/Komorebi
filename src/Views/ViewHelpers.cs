@@ -35,6 +35,19 @@ internal static class ViewHelpers
             options.SuggestedStartLocation = await toplevel.StorageProvider.TryGetFolderFromPathAsync(sshDir);
 
         var selected = await toplevel.StorageProvider.OpenFilePickerAsync(options);
-        return selected.Count == 1 ? selected[0].Path.LocalPath : null;
+        if (selected.Count != 1)
+            return null;
+
+        var path = selected[0].Path.LocalPath;
+
+        // .pub（公開鍵）を選択した場合は自動的に秘密鍵のパスに補正する
+        if (path.EndsWith(".pub", StringComparison.OrdinalIgnoreCase))
+        {
+            var privateKeyPath = path[..^4];
+            if (File.Exists(privateKeyPath))
+                return privateKeyPath;
+        }
+
+        return path;
     }
 }

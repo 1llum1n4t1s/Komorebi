@@ -102,15 +102,15 @@ public class Clone : Popup
         if (string.IsNullOrEmpty(ParentFolder))
             _parentFolder = Preferences.Instance.GitDefaultCloneDir;
 
-        // バックグラウンドでクリップボードからURLを検出する
-        Task.Run(async () =>
+        // クリップボードからURLを検出する
+        // クリップボードアクセスはUIスレッドが必須のためDispatcher経由で実行する
+        Dispatcher.UIThread.Post(async () =>
         {
             try
             {
                 var text = await App.GetClipboardTextAsync();
-                // クリップボードのテキストが有効なリモートURLであればRemoteに設定する
                 if (Models.Remote.IsValidURL(text))
-                    Dispatcher.UIThread.Post(() => Remote = text);
+                    Remote = text;
             }
             catch
             {

@@ -872,7 +872,8 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">समाप्त्यनन्तरं बलात् प्रेषयतु</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">मध्ये:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH गोपनकुञ्चिका:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">गोपन-SSH कुञ्चिकाभण्डारणमार्गः</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">गोपनकुञ्चिकामार्गः (.pub न भवतु)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">सार्वजनिककुञ्चिका (.pub) चिता। गोपनकुञ्चिकां (.pub विस्तारं विना सञ्चिकाम्) चिनुत।</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">प्रारभतु</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">निक्षेपः</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">अननुसृतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>

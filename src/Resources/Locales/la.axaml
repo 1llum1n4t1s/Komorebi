@@ -872,7 +872,8 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Vi mitte post perfectionem</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clavis SSH Privata:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Semita repositorii clavis SSH privatae</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Semita clavis privatae (non .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Clavem publicam (.pub) selegisti. Clavem privatam (archivum sine extensione .pub) selige.</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">INCIPE</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Repone</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Includi documenta non vestigata</x:String>

@@ -875,7 +875,8 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Nach Abschluss Force-Push durchführen</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Privater SSH-Schlüssel:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Pfad zum privaten SSH-Schlüssel</x:String>
+  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Pfad zum privaten Schlüssel (nicht .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Sie haben einen öffentlichen Schlüssel (.pub) ausgewählt. Bitte wählen Sie den privaten Schlüssel (die Datei ohne .pub-Endung).</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">START</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Nicht-verfolgte Dateien einbeziehen</x:String>
