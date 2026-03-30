@@ -1124,6 +1124,8 @@ Reason: {1}</x:String>
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Push was rejected because the remote has newer changes. Pull (or fetch and merge) first, then push again.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">You have uncommitted changes. Commit or stash them before proceeding.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Authentication failed. Check your credentials, SSH key, or personal access token.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH private key file permissions are too open. The key file must be accessible only by the owner (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Fix permissions (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Remote repository not found. Verify the URL and your network connection.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">A branch or tag with that name already exists. Choose a different name.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Untracked files would be overwritten. Move or delete them, or use stash to save them.</x:String>

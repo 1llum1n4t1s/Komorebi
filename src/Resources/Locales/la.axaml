@@ -1121,6 +1121,8 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Propulsio reiecta est quia repositorium remotum mutationes recentiores habet. Prius trahe (vel arcessere et fundere), deinde iterum propelle.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">Mutationes non commissae habes. Committe vel reconde eas antequam procedas.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Authenticatio defecit. Verifica credentialia, clavem SSH, vel signum accessus personalis.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Permissiones archivi clavis privatae SSH nimis apertae sunt. Archivum clavis solum a domino accessibile esse debet (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Permissiones corrige (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Repositorium remotum non inventum. Verifica URL et conexionem retis.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ramus vel titulus eo nomine iam existit. Elige nomen diversum.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Fasciculi non vestigati superscribentur. Move vel dele eos, vel utere stash ad eos servandos.</x:String>

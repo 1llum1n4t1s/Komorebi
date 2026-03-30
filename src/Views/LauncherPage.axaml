@@ -171,17 +171,27 @@
                               BorderBrush="#504FC3F7"
                               BorderThickness="1"
                               IsVisible="{Binding Hint, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                        <StackPanel Orientation="Horizontal" Spacing="6">
+                        <DockPanel>
                           <Path Width="14" Height="14"
                                 Data="{StaticResource Icons.Info}"
                                 Fill="#4FC3F7"
                                 VerticalAlignment="Top"
-                                Margin="0,2,0,0"/>
-                          <TextBlock Text="{Binding Hint}"
-                                     Foreground="#4FC3F7"
-                                     FontSize="12"
-                                     TextWrapping="Wrap"/>
-                        </StackPanel>
+                                Margin="0,2,6,0"
+                                DockPanel.Dock="Left"/>
+                          <StackPanel>
+                            <TextBlock Text="{Binding Hint}"
+                                       Foreground="#4FC3F7"
+                                       FontSize="12"
+                                       TextWrapping="Wrap"/>
+                            <Button Classes="flat"
+                                    Margin="0,6,0,0"
+                                    Padding="8,4"
+                                    FontSize="12"
+                                    Content="{Binding ActionLabel}"
+                                    Click="OnNotificationAction"
+                                    IsVisible="{Binding ActionLabel, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                          </StackPanel>
+                        </DockPanel>
                       </Border>
                     </Grid>
                   </Border>

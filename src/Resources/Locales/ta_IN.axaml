@@ -1124,6 +1124,8 @@
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">தொலைநிலையில் புதிய மாற்றங்கள் இருப்பதால் தள்ளல் நிராகரிக்கப்பட்டது. முதலில் இழுக்கவும் (அல்லது பெற்று இணைக்கவும்), பின்னர் மீண்டும் தள்ளவும்.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">உறுதிசெய்யப்படாத மாற்றங்கள் உள்ளன. தொடர்வதற்கு முன் உறுதிசெய்யவும் அல்லது ஒதுக்கி வைக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">அங்கீகாரம் தோல்வியடைந்தது. சான்றுகள், SSH விசை அல்லது தனிப்பட்ட அணுகல் டோக்கனை சரிபார்க்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH தனிப்பட்ட விசை கோப்பின் அனுமதிகள் மிகவும் திறந்தவை. விசை கோப்பு உரிமையாளருக்கு மட்டுமே அணுகக்கூடியதாக இருக்க வேண்டும் (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">அனுமதிகளை சரிசெய் (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">தொலைநிலை களஞ்சியம் கண்டறியப்படவில்லை. URL மற்றும் பிணைய இணைப்பை சரிபார்க்கவும்.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">அந்தப் பெயரில் ஒரு கிளை அல்லது குறிச்சொல் ஏற்கனவே உள்ளது. வேறு பெயரைத் தேர்ந்தெடுக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">கண்காணிக்கப்படாத கோப்புகள் மேலெழுதப்படும். அவற்றை நகர்த்தவும் அல்லது நீக்கவும், அல்லது stash பயன்படுத்தவும்.</x:String>

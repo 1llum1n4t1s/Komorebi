@@ -1121,6 +1121,8 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">प्रेषणं प्रत्याख्यातम् यतो दूरस्थे नवीनतराणि परिवर्तनानि सन्ति। प्रथमं आकर्षयतु, ततः पुनः प्रेषयतु।</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">अप्रतिबद्धानि परिवर्तनानि सन्ति। अग्रे गन्तुं प्रतिबध्नातु अथवा स्टैश् कुरुत।</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">प्रमाणीकरणं विफलम्। प्रमाणपत्राणि, SSH कुञ्चिकां, अथवा व्यक्तिगतप्रवेशचिह्नं परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH-गोपनकुञ्चिकासञ्चिकायाः अनुमतयः अतिविवृताः सन्ति। कुञ्चिकासञ्चिका स्वामिनमात्रम् प्रवेश्या भवेत् (chmod 600)।</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">अनुमतीः समीकुरुत (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">दूरस्थं भण्डारं न प्राप्तम्। URL जालसम्बन्धं च परीक्षयतु।</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">तेन नाम्ना शाखा अथवा चिह्नं पूर्वमेव विद्यते। भिन्नं नाम चिनुत।</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">अननुसृतानि सञ्चिकानि अधिलेखितानि भविष्यन्ति। तानि चालयतु विलोपयतु वा, अथवा स्टैश् उपयुज्यताम्।</x:String>

@@ -1,4 +1,6 @@
-﻿namespace Komorebi.Models;
+﻿using System.Text.RegularExpressions;
+
+namespace Komorebi.Models;
 
 /// <summary>
 /// gitのstderrメッセージをパターンマッチし、対応するローカライズキーを返すヘルパー。
@@ -47,6 +49,13 @@ public static partial class GitErrorHelper
             errorMessage.Contains("Please commit your changes", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("Please, commit your changes", System.StringComparison.OrdinalIgnoreCase))
             return "Text.GitError.UncommittedChanges";
+
+        // SSH秘密鍵のパーミッションが緩すぎる（認証失敗より先にチェック）
+        if (errorMessage.Contains("UNPROTECTED PRIVATE KEY FILE", System.StringComparison.OrdinalIgnoreCase) ||
+            errorMessage.Contains("bad permissions", System.StringComparison.OrdinalIgnoreCase) ||
+            (errorMessage.Contains("Permissions", System.StringComparison.Ordinal) &&
+             errorMessage.Contains("are too open", System.StringComparison.OrdinalIgnoreCase)))
+            return "Text.GitError.KeyPermissionTooOpen";
 
         // 認証失敗
         if (errorMessage.Contains("Authentication failed", System.StringComparison.OrdinalIgnoreCase) ||
@@ -246,5 +255,29 @@ public static partial class GitErrorHelper
             return "Text.Askpass.Hint.Password";
 
         return string.Empty;
+    }
+
+    /// <summary>
+    /// SSH秘密鍵パーミッションエラーのメッセージから鍵ファイルパスを抽出する。
+    /// "Permissions 0755 for '/path/to/key' are too open" または
+    /// "Load key \"/path/to/key\": bad permissions" パターンに対応。
+    /// </summary>
+    /// <returns>抽出されたファイルパス。抽出できない場合はnull。</returns>
+    public static string ExtractKeyPathFromPermissionError(string errorMessage)
+    {
+        if (string.IsNullOrWhiteSpace(errorMessage))
+            return null;
+
+        // "Permissions XXXX for '/path/to/key' are too open"
+        var match = Regex.Match(errorMessage, @"Permissions\s+\d+\s+for\s+'([^']+)'");
+        if (match.Success)
+            return match.Groups[1].Value;
+
+        // "Load key \"/path/to/key\": bad permissions"
+        match = Regex.Match(errorMessage, @"Load key\s+""([^""]+)""");
+        if (match.Success)
+            return match.Groups[1].Value;
+
+        return null;
     }
 }

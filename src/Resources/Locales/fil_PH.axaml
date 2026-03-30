@@ -1121,6 +1121,8 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Tinanggihan ang push dahil may mas bagong pagbabago sa remote. Mag-pull (o mag-fetch at merge) muna, pagkatapos mag-push ulit.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">May mga pagbabagong hindi pa naka-commit. I-commit o i-stash ang mga ito bago magpatuloy.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Nabigo ang authentication. Suriin ang iyong credentials, SSH key, o personal access token.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Masyadong bukas ang permissions ng SSH private key file. Ang key file ay dapat na accessible lamang ng may-ari (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Ayusin ang permissions (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Hindi nahanap ang remote repository. I-verify ang URL at ang iyong koneksyon sa network.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">May branch o tag na may ganitong pangalan. Pumili ng ibang pangalan.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Ang mga hindi sinusubaybayang file ay mapapatungan. Ilipat o tanggalin ang mga ito, o gamitin ang stash.</x:String>

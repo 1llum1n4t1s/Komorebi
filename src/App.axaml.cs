@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Avalonia;
@@ -292,7 +293,38 @@ public partial class App : Application
             // エラーメッセージからヒントキーを検索し、ローカライズされたヒント文字列を取得する
             var hintKey = Models.GitErrorHelper.GetHintKey(message);
             var hint = string.IsNullOrEmpty(hintKey) ? string.Empty : app.FindLocaleString(hintKey);
-            app._launcher.DispatchNotification(context, message, true, hint);
+
+            string actionLabel = null;
+            Action actionCallback = null;
+
+            // SSH秘密鍵パーミッションエラーの場合、自動修正アクションを提供する
+            if (hintKey == "Text.GitError.KeyPermissionTooOpen" && !OperatingSystem.IsWindows())
+            {
+                var keyPath = Models.GitErrorHelper.ExtractKeyPathFromPermissionError(message);
+                if (!string.IsNullOrEmpty(keyPath))
+                {
+                    actionLabel = app.FindLocaleString("Text.GitError.KeyPermissionTooOpen.Fix");
+                    actionCallback = () =>
+                    {
+                        try
+                        {
+                            var psi = new System.Diagnostics.ProcessStartInfo("chmod", $"600 \"{keyPath}\"")
+                            {
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            };
+                            System.Diagnostics.Process.Start(psi)?.WaitForExit(5000);
+                            app._launcher.DispatchNotification(context, $"Fixed permissions for '{keyPath}'", false);
+                        }
+                        catch (Exception e)
+                        {
+                            app._launcher.DispatchNotification(context, e.Message, true);
+                        }
+                    };
+                }
+            }
+
+            app._launcher.DispatchNotification(context, message, true, hint, actionLabel, actionCallback);
         }
     }
 
@@ -1124,8 +1156,57 @@ public partial class App : Application
         }
 
         [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🗑️ 通知クリア")]
+        [CRDebugger.Core.Options.Attributes.CRAction(Label = "📢 長文ヒント（折り返し確認）")]
         [CRDebugger.Core.Options.Attributes.CRSortOrder(6)]
+        public void SendLongHint()
+        {
+            Dispatch(
+                "fatal: Could not read from remote repository.",
+                true,
+                "SSH秘密鍵ファイルのパーミッションが緩すぎます。鍵ファイルは所有者のみアクセス可能（chmod 600）である必要があります。この問題はmacOSやLinuxで発生し、秘密鍵ファイルのパーミッションが644や755など他のユーザーからも読み取り可能な状態になっている場合に発生します。");
+        }
+
+        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
+        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔑 鍵パーミッションエラー（アクションボタン付き）")]
+        [CRDebugger.Core.Options.Attributes.CRSortOrder(7)]
+        public void SendKeyPermissionError()
+        {
+            var launcher = GetLauncher();
+            if (launcher is null)
+                return;
+
+            var errorMsg =
+                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
+                "@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @\n" +
+                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
+                "Permissions 0755 for '/Users/user/.ssh/id_rsa' are too open.\n" +
+                "It is required that your private key files are NOT accessible by others.\n" +
+                "This private key will be ignored.\n" +
+                "Load key \"/Users/user/.ssh/id_rsa\": bad permissions\n" +
+                "git@github.com: Permission denied (publickey).\n" +
+                "fatal: Could not read from remote repository.";
+
+            var hintKey = Models.GitErrorHelper.GetHintKey(errorMsg);
+            var hint = string.IsNullOrEmpty(hintKey) ? "" : Text(hintKey.Replace("Text.", ""));
+            var keyPath = Models.GitErrorHelper.ExtractKeyPathFromPermissionError(errorMsg);
+            var fixLabel = Text("GitError.KeyPermissionTooOpen.Fix");
+
+            // デバッグ用: Windows制限を外してアクションボタンを直接構築
+            launcher.DispatchNotification(
+                launcher.ActivePage?.Node.Id ?? "",
+                errorMsg,
+                true,
+                hint,
+                fixLabel,
+                () => launcher.DispatchNotification(
+                    launcher.ActivePage?.Node.Id ?? "",
+                    $"[デバッグ] chmod 600 \"{keyPath}\" を実行します（テスト環境のため実際には実行しません）",
+                    false));
+        }
+
+        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
+        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🗑️ 通知クリア")]
+        [CRDebugger.Core.Options.Attributes.CRSortOrder(8)]
         public void ClearNotifications()
         {
             GetLauncher()?.ActivePage?.ClearNotifications();
@@ -1244,6 +1325,9 @@ public partial class App : Application
         });
     }
 
+    /// <summary>更新チェック中かどうかのアトミックフラグ（0=未実行, 1=実行中）</summary>
+    private static int _isCheckingUpdate;
+
     /// <summary>
     /// GitHubリリースから最新バージョンを確認し、更新がある場合はダイアログを表示する。
     /// バックグラウンドスレッドで非同期実行される。
@@ -1254,6 +1338,10 @@ public partial class App : Application
     /// </param>
     private static void Check4Update(bool manually = false)
     {
+        // 先勝ち: 既に更新チェック中なら何もしない（起動時自動チェックとメニュー手動チェックの同時実行を防止）
+        if (Interlocked.CompareExchange(ref _isCheckingUpdate, 1, 0) != 0)
+            return;
+
         Task.Run(async () =>
         {
             try
@@ -1298,6 +1386,10 @@ public partial class App : Application
                 // 手動チェック時のみエラーを表示する
                 if (manually)
                     ShowSelfUpdateResult(new Models.SelfUpdateFailed(e));
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _isCheckingUpdate, 0);
             }
         });
     }

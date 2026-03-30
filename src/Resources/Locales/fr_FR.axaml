@@ -1124,6 +1124,8 @@ Raison : {1}</x:String>
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Le push a été rejeté car le dépôt distant contient des modifications plus récentes. Faites d'abord un pull (ou fetch puis merge), puis réessayez le push.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">Vous avez des modifications non validées. Validez-les ou mettez-les en stash avant de continuer.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Échec de l'authentification. Vérifiez vos identifiants, votre clé SSH ou votre jeton d'accès personnel.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Les permissions du fichier de clé privée SSH sont trop ouvertes. Le fichier de clé doit être accessible uniquement par le propriétaire (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Corriger les permissions (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Dépôt distant introuvable. Vérifiez l'URL et votre connexion réseau.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Une branche ou un tag portant ce nom existe déjà. Choisissez un nom différent.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Des fichiers non suivis seraient écrasés. Déplacez-les, supprimez-les ou utilisez stash pour les sauvegarder.</x:String>

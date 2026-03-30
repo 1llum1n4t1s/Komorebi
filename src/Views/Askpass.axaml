@@ -48,17 +48,18 @@
               BorderBrush="#504FC3F7"
               BorderThickness="1"
               IsVisible="False">
-        <StackPanel Orientation="Horizontal" Spacing="6">
+        <DockPanel>
           <Path Width="14" Height="14"
                 Data="{StaticResource Icons.Info}"
                 Fill="#4FC3F7"
                 VerticalAlignment="Top"
-                Margin="0,2,0,0"/>
+                Margin="0,2,6,0"
+                DockPanel.Dock="Left"/>
           <TextBlock x:Name="TxtHint"
                      Foreground="#4FC3F7"
                      FontSize="12"
                      TextWrapping="Wrap"/>
-        </StackPanel>
+        </DockPanel>
       </Border>
 
       <TextBox x:Name="TxtPassphrase"

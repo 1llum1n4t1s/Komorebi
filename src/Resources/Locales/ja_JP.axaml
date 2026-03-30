@@ -1124,6 +1124,8 @@
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">リモートに新しい変更があるためプッシュが拒否されました。先にプル（またはフェッチしてマージ）してから再度プッシュしてください。</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">コミットされていない変更があります。続行する前にコミットまたはスタッシュしてください。</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">認証に失敗しました。認証情報、SSHキー、またはパーソナルアクセストークンを確認してください。</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH秘密鍵ファイルのパーミッションが緩すぎます。鍵ファイルは所有者のみアクセス可能（chmod 600）である必要があります。</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">パーミッションを修正する（chmod 600）</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">リモートリポジトリが見つかりません。URLとネットワーク接続を確認してください。</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">同名のブランチまたはタグが既に存在します。別の名前を選択してください。</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">未追跡ファイルが上書きされます。ファイルを移動・削除するか、スタッシュで退避してください。</x:String>

@@ -1124,6 +1124,8 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Push ditolak karena remote memiliki perubahan yang lebih baru. Lakukan pull (atau fetch dan merge) terlebih dahulu, lalu push lagi.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">Anda memiliki perubahan yang belum di-commit. Commit atau stash sebelum melanjutkan.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Autentikasi gagal. Periksa kredensial, kunci SSH, atau token akses pribadi Anda.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Izin file kunci privat SSH terlalu terbuka. File kunci harus hanya dapat diakses oleh pemilik (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Perbaiki izin (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Repositori remote tidak ditemukan. Verifikasi URL dan koneksi jaringan Anda.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Branch atau tag dengan nama tersebut sudah ada. Pilih nama yang berbeda.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">File yang tidak dilacak akan ditimpa. Pindahkan atau hapus file tersebut, atau gunakan stash untuk menyimpannya.</x:String>

@@ -1124,6 +1124,8 @@
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">推送被拒绝，因为远程有更新的更改。请先拉取（或获取并合并），然后再推送。</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">您有未提交的更改。请先提交或暂存后再继续。</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">认证失败。请检查您的凭据、SSH密钥或个人访问令牌。</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH私钥文件的权限过于开放。密钥文件必须仅所有者可访问（chmod 600）。</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">修复权限（chmod 600）</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">未找到远程仓库。请验证URL和网络连接。</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">同名的分支或标签已存在。请选择其他名称。</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">未跟踪的文件将被覆盖。请移动或删除它们，或使用stash保存。</x:String>

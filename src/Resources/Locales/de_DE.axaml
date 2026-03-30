@@ -1124,6 +1124,8 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Push wurde abgelehnt, da der Remote neuere Änderungen hat. Ziehen Sie zuerst (oder fetchen und mergen), dann pushen Sie erneut.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">Sie haben nicht committete Änderungen. Committen oder stashen Sie diese, bevor Sie fortfahren.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Authentifizierung fehlgeschlagen. Überprüfen Sie Ihre Anmeldedaten, SSH-Schlüssel oder persönlichen Zugriffstoken.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Die Berechtigungen der SSH-Privatschlüsseldatei sind zu offen. Die Schlüsseldatei darf nur für den Eigentümer zugänglich sein (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Berechtigungen korrigieren (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Remote-Repository nicht gefunden. Überprüfen Sie die URL und Ihre Netzwerkverbindung.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ein Branch oder Tag mit diesem Namen existiert bereits. Wählen Sie einen anderen Namen.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Nicht verfolgte Dateien würden überschrieben. Verschieben oder löschen Sie diese, oder verwenden Sie Stash.</x:String>

@@ -1124,6 +1124,8 @@
   <x:String x:Key="Text.GitError.PushRejected" xml:space="preserve">Отправка отклонена, так как удалённый репозиторий содержит более новые изменения. Сначала выполните pull (или fetch и merge), затем повторите push.</x:String>
   <x:String x:Key="Text.GitError.UncommittedChanges" xml:space="preserve">У вас есть незафиксированные изменения. Сделайте коммит или stash перед продолжением.</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Ошибка аутентификации. Проверьте учётные данные, SSH-ключ или персональный токен доступа.</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Права доступа к файлу закрытого SSH-ключа слишком открыты. Файл ключа должен быть доступен только владельцу (chmod 600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Исправить права доступа (chmod 600)</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Удалённый репозиторий не найден. Проверьте URL и сетевое подключение.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ветка или тег с таким именем уже существует. Выберите другое имя.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Неотслеживаемые файлы будут перезаписаны. Переместите или удалите их, или используйте stash.</x:String>

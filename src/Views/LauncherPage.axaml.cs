@@ -98,6 +98,17 @@ public partial class LauncherPage : UserControl
     }
 
     /// <summary>
+    /// 通知のアクションボタン押下ハンドラ。
+    /// </summary>
+    private void OnNotificationAction(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: Models.Notification notice })
+            notice.ActionCallback?.Invoke();
+
+        e.Handled = true;
+    }
+
+    /// <summary>
     /// DismissNotificationイベントのハンドラ。
     /// </summary>
     private void OnDismissNotification(object sender, RoutedEventArgs e)
