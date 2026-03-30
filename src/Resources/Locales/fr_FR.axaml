@@ -204,27 +204,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Comparer avec HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configurer le dépôt</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">MODÈLE DE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;
-  ${branch_name} Nom de la branche locale actuelle.&#xD;&#xD;&#xD;
-  ${files_num} Nombre de fichiers modifiés&#xD;&#xD;&#xD;
-  ${files} Chemins des fichiers modifiés&#xD;&#xD;&#xD;
-  ${files:N} Nombre maximum N de chemins de fichiers modifiés&#xD;&#xD;&#xD;
-  ${pure_files} Comme ${files}, mais uniquement les noms de fichiers purs&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Nom de la branche locale actuelle.&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Nombre de fichiers modifiés&#xD;&#xD;&#xD;&#xD;
+  ${files} Chemins des fichiers modifiés&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Nombre maximum N de chemins de fichiers modifiés&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Comme ${files}, mais uniquement les noms de fichiers purs&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Comme ${files:N}, mais sans les dossiers</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contenu de modèle:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nom de modèle:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTION PERSONNALISÉE</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Arguments :</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;
-  ${REPO} Chemin du dépôt&#xD;&#xD;&#xD;
-  ${REMOTE} Dépôt distant sélectionné ou dépôt distant de la branche sélectionnée&#xD;&#xD;&#xD;
-  ${BRANCH} Branche sélectionnée, sans la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nom d'affichage de la branche sélectionnée, contient la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;
-  ${SHA} Hash du commit sélectionné&#xD;&#xD;&#xD;
-  ${TAG} Tag sélectionné&#xD;&#xD;&#xD;
-  ${FILE} Fichier sélectionné, relatif à la racine du dépôt&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;
+  ${REPO} Chemin du dépôt&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Dépôt distant sélectionné ou dépôt distant de la branche sélectionnée&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Branche sélectionnée, sans la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nom d'affichage de la branche sélectionnée, contient la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash du commit sélectionné&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Tag sélectionné&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Fichier sélectionné, relatif à la racine du dépôt&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Paramètres d'entrée utilisateur</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Fichier exécutable :</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Paramètres d'entrée utilisateur :</x:String>
@@ -1033,7 +1033,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Échec de l'enregistrement du fichier : {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Échec de l'enregistrement de la modification en tant que patch : {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Échec de l'analyse des dépôts : {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Échec du démarrage de l'observateur pour le dépôt : '{0}'. Vous devrez peut-être appuyer sur 'F5' pour actualiser le dépôt manuellement !&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Échec du démarrage de l'observateur pour le dépôt : '{0}'. Vous devrez peut-être appuyer sur 'F5' pour actualiser le dépôt manuellement !&#xD;&#xD;
 Raison : {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Échec du démarrage de '{0}'. Raison : {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Impossible d'ouvrir : {0}</x:String>

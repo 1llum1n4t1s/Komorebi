@@ -114,8 +114,6 @@
   <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
   <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Babala: Sa pag-checkout ng commit, ang iyong Head ay made-detach</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Mga Lokal na Pagbabago:</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.Discard" xml:space="preserve">Itapon</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.StashAndReapply" xml:space="preserve">Stash &amp; Ilapat Muli</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ang kasalukuyang HEAD mo ay may mga commit na hindi konektado sa anumang branch/tag! Gusto mo bang magpatuloy?</x:String>
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Ang mga sumusunod na submodule ay kailangang i-update:{0}Gusto mo bang i-update sila?</x:String>
@@ -203,27 +201,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">I-configure ang Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE NG COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;
-  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;
-  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;
-  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;
-  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;
-  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;&#xD;
+  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Katulad ng ${files:N}, ngunit walang mga folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Nilalaman ng Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Pangalan ng Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">CUSTOM NA AKSYON</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Mga Argumento:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;
-  ${REPO} Path ng Repository&#xD;&#xD;&#xD;
-  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;
-  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;
-  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;
-  ${TAG} Napiling tag&#xD;&#xD;&#xD;
-  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Path ng Repository&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Napiling tag&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Mga halaga ng input control</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Executable File:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Mga Input Control:</x:String>
@@ -307,8 +305,6 @@
   <x:String x:Key="Text.CreateBranch.BasedOn" xml:space="preserve">Batay Sa:</x:String>
   <x:String x:Key="Text.CreateBranch.Checkout" xml:space="preserve">I-checkout ang nilikhang branch</x:String>
   <x:String x:Key="Text.CreateBranch.LocalChanges" xml:space="preserve">Mga Lokal na Pagbabago:</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.Discard" xml:space="preserve">Itapon</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.StashAndReapply" xml:space="preserve">Stash &amp; Ilapat Muli</x:String>
   <x:String x:Key="Text.CreateBranch.Name" xml:space="preserve">Bagong Pangalan ng Branch:</x:String>
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Ilagay ang pangalan ng branch.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Lumikha ng Lokal na Branch</x:String>
@@ -623,14 +619,11 @@
   <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">Kahapon</x:String>
   <x:String x:Key="Text.Preferences" xml:space="preserve">Mga Kagustuhan</x:String>
   <x:String x:Key="Text.Preferences.AI" xml:space="preserve">AI</x:String>
-  <x:String x:Key="Text.Preferences.AI.AnalyzeDiffPrompt" xml:space="preserve">Prompt para sa Pag-analyze ng Diff</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">API Key</x:String>
-  <x:String x:Key="Text.Preferences.AI.GenerateSubjectPrompt" xml:space="preserve">Prompt para Gumawa ng Paksa</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Modelo</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Pangalan</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Entered value is the name to load API key from ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Server</x:String>
-  <x:String x:Key="Text.Preferences.AI.Streaming" xml:space="preserve">I-enable ang Streaming</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">HITSURA</x:String>
   <x:String x:Key="Text.Preferences.Appearance.DefaultFont" xml:space="preserve">Default na Font</x:String>
   <x:String x:Key="Text.Preferences.Appearance.EditorTabWidth" xml:space="preserve">Lapad ng Tab ng Editor</x:String>
@@ -705,8 +698,6 @@
   <x:String x:Key="Text.Pull.Branch" xml:space="preserve">Remote Branch:</x:String>
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">Sa:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Mga Lokal na Pagbabago:</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.Discard" xml:space="preserve">Itapon</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.StashAndReapply" xml:space="preserve">Stash &amp; Ilapat Muli</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Remote:</x:String>
   <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Fetch &amp; Merge)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Gamitin ang rebase sa halip na merge</x:String>
@@ -1036,7 +1027,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Hindi nagawang i-save ang file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Hindi nagawang i-save ang pagbabago bilang patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Hindi nagawang i-scan ang mga repository: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;&#xD;
 Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Hindi nagawang simulan ang '{0}'. Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Hindi nagawang buksan: {0}</x:String>

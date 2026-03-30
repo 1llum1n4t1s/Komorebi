@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">与当前 HEAD 对比</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">仓库配置</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">提交信息模板</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">内置变量：&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;
-  ${branch_name} 当前分支名&#xD;&#xD;&#xD;
-  ${files_num} 变更文件数量&#xD;&#xD;&#xD;
-  ${files} 变更文件路径列表&#xD;&#xD;&#xD;
-  ${files:N} 变更文件路径列表（仅输出指定 N 条）&#xD;&#xD;&#xD;
-  ${pure_files} 与 ${files} 类似，但仅输出文件名&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">内置变量：&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;
+  ${branch_name} 当前分支名&#xD;&#xD;&#xD;&#xD;
+  ${files_num} 变更文件数量&#xD;&#xD;&#xD;&#xD;
+  ${files} 变更文件路径列表&#xD;&#xD;&#xD;&#xD;
+  ${files:N} 变更文件路径列表（仅输出指定 N 条）&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} 与 ${files} 类似，但仅输出文件名&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} 与 ${files:N} 类似，但仅输出文件名</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">模板内容 ：</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">模板名 ：</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">自定义操作</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">命令行参数 ：</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">内置变量：&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;
-  ${REPO} 仓库路径&#xD;&#xD;&#xD;
-  ${REMOTE} 选中的远程仓库或选中分支所属的远程仓库&#xD;&#xD;&#xD;
-  ${BRANCH} 选中的分支，对于远程分支不包含远程名&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 选中的分支，对于远程分支包含远程名&#xD;&#xD;&#xD;
-  ${SHA} 选中的提交哈希&#xD;&#xD;&#xD;
-  ${TAG} 选中的标签&#xD;&#xD;&#xD;
-  ${FILE} 选中的文件&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">内置变量：&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;
+  ${REPO} 仓库路径&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} 选中的远程仓库或选中分支所属的远程仓库&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} 选中的分支，对于远程分支不包含远程名&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 选中的分支，对于远程分支包含远程名&#xD;&#xD;&#xD;&#xD;
+  ${SHA} 选中的提交哈希&#xD;&#xD;&#xD;&#xD;
+  ${TAG} 选中的标签&#xD;&#xD;&#xD;&#xD;
+  ${FILE} 选中的文件&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... 输入控件中填写的值</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">可执行文件路径 ：</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">输入控件 ：</x:String>
@@ -1036,7 +1036,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">保存文件失败：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">保存补丁更改失败：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">扫描仓库失败：{0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">启动仓库 '{0}' 的监视器失败。您可能需要按 'F5' 手动刷新仓库！&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">启动仓库 '{0}' 的监视器失败。您可能需要按 'F5' 手动刷新仓库！&#xD;&#xD;
 原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">启动 '{0}' 失败。原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">打开失败：{0}</x:String>
