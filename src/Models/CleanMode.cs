@@ -1,4 +1,4 @@
-﻿namespace Komorebi.Models;
+namespace Komorebi.Models;
 
 /// <summary>
 /// git cleanコマンドのクリーンモードを表す列挙型。
@@ -18,5 +18,5 @@ public enum CleanMode
     /// <summary>
     /// 未追跡ファイルと無視されたファイルの両方をクリーンする。
     /// </summary>
-    All,
+    UntrackedAndIgnoredFiles,
 }

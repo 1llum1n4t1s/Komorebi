@@ -177,7 +177,7 @@ public class Pull : Popup
             else
             {
                 // ローカル変更を破棄
-                await Commands.Discard.AllAsync(_repo.FullPath, false, false, log);
+                await Commands.Discard.AllAsync(_repo.FullPath, true, false, false, log);
             }
         }
 
