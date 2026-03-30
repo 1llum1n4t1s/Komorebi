@@ -74,6 +74,15 @@ public partial class StashesPage : UserControl
                 ev.Handled = true;
             };
 
+            var branch = new MenuItem();
+            branch.Header = App.Text("StashCM.Branch");
+            branch.Icon = App.CreateMenuIcon("Icons.Branch.Add");
+            branch.Click += (_, ev) =>
+            {
+                vm.CheckoutBranch(stash);
+                ev.Handled = true;
+            };
+
             var drop = new MenuItem();
             drop.Header = App.Text("StashCM.Drop");
             drop.Icon = App.CreateMenuIcon("Icons.Clear");
@@ -124,6 +133,7 @@ public partial class StashesPage : UserControl
 
             var menu = new ContextMenu();
             menu.Items.Add(apply);
+            menu.Items.Add(branch);
             menu.Items.Add(drop);
             menu.Items.Add(new MenuItem { Header = "-" });
             menu.Items.Add(patch);

@@ -166,6 +166,20 @@ public class Stash : Command
     }
 
     /// <summary>
+    /// スタッシュから新しいブランチをチェックアウトする。
+    /// git stash branch &lt;branch&gt; &lt;stash&gt; を実行し、作成したブランチ上でスタッシュを適用・削除する。
+    /// </summary>
+    /// <param name="name">元となるスタッシュ名（例: stash@{0}）。</param>
+    /// <param name="branch">作成するブランチ名。</param>
+    /// <returns>コマンドが成功した場合はtrue。</returns>
+    public async Task<bool> CheckoutBranchAsync(string name, string branch)
+    {
+        // git stash branch: 指定スタッシュから新規ブランチを作成して適用する
+        Args = $"stash branch {branch.Quoted()} {name.Quoted()}";
+        return await ExecAsync().ConfigureAwait(false);
+    }
+
+    /// <summary>
     /// スタッシュを個別に削除する。
     /// git stash drop を実行する。
     /// </summary>
