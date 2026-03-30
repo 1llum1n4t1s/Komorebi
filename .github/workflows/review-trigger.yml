@@ -19,7 +19,6 @@ jobs:
             const commands = [
               '@gemini review',
               '@coderabbitai review',
-              '@codex review',
             ];
 
             for (const cmd of commands) {
