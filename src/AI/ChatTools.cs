@@ -50,7 +50,7 @@ public static class ChatTools
 
             var orgFilePath = hasOriginalFile ? originalFilePath.GetString() : string.Empty;
             var rs = await new Commands.GetFileChangeForAI(repoPath.GetString(), filePath.GetString(), orgFilePath).ReadAsync();
-            var message = rs.IsSuccess ? rs.StdOut : string.Empty;
+            var message = rs.IsSuccess ? rs.StdOut : $"Failed to get diff for '{filePath.GetString()}'. Error: {rs.StdErr}";
             return new ToolChatMessage(call.Id, message);
         }
 
