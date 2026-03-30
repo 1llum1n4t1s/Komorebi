@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Revert : UserControl
 {
-    public partial class Revert : UserControl
+    public Revert()
     {
-        public Revert()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

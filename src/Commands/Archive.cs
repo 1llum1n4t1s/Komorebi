@@ -1,12 +1,11 @@
-﻿namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Archive : Command
 {
-    public class Archive : Command
+    public Archive(string repo, string revision, string saveTo)
     {
-        public Archive(string repo, string revision, string saveTo)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = $"archive --format=zip --verbose --output={saveTo.Quoted()} {revision}";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = $"archive --format=zip --verbose --output={saveTo.Quoted()} {revision}";
     }
 }

@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Cleanup : UserControl
 {
-    public partial class Cleanup : UserControl
+    public Cleanup()
     {
-        public Cleanup()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class ResetWithoutCheckout : UserControl
 {
-    public partial class ResetWithoutCheckout : UserControl
+    public ResetWithoutCheckout()
     {
-        public ResetWithoutCheckout()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

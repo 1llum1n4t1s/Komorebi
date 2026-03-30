@@ -1,30 +1,29 @@
-﻿using System;
+using System;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public class RepositoryCommandPaletteIcon : Path
 {
-    public class RepositoryCommandPaletteIcon : Path
+    protected override Type StyleKeyOverride => typeof(Path);
+
+    protected override void OnDataContextChanged(EventArgs e)
     {
-        protected override Type StyleKeyOverride => typeof(Path);
+        base.OnDataContextChanged(e);
 
-        protected override void OnDataContextChanged(EventArgs e)
+        if (DataContext is ViewModels.RepositoryCommandPaletteCmd cmd && !string.IsNullOrEmpty(cmd.Icon))
         {
-            base.OnDataContextChanged(e);
-
-            if (DataContext is ViewModels.RepositoryCommandPaletteCmd cmd && !string.IsNullOrEmpty(cmd.Icon))
+            var geo = this.FindResource($"Icons.{cmd.Icon}") as StreamGeometry;
+            if (geo is not null)
             {
-                var geo = this.FindResource($"Icons.{cmd.Icon}") as StreamGeometry;
-                if (geo != null)
-                {
-                    Data = geo;
-                    return;
-                }
+                Data = geo;
+                return;
             }
-
-            Data = this.FindResource("Icons.Command") as StreamGeometry;
         }
+
+        Data = this.FindResource("Icons.Command") as StreamGeometry;
     }
 }

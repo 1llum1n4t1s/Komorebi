@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class CheckoutAndFastForward : UserControl
 {
-    public partial class CheckoutAndFastForward : UserControl
+    public CheckoutAndFastForward()
     {
-        public CheckoutAndFastForward()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,11 +1,10 @@
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Hotkeys : ChromelessWindow
 {
-    public partial class Hotkeys : ChromelessWindow
+    public Hotkeys()
     {
-        public Hotkeys()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
     }
 }

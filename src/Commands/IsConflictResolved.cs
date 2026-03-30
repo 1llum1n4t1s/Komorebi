@@ -1,27 +1,26 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class IsConflictResolved : Command
 {
-    public class IsConflictResolved : Command
+    public IsConflictResolved(string repo, Models.Change change)
     {
-        public IsConflictResolved(string repo, Models.Change change)
-        {
-            var opt = new Models.DiffOption(change, true);
+        var opt = new Models.DiffOption(change, true);
 
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = $"diff --no-color --no-ext-diff -a --ignore-cr-at-eol --check {opt}";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = $"diff --no-color --no-ext-diff -a --ignore-cr-at-eol --check {opt}";
+    }
 
-        public bool GetResult()
-        {
-            return ReadToEnd().IsSuccess;
-        }
+    public bool GetResult()
+    {
+        return ReadToEnd().IsSuccess;
+    }
 
-        public async Task<bool> GetResultAsync()
-        {
-            var rs = await ReadToEndAsync().ConfigureAwait(false);
-            return rs.IsSuccess;
-        }
+    public async Task<bool> GetResultAsync()
+    {
+        var rs = await ReadToEndAsync().ConfigureAwait(false);
+        return rs.IsSuccess;
     }
 }

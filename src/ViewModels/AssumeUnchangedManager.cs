@@ -1,42 +1,41 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
 
-namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+public class AssumeUnchangedManager
 {
-    public class AssumeUnchangedManager
+    public AvaloniaList<string> Files { get; private set; }
+
+    public AssumeUnchangedManager(Repository repo)
     {
-        public AvaloniaList<string> Files { get; private set; }
+        _repo = repo;
+        Files = new AvaloniaList<string>();
 
-        public AssumeUnchangedManager(Repository repo)
+        Task.Run(async () =>
         {
-            _repo = repo;
-            Files = new AvaloniaList<string>();
-
-            Task.Run(async () =>
-            {
-                var collect = await new Commands.QueryAssumeUnchangedFiles(_repo.FullPath)
-                    .GetResultAsync()
-                    .ConfigureAwait(false);
-                Dispatcher.UIThread.Post(() => Files.AddRange(collect));
-            });
-        }
-
-        public async Task RemoveAsync(string file)
-        {
-            if (!string.IsNullOrEmpty(file))
-            {
-                var log = _repo.CreateLog("Remove Assume Unchanged File");
-
-                await new Commands.AssumeUnchanged(_repo.FullPath, file, false)
-                    .Use(log)
-                    .ExecAsync();
-
-                log.Complete();
-                Files.Remove(file);
-            }
-        }
-
-        private readonly Repository _repo;
+            var collect = await new Commands.QueryAssumeUnchangedFiles(_repo.FullPath)
+                .GetResultAsync()
+                .ConfigureAwait(false);
+            Dispatcher.UIThread.Post(() => Files.AddRange(collect));
+        });
     }
+
+    public async Task RemoveAsync(string file)
+    {
+        if (!string.IsNullOrEmpty(file))
+        {
+            var log = _repo.CreateLog("Remove Assume Unchanged File");
+
+            await new Commands.AssumeUnchanged(_repo.FullPath, file, false)
+                .Use(log)
+                .ExecAsync();
+
+            log.Complete();
+            Files.Remove(file);
+        }
+    }
+
+    private readonly Repository _repo;
 }

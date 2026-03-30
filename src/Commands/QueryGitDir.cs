@@ -1,30 +1,29 @@
-﻿using System.IO;
+using System.IO;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class QueryGitDir : Command
 {
-    public class QueryGitDir : Command
+    public QueryGitDir(string workDir)
     {
-        public QueryGitDir(string workDir)
-        {
-            WorkingDirectory = workDir;
-            Args = "rev-parse --git-dir";
-        }
+        WorkingDirectory = workDir;
+        Args = "rev-parse --git-dir";
+    }
 
-        public string GetResult()
-        {
-            return Parse(ReadToEnd());
-        }
+    public string GetResult()
+    {
+        return Parse(ReadToEnd());
+    }
 
-        private string Parse(Result rs)
-        {
-            if (!rs.IsSuccess)
-                return null;
+    private string Parse(Result rs)
+    {
+        if (!rs.IsSuccess)
+            return null;
 
-            var stdout = rs.StdOut.Trim();
-            if (string.IsNullOrEmpty(stdout))
-                return null;
+        var stdout = rs.StdOut.Trim();
+        if (string.IsNullOrEmpty(stdout))
+            return null;
 
-            return Path.IsPathRooted(stdout) ? stdout : Path.GetFullPath(Path.Combine(WorkingDirectory, stdout));
-        }
+        return Path.IsPathRooted(stdout) ? stdout : Path.GetFullPath(Path.Combine(WorkingDirectory, stdout));
     }
 }

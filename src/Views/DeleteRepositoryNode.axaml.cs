@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class DeleteRepositoryNode : UserControl
 {
-    public partial class DeleteRepositoryNode : UserControl
+    public DeleteRepositoryNode()
     {
-        public DeleteRepositoryNode()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

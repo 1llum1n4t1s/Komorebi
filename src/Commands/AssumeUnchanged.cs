@@ -1,14 +1,13 @@
-﻿namespace Komorebi.Commands
-{
-    public class AssumeUnchanged : Command
-    {
-        public AssumeUnchanged(string repo, string file, bool bAdd)
-        {
-            var mode = bAdd ? "--assume-unchanged" : "--no-assume-unchanged";
+namespace Komorebi.Commands;
 
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = $"update-index {mode} -- {file.Quoted()}";
-        }
+public class AssumeUnchanged : Command
+{
+    public AssumeUnchanged(string repo, string file, bool bAdd)
+    {
+        var mode = bAdd ? "--assume-unchanged" : "--no-assume-unchanged";
+
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = $"update-index {mode} -- {file.Quoted()}";
     }
 }

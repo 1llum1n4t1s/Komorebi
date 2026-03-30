@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class DropHead : UserControl
 {
-    public partial class DropHead : UserControl
+    public DropHead()
     {
-        public DropHead()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

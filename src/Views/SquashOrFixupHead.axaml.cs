@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class SquashOrFixupHead : UserControl
 {
-    public partial class SquashOrFixupHead : UserControl
+    public SquashOrFixupHead()
     {
-        public SquashOrFixupHead()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

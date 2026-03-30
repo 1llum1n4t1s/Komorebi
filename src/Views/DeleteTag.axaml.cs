@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class DeleteTag : UserControl
 {
-    public partial class DeleteTag : UserControl
+    public DeleteTag()
     {
-        public DeleteTag()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

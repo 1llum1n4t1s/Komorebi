@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.ClientModel;
 
-namespace Komorebi.AI
+namespace Komorebi.AI;
+
+public class Service
 {
-    public class Service
-    {
-        public string Name { get; set; }
-        public string Server { get; set; }
-        public string Model { get; set; }
-        public string ApiKey { get; set; }
-        public bool ReadApiKeyFromEnv { get; set; }
-        public string AdditionalPrompt { get; set; }
-        public ApiKeyCredential Credential => new ApiKeyCredential(ReadApiKeyFromEnv ? Environment.GetEnvironmentVariable(ApiKey) : ApiKey);
-    }
+    public string Name { get; set; }
+    public string Server { get; set; }
+    public string Model { get; set; }
+    public string ApiKey { get; set; }
+    public bool ReadApiKeyFromEnv { get; set; }
+    public string AdditionalPrompt { get; set; }
+    public ApiKeyCredential Credential => new ApiKeyCredential(ReadApiKeyFromEnv ? Environment.GetEnvironmentVariable(ApiKey) : ApiKey);
 }

@@ -1,19 +1,18 @@
-﻿using Avalonia.Data.Converters;
+using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace Komorebi.Converters
+namespace Komorebi.Converters;
+
+public static class FilterModeConverters
 {
-    public static class FilterModeConverters
-    {
-        public static readonly FuncValueConverter<Models.FilterMode, IBrush> ToBorderBrush =
-            new FuncValueConverter<Models.FilterMode, IBrush>(v =>
+    public static readonly FuncValueConverter<Models.FilterMode, IBrush> ToBorderBrush =
+        new FuncValueConverter<Models.FilterMode, IBrush>(v =>
+        {
+            return v switch
             {
-                return v switch
-                {
-                    Models.FilterMode.Included => Brushes.Green,
-                    Models.FilterMode.Excluded => Brushes.Red,
-                    _ => Brushes.Transparent,
-                };
-            });
-    }
+                Models.FilterMode.Included => Brushes.Green,
+                Models.FilterMode.Excluded => Brushes.Red,
+                _ => Brushes.Transparent,
+            };
+        });
 }

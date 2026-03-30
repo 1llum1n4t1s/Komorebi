@@ -1,12 +1,11 @@
-﻿namespace Komorebi.Models
-{
-    public interface ICommandLogReceiver
-    {
-        void OnReceiveCommandLog(string line);
-    }
+namespace Komorebi.Models;
 
-    public interface ICommandLog
-    {
-        void AppendLine(string line);
-    }
+public interface ICommandLogReceiver
+{
+    void OnReceiveCommandLog(string line);
+}
+
+public interface ICommandLog
+{
+    void AppendLine(string line);
 }

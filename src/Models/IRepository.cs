@@ -1,15 +1,14 @@
-﻿namespace Komorebi.Models
-{
-    public interface IRepository
-    {
-        bool MayHaveSubmodules();
+namespace Komorebi.Models;
 
-        void RefreshBranches();
-        void RefreshWorktrees();
-        void RefreshTags();
-        void RefreshCommits();
-        void RefreshSubmodules();
-        void RefreshWorkingCopyChanges();
-        void RefreshStashes();
-    }
+public interface IRepository
+{
+    bool MayHaveSubmodules();
+
+    void RefreshBranches();
+    void RefreshWorktrees();
+    void RefreshTags();
+    void RefreshCommits();
+    void RefreshSubmodules();
+    void RefreshWorkingCopyChanges();
+    void RefreshStashes();
 }

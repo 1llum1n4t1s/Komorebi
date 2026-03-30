@@ -1,11 +1,10 @@
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class ConfigureCustomActionControls : ChromelessWindow
 {
-    public partial class ConfigureCustomActionControls : ChromelessWindow
+    public ConfigureCustomActionControls()
     {
-        public ConfigureCustomActionControls()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
     }
 }

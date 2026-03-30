@@ -1,24 +1,23 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class CherryPick : Command
 {
-    public class CherryPick : Command
+    public CherryPick(string repo, string commits, bool noCommit, bool appendSourceToMessage, string extraParams)
     {
-        public CherryPick(string repo, string commits, bool noCommit, bool appendSourceToMessage, string extraParams)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
+        WorkingDirectory = repo;
+        Context = repo;
 
-            var builder = new StringBuilder(1024);
-            builder.Append("cherry-pick ");
-            if (noCommit)
-                builder.Append("-n ");
-            if (appendSourceToMessage)
-                builder.Append("-x ");
-            if (!string.IsNullOrEmpty(extraParams))
-                builder.Append(extraParams).Append(' ');
+        var builder = new StringBuilder(1024);
+        builder.Append("cherry-pick ");
+        if (noCommit)
+            builder.Append("-n ");
+        if (appendSourceToMessage)
+            builder.Append("-x ");
+        if (!string.IsNullOrEmpty(extraParams))
+            builder.Append(extraParams).Append(' ');
 
-            Args = builder.Append(commits).ToString();
-        }
+        Args = builder.Append(commits).ToString();
     }
 }

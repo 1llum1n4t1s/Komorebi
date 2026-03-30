@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class GitFlowStart : UserControl
 {
-    public partial class GitFlowStart : UserControl
+    public GitFlowStart()
     {
-        public GitFlowStart()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public class Notification
 {
-    public class Notification
-    {
-        public bool IsError { get; set; } = false;
-        public string Message { get; set; } = string.Empty;
-    }
+    public bool IsError { get; set; } = false;
+    public string Message { get; set; } = string.Empty;
 }

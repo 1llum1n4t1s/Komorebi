@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class FetchInto : UserControl
 {
-    public partial class FetchInto : UserControl
+    public FetchInto()
     {
-        public FetchInto()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

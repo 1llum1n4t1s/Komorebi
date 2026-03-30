@@ -1,23 +1,22 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class QueryRepositoryRootPath : Command
 {
-    public class QueryRepositoryRootPath : Command
+    public QueryRepositoryRootPath(string path)
     {
-        public QueryRepositoryRootPath(string path)
-        {
-            WorkingDirectory = path;
-            Args = "rev-parse --show-toplevel";
-        }
+        WorkingDirectory = path;
+        Args = "rev-parse --show-toplevel";
+    }
 
-        public Result GetResult()
-        {
-            return ReadToEnd();
-        }
+    public Result GetResult()
+    {
+        return ReadToEnd();
+    }
 
-        public async Task<Result> GetResultAsync()
-        {
-            return await ReadToEndAsync().ConfigureAwait(false);
-        }
+    public async Task<Result> GetResultAsync()
+    {
+        return await ReadToEndAsync().ConfigureAwait(false);
     }
 }

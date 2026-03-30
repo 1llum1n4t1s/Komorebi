@@ -1,25 +1,24 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class QueryCurrentBranch : Command
 {
-    public class QueryCurrentBranch : Command
+    public QueryCurrentBranch(string repo)
     {
-        public QueryCurrentBranch(string repo)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = "branch --show-current";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = "branch --show-current";
+    }
 
-        public string GetResult()
-        {
-            return ReadToEnd().StdOut.Trim();
-        }
+    public string GetResult()
+    {
+        return ReadToEnd().StdOut.Trim();
+    }
 
-        public async Task<string> GetResultAsync()
-        {
-            var rs = await ReadToEndAsync().ConfigureAwait(false);
-            return rs.StdOut.Trim();
-        }
+    public async Task<string> GetResultAsync()
+    {
+        var rs = await ReadToEndAsync().ConfigureAwait(false);
+        return rs.StdOut.Trim();
     }
 }

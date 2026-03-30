@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class StashChanges : UserControl
 {
-    public partial class StashChanges : UserControl
+    public StashChanges()
     {
-        public StashChanges()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

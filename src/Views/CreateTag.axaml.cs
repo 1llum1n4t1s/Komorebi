@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class CreateTag : UserControl
 {
-    public partial class CreateTag : UserControl
+    public CreateTag()
     {
-        public CreateTag()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

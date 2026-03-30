@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class LFSPrune : UserControl
 {
-    public partial class LFSPrune : UserControl
+    public LFSPrune()
     {
-        public LFSPrune()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

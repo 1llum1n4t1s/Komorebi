@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class ChangeSubmoduleUrl : UserControl
 {
-    public partial class ChangeSubmoduleUrl : UserControl
+    public ChangeSubmoduleUrl()
     {
-        public ChangeSubmoduleUrl()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Init : Command
 {
-    public class Init : Command
+    public Init(string ctx, string dir)
     {
-        public Init(string ctx, string dir)
-        {
-            Context = ctx;
-            WorkingDirectory = dir;
-            Args = "init -q";
-        }
+        Context = ctx;
+        WorkingDirectory = dir;
+        Args = "init -q";
     }
 }

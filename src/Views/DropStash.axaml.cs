@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class DropStash : UserControl
 {
-    public partial class DropStash : UserControl
+    public DropStash()
     {
-        public DropStash()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class LFSTrackCustomPattern : UserControl
 {
-    public partial class LFSTrackCustomPattern : UserControl
+    public LFSTrackCustomPattern()
     {
-        public LFSTrackCustomPattern()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

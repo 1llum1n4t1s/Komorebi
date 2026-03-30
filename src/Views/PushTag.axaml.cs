@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class PushTag : UserControl
 {
-    public partial class PushTag : UserControl
+    public PushTag()
     {
-        public PushTag()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

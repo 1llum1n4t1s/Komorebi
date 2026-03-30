@@ -1,8 +1,7 @@
-﻿namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+public class CustomActionContextMenuLabel(string name, bool isGlobal)
 {
-    public class CustomActionContextMenuLabel(string name, bool isGlobal)
-    {
-        public string Name { get; set; } = name;
-        public bool IsGlobal { get; set; } = isGlobal;
-    }
+    public string Name { get; set; } = name;
+    public bool IsGlobal { get; set; } = isGlobal;
 }

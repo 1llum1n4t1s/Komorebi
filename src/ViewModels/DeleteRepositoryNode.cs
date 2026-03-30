@@ -1,24 +1,23 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+public class DeleteRepositoryNode : Popup
 {
-    public class DeleteRepositoryNode : Popup
+    public RepositoryNode Node
     {
-        public RepositoryNode Node
-        {
-            get;
-        }
+        get;
+    }
 
-        public DeleteRepositoryNode(RepositoryNode node)
-        {
-            Node = node;
-        }
+    public DeleteRepositoryNode(RepositoryNode node)
+    {
+        Node = node;
+    }
 
-        public override Task<bool> Sure()
-        {
-            Preferences.Instance.RemoveNode(Node, true);
-            Welcome.Instance.Refresh();
-            return Task.FromResult(true);
-        }
+    public override Task<bool> Sure()
+    {
+        Preferences.Instance.RemoveNode(Node, true);
+        Welcome.Instance.Refresh();
+        return Task.FromResult(true);
     }
 }

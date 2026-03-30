@@ -3,54 +3,53 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Conflict : UserControl
 {
-    public partial class Conflict : UserControl
+    public Conflict()
     {
-        public Conflict()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void OnPressedSHA(object sender, PointerPressedEventArgs e)
-        {
-            var repoView = this.FindAncestorOfType<Repository>();
-            if (repoView is { DataContext: ViewModels.Repository repo } && sender is TextBlock text)
-                repo.NavigateToCommit(text.Text);
+    private void OnPressedSHA(object sender, PointerPressedEventArgs e)
+    {
+        var repoView = this.FindAncestorOfType<Repository>();
+        if (repoView is { DataContext: ViewModels.Repository repo } && sender is TextBlock text)
+            repo.NavigateToCommit(text.Text);
 
-            e.Handled = true;
-        }
+        e.Handled = true;
+    }
 
-        private async void OnUseTheirs(object _, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.Conflict vm)
-                await vm.UseTheirsAsync();
+    private async void OnUseTheirs(object _, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.Conflict vm)
+            await vm.UseTheirsAsync();
 
-            e.Handled = true;
-        }
+        e.Handled = true;
+    }
 
-        private async void OnUseMine(object _, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.Conflict vm)
-                await vm.UseMineAsync();
+    private async void OnUseMine(object _, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.Conflict vm)
+            await vm.UseMineAsync();
 
-            e.Handled = true;
-        }
+        e.Handled = true;
+    }
 
-        private async void OnMerge(object _, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.Conflict vm)
-                await vm.MergeAsync();
+    private async void OnMerge(object _, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.Conflict vm)
+            await vm.MergeAsync();
 
-            e.Handled = true;
-        }
+        e.Handled = true;
+    }
 
-        private async void OnMergeExternal(object _, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.Conflict vm)
-                await vm.MergeExternalAsync();
+    private async void OnMergeExternal(object _, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.Conflict vm)
+            await vm.MergeExternalAsync();
 
-            e.Handled = true;
-        }
+        e.Handled = true;
     }
 }

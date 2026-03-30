@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class DeleteMultipleBranches : UserControl
 {
-    public partial class DeleteMultipleBranches : UserControl
+    public DeleteMultipleBranches()
     {
-        public DeleteMultipleBranches()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

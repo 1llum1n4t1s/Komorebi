@@ -1,9 +1,8 @@
-﻿namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public enum DealWithLocalChanges
 {
-    public enum DealWithLocalChanges
-    {
-        DoNothing = 0,
-        StashAndReapply,
-        Discard,
-    }
+    DoNothing = 0,
+    StashAndReapply,
+    Discard,
 }

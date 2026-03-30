@@ -1,33 +1,32 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class QueryRevisionByRefName : Command
 {
-    public class QueryRevisionByRefName : Command
+    public QueryRevisionByRefName(string repo, string refname)
     {
-        public QueryRevisionByRefName(string repo, string refname)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = $"rev-parse {refname}";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = $"rev-parse {refname}";
+    }
 
-        public string GetResult()
-        {
-            return Parse(ReadToEnd());
-        }
+    public string GetResult()
+    {
+        return Parse(ReadToEnd());
+    }
 
-        public async Task<string> GetResultAsync()
-        {
-            var rs = await ReadToEndAsync().ConfigureAwait(false);
-            return Parse(rs);
-        }
+    public async Task<string> GetResultAsync()
+    {
+        var rs = await ReadToEndAsync().ConfigureAwait(false);
+        return Parse(rs);
+    }
 
-        private string Parse(Result rs)
-        {
-            if (rs.IsSuccess && !string.IsNullOrEmpty(rs.StdOut))
-                return rs.StdOut.Trim();
+    private string Parse(Result rs)
+    {
+        if (rs.IsSuccess && !string.IsNullOrEmpty(rs.StdOut))
+            return rs.StdOut.Trim();
 
-            return null;
-        }
+        return null;
     }
 }

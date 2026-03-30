@@ -1,13 +1,12 @@
-﻿namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Bisect : Command
 {
-    public class Bisect : Command
+    public Bisect(string repo, string subcmd)
     {
-        public Bisect(string repo, string subcmd)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            RaiseError = false;
-            Args = $"bisect {subcmd}";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        RaiseError = false;
+        Args = $"bisect {subcmd}";
     }
 }

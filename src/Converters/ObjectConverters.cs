@@ -2,26 +2,25 @@ using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace Komorebi.Converters
+namespace Komorebi.Converters;
+
+public static class ObjectConverters
 {
-    public static class ObjectConverters
+    public class IsTypeOfConverter : IValueConverter
     {
-        public class IsTypeOfConverter : IValueConverter
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                if (value == null || parameter == null)
-                    return false;
+            if (value is null || parameter is null)
+                return false;
 
-                return value.GetType().IsAssignableTo((Type)parameter);
-            }
-
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                return new NotImplementedException();
-            }
+            return value.GetType().IsAssignableTo((Type)parameter);
         }
 
-        public static readonly IsTypeOfConverter IsTypeOf = new IsTypeOfConverter();
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return new NotImplementedException();
+        }
     }
+
+    public static readonly IsTypeOfConverter IsTypeOf = new IsTypeOfConverter();
 }

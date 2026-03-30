@@ -1,42 +1,41 @@
-﻿namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public enum GitFlowBranchType
 {
-    public enum GitFlowBranchType
+    None = 0,
+    Feature,
+    Release,
+    Hotfix,
+}
+
+public class GitFlow
+{
+    public string Master { get; set; } = string.Empty;
+    public string Develop { get; set; } = string.Empty;
+    public string FeaturePrefix { get; set; } = string.Empty;
+    public string ReleasePrefix { get; set; } = string.Empty;
+    public string HotfixPrefix { get; set; } = string.Empty;
+
+    public bool IsValid
     {
-        None = 0,
-        Feature,
-        Release,
-        Hotfix,
+        get
+        {
+            return !string.IsNullOrEmpty(Master) &&
+                !string.IsNullOrEmpty(Develop) &&
+                !string.IsNullOrEmpty(FeaturePrefix) &&
+                !string.IsNullOrEmpty(ReleasePrefix) &&
+                !string.IsNullOrEmpty(HotfixPrefix);
+        }
     }
 
-    public class GitFlow
+    public string GetPrefix(GitFlowBranchType type)
     {
-        public string Master { get; set; } = string.Empty;
-        public string Develop { get; set; } = string.Empty;
-        public string FeaturePrefix { get; set; } = string.Empty;
-        public string ReleasePrefix { get; set; } = string.Empty;
-        public string HotfixPrefix { get; set; } = string.Empty;
-
-        public bool IsValid
+        return type switch
         {
-            get
-            {
-                return !string.IsNullOrEmpty(Master) &&
-                    !string.IsNullOrEmpty(Develop) &&
-                    !string.IsNullOrEmpty(FeaturePrefix) &&
-                    !string.IsNullOrEmpty(ReleasePrefix) &&
-                    !string.IsNullOrEmpty(HotfixPrefix);
-            }
-        }
-
-        public string GetPrefix(GitFlowBranchType type)
-        {
-            return type switch
-            {
-                GitFlowBranchType.Feature => FeaturePrefix,
-                GitFlowBranchType.Release => ReleasePrefix,
-                GitFlowBranchType.Hotfix => HotfixPrefix,
-                _ => string.Empty,
-            };
-        }
+            GitFlowBranchType.Feature => FeaturePrefix,
+            GitFlowBranchType.Release => ReleasePrefix,
+            GitFlowBranchType.Hotfix => HotfixPrefix,
+            _ => string.Empty,
+        };
     }
 }

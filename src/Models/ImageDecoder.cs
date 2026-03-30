@@ -1,10 +1,9 @@
-﻿namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public enum ImageDecoder
 {
-    public enum ImageDecoder
-    {
-        None = 0,
-        Builtin,
-        Pfim,
-        Tiff,
-    }
+    None = 0,
+    Builtin,
+    Pfim,
+    Tiff,
 }

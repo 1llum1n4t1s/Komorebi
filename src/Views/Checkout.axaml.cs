@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Checkout : UserControl
 {
-    public partial class Checkout : UserControl
+    public Checkout()
     {
-        public Checkout()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

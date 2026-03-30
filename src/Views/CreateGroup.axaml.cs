@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class CreateGroup : UserControl
 {
-    public partial class CreateGroup : UserControl
+    public CreateGroup()
     {
-        public CreateGroup()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

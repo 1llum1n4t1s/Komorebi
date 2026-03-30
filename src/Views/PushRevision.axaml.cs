@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class PushRevision : UserControl
 {
-    public partial class PushRevision : UserControl
+    public PushRevision()
     {
-        public PushRevision()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

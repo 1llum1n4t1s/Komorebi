@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class CheckoutCommit : UserControl
 {
-    public partial class CheckoutCommit : UserControl
+    public CheckoutCommit()
     {
-        public CheckoutCommit()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

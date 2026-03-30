@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class DeleteRemote : UserControl
 {
-    public partial class DeleteRemote : UserControl
+    public DeleteRemote()
     {
-        public DeleteRemote()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

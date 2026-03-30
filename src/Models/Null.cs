@@ -1,4 +1,3 @@
-namespace Komorebi.Models
-{
-    public class Null;
-}
+namespace Komorebi.Models;
+
+public class Null;

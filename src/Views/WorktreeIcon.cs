@@ -1,32 +1,31 @@
-﻿using System;
+using System;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public class WorktreeIcon : Path
 {
-    public class WorktreeIcon : Path
+    protected override Type StyleKeyOverride => typeof(Path);
+
+    protected override void OnDataContextChanged(EventArgs e)
     {
-        protected override Type StyleKeyOverride => typeof(Path);
+        base.OnDataContextChanged(e);
 
-        protected override void OnDataContextChanged(EventArgs e)
+        if (DataContext is ViewModels.Worktree wt)
         {
-            base.OnDataContextChanged(e);
+            if (wt.IsCurrent)
+                Data = this.FindResource("Icons.CheckCircled") as StreamGeometry;
+            else if (wt.IsMain)
+                Data = this.FindResource("Icons.Repositories") as StreamGeometry;
+            else
+                Data = this.FindResource("Icons.Worktree") as StreamGeometry;
 
-            if (DataContext is ViewModels.Worktree wt)
-            {
-                if (wt.IsCurrent)
-                    Data = this.FindResource("Icons.CheckCircled") as StreamGeometry;
-                else if (wt.IsMain)
-                    Data = this.FindResource("Icons.Repositories") as StreamGeometry;
-                else
-                    Data = this.FindResource("Icons.Worktree") as StreamGeometry;
-
-                return;
-            }
-
-            Data = null;
+            return;
         }
+
+        Data = null;
     }
 }

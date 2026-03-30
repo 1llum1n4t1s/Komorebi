@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class CreateBranch : UserControl
 {
-    public partial class CreateBranch : UserControl
+    public CreateBranch()
     {
-        public CreateBranch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

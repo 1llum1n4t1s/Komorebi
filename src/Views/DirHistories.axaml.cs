@@ -2,43 +2,41 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class DirHistories : ChromelessWindow
 {
-    public partial class DirHistories : ChromelessWindow
+    public DirHistories()
     {
-        public DirHistories()
+        InitializeComponent();
+    }
+
+    private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
+    {
+        if (sender is TextBlock { DataContext: Models.Commit commit } &&
+            DataContext is ViewModels.DirHistories vm)
         {
-            InitializeComponent();
+            vm.NavigateToCommit(commit);
         }
 
-        private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
-        {
-            if (sender is TextBlock { DataContext: Models.Commit commit } &&
-                DataContext is ViewModels.DirHistories vm)
-            {
-                vm.NavigateToCommit(commit);
-            }
+        e.Handled = true;
+    }
 
-            e.Handled = true;
-        }
+    private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
+    {
+        if (sender is Border border)
+            ToolTip.SetTip(border, null);
+    }
 
-        private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
+    private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
+    {
+        if (sender is Border { DataContext: Models.Commit commit } border &&
+            DataContext is ViewModels.DirHistories vm)
         {
-            if (sender is Border border)
-                ToolTip.SetTip(border, null);
-        }
-
-        private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
-        {
-            if (sender is Border { DataContext: Models.Commit commit } border &&
-                DataContext is ViewModels.DirHistories vm)
-            {
-                var tooltip = ToolTip.GetTip(border);
-                if (tooltip == null)
-                    ToolTip.SetTip(border, vm.GetCommitFullMessage(commit));
-            }
+            var tooltip = ToolTip.GetTip(border);
+            if (tooltip is null)
+                ToolTip.SetTip(border, vm.GetCommitFullMessage(commit));
         }
     }
 }
-
 

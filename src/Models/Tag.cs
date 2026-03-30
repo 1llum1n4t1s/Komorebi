@@ -1,18 +1,17 @@
-﻿namespace Komorebi.Models
-{
-    public enum TagSortMode
-    {
-        CreatorDate = 0,
-        Name,
-    }
+namespace Komorebi.Models;
 
-    public class Tag
-    {
-        public string Name { get; set; } = string.Empty;
-        public bool IsAnnotated { get; set; } = false;
-        public string SHA { get; set; } = string.Empty;
-        public User Creator { get; set; } = null;
-        public ulong CreatorDate { get; set; } = 0;
-        public string Message { get; set; } = string.Empty;
-    }
+public enum TagSortMode
+{
+    CreatorDate = 0,
+    Name,
+}
+
+public class Tag
+{
+    public string Name { get; set; } = string.Empty;
+    public bool IsAnnotated { get; set; } = false;
+    public string SHA { get; set; } = string.Empty;
+    public User Creator { get; set; } = null;
+    public ulong CreatorDate { get; set; } = 0;
+    public string Message { get; set; } = string.Empty;
 }

@@ -1,61 +1,60 @@
-﻿using System;
+using System;
 using System.IO;
 
-namespace Komorebi
+namespace Komorebi;
+
+public static class StringExtensions
 {
-    public static class StringExtensions
+    public static string Quoted(this string value)
     {
-        public static string Quoted(this string value)
-        {
-            return $"\"{Escaped(value)}\"";
-        }
-
-        public static string Escaped(this string value)
-        {
-            return value.Replace("\"", "\\\"", StringComparison.Ordinal);
-        }
+        return $"\"{Escaped(value)}\"";
     }
 
-    public static class CommandExtensions
+    public static string Escaped(this string value)
     {
-        public static T Use<T>(this T cmd, Models.ICommandLog log) where T : Commands.Command
-        {
-            cmd.Log = log;
-            return cmd;
-        }
+        return value.Replace("\"", "\\\"", StringComparison.Ordinal);
     }
+}
 
-    public static class DirectoryInfoExtension
+public static class CommandExtensions
+{
+    public static T Use<T>(this T cmd, Models.ICommandLog log) where T : Commands.Command
     {
-        public static void WalkFiles(this DirectoryInfo dir, Action<string> onFile, int maxDepth = 4)
+        cmd.Log = log;
+        return cmd;
+    }
+}
+
+public static class DirectoryInfoExtension
+{
+    public static void WalkFiles(this DirectoryInfo dir, Action<string> onFile, int maxDepth = 4)
+    {
+        try
         {
-            try
+            var options = new EnumerationOptions()
             {
-                var options = new EnumerationOptions()
+                IgnoreInaccessible = true,
+                RecurseSubdirectories = false,
+            };
+
+            foreach (var file in dir.GetFiles("*", options))
+                onFile(file.FullName);
+
+            if (maxDepth > 0)
+            {
+                foreach (var subDir in dir.GetDirectories("*", options))
                 {
-                    IgnoreInaccessible = true,
-                    RecurseSubdirectories = false,
-                };
+                    if (subDir.Name.StartsWith(".", StringComparison.Ordinal) ||
+                        subDir.Name.Equals("node_modules", StringComparison.OrdinalIgnoreCase))
+                        continue;
 
-                foreach (var file in dir.GetFiles("*", options))
-                    onFile(file.FullName);
-
-                if (maxDepth > 0)
-                {
-                    foreach (var subDir in dir.GetDirectories("*", options))
-                    {
-                        if (subDir.Name.StartsWith(".", StringComparison.Ordinal) ||
-                            subDir.Name.Equals("node_modules", StringComparison.OrdinalIgnoreCase))
-                            continue;
-
-                        WalkFiles(subDir, onFile, maxDepth - 1);
-                    }
+                    WalkFiles(subDir, onFile, maxDepth - 1);
                 }
             }
-            catch
-            {
-                // Ignore exceptions.
-            }
+        }
+        catch
+        {
+            // Ignore exceptions.
         }
     }
 }

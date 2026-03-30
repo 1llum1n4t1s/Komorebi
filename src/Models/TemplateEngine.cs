@@ -213,10 +213,10 @@ namespace Komorebi.Models
         private object TryParseRegexVariable(string name)
         {
             var regex = ParseRegex();
-            if (regex == null)
+            if (regex is null)
                 return null;
             var replacement = ParseReplacement();
-            if (replacement == null)
+            if (replacement is null)
                 return null;
 
             return new RegexVariable(name, regex, replacement);

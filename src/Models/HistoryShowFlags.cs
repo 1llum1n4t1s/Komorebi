@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 
-namespace Komorebi.Models
+namespace Komorebi.Models;
+
+[Flags]
+public enum HistoryShowFlags
 {
-    [Flags]
-    public enum HistoryShowFlags
-    {
-        None = 0,
-        Reflog = 1 << 0,
-        FirstParentOnly = 1 << 1,
-        SimplifyByDecoration = 1 << 2,
-    }
+    None = 0,
+    Reflog = 1 << 0,
+    FirstParentOnly = 1 << 1,
+    SimplifyByDecoration = 1 << 2,
 }

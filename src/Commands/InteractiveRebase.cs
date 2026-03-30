@@ -1,21 +1,20 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class InteractiveRebase : Command
 {
-    public class InteractiveRebase : Command
+    public InteractiveRebase(string repo, string basedOn, bool autoStash)
     {
-        public InteractiveRebase(string repo, string basedOn, bool autoStash)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            Editor = EditorType.RebaseEditor;
+        WorkingDirectory = repo;
+        Context = repo;
+        Editor = EditorType.RebaseEditor;
 
-            var builder = new StringBuilder(512);
-            builder.Append("rebase -i --autosquash ");
-            if (autoStash)
-                builder.Append("--autostash ");
+        var builder = new StringBuilder(512);
+        builder.Append("rebase -i --autosquash ");
+        if (autoStash)
+            builder.Append("--autostash ");
 
-            Args = builder.Append(basedOn).ToString();
-        }
+        Args = builder.Append(basedOn).ToString();
     }
 }

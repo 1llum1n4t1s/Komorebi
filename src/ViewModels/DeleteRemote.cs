@@ -1,38 +1,37 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+public class DeleteRemote : Popup
 {
-    public class DeleteRemote : Popup
+    public Models.Remote Remote
     {
-        public Models.Remote Remote
-        {
-            get;
-            private set;
-        }
-
-        public DeleteRemote(Repository repo, Models.Remote remote)
-        {
-            _repo = repo;
-            Remote = remote;
-        }
-
-        public override async Task<bool> Sure()
-        {
-            using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Deleting remote ...";
-
-            var log = _repo.CreateLog("Delete Remote");
-            Use(log);
-
-            var succ = await new Commands.Remote(_repo.FullPath)
-                .Use(log)
-                .DeleteAsync(Remote.Name);
-
-            log.Complete();
-            _repo.MarkBranchesDirtyManually();
-            return succ;
-        }
-
-        private readonly Repository _repo = null;
+        get;
+        private set;
     }
+
+    public DeleteRemote(Repository repo, Models.Remote remote)
+    {
+        _repo = repo;
+        Remote = remote;
+    }
+
+    public override async Task<bool> Sure()
+    {
+        using var lockWatcher = _repo.LockWatcher();
+        ProgressDescription = "Deleting remote ...";
+
+        var log = _repo.CreateLog("Delete Remote");
+        Use(log);
+
+        var succ = await new Commands.Remote(_repo.FullPath)
+            .Use(log)
+            .DeleteAsync(Remote.Name);
+
+        log.Complete();
+        _repo.MarkBranchesDirtyManually();
+        return succ;
+    }
+
+    private readonly Repository _repo = null;
 }

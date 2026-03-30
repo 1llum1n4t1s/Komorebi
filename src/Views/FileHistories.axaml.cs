@@ -7,120 +7,119 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class FileHistories : ChromelessWindow
 {
-    public partial class FileHistories : ChromelessWindow
+    public FileHistories()
     {
-        public FileHistories()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void OnRevisionsPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
-        {
-            if (e.Property == ListBox.ItemsSourceProperty &&
-                sender is ListBox { Items: { Count: > 0 } } listBox)
-                listBox.SelectedIndex = 0;
-        }
+    private void OnRevisionsPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ListBox.ItemsSourceProperty &&
+            sender is ListBox { Items: { Count: > 0 } } listBox)
+            listBox.SelectedIndex = 0;
+    }
 
-        private void OnRevisionsSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void OnRevisionsSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (sender is ListBox listBox && DataContext is ViewModels.FileHistories vm)
         {
-            if (sender is ListBox listBox && DataContext is ViewModels.FileHistories vm)
+            if (listBox.SelectedItems is { } selected)
             {
-                if (listBox.SelectedItems is { } selected)
+                var revs = new List<Models.FileVersion>();
+                foreach (var item in listBox.SelectedItems)
                 {
-                    var revs = new List<Models.FileVersion>();
-                    foreach (var item in listBox.SelectedItems)
-                    {
-                        if (item is Models.FileVersion ver)
-                            revs.Add(ver);
-                    }
-                    vm.SelectedRevisions = revs;
+                    if (item is Models.FileVersion ver)
+                        revs.Add(ver);
                 }
-                else
-                {
-                    vm.SelectedRevisions = [];
-                }
+                vm.SelectedRevisions = revs;
+            }
+            else
+            {
+                vm.SelectedRevisions = [];
             }
         }
+    }
 
-        private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
+    private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)
+    {
+        if (sender is TextBlock { DataContext: Models.FileVersion ver } &&
+            DataContext is ViewModels.FileHistories vm)
         {
-            if (sender is TextBlock { DataContext: Models.FileVersion ver } &&
-                DataContext is ViewModels.FileHistories vm)
-            {
-                vm.NavigateToCommit(ver);
-            }
-
-            e.Handled = true;
+            vm.NavigateToCommit(ver);
         }
 
-        private async void OnResetToSelectedRevision(object sender, RoutedEventArgs e)
+        e.Handled = true;
+    }
+
+    private async void OnResetToSelectedRevision(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: ViewModels.FileHistoriesSingleRevision single })
         {
-            if (sender is Button { DataContext: ViewModels.FileHistoriesSingleRevision single })
+            await single.ResetToSelectedRevisionAsync();
+            NotifyDonePanel.IsVisible = true;
+        }
+
+        e.Handled = true;
+    }
+
+    private void OnCloseNotifyPanel(object _, PointerPressedEventArgs e)
+    {
+        NotifyDonePanel.IsVisible = false;
+        e.Handled = true;
+    }
+
+    private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: ViewModels.FileHistoriesCompareRevisions compare })
+        {
+            var options = new FilePickerSaveOptions();
+            options.Title = App.Text("FileCM.SaveAsPatch");
+            options.DefaultExtension = ".patch";
+            options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
+
+            try
             {
-                await single.ResetToSelectedRevisionAsync();
+                var storageFile = await StorageProvider.SaveFilePickerAsync(options);
+                if (storageFile is not null)
+                    await compare.SaveAsPatch(storageFile.Path.LocalPath);
+
                 NotifyDonePanel.IsVisible = true;
             }
-
-            e.Handled = true;
-        }
-
-        private void OnCloseNotifyPanel(object _, PointerPressedEventArgs e)
-        {
-            NotifyDonePanel.IsVisible = false;
-            e.Handled = true;
-        }
-
-        private async void OnSaveAsPatch(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button { DataContext: ViewModels.FileHistoriesCompareRevisions compare })
+            catch (Exception exception)
             {
-                var options = new FilePickerSaveOptions();
-                options.Title = App.Text("FileCM.SaveAsPatch");
-                options.DefaultExtension = ".patch";
-                options.FileTypeChoices = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }];
-
-                try
-                {
-                    var storageFile = await StorageProvider.SaveFilePickerAsync(options);
-                    if (storageFile != null)
-                        await compare.SaveAsPatch(storageFile.Path.LocalPath);
-
-                    NotifyDonePanel.IsVisible = true;
-                }
-                catch (Exception exception)
-                {
-                    App.RaiseException(string.Empty, $"Failed to save as patch: {exception.Message}");
-                }
-
-                e.Handled = true;
+                App.RaiseException(string.Empty, $"Failed to save as patch: {exception.Message}");
             }
-        }
-
-        private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
-        {
-            if (sender is Border border)
-                ToolTip.SetTip(border, null);
-        }
-
-        private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
-        {
-            if (sender is Border { DataContext: Models.FileVersion ver } border &&
-                DataContext is ViewModels.FileHistories vm)
-            {
-                var tooltip = ToolTip.GetTip(border);
-                if (tooltip == null)
-                    ToolTip.SetTip(border, vm.GetCommitFullMessage(ver));
-            }
-        }
-
-        private async void OnOpenFileWithDefaultEditor(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.FileHistories { ViewContent: ViewModels.FileHistoriesSingleRevision revision })
-                await revision.OpenWithDefaultEditorAsync();
 
             e.Handled = true;
         }
+    }
+
+    private void OnCommitSubjectDataContextChanged(object sender, EventArgs e)
+    {
+        if (sender is Border border)
+            ToolTip.SetTip(border, null);
+    }
+
+    private void OnCommitSubjectPointerMoved(object sender, PointerEventArgs e)
+    {
+        if (sender is Border { DataContext: Models.FileVersion ver } border &&
+            DataContext is ViewModels.FileHistories vm)
+        {
+            var tooltip = ToolTip.GetTip(border);
+            if (tooltip is null)
+                ToolTip.SetTip(border, vm.GetCommitFullMessage(ver));
+        }
+    }
+
+    private async void OnOpenFileWithDefaultEditor(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.FileHistories { ViewContent: ViewModels.FileHistoriesSingleRevision revision })
+            await revision.OpenWithDefaultEditorAsync();
+
+        e.Handled = true;
     }
 }

@@ -1,20 +1,19 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Rebase : Command
 {
-    public class Rebase : Command
+    public Rebase(string repo, string basedOn, bool autoStash)
     {
-        public Rebase(string repo, string basedOn, bool autoStash)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
+        WorkingDirectory = repo;
+        Context = repo;
 
-            var builder = new StringBuilder(512);
-            builder.Append("rebase ");
-            if (autoStash)
-                builder.Append("--autostash ");
+        var builder = new StringBuilder(512);
+        builder.Append("rebase ");
+        if (autoStash)
+            builder.Append("--autostash ");
 
-            Args = builder.Append(basedOn).ToString();
-        }
+        Args = builder.Append(basedOn).ToString();
     }
 }

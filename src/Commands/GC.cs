@@ -1,12 +1,11 @@
-﻿namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class GC : Command
 {
-    public class GC : Command
+    public GC(string repo)
     {
-        public GC(string repo)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = "gc --prune=now";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = "gc --prune=now";
     }
 }

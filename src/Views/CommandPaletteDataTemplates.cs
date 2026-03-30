@@ -1,11 +1,10 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public class CommandPaletteDataTemplates : IDataTemplate
 {
-    public class CommandPaletteDataTemplates : IDataTemplate
-    {
-        public Control Build(object param) => App.CreateViewForViewModel(param);
-        public bool Match(object data) => data is ViewModels.ICommandPalette;
-    }
+    public Control Build(object param) => App.CreateViewForViewModel(param);
+    public bool Match(object data) => data is ViewModels.ICommandPalette;
 }

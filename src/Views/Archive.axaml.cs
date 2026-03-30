@@ -2,32 +2,31 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Archive : UserControl
 {
-    public partial class Archive : UserControl
+    public Archive()
     {
-        public Archive()
+        InitializeComponent();
+    }
+
+    private async void SelectOutputFile(object _, RoutedEventArgs e)
+    {
+        var toplevel = TopLevel.GetTopLevel(this);
+        if (toplevel is null)
+            return;
+
+        var options = new FilePickerSaveOptions()
         {
-            InitializeComponent();
-        }
+            DefaultExtension = ".zip",
+            FileTypeChoices = [new FilePickerFileType("ZIP") { Patterns = ["*.zip"] }]
+        };
 
-        private async void SelectOutputFile(object _, RoutedEventArgs e)
-        {
-            var toplevel = TopLevel.GetTopLevel(this);
-            if (toplevel == null)
-                return;
+        var selected = await toplevel.StorageProvider.SaveFilePickerAsync(options);
+        if (selected is not null)
+            TxtSaveFile.Text = selected.Path.LocalPath;
 
-            var options = new FilePickerSaveOptions()
-            {
-                DefaultExtension = ".zip",
-                FileTypeChoices = [new FilePickerFileType("ZIP") { Patterns = ["*.zip"] }]
-            };
-
-            var selected = await toplevel.StorageProvider.SaveFilePickerAsync(options);
-            if (selected != null)
-                TxtSaveFile.Text = selected.Path.LocalPath;
-
-            e.Handled = true;
-        }
+        e.Handled = true;
     }
 }

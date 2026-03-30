@@ -1,63 +1,62 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class FileHistoryCommandPalette : UserControl
 {
-    public partial class FileHistoryCommandPalette : UserControl
+    public FileHistoryCommandPalette()
     {
-        public FileHistoryCommandPalette()
+        InitializeComponent();
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        base.OnKeyDown(e);
+
+        if (DataContext is not ViewModels.FileHistoryCommandPalette vm)
+            return;
+
+        if (e.Key == Key.Enter)
         {
-            InitializeComponent();
+            vm.Launch();
+            e.Handled = true;
         }
-
-        protected override void OnKeyDown(KeyEventArgs e)
+        else if (e.Key == Key.Up)
         {
-            base.OnKeyDown(e);
-
-            if (DataContext is not ViewModels.FileHistoryCommandPalette vm)
+            if (FileListBox.IsKeyboardFocusWithin)
+            {
+                FilterTextBox.Focus(NavigationMethod.Directional);
+                e.Handled = true;
                 return;
-
-            if (e.Key == Key.Enter)
-            {
-                vm.Launch();
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Up)
-            {
-                if (FileListBox.IsKeyboardFocusWithin)
-                {
-                    FilterTextBox.Focus(NavigationMethod.Directional);
-                    e.Handled = true;
-                    return;
-                }
-            }
-            else if (e.Key == Key.Down || e.Key == Key.Tab)
-            {
-                if (FilterTextBox.IsKeyboardFocusWithin)
-                {
-                    if (vm.VisibleFiles.Count > 0)
-                        FileListBox.Focus(NavigationMethod.Directional);
-
-                    e.Handled = true;
-                    return;
-                }
-
-                if (FileListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
-                {
-                    FilterTextBox.Focus(NavigationMethod.Directional);
-                    e.Handled = true;
-                    return;
-                }
             }
         }
-
-        private void OnItemTapped(object sender, TappedEventArgs e)
+        else if (e.Key == Key.Down || e.Key == Key.Tab)
         {
-            if (DataContext is ViewModels.FileHistoryCommandPalette vm)
+            if (FilterTextBox.IsKeyboardFocusWithin)
             {
-                vm.Launch();
+                if (vm.VisibleFiles.Count > 0)
+                    FileListBox.Focus(NavigationMethod.Directional);
+
                 e.Handled = true;
+                return;
             }
+
+            if (FileListBox.IsKeyboardFocusWithin && e.Key == Key.Tab)
+            {
+                FilterTextBox.Focus(NavigationMethod.Directional);
+                e.Handled = true;
+                return;
+            }
+        }
+    }
+
+    private void OnItemTapped(object sender, TappedEventArgs e)
+    {
+        if (DataContext is ViewModels.FileHistoryCommandPalette vm)
+        {
+            vm.Launch();
+            e.Handled = true;
         }
     }
 }

@@ -1,13 +1,12 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class SetSubmoduleBranch : UserControl
 {
-    public partial class SetSubmoduleBranch : UserControl
+    public SetSubmoduleBranch()
     {
-        public SetSubmoduleBranch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
 

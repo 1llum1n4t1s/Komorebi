@@ -1,19 +1,18 @@
-﻿namespace Komorebi.Models
-{
-    public enum DecoratorType
-    {
-        None,
-        CurrentBranchHead,
-        LocalBranchHead,
-        CurrentCommitHead,
-        RemoteBranchHead,
-        Tag,
-    }
+namespace Komorebi.Models;
 
-    public class Decorator
-    {
-        public DecoratorType Type { get; set; } = DecoratorType.None;
-        public string Name { get; set; } = "";
-        public bool IsTag => Type == DecoratorType.Tag;
-    }
+public enum DecoratorType
+{
+    None,
+    CurrentBranchHead,
+    LocalBranchHead,
+    CurrentCommitHead,
+    RemoteBranchHead,
+    Tag,
+}
+
+public class Decorator
+{
+    public DecoratorType Type { get; set; } = DecoratorType.None;
+    public string Name { get; set; } = "";
+    public bool IsTag => Type == DecoratorType.Tag;
 }

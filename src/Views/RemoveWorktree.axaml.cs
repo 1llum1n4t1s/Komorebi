@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class RemoveWorktree : UserControl
 {
-    public partial class RemoveWorktree : UserControl
+    public RemoveWorktree()
     {
-        public RemoveWorktree()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,8 +1,7 @@
-﻿namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public enum ConfirmButtonType
 {
-    public enum ConfirmButtonType
-    {
-        OkCancel = 0,
-        YesNo,
-    }
+    OkCancel = 0,
+    YesNo,
 }

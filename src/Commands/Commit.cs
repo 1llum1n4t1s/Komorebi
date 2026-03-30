@@ -1,57 +1,56 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Commit : Command
 {
-    public class Commit : Command
+    public Commit(string repo, string message, bool signOff, bool noVerify, bool amend, bool resetAuthor)
     {
-        public Commit(string repo, string message, bool signOff, bool noVerify, bool amend, bool resetAuthor)
+        _tmpFile = Path.GetTempFileName();
+        _message = message;
+
+        WorkingDirectory = repo;
+        Context = repo;
+
+        var builder = new StringBuilder();
+        builder.Append("commit --allow-empty --file=");
+        builder.Append(_tmpFile.Quoted());
+        builder.Append(' ');
+
+        if (signOff)
+            builder.Append("--signoff ");
+
+        if (noVerify)
+            builder.Append("--no-verify ");
+
+        if (amend)
         {
-            _tmpFile = Path.GetTempFileName();
-            _message = message;
-
-            WorkingDirectory = repo;
-            Context = repo;
-
-            var builder = new StringBuilder();
-            builder.Append("commit --allow-empty --file=");
-            builder.Append(_tmpFile.Quoted());
-            builder.Append(' ');
-
-            if (signOff)
-                builder.Append("--signoff ");
-
-            if (noVerify)
-                builder.Append("--no-verify ");
-
-            if (amend)
-            {
-                builder.Append("--amend ");
-                if (resetAuthor)
-                    builder.Append("--reset-author ");
-                builder.Append("--no-edit");
-            }
-
-            Args = builder.ToString();
+            builder.Append("--amend ");
+            if (resetAuthor)
+                builder.Append("--reset-author ");
+            builder.Append("--no-edit");
         }
 
-        public async Task<bool> RunAsync()
-        {
-            try
-            {
-                await File.WriteAllTextAsync(_tmpFile, _message).ConfigureAwait(false);
-                var succ = await ExecAsync().ConfigureAwait(false);
-                File.Delete(_tmpFile);
-                return succ;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private readonly string _tmpFile;
-        private readonly string _message;
+        Args = builder.ToString();
     }
+
+    public async Task<bool> RunAsync()
+    {
+        try
+        {
+            await File.WriteAllTextAsync(_tmpFile, _message).ConfigureAwait(false);
+            var succ = await ExecAsync().ConfigureAwait(false);
+            File.Delete(_tmpFile);
+            return succ;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private readonly string _tmpFile;
+    private readonly string _message;
 }

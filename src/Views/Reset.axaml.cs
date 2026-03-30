@@ -2,35 +2,34 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Reset : UserControl
 {
-    public partial class Reset : UserControl
+    public Reset()
     {
-        public Reset()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        protected override void OnLoaded(RoutedEventArgs e)
-        {
-            base.OnLoaded(e);
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
 
-            ResetMode.Focus();
-        }
+        ResetMode.Focus();
+    }
 
-        private void OnResetModeKeyDown(object sender, KeyEventArgs e)
+    private void OnResetModeKeyDown(object sender, KeyEventArgs e)
+    {
+        if (sender is ComboBox comboBox)
         {
-            if (sender is ComboBox comboBox)
+            var key = e.Key.ToString();
+            for (int i = 0; i < Models.ResetMode.Supported.Length; i++)
             {
-                var key = e.Key.ToString();
-                for (int i = 0; i < Models.ResetMode.Supported.Length; i++)
+                if (key.Equals(Models.ResetMode.Supported[i].Key, System.StringComparison.OrdinalIgnoreCase))
                 {
-                    if (key.Equals(Models.ResetMode.Supported[i].Key, System.StringComparison.OrdinalIgnoreCase))
-                    {
-                        comboBox.SelectedIndex = i;
-                        e.Handled = true;
-                        return;
-                    }
+                    comboBox.SelectedIndex = i;
+                    e.Handled = true;
+                    return;
                 }
             }
         }

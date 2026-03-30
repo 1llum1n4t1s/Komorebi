@@ -1,26 +1,25 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Apply : Command
 {
-    public class Apply : Command
+    public Apply(string repo, string file, bool ignoreWhitespace, string whitespaceMode, string extra)
     {
-        public Apply(string repo, string file, bool ignoreWhitespace, string whitespaceMode, string extra)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
+        WorkingDirectory = repo;
+        Context = repo;
 
-            var builder = new StringBuilder(1024);
-            builder.Append("apply ");
+        var builder = new StringBuilder(1024);
+        builder.Append("apply ");
 
-            if (ignoreWhitespace)
-                builder.Append("--ignore-whitespace ");
-            else
-                builder.Append("--whitespace=").Append(whitespaceMode).Append(' ');
+        if (ignoreWhitespace)
+            builder.Append("--ignore-whitespace ");
+        else
+            builder.Append("--whitespace=").Append(whitespaceMode).Append(' ');
 
-            if (!string.IsNullOrEmpty(extra))
-                builder.Append(extra).Append(' ');
+        if (!string.IsNullOrEmpty(extra))
+            builder.Append(extra).Append(' ');
 
-            Args = builder.Append(file.Quoted()).ToString();
-        }
+        Args = builder.Append(file.Quoted()).ToString();
     }
 }

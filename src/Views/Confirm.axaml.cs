@@ -1,39 +1,38 @@
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Confirm : ChromelessWindow
 {
-    public partial class Confirm : ChromelessWindow
+    public Confirm()
     {
-        public Confirm()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        public void SetData(string message, Models.ConfirmButtonType buttonType)
-        {
-            Message.Text = message;
+    public void SetData(string message, Models.ConfirmButtonType buttonType)
+    {
+        Message.Text = message;
 
-            switch (buttonType)
-            {
-                case Models.ConfirmButtonType.OkCancel:
-                    BtnYes.Content = App.Text("Sure");
-                    BtnNo.Content = App.Text("Cancel");
-                    break;
-                case Models.ConfirmButtonType.YesNo:
-                    BtnYes.Content = App.Text("Yes");
-                    BtnNo.Content = App.Text("No");
-                    break;
-            }
-        }
-
-        private void Sure(object _1, RoutedEventArgs _2)
+        switch (buttonType)
         {
-            Close(true);
+            case Models.ConfirmButtonType.OkCancel:
+                BtnYes.Content = App.Text("Sure");
+                BtnNo.Content = App.Text("Cancel");
+                break;
+            case Models.ConfirmButtonType.YesNo:
+                BtnYes.Content = App.Text("Yes");
+                BtnNo.Content = App.Text("No");
+                break;
         }
+    }
 
-        private void CloseWindow(object _1, RoutedEventArgs _2)
-        {
-            Close(false);
-        }
+    private void Sure(object _1, RoutedEventArgs _2)
+    {
+        Close(true);
+    }
+
+    private void CloseWindow(object _1, RoutedEventArgs _2)
+    {
+        Close(false);
     }
 }

@@ -1,70 +1,69 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public partial class QueryRevisionObjects : Command
 {
-    public partial class QueryRevisionObjects : Command
+    [GeneratedRegex(@"^\d+\s+(\w+)\s+([0-9a-f]+)\s+(.*)$")]
+    private static partial Regex REG_FORMAT();
+
+    public QueryRevisionObjects(string repo, string sha, string parentFolder)
     {
-        [GeneratedRegex(@"^\d+\s+(\w+)\s+([0-9a-f]+)\s+(.*)$")]
-        private static partial Regex REG_FORMAT();
+        WorkingDirectory = repo;
+        Context = repo;
 
-        public QueryRevisionObjects(string repo, string sha, string parentFolder)
+        var builder = new StringBuilder(1024);
+        builder.Append("ls-tree ").Append(sha);
+        if (!string.IsNullOrEmpty(parentFolder))
+            builder.Append(" -- ").Append(parentFolder.Quoted());
+
+        Args = builder.ToString();
+    }
+
+    public async Task<List<Models.Object>> GetResultAsync()
+    {
+        var outs = new List<Models.Object>();
+
+        try
         {
-            WorkingDirectory = repo;
-            Context = repo;
+            using var proc = new Process();
+            proc.StartInfo = CreateGitStartInfo(true);
+            proc.Start();
 
-            var builder = new StringBuilder(1024);
-            builder.Append("ls-tree ").Append(sha);
-            if (!string.IsNullOrEmpty(parentFolder))
-                builder.Append(" -- ").Append(parentFolder.Quoted());
-
-            Args = builder.ToString();
-        }
-
-        public async Task<List<Models.Object>> GetResultAsync()
-        {
-            var outs = new List<Models.Object>();
-
-            try
+            while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
             {
-                using var proc = new Process();
-                proc.StartInfo = CreateGitStartInfo(true);
-                proc.Start();
+                var match = REG_FORMAT().Match(line);
+                if (!match.Success)
+                    continue;
 
-                while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
+                var obj = new Models.Object();
+                obj.SHA = match.Groups[2].Value;
+                obj.Type = Models.ObjectType.Blob;
+                obj.Path = match.Groups[3].Value;
+
+                obj.Type = match.Groups[1].Value switch
                 {
-                    var match = REG_FORMAT().Match(line);
-                    if (!match.Success)
-                        continue;
+                    "blob" => Models.ObjectType.Blob,
+                    "tree" => Models.ObjectType.Tree,
+                    "tag" => Models.ObjectType.Tag,
+                    "commit" => Models.ObjectType.Commit,
+                    _ => obj.Type,
+                };
 
-                    var obj = new Models.Object();
-                    obj.SHA = match.Groups[2].Value;
-                    obj.Type = Models.ObjectType.Blob;
-                    obj.Path = match.Groups[3].Value;
-
-                    obj.Type = match.Groups[1].Value switch
-                    {
-                        "blob" => Models.ObjectType.Blob,
-                        "tree" => Models.ObjectType.Tree,
-                        "tag" => Models.ObjectType.Tag,
-                        "commit" => Models.ObjectType.Commit,
-                        _ => obj.Type,
-                    };
-
-                    outs.Add(obj);
-                }
-
-                await proc.WaitForExitAsync().ConfigureAwait(false);
-            }
-            catch
-            {
-                // Ignore exceptions.
+                outs.Add(obj);
             }
 
-            return outs;
+            await proc.WaitForExitAsync().ConfigureAwait(false);
         }
+        catch
+        {
+            // Ignore exceptions.
+        }
+
+        return outs;
     }
 }

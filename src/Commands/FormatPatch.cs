@@ -1,13 +1,12 @@
-﻿namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class FormatPatch : Command
 {
-    public class FormatPatch : Command
+    public FormatPatch(string repo, string commit, string saveTo)
     {
-        public FormatPatch(string repo, string commit, string saveTo)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            Editor = EditorType.None;
-            Args = $"format-patch {commit} -1 --output={saveTo.Quoted()}";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        Editor = EditorType.None;
+        Args = $"format-patch {commit} -1 --output={saveTo.Quoted()}";
     }
 }

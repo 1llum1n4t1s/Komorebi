@@ -2,30 +2,29 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Push : UserControl
 {
-    public partial class Push : UserControl
+    public Push()
     {
-        public Push()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private async void OnPushToNewBranch(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is not ViewModels.Push push)
-                return;
+    private async void OnPushToNewBranch(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not ViewModels.Push push)
+            return;
 
-            var launcher = this.FindAncestorOfType<Launcher>();
-            if (launcher == null)
-                return;
+        var launcher = this.FindAncestorOfType<Launcher>();
+        if (launcher is null)
+            return;
 
-            var dialog = new PushToNewBranch();
-            dialog.SetRemote(push.SelectedRemote.Name);
+        var dialog = new PushToNewBranch();
+        dialog.SetRemote(push.SelectedRemote.Name);
 
-            var name = await dialog.ShowDialog<string>(launcher);
-            if (!string.IsNullOrEmpty(name))
-                push.PushToNewBranch(name);
-        }
+        var name = await dialog.ShowDialog<string>(launcher);
+        if (!string.IsNullOrEmpty(name))
+            push.PushToNewBranch(name);
     }
 }

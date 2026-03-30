@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class MoveRepositoryNode : UserControl
 {
-    public partial class MoveRepositoryNode : UserControl
+    public MoveRepositoryNode()
     {
-        public MoveRepositoryNode()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

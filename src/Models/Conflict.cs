@@ -1,86 +1,85 @@
 using System.Collections.Generic;
 
-namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public enum ConflictPanelType
 {
-    public enum ConflictPanelType
+    Ours,
+    Theirs,
+    Result
+}
+
+public enum ConflictResolution
+{
+    None,
+    UseOurs,
+    UseTheirs,
+    UseBothMineFirst,
+    UseBothTheirsFirst,
+}
+
+public enum ConflictLineType
+{
+    None,
+    Common,
+    Marker,
+    Ours,
+    Theirs,
+}
+
+public enum ConflictLineState
+{
+    Normal,
+    ConflictBlockStart,
+    ConflictBlock,
+    ConflictBlockEnd,
+    ResolvedBlockStart,
+    ResolvedBlock,
+    ResolvedBlockEnd,
+}
+
+public class ConflictLine
+{
+    public ConflictLineType Type { get; set; } = ConflictLineType.None;
+    public string Content { get; set; } = string.Empty;
+    public string LineNumber { get; set; } = string.Empty;
+
+    public ConflictLine()
     {
-        Ours,
-        Theirs,
-        Result
     }
-
-    public enum ConflictResolution
+    public ConflictLine(ConflictLineType type, string content)
     {
-        None,
-        UseOurs,
-        UseTheirs,
-        UseBothMineFirst,
-        UseBothTheirsFirst,
+        Type = type;
+        Content = content;
     }
-
-    public enum ConflictLineType
+    public ConflictLine(ConflictLineType type, string content, int lineNumber)
     {
-        None,
-        Common,
-        Marker,
-        Ours,
-        Theirs,
+        Type = type;
+        Content = content;
+        LineNumber = lineNumber.ToString();
     }
+}
 
-    public enum ConflictLineState
-    {
-        Normal,
-        ConflictBlockStart,
-        ConflictBlock,
-        ConflictBlockEnd,
-        ResolvedBlockStart,
-        ResolvedBlock,
-        ResolvedBlockEnd,
-    }
+public record ConflictSelectedChunk(
+    double Y,
+    double Height,
+    int ConflictIndex,
+    ConflictPanelType Panel,
+    bool IsResolved
+);
 
-    public class ConflictLine
-    {
-        public ConflictLineType Type { get; set; } = ConflictLineType.None;
-        public string Content { get; set; } = string.Empty;
-        public string LineNumber { get; set; } = string.Empty;
+public class ConflictRegion
+{
+    public int StartLineInOriginal { get; set; }
+    public int EndLineInOriginal { get; set; }
 
-        public ConflictLine()
-        {
-        }
-        public ConflictLine(ConflictLineType type, string content)
-        {
-            Type = type;
-            Content = content;
-        }
-        public ConflictLine(ConflictLineType type, string content, int lineNumber)
-        {
-            Type = type;
-            Content = content;
-            LineNumber = lineNumber.ToString();
-        }
-    }
+    public string StartMarker { get; set; } = "<<<<<<<";
+    public string SeparatorMarker { get; set; } = "=======";
+    public string EndMarker { get; set; } = ">>>>>>>";
 
-    public record ConflictSelectedChunk(
-        double Y,
-        double Height,
-        int ConflictIndex,
-        ConflictPanelType Panel,
-        bool IsResolved
-    );
+    public List<string> OursContent { get; set; } = new();
+    public List<string> TheirsContent { get; set; } = new();
 
-    public class ConflictRegion
-    {
-        public int StartLineInOriginal { get; set; }
-        public int EndLineInOriginal { get; set; }
-
-        public string StartMarker { get; set; } = "<<<<<<<";
-        public string SeparatorMarker { get; set; } = "=======";
-        public string EndMarker { get; set; } = ">>>>>>>";
-
-        public List<string> OursContent { get; set; } = new();
-        public List<string> TheirsContent { get; set; } = new();
-
-        public bool IsResolved { get; set; } = false;
-        public ConflictResolution ResolutionType { get; set; } = ConflictResolution.None;
-    }
+    public bool IsResolved { get; set; } = false;
+    public ConflictResolution ResolutionType { get; set; } = ConflictResolution.None;
 }

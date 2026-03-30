@@ -1,21 +1,20 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Remove : Command
 {
-    public class Remove : Command
+    public Remove(string repo, List<string> files)
     {
-        public Remove(string repo, List<string> files)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
+        WorkingDirectory = repo;
+        Context = repo;
 
-            var builder = new StringBuilder();
-            builder.Append("rm -f --");
-            foreach (var file in files)
-                builder.Append(' ').Append(file.Quoted());
+        var builder = new StringBuilder();
+        builder.Append("rm -f --");
+        foreach (var file in files)
+            builder.Append(' ').Append(file.Quoted());
 
-            Args = builder.ToString();
-        }
+        Args = builder.ToString();
     }
 }

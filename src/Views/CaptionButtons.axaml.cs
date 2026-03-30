@@ -3,48 +3,47 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class CaptionButtons : UserControl
 {
-    public partial class CaptionButtons : UserControl
+    public static readonly StyledProperty<bool> IsCloseButtonOnlyProperty =
+        AvaloniaProperty.Register<CaptionButtons, bool>(nameof(IsCloseButtonOnly));
+
+    public bool IsCloseButtonOnly
     {
-        public static readonly StyledProperty<bool> IsCloseButtonOnlyProperty =
-            AvaloniaProperty.Register<CaptionButtons, bool>(nameof(IsCloseButtonOnly));
+        get => GetValue(IsCloseButtonOnlyProperty);
+        set => SetValue(IsCloseButtonOnlyProperty, value);
+    }
 
-        public bool IsCloseButtonOnly
-        {
-            get => GetValue(IsCloseButtonOnlyProperty);
-            set => SetValue(IsCloseButtonOnlyProperty, value);
-        }
+    public CaptionButtons()
+    {
+        InitializeComponent();
+    }
 
-        public CaptionButtons()
-        {
-            InitializeComponent();
-        }
+    private void MinimizeWindow(object _, RoutedEventArgs e)
+    {
+        var window = this.FindAncestorOfType<Window>();
+        if (window is not null)
+            window.WindowState = WindowState.Minimized;
 
-        private void MinimizeWindow(object _, RoutedEventArgs e)
-        {
-            var window = this.FindAncestorOfType<Window>();
-            if (window != null)
-                window.WindowState = WindowState.Minimized;
+        e.Handled = true;
+    }
 
-            e.Handled = true;
-        }
+    private void MaximizeOrRestoreWindow(object _, RoutedEventArgs e)
+    {
+        var window = this.FindAncestorOfType<Window>();
+        if (window is not null)
+            window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
-        private void MaximizeOrRestoreWindow(object _, RoutedEventArgs e)
-        {
-            var window = this.FindAncestorOfType<Window>();
-            if (window != null)
-                window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        e.Handled = true;
+    }
 
-            e.Handled = true;
-        }
+    private void CloseWindow(object _, RoutedEventArgs e)
+    {
+        var window = this.FindAncestorOfType<Window>();
+        window?.Close();
 
-        private void CloseWindow(object _, RoutedEventArgs e)
-        {
-            var window = this.FindAncestorOfType<Window>();
-            window?.Close();
-
-            e.Handled = true;
-        }
+        e.Handled = true;
     }
 }

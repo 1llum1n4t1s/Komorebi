@@ -1,59 +1,58 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public partial class QueryRemotes : Command
 {
-    public partial class QueryRemotes : Command
+    [GeneratedRegex(@"^([\w\.\-]+)\s*(\S+).*$")]
+    private static partial Regex REG_REMOTE();
+
+    public QueryRemotes(string repo)
     {
-        [GeneratedRegex(@"^([\w\.\-]+)\s*(\S+).*$")]
-        private static partial Regex REG_REMOTE();
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = "remote -v";
+    }
 
-        public QueryRemotes(string repo)
+    public async Task<List<Models.Remote>> GetResultAsync()
+    {
+        var outs = new List<Models.Remote>();
+        var rs = await ReadToEndAsync().ConfigureAwait(false);
+        if (!rs.IsSuccess)
+            return outs;
+
+        var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        foreach (var line in lines)
         {
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = "remote -v";
-        }
+            var match = REG_REMOTE().Match(line);
+            if (!match.Success)
+                continue;
 
-        public async Task<List<Models.Remote>> GetResultAsync()
-        {
-            var outs = new List<Models.Remote>();
-            var rs = await ReadToEndAsync().ConfigureAwait(false);
-            if (!rs.IsSuccess)
-                return outs;
-
-            var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
+            var remote = new Models.Remote()
             {
-                var match = REG_REMOTE().Match(line);
-                if (!match.Success)
-                    continue;
+                Name = match.Groups[1].Value,
+                URL = match.Groups[2].Value,
+            };
 
-                var remote = new Models.Remote()
+            if (outs.Find(x => x.Name == remote.Name) is not null)
+                continue;
+
+            if (remote.URL.StartsWith("git@", StringComparison.Ordinal))
+            {
+                var hostEnd = remote.URL.IndexOf(':', 4);
+                if (hostEnd > 4)
                 {
-                    Name = match.Groups[1].Value,
-                    URL = match.Groups[2].Value,
-                };
-
-                if (outs.Find(x => x.Name == remote.Name) != null)
-                    continue;
-
-                if (remote.URL.StartsWith("git@", StringComparison.Ordinal))
-                {
-                    var hostEnd = remote.URL.IndexOf(':', 4);
-                    if (hostEnd > 4)
-                    {
-                        var host = remote.URL.Substring(4, hostEnd - 4);
-                        Models.HTTPSValidator.Add(host);
-                    }
+                    var host = remote.URL.Substring(4, hostEnd - 4);
+                    Models.HTTPSValidator.Add(host);
                 }
-
-                outs.Add(remote);
             }
 
-            return outs;
+            outs.Add(remote);
         }
+
+        return outs;
     }
 }

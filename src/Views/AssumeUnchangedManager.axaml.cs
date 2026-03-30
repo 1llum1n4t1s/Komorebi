@@ -1,22 +1,21 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class AssumeUnchangedManager : ChromelessWindow
 {
-    public partial class AssumeUnchangedManager : ChromelessWindow
+    public AssumeUnchangedManager()
     {
-        public AssumeUnchangedManager()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
+    }
 
-        private async void OnRemoveButtonClicked(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.AssumeUnchangedManager vm && sender is Button button)
-                await vm.RemoveAsync(button.DataContext as string);
+    private async void OnRemoveButtonClicked(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.AssumeUnchangedManager vm && sender is Button button)
+            await vm.RemoveAsync(button.DataContext as string);
 
-            e.Handled = true;
-        }
+        e.Handled = true;
     }
 }

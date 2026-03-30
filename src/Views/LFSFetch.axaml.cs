@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class LFSFetch : UserControl
 {
-    public partial class LFSFetch : UserControl
+    public LFSFetch()
     {
-        public LFSFetch()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

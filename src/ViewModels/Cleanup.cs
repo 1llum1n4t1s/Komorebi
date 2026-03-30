@@ -1,30 +1,29 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+public class Cleanup : Popup
 {
-    public class Cleanup : Popup
+    public Cleanup(Repository repo)
     {
-        public Cleanup(Repository repo)
-        {
-            _repo = repo;
-        }
-
-        public override async Task<bool> Sure()
-        {
-            using var lockWatcher = _repo.LockWatcher();
-            ProgressDescription = "Cleanup (GC & prune) ...";
-
-            var log = _repo.CreateLog("Cleanup (GC & prune)");
-            Use(log);
-
-            await new Commands.GC(_repo.FullPath)
-                .Use(log)
-                .ExecAsync();
-
-            log.Complete();
-            return true;
-        }
-
-        private readonly Repository _repo = null;
+        _repo = repo;
     }
+
+    public override async Task<bool> Sure()
+    {
+        using var lockWatcher = _repo.LockWatcher();
+        ProgressDescription = "Cleanup (GC & prune) ...";
+
+        var log = _repo.CreateLog("Cleanup (GC & prune)");
+        Use(log);
+
+        await new Commands.GC(_repo.FullPath)
+            .Use(log)
+            .ExecAsync();
+
+        log.Complete();
+        return true;
+    }
+
+    private readonly Repository _repo = null;
 }

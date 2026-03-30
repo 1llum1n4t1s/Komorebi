@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Reword : UserControl
 {
-    public partial class Reword : UserControl
+    public Reword()
     {
-        public Reword()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

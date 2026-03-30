@@ -20,708 +20,746 @@ using Avalonia.Media.Fonts;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
-namespace Komorebi
+namespace Komorebi;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    #region App Entry Point
+    [STAThread]
+    public static void Main(string[] args)
     {
-        #region App Entry Point
-        [STAThread]
-        public static void Main(string[] args)
+        Native.OS.SetupDataDir();
+
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
-            Native.OS.SetupDataDir();
+            LogException(e.ExceptionObject as Exception);
+        };
 
-            AppDomain.CurrentDomain.UnhandledException += (_, e) =>
-            {
-                LogException(e.ExceptionObject as Exception);
-            };
+        TaskScheduler.UnobservedTaskException += (_, e) =>
+        {
+            e.SetObserved();
+        };
 
-            TaskScheduler.UnobservedTaskException += (_, e) =>
-            {
-                e.SetObserved();
-            };
+        try
+        {
+            if (TryLaunchAsRebaseTodoEditor(args, out int exitTodo))
+                Environment.Exit(exitTodo);
+            else if (TryLaunchAsRebaseMessageEditor(args, out int exitMessage))
+                Environment.Exit(exitMessage);
+            else
+                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception ex)
+        {
+            LogException(ex);
+        }
+    }
 
-            try
-            {
-                if (TryLaunchAsRebaseTodoEditor(args, out int exitTodo))
-                    Environment.Exit(exitTodo);
-                else if (TryLaunchAsRebaseMessageEditor(args, out int exitMessage))
-                    Environment.Exit(exitMessage);
-                else
-                    BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-            }
-            catch (Exception ex)
-            {
-                LogException(ex);
-            }
+    public static AppBuilder BuildAvaloniaApp()
+    {
+        var builder = AppBuilder.Configure<App>();
+        builder.UsePlatformDetect();
+        builder.LogToTrace();
+        builder.WithInterFont();
+        builder.With(new FontManagerOptions()
+        {
+            DefaultFamilyName = "fonts:Inter#Inter"
+        });
+        builder.ConfigureFonts(manager =>
+        {
+            var monospace = new EmbeddedFontCollection(
+                new Uri("fonts:Komorebi", UriKind.Absolute),
+                new Uri("avares://Komorebi/Resources/Fonts", UriKind.Absolute));
+            manager.AddFontCollection(monospace);
+        });
+
+        Native.OS.SetupApp(builder);
+        return builder;
+    }
+
+    public static void LogException(Exception ex)
+    {
+        if (ex is null)
+            return;
+
+        var crashDir = Path.Combine(Native.OS.DataDir, "crashes");
+        if (!Directory.Exists(crashDir))
+            Directory.CreateDirectory(crashDir);
+
+        var time = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+        var file = Path.Combine(crashDir, $"{time}.log");
+        using var writer = new StreamWriter(file);
+        writer.WriteLine($"Crash::: {ex.GetType().FullName}: {ex.Message}");
+        writer.WriteLine();
+        writer.WriteLine("----------------------------");
+        writer.WriteLine($"Version: {Assembly.GetExecutingAssembly().GetName().Version}");
+        writer.WriteLine($"OS: {Environment.OSVersion}");
+        writer.WriteLine($"Framework: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}");
+        writer.WriteLine($"Source: {ex.Source}");
+        writer.WriteLine($"Thread Name: {Thread.CurrentThread.Name ?? "Unnamed"}");
+        writer.WriteLine($"App Start Time: {Process.GetCurrentProcess().StartTime}");
+        writer.WriteLine($"Exception Time: {DateTime.Now}");
+        writer.WriteLine($"Memory Usage: {Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024} MB");
+        writer.WriteLine("----------------------------");
+        writer.WriteLine();
+        writer.WriteLine(ex);
+        writer.Flush();
+    }
+    #endregion
+
+    #region Utility Functions
+    public static Control CreateViewForViewModel(object data)
+    {
+        var dataTypeName = data.GetType().FullName;
+        if (string.IsNullOrEmpty(dataTypeName) || !dataTypeName.Contains(".ViewModels.", StringComparison.Ordinal))
+            return null;
+
+        var viewTypeName = dataTypeName.Replace(".ViewModels.", ".Views.");
+        var viewType = Type.GetType(viewTypeName);
+        if (viewType is not null)
+            return Activator.CreateInstance(viewType) as Control;
+
+        return null;
+    }
+
+    public static Task ShowDialog(object data, Window owner = null)
+    {
+        if (owner is null)
+        {
+            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } mainWindow })
+                owner = mainWindow;
+            else
+                return null;
         }
 
-        public static AppBuilder BuildAvaloniaApp()
-        {
-            var builder = AppBuilder.Configure<App>();
-            builder.UsePlatformDetect();
-            builder.LogToTrace();
-            builder.WithInterFont();
-            builder.With(new FontManagerOptions()
-            {
-                DefaultFamilyName = "fonts:Inter#Inter"
-            });
-            builder.ConfigureFonts(manager =>
-            {
-                var monospace = new EmbeddedFontCollection(
-                    new Uri("fonts:Komorebi", UriKind.Absolute),
-                    new Uri("avares://Komorebi/Resources/Fonts", UriKind.Absolute));
-                manager.AddFontCollection(monospace);
-            });
+        if (data is Views.ChromelessWindow window)
+            return window.ShowDialog(owner);
 
-            Native.OS.SetupApp(builder);
-            return builder;
+        window = CreateViewForViewModel(data) as Views.ChromelessWindow;
+        if (window is not null)
+        {
+            window.DataContext = data;
+            return window.ShowDialog(owner);
         }
 
-        public static void LogException(Exception ex)
+        return null;
+    }
+
+    public static void ShowWindow(object data)
+    {
+        if (data is not Views.ChromelessWindow window)
         {
-            if (ex == null)
+            window = CreateViewForViewModel(data) as Views.ChromelessWindow;
+            if (window is null)
                 return;
 
-            var crashDir = Path.Combine(Native.OS.DataDir, "crashes");
-            if (!Directory.Exists(crashDir))
-                Directory.CreateDirectory(crashDir);
-
-            var time = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            var file = Path.Combine(crashDir, $"{time}.log");
-            using var writer = new StreamWriter(file);
-            writer.WriteLine($"Crash::: {ex.GetType().FullName}: {ex.Message}");
-            writer.WriteLine();
-            writer.WriteLine("----------------------------");
-            writer.WriteLine($"Version: {Assembly.GetExecutingAssembly().GetName().Version}");
-            writer.WriteLine($"OS: {Environment.OSVersion}");
-            writer.WriteLine($"Framework: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}");
-            writer.WriteLine($"Source: {ex.Source}");
-            writer.WriteLine($"Thread Name: {Thread.CurrentThread.Name ?? "Unnamed"}");
-            writer.WriteLine($"App Start Time: {Process.GetCurrentProcess().StartTime}");
-            writer.WriteLine($"Exception Time: {DateTime.Now}");
-            writer.WriteLine($"Memory Usage: {Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024} MB");
-            writer.WriteLine("----------------------------");
-            writer.WriteLine();
-            writer.WriteLine(ex);
-            writer.Flush();
-        }
-        #endregion
-
-        #region Utility Functions
-        public static Control CreateViewForViewModel(object data)
-        {
-            var dataTypeName = data.GetType().FullName;
-            if (string.IsNullOrEmpty(dataTypeName) || !dataTypeName.Contains(".ViewModels.", StringComparison.Ordinal))
-                return null;
-
-            var viewTypeName = dataTypeName.Replace(".ViewModels.", ".Views.");
-            var viewType = Type.GetType(viewTypeName);
-            if (viewType != null)
-                return Activator.CreateInstance(viewType) as Control;
-
-            return null;
+            window.DataContext = data;
         }
 
-        public static Task ShowDialog(object data, Window owner = null)
+        do
         {
-            if (owner == null)
+            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { Windows: { Count: > 0 } windows })
             {
-                if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } mainWindow })
-                    owner = mainWindow;
-                else
-                    return null;
-            }
-
-            if (data is Views.ChromelessWindow window)
-                return window.ShowDialog(owner);
-
-            window = CreateViewForViewModel(data) as Views.ChromelessWindow;
-            if (window != null)
-            {
-                window.DataContext = data;
-                return window.ShowDialog(owner);
-            }
-
-            return null;
-        }
-
-        public static void ShowWindow(object data)
-        {
-            if (data is not Views.ChromelessWindow window)
-            {
-                window = CreateViewForViewModel(data) as Views.ChromelessWindow;
-                if (window == null)
-                    return;
-
-                window.DataContext = data;
-            }
-
-            do
-            {
-                if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { Windows: { Count: > 0 } windows })
+                // Try to find the actived window (fall back to `MainWindow`)
+                Window actived = windows[0];
+                if (!actived.IsActive)
                 {
-                    // Try to find the actived window (fall back to `MainWindow`)
-                    Window actived = windows[0];
-                    if (!actived.IsActive)
+                    for (var i = 1; i < windows.Count; i++)
                     {
-                        for (var i = 1; i < windows.Count; i++)
+                        var test = windows[i];
+                        if (test.IsActive)
                         {
-                            var test = windows[i];
-                            if (test.IsActive)
-                            {
-                                actived = test;
-                                break;
-                            }
+                            actived = test;
+                            break;
                         }
                     }
-
-                    // Get the screen where current window locates.
-                    var screen = actived.Screens.ScreenFromWindow(actived) ?? actived.Screens.Primary;
-                    if (screen == null)
-                        break;
-
-                    // Calculate the startup position (Center Screen Mode) of target window
-                    var rect = new PixelRect(PixelSize.FromSize(window.ClientSize, actived.DesktopScaling));
-                    var centeredRect = screen.WorkingArea.CenterRect(rect);
-                    if (actived.Screens.ScreenFromPoint(centeredRect.Position) == null)
-                        break;
-
-                    // Use the startup position
-                    window.WindowStartupLocation = WindowStartupLocation.Manual;
-                    window.Position = centeredRect.Position;
                 }
-            } while (false);
 
-            window.Show();
-        }
+                // Get the screen where current window locates.
+                var screen = actived.Screens.ScreenFromWindow(actived) ?? actived.Screens.Primary;
+                if (screen is null)
+                    break;
 
-        public static async Task<bool> AskConfirmAsync(string message, Models.ConfirmButtonType buttonType = Models.ConfirmButtonType.OkCancel)
-        {
-            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
-            {
-                var confirm = new Views.Confirm();
-                confirm.SetData(message, buttonType);
-                return await confirm.ShowDialog<bool>(owner);
+                // Calculate the startup position (Center Screen Mode) of target window
+                var rect = new PixelRect(PixelSize.FromSize(window.ClientSize, actived.DesktopScaling));
+                var centeredRect = screen.WorkingArea.CenterRect(rect);
+                if (actived.Screens.ScreenFromPoint(centeredRect.Position) is null)
+                    break;
+
+                // Use the startup position
+                window.WindowStartupLocation = WindowStartupLocation.Manual;
+                window.Position = centeredRect.Position;
             }
+        } while (false);
 
-            return false;
-        }
+        window.Show();
+    }
 
-        public static async Task<Models.ConfirmEmptyCommitResult> AskConfirmEmptyCommitAsync(bool hasLocalChanges, bool hasSelectedUnstaged)
+    public static async Task<bool> AskConfirmAsync(string message, Models.ConfirmButtonType buttonType = Models.ConfirmButtonType.OkCancel)
+    {
+        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
         {
-            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
-            {
-                var confirm = new Views.ConfirmEmptyCommit();
-                confirm.TxtMessage.Text = Text(hasLocalChanges ? "ConfirmEmptyCommit.WithLocalChanges" : "ConfirmEmptyCommit.NoLocalChanges");
-                confirm.BtnStageAllAndCommit.IsVisible = hasLocalChanges;
-                confirm.BtnStageSelectedAndCommit.IsVisible = hasSelectedUnstaged;
-                return await confirm.ShowDialog<Models.ConfirmEmptyCommitResult>(owner);
-            }
-
-            return Models.ConfirmEmptyCommitResult.Cancel;
+            var confirm = new Views.Confirm();
+            confirm.SetData(message, buttonType);
+            return await confirm.ShowDialog<bool>(owner);
         }
 
-        public static void RaiseException(string context, string message)
+        return false;
+    }
+
+    public static async Task<Models.ConfirmEmptyCommitResult> AskConfirmEmptyCommitAsync(bool hasLocalChanges, bool hasSelectedUnstaged)
+    {
+        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
         {
-            if (Current is App { _launcher: not null } app)
-                app._launcher.DispatchNotification(context, message, true);
+            var confirm = new Views.ConfirmEmptyCommit();
+            confirm.TxtMessage.Text = Text(hasLocalChanges ? "ConfirmEmptyCommit.WithLocalChanges" : "ConfirmEmptyCommit.NoLocalChanges");
+            confirm.BtnStageAllAndCommit.IsVisible = hasLocalChanges;
+            confirm.BtnStageSelectedAndCommit.IsVisible = hasSelectedUnstaged;
+            return await confirm.ShowDialog<Models.ConfirmEmptyCommitResult>(owner);
         }
 
-        public static void SendNotification(string context, string message)
+        return Models.ConfirmEmptyCommitResult.Cancel;
+    }
+
+    public static void RaiseException(string context, string message)
+    {
+        if (Current is App { _launcher: not null } app)
+            app._launcher.DispatchNotification(context, message, true);
+    }
+
+    public static void SendNotification(string context, string message)
+    {
+        if (Current is App { _launcher: not null } app)
+            app._launcher.DispatchNotification(context, message, false);
+    }
+
+    public static void SetLocale(string localeKey)
+    {
+        if (Current is not App app ||
+            app.Resources[localeKey] is not ResourceDictionary targetLocale ||
+            targetLocale == app._activeLocale)
+            return;
+
+        if (app._activeLocale is not null)
+            app.Resources.MergedDictionaries.Remove(app._activeLocale);
+
+        app.Resources.MergedDictionaries.Add(targetLocale);
+        app._activeLocale = targetLocale;
+    }
+
+    public static void SetTheme(string theme, string themeOverridesFile)
+    {
+        if (Current is not App app)
+            return;
+
+        if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
+            app.RequestedThemeVariant = ThemeVariant.Light;
+        else if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
+            app.RequestedThemeVariant = ThemeVariant.Dark;
+        else
+            app.RequestedThemeVariant = ThemeVariant.Default;
+
+        if (app._themeOverrides is not null)
         {
-            if (Current is App { _launcher: not null } app)
-                app._launcher.DispatchNotification(context, message, false);
+            app.Resources.MergedDictionaries.Remove(app._themeOverrides);
+            app._themeOverrides = null;
         }
 
-        public static void SetLocale(string localeKey)
-        {
-            if (Current is not App app ||
-                app.Resources[localeKey] is not ResourceDictionary targetLocale ||
-                targetLocale == app._activeLocale)
-                return;
-
-            if (app._activeLocale != null)
-                app.Resources.MergedDictionaries.Remove(app._activeLocale);
-
-            app.Resources.MergedDictionaries.Add(targetLocale);
-            app._activeLocale = targetLocale;
-        }
-
-        public static void SetTheme(string theme, string themeOverridesFile)
-        {
-            if (Current is not App app)
-                return;
-
-            if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Light;
-            else if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Dark;
-            else
-                app.RequestedThemeVariant = ThemeVariant.Default;
-
-            if (app._themeOverrides != null)
-            {
-                app.Resources.MergedDictionaries.Remove(app._themeOverrides);
-                app._themeOverrides = null;
-            }
-
-            if (!string.IsNullOrEmpty(themeOverridesFile) && File.Exists(themeOverridesFile))
-            {
-                try
-                {
-                    var resDic = new ResourceDictionary();
-                    using var stream = File.OpenRead(themeOverridesFile);
-                    var overrides = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ThemeOverrides);
-                    foreach (var kv in overrides.BasicColors)
-                    {
-                        if (kv.Key.Equals("SystemAccentColor", StringComparison.Ordinal))
-                            resDic["SystemAccentColor"] = kv.Value;
-                        else
-                            resDic[$"Color.{kv.Key}"] = kv.Value;
-                    }
-
-                    if (overrides.GraphColors.Count > 0)
-                        Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
-                    else
-                        Models.CommitGraph.SetDefaultPens(overrides.GraphPenThickness);
-
-                    Native.OS.UseMicaOnWindows11 = overrides.UseMicaOnWindows11;
-
-                    app.Resources.MergedDictionaries.Add(resDic);
-                    app._themeOverrides = resDic;
-                }
-                catch
-                {
-                    // ignore
-                }
-            }
-            else
-            {
-                Models.CommitGraph.SetDefaultPens();
-            }
-        }
-
-        public static void SetFonts(string defaultFont, string monospaceFont)
-        {
-            if (Current is not App app)
-                return;
-
-            if (app._fontsOverrides != null)
-            {
-                app.Resources.MergedDictionaries.Remove(app._fontsOverrides);
-                app._fontsOverrides = null;
-            }
-
-            defaultFont = app.FixFontFamilyName(defaultFont);
-            monospaceFont = app.FixFontFamilyName(monospaceFont);
-
-            var resDic = new ResourceDictionary();
-            if (!string.IsNullOrEmpty(defaultFont))
-                resDic.Add("Fonts.Default", new FontFamily(defaultFont));
-
-            if (string.IsNullOrEmpty(monospaceFont))
-            {
-                if (!string.IsNullOrEmpty(defaultFont))
-                {
-                    monospaceFont = $"fonts:Komorebi#JetBrains Mono,{defaultFont}";
-                    resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(defaultFont) && !monospaceFont.Contains(defaultFont, StringComparison.Ordinal))
-                    monospaceFont = $"{monospaceFont},{defaultFont}";
-
-                resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
-            }
-
-            if (resDic.Count > 0)
-            {
-                app.Resources.MergedDictionaries.Add(resDic);
-                app._fontsOverrides = resDic;
-            }
-        }
-
-        public static async Task CopyTextAsync(string data)
-        {
-            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard })
-                await clipboard.SetTextAsync(data ?? "");
-        }
-
-        public static async Task<string> GetClipboardTextAsync()
-        {
-            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard })
-                return await clipboard.TryGetTextAsync();
-            return null;
-        }
-
-        public static string Text(string key, params object[] args)
-        {
-            var fmt = Current?.FindResource($"Text.{key}") as string;
-            if (string.IsNullOrWhiteSpace(fmt))
-                return $"Text.{key}";
-
-            if (args == null || args.Length == 0)
-                return fmt;
-
-            return string.Format(fmt, args);
-        }
-
-        public static Avalonia.Controls.Shapes.Path CreateMenuIcon(string key)
-        {
-            var icon = new Avalonia.Controls.Shapes.Path();
-            icon.Width = 12;
-            icon.Height = 12;
-            icon.Stretch = Stretch.Uniform;
-
-            if (Current?.FindResource(key) is StreamGeometry geo)
-                icon.Data = geo;
-
-            return icon;
-        }
-
-        public static ViewModels.Launcher GetLauncher()
-        {
-            return Current is App app ? app._launcher : null;
-        }
-
-        public static void Quit(int exitCode)
-        {
-            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-                desktop.MainWindow?.Close();
-                desktop.Shutdown(exitCode);
-            }
-            else
-            {
-                Environment.Exit(exitCode);
-            }
-        }
-        #endregion
-
-        #region Overrides
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-
-            var pref = ViewModels.Preferences.Instance;
-            pref.PropertyChanged += (_, _) => pref.Save();
-
-            SetLocale(pref.Locale);
-            SetTheme(pref.Theme, pref.ThemeOverrides);
-            SetFonts(pref.DefaultFontFamily, pref.MonospaceFontFamily);
-        }
-
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                BindingPlugins.DataValidators.RemoveAt(0);
-
-                // Disable tooltip if window is not active.
-                ToolTip.ToolTipOpeningEvent.AddClassHandler<Control>((c, e) =>
-                {
-                    var topLevel = TopLevel.GetTopLevel(c);
-                    if (topLevel is not Window { IsActive: true })
-                        e.Cancel = true;
-                });
-
-                if (TryLaunchAsFileHistoryViewer(desktop))
-                    return;
-
-                if (TryLaunchAsBlameViewer(desktop))
-                    return;
-
-                if (TryLaunchAsCoreEditor(desktop))
-                    return;
-
-                if (TryLaunchAsAskpass(desktop))
-                    return;
-
-                _ipcChannel = new Models.IpcChannel();
-                if (!_ipcChannel.IsFirstInstance)
-                {
-                    var arg = desktop.Args is { Length: > 0 } ? desktop.Args[0].Trim() : string.Empty;
-                    if (!string.IsNullOrEmpty(arg))
-                    {
-                        if (arg.StartsWith('"') && arg.EndsWith('"'))
-                            arg = arg.Substring(1, arg.Length - 2).Trim();
-
-                        if (arg.Length > 0 && !Path.IsPathFullyQualified(arg))
-                            arg = Path.GetFullPath(arg);
-                    }
-
-                    _ipcChannel.SendToFirstInstance(arg);
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    _ipcChannel.MessageReceived += TryOpenRepository;
-                    desktop.Exit += (_, _) => _ipcChannel.Dispose();
-                    TryLaunchAsNormal(desktop);
-                }
-            }
-        }
-        #endregion
-
-        private static bool TryLaunchAsRebaseTodoEditor(string[] args, out int exitCode)
-        {
-            exitCode = -1;
-
-            if (args.Length <= 1 || !args[0].Equals("--rebase-todo-editor", StringComparison.Ordinal))
-                return false;
-
-            var file = args[1];
-            var filename = Path.GetFileName(file);
-            if (!filename.Equals("git-rebase-todo", StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            var dirInfo = new DirectoryInfo(Path.GetDirectoryName(file)!);
-            if (!dirInfo.Exists || !dirInfo.Name.Equals("rebase-merge", StringComparison.Ordinal))
-                return true;
-
-            var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "komorebi.interactive_rebase");
-            if (!File.Exists(jobsFile))
-                return true;
-
-            using var stream = File.OpenRead(jobsFile);
-            var collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
-            collection.WriteTodoList(file);
-            exitCode = 0;
-            return true;
-        }
-
-        private static bool TryLaunchAsRebaseMessageEditor(string[] args, out int exitCode)
-        {
-            exitCode = -1;
-
-            if (args.Length <= 1 || !args[0].Equals("--rebase-message-editor", StringComparison.Ordinal))
-                return false;
-
-            exitCode = 0;
-
-            var file = args[1];
-            var filename = Path.GetFileName(file);
-            if (!filename.Equals("COMMIT_EDITMSG", StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            var gitDir = Path.GetDirectoryName(file)!;
-            var origHeadFile = Path.Combine(gitDir, "rebase-merge", "orig-head");
-            var ontoFile = Path.Combine(gitDir, "rebase-merge", "onto");
-            var doneFile = Path.Combine(gitDir, "rebase-merge", "done");
-            var jobsFile = Path.Combine(gitDir, "komorebi.interactive_rebase");
-            if (!File.Exists(ontoFile) || !File.Exists(origHeadFile) || !File.Exists(doneFile) || !File.Exists(jobsFile))
-                return true;
-
-            var origHead = File.ReadAllText(origHeadFile).Trim();
-            var onto = File.ReadAllText(ontoFile).Trim();
-            using var stream = File.OpenRead(jobsFile);
-            var collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
-            if (collection.Onto.StartsWith(onto, StringComparison.OrdinalIgnoreCase) && collection.OrigHead.StartsWith(origHead, StringComparison.OrdinalIgnoreCase))
-                collection.WriteCommitMessage(doneFile, file);
-
-            return true;
-        }
-
-        private bool TryLaunchAsFileHistoryViewer(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var args = desktop.Args;
-            if (args is not { Length: > 1 } || !args[0].Equals("--file-history", StringComparison.Ordinal))
-                return false;
-
-            var file = Path.GetFullPath(args[1]);
-            var dir = Path.GetDirectoryName(file);
-
-            var test = new Commands.QueryRepositoryRootPath(dir).GetResult();
-            if (!test.IsSuccess || string.IsNullOrEmpty(test.StdOut))
-            {
-                Console.Out.WriteLine($"'{args[1]}' is not in a valid git repository");
-                desktop.Shutdown(-1);
-                return true;
-            }
-
-            var repo = test.StdOut.Trim();
-            var relFile = Path.GetRelativePath(repo, file);
-            var viewer = new Views.FileHistories()
-            {
-                DataContext = new ViewModels.FileHistories(repo, relFile)
-            };
-            desktop.MainWindow = viewer;
-            return true;
-        }
-
-        private bool TryLaunchAsBlameViewer(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var args = desktop.Args;
-            if (args is not { Length: > 1 } || !args[0].Equals("--blame", StringComparison.Ordinal))
-                return false;
-
-            var file = Path.GetFullPath(args[1]);
-            var dir = Path.GetDirectoryName(file);
-
-            var test = new Commands.QueryRepositoryRootPath(dir).GetResult();
-            if (!test.IsSuccess || string.IsNullOrEmpty(test.StdOut))
-            {
-                Console.Out.WriteLine($"'{args[1]}' is not in a valid git repository");
-                desktop.Shutdown(-1);
-                return true;
-            }
-
-            var repo = test.StdOut.Trim();
-            var head = new Commands.QuerySingleCommit(repo, "HEAD").GetResult();
-            if (head == null)
-            {
-                Console.Out.WriteLine($"{repo} has no commits!");
-                desktop.Shutdown(-1);
-                return true;
-            }
-
-            var relFile = Path.GetRelativePath(repo, file);
-            var viewer = new Views.Blame()
-            {
-                DataContext = new ViewModels.Blame(repo, relFile, head)
-            };
-            desktop.MainWindow = viewer;
-            return true;
-        }
-
-        private bool TryLaunchAsCoreEditor(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var args = desktop.Args;
-            if (args is not { Length: > 1 } || !args[0].Equals("--core-editor", StringComparison.Ordinal))
-                return false;
-
-            var file = args[1];
-            if (!File.Exists(file))
-            {
-                desktop.Shutdown(-1);
-                return true;
-            }
-
-            var editor = new Views.CommitMessageEditor();
-            editor.AsStandalone(file);
-            desktop.MainWindow = editor;
-            return true;
-        }
-
-        private bool TryLaunchAsAskpass(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var launchAsAskpass = Environment.GetEnvironmentVariable("KOMOREBI_LAUNCH_AS_ASKPASS");
-            if (launchAsAskpass is not "TRUE")
-                return false;
-
-            var args = desktop.Args;
-            if (args?.Length > 0)
-            {
-                var askpass = new Views.Askpass();
-                askpass.TxtDescription.Text = args[0];
-                desktop.MainWindow = askpass;
-                return true;
-            }
-
-            return false;
-        }
-
-        private void TryLaunchAsNormal(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            Native.OS.SetupExternalTools();
-            Models.AvatarManager.Instance.Start();
-
-            string startupRepo = null;
-            if (desktop.Args is { Length: 1 } && Directory.Exists(desktop.Args[0]))
-                startupRepo = desktop.Args[0];
-
-            var pref = ViewModels.Preferences.Instance;
-            pref.SetCanModify();
-
-            _launcher = new ViewModels.Launcher(startupRepo);
-            desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
-            desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
-
-#if !DISABLE_UPDATE_DETECTION
-            if (pref.ShouldCheck4UpdateOnStartup())
-                Check4Update();
-#endif
-        }
-
-        private void TryOpenRepository(string repo)
-        {
-            if (!string.IsNullOrEmpty(repo) && Directory.Exists(repo))
-            {
-                var test = new Commands.QueryRepositoryRootPath(repo).GetResult();
-                if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
-                {
-                    Dispatcher.UIThread.Invoke(() =>
-                    {
-                        var node = ViewModels.Preferences.Instance.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), null, false);
-                        ViewModels.Welcome.Instance.Refresh();
-                        _launcher?.OpenRepositoryInTab(node, null);
-
-                        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: Views.Launcher wnd })
-                            wnd.BringToTop();
-                    });
-
-                    return;
-                }
-            }
-
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: Views.Launcher launcher })
-                    launcher.BringToTop();
-            });
-        }
-
-        private void Check4Update(bool manually = false)
-        {
-            Task.Run(async () =>
-            {
-                try
-                {
-                    // Fetch latest release information.
-                    using var client = new HttpClient();
-                    client.Timeout = TimeSpan.FromSeconds(5);
-
-                    var data = await client.GetStringAsync("https://sourcegit-scm.github.io/data/version.json");
-                    var ver = JsonSerializer.Deserialize(data, JsonCodeGen.Default.Version);
-                    if (ver == null)
-                        return;
-
-                    // Check if already up-to-date.
-                    if (!ver.IsNewVersion)
-                    {
-                        if (manually)
-                            ShowSelfUpdateResult(new Models.AlreadyUpToDate());
-                        return;
-                    }
-
-                    // Should not check ignored tag if this is called manually.
-                    if (!manually)
-                    {
-                        var pref = ViewModels.Preferences.Instance;
-                        if (ver.TagName == pref.IgnoreUpdateTag)
-                            return;
-                    }
-
-                    ShowSelfUpdateResult(ver);
-                }
-                catch (Exception e)
-                {
-                    if (manually)
-                        ShowSelfUpdateResult(new Models.SelfUpdateFailed(e));
-                }
-            });
-        }
-
-        private void ShowSelfUpdateResult(object data)
+        if (!string.IsNullOrEmpty(themeOverridesFile) && File.Exists(themeOverridesFile))
         {
             try
             {
-                Dispatcher.UIThread.Invoke(async () =>
+                var resDic = new ResourceDictionary();
+                using var stream = File.OpenRead(themeOverridesFile);
+                var overrides = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ThemeOverrides);
+                foreach (var kv in overrides.BasicColors)
                 {
-                    await ShowDialog(new ViewModels.SelfUpdate { Data = data });
+                    if (kv.Key.Equals("SystemAccentColor", StringComparison.Ordinal))
+                        resDic["SystemAccentColor"] = kv.Value;
+                    else
+                        resDic[$"Color.{kv.Key}"] = kv.Value;
+                }
+
+                if (overrides.GraphColors.Count > 0)
+                    Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
+                else
+                    Models.CommitGraph.SetDefaultPens(overrides.GraphPenThickness);
+
+                Native.OS.UseMicaOnWindows11 = overrides.UseMicaOnWindows11;
+
+                app.Resources.MergedDictionaries.Add(resDic);
+                app._themeOverrides = resDic;
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+        else
+        {
+            Models.CommitGraph.SetDefaultPens();
+        }
+    }
+
+    public static void SetFonts(string defaultFont, string monospaceFont)
+    {
+        if (Current is not App app)
+            return;
+
+        if (app._fontsOverrides is not null)
+        {
+            app.Resources.MergedDictionaries.Remove(app._fontsOverrides);
+            app._fontsOverrides = null;
+        }
+
+        defaultFont = app.FixFontFamilyName(defaultFont);
+        monospaceFont = app.FixFontFamilyName(monospaceFont);
+
+        var resDic = new ResourceDictionary();
+        if (!string.IsNullOrEmpty(defaultFont))
+            resDic.Add("Fonts.Default", new FontFamily(defaultFont));
+
+        if (string.IsNullOrEmpty(monospaceFont))
+        {
+            if (!string.IsNullOrEmpty(defaultFont))
+            {
+                monospaceFont = $"fonts:Komorebi#JetBrains Mono,{defaultFont}";
+                resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
+            }
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(defaultFont) && !monospaceFont.Contains(defaultFont, StringComparison.Ordinal))
+                monospaceFont = $"{monospaceFont},{defaultFont}";
+
+            resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
+        }
+
+        if (resDic.Count > 0)
+        {
+            app.Resources.MergedDictionaries.Add(resDic);
+            app._fontsOverrides = resDic;
+        }
+    }
+
+    public static async Task CopyTextAsync(string data)
+    {
+        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard })
+            await clipboard.SetTextAsync(data ?? "");
+    }
+
+    public static async Task<string> GetClipboardTextAsync()
+    {
+        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard })
+            return await clipboard.TryGetTextAsync();
+        return null;
+    }
+
+    public static string Text(string key, params object[] args)
+    {
+        var fmt = Current?.FindResource($"Text.{key}") as string;
+        if (string.IsNullOrWhiteSpace(fmt))
+            return $"Text.{key}";
+
+        if (args is null || args.Length == 0)
+            return fmt;
+
+        return string.Format(fmt, args);
+    }
+
+    public static Avalonia.Controls.Shapes.Path CreateMenuIcon(string key)
+    {
+        var icon = new Avalonia.Controls.Shapes.Path();
+        icon.Width = 12;
+        icon.Height = 12;
+        icon.Stretch = Stretch.Uniform;
+
+        if (Current?.FindResource(key) is StreamGeometry geo)
+            icon.Data = geo;
+
+        return icon;
+    }
+
+    public static ViewModels.Launcher GetLauncher()
+    {
+        return Current is App app ? app._launcher : null;
+    }
+
+    public static void Quit(int exitCode)
+    {
+        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            desktop.MainWindow?.Close();
+            desktop.Shutdown(exitCode);
+        }
+        else
+        {
+            Environment.Exit(exitCode);
+        }
+    }
+    #endregion
+
+    #region Overrides
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+
+        var pref = ViewModels.Preferences.Instance;
+        pref.PropertyChanged += (_, _) => pref.Save();
+
+        SetLocale(pref.Locale);
+        SetTheme(pref.Theme, pref.ThemeOverrides);
+        SetFonts(pref.DefaultFontFamily, pref.MonospaceFontFamily);
+    }
+
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            BindingPlugins.DataValidators.RemoveAt(0);
+
+            // Disable tooltip if window is not active.
+            ToolTip.ToolTipOpeningEvent.AddClassHandler<Control>((c, e) =>
+            {
+                var topLevel = TopLevel.GetTopLevel(c);
+                if (topLevel is not Window { IsActive: true })
+                    e.Cancel = true;
+            });
+
+            if (TryLaunchAsFileHistoryViewer(desktop))
+                return;
+
+            if (TryLaunchAsBlameViewer(desktop))
+                return;
+
+            if (TryLaunchAsCoreEditor(desktop))
+                return;
+
+            if (TryLaunchAsAskpass(desktop))
+                return;
+
+            _ipcChannel = new Models.IpcChannel();
+            if (!_ipcChannel.IsFirstInstance)
+            {
+                var arg = desktop.Args is { Length: > 0 } ? desktop.Args[0].Trim() : string.Empty;
+                if (!string.IsNullOrEmpty(arg))
+                {
+                    if (arg.StartsWith('"') && arg.EndsWith('"'))
+                        arg = arg.Substring(1, arg.Length - 2).Trim();
+
+                    if (arg.Length > 0 && !Path.IsPathFullyQualified(arg))
+                        arg = Path.GetFullPath(arg);
+                }
+
+                _ipcChannel.SendToFirstInstance(arg);
+                Environment.Exit(0);
+            }
+            else
+            {
+                _ipcChannel.MessageReceived += TryOpenRepository;
+                desktop.Exit += (_, _) => _ipcChannel.Dispose();
+                TryLaunchAsNormal(desktop);
+            }
+        }
+    }
+    #endregion
+
+    private static bool TryLaunchAsRebaseTodoEditor(string[] args, out int exitCode)
+    {
+        exitCode = -1;
+
+        if (args.Length <= 1 || !args[0].Equals("--rebase-todo-editor", StringComparison.Ordinal))
+            return false;
+
+        var file = args[1];
+        var filename = Path.GetFileName(file);
+        if (!filename.Equals("git-rebase-todo", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var dirInfo = new DirectoryInfo(Path.GetDirectoryName(file)!);
+        if (!dirInfo.Exists || !dirInfo.Name.Equals("rebase-merge", StringComparison.Ordinal))
+            return true;
+
+        var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "komorebi.interactive_rebase");
+        if (!File.Exists(jobsFile))
+            return true;
+
+        using var stream = File.OpenRead(jobsFile);
+        var collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
+        collection.WriteTodoList(file);
+        exitCode = 0;
+        return true;
+    }
+
+    private static bool TryLaunchAsRebaseMessageEditor(string[] args, out int exitCode)
+    {
+        exitCode = -1;
+
+        if (args.Length <= 1 || !args[0].Equals("--rebase-message-editor", StringComparison.Ordinal))
+            return false;
+
+        exitCode = 0;
+
+        var file = args[1];
+        var filename = Path.GetFileName(file);
+        if (!filename.Equals("COMMIT_EDITMSG", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        var gitDir = Path.GetDirectoryName(file)!;
+        var origHeadFile = Path.Combine(gitDir, "rebase-merge", "orig-head");
+        var ontoFile = Path.Combine(gitDir, "rebase-merge", "onto");
+        var doneFile = Path.Combine(gitDir, "rebase-merge", "done");
+        var jobsFile = Path.Combine(gitDir, "komorebi.interactive_rebase");
+        if (!File.Exists(ontoFile) || !File.Exists(origHeadFile) || !File.Exists(doneFile) || !File.Exists(jobsFile))
+            return true;
+
+        var origHead = File.ReadAllText(origHeadFile).Trim();
+        var onto = File.ReadAllText(ontoFile).Trim();
+        using var stream = File.OpenRead(jobsFile);
+        var collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
+        if (collection.Onto.StartsWith(onto, StringComparison.OrdinalIgnoreCase) && collection.OrigHead.StartsWith(origHead, StringComparison.OrdinalIgnoreCase))
+            collection.WriteCommitMessage(doneFile, file);
+
+        return true;
+    }
+
+    private bool TryLaunchAsFileHistoryViewer(IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        var args = desktop.Args;
+        if (args is not { Length: > 1 } || !args[0].Equals("--file-history", StringComparison.Ordinal))
+            return false;
+
+        var file = Path.GetFullPath(args[1]);
+        var dir = Path.GetDirectoryName(file);
+
+        var test = new Commands.QueryRepositoryRootPath(dir).GetResult();
+        if (!test.IsSuccess || string.IsNullOrEmpty(test.StdOut))
+        {
+            Console.Out.WriteLine($"'{args[1]}' is not in a valid git repository");
+            desktop.Shutdown(-1);
+            return true;
+        }
+
+        var repo = test.StdOut.Trim();
+        var relFile = Path.GetRelativePath(repo, file);
+        var viewer = new Views.FileHistories()
+        {
+            DataContext = new ViewModels.FileHistories(repo, relFile)
+        };
+        desktop.MainWindow = viewer;
+        return true;
+    }
+
+    private bool TryLaunchAsBlameViewer(IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        var args = desktop.Args;
+        if (args is not { Length: > 1 } || !args[0].Equals("--blame", StringComparison.Ordinal))
+            return false;
+
+        var file = Path.GetFullPath(args[1]);
+        var dir = Path.GetDirectoryName(file);
+
+        var test = new Commands.QueryRepositoryRootPath(dir).GetResult();
+        if (!test.IsSuccess || string.IsNullOrEmpty(test.StdOut))
+        {
+            Console.Out.WriteLine($"'{args[1]}' is not in a valid git repository");
+            desktop.Shutdown(-1);
+            return true;
+        }
+
+        var repo = test.StdOut.Trim();
+        var head = new Commands.QuerySingleCommit(repo, "HEAD").GetResult();
+        if (head is null)
+        {
+            Console.Out.WriteLine($"{repo} has no commits!");
+            desktop.Shutdown(-1);
+            return true;
+        }
+
+        var relFile = Path.GetRelativePath(repo, file);
+        var viewer = new Views.Blame()
+        {
+            DataContext = new ViewModels.Blame(repo, relFile, head)
+        };
+        desktop.MainWindow = viewer;
+        return true;
+    }
+
+    private bool TryLaunchAsCoreEditor(IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        var args = desktop.Args;
+        if (args is not { Length: > 1 } || !args[0].Equals("--core-editor", StringComparison.Ordinal))
+            return false;
+
+        var file = args[1];
+        if (!File.Exists(file))
+        {
+            desktop.Shutdown(-1);
+            return true;
+        }
+
+        var editor = new Views.CommitMessageEditor();
+        editor.AsStandalone(file);
+        desktop.MainWindow = editor;
+        return true;
+    }
+
+    private bool TryLaunchAsAskpass(IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        var launchAsAskpass = Environment.GetEnvironmentVariable("KOMOREBI_LAUNCH_AS_ASKPASS");
+        if (launchAsAskpass is not "TRUE")
+            return false;
+
+        var args = desktop.Args;
+        if (args?.Length > 0)
+        {
+            var askpass = new Views.Askpass();
+            askpass.TxtDescription.Text = args[0];
+            desktop.MainWindow = askpass;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void TryLaunchAsNormal(IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        Native.OS.SetupExternalTools();
+        Models.AvatarManager.Instance.Start();
+
+        string startupRepo = null;
+        if (desktop.Args is { Length: 1 } && Directory.Exists(desktop.Args[0]))
+            startupRepo = desktop.Args[0];
+
+        var pref = ViewModels.Preferences.Instance;
+        pref.SetCanModify();
+
+        _launcher = new ViewModels.Launcher(startupRepo);
+        desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
+        desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+#if !DISABLE_UPDATE_DETECTION
+        if (pref.ShouldCheck4UpdateOnStartup())
+            Check4Update();
+#endif
+    }
+
+    private void TryOpenRepository(string repo)
+    {
+        if (!string.IsNullOrEmpty(repo) && Directory.Exists(repo))
+        {
+            var test = new Commands.QueryRepositoryRootPath(repo).GetResult();
+            if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
+            {
+                Dispatcher.UIThread.Invoke(() =>
+                {
+                    var node = ViewModels.Preferences.Instance.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), null, false);
+                    ViewModels.Welcome.Instance.Refresh();
+                    _launcher?.OpenRepositoryInTab(node, null);
+
+                    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: Views.Launcher wnd })
+                        wnd.BringToTop();
                 });
+
+                return;
+            }
+        }
+
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: Views.Launcher launcher })
+                launcher.BringToTop();
+        });
+    }
+
+    private void Check4Update(bool manually = false)
+    {
+        Task.Run(async () =>
+        {
+            try
+            {
+                // Fetch latest release information.
+                using var client = new HttpClient();
+                client.Timeout = TimeSpan.FromSeconds(5);
+
+                var data = await client.GetStringAsync("https://sourcegit-scm.github.io/data/version.json");
+                var ver = JsonSerializer.Deserialize(data, JsonCodeGen.Default.Version);
+                if (ver is null)
+                    return;
+
+                // Check if already up-to-date.
+                if (!ver.IsNewVersion)
+                {
+                    if (manually)
+                        ShowSelfUpdateResult(new Models.AlreadyUpToDate());
+                    return;
+                }
+
+                // Should not check ignored tag if this is called manually.
+                if (!manually)
+                {
+                    var pref = ViewModels.Preferences.Instance;
+                    if (ver.TagName == pref.IgnoreUpdateTag)
+                        return;
+                }
+
+                ShowSelfUpdateResult(ver);
+            }
+            catch (Exception e)
+            {
+                if (manually)
+                    ShowSelfUpdateResult(new Models.SelfUpdateFailed(e));
+            }
+        });
+    }
+
+    private void ShowSelfUpdateResult(object data)
+    {
+        try
+        {
+            Dispatcher.UIThread.Invoke(async () =>
+            {
+                await ShowDialog(new ViewModels.SelfUpdate { Data = data });
+            });
+        }
+        catch
+        {
+            // Ignore exceptions.
+        }
+    }
+
+    private string FixFontFamilyName(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return string.Empty;
+
+        var parts = input.Split(',');
+        var trimmed = new List<string>();
+
+        foreach (var part in parts)
+        {
+            var t = part.Trim();
+            if (string.IsNullOrEmpty(t))
+                continue;
+
+            var sb = new StringBuilder();
+            var prevChar = '\0';
+
+            foreach (var c in t)
+            {
+                if (c == ' ' && prevChar == ' ')
+                    continue;
+                sb.Append(c);
+                prevChar = c;
+            }
+
+            var name = sb.ToString();
+            try
+            {
+                var fontFamily = FontFamily.Parse(name);
+                if (fontFamily.FamilyTypefaces.Count > 0)
+                    trimmed.Add(name);
             }
             catch
             {
@@ -729,51 +767,12 @@ namespace Komorebi
             }
         }
 
-        private string FixFontFamilyName(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return string.Empty;
-
-            var parts = input.Split(',');
-            var trimmed = new List<string>();
-
-            foreach (var part in parts)
-            {
-                var t = part.Trim();
-                if (string.IsNullOrEmpty(t))
-                    continue;
-
-                var sb = new StringBuilder();
-                var prevChar = '\0';
-
-                foreach (var c in t)
-                {
-                    if (c == ' ' && prevChar == ' ')
-                        continue;
-                    sb.Append(c);
-                    prevChar = c;
-                }
-
-                var name = sb.ToString();
-                try
-                {
-                    var fontFamily = FontFamily.Parse(name);
-                    if (fontFamily.FamilyTypefaces.Count > 0)
-                        trimmed.Add(name);
-                }
-                catch
-                {
-                    // Ignore exceptions.
-                }
-            }
-
-            return trimmed.Count > 0 ? string.Join(',', trimmed) : string.Empty;
-        }
-
-        private Models.IpcChannel _ipcChannel = null;
-        private ViewModels.Launcher _launcher = null;
-        private ResourceDictionary _activeLocale = null;
-        private ResourceDictionary _themeOverrides = null;
-        private ResourceDictionary _fontsOverrides = null;
+        return trimmed.Count > 0 ? string.Join(',', trimmed) : string.Empty;
     }
+
+    private Models.IpcChannel _ipcChannel = null;
+    private ViewModels.Launcher _launcher = null;
+    private ResourceDictionary _activeLocale = null;
+    private ResourceDictionary _themeOverrides = null;
+    private ResourceDictionary _fontsOverrides = null;
 }

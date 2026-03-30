@@ -1,23 +1,22 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Move : Command
 {
-    public class Move : Command
+    public Move(string repo, string oldPath, string newPath, bool force)
     {
-        public Move(string repo, string oldPath, string newPath, bool force)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
+        WorkingDirectory = repo;
+        Context = repo;
 
-            var builder = new StringBuilder();
-            builder.Append("mv -v ");
-            if (force)
-                builder.Append("-f ");
-            builder.Append(oldPath.Quoted());
-            builder.Append(' ');
-            builder.Append(newPath.Quoted());
+        var builder = new StringBuilder();
+        builder.Append("mv -v ");
+        if (force)
+            builder.Append("-f ");
+        builder.Append(oldPath.Quoted());
+        builder.Append(' ');
+        builder.Append(newPath.Quoted());
 
-            Args = builder.ToString();
-        }
+        Args = builder.ToString();
     }
 }

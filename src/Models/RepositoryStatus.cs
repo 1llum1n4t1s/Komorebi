@@ -1,29 +1,28 @@
-﻿namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public class RepositoryStatus
 {
-    public class RepositoryStatus
+    public string CurrentBranch { get; set; } = string.Empty;
+    public int Ahead { get; set; } = 0;
+    public int Behind { get; set; } = 0;
+    public int LocalChanges { get; set; } = 0;
+
+    public bool IsTrackingStatusVisible
     {
-        public string CurrentBranch { get; set; } = string.Empty;
-        public int Ahead { get; set; } = 0;
-        public int Behind { get; set; } = 0;
-        public int LocalChanges { get; set; } = 0;
-
-        public bool IsTrackingStatusVisible
+        get
         {
-            get
-            {
-                return Ahead > 0 || Behind > 0;
-            }
+            return Ahead > 0 || Behind > 0;
         }
+    }
 
-        public string TrackingDescription
+    public string TrackingDescription
+    {
+        get
         {
-            get
-            {
-                if (Ahead > 0)
-                    return Behind > 0 ? $"{Ahead}↑ {Behind}↓" : $"{Ahead}↑";
+            if (Ahead > 0)
+                return Behind > 0 ? $"{Ahead}↑ {Behind}↓" : $"{Ahead}↑";
 
-                return Behind > 0 ? $"{Behind}↓" : string.Empty;
-            }
+            return Behind > 0 ? $"{Behind}↓" : string.Empty;
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Restore : Command
 {
-    public class Restore : Command
+    public Restore(string repo, string pathspecFile)
     {
-        public Restore(string repo, string pathspecFile)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
-            Args = $"restore --progress --worktree --recurse-submodules --pathspec-from-file={pathspecFile.Quoted()}";
-        }
+        WorkingDirectory = repo;
+        Context = repo;
+        Args = $"restore --progress --worktree --recurse-submodules --pathspec-from-file={pathspecFile.Quoted()}";
     }
 }

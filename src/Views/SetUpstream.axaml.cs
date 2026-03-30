@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class SetUpstream : UserControl
 {
-    public partial class SetUpstream : UserControl
+    public SetUpstream()
     {
-        public SetUpstream()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

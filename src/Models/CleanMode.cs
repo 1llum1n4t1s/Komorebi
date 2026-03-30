@@ -1,9 +1,8 @@
-﻿namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public enum CleanMode
 {
-    public enum CleanMode
-    {
-        OnlyUntrackedFiles = 0,
-        OnlyIgnoredFiles,
-        All,
-    }
+    OnlyUntrackedFiles = 0,
+    OnlyIgnoredFiles,
+    All,
 }

@@ -1,11 +1,10 @@
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Statistics : ChromelessWindow
 {
-    public partial class Statistics : ChromelessWindow
+    public Statistics()
     {
-        public Statistics()
-        {
-            CloseOnESC = true;
-            InitializeComponent();
-        }
+        CloseOnESC = true;
+        InitializeComponent();
     }
 }

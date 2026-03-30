@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class FilterModeInGraph : UserControl
 {
-    public partial class FilterModeInGraph : UserControl
+    public FilterModeInGraph()
     {
-        public FilterModeInGraph()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class Merge : UserControl
 {
-    public partial class Merge : UserControl
+    public Merge()
     {
-        public Merge()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

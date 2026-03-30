@@ -1,21 +1,20 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+public class ICommandPalette : ObservableObject
 {
-    public class ICommandPalette : ObservableObject
+    public void Open()
     {
-        public void Open()
-        {
-            var host = App.GetLauncher();
-            if (host != null)
-                host.CommandPalette = this;
-        }
+        var host = App.GetLauncher();
+        if (host is not null)
+            host.CommandPalette = this;
+    }
 
-        public void Close()
-        {
-            var host = App.GetLauncher();
-            if (host != null)
-                host.CommandPalette = null;
-        }
+    public void Close()
+    {
+        var host = App.GetLauncher();
+        if (host is not null)
+            host.CommandPalette = null;
     }
 }

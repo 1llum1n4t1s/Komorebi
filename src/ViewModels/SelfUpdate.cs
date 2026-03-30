@@ -1,15 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Komorebi.ViewModels
+namespace Komorebi.ViewModels;
+
+public class SelfUpdate : ObservableObject
 {
-    public class SelfUpdate : ObservableObject
+    public object Data
     {
-        public object Data
-        {
-            get => _data;
-            set => SetProperty(ref _data, value);
-        }
-
-        private object _data = null;
+        get => _data;
+        set => SetProperty(ref _data, value);
     }
+
+    private object _data = null;
 }

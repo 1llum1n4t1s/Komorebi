@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace Komorebi.Views
+namespace Komorebi.Views;
+
+public partial class ClearStashes : UserControl
 {
-    public partial class ClearStashes : UserControl
+    public ClearStashes()
     {
-        public ClearStashes()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

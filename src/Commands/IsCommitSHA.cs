@@ -1,19 +1,18 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class IsCommitSHA : Command
 {
-    public class IsCommitSHA : Command
+    public IsCommitSHA(string repo, string hash)
     {
-        public IsCommitSHA(string repo, string hash)
-        {
-            WorkingDirectory = repo;
-            Args = $"cat-file -t {hash}";
-        }
+        WorkingDirectory = repo;
+        Args = $"cat-file -t {hash}";
+    }
 
-        public async Task<bool> GetResultAsync()
-        {
-            var rs = await ReadToEndAsync().ConfigureAwait(false);
-            return rs.IsSuccess && rs.StdOut.Trim().Equals("commit");
-        }
+    public async Task<bool> GetResultAsync()
+    {
+        var rs = await ReadToEndAsync().ConfigureAwait(false);
+        return rs.IsSuccess && rs.StdOut.Trim().Equals("commit");
     }
 }

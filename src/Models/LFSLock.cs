@@ -1,22 +1,21 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace Komorebi.Models
+namespace Komorebi.Models;
+
+public class LFSLockOwner
 {
-    public class LFSLockOwner
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-    }
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+}
 
-    public class LFSLock
-    {
-        [JsonPropertyName("id")]
-        public string ID { get; set; } = string.Empty;
+public class LFSLock
+{
+    [JsonPropertyName("id")]
+    public string ID { get; set; } = string.Empty;
 
-        [JsonPropertyName("path")]
-        public string Path { get; set; } = string.Empty;
+    [JsonPropertyName("path")]
+    public string Path { get; set; } = string.Empty;
 
-        [JsonPropertyName("owner")]
-        public LFSLockOwner Owner { get; set; } = null;
-    }
+    [JsonPropertyName("owner")]
+    public LFSLockOwner Owner { get; set; } = null;
 }

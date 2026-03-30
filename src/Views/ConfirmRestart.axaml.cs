@@ -2,20 +2,19 @@ using System.Diagnostics;
 
 using Avalonia.Interactivity;
 
-namespace Komorebi.Views
-{
-    public partial class ConfirmRestart : ChromelessWindow
-    {
-        public ConfirmRestart()
-        {
-            InitializeComponent();
-        }
+namespace Komorebi.Views;
 
-        private void Restart(object _1, RoutedEventArgs _2)
-        {
-            var selfExecFile = Process.GetCurrentProcess().MainModule!.FileName;
-            Process.Start(selfExecFile);
-            App.Quit(-1);
-        }
+public partial class ConfirmRestart : ChromelessWindow
+{
+    public ConfirmRestart()
+    {
+        InitializeComponent();
+    }
+
+    private void Restart(object _1, RoutedEventArgs _2)
+    {
+        var selfExecFile = Process.GetCurrentProcess().MainModule!.FileName;
+        Process.Start(selfExecFile);
+        App.Quit(-1);
     }
 }

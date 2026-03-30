@@ -1,23 +1,22 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class Revert : Command
 {
-    public class Revert : Command
+    public Revert(string repo, string commit, bool autoCommit)
     {
-        public Revert(string repo, string commit, bool autoCommit)
-        {
-            WorkingDirectory = repo;
-            Context = repo;
+        WorkingDirectory = repo;
+        Context = repo;
 
-            var builder = new StringBuilder(512);
-            builder
-                .Append("revert -m 1 ")
-                .Append(commit)
-                .Append(" --no-edit");
-            if (!autoCommit)
-                builder.Append(" --no-commit");
+        var builder = new StringBuilder(512);
+        builder
+            .Append("revert -m 1 ")
+            .Append(commit)
+            .Append(" --no-edit");
+        if (!autoCommit)
+            builder.Append(" --no-commit");
 
-            Args = builder.ToString();
-        }
+        Args = builder.ToString();
     }
 }

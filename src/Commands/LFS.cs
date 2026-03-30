@@ -1,112 +1,111 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Komorebi.Commands
+namespace Komorebi.Commands;
+
+public class LFS : Command
 {
-    public class LFS : Command
+    public LFS(string repo)
     {
-        public LFS(string repo)
+        WorkingDirectory = repo;
+        Context = repo;
+    }
+
+    public async Task<bool> InstallAsync()
+    {
+        Args = "lfs install --local";
+        return await ExecAsync().ConfigureAwait(false);
+    }
+
+    public async Task<bool> TrackAsync(string pattern, bool isFilenameMode)
+    {
+        var builder = new StringBuilder();
+        builder.Append("lfs track ");
+        builder.Append(isFilenameMode ? "--filename " : string.Empty);
+        builder.Append(pattern.Quoted());
+
+        Args = builder.ToString();
+        return await ExecAsync().ConfigureAwait(false);
+    }
+
+    public async Task FetchAsync(string remote)
+    {
+        Args = $"lfs fetch {remote}";
+        await ExecAsync().ConfigureAwait(false);
+    }
+
+    public async Task PullAsync(string remote)
+    {
+        Args = $"lfs pull {remote}";
+        await ExecAsync().ConfigureAwait(false);
+    }
+
+    public async Task PushAsync(string remote)
+    {
+        Args = $"lfs push {remote}";
+        await ExecAsync().ConfigureAwait(false);
+    }
+
+    public async Task PruneAsync()
+    {
+        Args = "lfs prune";
+        await ExecAsync().ConfigureAwait(false);
+    }
+
+    public async Task<List<Models.LFSLock>> GetLocksAsync(string remote)
+    {
+        Args = $"lfs locks --json --remote={remote}";
+
+        var rs = await ReadToEndAsync().ConfigureAwait(false);
+        if (rs.IsSuccess)
         {
-            WorkingDirectory = repo;
-            Context = repo;
-        }
-
-        public async Task<bool> InstallAsync()
-        {
-            Args = "lfs install --local";
-            return await ExecAsync().ConfigureAwait(false);
-        }
-
-        public async Task<bool> TrackAsync(string pattern, bool isFilenameMode)
-        {
-            var builder = new StringBuilder();
-            builder.Append("lfs track ");
-            builder.Append(isFilenameMode ? "--filename " : string.Empty);
-            builder.Append(pattern.Quoted());
-
-            Args = builder.ToString();
-            return await ExecAsync().ConfigureAwait(false);
-        }
-
-        public async Task FetchAsync(string remote)
-        {
-            Args = $"lfs fetch {remote}";
-            await ExecAsync().ConfigureAwait(false);
-        }
-
-        public async Task PullAsync(string remote)
-        {
-            Args = $"lfs pull {remote}";
-            await ExecAsync().ConfigureAwait(false);
-        }
-
-        public async Task PushAsync(string remote)
-        {
-            Args = $"lfs push {remote}";
-            await ExecAsync().ConfigureAwait(false);
-        }
-
-        public async Task PruneAsync()
-        {
-            Args = "lfs prune";
-            await ExecAsync().ConfigureAwait(false);
-        }
-
-        public async Task<List<Models.LFSLock>> GetLocksAsync(string remote)
-        {
-            Args = $"lfs locks --json --remote={remote}";
-
-            var rs = await ReadToEndAsync().ConfigureAwait(false);
-            if (rs.IsSuccess)
+            try
             {
-                try
-                {
-                    var locks = JsonSerializer.Deserialize(rs.StdOut, JsonCodeGen.Default.ListLFSLock);
-                    return locks;
-                }
-                catch
-                {
-                    // Ignore exceptions.
-                }
+                var locks = JsonSerializer.Deserialize(rs.StdOut, JsonCodeGen.Default.ListLFSLock);
+                return locks;
             }
-
-            return [];
+            catch
+            {
+                // Ignore exceptions.
+            }
         }
 
-        public async Task<bool> LockAsync(string remote, string file)
-        {
-            Args = $"lfs lock --remote={remote} {file.Quoted()}";
-            return await ExecAsync().ConfigureAwait(false);
-        }
+        return [];
+    }
 
-        public async Task<bool> UnlockAsync(string remote, string file, bool force)
-        {
-            var builder = new StringBuilder();
-            builder
-                .Append("lfs unlock --remote=")
-                .Append(remote)
-                .Append(force ? " -f " : " ")
-                .Append(file.Quoted());
+    public async Task<bool> LockAsync(string remote, string file)
+    {
+        Args = $"lfs lock --remote={remote} {file.Quoted()}";
+        return await ExecAsync().ConfigureAwait(false);
+    }
 
-            Args = builder.ToString();
-            return await ExecAsync().ConfigureAwait(false);
-        }
+    public async Task<bool> UnlockAsync(string remote, string file, bool force)
+    {
+        var builder = new StringBuilder();
+        builder
+            .Append("lfs unlock --remote=")
+            .Append(remote)
+            .Append(force ? " -f " : " ")
+            .Append(file.Quoted());
 
-        public async Task<bool> UnlockMultipleAsync(string remote, List<string> files, bool force)
-        {
-            var builder = new StringBuilder();
-            builder
-                .Append("lfs unlock --remote=")
-                .Append(remote)
-                .Append(force ? " -f" : " ");
+        Args = builder.ToString();
+        return await ExecAsync().ConfigureAwait(false);
+    }
 
-            foreach (string file in files)
-                builder.Append(' ').Append(file.Quoted());
+    public async Task<bool> UnlockMultipleAsync(string remote, List<string> files, bool force)
+    {
+        var builder = new StringBuilder();
+        builder
+            .Append("lfs unlock --remote=")
+            .Append(remote)
+            .Append(force ? " -f" : " ");
 
-            Args = builder.ToString();
-            return await ExecAsync().ConfigureAwait(false);
-        }
+        foreach (string file in files)
+            builder.Append(' ').Append(file.Quoted());
+
+        Args = builder.ToString();
+        return await ExecAsync().ConfigureAwait(false);
     }
 }
