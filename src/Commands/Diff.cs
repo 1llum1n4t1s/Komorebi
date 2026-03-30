@@ -361,42 +361,7 @@ public partial class Diff : Command
 
     private void ProcessInlineHighlights()
     {
-        if (_deleted.Count > 0)
-        {
-            if (_added.Count == _deleted.Count)
-            {
-                for (int i = _added.Count - 1; i >= 0; i--)
-                {
-                    var left = _deleted[i];
-                    var right = _added[i];
-
-                    if (left.Content.Length > MaxLineLengthForInlineDiff || right.Content.Length > MaxLineLengthForInlineDiff)
-                        continue;
-
-                    var chunks = Models.TextInlineChange.Compare(left.Content, right.Content);
-                    if (chunks.Count > MaxInlineDiffChunks)
-                        continue;
-
-                    foreach (var chunk in chunks)
-                    {
-                        if (chunk.DeletedCount > 0)
-                            left.Highlights.Add(new Models.TextRange(chunk.DeletedStart, chunk.DeletedCount));
-
-                        if (chunk.AddedCount > 0)
-                            right.Highlights.Add(new Models.TextRange(chunk.AddedStart, chunk.AddedCount));
-                    }
-                }
-            }
-
-            _result.TextDiff.Lines.AddRange(_deleted);
-            _deleted.Clear();
-        }
-
-        if (_added.Count > 0)
-        {
-            _result.TextDiff.Lines.AddRange(_added);
-            _added.Clear();
-        }
+        FlushInlineHighlights(_result, _deleted, _added);
     }
 
     private const int MaxLineLengthForInlineDiff = 1024;

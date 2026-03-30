@@ -149,19 +149,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![uk__UA](https://img.shields.io/badge/uk__UA-99.47%25-yellow)
-
-<details>
-<summary>Missing keys in uk_UA.axaml</summary>
-
-- Text.Apply.3Way
-- Text.DealWithLocalChanges.Discard
-- Text.DealWithLocalChanges.DoNothing
-- Text.DealWithLocalChanges.StashAndReapply
-- Text.Hotkeys.Repo.CreateBranch
-- Text.Preferences.AI.AdditionalPrompt
-
-</details>
+### ![uk__UA](https://img.shields.io/badge/uk__UA-%E2%88%9A-brightgreen)
 
 ### ![zh__CN](https://img.shields.io/badge/zh__CN-%E2%88%9A-brightgreen)
 

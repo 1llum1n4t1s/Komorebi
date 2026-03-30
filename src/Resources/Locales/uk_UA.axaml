@@ -28,6 +28,7 @@
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Сховати Komorebi</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Показати все</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Застосувати</x:String>
+  <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-стороннє злиття</x:String>
   <x:String x:Key="Text.Apply.File" xml:space="preserve">Файл патчу:</x:String>
   <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">Виберіть файл .patch для застосування</x:String>
   <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">Ігнорувати зміни пробілів</x:String>
@@ -327,6 +328,9 @@
   <x:String x:Key="Text.CreateTag.Type.Lightweight" xml:space="preserve">легкий</x:String>
   <x:String x:Key="Text.CtrlClickTip" xml:space="preserve">Утримуйте Ctrl для запуску без діалогу</x:String>
   <x:String x:Key="Text.Cut" xml:space="preserve">Вирізати</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.Discard" xml:space="preserve">Відкинути</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.DoNothing" xml:space="preserve">Нічого не робити</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.StashAndReapply" xml:space="preserve">Сховати та застосувати повторно</x:String>
   <x:String x:Key="Text.DeinitSubmodule" xml:space="preserve">Деініціалізувати підмодуль</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Примусова деініціалізація навіть за наявності локальних змін.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Підмодуль:</x:String>
@@ -512,6 +516,7 @@
   <x:String x:Key="Text.Hotkeys.Repo.Commit" xml:space="preserve">Закомітити проіндексовані зміни</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitAndPush" xml:space="preserve">Закомітити та надіслати проіндексовані зміни</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">Індексувати всі зміни та закомітити</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.CreateBranch" xml:space="preserve">Створити нову гілку</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Fetch, запускається без діалогу</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Режим панелі керування (за замовчуванням)</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">Перейти до дочірнього commit</x:String>
@@ -622,6 +627,7 @@
   <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">Вчора</x:String>
   <x:String x:Key="Text.Preferences" xml:space="preserve">Налаштування</x:String>
   <x:String x:Key="Text.Preferences.AI" xml:space="preserve">AI</x:String>
+  <x:String x:Key="Text.Preferences.AI.AdditionalPrompt" xml:space="preserve">Додатковий промпт (використовуйте `-` для списку вимог)</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Ключ API</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Модель</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Назва</x:String>
