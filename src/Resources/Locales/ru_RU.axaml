@@ -28,6 +28,7 @@
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Скрыть Komorebi</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Показать все</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Исправить </x:String>
+  <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Трехстороннее слияние</x:String>
   <x:String x:Key="Text.Apply.File" xml:space="preserve">Файл заплатки:</x:String>
   <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">Выберите файл .patch для применения</x:String>
   <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">Игнорировать изменения пробелов</x:String>
@@ -117,8 +118,6 @@
   <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Ревизия:</x:String>
   <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Предупреждение: После переключения ревизии ваша Голова (HEAD) будет отсоединена</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Локальные изменения:</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.Discard" xml:space="preserve">Отклонить</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.StashAndReapply" xml:space="preserve">Отложить и применить повторно</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Ветка:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ваша текущая ГОЛОВА содержит ревизию(и), не связанные ни с к какими ветками или метками! Вы хотите продолжить?</x:String>
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Подмодулям требуется обновление:{0}Обновить их?</x:String>
@@ -310,8 +309,6 @@
   <x:String x:Key="Text.CreateBranch.BasedOn" xml:space="preserve">Основан на:</x:String>
   <x:String x:Key="Text.CreateBranch.Checkout" xml:space="preserve">Переключиться на созданную ветку</x:String>
   <x:String x:Key="Text.CreateBranch.LocalChanges" xml:space="preserve">Локальные изменения:</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.Discard" xml:space="preserve">Отклонить</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.StashAndReapply" xml:space="preserve">Отложить и применить повторно</x:String>
   <x:String x:Key="Text.CreateBranch.Name" xml:space="preserve">Имя новой ветки:</x:String>
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Введите имя ветки.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Создать локальную ветку</x:String>
@@ -331,6 +328,9 @@
   <x:String x:Key="Text.CreateTag.Type.Lightweight" xml:space="preserve">Простой</x:String>
   <x:String x:Key="Text.CtrlClickTip" xml:space="preserve">Удерживайте Ctrl, чтобы сразу начать</x:String>
   <x:String x:Key="Text.Cut" xml:space="preserve">Вырезать</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.Discard" xml:space="preserve">Отклонить</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.DoNothing" xml:space="preserve">Ничего не делать</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.StashAndReapply" xml:space="preserve">Отложить и примненить повторно</x:String>
   <x:String x:Key="Text.DeinitSubmodule" xml:space="preserve">Удалить подмодуль</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Принудительно удалить даже если содержит локальные изменения.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Подмодуль:</x:String>
@@ -516,6 +516,7 @@
   <x:String x:Key="Text.Hotkeys.Repo.Commit" xml:space="preserve">Зафиксировать сформированные изменения</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitAndPush" xml:space="preserve">Зафиксировать и выложить сформированные изменения</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">Сформировать все изменения и зафиксировать</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.CreateBranch" xml:space="preserve">Создать новую ветку</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Извлечь (fetch), запускается сразу</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Режим доски (по умолчанию)</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">К дочернему выбранной ревизии</x:String>
@@ -626,14 +627,12 @@
   <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">Вчера</x:String>
   <x:String x:Key="Text.Preferences" xml:space="preserve">Параметры</x:String>
   <x:String x:Key="Text.Preferences.AI" xml:space="preserve">ОТКРЫТЬ ИИ</x:String>
-  <x:String x:Key="Text.Preferences.AI.AnalyzeDiffPrompt" xml:space="preserve">Запрос на анализ сравнения</x:String>
+  <x:String x:Key="Text.Preferences.AI.AdditionalPrompt" xml:space="preserve">Дополнительная подсказка (Для перечисления ваших требований используйте `-`)</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Ключ API</x:String>
-  <x:String x:Key="Text.Preferences.AI.GenerateSubjectPrompt" xml:space="preserve">Создать запрос на тему</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Модель</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Имя:</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Введённое значение — это имя для загрузки API-ключа из ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Сервер</x:String>
-  <x:String x:Key="Text.Preferences.AI.Streaming" xml:space="preserve">Разрешить потоковую передачу</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">ВИД</x:String>
   <x:String x:Key="Text.Preferences.Appearance.DefaultFont" xml:space="preserve">Шрифт по умолчанию</x:String>
   <x:String x:Key="Text.Preferences.Appearance.EditorTabWidth" xml:space="preserve">Редактировать ширину вкладки</x:String>
@@ -708,8 +707,6 @@
   <x:String x:Key="Text.Pull.Branch" xml:space="preserve">Ветка внешнего репозитория:</x:String>
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Локальные изменения:</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.Discard" xml:space="preserve">Отклонить</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.StashAndReapply" xml:space="preserve">Отложить и применить повторно</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Внешний репозиторий:</x:String>
   <x:String x:Key="Text.Pull.Title" xml:space="preserve">Загрузить (Получить и слить)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Использовать перемещение вместо слияния</x:String>

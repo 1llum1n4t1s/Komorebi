@@ -62,6 +62,8 @@
                ItemsSource="{Binding Revisions}"
                SelectedItems="{Binding SelectedRevisions, Mode=TwoWay}"
                SelectionMode="Multiple"
+               SelectionChanged="OnRevisionsSelectionChanged"
+               PropertyChanged="OnRevisionsPropertyChanged"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ListBox.Styles>

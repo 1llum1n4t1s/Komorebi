@@ -580,6 +580,7 @@ public class Preferences : ObservableObject
             if (w.IsActive)
                 return w;
         }
+    }
 
         // ワークスペースが存在しない場合はデフォルトを作成
         if (Workspaces.Count == 0)

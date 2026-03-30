@@ -1,10 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels;
@@ -275,6 +272,10 @@ public class WorkingCopy : ObservableObject, IDisposable
                     else
                         SetDetail(null, false);
                 }
+
+                Staged = GetStagedChanges(_cached);
+                VisibleStaged = GetVisibleChanges(_staged);
+                SelectedStaged = [];
             }
         }
     }

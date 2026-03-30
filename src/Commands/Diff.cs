@@ -306,6 +306,10 @@ public partial class Diff : Command
             {
                 last.NoNewLineEndOfFile = true;
             }
+            else if (line.Equals("\\ No newline at end of file", StringComparison.Ordinal))
+            {
+                _last.NoNewLineEndOfFile = true;
+            }
         }
     }
 
@@ -358,4 +362,51 @@ public partial class Diff : Command
             added.Clear();
         }
     }
+
+    private void ProcessInlineHighlights()
+    {
+        if (_deleted.Count > 0)
+        {
+            if (_added.Count == _deleted.Count)
+            {
+                for (int i = _added.Count - 1; i >= 0; i--)
+                {
+                    var left = _deleted[i];
+                    var right = _added[i];
+
+                    if (left.Content.Length > 1024 || right.Content.Length > 1024)
+                        continue;
+
+                    var chunks = Models.TextInlineChange.Compare(left.Content, right.Content);
+                    if (chunks.Count > 4)
+                        continue;
+
+                    foreach (var chunk in chunks)
+                    {
+                        if (chunk.DeletedCount > 0)
+                            left.Highlights.Add(new Models.TextRange(chunk.DeletedStart, chunk.DeletedCount));
+
+                        if (chunk.AddedCount > 0)
+                            right.Highlights.Add(new Models.TextRange(chunk.AddedStart, chunk.AddedCount));
+                    }
+                }
+            }
+
+            _result.TextDiff.Lines.AddRange(_deleted);
+            _deleted.Clear();
+        }
+
+        if (_added.Count > 0)
+        {
+            _result.TextDiff.Lines.AddRange(_added);
+            _added.Clear();
+        }
+    }
+
+    private readonly Models.DiffResult _result = new Models.DiffResult();
+    private readonly List<Models.TextDiffLine> _deleted = new List<Models.TextDiffLine>();
+    private readonly List<Models.TextDiffLine> _added = new List<Models.TextDiffLine>();
+    private Models.TextDiffLine _last = null;
+    private int _oldLine = 0;
+    private int _newLine = 0;
 }

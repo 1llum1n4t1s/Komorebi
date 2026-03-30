@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 

@@ -9,6 +9,7 @@ using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
+using AvaloniaEdit.Rendering;
 using AvaloniaEdit.TextMate;
 
 namespace Komorebi.Views;

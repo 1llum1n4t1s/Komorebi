@@ -19,9 +19,9 @@ jobs:
             label: windows-arm64
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Download build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: komorebi.${{ matrix.runtime }}
           path: build/Komorebi
@@ -32,7 +32,7 @@ jobs:
           LABEL: ${{ matrix.label }}
         run: ./build/scripts/package.win.ps1
       - name: Upload package artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.label }}
           path: build/komorebi_*.zip
@@ -47,9 +47,9 @@ jobs:
             label: macos-apple-silicon
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Download build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: komorebi.${{ matrix.runtime }}
           path: build
@@ -62,7 +62,7 @@ jobs:
           tar -xf "build/komorebi.${{ matrix.runtime }}.tar" -C build/Komorebi
           ./build/scripts/package.osx-app.sh
       - name: Upload package artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.label }}
           path: build/komorebi_*.zip
@@ -80,7 +80,7 @@ jobs:
             label: linux-arm64
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Download package dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
@@ -88,7 +88,7 @@ jobs:
           apt-get update
           apt-get install -y curl wget git dpkg-dev fakeroot tzdata zip unzip desktop-file-utils rpm libfuse2 file build-essential binutils
       - name: Download build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: komorebi.${{ matrix.runtime }}
           path: build
@@ -103,7 +103,7 @@ jobs:
           tar -xf "build/komorebi.${{ matrix.runtime }}.tar" -C build/Komorebi
           ./build/scripts/package.linux.sh
       - name: Upload package artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.label }}
           path: |
