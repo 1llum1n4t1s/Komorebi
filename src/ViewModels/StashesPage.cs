@@ -194,6 +194,15 @@ public class StashesPage : ObservableObject, IDisposable
     }
 
     /// <summary>
+    /// スタッシュから新しいブランチをチェックアウトするダイアログを表示する。
+    /// </summary>
+    public void CheckoutBranch(Models.Stash stash)
+    {
+        if (_repo.CanCreatePopup())
+            _repo.ShowPopup(new CheckoutBranchFromStash(_repo, stash));
+    }
+
+    /// <summary>
     /// スタッシュを削除するダイアログを表示する。
     /// </summary>
     public void Drop(Models.Stash stash)
