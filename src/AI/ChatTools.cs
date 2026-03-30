@@ -29,7 +29,7 @@ public static class ChatTools
              },
              "required": ["repo", "file"]
         }
-        """)), false);
+        """), false);
 
     public static async Task<ToolChatMessage> Process(ChatToolCall call, Action<string> output)
     {
