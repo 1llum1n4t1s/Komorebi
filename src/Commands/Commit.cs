@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -82,7 +82,14 @@ public class Commit : Command
         finally
         {
             // 例外発生時も一時ファイルを確実に削除する（旧: catchブロックで削除されずリーク）
-            try { File.Delete(_tmpFile); } catch { /* 削除失敗は無視 */ }
+            try
+            {
+                File.Delete(_tmpFile);
+            }
+            catch
+            {
+                /* 削除失敗は無視 */
+            }
         }
     }
 

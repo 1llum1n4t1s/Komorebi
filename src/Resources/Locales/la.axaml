@@ -114,8 +114,6 @@
   <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Committum:</x:String>
   <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Monitum: Eligendo committum, caput tuum separabitur</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Mutationes Locales:</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.Discard" xml:space="preserve">Abice</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.StashAndReapply" xml:space="preserve">Repone &amp; Reapplica</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Ramus:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">HEAD praesens continet committum(-a) non connexum(-a) ullis ramis/signis! Visne pergere?</x:String>
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Hi submoduli renovandi sunt:{0}Visne eos renovare?</x:String>
@@ -203,27 +201,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Compara cum HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configura Repositorium</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">EXEMPLAR COMMITTENDI</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;
-&#xD;&#xD;
-  ${branch_name} Nomen rami localis praesentis.&#xD;&#xD;
-  ${files_num} Numerus documentorum mutatorum&#xD;&#xD;
-  ${files} Semitae documentorum mutatorum&#xD;&#xD;
-  ${files:N} Maxime N semitae documentorum mutatorum&#xD;&#xD;
-  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${branch_name} Nomen rami localis praesentis.&#xD;&#xD;&#xD;
+  ${files_num} Numerus documentorum mutatorum&#xD;&#xD;&#xD;
+  ${files} Semitae documentorum mutatorum&#xD;&#xD;&#xD;
+  ${files:N} Maxime N semitae documentorum mutatorum&#xD;&#xD;&#xD;
+  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;&#xD;&#xD;
   ${pure_files:N} Ut ${files:N}, sed sine fasciculis</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contentum Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nomen Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTIO PROPRIA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumenta:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;
-&#xD;&#xD;
-  ${REPO} Semita repositorii&#xD;&#xD;
-  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;&#xD;
-  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;&#xD;
-  ${SHA} Hash committi selecti&#xD;&#xD;
-  ${TAG} Signum selectum&#xD;&#xD;
-  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${REPO} Semita repositorii&#xD;&#xD;&#xD;
+  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;&#xD;&#xD;
+  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;&#xD;&#xD;
+  ${SHA} Hash committi selecti&#xD;&#xD;&#xD;
+  ${TAG} Signum selectum&#xD;&#xD;&#xD;
+  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;&#xD;&#xD;
   $1, $2 ... Valores moderaminum inscriptionis</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Documentum Exsecutabile:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Moderamina Inscriptionis:</x:String>
@@ -307,8 +305,6 @@
   <x:String x:Key="Text.CreateBranch.BasedOn" xml:space="preserve">Fundatum In:</x:String>
   <x:String x:Key="Text.CreateBranch.Checkout" xml:space="preserve">Elige ramum creatum</x:String>
   <x:String x:Key="Text.CreateBranch.LocalChanges" xml:space="preserve">Mutationes Locales:</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.Discard" xml:space="preserve">Abice</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.StashAndReapply" xml:space="preserve">Repone &amp; Reapplica</x:String>
   <x:String x:Key="Text.CreateBranch.Name" xml:space="preserve">Nomen Novi Rami:</x:String>
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Inscribe nomen rami.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Crea Ramum Localem</x:String>
@@ -623,14 +619,11 @@
   <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">Heri</x:String>
   <x:String x:Key="Text.Preferences" xml:space="preserve">Optiones</x:String>
   <x:String x:Key="Text.Preferences.AI" xml:space="preserve">AI</x:String>
-  <x:String x:Key="Text.Preferences.AI.AnalyzeDiffPrompt" xml:space="preserve">Mandatum Analyseos Diff</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Clavis API</x:String>
-  <x:String x:Key="Text.Preferences.AI.GenerateSubjectPrompt" xml:space="preserve">Mandatum Generandi Subiectum</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Exemplar</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Nomen</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Valor inscriptus est nomen ad onerandum clavem API ex ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Servitor</x:String>
-  <x:String x:Key="Text.Preferences.AI.Streaming" xml:space="preserve">Activa Fluxum</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">ASPECTUS</x:String>
   <x:String x:Key="Text.Preferences.Appearance.DefaultFont" xml:space="preserve">Typus Praefinitus</x:String>
   <x:String x:Key="Text.Preferences.Appearance.EditorTabWidth" xml:space="preserve">Latitudo Tabulae Editoris</x:String>
@@ -705,8 +698,6 @@
   <x:String x:Key="Text.Pull.Branch" xml:space="preserve">Ramus Remotus:</x:String>
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Mutationes Locales:</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.Discard" xml:space="preserve">Abice</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.StashAndReapply" xml:space="preserve">Repone &amp; Reapplica</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Remotum:</x:String>
   <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Arcessse &amp; Merge)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Utere rebase vice merge</x:String>
@@ -1036,7 +1027,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Fasciculum servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Mutationem ad patch servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Repositoria explorare non potuit: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!&#xD;&#xD;
 Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' incipere non potuit. Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Aperire non potuit: {0}</x:String>

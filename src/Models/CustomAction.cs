@@ -1,4 +1,4 @@
-﻿using Avalonia.Collections;
+using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.Models;

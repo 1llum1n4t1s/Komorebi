@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -70,7 +70,9 @@ public class Tag : Command
             finally
             {
                 // 例外発生時も一時ファイルを確実に削除する（旧: ExecAsync()失敗時にリーク）
-                try { File.Delete(tmp); } catch { /* 削除失敗は無視 */ }
+                try
+                { File.Delete(tmp); }
+                catch { /* 削除失敗は無視 */ }
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels;
 
@@ -12,39 +12,38 @@ public class Checkout : Popup
     /// <summary>
     /// チェックアウト対象のブランチ名。
     /// </summary>
-    public string Branch
+    public string BranchName
     {
-        get;
+        get => _branch.Name;
     }
 
     /// <summary>
-    /// ローカル変更を破棄するかどうかのフラグ。
+    /// ローカル変更があるかどうか。
     /// </summary>
-    public bool DiscardLocalChanges
+    public bool HasLocalChanges
+    {
+        get => _repo.LocalChangesCount > 0;
+    }
+
+    /// <summary>
+    /// ローカル変更の扱い方。
+    /// </summary>
+    public Models.DealWithLocalChanges DealWithLocalChanges
     {
         get;
         set;
     }
 
     /// <summary>
-    /// コンストラクタ。リポジトリとブランチ名を受け取って初期化する。
+    /// コンストラクタ。リポジトリとブランチを受け取って初期化する。
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
-    /// <param name="branch">チェックアウト対象のブランチ名</param>
-    public Checkout(Repository repo, string branch)
+    /// <param name="branch">チェックアウト対象のブランチ</param>
+    public Checkout(Repository repo, Models.Branch branch)
     {
         _repo = repo;
-        Branch = branch;
-        DiscardLocalChanges = false;
-    }
-
-    /// <summary>
-    /// ローカル変更がない場合はダイアログを表示せず直接実行可能かどうかを判定する。
-    /// </summary>
-    /// <returns>ローカル変更がなければtrue</returns>
-    public override bool CanStartDirectly()
-    {
-        return _repo.LocalChangesCount == 0;
+        _branch = branch;
+        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
     }
 
     /// <summary>
@@ -55,9 +54,10 @@ public class Checkout : Popup
     public override async Task<bool> Sure()
     {
         using var lockWatcher = _repo.LockWatcher();
-        ProgressDescription = App.Text("Progress.Checkout", Branch);
+        var branchName = BranchName;
+        ProgressDescription = $"Checkout '{branchName}' ...";
 
-        var log = _repo.CreateLog($"Checkout '{Branch}'");
+        var log = _repo.CreateLog($"Checkout '{branchName}'");
         Use(log);
 
         // DetachedHEAD状態の場合、到達不能コミットの警告を表示する
@@ -76,30 +76,40 @@ public class Checkout : Popup
         var succ = false;
         var needPopStash = false;
 
-        // ローカル変更を破棄しない場合、自動スタッシュを行う
-        if (!DiscardLocalChanges)
+        if (DealWithLocalChanges == Models.DealWithLocalChanges.DoNothing)
+        {
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .BranchAsync(branchName, false);
+        }
+        else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
         {
             var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
             if (changes > 0)
             {
-                // ローカル変更を一時的にスタッシュに保存する
                 succ = await new Commands.Stash(_repo.FullPath)
                     .Use(log)
                     .PushAsync("CHECKOUT_AUTO_STASH", false);
                 if (!succ)
                 {
                     log.Complete();
+                    _repo.MarkWorkingCopyDirtyManually();
                     return false;
                 }
 
                 needPopStash = true;
             }
-        }
 
-        // git checkoutコマンドでブランチを切り替える
-        succ = await new Commands.Checkout(_repo.FullPath)
-            .Use(log)
-            .BranchAsync(Branch, DiscardLocalChanges);
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .BranchAsync(branchName, false);
+        }
+        else
+        {
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .BranchAsync(branchName, true);
+        }
 
         if (succ)
         {
@@ -111,12 +121,13 @@ public class Checkout : Popup
                 await new Commands.Stash(_repo.FullPath)
                     .Use(log)
                     .PopAsync("stash@{0}");
+
         }
 
         log.Complete();
 
         // フィルタモードでチェックアウトしたブランチをIncludedに設定する
-        var b = _repo.Branches.Find(x => x.IsLocal && x.Name == Branch);
+        var b = _repo.Branches.Find(x => x.IsLocal && x.Name == branchName);
         if (b is not null && _repo.HistoryFilterMode == Models.FilterMode.Included)
             _repo.SetBranchFilterMode(b, Models.FilterMode.Included, false, false);
 
@@ -131,4 +142,5 @@ public class Checkout : Popup
 
     /// <summary>対象リポジトリへの参照</summary>
     private readonly Repository _repo = null;
+    private readonly Models.Branch _branch = null;
 }

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels;
 
@@ -17,9 +17,17 @@ public class CheckoutCommit : Popup
     }
 
     /// <summary>
-    /// ローカル変更を破棄するかどうかのフラグ。
+    /// ローカル変更があるかどうか。
     /// </summary>
-    public bool DiscardLocalChanges
+    public bool HasLocalChanges
+    {
+        get => _repo.LocalChangesCount > 0;
+    }
+
+    /// <summary>
+    /// ローカル変更の扱い方。
+    /// </summary>
+    public Models.DealWithLocalChanges DealWithLocalChanges
     {
         get;
         set;
@@ -34,7 +42,7 @@ public class CheckoutCommit : Popup
     {
         _repo = repo;
         Commit = commit;
-        DiscardLocalChanges = false;
+        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
     }
 
     /// <summary>
@@ -66,30 +74,40 @@ public class CheckoutCommit : Popup
         var succ = false;
         var needPop = false;
 
-        // ローカル変更を破棄しない場合、自動スタッシュを行う
-        if (!DiscardLocalChanges)
+        if (DealWithLocalChanges == Models.DealWithLocalChanges.DoNothing)
+        {
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .CommitAsync(Commit.SHA, false);
+        }
+        else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
         {
             var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
             if (changes > 0)
             {
-                // ローカル変更を一時的にスタッシュに保存する
                 succ = await new Commands.Stash(_repo.FullPath)
                     .Use(log)
                     .PushAsync("CHECKOUT_AUTO_STASH", false);
                 if (!succ)
                 {
                     log.Complete();
+                    _repo.MarkWorkingCopyDirtyManually();
                     return false;
                 }
 
                 needPop = true;
             }
-        }
 
-        // git checkoutコマンドでコミットに切り替える
-        succ = await new Commands.Checkout(_repo.FullPath)
-            .Use(log)
-            .CommitAsync(Commit.SHA, DiscardLocalChanges);
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .CommitAsync(Commit.SHA, false);
+        }
+        else
+        {
+            succ = await new Commands.Checkout(_repo.FullPath)
+                .Use(log)
+                .CommitAsync(Commit.SHA, true);
+        }
 
         if (succ)
         {

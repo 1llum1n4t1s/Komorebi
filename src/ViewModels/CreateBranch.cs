@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -32,9 +32,17 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
-    /// ローカルの変更を破棄するかどうか。
+    /// ローカル変更があるかどうか。
     /// </summary>
-    public bool DiscardLocalChanges
+    public bool HasLocalChanges
+    {
+        get => _repo.LocalChangesCount > 0;
+    }
+
+    /// <summary>
+    /// ローカル変更の扱い方。
+    /// </summary>
+    public Models.DealWithLocalChanges DealWithLocalChanges
     {
         get;
         set;
@@ -53,6 +61,7 @@ public class CreateBranch : Popup
             {
                 _repo.UIStates.CheckoutBranchOnCreateBranch = value;
                 OnPropertyChanged();
+                UpdateOverrideTip();
             }
         }
     }
@@ -83,6 +92,15 @@ public class CreateBranch : Popup
     }
 
     /// <summary>
+    /// 上書き時のgitコマンドのヒント表示。
+    /// </summary>
+    public string OverrideTip
+    {
+        get => _overrideTip;
+        private set => SetProperty(ref _overrideTip, value);
+    }
+
+    /// <summary>
     /// 既存の同名ブランチの上書きを許可するかどうか。
     /// 変更時にブランチ名のバリデーションを再実行する。
     /// </summary>
@@ -109,7 +127,8 @@ public class CreateBranch : Popup
             Name = branch.Name;
 
         BasedOn = branch;
-        DiscardLocalChanges = false;
+        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        UpdateOverrideTip();
     }
 
     /// <summary>
@@ -121,7 +140,8 @@ public class CreateBranch : Popup
         _baseOnRevision = commit.SHA;
 
         BasedOn = commit;
-        DiscardLocalChanges = false;
+        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        UpdateOverrideTip();
     }
 
     /// <summary>
@@ -133,7 +153,8 @@ public class CreateBranch : Popup
         _baseOnRevision = tag.SHA;
 
         BasedOn = tag;
-        DiscardLocalChanges = false;
+        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        UpdateOverrideTip();
     }
 
     /// <summary>
@@ -190,9 +211,9 @@ public class CreateBranch : Popup
         // チェックアウト付きブランチ作成（ベアリポジトリ以外）
         if (CheckoutAfterCreated && !_repo.IsBare)
         {
-            // ローカル変更がある場合は自動スタッシュ
+            // ローカル変更がある場合の処理
             var needPopStash = false;
-            if (!DiscardLocalChanges)
+            if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
             {
                 var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
                 if (changes > 0)
@@ -210,9 +231,10 @@ public class CreateBranch : Popup
                 }
             }
 
+            var forceDiscard = DealWithLocalChanges == Models.DealWithLocalChanges.Discard;
             succ = await new Commands.Checkout(_repo.FullPath)
                 .Use(log)
-                .BranchAsync(_name, _baseOnRevision, DiscardLocalChanges, _allowOverwrite);
+                .BranchAsync(_name, _baseOnRevision, forceDiscard, _allowOverwrite);
 
             if (succ)
             {
@@ -280,8 +302,17 @@ public class CreateBranch : Popup
         return true;
     }
 
+    /// <summary>
+    /// 上書き時のヒント文字列を更新する。
+    /// </summary>
+    private void UpdateOverrideTip()
+    {
+        OverrideTip = CheckoutAfterCreated ? "-B in `git checkout`" : "-f in `git branch`";
+    }
+
     private readonly Repository _repo = null;       // 対象リポジトリ
     private string _name = null;                     // 新しいブランチ名
     private readonly string _baseOnRevision = null;  // 基点となるリビジョンSHA
     private bool _allowOverwrite = false;            // 上書き許可フラグ
+    private string _overrideTip = "-B";              // 上書きヒント文字列
 }

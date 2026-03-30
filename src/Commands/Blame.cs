@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -123,4 +123,5 @@ public partial class Blame : Command
         result.Content = content.ToString();
         return result;
     }
+
 }

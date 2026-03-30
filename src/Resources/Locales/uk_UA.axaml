@@ -28,6 +28,7 @@
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Сховати Komorebi</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Показати все</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Застосувати</x:String>
+  <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-стороннє злиття</x:String>
   <x:String x:Key="Text.Apply.File" xml:space="preserve">Файл патчу:</x:String>
   <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">Виберіть файл .patch для застосування</x:String>
   <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">Ігнорувати зміни пробілів</x:String>
@@ -117,8 +118,6 @@
   <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Коміт:</x:String>
   <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Попередження: Перехід на коміт призведе до стану "від'єднаний HEAD"</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Локальні зміни:</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.Discard" xml:space="preserve">Скасувати</x:String>
-  <x:String x:Key="Text.Checkout.LocalChanges.StashAndReapply" xml:space="preserve">Сховати та Застосувати</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Гілка:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ваш поточний HEAD містить commit(и), що не пов'язані з жодною гілкою/тегом! Бажаєте продовжити?</x:String>
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Наступні підмодулі потребують оновлення:{0}Бажаєте оновити їх?</x:String>
@@ -206,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Порівняти з HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Налаштування сховища</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН КОМІТУ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;
-  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;
-  ${files_num} Number of changed files&#xD;&#xD;&#xD;
-  ${files} Paths of changed files&#xD;&#xD;&#xD;
-  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;
-  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Number of changed files&#xD;&#xD;&#xD;&#xD;
+  ${files} Paths of changed files&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Likes ${files:N}, but without folders</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Зміст шаблону:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Назва шаблону:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">СПЕЦІАЛЬНА ДІЯ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументи:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;
-  ${REPO} Repository's path&#xD;&#xD;&#xD;
-  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;
-  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
-  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;
-  ${TAG} Selected tag&#xD;&#xD;&#xD;
-  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;
+  ${REPO} Repository's path&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Selected tag&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Input control values</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Виконуваний файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Елементи введення:</x:String>
@@ -310,8 +309,6 @@
   <x:String x:Key="Text.CreateBranch.BasedOn" xml:space="preserve">На основі:</x:String>
   <x:String x:Key="Text.CreateBranch.Checkout" xml:space="preserve">Перейти на створену гілку</x:String>
   <x:String x:Key="Text.CreateBranch.LocalChanges" xml:space="preserve">Локальні зміни:</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.Discard" xml:space="preserve">Скасувати</x:String>
-  <x:String x:Key="Text.CreateBranch.LocalChanges.StashAndReapply" xml:space="preserve">Сховати та Застосувати</x:String>
   <x:String x:Key="Text.CreateBranch.Name" xml:space="preserve">Назва нової гілки:</x:String>
   <x:String x:Key="Text.CreateBranch.Name.Placeholder" xml:space="preserve">Введіть назву гілки.</x:String>
   <x:String x:Key="Text.CreateBranch.Title" xml:space="preserve">Створити локальну гілку</x:String>
@@ -331,6 +328,9 @@
   <x:String x:Key="Text.CreateTag.Type.Lightweight" xml:space="preserve">легкий</x:String>
   <x:String x:Key="Text.CtrlClickTip" xml:space="preserve">Утримуйте Ctrl для запуску без діалогу</x:String>
   <x:String x:Key="Text.Cut" xml:space="preserve">Вирізати</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.Discard" xml:space="preserve">Відкинути</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.DoNothing" xml:space="preserve">Нічого не робити</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.StashAndReapply" xml:space="preserve">Сховати та застосувати повторно</x:String>
   <x:String x:Key="Text.DeinitSubmodule" xml:space="preserve">Деініціалізувати підмодуль</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Примусова деініціалізація навіть за наявності локальних змін.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Підмодуль:</x:String>
@@ -516,6 +516,7 @@
   <x:String x:Key="Text.Hotkeys.Repo.Commit" xml:space="preserve">Закомітити проіндексовані зміни</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitAndPush" xml:space="preserve">Закомітити та надіслати проіндексовані зміни</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">Індексувати всі зміни та закомітити</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.CreateBranch" xml:space="preserve">Створити нову гілку</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Fetch, запускається без діалогу</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Режим панелі керування (за замовчуванням)</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">Перейти до дочірнього commit</x:String>
@@ -626,14 +627,12 @@
   <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">Вчора</x:String>
   <x:String x:Key="Text.Preferences" xml:space="preserve">Налаштування</x:String>
   <x:String x:Key="Text.Preferences.AI" xml:space="preserve">AI</x:String>
-  <x:String x:Key="Text.Preferences.AI.AnalyzeDiffPrompt" xml:space="preserve">Промпт для аналізу різниці</x:String>
+  <x:String x:Key="Text.Preferences.AI.AdditionalPrompt" xml:space="preserve">Додатковий промпт (використовуйте `-` для списку вимог)</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Ключ API</x:String>
-  <x:String x:Key="Text.Preferences.AI.GenerateSubjectPrompt" xml:space="preserve">Промпт для генерації теми</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Модель</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Назва</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Введене значення - це назва для завантаження API-ключа зі змінних середовища</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Сервер</x:String>
-  <x:String x:Key="Text.Preferences.AI.Streaming" xml:space="preserve">Увімкнути потокове відтворення</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">ВИГЛЯД</x:String>
   <x:String x:Key="Text.Preferences.Appearance.DefaultFont" xml:space="preserve">Шрифт за замовчуванням</x:String>
   <x:String x:Key="Text.Preferences.Appearance.EditorTabWidth" xml:space="preserve">Ширина табуляції в редакторі</x:String>
@@ -708,8 +707,6 @@
   <x:String x:Key="Text.Pull.Branch" xml:space="preserve">Віддалена гілка:</x:String>
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Локальні зміни:</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.Discard" xml:space="preserve">Скасувати</x:String>
-  <x:String x:Key="Text.Pull.LocalChanges.StashAndReapply" xml:space="preserve">Сховати та Застосувати</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Віддалене сховище:</x:String>
   <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Fetch &amp; Merge)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Використовувати rebase замість merge</x:String>
@@ -1039,7 +1036,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не вдалося зберегти файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не вдалося зберегти зміни в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не вдалося просканувати репозиторії: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!&#xD;&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не вдалося запустити '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не вдалося відкрити: {0}</x:String>

@@ -151,15 +151,18 @@ public partial class AIAssistant : ChromelessWindow
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
-        if (DataContext is ViewModels.AIAssistant vmClosing) vmClosing.Cancel();
+        if (DataContext is ViewModels.AIAssistant vmClosing)
+            vmClosing.Cancel();
     }
 
     /// <summary>
-    /// Applyイベントのハンドラ。
+    /// 再生成ボタンクリックのハンドラ。
     /// </summary>
-    private void OnApply(object sender, RoutedEventArgs e)
+    private void OnRegenClicked(object sender, RoutedEventArgs e)
     {
-        if (DataContext is ViewModels.AIAssistant vm) vm.Apply();
-        Close();
+        if (DataContext is ViewModels.AIAssistant vm)
+            vm.Regen();
+
+        e.Handled = true;
     }
 }

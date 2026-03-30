@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -34,6 +34,15 @@ public class Apply : Popup
     /// 選択された空白処理モード。
     /// </summary>
     public Models.ApplyWhiteSpaceMode SelectedWhiteSpaceMode
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// 3-wayマージを使用するかどうか。
+    /// </summary>
+    public bool ThreeWayMerge
     {
         get;
         set;
@@ -79,7 +88,8 @@ public class Apply : Popup
         Use(log);
 
         // git applyコマンドを実行してパッチを適用する
-        var succ = await new Commands.Apply(_repo.FullPath, _patchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, null)
+        var extra = ThreeWayMerge ? "--3way" : string.Empty;
+        var succ = await new Commands.Apply(_repo.FullPath, _patchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
             .Use(log)
             .ExecAsync();
 

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Avalonia.Threading;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels;
@@ -38,7 +38,7 @@ public class AIAssistant : ObservableObject
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="service">OpenAIサービス設定</param>
     /// <param name="changes">コミットメッセージ生成対象の変更リスト</param>
-    public AIAssistant(Repository repo, Models.OpenAIService service, List<Models.Change> changes)
+    public AIAssistant(Repository repo, AI.Service service, List<Models.Change> changes)
     {
         _repo = repo;
         _service = service;
@@ -96,11 +96,39 @@ public class AIAssistant : ObservableObject
         _cancel = new CancellationTokenSource();
         Task.Run(async () =>
         {
-            // AIサービスを使ってコミットメッセージを生成し、UIスレッドでテキストを更新する
-            await new Commands.GenerateCommitMessage(_service, _repo.FullPath, _changes, _cancel.Token, message =>
+            try
             {
-                Dispatcher.UIThread.Post(() => Text = message);
-            }).ExecAsync().ConfigureAwait(false);
+                // 変更リストを文字列に変換する（Agent が期待するフォーマット: "A/M/D/R/C path"）
+                var changeListBuilder = new StringBuilder();
+                foreach (var change in _changes)
+                {
+                    var state = change.Index != Models.ChangeState.None ? change.Index : change.WorkTree;
+                    var flag = state switch
+                    {
+                        Models.ChangeState.Modified => 'M',
+                        Models.ChangeState.TypeChanged => 'T',
+                        Models.ChangeState.Added => 'A',
+                        Models.ChangeState.Deleted => 'D',
+                        Models.ChangeState.Renamed => 'R',
+                        Models.ChangeState.Copied => 'C',
+                        _ => throw new ArgumentOutOfRangeException(nameof(state), $"Unsupported change state for AI message generation: {state}"),
+                    };
+                    changeListBuilder.AppendLine($"{flag} {change.Path}");
+                }
+
+                // AI.Agentを使ってコミットメッセージを生成し、UIスレッドでテキストを更新する
+                var agent = new AI.Agent(_service);
+                await agent.GenerateCommitMessageAsync(
+                    _repo.FullPath,
+                    changeListBuilder.ToString(),
+                    message => Dispatcher.UIThread.Post(() => Text += message + "\n"),
+                    _cancel.Token).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Dispatcher.UIThread.Post(() =>
+                    App.RaiseException(_repo.FullPath, App.Text("Error.FailedToGenerateCommitMessage", e)));
+            }
 
             // 生成完了後にUIスレッドでフラグを解除する
             Dispatcher.UIThread.Post(() => IsGenerating = false);
@@ -110,7 +138,7 @@ public class AIAssistant : ObservableObject
     /// <summary>対象リポジトリへの参照</summary>
     private readonly Repository _repo = null;
     /// <summary>OpenAIサービス設定</summary>
-    private Models.OpenAIService _service = null;
+    private AI.Service _service = null;
     /// <summary>コミットメッセージ生成対象の変更リスト</summary>
     private List<Models.Change> _changes = null;
     /// <summary>生成処理のキャンセルトークンソース</summary>

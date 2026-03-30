@@ -88,11 +88,11 @@ namespace Komorebi.Tests.Converters
         #region IsTypeOf - ConvertBack
 
         [Fact]
-        public void IsTypeOf_ConvertBack_ReturnsNotImplementedException()
+        public void IsTypeOf_ConvertBack_ThrowsNotImplementedException()
         {
             var converter = ObjectConverters.IsTypeOf;
-            var result = converter.ConvertBack("value", typeof(object), null, CultureInfo.InvariantCulture);
-            Assert.IsType<NotImplementedException>(result);
+            Assert.Throws<NotImplementedException>(() =>
+                converter.ConvertBack("value", typeof(object), null, CultureInfo.InvariantCulture));
         }
 
         #endregion

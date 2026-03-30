@@ -102,6 +102,10 @@ public partial class TextDiff
     public List<TextDiffLine> Lines { get; set; } = [];
     /// <summary>最大行番号（UI表示の桁数計算用）</summary>
     public int MaxLineNumber = 0;
+    /// <summary>追加行数</summary>
+    public int AddedLines { get; set; } = 0;
+    /// <summary>削除行数</summary>
+    public int DeletedLines { get; set; } = 0;
 
     /// <summary>
     /// 指定範囲の選択情報を生成する。パッチ生成時に選択行の統計を計算する。
