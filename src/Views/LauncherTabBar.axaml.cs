@@ -257,7 +257,8 @@ public partial class LauncherTabBar : UserControl
             var point = e.GetCurrentPoint(border);
             if (point.Properties.IsMiddleButtonPressed && border.DataContext is ViewModels.LauncherPage page)
             {
-                if (DataContext is ViewModels.Launcher vm) vm.CloseTab(page);
+                if (DataContext is ViewModels.Launcher vm)
+                    vm.CloseTab(page);
                 e.Handled = true;
             }
             else
@@ -472,7 +473,8 @@ public partial class LauncherTabBar : UserControl
     {
         if (sender is Button btn && DataContext is ViewModels.Launcher vm)
         {
-            if (btn.DataContext is ViewModels.LauncherPage page) vm.CloseTab(page);
+            if (btn.DataContext is ViewModels.LauncherPage page)
+                vm.CloseTab(page);
         }
 
         e.Handled = true;

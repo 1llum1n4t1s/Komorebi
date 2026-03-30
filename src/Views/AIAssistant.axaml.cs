@@ -151,7 +151,8 @@ public partial class AIAssistant : ChromelessWindow
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
-        if (DataContext is ViewModels.AIAssistant vmClosing) vmClosing.Cancel();
+        if (DataContext is ViewModels.AIAssistant vmClosing)
+            vmClosing.Cancel();
     }
 
     /// <summary>
@@ -159,7 +160,8 @@ public partial class AIAssistant : ChromelessWindow
     /// </summary>
     private void OnApply(object sender, RoutedEventArgs e)
     {
-        if (DataContext is ViewModels.AIAssistant vm) vm.Apply();
+        if (DataContext is ViewModels.AIAssistant vm)
+            vm.Apply();
         Close();
     }
 

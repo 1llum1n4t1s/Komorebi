@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -31,6 +33,7 @@ jobs:
         run: node build/scripts/localization-check.js
 
       - name: Commit changes
+        if: github.event_name == 'push'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -43,3 +46,12 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify no changes (PR only)
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Localization files need updating. Run 'node build/scripts/localization-check.js' locally and commit the changes."
+            git diff --stat
+            exit 1
+          fi

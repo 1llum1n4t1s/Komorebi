@@ -47,7 +47,8 @@ public class IpcChannel : IDisposable
             // Release the lock if we acquired it but failed to start the server.
             // Without this, the lock would be held indefinitely, blocking all
             // future instances from starting.
-            try { _singletonLock?.Dispose(); }
+            try
+            { _singletonLock?.Dispose(); }
             catch { /* best-effort cleanup */ }
             _singletonLock = null;
 
@@ -106,12 +107,14 @@ public class IpcChannel : IDisposable
             }
             catch { /* pipe already closed or timeout */ }
 
-            try { _server.Dispose(); }
+            try
+            { _server.Dispose(); }
             catch { /* already disposed */ }
             _server = null;
         }
 
-        try { _singletonLock?.Dispose(); }
+        try
+        { _singletonLock?.Dispose(); }
         catch { /* already disposed */ }
         _singletonLock = null;
     }
