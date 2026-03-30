@@ -236,12 +236,13 @@ public static partial class GitErrorHelper
              message.Contains("continue connecting", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.Askpass.Hint.HostKeyNew";
 
-        // パスフレーズ入力
-        if (message.Contains("passphrase", System.StringComparison.OrdinalIgnoreCase))
+        // パスフレーズ入力（"Enter passphrase for key ..." のプロンプト）
+        if (message.Contains("Enter passphrase", System.StringComparison.OrdinalIgnoreCase))
             return "Text.Askpass.Hint.Passphrase";
 
-        // パスワード入力
-        if (message.Contains("password", System.StringComparison.OrdinalIgnoreCase))
+        // パスワード入力（"Password for ..." のプロンプト）
+        if (message.Contains("Password for", System.StringComparison.OrdinalIgnoreCase) ||
+            message.Contains("Enter password", System.StringComparison.OrdinalIgnoreCase))
             return "Text.Askpass.Hint.Password";
 
         return string.Empty;

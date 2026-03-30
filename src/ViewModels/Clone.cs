@@ -40,12 +40,13 @@ public class Clone : Popup
     }
 
     /// <summary>
-    /// SSH秘密鍵のファイルパス。
+    /// SSH秘密鍵のファイルパス。ファイル存在チェックと公開鍵誤選択チェックのバリデーション付き。
     /// </summary>
+    [CustomValidation(typeof(Clone), nameof(ValidateSSHKey))]
     public string SSHKey
     {
         get => _sshKey;
-        set => SetProperty(ref _sshKey, value);
+        set => SetProperty(ref _sshKey, value, true);
     }
 
     /// <summary>
@@ -144,6 +145,23 @@ public class Clone : Popup
     {
         if (!Directory.Exists(folder))
             return new ValidationResult("Given path can NOT be found");
+        return ValidationResult.Success;
+    }
+
+    /// <summary>
+    /// SSH秘密鍵ファイルの存在と公開鍵誤選択を検証するバリデーションメソッド。
+    /// </summary>
+    public static ValidationResult ValidateSSHKey(string sshkey, ValidationContext ctx)
+    {
+        if (ctx.ObjectInstance is Clone { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
+        {
+            if (!File.Exists(sshkey))
+                return new ValidationResult("Given SSH private key can NOT be found!");
+
+            if (sshkey.EndsWith(".pub", System.StringComparison.OrdinalIgnoreCase))
+                return new ValidationResult(App.Text("SSHKey.PublicKeySelected"));
+        }
+
         return ValidationResult.Success;
     }
 
