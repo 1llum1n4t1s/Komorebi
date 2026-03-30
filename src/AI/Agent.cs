@@ -62,7 +62,7 @@ public class Agent
                     onUpdate?.Invoke($"Total: {completion.Usage.TotalTokenCount}. Input: {completion.Usage.InputTokenCount}. Output: {completion.Usage.OutputTokenCount}");
                     break;
                 case ChatFinishReason.Length:
-                    throw new Exception("The response was cut off because it reached the maximum length. Consider increasing the max tokens limit.");
+                    throw new InvalidOperationException("The response was cut off because it reached the maximum length. Consider increasing the max tokens limit.");
                 case ChatFinishReason.ToolCalls:
                     {
                         messages.Add(new AssistantChatMessage(completion));
@@ -77,7 +77,7 @@ public class Agent
                         break;
                     }
                 case ChatFinishReason.ContentFilter:
-                    throw new Exception("Ommitted content due to a content filter flag");
+                    throw new InvalidOperationException("Omitted content due to a content filter flag");
                 default:
                     break;
             }

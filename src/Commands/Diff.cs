@@ -330,11 +330,11 @@ public partial class Diff : Command
                     var left = deleted[i];
                     var right = added[i];
 
-                    if (left.Content.Length > 1024 || right.Content.Length > 1024)
+                    if (left.Content.Length > MaxLineLengthForInlineDiff || right.Content.Length > MaxLineLengthForInlineDiff)
                         continue;
 
                     var chunks = Models.TextInlineChange.Compare(left.Content, right.Content);
-                    if (chunks.Count > 4)
+                    if (chunks.Count > MaxInlineDiffChunks)
                         continue;
 
                     foreach (var chunk in chunks)
@@ -370,11 +370,11 @@ public partial class Diff : Command
                     var left = _deleted[i];
                     var right = _added[i];
 
-                    if (left.Content.Length > 1024 || right.Content.Length > 1024)
+                    if (left.Content.Length > MaxLineLengthForInlineDiff || right.Content.Length > MaxLineLengthForInlineDiff)
                         continue;
 
                     var chunks = Models.TextInlineChange.Compare(left.Content, right.Content);
-                    if (chunks.Count > 4)
+                    if (chunks.Count > MaxInlineDiffChunks)
                         continue;
 
                     foreach (var chunk in chunks)
@@ -398,6 +398,9 @@ public partial class Diff : Command
             _added.Clear();
         }
     }
+
+    private const int MaxLineLengthForInlineDiff = 1024;
+    private const int MaxInlineDiffChunks = 4;
 
     private readonly Models.DiffResult _result = new Models.DiffResult();
     private readonly List<Models.TextDiffLine> _deleted = new List<Models.TextDiffLine>();

@@ -156,16 +156,6 @@ public partial class AIAssistant : ChromelessWindow
     }
 
     /// <summary>
-    /// Applyイベントのハンドラ。
-    /// </summary>
-    private void OnApply(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is ViewModels.AIAssistant vm)
-            vm.Apply();
-        Close();
-    }
-
-    /// <summary>
     /// 再生成ボタンクリックのハンドラ。
     /// </summary>
     private void OnRegenClicked(object sender, RoutedEventArgs e)
