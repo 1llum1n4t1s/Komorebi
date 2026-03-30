@@ -49,10 +49,12 @@ reviews:
   # レビュー対象外のパス
   path_filters:
     - "!depends/**"
-    - "!build/resources/**"
-    - "!src/Resources/Fonts/**"
-    - "!src/Resources/Locales/**"
+    - "!build/**"
+    - "!docs/**"
+    - "!src/Resources/**"
+    - "!src/Converters/**"
     - "!**/*.Designer.cs"
+    - "!**/__pycache__/**"
 
 chat:
   auto_reply: true
