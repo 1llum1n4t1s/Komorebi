@@ -278,17 +278,17 @@ public partial class ChangeCollectionView : UserControl
     /// </summary>
     private void OnRowDataContextChanged(object sender, EventArgs e)
     {
-        if (sender is not Control control)
+        if (sender is not Control { DataContext: { } ctx } control)
             return;
 
-        if (control.DataContext is ViewModels.ChangeTreeNode node)
+        if (ctx is ViewModels.ChangeTreeNode node)
         {
             if (node.Change is { } c)
                 UpdateRowTips(control, c);
             else
                 ToolTip.SetTip(control, node.FullPath);
         }
-        else if (control.DataContext is Models.Change change)
+        else if (ctx is Models.Change change)
         {
             UpdateRowTips(control, change);
         }
@@ -303,8 +303,10 @@ public partial class ChangeCollectionView : UserControl
     /// </summary>
     private void OnRowDoubleTapped(object sender, TappedEventArgs e)
     {
-        var grid = sender as Grid;
-        if (grid?.DataContext is ViewModels.ChangeTreeNode node)
+        if (sender is not Control { DataContext: { } ctx })
+            return;
+
+        if (ctx is ViewModels.ChangeTreeNode node)
         {
             if (node.IsFolder)
             {
@@ -319,7 +321,7 @@ public partial class ChangeCollectionView : UserControl
                 RaiseEvent(new RoutedEventArgs(ChangeDoubleTappedEvent));
             }
         }
-        else if (grid?.DataContext is Models.Change)
+        else if (ctx is Models.Change)
         {
             RaiseEvent(new RoutedEventArgs(ChangeDoubleTappedEvent));
         }
