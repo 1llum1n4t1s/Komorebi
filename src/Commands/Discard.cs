@@ -16,10 +16,11 @@ public static class Discard
     /// 未追跡ファイルの削除とgit reset --hardの組み合わせで実現する。
     /// </summary>
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
+    /// <param name="includeModified">変更済み/削除済みファイル (tracked modified/deleted) も破棄対象にするかどうか。false の場合は git reset --hard をスキップする。</param>
     /// <param name="includeUntracked">未追跡ファイルも削除するかどうか。</param>
     /// <param name="includeIgnored">無視ファイルも削除するかどうか。</param>
     /// <param name="log">コマンドログの出力先。</param>
-    public static async Task AllAsync(string repo, bool includeUntracked, bool includeIgnored, Models.ICommandLog log)
+    public static async Task AllAsync(string repo, bool includeModified, bool includeUntracked, bool includeIgnored, Models.ICommandLog log)
     {
         if (includeUntracked)
         {
@@ -49,7 +50,7 @@ public static class Discard
 
             // git cleanで残りの未追跡ファイルを削除する
             if (includeIgnored)
-                await new Clean(repo, Models.CleanMode.All).Use(log).ExecAsync().ConfigureAwait(false);
+                await new Clean(repo, Models.CleanMode.UntrackedAndIgnoredFiles).Use(log).ExecAsync().ConfigureAwait(false);
             else
                 await new Clean(repo, Models.CleanMode.OnlyUntrackedFiles).Use(log).ExecAsync().ConfigureAwait(false);
         }
@@ -59,8 +60,9 @@ public static class Discard
             await new Clean(repo, Models.CleanMode.OnlyIgnoredFiles).Use(log).ExecAsync().ConfigureAwait(false);
         }
 
-        // git reset --hard: HEADの状態にインデックスと作業ツリーをリセットする
-        await new Reset(repo, "", "--hard").Use(log).ExecAsync().ConfigureAwait(false);
+        // git reset --hard: HEADの状態にインデックスと作業ツリーをリセットする（修正/削除済みファイルを破棄する場合のみ）
+        if (includeModified)
+            await new Reset(repo, "", "--hard").Use(log).ExecAsync().ConfigureAwait(false);
     }
 
     /// <summary>

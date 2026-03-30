@@ -9,6 +9,16 @@ namespace Komorebi.ViewModels;
 public class DiscardAllMode
 {
     /// <summary>
+    /// 変更済み/削除済みファイル (tracked modified/deleted) も破棄対象に含めるかどうか。
+    /// false の場合、破棄は未追跡ファイルと無視ファイルだけに限定され、tracked 変更は残る。
+    /// </summary>
+    public bool IncludeModified
+    {
+        get;
+        set;
+    } = true;
+
+    /// <summary>
     /// 追跡されていないファイルも破棄対象に含めるかどうか。
     /// </summary>
     public bool IncludeUntracked
@@ -114,8 +124,8 @@ public class Discard : Popup
         {
             if (Mode is DiscardAllMode all)
             {
-                // 全変更破棄：追跡外・無視ファイルのオプション付き
-                await Commands.Discard.AllAsync(_repo.FullPath, all.IncludeUntracked, all.IncludeIgnored, log);
+                // 全変更破棄：変更/削除済み・追跡外・無視ファイルのオプション付き
+                await Commands.Discard.AllAsync(_repo.FullPath, all.IncludeModified, all.IncludeUntracked, all.IncludeIgnored, log);
                 _repo.ClearCommitMessage();
             }
             else
