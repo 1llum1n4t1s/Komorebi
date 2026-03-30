@@ -86,3 +86,22 @@ jobs:
           gh release create "$TAG" -t "$VERSION" --generate-notes
           gh release upload "$TAG" packages/*
           gh release upload "$TAG" velopack-packages/*-Setup.exe velopack-packages/*-Setup.pkg
+      - name: Cleanup old releases (keep latest 3)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 通常リリース: タグがx.y.z形式のもの（velopack-を含まない）を作成日降順で取得
+          gh release list --limit 100 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | test("^[0-9]"))] | sort_by(.createdAt) | reverse | .[3:] | .[].tagName' \
+          | while read -r tag; do
+              echo "Deleting old release: $tag"
+              gh release delete "$tag" --yes --cleanup-tag || true
+            done
+
+          # Velopackリリース: タグがvelopack-x.y.z形式のものを作成日降順で取得
+          gh release list --limit 100 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | startswith("velopack-"))] | sort_by(.createdAt) | reverse | .[3:] | .[].tagName' \
+          | while read -r tag; do
+              echo "Deleting old velopack release: $tag"
+              gh release delete "$tag" --yes --cleanup-tag || true
+            done
