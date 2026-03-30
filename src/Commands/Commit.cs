@@ -83,8 +83,13 @@ public class Commit : Command
         {
             // 例外発生時も一時ファイルを確実に削除する（旧: catchブロックで削除されずリーク）
             try
-            { File.Delete(_tmpFile); }
-            catch { /* 削除失敗は無視 */ }
+            {
+                File.Delete(_tmpFile);
+            }
+            catch
+            {
+                /* 削除失敗は無視 */
+            }
         }
     }
 

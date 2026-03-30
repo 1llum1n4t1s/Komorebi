@@ -38,23 +38,8 @@ public partial class DealWithLocalChangesMethod : UserControl
 
     private void UpdateRadioButtons()
     {
-        switch (Method)
-        {
-            case Models.DealWithLocalChanges.DoNothing:
-                RadioDoNothing.IsChecked = true;
-                RadioStashAndReapply.IsChecked = false;
-                RadioDiscard.IsChecked = false;
-                break;
-            case Models.DealWithLocalChanges.StashAndReapply:
-                RadioDoNothing.IsChecked = false;
-                RadioStashAndReapply.IsChecked = true;
-                RadioDiscard.IsChecked = false;
-                break;
-            default:
-                RadioDoNothing.IsChecked = false;
-                RadioStashAndReapply.IsChecked = false;
-                RadioDiscard.IsChecked = true;
-                break;
-        }
+        RadioDoNothing.IsChecked = Method == Models.DealWithLocalChanges.DoNothing;
+        RadioStashAndReapply.IsChecked = Method == Models.DealWithLocalChanges.StashAndReapply;
+        RadioDiscard.IsChecked = Method == Models.DealWithLocalChanges.Discard;
     }
 }

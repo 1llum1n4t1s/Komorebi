@@ -48,8 +48,13 @@ public class IpcChannel : IDisposable
             // Without this, the lock would be held indefinitely, blocking all
             // future instances from starting.
             try
-            { _singletonLock?.Dispose(); }
-            catch { /* best-effort cleanup */ }
+            {
+                _singletonLock?.Dispose();
+            }
+            catch
+            {
+                /* best-effort cleanup */
+            }
             _singletonLock = null;
 
             IsFirstInstance = false;

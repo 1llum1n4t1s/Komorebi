@@ -111,7 +111,7 @@ public class AIAssistant : ObservableObject
                         Models.ChangeState.Deleted => 'D',
                         Models.ChangeState.Renamed => 'R',
                         Models.ChangeState.Copied => 'C',
-                        _ => 'M',
+                        _ => throw new ArgumentOutOfRangeException(nameof(state), $"Unsupported change state for AI message generation: {state}"),
                     };
                     changeListBuilder.AppendLine($"{flag} {change.Path}");
                 }
