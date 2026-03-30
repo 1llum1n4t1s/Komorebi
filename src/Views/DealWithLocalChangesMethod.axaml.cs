@@ -7,7 +7,9 @@ namespace Komorebi.Views;
 public partial class DealWithLocalChangesMethod : UserControl
 {
     public static readonly StyledProperty<Models.DealWithLocalChanges> MethodProperty =
-        AvaloniaProperty.Register<DealWithLocalChangesMethod, Models.DealWithLocalChanges>(nameof(Method), Models.DealWithLocalChanges.DoNothing);
+        AvaloniaProperty.Register<DealWithLocalChangesMethod, Models.DealWithLocalChanges>(
+            nameof(Method),
+            defaultValue: Models.DealWithLocalChanges.DoNothing);
 
     public Models.DealWithLocalChanges Method
     {
@@ -15,10 +17,14 @@ public partial class DealWithLocalChangesMethod : UserControl
         set => SetValue(MethodProperty, value);
     }
 
+    static DealWithLocalChangesMethod()
+    {
+        MethodProperty.Changed.AddClassHandler<DealWithLocalChangesMethod>((x, _) => x.UpdateRadioButtons());
+    }
+
     public DealWithLocalChangesMethod()
     {
         InitializeComponent();
-        UpdateRadioButtons();
     }
 
     private void OnRadioButtonClicked(object sender, RoutedEventArgs e)
@@ -26,7 +32,6 @@ public partial class DealWithLocalChangesMethod : UserControl
         if (sender is RadioButton { Tag: Models.DealWithLocalChanges way })
         {
             Method = way;
-            UpdateRadioButtons();
             e.Handled = true;
         }
     }

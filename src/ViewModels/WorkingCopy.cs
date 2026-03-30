@@ -274,10 +274,6 @@ public class WorkingCopy : ObservableObject, IDisposable
                     else
                         SetDetail(null, false);
                 }
-
-                Staged = GetStagedChanges(_cached);
-                VisibleStaged = GetVisibleChanges(_staged);
-                SelectedStaged = [];
             }
         }
     }
