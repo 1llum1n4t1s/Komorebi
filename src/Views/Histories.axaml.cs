@@ -12,7 +12,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class HistoriesLayout : Grid
     {

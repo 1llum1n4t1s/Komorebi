@@ -2,7 +2,7 @@
 
 using Avalonia.Media;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class ThemeOverrides
     {

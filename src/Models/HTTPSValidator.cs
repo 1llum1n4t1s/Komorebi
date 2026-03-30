@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public static class HTTPSValidator
     {

@@ -1,4 +1,4 @@
-﻿namespace SourceGit.Commands
+﻿namespace Komorebi.Commands
 {
     public class Archive : Command
     {

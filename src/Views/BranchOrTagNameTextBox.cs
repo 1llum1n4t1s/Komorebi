@@ -6,7 +6,7 @@ using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class BranchOrTagNameTextBox : TextBox
     {

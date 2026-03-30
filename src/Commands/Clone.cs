@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SourceGit.Commands
+namespace Komorebi.Commands
 {
     public class Clone : Command
     {

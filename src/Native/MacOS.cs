@@ -8,7 +8,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 
-namespace SourceGit.Native
+namespace Komorebi.Native
 {
     [SupportedOSPlatform("macOS")]
     internal class MacOS : OS.IBackend
@@ -48,7 +48,7 @@ namespace SourceGit.Native
         {
             return Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SourceGit");
+                "Komorebi");
         }
 
         public string FindGitExecutable()

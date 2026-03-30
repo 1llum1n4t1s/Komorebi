@@ -5,7 +5,7 @@ using Avalonia.Collections;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class LauncherPage : ObservableObject
     {

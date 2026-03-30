@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class TextInlineChange(int dp, int dc, int ap, int ac)
     {

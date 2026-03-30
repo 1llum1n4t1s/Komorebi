@@ -11,7 +11,7 @@ using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using AvaloniaEdit.TextMate;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
     {

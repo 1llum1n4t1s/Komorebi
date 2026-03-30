@@ -4,7 +4,7 @@ using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 
-namespace SourceGit
+namespace Komorebi
 {
     public partial class App
     {

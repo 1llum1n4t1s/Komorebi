@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class ColorPicker : Control
     {

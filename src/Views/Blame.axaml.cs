@@ -15,7 +15,7 @@ using AvaloniaEdit.Rendering;
 using AvaloniaEdit.TextMate;
 using AvaloniaEdit.Utils;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class BlameTextEditor : TextEditor
     {

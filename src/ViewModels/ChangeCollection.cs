@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Avalonia.Collections;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class ChangeCollectionAsTree
     {

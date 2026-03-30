@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class CommitTemplate : ObservableObject
     {

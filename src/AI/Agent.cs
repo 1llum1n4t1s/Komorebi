@@ -7,7 +7,7 @@ using Azure.AI.OpenAI;
 using OpenAI;
 using OpenAI.Chat;
 
-namespace SourceGit.AI
+namespace Komorebi.AI
 {
     public class Agent
     {

@@ -8,9 +8,9 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
 
-    <Product>SourceGit</Product>
+    <Product>Komorebi</Product>
     <Description>OpenSource GIT client</Description>
-    <Company>sourcegit-scm</Company>
+    <Company>1llum1n4t1s</Company>
     <Copyright>Copyright © $([System.DateTime]::Now.Year) sourcegit-scm.</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/sourcegit-scm/sourcegit.git</PackageProjectUrl>
@@ -64,7 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TrimmerRootAssembly Include="SourceGit" />
+    <TrimmerRootAssembly Include="Komorebi" />
     <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
   </ItemGroup>
 </Project>

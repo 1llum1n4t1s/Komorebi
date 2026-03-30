@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class MergeCommandPalette : ICommandPalette
     {

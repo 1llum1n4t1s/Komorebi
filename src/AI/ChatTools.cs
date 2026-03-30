@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using OpenAI.Chat;
 
-namespace SourceGit.AI
+namespace Komorebi.AI
 {
     public static class ChatTools
     {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class FileHistoriesRevisionFile(string path, object content = null, bool canOpenWithDefaultEditor = false)
     {

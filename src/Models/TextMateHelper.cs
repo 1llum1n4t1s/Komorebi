@@ -15,7 +15,7 @@ using TextMateSharp.Internal.Types;
 using TextMateSharp.Registry;
 using TextMateSharp.Themes;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public static class GrammarUtility
     {
@@ -57,7 +57,7 @@ namespace SourceGit.Models
             {
                 if (grammar.Scope.Equals(scopeName, StringComparison.OrdinalIgnoreCase))
                 {
-                    var asset = AssetLoader.Open(new Uri($"avares://SourceGit/Resources/Grammars/{grammar.File}",
+                    var asset = AssetLoader.Open(new Uri($"avares://Komorebi/Resources/Grammars/{grammar.File}",
                         UriKind.RelativeOrAbsolute));
 
                     try

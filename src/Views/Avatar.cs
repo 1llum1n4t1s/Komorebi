@@ -13,7 +13,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class Avatar : Control, Models.IAvatarHost
     {
@@ -63,7 +63,7 @@ namespace SourceGit.Views
             else if (!UseGitHubStyleAvatar)
             {
                 var fallback = GetFallbackString(User.Name);
-                var typeface = new Typeface("fonts:SourceGit#JetBrains Mono");
+                var typeface = new Typeface("fonts:Komorebi#JetBrains Mono");
                 var label = new FormattedText(
                     fallback,
                     CultureInfo.CurrentCulture,

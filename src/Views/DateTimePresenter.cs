@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class DateTimePresenter : TextBlock
     {

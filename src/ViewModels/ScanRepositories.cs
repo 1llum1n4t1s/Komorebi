@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class ScanRepositories : Popup
     {

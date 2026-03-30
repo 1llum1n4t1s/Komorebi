@@ -6,7 +6,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public partial class StashSubjectPresenter : Control
     {

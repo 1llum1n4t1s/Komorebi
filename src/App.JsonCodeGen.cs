@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace SourceGit
+namespace Komorebi
 {
     public class DateTimeConverter : JsonConverter<DateTime>
     {

@@ -6,7 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class ChangeStatusIcon : Control
     {
@@ -47,7 +47,7 @@ namespace SourceGit.Views
             if (Change == null || Bounds.Width <= 0)
                 return;
 
-            var typeface = new Typeface("fonts:SourceGit#JetBrains Mono");
+            var typeface = new Typeface("fonts:Komorebi#JetBrains Mono");
 
             var idx = (int)(IsUnstagedChange ? Change.WorkTree : Change.Index);
             var indicator = INDICATOR[idx];

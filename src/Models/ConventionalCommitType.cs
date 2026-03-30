@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text.Json;
 
-namespace SourceGit.Models
+namespace Komorebi.Models
 {
     public class ConventionalCommitType
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class LFSTrackCustomPattern : Popup
     {

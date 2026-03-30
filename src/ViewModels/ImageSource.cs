@@ -10,7 +10,7 @@ using Avalonia.Platform;
 using BitMiracle.LibTiff.Classic;
 using Pfim;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class ImageSource
     {

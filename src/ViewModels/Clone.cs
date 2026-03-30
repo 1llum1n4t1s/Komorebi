@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class Clone : Popup
     {

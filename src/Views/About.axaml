@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:v="using:SourceGit.Views"
+                    xmlns:v="using:Komorebi.Views"
                     mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="230"
-                    x:Class="SourceGit.Views.About"
+                    x:Class="Komorebi.Views.About"
                     x:Name="ThisControl"
                     Icon="/App.ico"
                     Title="{DynamicResource Text.About}"
@@ -44,7 +44,7 @@
 
       <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto" VerticalAlignment="Center">
         <StackPanel Grid.Row="0" Height="40" Orientation="Horizontal">
-          <TextBlock Classes="bold" Text="SourceGit" FontSize="32" />
+          <TextBlock Classes="bold" Text="Komorebi" FontSize="32" />
           <Border Margin="12,0,0,0" Height="20"
                   CornerRadius="10"
                   Background="{DynamicResource Brush.Accent}"

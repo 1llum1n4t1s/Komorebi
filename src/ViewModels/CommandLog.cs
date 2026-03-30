@@ -4,7 +4,7 @@ using System.Text;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class CommandLog : ObservableObject, Models.ICommandLog
     {

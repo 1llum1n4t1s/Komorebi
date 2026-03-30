@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ClientModel;
 
-namespace SourceGit.AI
+namespace Komorebi.AI
 {
     public class Service
     {

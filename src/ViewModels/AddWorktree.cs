@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace Komorebi.ViewModels
 {
     public class AddWorktree : Popup
     {

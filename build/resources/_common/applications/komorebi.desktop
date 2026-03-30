@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=SourceGit
+Name=Komorebi
 Comment=Open-source & Free Git GUI Client
-Exec=sourcegit.sh
-Icon=io.github.sourcegit_scm.sourcegit
+Exec=/opt/komorebi/komorebi
+Icon=/usr/share/icons/komorebi.png
 Terminal=false
 Type=Application
 Categories=Development

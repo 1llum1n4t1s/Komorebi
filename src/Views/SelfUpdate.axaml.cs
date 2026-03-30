@@ -8,7 +8,7 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.TextMate;
 
-namespace SourceGit.Views
+namespace Komorebi.Views
 {
     public class UpdateInfoView : TextEditor
     {
