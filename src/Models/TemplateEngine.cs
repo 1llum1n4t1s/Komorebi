@@ -431,7 +431,7 @@ public class TemplateEngine
     /// <summary>変更ファイルのフルパスをカンマ区切りで取得する</summary>
     private static string GetFiles(Context context)
     {
-        var paths = new List<string>();
+        List<string> paths = [];
         foreach (var c in context.changes)
             paths.Add(c.Path);
         return string.Join(", ", paths);
@@ -440,7 +440,7 @@ public class TemplateEngine
     /// <summary>変更ファイルのファイル名のみをカンマ区切りで取得する</summary>
     private static string GetPureFiles(Context context)
     {
-        var names = new List<string>();
+        List<string> names = [];
         foreach (var c in context.changes)
             names.Add(Path.GetFileName(c.Path));
         return string.Join(", ", names);
@@ -459,7 +459,7 @@ public class TemplateEngine
     private static string GetFilesSliced(Context context, int count)
     {
         var sb = new StringBuilder();
-        var paths = new List<string>();
+        List<string> paths = [];
         var max = Math.Min(count, context.changes.Count);
         for (int i = 0; i < max; i++)
             paths.Add(context.changes[i].Path);
@@ -475,7 +475,7 @@ public class TemplateEngine
     private static string GetPureFilesSliced(Context context, int count)
     {
         var sb = new StringBuilder();
-        var names = new List<string>();
+        List<string> names = [];
         var max = Math.Min(count, context.changes.Count);
         for (int i = 0; i < max; i++)
             names.Add(Path.GetFileName(context.changes[i].Path));

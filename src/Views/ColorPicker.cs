@@ -104,10 +104,12 @@ public class ColorPicker : Control
         // Color table.
         {
             // Colors
+            // パフォーマンス: 48色のBrushをstaticキャッシュで再利用（毎フレーム48回のnewを排除）
+            s_colorBrushes ??= InitColorBrushes();
             for (int i = 0; i < 6; i++)
             {
                 for (int j = 0; j < 8; j++)
-                    context.FillRectangle(new SolidColorBrush(COLOR_TABLE[i, j]), new Rect(j * 32, i * 32, 32, 32));
+                    context.FillRectangle(s_colorBrushes[i, j], new Rect(j * 32, i * 32, 32, 32));
             }
 
             // Borders
@@ -119,8 +121,9 @@ public class ColorPicker : Control
                 context.DrawLine(pen, new Point(j * 32, 0), new Point(j * 32, 192));
 
             // Selected
+            // パフォーマンス: 固定色Penはstaticキャッシュで再利用
             if (_highlightedTableRect is { } rect)
-                context.DrawRectangle(new Pen(Brushes.White, 2), rect);
+                context.DrawRectangle(s_selectedPen ??= new Pen(Brushes.White, 2), rect);
         }
 
         // Palette picker
@@ -294,4 +297,17 @@ public class ColorPicker : Control
     private Color _lightColor;
     private Color _lighterColor;
     private Color _lightestColor;
+
+    // パフォーマンス: 固定色Pen/Brushはstaticキャッシュで再利用（描画毎の生成を排除）
+    private static Pen s_selectedPen;
+    private static SolidColorBrush[,] s_colorBrushes;
+
+    private static SolidColorBrush[,] InitColorBrushes()
+    {
+        var brushes = new SolidColorBrush[6, 8];
+        for (int i = 0; i < 6; i++)
+            for (int j = 0; j < 8; j++)
+                brushes[i, j] = new SolidColorBrush(COLOR_TABLE[i, j]);
+        return brushes;
+    }
 }

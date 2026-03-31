@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -39,9 +38,10 @@ public class ImageSource
     /// </summary>
     public static Models.ImageDecoder GetDecoder(string file)
     {
-        var ext = (Path.GetExtension(file) ?? ".invalid_img").ToLower(CultureInfo.CurrentCulture);
+        // パフォーマンス: ToLower()の文字列割り当てを排除し、OrdinalIgnoreCaseで直接比較
+        var ext = Path.GetExtension(file) ?? ".invalid_img";
 
-        return ext switch
+        return ext.ToLowerInvariant() switch
         {
             ".ico" or ".bmp" or ".gif" or ".jpg" or ".jpeg" or ".png" or ".webp" => Models.ImageDecoder.Builtin,
             ".tga" or ".dds" => Models.ImageDecoder.Pfim,

@@ -12,8 +12,8 @@ public class DateTimeFormat
     /// <summary>
     /// サポートされている日付フォーマットの一覧
     /// </summary>
-    public static readonly List<DateTimeFormat> Supported = new List<DateTimeFormat>
-    {
+    public static readonly List<DateTimeFormat> Supported =
+    [
         new("yyyy/MM/dd"),
         new("yyyy.MM.dd"),
         new("yyyy-MM-dd"),
@@ -25,7 +25,7 @@ public class DateTimeFormat
         new("dd-MM-yyyy"),
         new("MMM d yyyy"),
         new("d MMM yyyy"),
-    };
+    ];
 
     /// <summary>
     /// 現在選択されている日付フォーマットのインデックス

@@ -80,7 +80,7 @@ public class QueryCommits : Command
     /// <returns>コミットモデルのリスト</returns>
     public async Task<List<Models.Commit>> GetResultAsync()
     {
-        var commits = new List<Models.Commit>();
+        List<Models.Commit> commits = [];
         try
         {
             using var proc = new Process();

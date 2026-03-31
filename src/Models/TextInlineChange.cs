@@ -69,7 +69,7 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
     /// <returns>インライン変更のリスト</returns>
     public static List<TextInlineChange> Compare(string oldValue, string newValue)
     {
-        var hashes = new Dictionary<string, int>();
+        Dictionary<string, int> hashes = [];
         var chunksOld = MakeChunks(hashes, oldValue);
         var chunksNew = MakeChunks(hashes, newValue);
         var sizeOld = chunksOld.Count;
@@ -79,7 +79,7 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
         var reverse = new int[max];
         CheckModified(chunksOld, 0, sizeOld, chunksNew, 0, sizeNew, forward, reverse);
 
-        var ret = new List<TextInlineChange>();
+        List<TextInlineChange> ret = [];
         var posOld = 0;
         var posNew = 0;
         TextInlineChange last = null;
@@ -138,7 +138,7 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
     {
         var start = 0;
         var size = text.Length;
-        var chunks = new List<Chunk>();
+        List<Chunk> chunks = [];
         var delims = new HashSet<char>(" \t+-*/=!,:;.'\"/?|&#@%`<>()[]{}\\".ToCharArray());
 
         for (int i = 0; i < size; i++)

@@ -277,8 +277,8 @@ public class ExternalToolsFinder
     /// <param name="platformFinder">Toolboxのデータディレクトリを返す関数</param>
     public void FindJetBrainsFromToolbox(Func<string> platformFinder)
     {
-        var exclude = new List<string> { "fleet", "dotmemory", "dottrace", "resharper-u", "androidstudio" };
-        var supportedIcons = new List<string> { "CL", "DB", "DL", "DS", "GO", "JB", "PC", "PS", "PY", "QA", "QD", "RD", "RM", "RR", "WRS", "WS" };
+        List<string> exclude = ["fleet", "dotmemory", "dottrace", "resharper-u", "androidstudio"];
+        List<string> supportedIcons = ["CL", "DB", "DL", "DS", "GO", "JB", "PC", "PS", "PY", "QA", "QD", "RD", "RM", "RR", "WRS", "WS"];
         var state = Path.Combine(platformFinder(), "state.json");
         if (File.Exists(state))
         {
@@ -316,7 +316,7 @@ public class ExternalToolsFinder
         if (!root.Exists)
             return null;
 
-        var options = new List<ExternalTool.LaunchOption>();
+        List<ExternalTool.LaunchOption> options = [];
         var prefixLen = root.FullName.Length;
         root.WalkFiles(f =>
         {

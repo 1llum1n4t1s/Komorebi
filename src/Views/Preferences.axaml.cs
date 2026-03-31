@@ -371,7 +371,7 @@ public partial class Preferences : ChromelessWindow
     /// </summary>
     private async void SelectGPGExecutable(object _, RoutedEventArgs e)
     {
-        var patterns = new List<string>();
+        List<string> patterns = [];
         if (OperatingSystem.IsWindows())
             patterns.Add($"{GPGFormat.Program}.exe");
         else

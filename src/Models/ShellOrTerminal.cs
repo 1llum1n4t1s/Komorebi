@@ -42,31 +42,31 @@ public class ShellOrTerminal
         // Windows向けターミナル
         if (OperatingSystem.IsWindows())
         {
-            Supported = new List<ShellOrTerminal>()
-            {
+            Supported =
+            [
                 new ShellOrTerminal("git-bash", "Git Bash", "bash.exe"),
                 new ShellOrTerminal("pwsh", "PowerShell", "pwsh.exe|powershell.exe"),
                 new ShellOrTerminal("cmd", "Command Prompt", "cmd.exe"),
                 new ShellOrTerminal("wt", "Windows Terminal", "wt.exe", "-d .")
-            };
+            ];
         }
         // macOS向けターミナル
         else if (OperatingSystem.IsMacOS())
         {
-            Supported = new List<ShellOrTerminal>()
-            {
+            Supported =
+            [
                 new ShellOrTerminal("mac-terminal", "Terminal", "Terminal"),
                 new ShellOrTerminal("iterm2", "iTerm", "iTerm"),
                 new ShellOrTerminal("warp", "Warp", "Warp"),
                 new ShellOrTerminal("ghostty", "Ghostty", "Ghostty"),
                 new ShellOrTerminal("kitty", "kitty", "kitty")
-            };
+            ];
         }
         // Linux向けターミナル
         else
         {
-            Supported = new List<ShellOrTerminal>()
-            {
+            Supported =
+            [
                 new ShellOrTerminal("gnome-terminal", "Gnome Terminal", "gnome-terminal"),
                 new ShellOrTerminal("konsole", "Konsole", "konsole"),
                 new ShellOrTerminal("xfce4-terminal", "Xfce4 Terminal", "xfce4-terminal"),
@@ -79,7 +79,7 @@ public class ShellOrTerminal
                 new ShellOrTerminal("ghostty", "Ghostty", "ghostty"),
                 new ShellOrTerminal("kitty", "kitty", "kitty"),
                 new ShellOrTerminal("custom", "Custom", ""),
-            };
+            ];
         }
     }
 

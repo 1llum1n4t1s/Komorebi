@@ -210,7 +210,7 @@ public class CommitMessageTextEditor : TextEditor
         if (TextArea.TextView is not { VisualLinesValid: true } view)
             return;
 
-        var lines = new List<VisualLine>();
+        List<VisualLine> lines = [];
         foreach (var line in view.VisualLines)
         {
             if (line.IsDisposed || line.FirstDocumentLine is null || line.FirstDocumentLine.IsDeleted)
@@ -347,7 +347,7 @@ public class CommitMessageTextEditor : TextEditor
         }
 
         var word = Text[lineStart..caretOffset];
-        var matches = new List<CommitMessageCodeCompletionData>();
+        List<CommitMessageCodeCompletionData> matches = [];
         foreach (var t in _trailers)
         {
             if (t.StartsWith(word, StringComparison.OrdinalIgnoreCase) && t.Length != word.Length)

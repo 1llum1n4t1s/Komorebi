@@ -48,7 +48,8 @@ public class BlameTextEditor : TextEditor
             if (view is { VisualLinesValid: true })
             {
                 var typeface = view.CreateTypeface();
-                var underlinePen = new Pen(Brushes.DarkOrange);
+                // パフォーマンス: 描画毎のPen生成を排除
+                var underlinePen = s_underlinePen ??= new Pen(Brushes.DarkOrange);
                 var width = Bounds.Width;
                 var lineHeight = view.DefaultLineHeight;
                 var pixelHeight = PixelSnapHelpers.GetPixelSize(view).Height;
@@ -264,6 +265,8 @@ public class BlameTextEditor : TextEditor
 
         /// <summary>親のBlameTextEditorへの参照。</summary>
         private readonly BlameTextEditor _editor = null;
+        // パフォーマンス: 描画毎のPen生成を排除するstaticキャッシュ
+        private static Pen s_underlinePen;
     }
 
     /// <summary>

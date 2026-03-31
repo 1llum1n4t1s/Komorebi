@@ -166,14 +166,55 @@ public class Repository : ObservableObject, Models.IRepository
     public List<Models.Remote> Remotes
     {
         get => _remotes;
-        private set => SetProperty(ref _remotes, value);
+        private set
+        {
+            if (SetProperty(ref _remotes, value))
+            {
+                // パフォーマンス: リモート名→Remoteの辞書を再構築（Find()のO(n)→O(1)に改善）
+                _remoteByName = [];
+                foreach (var r in value)
+                    _remoteByName[r.Name] = r;
+            }
+        }
     }
 
     /// <summary>ブランチの一覧（ローカル・リモート両方）。</summary>
     public List<Models.Branch> Branches
     {
         get => _branches;
-        private set => SetProperty(ref _branches, value);
+        private set
+        {
+            if (SetProperty(ref _branches, value))
+            {
+                // パフォーマンス: ブランチ名→Branchの辞書を再構築（Find()のO(n)→O(1)に改善）
+                _localBranchByName = [];
+                _branchByFriendlyName = [];
+                foreach (var b in value)
+                {
+                    if (b.IsLocal)
+                        _localBranchByName[b.Name] = b;
+                    _branchByFriendlyName[b.FriendlyName] = b;
+                }
+            }
+        }
+    }
+
+    /// <summary>リモート名でリモートを検索する。O(1)。見つからない場合はnullを返す。</summary>
+    public Models.Remote FindRemoteByName(string name)
+    {
+        return name is not null && _remoteByName.TryGetValue(name, out var r) ? r : null;
+    }
+
+    /// <summary>名前でローカルブランチを検索する。O(1)。見つからない場合はnullを返す。</summary>
+    public Models.Branch FindLocalBranchByName(string name)
+    {
+        return name is not null && _localBranchByName.TryGetValue(name, out var b) ? b : null;
+    }
+
+    /// <summary>FriendlyNameでブランチを検索する。O(1)。見つからない場合はnullを返す。</summary>
+    public Models.Branch FindBranchByFriendlyName(string name)
+    {
+        return name is not null && _branchByFriendlyName.TryGetValue(name, out var b) ? b : null;
     }
 
     /// <summary>現在チェックアウト中のブランチ。HEAD変更時にAmendモードをリセットする。</summary>
@@ -639,8 +680,8 @@ public class Repository : ObservableObject, Models.IRepository
     public bool IsGitFlowEnabled()
     {
         return GitFlow is { IsValid: true } &&
-            _branches.Find(x => x.IsLocal && x.Name.Equals(GitFlow.Master, StringComparison.Ordinal)) is not null &&
-            _branches.Find(x => x.IsLocal && x.Name.Equals(GitFlow.Develop, StringComparison.Ordinal)) is not null;
+            _localBranchByName.ContainsKey(GitFlow.Master) &&
+            _localBranchByName.ContainsKey(GitFlow.Develop);
     }
 
     /// <summary>指定ブランチのGit Flowタイプ（Feature/Release/Hotfix）を判定する。</summary>
@@ -1808,7 +1849,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public async Task<bool> SaveCommitAsPatchAsync(Models.Commit commit, string folder, int index = 0)
     {
-        var ignoredChars = new HashSet<char> { '/', '\\', ':', ',', '*', '?', '\"', '<', '>', '|', '`', '$', '^', '%', '[', ']', '+', '-' };
+        HashSet<char> ignoredChars = ['/', '\\', ':', ',', '*', '?', '\"', '<', '>', '|', '`', '$', '^', '%', '[', ']', '+', '-'];
         var builder = new StringBuilder();
         builder.Append(index.ToString("D4"));
         builder.Append('-');
@@ -2162,6 +2203,10 @@ public class Repository : ObservableObject, Models.IRepository
     private string _filter = string.Empty;                                             // サイドバーフィルタ文字列
     private List<Models.Remote> _remotes = [];                                         // リモート一覧
     private List<Models.Branch> _branches = [];                                        // ブランチ一覧
+    // パフォーマンス: O(1)ルックアップ辞書（Remotes/Branches更新時に自動再構築）
+    private Dictionary<string, Models.Remote> _remoteByName = [];
+    private Dictionary<string, Models.Branch> _localBranchByName = [];
+    private Dictionary<string, Models.Branch> _branchByFriendlyName = [];
     private Models.Branch _currentBranch = null;                                       // 現在のブランチ
     private List<BranchTreeNode> _localBranchTrees = [];                               // ローカルブランチツリー
     private List<BranchTreeNode> _remoteBranchTrees = [];                              // リモートブランチツリー

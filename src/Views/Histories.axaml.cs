@@ -252,7 +252,7 @@ public partial class Histories : UserControl
             return;
         }
 
-        var parents = new List<Models.Commit>();
+        List<Models.Commit> parents = [];
         foreach (var sha in commit.Parents)
         {
             var c = await vm.GetCommitAsync(sha);
@@ -294,7 +294,7 @@ public partial class Histories : UserControl
         if (selected[0] is not Models.Commit { Parents.Count: > 0 } commit)
             return;
 
-        var children = new List<Models.Commit>();
+        List<Models.Commit> children = [];
         var sha = commit.SHA;
         foreach (var c in vm.Commits)
         {
@@ -405,7 +405,7 @@ public partial class Histories : UserControl
             if (selected is not { Count: > 0 })
                 return;
 
-            var commits = new List<Models.Commit>();
+            List<Models.Commit> commits = [];
             for (var i = selected.Count - 1; i >= 0; i--)
             {
                 if (selected[i] is Models.Commit c)
@@ -698,7 +698,7 @@ public partial class Histories : UserControl
         {
             if (DataContext is not ViewModels.Histories vm)
                 return;
-            var messages = new List<string>();
+            List<string> messages = [];
             foreach (var c in selected)
             {
                 var message = await vm.GetCommitFullMessageAsync(c);
@@ -731,7 +731,7 @@ public partial class Histories : UserControl
             return null;
 
         var menu = new ContextMenu();
-        var tags = new List<Models.Tag>();
+        List<Models.Tag> tags = [];
         var isHead = commit.IsCurrentHead;
 
         if (commit.HasDecorators)

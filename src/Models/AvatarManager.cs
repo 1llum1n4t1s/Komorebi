@@ -118,21 +118,24 @@ public partial class AvatarManager
                 try
                 {
                     // staticなHttpClientを再利用（ソケット枯渇防止・DNS再利用・接続プール活用）
-                    using var rsp = await s_httpClient.GetAsync(url);
+                    using var rsp = await s_httpClient.GetAsync(url).ConfigureAwait(false);
                     if (rsp.IsSuccessStatusCode)
                     {
-                        using (var stream = rsp.Content.ReadAsStream())
+                        // パフォーマンス: MemoryStreamで一度だけ読み込み、ファイル保存とデコードを効率化
+                        // 旧: sync CopyTo + 二重ファイルI/O（書き込み→読み込み）
+                        using var ms = new MemoryStream();
+                        await rsp.Content.CopyToAsync(ms).ConfigureAwait(false);
+
+                        // ファイルキャッシュに非同期で書き込み
+                        ms.Position = 0;
+                        await using (var writer = File.Create(localFile))
                         {
-                            using (var writer = File.Create(localFile))
-                            {
-                                stream.CopyTo(writer);
-                            }
+                            await ms.CopyToAsync(writer).ConfigureAwait(false);
                         }
 
-                        using (var reader = File.OpenRead(localFile))
-                        {
-                            img = Bitmap.DecodeToWidth(reader, 128);
-                        }
+                        // MemoryStreamから直接デコード（ディスク再読み込み不要）
+                        ms.Position = 0;
+                        img = Bitmap.DecodeToWidth(ms, 128);
                     }
                 }
                 catch (Exception ex)

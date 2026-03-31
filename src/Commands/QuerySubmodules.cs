@@ -41,11 +41,11 @@ public partial class QuerySubmodules : Command
     /// <returns>サブモジュールモデルのリスト</returns>
     public async Task<List<Models.Submodule>> GetResultAsync()
     {
-        var submodules = new List<Models.Submodule>();
+        List<Models.Submodule> submodules = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
 
         var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-        var map = new Dictionary<string, Models.Submodule>();
+        Dictionary<string, Models.Submodule> map = [];
         var needCheckLocalChanges = false;
         foreach (var line in lines)
         {
@@ -87,7 +87,7 @@ public partial class QuerySubmodules : Command
             rs = await ReadToEndAsync().ConfigureAwait(false);
             if (rs.IsSuccess)
             {
-                var modules = new Dictionary<string, ModuleInfo>();
+                Dictionary<string, ModuleInfo> modules = [];
                 lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var line in lines)

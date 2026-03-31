@@ -82,7 +82,7 @@ public class AddRemote : Popup
         if (ctx.ObjectInstance is AddRemote add)
         {
             // 同じ名前のリモートが既に存在するか確認する
-            var exists = add._repo.Remotes.Find(x => x.Name == name);
+            var exists = add._repo.FindRemoteByName(name);
             if (exists is not null)
                 return new ValidationResult("A remote with given name already exists!!!");
         }

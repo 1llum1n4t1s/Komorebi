@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels;
@@ -55,10 +56,12 @@ public class DeleteTag : Popup
 
         if (succ)
         {
-            foreach (var r in remotes)
-                await new Commands.Push(_repo.FullPath, r.Name, $"refs/tags/{Target.Name}", true)
+            // パフォーマンス: 独立したリモートへのpushを並列実行（旧: 逐次await）
+            var pushTasks = remotes.Select(r =>
+                new Commands.Push(_repo.FullPath, r.Name, $"refs/tags/{Target.Name}", true)
                     .Use(log)
-                    .RunAsync();
+                    .RunAsync());
+            await Task.WhenAll(pushTasks).ConfigureAwait(false);
         }
 
         log.Complete();

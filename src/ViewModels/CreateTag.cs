@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels;
@@ -137,10 +138,12 @@ public class CreateTag : Popup
 
         if (succ && remotes is not null)
         {
-            foreach (var remote in remotes)
-                await new Commands.Push(_repo.FullPath, remote.Name, $"refs/tags/{_tagName}", false)
+            // パフォーマンス: 独立したリモートへのpushを並列実行（旧: 逐次await）
+            var pushTasks = remotes.Select(remote =>
+                new Commands.Push(_repo.FullPath, remote.Name, $"refs/tags/{_tagName}", false)
                     .Use(log)
-                    .RunAsync();
+                    .RunAsync());
+            await Task.WhenAll(pushTasks).ConfigureAwait(false);
         }
 
         log.Complete();

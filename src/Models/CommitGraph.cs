@@ -155,8 +155,8 @@ public class CommitGraph
             return temp;
         }
 
-        var unsolved = new List<PathHelper>();  // 未解決（続行中）のパス
-        var ended = new List<PathHelper>();      // 終了したパス
+        List<PathHelper> unsolved = [];  // 未解決（続行中）のパス
+        List<PathHelper> ended = [];      // 終了したパス
         // 未解決パスのNext→PathHelper検索用Dictionary（旧: List.Find()のO(n) → O(1)）
         var unsolvedByNext = new Dictionary<string, PathHelper>(StringComparer.Ordinal);
         var offsetY = -halfHeight;

@@ -206,14 +206,12 @@ public class RepositorySettings
     private static string HashContent(string source)
     {
         var hash = MD5.HashData(Encoding.Default.GetBytes(source));
-        var builder = new StringBuilder(hash.Length * 2);
-        foreach (var c in hash)
-            builder.Append(c.ToString("x2"));
-        return builder.ToString();
+        // パフォーマンス: ループ内のToString("x2")による16回の文字列割り当てを排除
+        return Convert.ToHexString(hash).ToLowerInvariant();
     }
 
     /// <summary>設定ファイルのキャッシュ（フルパス→設定インスタンス）</summary>
-    private static Dictionary<string, RepositorySettings> _cache = new();
+    private static Dictionary<string, RepositorySettings> _cache = [];
     /// <summary>設定ファイルのフルパス</summary>
     private string _file = string.Empty;
     /// <summary>最後に保存した内容のMD5ハッシュ（変更検出用）</summary>

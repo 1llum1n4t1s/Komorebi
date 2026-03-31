@@ -52,7 +52,7 @@ public class CommitMessagePresenter : SelectableTextBlock
                 return;
             }
 
-            var inlines = new List<Inline>();
+            List<Inline> inlines = [];
             var pos = 0;
             for (var i = 0; i < links.Count; i++)
             {

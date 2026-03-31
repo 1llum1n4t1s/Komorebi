@@ -33,7 +33,7 @@ public partial class QueryAssumeUnchangedFiles : Command
     /// <returns>assume-unchangedフラグが設定されたファイルパスのリスト</returns>
     public async Task<List<string>> GetResultAsync()
     {
-        var outs = new List<string>();
+        List<string> outs = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         foreach (var line in lines)

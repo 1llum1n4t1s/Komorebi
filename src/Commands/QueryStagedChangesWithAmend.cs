@@ -40,7 +40,7 @@ public partial class QueryStagedChangesWithAmend : Command
         if (!rs.IsSuccess)
             return [];
 
-        var changes = new List<Models.Change>();
+        List<Models.Change> changes = [];
         var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         foreach (var line in lines)
         {

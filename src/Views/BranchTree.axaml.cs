@@ -382,7 +382,7 @@ public partial class BranchTree : UserControl
         if (branch is null)
             return;
 
-        var treePath = new List<ViewModels.BranchTreeNode>();
+        List<ViewModels.BranchTreeNode> treePath = [];
         FindTreePath(treePath, Nodes, branch.Name, 0);
 
         if (treePath.Count == 0)
@@ -398,7 +398,7 @@ public partial class BranchTree : UserControl
                 node.IsExpanded = true;
 
                 var idx = rows.IndexOf(node);
-                var subtree = new List<ViewModels.BranchTreeNode>();
+                List<ViewModels.BranchTreeNode> subtree = [];
                 MakeRows(subtree, node.Children, node.Depth + 1);
                 rows.InsertRange(idx + 1, subtree);
             }
@@ -436,7 +436,7 @@ public partial class BranchTree : UserControl
 
         if (node.IsExpanded)
         {
-            var subtree = new List<ViewModels.BranchTreeNode>();
+            List<ViewModels.BranchTreeNode> subtree = [];
             MakeRows(subtree, node.Children, depth + 1);
             rows.InsertRange(idx + 1, subtree);
         }
@@ -486,7 +486,7 @@ public partial class BranchTree : UserControl
 
             if (Nodes is { Count: > 0 })
             {
-                var rows = new List<ViewModels.BranchTreeNode>();
+                List<ViewModels.BranchTreeNode> rows = [];
                 MakeRows(rows, Nodes, 0);
                 Rows.AddRange(rows);
             }
@@ -594,7 +594,7 @@ public partial class BranchTree : UserControl
             return;
         }
 
-        var branches = new List<Models.Branch>();
+        List<Models.Branch> branches = [];
         foreach (var item in selected)
         {
             if (item is ViewModels.BranchTreeNode node)
@@ -684,7 +684,7 @@ public partial class BranchTree : UserControl
             return;
         }
 
-        var branches = new List<Models.Branch>();
+        List<Models.Branch> branches = [];
         foreach (var item in selected)
         {
             if (item is ViewModels.BranchTreeNode node)
@@ -1068,7 +1068,7 @@ public partial class BranchTree : UserControl
 
         if (!repo.IsBare)
         {
-            var remoteBranches = new List<Models.Branch>();
+            List<Models.Branch> remoteBranches = [];
             foreach (var b in repo.Branches)
             {
                 if (!b.IsLocal)

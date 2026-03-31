@@ -37,7 +37,7 @@ public class CommitLink
     /// <returns>対応するコミットリンクのリスト。</returns>
     public static List<CommitLink> Get(List<Remote> remotes)
     {
-        var outs = new List<CommitLink>();
+        List<CommitLink> outs = [];
 
         foreach (var remote in remotes)
         {

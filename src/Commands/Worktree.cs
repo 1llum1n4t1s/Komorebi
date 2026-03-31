@@ -32,7 +32,7 @@ public class Worktree : Command
         Args = "worktree list --porcelain";
 
         var rs = await ReadToEndAsync().ConfigureAwait(false);
-        var worktrees = new List<Models.Worktree>();
+        List<Models.Worktree> worktrees = [];
         Models.Worktree last = null;
         if (rs.IsSuccess)
         {

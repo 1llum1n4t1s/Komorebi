@@ -329,7 +329,7 @@ public class Avatar : Control, Models.IAvatarHost
 
         // 名前をスペースで分割して各パートの先頭文字を取得する
         var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var chars = new List<char>();
+        List<char> chars = [];
         foreach (var part in parts)
             chars.Add(part[0]);
 

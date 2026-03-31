@@ -92,8 +92,8 @@ public partial class Diff : Command
     internal static Models.DiffResult ParseDiffOutput(string text)
     {
         var result = new Models.DiffResult() { TextDiff = new Models.TextDiff() };
-        var deleted = new List<Models.TextDiffLine>();
-        var added = new List<Models.TextDiffLine>();
+        List<Models.TextDiffLine> deleted = [];
+        List<Models.TextDiffLine> added = [];
         Models.TextDiffLine last = null;
         var oldLine = 0;
         var newLine = 0;
@@ -368,6 +368,6 @@ public partial class Diff : Command
     private const int MaxInlineDiffChunks = 4;
 
     private readonly Models.DiffResult _result = new Models.DiffResult();
-    private readonly List<Models.TextDiffLine> _deleted = new List<Models.TextDiffLine>();
-    private readonly List<Models.TextDiffLine> _added = new List<Models.TextDiffLine>();
+    private readonly List<Models.TextDiffLine> _deleted = [];
+    private readonly List<Models.TextDiffLine> _added = [];
 }

@@ -338,7 +338,7 @@ internal class Windows : OS.IBackend
         if (!root.Exists)
             return null;
 
-        var options = new List<Models.ExternalTool.LaunchOption>();
+        List<Models.ExternalTool.LaunchOption> options = [];
         var prefixLen = root.FullName.Length;
         // ディレクトリを再帰的に探索して.slnと.slnxファイルを収集する
         root.WalkFiles(f =>

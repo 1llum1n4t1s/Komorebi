@@ -185,7 +185,7 @@ public class Push : Popup
             {
                 if (!branch.IsLocal && _selectedLocalBranch.Upstream == branch.FullName)
                 {
-                    _selectedRemote = repo.Remotes.Find(x => x.Name == branch.Remote);
+                    _selectedRemote = repo.FindRemoteByName(branch.Remote);
                     break;
                 }
             }
@@ -200,7 +200,7 @@ public class Push : Popup
         {
             Models.Remote remote = null;
             if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
-                remote = repo.Remotes.Find(x => x.Name == _repo.Settings.DefaultRemote);
+                remote = repo.FindRemoteByName(_repo.Settings.DefaultRemote);
 
             _selectedRemote = remote ?? repo.Remotes[0];
         }

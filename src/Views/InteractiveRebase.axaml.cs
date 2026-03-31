@@ -30,7 +30,7 @@ public class InteractiveRebaseListBox : ListBox
         if (DataContext is not ViewModels.InteractiveRebase vm || SelectedItems is null)
             return;
 
-        var items = new List<ViewModels.InteractiveRebaseItem>();
+        List<ViewModels.InteractiveRebaseItem> items = [];
         foreach (var item in SelectedItems)
         {
             if (item is ViewModels.InteractiveRebaseItem rebaseItem)
@@ -252,7 +252,7 @@ public partial class InteractiveRebase : ChromelessWindow
             _firstSelectionChangedHandled = true;
 
         var selected = ItemListBox.SelectedItems ?? new List<object>();
-        var items = new List<ViewModels.InteractiveRebaseItem>();
+        List<ViewModels.InteractiveRebaseItem> items = [];
         foreach (var item in selected)
         {
             if (item is ViewModels.InteractiveRebaseItem rebaseItem)
@@ -359,7 +359,7 @@ public partial class InteractiveRebase : ChromelessWindow
         var before = p.Y < control.Bounds.Height * 0.5;
         var idx = vm.Items.IndexOf(dst);
 
-        var commits = new List<ViewModels.InteractiveRebaseItem>();
+        List<ViewModels.InteractiveRebaseItem> commits = [];
         foreach (var item in selected)
         {
             if (item is ViewModels.InteractiveRebaseItem irItem)
@@ -386,7 +386,7 @@ public partial class InteractiveRebase : ChromelessWindow
             return;
 
         var hashes = new HashSet<string>();
-        var items = new List<ViewModels.InteractiveRebaseItem>();
+        List<ViewModels.InteractiveRebaseItem> items = [];
         foreach (var item in selected)
         {
             if (item is ViewModels.InteractiveRebaseItem irItem)
@@ -423,7 +423,7 @@ public partial class InteractiveRebase : ChromelessWindow
             return;
 
         var hashes = new HashSet<string>();
-        var items = new List<ViewModels.InteractiveRebaseItem>();
+        List<ViewModels.InteractiveRebaseItem> items = [];
         foreach (var item in selected)
         {
             if (item is ViewModels.InteractiveRebaseItem irItem)
@@ -550,7 +550,7 @@ public partial class InteractiveRebase : ChromelessWindow
             return;
 
         var selected = ItemListBox.SelectedItems ?? new List<object>();
-        var items = new List<ViewModels.InteractiveRebaseItem>();
+        List<ViewModels.InteractiveRebaseItem> items = [];
         foreach (var item in selected)
         {
             if (item is ViewModels.InteractiveRebaseItem rebaseItem)

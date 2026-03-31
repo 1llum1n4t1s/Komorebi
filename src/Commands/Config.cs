@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Komorebi.Commands;
@@ -38,56 +37,41 @@ public class Config : Command
     /// <returns>設定キーと値の辞書。</returns>
     public Dictionary<string, string> ReadAll()
     {
-        // git config -l: 全ての設定値を一覧表示する
         Args = "config -l";
-
         var output = ReadToEnd();
-        var rs = new Dictionary<string, string>();
-        if (output.IsSuccess)
-        {
-            // 出力を行ごとに分割し、key=value形式をパースする
-            var lines = output.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
-            {
-                var parts = line.Split('=', 2);
-                if (parts.Length == 2)
-                    rs[parts[0]] = parts[1];
-            }
-        }
-
-        return rs;
+        return output.IsSuccess ? ParseConfigOutput(output.StdOut) : [];
     }
 
     /// <summary>
     /// 全ての設定値を非同期で読み取る。
     /// git config -l を実行し、キーと値のペアを辞書として返す。
-    /// キーは小文字に正規化される。
+    /// キーは大文字小文字を区別しない辞書で返される。
     /// </summary>
-    /// <returns>設定キー（小文字）と値の辞書。</returns>
+    /// <returns>設定キーと値の辞書（キーは大文字小文字を区別しない）。</returns>
     public async Task<Dictionary<string, string>> ReadAllAsync()
     {
-        // git config -l: 全ての設定値を一覧表示する
         Args = "config -l";
-
         var output = await ReadToEndAsync().ConfigureAwait(false);
-        var rs = new Dictionary<string, string>();
-        if (output.IsSuccess)
-        {
-            // 出力を行ごとに分割し、key=value形式をパースする
-            var lines = output.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
-            {
-                var parts = line.Split('=', 2);
-                if (parts.Length == 2)
-                {
-                    // キーは常に小文字で統一する（大文字小文字の差異を吸収するため）
-                    var key = parts[0].ToLower(CultureInfo.CurrentCulture); // Always use lower case for key
-                    var value = parts[1];
-                    rs[key] = value;
-                }
-            }
-        }
+        // パフォーマンス: ToLower()による文字列割り当てを排除し、OrdinalIgnoreCase辞書で大文字小文字を吸収
+        return output.IsSuccess ? ParseConfigOutput(output.StdOut, StringComparer.OrdinalIgnoreCase) : [];
+    }
 
+    /// <summary>
+    /// git config -l の出力をキーと値の辞書にパースする共通ヘルパー。
+    /// </summary>
+    /// <param name="stdout">git configの標準出力。</param>
+    /// <param name="comparer">辞書のキー比較子。nullの場合はデフォルト（大文字小文字区別あり）。</param>
+    /// <returns>設定キーと値の辞書。</returns>
+    private static Dictionary<string, string> ParseConfigOutput(string stdout, IEqualityComparer<string> comparer = null)
+    {
+        var rs = comparer is not null ? new Dictionary<string, string>(comparer) : new Dictionary<string, string>();
+        var lines = stdout.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        foreach (var line in lines)
+        {
+            var parts = line.Split('=', 2);
+            if (parts.Length == 2)
+                rs[parts[0]] = parts[1];
+        }
         return rs;
     }
 

@@ -44,13 +44,13 @@ public class StatisticsReport
     /// <summary>合計コミット数</summary>
     public int Total { get; set; } = 0;
     /// <summary>著者リスト（コミット数降順）</summary>
-    public List<StatisticsAuthor> Authors { get; set; } = new();
+    public List<StatisticsAuthor> Authors { get; set; } = [];
     /// <summary>チャートのシリーズデータ</summary>
-    public List<ISeries> Series { get; set; } = new();
+    public List<ISeries> Series { get; set; } = [];
     /// <summary>X軸の設定</summary>
-    public List<Axis> XAxes { get; set; } = new();
+    public List<Axis> XAxes { get; set; } = [];
     /// <summary>Y軸の設定</summary>
-    public List<Axis> YAxes { get; set; } = new();
+    public List<Axis> YAxes { get; set; } = [];
     /// <summary>選択中の著者（変更時にチャートを更新）</summary>
     public StatisticsAuthor SelectedAuthor { get => _selectedAuthor; set => ChangeAuthor(value); }
 
@@ -144,7 +144,7 @@ public class StatisticsReport
 
         Authors.Sort((l, r) => r.Count - l.Count);
 
-        var samples = new List<DateTimePoint>();
+        List<DateTimePoint> samples = [];
         foreach (var kv in _mapSamples)
             samples.Add(new DateTimePoint(kv.Key, kv.Value));
 
@@ -196,7 +196,7 @@ public class StatisticsReport
             return;
         }
 
-        var samples = new List<DateTimePoint>();
+        List<DateTimePoint> samples = [];
         foreach (var kv in userSamples)
             samples.Add(new DateTimePoint(kv.Key, kv.Value));
 
@@ -218,11 +218,11 @@ public class StatisticsReport
     /// <summary>統計モード</summary>
     private StatisticsMode _mode;
     /// <summary>ユーザーごとのコミット数マップ</summary>
-    private Dictionary<User, int> _mapUsers = new();
+    private Dictionary<User, int> _mapUsers = [];
     /// <summary>日時ごとのコミット数マップ</summary>
-    private Dictionary<DateTime, int> _mapSamples = new();
+    private Dictionary<DateTime, int> _mapSamples = [];
     /// <summary>ユーザー×日時ごとのコミット数マップ</summary>
-    private Dictionary<User, Dictionary<DateTime, int>> _mapUserSamples = new();
+    private Dictionary<User, Dictionary<DateTime, int>> _mapUserSamples = [];
     /// <summary>現在選択中の著者</summary>
     private StatisticsAuthor _selectedAuthor = null;
     /// <summary>チャートの塗りつぶし色</summary>
@@ -298,5 +298,5 @@ public class Statistics
     /// <summary>今週の開始日</summary>
     private readonly DateTime _thisWeekStart;
     /// <summary>メールアドレスによるユーザー検索キャッシュ</summary>
-    private readonly Dictionary<string, User> _users = new();
+    private readonly Dictionary<string, User> _users = [];
 }

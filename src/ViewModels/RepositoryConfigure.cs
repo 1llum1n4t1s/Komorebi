@@ -206,7 +206,7 @@ public class RepositoryConfigure : ObservableObject
             Remotes.Add(remote.Name);
 
         // OpenAIサービス一覧を構築（「---」= 未選択）
-        AvailableOpenAIServices = new List<string>() { "---" };
+        AvailableOpenAIServices = ["---"];
         foreach (var service in Preferences.Instance.OpenAIServices)
             AvailableOpenAIServices.Add(service.Name);
 

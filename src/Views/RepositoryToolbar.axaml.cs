@@ -110,7 +110,7 @@ public partial class RepositoryToolbar : UserControl
                 }
             }
 
-            var urls = new Dictionary<string, string>();
+            Dictionary<string, string> urls = [];
             foreach (var r in repo.Remotes)
             {
                 if (r.TryGetVisitURL(out var visit))

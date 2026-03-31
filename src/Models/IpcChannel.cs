@@ -124,19 +124,21 @@ public class IpcChannel : IDisposable
         _singletonLock = null;
     }
 
-    private async void StartServer()
+    // async void → async Task に変更。未処理例外がプロセスをクラッシュさせるリスクを排除
+    // Task.Run()経由で呼ばれるため、戻り値のTaskは自動的にスレッドプールに委譲される
+    private async Task StartServer()
     {
         while (!_disposed)
         {
             try
             {
-                await _server.WaitForConnectionAsync();
+                await _server.WaitForConnectionAsync().ConfigureAwait(false);
 
                 if (_disposed)
                     break;
 
                 using var reader = new StreamReader(_server, leaveOpen: true);
-                var line = await reader.ReadToEndAsync();
+                var line = await reader.ReadToEndAsync().ConfigureAwait(false);
                 MessageReceived?.Invoke(line.Trim());
 
                 _server.Disconnect();

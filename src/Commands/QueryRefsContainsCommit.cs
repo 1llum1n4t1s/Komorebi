@@ -28,7 +28,7 @@ public class QueryRefsContainsCommit : Command
     /// <returns>デコレータモデルのリスト</returns>
     public async Task<List<Models.Decorator>> GetResultAsync()
     {
-        var outs = new List<Models.Decorator>();
+        List<Models.Decorator> outs = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (!rs.IsSuccess)
             return outs;

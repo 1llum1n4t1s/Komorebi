@@ -148,6 +148,9 @@ When using `LockWatcher()` in a `Popup.Sure()` override, the lock must be releas
 ### CommitGraph performance considerations
 `CommitGraph.Parse()` processes potentially tens of thousands of commits. It uses `HashSet` for O(1) color recycling checks and `Dictionary` for O(1) parent lookups. When modifying this code, avoid introducing `List.Find()`, `List.Contains()`, or `List.Remove()` in inner loops.
 
+### Histories SHA lookup uses dictionary
+`Histories.cs` maintains a `_commitBySha` dictionary (rebuilt when `Commits` is set) for O(1) commit lookups by SHA. When adding new commit-search logic in Histories, use `_commitBySha.TryGetValue()` instead of `_commits.Find()`. The dictionary is automatically kept in sync with the commit list.
+
 ## Code Style
 
 Enforced via `.editorconfig` and `dotnet format` in CI:
@@ -156,6 +159,7 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - Braces on new line (Allman style)
 - Private fields: `_camelCase`; private static: `s_camelCase`; constants: `PascalCase`
 - No `this.` qualifier
+- Collection expressions `[]` preferred over `new List<T>()` / `new Dictionary<K,V>()` (C# 12+). Use `List<T> x = []` instead of `var x = new List<T>()`
 
 ## CI/CD
 
@@ -174,4 +178,4 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 - **Velopack 0.0.1298** — auto-update framework
 - **depends/AvaloniaEdit** — git submodule, text editor for diff/blame
 - **OpenAI / Azure.AI.OpenAI** — AI commit message generation
-- **LiveChartsCore** — contribution statistics charts
+- **LiveChartsCore 2.0.0** — contribution statistics charts

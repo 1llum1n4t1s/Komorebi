@@ -33,7 +33,7 @@ public partial class QueryRemotes : Command
     /// <returns>リモートモデルのリスト</returns>
     public async Task<List<Models.Remote>> GetResultAsync()
     {
-        var outs = new List<Models.Remote>();
+        List<Models.Remote> outs = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (!rs.IsSuccess)
             return outs;

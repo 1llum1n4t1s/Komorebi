@@ -76,12 +76,13 @@ internal class MacOS : OS.IBackend
     public string FindGitExecutable()
     {
         // macOSでgitが存在する可能性のあるパスを順に確認する
-        var gitPathVariants = new List<string>() {
+        List<string> gitPathVariants =
+        [
             "/usr/bin/git",
             "/usr/local/bin/git",
             "/opt/homebrew/bin/git",
             "/opt/homebrew/opt/git/bin/git"
-        };
+        ];
 
         foreach (var path in gitPathVariants)
             if (File.Exists(path))

@@ -80,7 +80,7 @@ public class Fetch : Popup
         }
         else if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
         {
-            var def = _repo.Remotes.Find(r => r.Name == _repo.Settings.DefaultRemote);
+            var def = _repo.FindRemoteByName(_repo.Settings.DefaultRemote);
             SelectedRemote = def ?? _repo.Remotes[0];
         }
         else

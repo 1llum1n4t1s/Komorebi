@@ -266,7 +266,7 @@ public class CreateBranch : Popup
         {
             Models.Remote remote = null;
             if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
-                remote = _repo.Remotes.Find(x => x.Name == _repo.Settings.DefaultRemote);
+                remote = _repo.FindRemoteByName(_repo.Settings.DefaultRemote);
             remote ??= _repo.Remotes[0];
 
             await new Commands.Push(_repo.FullPath, _name, remote.Name, _name, false, false, true, false)

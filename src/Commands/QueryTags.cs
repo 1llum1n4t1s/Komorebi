@@ -31,7 +31,7 @@ public class QueryTags : Command
     /// <returns>タグモデルのリスト</returns>
     public async Task<List<Models.Tag>> GetResultAsync()
     {
-        var tags = new List<Models.Tag>();
+        List<Models.Tag> tags = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (!rs.IsSuccess)
             return tags;

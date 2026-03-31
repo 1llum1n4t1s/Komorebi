@@ -249,7 +249,7 @@ public partial class RevisionFileTreeView : UserControl
         Rows.Clear();
         _searchResult.Clear();
 
-        var rows = new List<ViewModels.RevisionFileTreeNode>();
+        List<ViewModels.RevisionFileTreeNode> rows = [];
         if (string.IsNullOrEmpty(file))
         {
             MakeRows(rows, _tree, 0);
@@ -323,7 +323,7 @@ public partial class RevisionFileTreeView : UserControl
             var subtree = await GetChildrenOfTreeNodeAsync(node);
             if (subtree is { Count: > 0 })
             {
-                var subrows = new List<ViewModels.RevisionFileTreeNode>();
+                List<ViewModels.RevisionFileTreeNode> subrows = [];
                 MakeRows(subrows, subtree, depth + 1);
                 Rows.InsertRange(idx + 1, subrows);
             }
@@ -508,7 +508,7 @@ public partial class RevisionFileTreeView : UserControl
 
         SortNodes(_tree);
 
-        var topTree = new List<ViewModels.RevisionFileTreeNode>();
+        List<ViewModels.RevisionFileTreeNode> topTree = [];
         MakeRows(topTree, _tree, 0);
 
         Rows.Clear();

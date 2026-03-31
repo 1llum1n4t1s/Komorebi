@@ -32,7 +32,7 @@ public class QueryCommitChildren : Command
     public async Task<List<string>> GetResultAsync()
     {
         var rs = await ReadToEndAsync().ConfigureAwait(false);
-        var outs = new List<string>();
+        List<string> outs = [];
         if (rs.IsSuccess)
         {
             var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);

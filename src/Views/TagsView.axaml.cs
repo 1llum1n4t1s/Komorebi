@@ -267,7 +267,7 @@ public partial class TagsView : UserControl
         if (DataContext is not ViewModels.Repository repo)
             return;
 
-        var selected = new List<Models.Tag>();
+        List<Models.Tag> selected = [];
         foreach (var item in selectedItems)
         {
             if (item is ViewModels.TagListItem i)

@@ -32,7 +32,7 @@ public class QueryCommitsForInteractiveRebase : Command
     /// <returns>インタラクティブリベース用コミットのリスト</returns>
     public async Task<List<Models.InteractiveCommit>> GetResultAsync()
     {
-        var commits = new List<Models.InteractiveCommit>();
+        List<Models.InteractiveCommit> commits = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (!rs.IsSuccess)
         {

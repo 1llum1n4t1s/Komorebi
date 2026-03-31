@@ -1430,7 +1430,7 @@ public partial class App : Application
 
         // カンマで分割して各フォント名を個別に処理する
         var parts = input.Split(',');
-        var trimmed = new List<string>();
+        List<string> trimmed = [];
 
         foreach (var part in parts)
         {

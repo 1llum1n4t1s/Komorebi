@@ -43,7 +43,7 @@ public partial class QueryRevisionObjects : Command
     /// <returns>オブジェクトモデル（blob/tree/tag/commit）のリスト</returns>
     public async Task<List<Models.Object>> GetResultAsync()
     {
-        var outs = new List<Models.Object>();
+        List<Models.Object> outs = [];
 
         try
         {

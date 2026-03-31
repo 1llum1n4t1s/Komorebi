@@ -27,7 +27,7 @@ public class QueryStashes : Command
     /// <returns>スタッシュモデルのリスト</returns>
     public async Task<List<Models.Stash>> GetResultAsync()
     {
-        var outs = new List<Models.Stash>();
+        List<Models.Stash> outs = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (!rs.IsSuccess)
             return outs;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -105,13 +106,15 @@ public class IssueTracker : ObservableObject
                     continue;
 
                 // URLテンプレートのプレースホルダーをマッチグループで置換
-                var link = _urlTemplate;
+                // パフォーマンス: StringBuilderで1回のみ構築（旧: Replace()チェーンで毎回新規string割り当て）
+                var sb = new StringBuilder(_urlTemplate);
                 for (var j = 1; j < match.Groups.Count; j++)
                 {
                     var group = match.Groups[j];
                     if (group.Success)
-                        link = link.Replace($"${j}", group.Value);
+                        sb.Replace($"${j}", group.Value);
                 }
+                var link = sb.ToString();
 
                 // リンク要素として追加
                 outs.Add(new InlineElement(InlineElementType.Link, start, len, link));

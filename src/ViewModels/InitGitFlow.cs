@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
@@ -135,7 +134,7 @@ public partial class InitGitFlow : Popup
         var current = _repo.CurrentBranch;
 
         // masterブランチが存在しなければ現在のHEADから作成
-        var masterBranch = _repo.Branches.Find(x => x.IsLocal && x.Name.Equals(_master, StringComparison.Ordinal));
+        var masterBranch = _repo.FindLocalBranchByName(_master);
         if (masterBranch is null)
         {
             succ = await new Commands.Branch(_repo.FullPath, _master)
@@ -149,7 +148,7 @@ public partial class InitGitFlow : Popup
         }
 
         // developブランチが存在しなければ現在のHEADから作成
-        var developBranch = _repo.Branches.Find(x => x.IsLocal && x.Name.Equals(_develop, StringComparison.Ordinal));
+        var developBranch = _repo.FindLocalBranchByName(_develop);
         if (developBranch is null)
         {
             succ = await new Commands.Branch(_repo.FullPath, _develop)

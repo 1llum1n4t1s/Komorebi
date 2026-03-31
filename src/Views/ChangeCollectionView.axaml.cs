@@ -159,7 +159,7 @@ public partial class ChangeCollectionView : UserControl
 
             if (node.IsExpanded)
             {
-                var subrows = new List<ViewModels.ChangeTreeNode>();
+                List<ViewModels.ChangeTreeNode> subrows = [];
                 MakeTreeRows(subrows, node.Children);
                 tree.Rows.InsertRange(idx + 1, subrows);
             }
@@ -335,7 +335,7 @@ public partial class ChangeCollectionView : UserControl
 
         _disableSelectionChangingEvent = true;
 
-        var selected = new List<Models.Change>();
+        List<Models.Change> selected = [];
         if (sender is ListBox { SelectedItems: { } selectedItems })
         {
             foreach (var item in selectedItems)
@@ -418,14 +418,14 @@ public partial class ChangeCollectionView : UserControl
             var tree = new ViewModels.ChangeCollectionAsTree();
             tree.Tree = ViewModels.ChangeTreeNode.Build(changes, oldFolded, EnableCompactFolders);
 
-            var rows = new List<ViewModels.ChangeTreeNode>();
+            List<ViewModels.ChangeTreeNode> rows = [];
             MakeTreeRows(rows, tree.Tree);
             tree.Rows.AddRange(rows);
 
             if (selected.Count > 0)
             {
                 var sets = new HashSet<Models.Change>(selected);
-                var nodes = new List<ViewModels.ChangeTreeNode>();
+                List<ViewModels.ChangeTreeNode> nodes = [];
                 foreach (var row in tree.Rows)
                 {
                     if (row.Change is not null && sets.Contains(row.Change))
@@ -478,7 +478,7 @@ public partial class ChangeCollectionView : UserControl
             {
                 var sets = new HashSet<Models.Change>(selected);
 
-                var nodes = new List<ViewModels.ChangeTreeNode>();
+                List<ViewModels.ChangeTreeNode> nodes = [];
                 foreach (var row in tree.Rows)
                 {
                     if (row.Change is not null && sets.Contains(row.Change))

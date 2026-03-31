@@ -49,7 +49,7 @@ public class CompareRevisions : Command
     /// <returns>変更されたファイルのリスト（パスの数値順でソート済み）。</returns>
     public async Task<List<Models.Change>> ReadAsync()
     {
-        var changes = new List<Models.Change>();
+        List<Models.Change> changes = [];
         try
         {
             // gitプロセスを起動して差分出力を取得する

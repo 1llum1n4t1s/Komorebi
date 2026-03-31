@@ -90,7 +90,8 @@ public class CommitGraph : Control
     /// </summary>
     private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
     {
-        var grayedPen = new Pen(new SolidColorBrush(Colors.Gray, 0.4), Models.CommitGraph.Pens[0].Thickness);
+        // パフォーマンス: 描画毎のPen生成を排除（static cacheで再利用）
+        var grayedPen = s_grayedPen ??= new Pen(new SolidColorBrush(Colors.Gray, 0.4), Models.CommitGraph.Pens[0].Thickness);
         var onlyHighlightCurrentBranch = OnlyHighlightCurrentBranch;
 
         if (onlyHighlightCurrentBranch)
@@ -221,8 +222,11 @@ public class CommitGraph : Control
     private void DrawAnchors(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
     {
         var dotFill = DotBrush;
-        var dotFillPen = new Pen(dotFill, 2);
-        var grayedPen = new Pen(Brushes.Gray, Models.CommitGraph.Pens[0].Thickness);
+        // パフォーマンス: Penをキャッシュ（Brushが変わったら再生成）
+        if (_dotFillPen is null || _dotFillPen.Brush != dotFill)
+            _dotFillPen = new Pen(dotFill, 2);
+        var dotFillPen = _dotFillPen;
+        var grayedPen = s_grayedAnchorPen ??= new Pen(Brushes.Gray, Models.CommitGraph.Pens[0].Thickness);
         var onlyHighlightCurrentBranch = OnlyHighlightCurrentBranch;
 
         foreach (var dot in graph.Dots)
@@ -255,4 +259,9 @@ public class CommitGraph : Control
             }
         }
     }
+
+    // パフォーマンス: 描画毎のPen生成を排除するstaticキャッシュ
+    private static Pen s_grayedPen;
+    private static Pen s_grayedAnchorPen;
+    private Pen _dotFillPen;
 }

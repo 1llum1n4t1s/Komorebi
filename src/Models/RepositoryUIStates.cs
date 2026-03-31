@@ -337,7 +337,7 @@ public class RepositoryUIStates
     /// <summary>履歴フィルターをパターンとモードのマップとして取得する</summary>
     public Dictionary<string, FilterMode> GetHistoryFiltersMap()
     {
-        var map = new Dictionary<string, FilterMode>();
+        Dictionary<string, FilterMode> map = [];
         foreach (var filter in HistoryFilters)
             map.Add(filter.Pattern, filter.Mode);
         return map;
@@ -430,7 +430,7 @@ public class RepositoryUIStates
     /// <summary>指定プレフィックスに一致するブランチフィルターを一括削除する</summary>
     public void RemoveBranchFiltersByPrefix(string pattern)
     {
-        var dirty = new List<HistoryFilter>();
+        List<HistoryFilter> dirty = [];
         var prefix = $"{pattern}/";
 
         foreach (var filter in HistoryFilters)
@@ -452,10 +452,10 @@ public class RepositoryUIStates
     /// <returns>git logのパラメータ文字列</returns>
     public string BuildHistoryParams()
     {
-        var includedRefs = new List<string>();
-        var excludedBranches = new List<string>();
-        var excludedRemotes = new List<string>();
-        var excludedTags = new List<string>();
+        List<string> includedRefs = [];
+        List<string> excludedBranches = [];
+        List<string> excludedRemotes = [];
+        List<string> excludedTags = [];
         foreach (var filter in HistoryFilters)
         {
             if (filter.Type == FilterType.LocalBranch)

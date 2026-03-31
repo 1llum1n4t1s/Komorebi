@@ -37,14 +37,14 @@ public class QueryBranches : Command
     /// <returns>ブランチモデルのリスト</returns>
     public async Task<List<Models.Branch>> GetResultAsync()
     {
-        var branches = new List<Models.Branch>();
+        List<Models.Branch> branches = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (!rs.IsSuccess)
             return branches;
 
         var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         var mismatched = new HashSet<string>(); // 追跡状態が不一致のブランチ
-        var remotes = new Dictionary<string, Models.Branch>(); // リモートブランチのルックアップ用
+        Dictionary<string, Models.Branch> remotes = []; // リモートブランチのルックアップ用
         foreach (var line in lines)
         {
             var b = ParseLine(line, mismatched);
@@ -57,7 +57,7 @@ public class QueryBranches : Command
         }
 
         // ローカルブランチのupstream追跡状態を解決
-        var trackTasks = new List<Task>();
+        List<Task> trackTasks = [];
         foreach (var b in branches)
         {
             if (b.IsLocal && !string.IsNullOrEmpty(b.Upstream))

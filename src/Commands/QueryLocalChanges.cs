@@ -46,7 +46,7 @@ public partial class QueryLocalChanges : Command
     /// <returns>変更モデルのリスト</returns>
     public async Task<List<Models.Change>> GetResultAsync()
     {
-        var outs = new List<Models.Change>();
+        List<Models.Change> outs = [];
 
         try
         {

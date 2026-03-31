@@ -289,5 +289,5 @@ public class CommitRefsPresenter : Control
         return new Size(0, 0);
     }
 
-    private List<RenderItem> _items = new List<RenderItem>();
+    private List<RenderItem> _items = [];
 }

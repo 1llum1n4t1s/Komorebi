@@ -49,7 +49,8 @@ public class ExternalMerger(string icon, string name, string finder, string merg
     {
         if (OperatingSystem.IsWindows())
         {
-            Supported = new List<ExternalMerger>() {
+            Supported =
+            [
                 new ExternalMerger("git", "Use Git Settings", "", "", ""),
                 new ExternalMerger("vscode", "Visual Studio Code", "Code.exe", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("vscode_insiders", "Visual Studio Code - Insiders", "Code - Insiders.exe", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
@@ -63,11 +64,12 @@ public class ExternalMerger(string icon, string name, string finder, string merg
                 new ExternalMerger("plastic_merge", "Plastic SCM", "mergetool.exe", "-s=\"$REMOTE\" -b=\"$BASE\" -d=\"$LOCAL\" -r=\"$MERGED\" --automatic", "-s=\"$LOCAL\" -d=\"$REMOTE\""),
                 new ExternalMerger("meld", "Meld", "Meld.exe", "\"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\"", "\"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("cursor", "Cursor", "Cursor.exe", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
-            };
+            ];
         }
         else if (OperatingSystem.IsMacOS())
         {
-            Supported = new List<ExternalMerger>() {
+            Supported =
+            [
                 new ExternalMerger("git", "Use Git Settings", "", "", ""),
                 new ExternalMerger("xcode", "FileMerge", "/usr/bin/opendiff", "\"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"", "\"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("vscode", "Visual Studio Code", "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
@@ -77,11 +79,12 @@ public class ExternalMerger(string icon, string name, string finder, string merg
                 new ExternalMerger("codium", "VSCodium", "/Applications/VSCodium.app/Contents/Resources/app/bin/codium", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("p4merge", "P4Merge", "/Applications/p4merge.app/Contents/Resources/launchp4merge", "-tw 4 \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"", "-tw 4 \"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("cursor", "Cursor", "/Applications/Cursor.app/Contents/Resources/app/bin/cursor", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
-            };
+            ];
         }
         else if (OperatingSystem.IsLinux())
         {
-            Supported = new List<ExternalMerger>() {
+            Supported =
+            [
                 new ExternalMerger("git", "Use Git Settings", "", "", ""),
                 new ExternalMerger("vscode", "Visual Studio Code", "/usr/share/code/code", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("vscode_insiders", "Visual Studio Code - Insiders", "/usr/share/code-insiders/code-insiders", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
@@ -91,13 +94,14 @@ public class ExternalMerger(string icon, string name, string finder, string merg
                 new ExternalMerger("codium", "VSCodium", "/usr/share/codium/bin/codium", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("p4merge", "P4Merge", "/usr/local/bin/p4merge", "-tw 4 \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"", "-tw 4 \"$LOCAL\" \"$REMOTE\""),
                 new ExternalMerger("cursor", "Cursor", "cursor", "-n --wait \"$MERGED\"", "-n --wait --diff \"$LOCAL\" \"$REMOTE\""),
-            };
+            ];
         }
         else
         {
-            Supported = new List<ExternalMerger>() {
+            Supported =
+            [
                 new ExternalMerger("git", "Use Git Settings", "", "", ""),
-            };
+            ];
         }
     }
 

@@ -73,7 +73,7 @@ public static class Discard
     public static async Task ChangesAsync(string repo, List<Models.Change> changes, Models.ICommandLog log)
     {
         // git restoreで復元するファイルのリスト
-        var restores = new List<string>();
+        List<string> restores = [];
 
         try
         {

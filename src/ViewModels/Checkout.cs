@@ -127,7 +127,7 @@ public class Checkout : Popup
         log.Complete();
 
         // フィルタモードでチェックアウトしたブランチをIncludedに設定する
-        var b = _repo.Branches.Find(x => x.IsLocal && x.Name == branchName);
+        var b = _repo.FindLocalBranchByName(branchName);
         if (b is not null && _repo.HistoryFilterMode == Models.FilterMode.Included)
             _repo.SetBranchFilterMode(b, Models.FilterMode.Included, false, false);
 

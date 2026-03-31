@@ -96,7 +96,7 @@ public class Pull : Popup
         if (specifiedRemoteBranch is not null)
         {
             // 特定のリモートブランチが指定された場合
-            _selectedRemote = repo.Remotes.Find(x => x.Name == specifiedRemoteBranch.Remote);
+            _selectedRemote = repo.FindRemoteByName(specifiedRemoteBranch.Remote);
             _selectedBranch = specifiedRemoteBranch;
 
             List<Models.Branch> branches = [];
@@ -119,7 +119,7 @@ public class Pull : Popup
                 if (remoteNameEndIdx > 0)
                 {
                     var remoteName = Current.Upstream[13..remoteNameEndIdx];
-                    autoSelectedRemote = _repo.Remotes.Find(x => x.Name == remoteName);
+                    autoSelectedRemote = _repo.FindRemoteByName(remoteName);
                 }
             }
 
@@ -128,7 +128,7 @@ public class Pull : Popup
             {
                 Models.Remote remote = null;
                 if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
-                    remote = _repo.Remotes.Find(x => x.Name == _repo.Settings.DefaultRemote);
+                    remote = _repo.FindRemoteByName(_repo.Settings.DefaultRemote);
                 _selectedRemote = remote ?? (_repo.Remotes.Count > 0 ? _repo.Remotes[0] : null);
             }
             else

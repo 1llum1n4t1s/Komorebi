@@ -41,7 +41,7 @@ public class QueryFileHistory : Command
     /// <returns>ファイルバージョンモデルのリスト</returns>
     public async Task<List<Models.FileVersion>> GetResultAsync()
     {
-        var versions = new List<Models.FileVersion>();
+        List<Models.FileVersion> versions = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (!rs.IsSuccess)
             return versions;

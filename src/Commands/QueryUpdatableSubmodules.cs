@@ -35,7 +35,7 @@ public partial class QueryUpdatableSubmodules : Command
     /// <returns>サブモジュールパスのリスト</returns>
     public async Task<List<string>> GetResultAsync()
     {
-        var submodules = new List<string>();
+        List<string> submodules = [];
         var rs = await ReadToEndAsync().ConfigureAwait(false);
 
         var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);

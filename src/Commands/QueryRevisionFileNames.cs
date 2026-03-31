@@ -28,7 +28,7 @@ public class QueryRevisionFileNames : Command
     /// <returns>ファイルパスのリスト</returns>
     public async Task<List<string>> GetResultAsync()
     {
-        var outs = new List<string>();
+        List<string> outs = [];
 
         try
         {

@@ -40,7 +40,7 @@ public class Agent
             .AppendLine("Changed files ('A' means added, 'M' means modified, 'D' means deleted, 'T' means type changed, 'R' means renamed, 'C' means copied): ")
             .Append(changeList);
 
-        var messages = new List<ChatMessage>() { new UserChatMessage(userMessageBuilder.ToString()) };
+        List<ChatMessage> messages = [new UserChatMessage(userMessageBuilder.ToString())];
 
         do
         {

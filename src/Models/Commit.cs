@@ -60,7 +60,8 @@ public class Commit
     /// <summary>著者とコミッターが異なる場合にコミッター情報を表示するかどうか。</summary>
     public bool IsCommitterVisible => !Author.Equals(Committer) || AuthorTime != CommitterTime;
     /// <summary>現在のHEADを指しているコミットかどうか。</summary>
-    public bool IsCurrentHead => Decorators.Find(x => x.Type is DecoratorType.CurrentBranchHead or DecoratorType.CurrentCommitHead) is not null;
+    // パフォーマンス: Find()→Any()に変更。Decoratorオブジェクトの生成不要でホットパスの無駄な割り当てを削減
+    public bool IsCurrentHead => Decorators.Exists(x => x.Type is DecoratorType.CurrentBranchHead or DecoratorType.CurrentCommitHead);
     /// <summary>デコレーターが存在するかどうか。</summary>
     public bool HasDecorators => Decorators.Count > 0;
 

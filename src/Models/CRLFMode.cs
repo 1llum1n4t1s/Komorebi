@@ -26,9 +26,10 @@ public class CRLFMode(string name, string value, string descKey)
     /// <summary>
     /// サポートされている改行コード変換モードの一覧。
     /// </summary>
-    public static readonly List<CRLFMode> Supported = new List<CRLFMode>() {
+    public static readonly List<CRLFMode> Supported =
+    [
         new CRLFMode("TRUE", "true", "Preferences.Git.CRLF.True"),
         new CRLFMode("INPUT", "input", "Preferences.Git.CRLF.Input"),
         new CRLFMode("FALSE", "false", "Preferences.Git.CRLF.False"),
-    };
+    ];
 }

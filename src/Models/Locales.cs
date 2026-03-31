@@ -21,7 +21,8 @@ public class Locale
     /// <summary>
     /// サポートされているロケールの一覧。
     /// </summary>
-    public static readonly List<Locale> Supported = new List<Locale>() {
+    public static readonly List<Locale> Supported =
+    [
         new Locale("Deutsch", "de_DE"),
         new Locale("English", "en_US"),
         new Locale("Español", "es_ES"),
@@ -39,7 +40,7 @@ public class Locale
         new Locale("한국어", "ko_KR"),
         new Locale("संस्कृतम् (Sanskrit)", "sa"),
         new Locale("Latina (Latin)", "la"),
-    };
+    ];
 
     /// <summary>
     /// Localeの新しいインスタンスを初期化する。

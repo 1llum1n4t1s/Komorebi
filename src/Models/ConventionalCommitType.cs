@@ -62,7 +62,8 @@ public class ConventionalCommitType
         }
 
         // デフォルトのConventional Commit型リストを返す
-        return new List<ConventionalCommitType> {
+        return
+        [
             new("Features", "feat", "Adding a new feature"),
             new("Bug Fixes", "fix", "Fixing a bug"),
             new("Work In Progress", "wip", "Still being developed and not yet complete"),
@@ -75,6 +76,6 @@ public class ConventionalCommitType
             new("Styles", "style", "Elements or code styles without changing the code logic"),
             new("Tests", "test", "Adding or updating tests"),
             new("Chores", "chore", "Other changes that don't modify src or test files"),
-        };
+        ];
     }
 }
