@@ -49,17 +49,6 @@ public partial class BranchSelector : UserControl
         set => SetValue(SelectedBranchProperty, value);
     }
 
-    /// <summary>FriendlyName を表示に使うかどうか</summary>
-    public static readonly StyledProperty<bool> UseFriendlyNameProperty =
-        AvaloniaProperty.Register<BranchSelector, bool>(nameof(UseFriendlyName));
-
-    /// <summary>FriendlyName を表示に使うかどうか</summary>
-    public bool UseFriendlyName
-    {
-        get => GetValue(UseFriendlyNameProperty);
-        set => SetValue(UseFriendlyNameProperty, value);
-    }
-
     /// <summary>ドロップダウンが開いているかどうか</summary>
     public static readonly StyledProperty<bool> IsDropDownOpenedProperty =
         AvaloniaProperty.Register<BranchSelector, bool>(nameof(IsDropDownOpened));
@@ -109,6 +98,7 @@ public partial class BranchSelector : UserControl
                 var visible = new List<Models.Branch>();
                 var oldSelection = SelectedBranch;
                 var keepSelection = false;
+
                 foreach (var b in Branches)
                 {
                     if (b.FriendlyName.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase))
