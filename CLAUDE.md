@@ -78,14 +78,21 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 - `ParseNameStatusLine(line)` — parses `--name-status` output lines (M/A/D/R/C) into `(path, ChangeState)` tuples
 
 ### Key ViewModels
-- `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management
-- `Repository.cs` — central VM for an open repo (branches, tags, history, working copy)
+- `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management. `LauncherPage.IsActive` controls visibility for view caching.
+- `Repository.cs` — central VM for an open repo (branches, tags, history, working copy). Exposes `HistoriesVM`/`WorkingCopyVM`/`StashesPageVM` for cached sub-view binding.
 - `Histories.cs` — commit graph and log
 - `WorkingCopy.cs` — staging/unstaging, diff, committing
 - `Popup.cs` — base class for all dialog VMs (`Sure()` = confirm action, `[Required]` validation)
 - `Preferences.cs` — singleton app settings (serialized to `preference.json`)
 - `InitSetup.cs` — first-launch popup for language + default clone directory selection
 - `SelfUpdate.cs` — handles Velopack download progress and apply
+
+### View Caching Pattern
+Tab switching and sub-view switching use `ItemsControl + Panel + IsVisible` instead of `ContentControl + DataTemplate` to avoid destroying and recreating heavy Views on every switch. This keeps all Views alive in memory and toggles `IsVisible` for instant switching.
+
+- **Tab level** (`Launcher.axaml`): `ItemsControl` bound to `Pages`, each `LauncherPage` view's `IsVisible` binds to `LauncherPage.IsActive`. The `Launcher.ActivePage` setter toggles `IsActive` on old/new page.
+- **Sub-view level** (`Repository.axaml`): `Panel` contains `v:Histories`, `v:WorkingCopy`, `v:StashesPage` directly (not via DataTemplate). Each view's `IsVisible` binds to `SelectedViewIndex` via `IntConverters.IsZero`/`IsOne`/`IsTwo`.
+- **`SelectedView` property**: No longer used for XAML binding (no `PropertyChanged`). Kept only for `Fetch.cs` type checking (`_repo.SelectedView is Histories { ... }`).
 
 ### Platform Abstraction
 `src/Native/`:

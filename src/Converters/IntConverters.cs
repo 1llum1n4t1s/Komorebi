@@ -33,6 +33,20 @@ public static class IntConverters
         new(v => v == 0);
 
     /// <summary>
+    /// 整数値が1であるかを判定するコンバータ。
+    /// 1の場合はtrue、それ以外はfalseを返す。
+    /// </summary>
+    public static readonly FuncValueConverter<int, bool> IsOne =
+        new(v => v == 1);
+
+    /// <summary>
+    /// 整数値が2であるかを判定するコンバータ。
+    /// 2の場合はtrue、それ以外はfalseを返す。
+    /// </summary>
+    public static readonly FuncValueConverter<int, bool> IsTwo =
+        new(v => v == 2);
+
+    /// <summary>
     /// 整数値が1でないかを判定するコンバータ。
     /// 1でない場合はtrue、1の場合はfalseを返す。
     /// </summary>

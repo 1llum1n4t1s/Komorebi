@@ -939,25 +939,22 @@
         </Grid>
       </Border>
 
-      <ContentControl Grid.Row="3" Content="{Binding SelectedView}">
-        <ContentControl.DataTemplates>
-          <DataTemplate DataType="vm:Histories">
-            <v:Histories CurrentBranch="{Binding $parent[v:Repository].((vm:Repository)DataContext).CurrentBranch}"
-                         Bisect="{Binding Bisect}"
-                         IssueTrackers="{Binding $parent[v:Repository].((vm:Repository)DataContext).IssueTrackers}"
-                         OnlyHighlightCurrentBranch="{Binding $parent[v:Repository].((vm:Repository)DataContext).OnlyHighlightCurrentBranchInHistory}"
-                         NavigationId="{Binding NavigationId}"/>
-          </DataTemplate>
+      <!-- サブビューキャッシュ: 3つのViewを常時保持し、IsVisibleで切り替え -->
+      <Panel Grid.Row="3">
+        <v:Histories DataContext="{Binding HistoriesVM}"
+                     CurrentBranch="{Binding $parent[v:Repository].((vm:Repository)DataContext).CurrentBranch}"
+                     Bisect="{Binding Bisect}"
+                     IssueTrackers="{Binding $parent[v:Repository].((vm:Repository)DataContext).IssueTrackers}"
+                     OnlyHighlightCurrentBranch="{Binding $parent[v:Repository].((vm:Repository)DataContext).OnlyHighlightCurrentBranchInHistory}"
+                     NavigationId="{Binding NavigationId}"
+                     IsVisible="{Binding $parent[v:Repository].((vm:Repository)DataContext).SelectedViewIndex, Converter={x:Static c:IntConverters.IsZero}}"/>
 
-          <DataTemplate DataType="vm:WorkingCopy">
-            <v:WorkingCopy/>
-          </DataTemplate>
+        <v:WorkingCopy DataContext="{Binding WorkingCopyVM}"
+                       IsVisible="{Binding $parent[v:Repository].((vm:Repository)DataContext).SelectedViewIndex, Converter={x:Static c:IntConverters.IsOne}}"/>
 
-          <DataTemplate DataType="vm:StashesPage">
-            <v:StashesPage/>
-          </DataTemplate>
-        </ContentControl.DataTemplates>
-      </ContentControl>
+        <v:StashesPage DataContext="{Binding StashesPageVM}"
+                       IsVisible="{Binding $parent[v:Repository].((vm:Repository)DataContext).SelectedViewIndex, Converter={x:Static c:IntConverters.IsTwo}}"/>
+      </Panel>
     </Grid>
 
     <!-- Right (Auto-Fetch) -->

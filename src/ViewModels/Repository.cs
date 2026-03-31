@@ -87,12 +87,24 @@ public class Repository : ObservableObject, Models.IRepository
         }
     }
 
-    /// <summary>現在選択中のビューオブジェクト（Histories/WorkingCopy/StashesPage）。</summary>
+    /// <summary>
+    /// 現在選択中のビューオブジェクト（Histories/WorkingCopy/StashesPage）。
+    /// XAMLバインディングからは未使用（Viewキャッシュ方式に移行済み）。Fetch.csの型チェック用に保持。
+    /// </summary>
     public object SelectedView
     {
         get => _selectedView;
-        set => SetProperty(ref _selectedView, value);
+        set => _selectedView = value;
     }
+
+    /// <summary>履歴ビューVM。Viewキャッシュ用にXAMLから直接参照する。</summary>
+    public Histories HistoriesVM => _histories;
+
+    /// <summary>ワーキングコピーVM。Viewキャッシュ用にXAMLから直接参照する。</summary>
+    public WorkingCopy WorkingCopyVM => _workingCopy;
+
+    /// <summary>スタッシュページVM。Viewキャッシュ用にXAMLから直接参照する。</summary>
+    public StashesPage StashesPageVM => _stashesPage;
 
     /// <summary>履歴をトポロジカル順序で表示するかどうか。変更時にコミット一覧を再取得する。</summary>
     public bool EnableTopoOrderInHistory
@@ -598,7 +610,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void Close()
     {
-        SelectedView = null; // Do NOT modify. Used to remove exists widgets for GC.Collect
+        SelectedView = null; // Viewキャッシュ方式移行後もFetch.csの型チェック用にnullリセット
         Logs.Clear();
 
         _uiStates.Unload(_workingCopy.CommitMessage);

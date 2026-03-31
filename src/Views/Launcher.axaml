@@ -114,14 +114,19 @@
       </Border>
     </Grid>
 
-    <!-- Page -->
-    <ContentControl Grid.Row="1" Content="{Binding ActivePage}" Background="{DynamicResource Brush.Window}">
-      <ContentControl.DataTemplates>
+    <!-- Page（Viewキャッシュ: 全タブのViewを保持し、IsVisibleで切り替え） -->
+    <ItemsControl Grid.Row="1" ItemsSource="{Binding Pages}" Background="{DynamicResource Brush.Window}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <Panel/>
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
         <DataTemplate DataType="vm:LauncherPage">
-          <v:LauncherPage/>
+          <v:LauncherPage IsVisible="{Binding IsActive}"/>
         </DataTemplate>
-      </ContentControl.DataTemplates>
-    </ContentControl>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
 
     <!-- Command Palette -->
     <Border Grid.Row="0" Grid.RowSpan="2"

@@ -13,6 +13,13 @@ namespace Komorebi.ViewModels;
 /// </summary>
 public class LauncherPage : ObservableObject
 {
+    /// <summary>このタブが現在アクティブ（前面表示中）かどうか。Viewキャッシュ用のフラグ。</summary>
+    public bool IsActive
+    {
+        get => _isActive;
+        set => SetProperty(ref _isActive, value);
+    }
+
     /// <summary>タブに関連付けられたリポジトリノード。</summary>
     public RepositoryNode Node
     {
@@ -148,6 +155,7 @@ public class LauncherPage : ObservableObject
 
     private RepositoryNode _node = null;                              // リポジトリノード
     private object _data = null;                                      // タブデータ（Repository or Welcome）
+    private bool _isActive;                                           // アクティブタブフラグ
     private Models.DirtyState _dirtyState = Models.DirtyState.None;   // ダーティ状態フラグ
     private Popup _popup = null;                                      // 表示中のポップアップ
 }
