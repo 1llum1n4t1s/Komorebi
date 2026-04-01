@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -162,7 +163,7 @@ public class ScanRepositories : Popup
         foreach (var node in group)
         {
             if (node.IsRepository)
-                repos.Add(node.Id);
+                repos.Add(OperatingSystem.IsLinux() ? node.Id : node.Id.ToLower(CultureInfo.CurrentCulture));
             else
                 GetManagedRepositories(node.SubNodes, repos);
         }
@@ -222,12 +223,12 @@ public class ScanRepositories : Popup
         foreach (var f in found)
         {
             var parent = new DirectoryInfo(f).Parent!.FullName.Replace('\\', '/').TrimEnd('/');
-            if (parent.Equals(normalizedRoot, StringComparison.Ordinal))
+            if (parent.Equals(normalizedRoot, StringComparison.OrdinalIgnoreCase))
             {
                 var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(f, null, false, false);
                 await node.UpdateStatusAsync(false, null);
             }
-            else if (parent.StartsWith(normalizedRoot, StringComparison.Ordinal))
+            else if (parent.StartsWith(normalizedRoot, StringComparison.OrdinalIgnoreCase))
             {
                 var relative = parent.Substring(normalizedRoot.Length).TrimStart('/');
                 var group = FindOrCreateGroupRecursive(Preferences.Instance.RepositoryNodes, relative);
