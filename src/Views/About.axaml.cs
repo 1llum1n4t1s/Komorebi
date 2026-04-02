@@ -35,7 +35,8 @@ public partial class About : ChromelessWindow
         {
             if (attr.Key.Equals("BuildDate", StringComparison.OrdinalIgnoreCase) && DateTime.TryParse(attr.Value, out var date))
             {
-                TxtReleaseDate.Text = App.Text("About.ReleaseDate", date.ToLocalTime().ToString("MMM d yyyy"));
+                // Preferences の DateTimeFormat 設定を反映する（"MMM d yyyy" 固定ではなくユーザー選択形式）
+                TxtReleaseDate.Text = App.Text("About.ReleaseDate", Models.DateTimeFormat.Format(date, true));
                 break;
             }
         }
