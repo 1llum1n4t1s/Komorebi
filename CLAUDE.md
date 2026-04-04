@@ -118,8 +118,28 @@ Tab switching and sub-view switching use `ItemsControl + Panel + IsVisible` inst
 - Each locale must be registered in `App.axaml` as `<ResourceInclude x:Key="xx_YY">`
 - First-launch: `InitSetup` popup lets user choose language + clone directory (bypasses OS auto-detection)
 
+### Theme System
+`src/Resources/Themes.axaml` defines 5 built-in themes (Default/Light/Dark/White/OneDark) as `ResourceDictionary` entries with `ThemeVariant` keys. Each theme defines `Color.*` resources that `Brush.*` `SolidColorBrush` resources reference via `DynamicResource`. User-customizable color overrides are applied via `Models/ThemeOverrides.cs` which loads a JSON file and merges overrides into the active resource dictionary at runtime. When adding new themed colors, define both the `Color` and `Brush` in `Themes.axaml`, and use `{DynamicResource Brush.MyName}` in AXAML — never hardcode colors.
+
+### AI Commit Message Generation
+`src/AI/` contains AI integration for generating commit messages. Supported providers: OpenAI, Azure OpenAI, Gemini, Anthropic.
+- `Service.cs` — API client configuration (provider, server, model, API key)
+- `Provider.cs` — Provider enum (OpenAI, AzureOpenAI, Gemini, Anthropic)
+- `Agent.cs` — orchestrates generation with tool use (OpenAI SDK or Anthropic raw HTTP)
+- `ChatTools.cs` — tool definitions for file diff retrieval (OpenAI SDK + Anthropic JSON)
+- Configured in Preferences under AI settings; requires an API key
+
 ### Application Entry Point
 `App.axaml.cs` contains `Main()`. The app can also launch as a rebase editor (invoked by git during interactive rebase). `App.axaml.cs` is split across partial classes: `App.Commands.cs`, `App.Extensions.cs`, `App.JsonCodeGen.cs`.
+
+### Toolbar Architecture
+The app uses a unified toolbar design (RepositoryToolbar was removed):
+- **`Launcher.axaml` title bar**: Page tabs (`LauncherTabBar`) and page switcher button only.
+- **`WelcomeToolbar.axaml`**: Shown on Welcome page. Contains Clone/Open/Terminal buttons, workspace selector (`● Name ▾`), and `···` overflow menu (Preferences, AppDataDir, Hotkeys, Update, About, Quit).
+- **Repository view (`Repository.axaml`)**: Toolbar is split into two areas:
+  - **Left sidebar top**: Branch selector, create branch button, Fetch/Pull/Push buttons (in a 36px branch bar above the filter box).
+  - **Content toolbar (right panel Row 0)**: Segmented control (Histories/WorkingCopy/Stashes), search bar, view-specific action buttons, settings gear, workspace selector, and `···` overflow menu.
+- Global keyboard shortcuts (Ctrl+,, F1, Ctrl+Q) are handled in `Launcher.axaml.cs` `OnKeyDown()`.
 
 ### Adding a New Popup Dialog
 1. Create `src/ViewModels/MyDialog.cs` inheriting `Popup`, override `Sure()` for confirm logic
@@ -158,6 +178,12 @@ When using `LockWatcher()` in a `Popup.Sure()` override, the lock must be releas
 ### Histories SHA lookup uses dictionary
 `Histories.cs` maintains a `_commitBySha` dictionary (rebuilt when `Commits` is set) for O(1) commit lookups by SHA. When adding new commit-search logic in Histories, use `_commitBySha.TryGetValue()` instead of `_commits.Find()`. The dictionary is automatically kept in sync with the commit list.
 
+### Avalonia Fluent theme overrides ToggleButton template parts by name
+When creating custom `ControlTemplate` for `ToggleButton`, **do not** name `ContentPresenter` as `PART_ContentPresenter`. The Fluent theme has a built-in style `ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter` that forces the accent color onto any `ContentPresenter` with that name. Use a custom name (e.g., `x:Name="ExpanderContent"`) to avoid the Fluent theme overriding your Background. The same applies to `Border#PART_LayoutRoot` and other PART-named elements.
+
+### Avalonia style specificity: TemplateBinding vs DynamicResource in templates
+Inside a `ControlTemplate`, `{TemplateBinding Background}` reads the control's `Background` property — which external styles (including Fluent theme pseudo-class styles like `:checked`, `:pointerover`) can change. If you want a template element's background to be immune to external style changes, use `{DynamicResource Brush.MyBrush}` directly instead of `{TemplateBinding Background}`.
+
 ## Code Style
 
 Enforced via `.editorconfig` and `dotnet format` in CI:
@@ -170,13 +196,13 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 
 ## CI/CD
 
-- **format-check.yml** — `dotnet format --verify-no-changes` on PRs to `develop`
+- **format-check.yml** — `dotnet format --verify-no-changes` on push/PR to `main`
 - **localization-check.yml** — validates locale files against `en_US`
-- **ci.yml** — builds all platforms + packages on push/PR to `develop`
-- **release.yml** — triggered by `v*` tags: builds → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
+- **ci.yml** — builds all platforms + packages on push/PR to `main`
+- **release.yml** — triggered by push to `release/**` branches: builds → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
 - **velopack.yml** — reusable workflow creating Velopack packages for 5 RIDs (win-x64, win-arm64, osx-arm64, linux-x64, linux-arm64)
 
-Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.4`). CI reads it directly for both packaging and Velopack.
+Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.52`). CI reads it directly for both packaging and Velopack.
 
 ## Key Dependencies
 

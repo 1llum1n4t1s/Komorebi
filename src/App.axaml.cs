@@ -653,6 +653,70 @@ public partial class App : Application
     }
 
     /// <summary>
+    /// ワークスペース切替メニューを構築して表示する共有ヘルパー。
+    /// Repository.axaml.cs と WelcomeToolbar.axaml.cs から呼び出される。
+    /// </summary>
+    /// <param name="anchor">メニューを開くボタン</param>
+    /// <param name="placement">メニューの配置方向</param>
+    /// <param name="onWorkspaceSwitched">ワークスペース切替後のコールバック（表示更新用）</param>
+    public static void OpenWorkspaceMenu(Avalonia.Controls.Button anchor, Avalonia.Controls.PlacementMode placement, Action onWorkspaceSwitched)
+    {
+        if (GetLauncher() is not { } launcher)
+            return;
+
+        var pref = ViewModels.Preferences.Instance;
+        var menu = new Avalonia.Controls.ContextMenu();
+        menu.Placement = placement;
+
+        var groupHeader = new Avalonia.Controls.TextBlock()
+        {
+            Text = Text("Launcher.Workspaces"),
+            FontWeight = Avalonia.Media.FontWeight.Bold,
+        };
+
+        var workspaces = new Avalonia.Controls.MenuItem();
+        workspaces.Header = groupHeader;
+        workspaces.IsEnabled = false;
+        menu.Items.Add(workspaces);
+
+        for (var i = 0; i < pref.Workspaces.Count; i++)
+        {
+            var workspace = pref.Workspaces[i];
+            var icon = CreateMenuIcon(workspace.IsActive ? "Icons.Check" : "Icons.Workspace");
+            icon.Fill = workspace.Brush;
+
+            var item = new Avalonia.Controls.MenuItem();
+            item.Header = workspace.Name;
+            item.Icon = icon;
+            item.Click += (_, ev) =>
+            {
+                if (!workspace.IsActive)
+                {
+                    launcher.CommandPalette = null;
+                    launcher.SwitchWorkspace(workspace);
+                    onWorkspaceSwitched?.Invoke();
+                }
+                ev.Handled = true;
+            };
+
+            menu.Items.Add(item);
+        }
+
+        menu.Items.Add(new Avalonia.Controls.MenuItem() { Header = "-" });
+
+        var configure = new Avalonia.Controls.MenuItem();
+        configure.Header = Text("Workspace.Configure");
+        configure.Click += async (_, ev) =>
+        {
+            await ShowDialog(new ViewModels.ConfigureWorkspace());
+            onWorkspaceSwitched?.Invoke();
+            ev.Handled = true;
+        };
+        menu.Items.Add(configure);
+        menu.Open(anchor);
+    }
+
+    /// <summary>
     /// 現在のLauncherビューモデルインスタンスを取得する。
     /// アプリケーションが初期化されていない場合はnullを返す。
     /// </summary>

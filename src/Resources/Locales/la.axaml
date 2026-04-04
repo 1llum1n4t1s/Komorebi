@@ -622,6 +622,7 @@
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Clavis API</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Exemplar</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Nomen</x:String>
+  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Provider</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Valor inscriptus est nomen ad onerandum clavem API ex ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Servitor</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">ASPECTUS</x:String>
@@ -752,6 +753,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Exsequi mandatum `git gc` pro hoc repositorio.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Purga Cache Indicis</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Exsequi `git rm -r --cached .` et `git add .` ad reaedificandum indicem.</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Purga omnia</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Purga</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Configura hoc repositorium</x:String>
@@ -786,6 +788,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">Adde Remotum</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">RESOLVE</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Quaere Committum</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Auctor</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committens</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Contentum</x:String>

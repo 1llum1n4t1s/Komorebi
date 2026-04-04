@@ -61,7 +61,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="CRDebugger.Avalonia" Version="1.0.20" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0" />
-    <PackageReference Include="NLog" Version="6.1.1" />
+    <PackageReference Include="NLog" Version="6.1.2" />
     <PackageReference Include="OpenAI" Version="2.9.1" />
     <PackageReference Include="Pfim" Version="0.11.4" />
     <PackageReference Include="Velopack" Version="0.0.1298" />

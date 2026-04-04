@@ -5,7 +5,6 @@ using System.Text;
 
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views;
@@ -526,10 +525,7 @@ public partial class CommitDetail : UserControl
     {
         if (DataContext is ViewModels.CommitDetail detail && sender is Grid { DataContext: Models.Change change })
         {
-            var tabControl = this.FindLogicalDescendantOfType<TabControl>();
-            if (tabControl is not null)
-                tabControl.SelectedIndex = 1;
-
+            detail.ActiveTabIndex = 1;
             detail.SelectedChanges = new() { change };
         }
 

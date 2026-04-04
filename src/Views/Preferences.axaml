@@ -864,6 +864,11 @@
                     <TextBlock Text="{DynamicResource Text.Preferences.AI.Name}"/>
                     <TextBox Margin="0,4,0,0" CornerRadius="3" Height="28" Text="{Binding Name, Mode=TwoWay}"/>
 
+                    <TextBlock Margin="0,12,0,0" Text="{DynamicResource Text.Preferences.AI.Provider}"/>
+                    <ComboBox Margin="0,4,0,0" Height="28" HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding Source={x:Static ai:Service.AllProviders}}"
+                              SelectedItem="{Binding Provider, Mode=TwoWay}"/>
+
                     <TextBlock Margin="0,12,0,0" Text="{DynamicResource Text.Preferences.AI.Server}"/>
                     <TextBox Margin="0,4,0,0" CornerRadius="3" Height="28" Text="{Binding Server, Mode=TwoWay}"/>
 

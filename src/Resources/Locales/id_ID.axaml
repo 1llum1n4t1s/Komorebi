@@ -627,6 +627,7 @@
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">API Key</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Model</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Nama</x:String>
+  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Penyedia</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Nilai yang dimasukkan adalah nama untuk memuat API key dari ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Server</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">TAMPILAN</x:String>
@@ -757,6 +758,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Jalankan perintah `git gc` untuk repositori ini.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Bersihkan Cache Indeks</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Jalankan `git rm -r --cached .` dan `git add .` untuk membangun ulang indeks.</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Bersihkan semua</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Bersihkan</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Konfigurasikan repositori ini</x:String>
@@ -791,6 +793,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">Tambah Remote</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">SELESAIKAN</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Cari Commit</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Author</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Konten</x:String>

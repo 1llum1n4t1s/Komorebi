@@ -678,6 +678,36 @@
     <Setter Property="Fill" Value="{DynamicResource Brush.FG2}"/>
   </Style>
 
+  <!-- ToggleButton.icon_button: checked状態でもサイズ変動しないスタイル -->
+  <Style Selector="ToggleButton.icon_button">
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="ToggleButton.icon_button /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Opacity" Value="0.8"/>
+  </Style>
+  <Style Selector="ToggleButton.icon_button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Opacity" Value="1"/>
+  </Style>
+  <Style Selector="ToggleButton.icon_button:checked">
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+  <Style Selector="ToggleButton.icon_button:checked /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Opacity" Value="1"/>
+  </Style>
+  <Style Selector="ToggleButton.icon_button:checked Path">
+    <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
+  </Style>
+  <Style Selector="ToggleButton.icon_button:pressed">
+    <Setter Property="RenderTransform" Value="scale(1)"/>
+  </Style>
+
   <Style Selector="Button.flat">
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border2}"/>
@@ -1205,49 +1235,60 @@
 
   <Style Selector="ToggleButton.group_expander">
     <Setter Property="Height" Value="28"/>
-    <Setter Property="Margin" Value="6,0,0,0"/>
+    <Setter Property="Margin" Value="0"/>
     <Setter Property="Padding" Value="0"/>
-    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Background" Value="{DynamicResource Brush.ToolBar}"/>
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
     <Setter Property="VerticalAlignment" Value="Stretch"/>
     <Setter Property="Template">
       <ControlTemplate>
-        <Grid ColumnDefinitions="Auto,*" Background="Transparent">
-          <Path Grid.Column="0"
-                x:Name="PART_IndicatorIcon"
-                Width="10"
-                Margin="0,0,2,0"
-                Data="{StaticResource Icons.Down}"
-                Fill="{DynamicResource Brush.FG2}"
-                VerticalAlignment="Center"
-                RenderTransformOrigin="50%,50%"
-                RenderTransform="rotate(270deg)"/>
-          <ContentPresenter Grid.Column="1"
-                            x:Name="PART_ContentPresenter"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            Padding="0"
-                            RecognizesAccessKey="True"
-                            HorizontalContentAlignment="Stretch"
-                            VerticalContentAlignment="Stretch" />
-        </Grid>
+        <Border Background="{DynamicResource Brush.ToolBar}"
+                BorderThickness="0,0,0,1"
+                BorderBrush="{DynamicResource Brush.Border0}"
+                Padding="8,0">
+          <Grid ColumnDefinitions="Auto,*">
+            <Path Grid.Column="0"
+                  x:Name="PART_IndicatorIcon"
+                  Width="10"
+                  Margin="0,0,4,0"
+                  Data="{StaticResource Icons.Down}"
+                  Fill="{DynamicResource Brush.FG2}"
+                  VerticalAlignment="Center"
+                  RenderTransformOrigin="50%,50%"
+                  RenderTransform="rotate(270deg)"/>
+            <ContentPresenter Grid.Column="1"
+                              x:Name="ExpanderContent"
+                              Background="Transparent"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Padding="0"
+                              RecognizesAccessKey="True"
+                              HorizontalContentAlignment="Stretch"
+                              VerticalContentAlignment="Stretch" />
+          </Grid>
+        </Border>
       </ControlTemplate>
     </Setter>
   </Style>
   <Style Selector="ToggleButton.group_expander:pressed">
     <Setter Property="RenderTransform" Value="scale(1)"/>
   </Style>
-  <Style Selector="ToggleButton.group_expander:checked /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="Transparent"/>
+  <Style Selector="ToggleButton.group_expander:checked">
+    <Setter Property="Background" Value="{DynamicResource Brush.ToolBar}"/>
+  </Style>
+  <Style Selector="ToggleButton.group_expander:pointerover">
+    <Setter Property="Background" Value="{DynamicResource Brush.ToolBar}"/>
+  </Style>
+  <Style Selector="ToggleButton.group_expander:pointerover /template/ Path#PART_IndicatorIcon">
+    <Setter Property="Fill" Value="{DynamicResource Brush.FG1}"/>
   </Style>
   <Style Selector="ToggleButton.group_expander:checked /template/ Path#PART_IndicatorIcon">
     <Setter Property="RenderTransform" Value="rotate(0deg)"/>
   </Style>
-  <Style Selector="ToggleButton.group_expander:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+  <Style Selector="ToggleButton.group_expander:checked /template/ ContentPresenter#ExpanderContent">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="ToggleButton.group_expander:pointerover /template/ ContentPresenter#ExpanderContent">
     <Setter Property="Background" Value="Transparent"/>
   </Style>
 
@@ -1539,5 +1580,151 @@
     <Setter Property="Height" Value="24"/>
     <Setter Property="Margin" Value="0,2"/>
     <Setter Property="CornerRadius" Value="4"/>
+  </Style>
+
+  <!-- ========== Apple-style Segmented Control ========== -->
+  <!-- セグメンテッドコントロール: ビュー切替に使用（コンテンツツールバー、コミット詳細） -->
+  <Style Selector="ListBox.segmented_control">
+    <Setter Property="Background" Value="{DynamicResource Brush.Contents}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border2}"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="2"/>
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="1"/>
+      </ItemsPanelTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ListBox.segmented_control ListBoxItem">
+    <Setter Property="Height" Value="22"/>
+    <Setter Property="Padding" Value="8,2"/>
+    <Setter Property="Margin" Value="0"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
+    <Setter Property="FontSize" Value="11"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control ListBoxItem:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control ListBoxItem:selected">
+    <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control ListBoxItem:selected Path">
+    <Setter Property="Fill" Value="{DynamicResource Brush.FG1}"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Grid/>
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+
+  <!-- 小サイズバリアント（コミット詳細パネル用） -->
+  <Style Selector="ListBox.segmented_control.small">
+    <Setter Property="Padding" Value="2"/>
+  </Style>
+  <Style Selector="ListBox.segmented_control.small ListBoxItem">
+    <Setter Property="Height" Value="20"/>
+    <Setter Property="Padding" Value="6,0"/>
+    <Setter Property="FontSize" Value="11"/>
+  </Style>
+
+  <!-- ========== コンテンツツールバー ========== -->
+  <!-- 右ペイン上部のビュー制御バー -->
+  <Style Selector="Border.content_toolbar">
+    <Setter Property="Padding" Value="0,4"/>
+    <Setter Property="Background" Value="{DynamicResource Brush.ToolBar}"/>
+    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
+  </Style>
+
+  <!-- ========== ワークスペースセレクター ========== -->
+  <Style Selector="Button.workspace_selector">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border2}"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="8,3"/>
+    <Setter Property="Height" Value="26"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Cursor" Value="Hand"/>
+  </Style>
+  <Style Selector="Button.workspace_selector /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="Button.workspace_selector:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
+  </Style>
+
+  <!-- ========== ブランチセレクター ========== -->
+  <Style Selector="Button.branch_selector">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border2}"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="8,3"/>
+    <Setter Property="Height" Value="26"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Cursor" Value="Hand"/>
+  </Style>
+  <Style Selector="Button.branch_selector /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="Button.branch_selector:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
+  </Style>
+
+  <!-- ========== サイドバーアクションボタン ========== -->
+  <!-- セクションヘッダーのアクションボタン: 常時表示 -->
+  <Style Selector="StackPanel.sidebar_hover_actions">
+    <Setter Property="Opacity" Value="1"/>
+  </Style>
+
+  <!-- ブランチ行のフィルターボタン: ホバー時のみ表示（アクティブ時は常時表示） -->
+  <Style Selector="Button.branch_filter_button">
+    <Setter Property="Opacity" Value="0"/>
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15"/>
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Grid.branch_item:pointerover Button.branch_filter_button">
+    <Setter Property="Opacity" Value="1"/>
+  </Style>
+
+  <!-- セグメントバッジ（変更数・スタッシュ数表示） -->
+  <Style Selector="Border.seg_badge">
+    <Setter Property="Background" Value="{DynamicResource Brush.Badge}"/>
+    <Setter Property="CornerRadius" Value="7"/>
+    <Setter Property="Padding" Value="4,0"/>
+    <Setter Property="MinWidth" Value="16"/>
+    <Setter Property="Height" Value="14"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Border.seg_badge TextBlock">
+    <Setter Property="FontSize" Value="9"/>
+    <Setter Property="FontFamily" Value="{DynamicResource Fonts.Monospace}"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="HorizontalAlignment" Value="Center"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
   </Style>
 </Styles>

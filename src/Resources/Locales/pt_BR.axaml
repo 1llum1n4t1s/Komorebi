@@ -625,6 +625,7 @@
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Chave da API</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Modelo</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Nome</x:String>
+  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Provedor</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">O valor informado é o nome para carregar a chave API do ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Servidor</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">APARÊNCIA</x:String>
@@ -755,6 +756,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Execute o comando `git gc` para este repositório.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Limpar Cache do Índice</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Execute `git rm -r --cached .` e `git add .` para reconstruir o índice.</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Limpar tudo</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Limpar</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Configurar este repositório</x:String>
@@ -789,6 +791,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">ADICIONAR REMOTO</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">RESOLVER</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Pesquisar Commit</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Autor</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Conteúdo</x:String>
