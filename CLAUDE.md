@@ -122,10 +122,11 @@ Tab switching and sub-view switching use `ItemsControl + Panel + IsVisible` inst
 `src/Resources/Themes.axaml` defines 5 built-in themes (Default/Light/Dark/White/OneDark) as `ResourceDictionary` entries with `ThemeVariant` keys. Each theme defines `Color.*` resources that `Brush.*` `SolidColorBrush` resources reference via `DynamicResource`. User-customizable color overrides are applied via `Models/ThemeOverrides.cs` which loads a JSON file and merges overrides into the active resource dictionary at runtime. When adding new themed colors, define both the `Color` and `Brush` in `Themes.axaml`, and use `{DynamicResource Brush.MyName}` in AXAML — never hardcode colors.
 
 ### AI Commit Message Generation
-`src/AI/` contains OpenAI/Azure OpenAI integration for generating commit messages:
-- `Service.cs` — API client configuration and request handling
-- `Agent.cs` — orchestrates 2-stage generation (summary → message)
-- `ChatTools.cs` — tool definitions for the AI agent
+`src/AI/` contains AI integration for generating commit messages. Supported providers: OpenAI, Azure OpenAI, Gemini, Anthropic.
+- `Service.cs` — API client configuration (provider, server, model, API key)
+- `Provider.cs` — Provider enum (OpenAI, AzureOpenAI, Gemini, Anthropic)
+- `Agent.cs` — orchestrates generation with tool use (OpenAI SDK or Anthropic raw HTTP)
+- `ChatTools.cs` — tool definitions for file diff retrieval (OpenAI SDK + Anthropic JSON)
 - Configured in Preferences under AI settings; requires an API key
 
 ### Application Entry Point

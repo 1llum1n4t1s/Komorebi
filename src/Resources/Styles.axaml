@@ -1721,6 +1721,7 @@
   </Style>
   <Style Selector="Border.seg_badge TextBlock">
     <Setter Property="FontSize" Value="9"/>
+    <Setter Property="FontFamily" Value="{DynamicResource Fonts.Monospace}"/>
     <Setter Property="Foreground" Value="White"/>
     <Setter Property="FontWeight" Value="Bold"/>
     <Setter Property="HorizontalAlignment" Value="Center"/>

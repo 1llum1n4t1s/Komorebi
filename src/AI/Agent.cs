@@ -15,6 +15,8 @@ namespace Komorebi.AI;
 public class Agent
 {
     private static readonly HttpClient s_httpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
+    private const string AnthropicApiVersion = "2023-06-01";
+    private const int AnthropicMaxTokens = 4096;
 
     public Agent(Service service)
     {
@@ -139,14 +141,14 @@ public class Agent
             var requestBody = new JsonObject
             {
                 ["model"] = _service.Model,
-                ["max_tokens"] = 4096,
+                ["max_tokens"] = AnthropicMaxTokens,
                 ["tools"] = tools,
                 ["messages"] = messages.DeepClone()
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/v1/messages");
             request.Headers.Add("x-api-key", _service.ResolvedApiKey);
-            request.Headers.Add("anthropic-version", "2023-06-01");
+            request.Headers.Add("anthropic-version", AnthropicApiVersion);
             request.Content = new StringContent(requestBody.ToJsonString(), Encoding.UTF8, "application/json");
             var response = await s_httpClient.SendAsync(request, cancellation);
             response.EnsureSuccessStatusCode();
