@@ -150,7 +150,7 @@ public class Agent
             request.Headers.Add("x-api-key", _service.ResolvedApiKey);
             request.Headers.Add("anthropic-version", AnthropicApiVersion);
             request.Content = new StringContent(requestBody.ToJsonString(), Encoding.UTF8, "application/json");
-            var response = await s_httpClient.SendAsync(request, cancellation);
+            using var response = await s_httpClient.SendAsync(request, cancellation);
             response.EnsureSuccessStatusCode();
 
             var responseText = await response.Content.ReadAsStringAsync(cancellation);

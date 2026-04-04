@@ -133,7 +133,7 @@ Tab switching and sub-view switching use `ItemsControl + Panel + IsVisible` inst
 `App.axaml.cs` contains `Main()`. The app can also launch as a rebase editor (invoked by git during interactive rebase). `App.axaml.cs` is split across partial classes: `App.Commands.cs`, `App.Extensions.cs`, `App.JsonCodeGen.cs`.
 
 ### Toolbar Architecture
-The app uses a unified toolbar design (RepositoryToolbar は廃止済み):
+The app uses a unified toolbar design (RepositoryToolbar was removed):
 - **`Launcher.axaml` title bar**: Page tabs (`LauncherTabBar`) and page switcher button only.
 - **`WelcomeToolbar.axaml`**: Shown on Welcome page. Contains Clone/Open/Terminal buttons, workspace selector (`● Name ▾`), and `···` overflow menu (Preferences, AppDataDir, Hotkeys, Update, About, Quit).
 - **Repository view (`Repository.axaml`)**: Toolbar is split into two areas:
