@@ -6,7 +6,7 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-99.73%25-yellow)
+### ![de__DE](https://img.shields.io/badge/de__DE-99.74%25-yellow)
 
 <details>
 <summary>Missing keys in de_DE.axaml</summary>
@@ -33,7 +33,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![fr__FR](https://img.shields.io/badge/fr__FR-99.73%25-yellow)
+### ![fr__FR](https://img.shields.io/badge/fr__FR-99.74%25-yellow)
 
 <details>
 <summary>Missing keys in fr_FR.axaml</summary>
@@ -56,7 +56,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![it__IT](https://img.shields.io/badge/it__IT-99.73%25-yellow)
+### ![it__IT](https://img.shields.io/badge/it__IT-99.74%25-yellow)
 
 <details>
 <summary>Missing keys in it_IT.axaml</summary>
