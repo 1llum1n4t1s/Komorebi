@@ -132,11 +132,13 @@ Tab switching and sub-view switching use `ItemsControl + Panel + IsVisible` inst
 `App.axaml.cs` contains `Main()`. The app can also launch as a rebase editor (invoked by git during interactive rebase). `App.axaml.cs` is split across partial classes: `App.Commands.cs`, `App.Extensions.cs`, `App.JsonCodeGen.cs`.
 
 ### Toolbar Architecture
-The app uses a split-toolbar design:
-- **`Launcher.axaml` title bar**: Only contains page tabs (`LauncherTabBar`) and page switcher button. No app-level menu or workspace buttons.
-- **`WelcomeToolbar.axaml`**: Shown on the new-tab/Welcome page. Contains Clone/Open/Terminal buttons, plus **☰ app menu** (Preferences, Hotkeys, About, Quit) and **workspace selector** — these are the only places to access app settings when no repo is open.
-- **`RepositoryToolbar.axaml`**: Shown when a repo tab is active. Contains branch selector, Fetch/Pull/Push, repo configure, workspace selector, and `···` overflow menu (which includes Preferences, Hotkeys, About).
-- Global keyboard shortcuts (Ctrl+,, F1, Ctrl+Q) are handled in `Launcher.axaml.cs` `OnKeyDown()`, not tied to any specific toolbar.
+The app uses a unified toolbar design (RepositoryToolbar は廃止済み):
+- **`Launcher.axaml` title bar**: Page tabs (`LauncherTabBar`) and page switcher button only.
+- **`WelcomeToolbar.axaml`**: Shown on Welcome page. Contains Clone/Open/Terminal buttons, workspace selector (`● Name ▾`), and `···` overflow menu (Preferences, AppDataDir, Hotkeys, Update, About, Quit).
+- **Repository view (`Repository.axaml`)**: Toolbar is split into two areas:
+  - **Left sidebar top**: Branch selector, create branch button, Fetch/Pull/Push buttons (in a 36px branch bar above the filter box).
+  - **Content toolbar (right panel Row 0)**: Segmented control (Histories/WorkingCopy/Stashes), search bar, view-specific action buttons, settings gear, workspace selector, and `···` overflow menu.
+- Global keyboard shortcuts (Ctrl+,, F1, Ctrl+Q) are handled in `Launcher.axaml.cs` `OnKeyDown()`.
 
 ### Adding a New Popup Dialog
 1. Create `src/ViewModels/MyDialog.cs` inheriting `Popup`, override `Sure()` for confirm logic
