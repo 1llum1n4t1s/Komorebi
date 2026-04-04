@@ -62,6 +62,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
             if (value != _sharedData.ActiveTabIndex)
             {
                 _sharedData.ActiveTabIndex = value;
+                OnPropertyChanged();
 
                 // 変更タブに切り替え時、選択が1件で差分コンテキストがない場合は生成する
                 if (value == 1 && DiffContext is null && _selectedChanges is { Count: 1 })

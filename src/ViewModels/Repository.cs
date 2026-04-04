@@ -1005,6 +1005,8 @@ public class Repository : ObservableObject, Models.IRepository
         }
         else
         {
+            if (IsSearchingCommits)
+                IsSearchingCommits = false;
             SelectedViewIndex = 0;
             _histories?.NavigateTo(sha);
         }

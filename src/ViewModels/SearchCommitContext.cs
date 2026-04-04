@@ -24,7 +24,8 @@ public class SearchCommitContext : ObservableObject, IDisposable
             if (SetProperty(ref _method, value))
             {
                 UpdateSuggestions();
-                StartSearch();
+                if (_repo.IsSearchingCommits)
+                    StartSearch();
             }
         }
     }
@@ -243,12 +244,8 @@ public class SearchCommitContext : ObservableObject, IDisposable
                 Dispatcher.UIThread.Post(() =>
                 {
                     _requestingWorktreeFiles = false;
-
-                    if (_repo.IsSearchingCommits)
-                    {
-                        _worktreeFiles = files;
-                        UpdateSuggestions();
-                    }
+                    _worktreeFiles = files;
+                    UpdateSuggestions();
                 });
             });
 

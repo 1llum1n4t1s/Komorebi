@@ -9,16 +9,42 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Komorebi.Views.CommitDetail"
              x:DataType="vm:CommitDetail">
-  <TabControl SelectedIndex="{Binding ActiveTabIndex, Mode=TwoWay}" Padding="0,4">
-    <!-- Information Page -->
-    <TabItem>
-      <TabItem.Header>
-        <TextBlock Classes="tab_header" Text="{DynamicResource Text.CommitDetail.Info}"/>
-      </TabItem.Header>
+  <Grid RowDefinitions="Auto,*">
+    <!-- セグメンテッドコントロール（Apple風タブ切替） -->
+    <Border Grid.Row="0" Padding="6,4" Background="{DynamicResource Brush.ToolBar}" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}">
+      <ListBox Classes="segmented_control small"
+               SelectedIndex="{Binding ActiveTabIndex, Mode=TwoWay}"
+               SelectionMode="AlwaysSelected">
+        <ListBoxItem>
+          <StackPanel Orientation="Horizontal" Spacing="4">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.Info}" Fill="{DynamicResource Brush.FG2}"/>
+            <TextBlock Text="{DynamicResource Text.CommitDetail.Info}"/>
+          </StackPanel>
+        </ListBoxItem>
+        <ListBoxItem>
+          <StackPanel Orientation="Horizontal" Spacing="4">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.Changes}" Fill="{DynamicResource Brush.FG2}"/>
+            <TextBlock Text="{DynamicResource Text.CommitDetail.Changes}"/>
+          </StackPanel>
+        </ListBoxItem>
+        <ListBoxItem>
+          <StackPanel Orientation="Horizontal" Spacing="4">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.File}" Fill="{DynamicResource Brush.FG2}"/>
+            <TextBlock Text="{DynamicResource Text.CommitDetail.Files}"/>
+          </StackPanel>
+        </ListBoxItem>
+      </ListBox>
+    </Border>
 
-      <ScrollViewer Margin="4,0,0,0" Offset="{Binding ScrollOffset, Mode=TwoWay}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <!-- コンテンツ（ActiveTabIndexで切替） -->
+    <Panel Grid.Row="1">
+      <!-- コミット情報 -->
+      <ScrollViewer Margin="4,0,0,0"
+                    Offset="{Binding ScrollOffset, Mode=TwoWay}"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto"
+                    IsVisible="{Binding ActiveTabIndex, Converter={x:Static c:IntConverters.IsZero}}">
         <StackPanel Orientation="Vertical">
-          <!-- Base Information -->
           <v:CommitBaseInfo Content="{Binding Commit}"
                             FullMessage="{Binding FullMessage}"
                             SignInfo="{Binding SignInfo}"
@@ -27,10 +53,8 @@
                             Children="{Binding Children}"
                             Margin="0,0,12,0"/>
 
-          <!-- Line -->
           <Rectangle Height=".65" Margin="8,8,12,8" Fill="{DynamicResource Brush.Border2}"/>
 
-          <!-- Change List -->
           <ListBox Background="Transparent"
                    Margin="64,0,12,4"
                    SelectionMode="Single"
@@ -72,27 +96,20 @@
             </ListBox.ItemTemplate>
           </ListBox>
 
-          <!-- Only Top100 Tip -->
           <TextBlock Margin="108,0,12,16"
                      Text="{DynamicResource Text.CommitDetail.Info.GotoChangesPage}"
                      Foreground="{DynamicResource Brush.FG2}"
                      IsVisible="{Binding Changes, Converter={x:Static c:ListConverters.IsOnlyTop100Shows}}"/>
         </StackPanel>
       </ScrollViewer>
-    </TabItem>
 
-    <TabItem>
-      <TabItem.Header>
-        <TextBlock Classes="tab_header" Text="{DynamicResource Text.CommitDetail.Changes}"/>
-      </TabItem.Header>
-      <v:CommitChanges Margin="4,0"/>
-    </TabItem>
+      <!-- 変更 -->
+      <v:CommitChanges Margin="4,0"
+                       IsVisible="{Binding ActiveTabIndex, Converter={x:Static c:IntConverters.IsOne}}"/>
 
-    <TabItem>
-      <TabItem.Header>
-        <TextBlock Classes="tab_header" Text="{DynamicResource Text.CommitDetail.Files}"/>
-      </TabItem.Header>
-      <v:RevisionFiles Margin="4,0"/>
-    </TabItem>
-  </TabControl>
+      <!-- ファイル -->
+      <v:RevisionFiles Margin="4,0"
+                       IsVisible="{Binding ActiveTabIndex, Converter={x:Static c:IntConverters.IsTwo}}"/>
+    </Panel>
+  </Grid>
 </UserControl>
