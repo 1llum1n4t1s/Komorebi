@@ -155,7 +155,7 @@ public partial class WorkingCopy : UserControl
             }
             else if (e.Key is Key.F && e.KeyModifiers == cmdKey)
             {
-                LocalChangesSearchBox.Focus();
+                this.FindAncestorOfType<Repository>()?.FocusWorkingCopySearchBox();
                 e.Handled = true;
             }
         }
@@ -197,7 +197,7 @@ public partial class WorkingCopy : UserControl
             }
             else if (e.Key is Key.F && e.KeyModifiers == cmdKey)
             {
-                LocalChangesSearchBox.Focus();
+                this.FindAncestorOfType<Repository>()?.FocusWorkingCopySearchBox();
                 e.Handled = true;
             }
         }

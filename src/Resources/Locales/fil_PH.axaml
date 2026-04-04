@@ -622,6 +622,7 @@
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">API Key</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Modelo</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Pangalan</x:String>
+  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Provider</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Entered value is the name to load API key from ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Server</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">HITSURA</x:String>
@@ -752,6 +753,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Patakbuhin ang `git gc` command para sa repository na ito.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">I-clear ang Index Cache</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Patakbuhin ang `git rm -r --cached .` at `git add .` para i-rebuild ang index.</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Burahin lahat</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Burahin</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">I-configure ang repository na ito</x:String>
@@ -786,6 +788,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">Magdagdag ng Remote</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">RESOLBAHIN</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Maghanap ng Commit</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">May-akda</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Nag-commit</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Nilalaman</x:String>

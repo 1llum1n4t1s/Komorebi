@@ -625,6 +625,7 @@
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">பநிஇ திறவுகோல்</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">மாதிரி</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">பெயர்</x:String>
+  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">வழங்குநர்</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">உள்ளிட்ட மதிப்பு ENV-லிருந்து API சாவியை ஏற்றுவதற்கான பெயர்</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">சேவையகம்</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">தோற்றம்</x:String>
@@ -755,6 +756,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">இந்த களஞ்சியத்திற்கு `அறிவிலி சீசி` கட்டளையை இயக்கு.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">குறியீட்டு தற்காலிக சேமிப்பை அழி</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">`git rm -r --cached .` மற்றும் `git add .` இயக்கி குறியீட்டை மீளமைக்கவும்.</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">அனைத்தையும் அழி</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">அழி</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">இந்த களஞ்சியத்தை உள்ளமை</x:String>
@@ -789,6 +791,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">தொலையைச் சேர்</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">தீர்வு</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">உறுதிமொழி தேடு</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">ஆசிரியர்</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">உறுதிமொழியாளர்</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">உள்ளடக்கம்</x:String>

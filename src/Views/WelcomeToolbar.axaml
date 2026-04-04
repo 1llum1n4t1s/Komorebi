@@ -36,6 +36,29 @@
       <Button Classes="icon_button" Width="32" Command="{Binding ScanDefaultCloneDir}" ToolTip.Tip="{DynamicResource Text.Welcome.ScanDefaultCloneDir}">
         <Path Width="14" Height="14" Data="{StaticResource Icons.Scan}"/>
       </Button>
+
+      <!-- セパレーター -->
+      <Rectangle Width="1" Height="16" Margin="8,0" VerticalAlignment="Center" Fill="{DynamicResource Brush.Border2}"/>
+
+      <!-- ワークスペースセレクター -->
+      <Button Classes="workspace_selector" Margin="6,0,0,0" Click="OpenWorkspaceMenu"
+              ToolTip.Tip="{DynamicResource Text.Workspace}"
+              HotKey="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <Ellipse x:Name="WorkspaceDot" Width="8" Height="8"/>
+          <TextBlock x:Name="WorkspaceName" FontSize="11" Foreground="{DynamicResource Brush.FG2}"/>
+          <Path Width="8" Height="8" Data="{StaticResource Icons.Down}" Fill="{DynamicResource Brush.FG2}"/>
+        </StackPanel>
+      </Button>
+
+      <!-- セパレーター -->
+      <Rectangle Width="1" Height="16" Margin="8,0" VerticalAlignment="Center" Fill="{DynamicResource Brush.Border2}"/>
+
+      <!-- オーバーフローメニュー (···) — RepositoryToolbarと同一の表現 -->
+      <Button Classes="icon_button" Width="32" Margin="0,0,6,0" Click="OpenOverflowMenu"
+              IsVisible="{OnPlatform True, macOS=False}">
+        <Path Width="16" Height="16" Data="{StaticResource Icons.More}"/>
+      </Button>
     </StackPanel>
   </Grid>
 </UserControl>
