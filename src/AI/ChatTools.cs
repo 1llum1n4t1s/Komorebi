@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using OpenAI.Chat;
 
@@ -54,5 +55,34 @@ public static class ChatTools
         }
 
         throw new NotSupportedException($"The tool {call.FunctionName} is not supported");
+    }
+
+    public static async Task<JsonObject> ProcessAnthropicCall(string toolId, string toolName, JsonElement toolInput, Action<string> output)
+    {
+        if (toolName == GetDetailChangesInFile.FunctionName)
+        {
+            var hasRepo = toolInput.TryGetProperty("repo", out var repoPath);
+            var hasFile = toolInput.TryGetProperty("file", out var filePath);
+            var hasOriginalFile = toolInput.TryGetProperty("originalFile", out var originalFilePath);
+            if (!hasRepo)
+                throw new ArgumentException("repo", "The repo argument is required");
+            if (!hasFile)
+                throw new ArgumentException("file", "The file argument is required");
+
+            output?.Invoke($"Read changes in file: {filePath.GetString()}");
+
+            var orgFilePath = hasOriginalFile ? originalFilePath.GetString() : string.Empty;
+            var rs = await new Commands.GetFileChangeForAI(repoPath.GetString(), filePath.GetString(), orgFilePath).ReadAsync();
+            var message = rs.IsSuccess ? rs.StdOut : $"Failed to get diff for '{filePath.GetString()}'. Error: {rs.StdErr}";
+
+            return new JsonObject
+            {
+                ["type"] = "tool_result",
+                ["tool_use_id"] = toolId,
+                ["content"] = message
+            };
+        }
+
+        throw new NotSupportedException($"The tool {toolName} is not supported");
     }
 }
