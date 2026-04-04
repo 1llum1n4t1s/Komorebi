@@ -42,9 +42,9 @@ public static class ChatTools
             var hasFile = doc.RootElement.TryGetProperty("file", out var filePath);
             var hasOriginalFile = doc.RootElement.TryGetProperty("originalFile", out var originalFilePath);
             if (!hasRepo)
-                throw new ArgumentException("repo", "The repo argument is required");
+                throw new ArgumentException("The repo argument is required", "repo");
             if (!hasFile)
-                throw new ArgumentException("file", "The file argument is required");
+                throw new ArgumentException("The file argument is required", "file");
 
             output?.Invoke($"Read changes in file: {filePath.GetString()}");
 
@@ -65,9 +65,9 @@ public static class ChatTools
             var hasFile = toolInput.TryGetProperty("file", out var filePath);
             var hasOriginalFile = toolInput.TryGetProperty("originalFile", out var originalFilePath);
             if (!hasRepo)
-                throw new ArgumentException("repo", "The repo argument is required");
+                throw new ArgumentException("The repo argument is required", "repo");
             if (!hasFile)
-                throw new ArgumentException("file", "The file argument is required");
+                throw new ArgumentException("The file argument is required", "file");
 
             output?.Invoke($"Read changes in file: {filePath.GetString()}");
 

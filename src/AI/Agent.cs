@@ -14,6 +14,8 @@ namespace Komorebi.AI;
 
 public class Agent
 {
+    private static readonly HttpClient s_httpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
+
     public Agent(Service service)
     {
         _service = service;
@@ -107,10 +109,6 @@ public class Agent
     {
         var baseUrl = string.IsNullOrEmpty(_service.Server) ? "https://api.anthropic.com" : _service.Server.TrimEnd('/');
 
-        using var http = new HttpClient();
-        http.DefaultRequestHeaders.Add("x-api-key", _service.ResolvedApiKey);
-        http.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
-
         var tools = new JsonArray
         {
             new JsonObject
@@ -143,11 +141,14 @@ public class Agent
                 ["model"] = _service.Model,
                 ["max_tokens"] = 4096,
                 ["tools"] = tools,
-                ["messages"] = JsonNode.Parse(messages.ToJsonString())
+                ["messages"] = messages.DeepClone()
             };
 
-            var httpContent = new StringContent(requestBody.ToJsonString(), Encoding.UTF8, "application/json");
-            var response = await http.PostAsync($"{baseUrl}/v1/messages", httpContent, cancellation);
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/v1/messages");
+            request.Headers.Add("x-api-key", _service.ResolvedApiKey);
+            request.Headers.Add("anthropic-version", "2023-06-01");
+            request.Content = new StringContent(requestBody.ToJsonString(), Encoding.UTF8, "application/json");
+            var response = await s_httpClient.SendAsync(request, cancellation);
             response.EnsureSuccessStatusCode();
 
             var responseText = await response.Content.ReadAsStringAsync(cancellation);
@@ -201,7 +202,8 @@ public class Agent
             }
             else
             {
-                break;
+                throw new InvalidOperationException(
+                    $"Unsupported Anthropic stop_reason: {stopReason ?? "<null>"}");
             }
         } while (true);
     }

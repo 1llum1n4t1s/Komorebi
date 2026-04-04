@@ -953,59 +953,8 @@ public partial class Repository : UserControl
     /// </summary>
     private void OpenWorkspaceMenu(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && App.GetLauncher() is { } launcher)
-        {
-            var pref = ViewModels.Preferences.Instance;
-            var menu = new ContextMenu();
-            menu.Placement = PlacementMode.BottomEdgeAlignedLeft;
-
-            var groupHeader = new TextBlock()
-            {
-                Text = App.Text("Launcher.Workspaces"),
-                FontWeight = FontWeight.Bold,
-            };
-
-            var workspaces = new MenuItem();
-            workspaces.Header = groupHeader;
-            workspaces.IsEnabled = false;
-            menu.Items.Add(workspaces);
-
-            for (var i = 0; i < pref.Workspaces.Count; i++)
-            {
-                var workspace = pref.Workspaces[i];
-                var icon = App.CreateMenuIcon(workspace.IsActive ? "Icons.Check" : "Icons.Workspace");
-                icon.Fill = workspace.Brush;
-
-                var item = new MenuItem();
-                item.Header = workspace.Name;
-                item.Icon = icon;
-                item.Click += (_, ev) =>
-                {
-                    if (!workspace.IsActive)
-                    {
-                        launcher.CommandPalette = null;
-                        launcher.SwitchWorkspace(workspace);
-                        UpdateWorkspaceDisplay();
-                    }
-                    ev.Handled = true;
-                };
-
-                menu.Items.Add(item);
-            }
-
-            menu.Items.Add(new MenuItem() { Header = "-" });
-
-            var configure = new MenuItem();
-            configure.Header = App.Text("Workspace.Configure");
-            configure.Click += async (_, ev) =>
-            {
-                await App.ShowDialog(new ViewModels.ConfigureWorkspace());
-                UpdateWorkspaceDisplay();
-                ev.Handled = true;
-            };
-            menu.Items.Add(configure);
-            menu.Open(btn);
-        }
+        if (sender is Button btn)
+            App.OpenWorkspaceMenu(btn, PlacementMode.BottomEdgeAlignedLeft, UpdateWorkspaceDisplay);
 
         e.Handled = true;
     }
@@ -1043,7 +992,8 @@ public partial class Repository : UserControl
             if (!repo.IsBare)
                 menu.Items.Add(apply);
 
-            menu.Items.Add(new MenuItem() { Header = "-" });
+            if (!repo.IsBare)
+                menu.Items.Add(new MenuItem() { Header = "-" });
 
             // Git Flow
             var gitflow = new MenuItem();
@@ -1069,7 +1019,8 @@ public partial class Repository : UserControl
             if (!repo.IsBare)
                 menu.Items.Add(bisect);
 
-            menu.Items.Add(new MenuItem() { Header = "-" });
+            if (!repo.IsBare)
+                menu.Items.Add(new MenuItem() { Header = "-" });
 
             // Custom Actions
             var customActions = new MenuItem();
