@@ -33,7 +33,15 @@ public partial class Repository : UserControl
         UpdateLeftSidebarLayout();
         UpdateWorkspaceDisplay();
         if (DataContext is ViewModels.Repository repo)
+        {
             repo.PropertyChanged += OnRepoPropertyChanged;
+
+            // ListBox(SelectionMode=AlwaysSelected)の初期化がSelectedViewIndexを
+            // 0にリセットする場合があるため、設定に応じてデフォルトビューを再適用する
+            // ベアリポジトリではワーキングコピータブが非表示のためスキップ
+            if (!repo.IsBare && ViewModels.Preferences.Instance.ShowLocalChangesByDefault)
+                repo.SelectedViewIndex = 1;
+        }
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
