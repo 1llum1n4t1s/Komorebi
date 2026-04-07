@@ -286,8 +286,8 @@ public class Histories : ObservableObject, IDisposable
         else if (commits.Count == 1)
         {
             var commit = (commits[0] as Models.Commit)!;
-            if (_repo.SearchCommitContext.Selected is null || _repo.SearchCommitContext.Selected.SHA != commit.SHA)
-                _repo.SearchCommitContext.Selected = _repo.SearchCommitContext.Results?.Find(x => x.SHA == commit.SHA);
+            if (_repo.SearchCommitContext.Selected is null || !_repo.SearchCommitContext.Selected.SHA.Equals(commit.SHA, StringComparison.Ordinal))
+                _repo.SearchCommitContext.Selected = _repo.SearchCommitContext.Results?.Find(x => x.SHA.Equals(commit.SHA, StringComparison.Ordinal));
 
             SelectedCommit = commit;
             NavigationId = _navigationId + 1;
