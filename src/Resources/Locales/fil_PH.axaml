@@ -7,29 +7,30 @@
   <x:String x:Key="Text.About.SubTitle" xml:space="preserve">Open-source &amp; Libreng Git GUI Client</x:String>
   <x:String x:Key="Text.AddToIgnore" xml:space="preserve">Magdagdag ng (mga) File sa Ignore</x:String>
   <x:String x:Key="Text.AddToIgnore.Pattern" xml:space="preserve">Pattern:</x:String>
-  <x:String x:Key="Text.AddToIgnore.Storage" xml:space="preserve">Storage File:</x:String>
+  <x:String x:Key="Text.AddToIgnore.Storage" xml:space="preserve">File ng Storage:</x:String>
   <x:String x:Key="Text.AddWorktree" xml:space="preserve">Magdagdag ng Worktree</x:String>
   <x:String x:Key="Text.AddWorktree.Location" xml:space="preserve">Lokasyon:</x:String>
   <x:String x:Key="Text.AddWorktree.Location.Placeholder" xml:space="preserve">Path para sa worktree na ito. Sinusuportahan ang relative path.</x:String>
   <x:String x:Key="Text.AddWorktree.Name" xml:space="preserve">Pangalan ng Branch:</x:String>
   <x:String x:Key="Text.AddWorktree.Name.Placeholder" xml:space="preserve">Opsyonal. Ang default ay ang pangalan ng destination folder.</x:String>
-  <x:String x:Key="Text.AddWorktree.Tracking" xml:space="preserve">Track Branch:</x:String>
+  <x:String x:Key="Text.AddWorktree.Tracking" xml:space="preserve">I-track ang Branch:</x:String>
   <x:String x:Key="Text.AddWorktree.Tracking.Toggle" xml:space="preserve">Sinusubaybayan ang remote branch</x:String>
   <x:String x:Key="Text.AddWorktree.WhatToCheckout" xml:space="preserve">Ano ang i-checkout:</x:String>
   <x:String x:Key="Text.AddWorktree.WhatToCheckout.CreateNew" xml:space="preserve">Lumikha ng Bagong Branch</x:String>
   <x:String x:Key="Text.AddWorktree.WhatToCheckout.Existing" xml:space="preserve">Umiiral na Branch</x:String>
-  <x:String x:Key="Text.AIAssistant" xml:space="preserve">AI Assistant</x:String>
+  <x:String x:Key="Text.AIAssistant" xml:space="preserve">AI Katulong</x:String>
   <x:String x:Key="Text.AIAssistant.Regen" xml:space="preserve">MULING I-GENERATE</x:String>
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Gamitin ang AI para gumawa ng commit message</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">GAMITIN BILANG COMMIT MESSAGE</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Itago ang Komorebi</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Ipakita Lahat</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Patch</x:String>
-  <x:String x:Key="Text.Apply.File" xml:space="preserve">Patch File:</x:String>
+  <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-Way na Merge</x:String>
+  <x:String x:Key="Text.Apply.File" xml:space="preserve">Patch na File:</x:String>
   <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">Pumili ng .patch file na ilalapat</x:String>
   <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">Huwag pansinin ang pagbabago sa whitespace</x:String>
   <x:String x:Key="Text.Apply.Title" xml:space="preserve">Ilapat ang Patch</x:String>
-  <x:String x:Key="Text.Apply.WS" xml:space="preserve">Whitespace:</x:String>
+  <x:String x:Key="Text.Apply.WS" xml:space="preserve">Puting Espasyo:</x:String>
   <x:String x:Key="Text.ApplyStash" xml:space="preserve">Ilapat ang Stash</x:String>
   <x:String x:Key="Text.ApplyStash.DropAfterApply" xml:space="preserve">Burahin pagkatapos ilapat</x:String>
   <x:String x:Key="Text.ApplyStash.RestoreIndex" xml:space="preserve">Ibalik ang mga pagbabago ng index</x:String>
@@ -99,8 +100,8 @@
   <x:String x:Key="Text.ChangeCM.CheckoutFirstParentRevision" xml:space="preserve">I-reset sa Parent na Rebisyon</x:String>
   <x:String x:Key="Text.ChangeCM.CheckoutThisRevision" xml:space="preserve">I-reset sa Rebisyong Ito</x:String>
   <x:String x:Key="Text.ChangeCM.GenerateCommitMessage" xml:space="preserve">Gumawa ng commit message</x:String>
-  <x:String x:Key="Text.ChangeCM.Merge" xml:space="preserve">Merge (Built-in)</x:String>
-  <x:String x:Key="Text.ChangeCM.MergeExternal" xml:space="preserve">Merge (External)</x:String>
+  <x:String x:Key="Text.ChangeCM.Merge" xml:space="preserve">Merge (Naka-built-in)</x:String>
+  <x:String x:Key="Text.ChangeCM.MergeExternal" xml:space="preserve">Merge (Panlabas)</x:String>
   <x:String x:Key="Text.ChangeCM.ResetFileTo" xml:space="preserve">I-reset ang (mga) File sa ${0}$</x:String>
   <x:String x:Key="Text.ChangeDisplayMode" xml:space="preserve">BAGUHIN ANG PARAAN NG PAGPAPAKITA</x:String>
   <x:String x:Key="Text.ChangeDisplayMode.Grid" xml:space="preserve">Ipakita bilang Listahan ng File at Dir</x:String>
@@ -117,9 +118,9 @@
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ang kasalukuyang HEAD mo ay may mga commit na hindi konektado sa anumang branch/tag! Gusto mo bang magpatuloy?</x:String>
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Ang mga sumusunod na submodule ay kailangang i-update:{0}Gusto mo bang i-update sila?</x:String>
-  <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout &amp; Fast-Forward</x:String>
+  <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout at Fast-Forward</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Fast-Forward sa:</x:String>
-  <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry Pick</x:String>
+  <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Idagdag ang source sa commit message</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Mga Commit:</x:String>
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">I-commit ang lahat ng pagbabago</x:String>
@@ -138,12 +139,12 @@
   <x:String x:Key="Text.Close" xml:space="preserve">ISARA</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">Editor</x:String>
   <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
-  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
-  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
-  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Mga Branch &amp; Tag</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Mga Custom na Aksyon ng Repository</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Mga File ng Rebisyon</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">I-checkout ang Commit</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">I-cherry-pick ang Commit</x:String>
-  <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Cherry-Pick ...</x:String>
+  <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Cherry-Pick (marami) ...</x:String>
   <x:String x:Key="Text.CommitCM.CompareWithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.CommitCM.CompareWithWorktree" xml:space="preserve">Ikumpara sa Worktree</x:String>
   <x:String x:Key="Text.CommitCM.CopyAuthor" xml:space="preserve">May-akda</x:String>
@@ -153,7 +154,7 @@
   <x:String x:Key="Text.CommitCM.CopySubject" xml:space="preserve">Paksa</x:String>
   <x:String x:Key="Text.CommitCM.CustomAction" xml:space="preserve">Custom na Aksyon</x:String>
   <x:String x:Key="Text.CommitCM.Drop" xml:space="preserve">Itapon ang Commit</x:String>
-  <x:String x:Key="Text.CommitCM.InteractiveRebase" xml:space="preserve">Interactive Rebase</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase" xml:space="preserve">Interactive na Rebase</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Drop" xml:space="preserve">Itapon...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Edit" xml:space="preserve">I-edit...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Fixup" xml:space="preserve">Fixup sa Parent...</x:String>
@@ -201,29 +202,29 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">I-configure ang Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE NG COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Katulad ng ${files:N}, ngunit walang mga folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Nilalaman ng Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Pangalan ng Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">CUSTOM NA AKSYON</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Mga Argumento:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Path ng Repository&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Napiling tag&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Path ng Repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Napiling tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Mga halaga ng input control</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Executable File:</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Maipapatupad na File:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Mga Input Control:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls.Edit" xml:space="preserve">I-edit</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Name" xml:space="preserve">Pangalan:</x:String>
@@ -235,8 +236,8 @@
   <x:String x:Key="Text.Configure.CustomAction.Scope.Repository" xml:space="preserve">Repository</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Scope.Tag" xml:space="preserve">Tag</x:String>
   <x:String x:Key="Text.Configure.CustomAction.WaitForExit" xml:space="preserve">Hintayin ang pagtapos ng aksyon</x:String>
-  <x:String x:Key="Text.Configure.Email" xml:space="preserve">Email Address</x:String>
-  <x:String x:Key="Text.Configure.Email.Placeholder" xml:space="preserve">Email address</x:String>
+  <x:String x:Key="Text.Configure.Email" xml:space="preserve">Adres ng Email</x:String>
+  <x:String x:Key="Text.Configure.Email.Placeholder" xml:space="preserve">Adres ng email</x:String>
   <x:String x:Key="Text.Configure.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Configure.Git.AskBeforeAutoUpdatingSubmodules" xml:space="preserve">Magtanong bago awtomatikong i-update ang mga submodule</x:String>
   <x:String x:Key="Text.Configure.Git.AutoFetch" xml:space="preserve">Awtomatikong mag-fetch ng mga remote</x:String>
@@ -244,7 +245,7 @@
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Mga Uri ng Conventional Commit</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Default na Remote</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Mas Gustong Merge Mode</x:String>
-  <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">ISSUE TRACKER</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">TAGASUBAYBAY NG ISYU</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Magdagdag ng Azure DevOps Rule</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleGerritChangeIdCommit" xml:space="preserve">Magdagdag ng Gerrit Change-Id Commit Rule</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleGiteeIssue" xml:space="preserve">Magdagdag ng Gitee Issue Rule</x:String>
@@ -254,7 +255,7 @@
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleGitLabMergeRequest" xml:space="preserve">Magdagdag ng GitLab Merge Request Rule</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleJira" xml:space="preserve">Magdagdag ng Jira Rule</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.NewRule" xml:space="preserve">Bagong Rule</x:String>
-  <x:String x:Key="Text.Configure.IssueTracker.Regex" xml:space="preserve">Issue Regex Expression:</x:String>
+  <x:String x:Key="Text.Configure.IssueTracker.Regex" xml:space="preserve">Regex Expression ng Isyu:</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.RuleName" xml:space="preserve">Pangalan ng Rule:</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.Share" xml:space="preserve">Ibahagi ang rule na ito sa .issuetracker file</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.URLTemplate" xml:space="preserve">Resulta ng URL:</x:String>
@@ -286,12 +287,12 @@
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">MAGPATULOY</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Nadetect ang walang lamang commit! Gusto mo bang magpatuloy (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">I-STAGE LAHAT &amp; I-COMMIT</x:String>
-  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">I-STAGE ANG NAPILI &amp; I-COMMIT</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">Nadetect ang walang lamang commit! Gusto mo bang magpatuloy (--allow-empty) o i-stage lahat tapos i-commit?</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">Kailangan ng Pag-restart</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">Kailangan mong i-restart ang app na ito para mailapat ang mga pagbabago.</x:String>
   <x:String x:Key="Text.ConventionalCommit" xml:space="preserve">Katulong sa Conventional Commit</x:String>
-  <x:String x:Key="Text.ConventionalCommit.BreakingChanges" xml:space="preserve">Breaking Change:</x:String>
+  <x:String x:Key="Text.ConventionalCommit.BreakingChanges" xml:space="preserve">Breaking na Pagbabago:</x:String>
   <x:String x:Key="Text.ConventionalCommit.ClosedIssue" xml:space="preserve">Saradong Issue:</x:String>
   <x:String x:Key="Text.ConventionalCommit.Detail" xml:space="preserve">Mga Detalyadong Pagbabago:</x:String>
   <x:String x:Key="Text.ConventionalCommit.Scope" xml:space="preserve">Sakop:</x:String>
@@ -312,7 +313,7 @@
   <x:String x:Key="Text.CreateBranch.PushToRemote" xml:space="preserve">I-push ang nilikhang branch sa remote</x:String>
   <x:String x:Key="Text.CreateTag" xml:space="preserve">Lumikha ng Tag...</x:String>
   <x:String x:Key="Text.CreateTag.BasedOn" xml:space="preserve">Bagong Tag Sa:</x:String>
-  <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">GPG signing</x:String>
+  <x:String x:Key="Text.CreateTag.GPGSign" xml:space="preserve">Pagpirma gamit ang GPG</x:String>
   <x:String x:Key="Text.CreateTag.Message" xml:space="preserve">Mensahe ng Tag:</x:String>
   <x:String x:Key="Text.CreateTag.Message.Placeholder" xml:space="preserve">Opsyonal.</x:String>
   <x:String x:Key="Text.CreateTag.Name" xml:space="preserve">Pangalan ng Tag:</x:String>
@@ -321,9 +322,12 @@
   <x:String x:Key="Text.CreateTag.Title" xml:space="preserve">Lumikha ng Tag</x:String>
   <x:String x:Key="Text.CreateTag.Type" xml:space="preserve">Uri:</x:String>
   <x:String x:Key="Text.CreateTag.Type.Annotated" xml:space="preserve">annotated</x:String>
-  <x:String x:Key="Text.CreateTag.Type.Lightweight" xml:space="preserve">lightweight</x:String>
+  <x:String x:Key="Text.CreateTag.Type.Lightweight" xml:space="preserve">magaan</x:String>
   <x:String x:Key="Text.CtrlClickTip" xml:space="preserve">Pindutin nang matagal ang Ctrl para magsimula agad</x:String>
   <x:String x:Key="Text.Cut" xml:space="preserve">Gupitin</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.Discard" xml:space="preserve">I-discard</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.DoNothing" xml:space="preserve">Walang Gagawin</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.StashAndReapply" xml:space="preserve">I-stash at I-reapply</x:String>
   <x:String x:Key="Text.DeinitSubmodule" xml:space="preserve">I-de-initialize ang Submodule</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Pilitin ang pag-de-init kahit may mga lokal na pagbabago.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submodule:</x:String>
@@ -349,7 +353,7 @@
   <x:String x:Key="Text.DeleteTag" xml:space="preserve">Burahin ang Tag</x:String>
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Tag:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Burahin mula sa mga remote repository</x:String>
-  <x:String x:Key="Text.Diff.Binary" xml:space="preserve">BINARY DIFF</x:String>
+  <x:String x:Key="Text.Diff.Binary" xml:space="preserve">BINARY NA PAGKAKAIBA</x:String>
   <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Nagbago ang File Mode</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Unang Pagkakaiba</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Huwag Pansinin ang mga Pagbabago sa Whitespace</x:String>
@@ -371,7 +375,7 @@
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">BINURA</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">BAGO</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">Magpalit</x:String>
-  <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Syntax Highlighting</x:String>
+  <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Pag-highlight ng Syntax</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">Pagbabalot ng Salita sa Linya</x:String>
   <x:String x:Key="Text.Diff.UseMerger" xml:space="preserve">Buksan sa Merge Tool</x:String>
   <x:String x:Key="Text.Diff.VisualLines.All" xml:space="preserve">Ipakita ang Lahat ng Linya</x:String>
@@ -430,7 +434,7 @@
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Branch ng Development:</x:String>
   <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
-  <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Feature Prefix:</x:String>
+  <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Unlapi ng Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Tapusin ang Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Tapusin ang Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Tapusin ang Release</x:String>
@@ -438,12 +442,12 @@
   <x:String x:Key="Text.GitFlow.FinishWithPush" xml:space="preserve">I-push sa (mga) remote pagkatapos tapusin</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">I-squash habang nag-merge</x:String>
   <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
-  <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Hotfix Prefix:</x:String>
+  <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Unlapi ng Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">I-initialize ang Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Panatilihin ang branch</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Branch ng Production:</x:String>
   <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Release:</x:String>
-  <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Release Prefix:</x:String>
+  <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Unlapi ng Release:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Magsimula ng Feature...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Magsimula ng Feature</x:String>
   <x:String x:Key="Text.GitFlow.StartHotfix" xml:space="preserve">Magsimula ng Hotfix...</x:String>
@@ -451,7 +455,7 @@
   <x:String x:Key="Text.GitFlow.StartPlaceholder" xml:space="preserve">Ilagay ang pangalan</x:String>
   <x:String x:Key="Text.GitFlow.StartRelease" xml:space="preserve">Magsimula ng Release...</x:String>
   <x:String x:Key="Text.GitFlow.StartReleaseTitle" xml:space="preserve">FLOW - Magsimula ng Release</x:String>
-  <x:String x:Key="Text.GitFlow.TagPrefix" xml:space="preserve">Version Tag Prefix:</x:String>
+  <x:String x:Key="Text.GitFlow.TagPrefix" xml:space="preserve">Unlapi ng Version Tag:</x:String>
   <x:String x:Key="Text.GitLFS" xml:space="preserve">Git LFS</x:String>
   <x:String x:Key="Text.GitLFS.AddTrackPattern" xml:space="preserve">Magdagdag ng Track Pattern...</x:String>
   <x:String x:Key="Text.GitLFS.AddTrackPattern.IsFilename" xml:space="preserve">Ang pattern ay pangalan ng file</x:String>
@@ -509,19 +513,20 @@
   <x:String x:Key="Text.Hotkeys.Repo.Commit" xml:space="preserve">I-commit ang mga na-stage na pagbabago</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitAndPush" xml:space="preserve">I-commit at i-push ang mga na-stage na pagbabago</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">I-stage ang lahat ng pagbabago at i-commit</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.CreateBranch" xml:space="preserve">Lumikha ng bagong branch</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Fetch, magsisimula agad</x:String>
-  <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Dashboard mode (Default)</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">Dashboard mode (Karaniwan)</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">Pumunta sa anak ng napiling commit</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToParent" xml:space="preserve">Pumunta sa magulang ng napiling commit</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.OpenCommandPalette" xml:space="preserve">Buksan ang command palette</x:String>
-  <x:String x:Key="Text.Hotkeys.Repo.OpenSearchCommits" xml:space="preserve">Commit search mode</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.OpenSearchCommits" xml:space="preserve">Mode ng paghahanap ng commit</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Pull" xml:space="preserve">Pull, magsisimula agad</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Push" xml:space="preserve">Push, magsisimula agad</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Refresh" xml:space="preserve">Pilitin ang pag-reload ng repository na ito</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.ViewChanges" xml:space="preserve">Lumipat sa 'MGA LOKAL NA PAGBABAGO'</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.ViewHistories" xml:space="preserve">Lumipat sa 'KASAYSAYAN'</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.ViewStashes" xml:space="preserve">Lumipat sa 'MGA STASH'</x:String>
-  <x:String x:Key="Text.Hotkeys.TextEditor" xml:space="preserve">TEXT EDITOR</x:String>
+  <x:String x:Key="Text.Hotkeys.TextEditor" xml:space="preserve">EDITOR NG TEKSTO</x:String>
   <x:String x:Key="Text.Hotkeys.TextEditor.CloseSearch" xml:space="preserve">Isara ang panel ng paghahanap</x:String>
   <x:String x:Key="Text.Hotkeys.TextEditor.GotoNextMatch" xml:space="preserve">Hanapin ang susunod na tugma</x:String>
   <x:String x:Key="Text.Hotkeys.TextEditor.GotoPrevMatch" xml:space="preserve">Hanapin ang nakaraang tugma</x:String>
@@ -531,8 +536,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">Stage</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">I-unstage</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">I-initialize ang Repository</x:String>
-  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
-  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Gusto mo bang patakbuhin ang `git init` sa path na ito?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Nabigong buksan ang repository. Dahilan: </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Path:</x:String>
   <x:String x:Key="Text.InitSetup" xml:space="preserve">Unang Pag-setup</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Pumili ng iyong gustong wika at default na direktoryo para sa pag-clone ng mga repository.</x:String>
@@ -545,7 +550,7 @@
   <x:String x:Key="Text.InProgress.Rebase.StoppedAt" xml:space="preserve">Huminto sa</x:String>
   <x:String x:Key="Text.InProgress.Revert" xml:space="preserve">Nagaganap ang Revert.</x:String>
   <x:String x:Key="Text.InProgress.Revert.Head" xml:space="preserve">Nire-revert ang commit</x:String>
-  <x:String x:Key="Text.InteractiveRebase" xml:space="preserve">Interactive Rebase</x:String>
+  <x:String x:Key="Text.InteractiveRebase" xml:space="preserve">Interactive na Rebase</x:String>
   <x:String x:Key="Text.InteractiveRebase.AutoStash" xml:space="preserve">I-stash &amp; ilapat muli ang mga lokal na pagbabago</x:String>
   <x:String x:Key="Text.InteractiveRebase.On" xml:space="preserve">Sa:</x:String>
   <x:String x:Key="Text.InteractiveRebase.ReorderTip" xml:space="preserve">I-drag-drop para muling ayusin ang mga commit</x:String>
@@ -619,11 +624,12 @@
   <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">Kahapon</x:String>
   <x:String x:Key="Text.Preferences" xml:space="preserve">Mga Kagustuhan</x:String>
   <x:String x:Key="Text.Preferences.AI" xml:space="preserve">AI</x:String>
+  <x:String x:Key="Text.Preferences.AI.AdditionalPrompt" xml:space="preserve">Karagdagang Prompt (Gamitin ang `-` upang ilista ang iyong mga kinakailangan)</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">API Key</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Modelo</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Pangalan</x:String>
   <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Provider</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Entered value is the name to load API key from ENV</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Ang inilagay na halaga ay ang pangalan para i-load ang API key mula sa ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Server</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">HITSURA</x:String>
   <x:String x:Key="Text.Preferences.Appearance.DefaultFont" xml:space="preserve">Default na Font</x:String>
@@ -631,13 +637,13 @@
   <x:String x:Key="Text.Preferences.Appearance.FontSize" xml:space="preserve">Laki ng Font</x:String>
   <x:String x:Key="Text.Preferences.Appearance.FontSize.Default" xml:space="preserve">Default</x:String>
   <x:String x:Key="Text.Preferences.Appearance.FontSize.Editor" xml:space="preserve">Editor</x:String>
-  <x:String x:Key="Text.Preferences.Appearance.MonospaceFont" xml:space="preserve">Monospace Font</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.MonospaceFont" xml:space="preserve">Monospace na Font</x:String>
   <x:String x:Key="Text.Preferences.Appearance.Theme" xml:space="preserve">Tema</x:String>
   <x:String x:Key="Text.Preferences.Appearance.ThemeOverrides" xml:space="preserve">File ng tema overrides</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseAutoHideScrollBars" xml:space="preserve">Gumamit ng awtomatikong pagtatago ng scrollbar</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">Gumamit ng fixed na lapad ng tab sa titlebar</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">Gumamit ng native na window frame</x:String>
-  <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">DIFF/MERGE TOOL</x:String>
+  <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">KASANGKAPAN SA DIFF/MERGE</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">Mga Argumento ng Diff</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">Mga magagamit na variable: $LOCAL, $REMOTE</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.MergeArgs" xml:space="preserve">Mga Argumento ng Merge</x:String>
@@ -677,7 +683,7 @@
   <x:String x:Key="Text.Preferences.Git.User" xml:space="preserve">Pangalan ng User</x:String>
   <x:String x:Key="Text.Preferences.Git.User.Placeholder" xml:space="preserve">Global na git user name</x:String>
   <x:String x:Key="Text.Preferences.Git.Version" xml:space="preserve">Bersyon ng Git</x:String>
-  <x:String x:Key="Text.Preferences.GPG" xml:space="preserve">GPG SIGNING</x:String>
+  <x:String x:Key="Text.Preferences.GPG" xml:space="preserve">PAGPIRMA GAMIT ANG GPG</x:String>
   <x:String x:Key="Text.Preferences.GPG.CommitEnabled" xml:space="preserve">GPG signing ng Commit</x:String>
   <x:String x:Key="Text.Preferences.GPG.Format" xml:space="preserve">Format ng GPG</x:String>
   <x:String x:Key="Text.Preferences.GPG.Path" xml:space="preserve">Path ng Pag-install ng Programa</x:String>
@@ -686,21 +692,21 @@
   <x:String x:Key="Text.Preferences.GPG.UserKey" xml:space="preserve">Signing Key ng User</x:String>
   <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">Gpg signing key ng user</x:String>
   <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">INTEGRASYON</x:String>
-  <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">SHELL/TERMINAL</x:String>
+  <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">TERMINAL</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">Arguments</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Gamitin ang '.' para tukuyin ang working directory</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Shell/Terminal</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Terminal</x:String>
   <x:String x:Key="Text.PruneRemote" xml:space="preserve">I-prune ang Remote</x:String>
   <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Target:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">I-prune ang mga Worktree</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">I-prune ang impormasyon ng worktree sa `$GIT_COMMON_DIR/worktrees`</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull</x:String>
-  <x:String x:Key="Text.Pull.Branch" xml:space="preserve">Remote Branch:</x:String>
+  <x:String x:Key="Text.Pull.Branch" xml:space="preserve">Remote na Branch:</x:String>
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">Sa:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Mga Lokal na Pagbabago:</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Remote:</x:String>
-  <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Fetch &amp; Merge)</x:String>
+  <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Kunin at Pagsamahin)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Gamitin ang rebase sa halip na merge</x:String>
   <x:String x:Key="Text.Push" xml:space="preserve">Push</x:String>
   <x:String x:Key="Text.Push.CheckSubmodules" xml:space="preserve">Siguraduhing na-push na ang mga submodule</x:String>
@@ -711,7 +717,7 @@
   <x:String x:Key="Text.Push.Revision" xml:space="preserve">Rebisyon:</x:String>
   <x:String x:Key="Text.Push.Revision.Title" xml:space="preserve">I-push ang Rebisyon sa Remote</x:String>
   <x:String x:Key="Text.Push.Title" xml:space="preserve">I-push ang mga Pagbabago sa Remote</x:String>
-  <x:String x:Key="Text.Push.To" xml:space="preserve">Remote Branch:</x:String>
+  <x:String x:Key="Text.Push.To" xml:space="preserve">Remote na Branch:</x:String>
   <x:String x:Key="Text.Push.Tracking" xml:space="preserve">Itakda bilang tracking branch</x:String>
   <x:String x:Key="Text.Push.WithAllTags" xml:space="preserve">I-push ang lahat ng tag</x:String>
   <x:String x:Key="Text.PushTag" xml:space="preserve">I-push ang Tag sa Remote</x:String>
@@ -753,7 +759,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Patakbuhin ang `git gc` command para sa repository na ito.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">I-clear ang Index Cache</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Patakbuhin ang `git rm -r --cached .` at `git add .` para i-rebuild ang index.</x:String>
-  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">Higit Pang Aksyon</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Burahin lahat</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Burahin</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">I-configure ang repository na ito</x:String>
@@ -774,7 +780,7 @@
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Patayo</x:String>
   <x:String x:Key="Text.Repository.HistoriesOrder" xml:space="preserve">PAGKAKASUNOD-SUNOD NG MGA COMMIT</x:String>
   <x:String x:Key="Text.Repository.HistoriesOrder.ByDate" xml:space="preserve">Petsa ng Commit</x:String>
-  <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologically</x:String>
+  <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Ayon sa Topolohiya</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">MGA LOKAL NA BRANCH</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Higit pang mga opsyon...</x:String>
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Mag-navigate sa HEAD</x:String>
@@ -788,8 +794,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">Magdagdag ng Remote</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">RESOLBAHIN</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Maghanap ng Commit</x:String>
-  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
-  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">I-filter ang mga File</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Maghanap ng mga Stash</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">May-akda</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Nag-commit</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Nilalaman</x:String>
@@ -823,7 +829,7 @@
   <x:String x:Key="Text.Repository.Worktrees.Prune" xml:space="preserve">Prune</x:String>
   <x:String x:Key="Text.RepositoryURL" xml:space="preserve">URL ng Git Repository</x:String>
   <x:String x:Key="Text.Reset" xml:space="preserve">I-reset ang Kasalukuyang Branch sa Rebisyon</x:String>
-  <x:String x:Key="Text.Reset.Mode" xml:space="preserve">Reset Mode:</x:String>
+  <x:String x:Key="Text.Reset.Mode" xml:space="preserve">Mode ng Reset:</x:String>
   <x:String x:Key="Text.Reset.MoveTo" xml:space="preserve">Ilipat Sa:</x:String>
   <x:String x:Key="Text.Reset.Target" xml:space="preserve">Kasalukuyang Branch:</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout" xml:space="preserve">I-reset ang Branch (Walang Checkout)</x:String>
@@ -898,13 +904,13 @@
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Magdagdag ng Submodule</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branch</x:String>
-  <x:String x:Key="Text.Submodule.CopyPath" xml:space="preserve">Relative Path</x:String>
+  <x:String x:Key="Text.Submodule.CopyPath" xml:space="preserve">Relative na Path</x:String>
   <x:String x:Key="Text.Submodule.Deinit" xml:space="preserve">I-de-initialize</x:String>
   <x:String x:Key="Text.Submodule.FetchNested" xml:space="preserve">I-fetch ang mga nested na submodule</x:String>
   <x:String x:Key="Text.Submodule.Histories" xml:space="preserve">Kasaysayan</x:String>
   <x:String x:Key="Text.Submodule.Move" xml:space="preserve">Ilipat Sa</x:String>
   <x:String x:Key="Text.Submodule.Open" xml:space="preserve">Buksan ang Repository</x:String>
-  <x:String x:Key="Text.Submodule.RelativePath" xml:space="preserve">Relative Path:</x:String>
+  <x:String x:Key="Text.Submodule.RelativePath" xml:space="preserve">Relative na Path:</x:String>
   <x:String x:Key="Text.Submodule.RelativePath.Placeholder" xml:space="preserve">Relative na folder para ilagay ang module na ito.</x:String>
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Burahin</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Itakda ang Branch</x:String>
@@ -930,7 +936,7 @@
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Burahin ang ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Burahin ang {0} napiling tag...</x:String>
   <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">I-merge ang ${0}$ sa ${1}$...</x:String>
-  <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Push ${0}$...</x:String>
+  <x:String x:Key="Text.TagCM.Push" xml:space="preserve">I-push ang ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">I-update ang mga Submodule</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Lahat ng submodule</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Init" xml:space="preserve">I-initialize kung kinakailangan</x:String>
@@ -967,7 +973,7 @@
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Burahin ang Kasaysayan</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories.Confirm" xml:space="preserve">Sigurado ka bang gusto mong burahin lahat ng kasaysayan ng commit message? Hindi mababawi ang aksyon na ito.</x:String>
   <x:String x:Key="Text.WorkingCopy.Commit" xml:space="preserve">COMMIT</x:String>
-  <x:String x:Key="Text.WorkingCopy.CommitAndPush" xml:space="preserve">COMMIT &amp; PUSH</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitAndPush" xml:space="preserve">I-COMMIT &amp; I-PUSH</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitMessageHelper" xml:space="preserve">Template/Kasaysayan</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">I-trigger ang click event</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">Commit (I-edit)</x:String>
@@ -994,8 +1000,8 @@
   <x:String x:Key="Text.WorkingCopy.Unstaged.Stage" xml:space="preserve">I-STAGE</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">I-STAGE LAHAT</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">TINGNAN ANG ITINUTURING NA HINDI NAGBAGO</x:String>
-  <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Template: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">WORKSPACE: </x:String>
+  <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Plantilya: ${0}$</x:String>
+  <x:String x:Key="Text.Workspace" xml:space="preserve">ESPASYO NG TRABAHO: </x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">I-configure ang mga Workspace...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
   <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">BRANCH</x:String>
@@ -1031,7 +1037,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Hindi nagawang i-save ang file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Hindi nagawang i-save ang pagbabago bilang patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Hindi nagawang i-scan ang mga repository: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;&#xD;&#xD;&#xD;
 Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Hindi nagawang simulan ang '{0}'. Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Hindi nagawang buksan: {0}</x:String>
@@ -1098,7 +1104,7 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Tinatanggal ang worktree...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Pinapatakbo ang prune sa remote...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Pinapatakbo ang `prune` sa remote...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Pinapu-push ang tag...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Pinapalitan ang pangalan ng '{0}'</x:String>

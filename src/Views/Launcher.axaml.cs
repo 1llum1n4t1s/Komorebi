@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.VisualTree;
 
@@ -84,18 +83,7 @@ public partial class Launcher : ChromelessWindow
         InitializeComponent();
         PositionChanged += OnPositionChanged;
 
-        // Windows 11以降の場合はMicaエフェクト（透明背景）を適用する
-        if (OperatingSystem.IsWindows() && OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
-        {
-            Background = Brushes.Transparent;
-            TransparencyLevelHint = [WindowTransparencyLevel.Mica];
-            TitleBarBG.Background = Brushes.Transparent;
-        }
-        else
-        {
-            // それ以外はテーマのタイトルバーブラシをバインドする
-            TitleBarBG.Bind(BackgroundProperty, new DynamicResourceExtension("Brush.TitleBar"));
-        }
+        TitleBarBG.Bind(BackgroundProperty, new DynamicResourceExtension("Brush.TitleBar"));
 
         // 前回のウィンドウサイズを復元する
         var layout = ViewModels.Preferences.Instance.Layout;

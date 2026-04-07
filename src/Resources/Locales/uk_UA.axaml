@@ -72,7 +72,7 @@
   <x:String x:Key="Text.BranchCM.CopyName" xml:space="preserve">Копіювати назву гілки</x:String>
   <x:String x:Key="Text.BranchCM.CreatePR" xml:space="preserve">Створити PR...</x:String>
   <x:String x:Key="Text.BranchCM.CreatePRForUpstream" xml:space="preserve">Створити PR для upstream ${0}$...</x:String>
-  <x:String x:Key="Text.BranchCM.CustomAction" xml:space="preserve">Спеціальна дія</x:String>
+  <x:String x:Key="Text.BranchCM.CustomAction" xml:space="preserve">Довільна дія</x:String>
   <x:String x:Key="Text.BranchCM.Delete" xml:space="preserve">Видалити ${0}$...</x:String>
   <x:String x:Key="Text.BranchCM.DeleteMultiBranches" xml:space="preserve">Видалити вибрані {0} гілок</x:String>
   <x:String x:Key="Text.BranchCM.EditDescription" xml:space="preserve">Редагувати опис ${0}$...</x:String>
@@ -121,7 +121,7 @@
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Гілка:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ваш поточний HEAD містить commit(и), що не пов'язані з жодною гілкою/тегом! Бажаєте продовжити?</x:String>
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Наступні підмодулі потребують оновлення:{0}Бажаєте оновити їх?</x:String>
-  <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout &amp; Fast-Forward</x:String>
+  <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Перемкнути &amp; Перемотати</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Fast-Forward до:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Додати джерело до повідомлення коміту</x:String>
@@ -142,9 +142,9 @@
   <x:String x:Key="Text.Close" xml:space="preserve">ЗАКРИТИ</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">Редактор</x:String>
   <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
-  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
-  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
-  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Гілки &amp; Теги</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Власні дії репозиторію</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Файли ревізії</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">Перейти на коміт</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">Cherry-pick коміт</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Cherry-pick ...</x:String>
@@ -155,9 +155,9 @@
   <x:String x:Key="Text.CommitCM.CopyCommitter" xml:space="preserve">Комітер</x:String>
   <x:String x:Key="Text.CommitCM.CopySHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.CommitCM.CopySubject" xml:space="preserve">Тема</x:String>
-  <x:String x:Key="Text.CommitCM.CustomAction" xml:space="preserve">Спеціальна дія</x:String>
+  <x:String x:Key="Text.CommitCM.CustomAction" xml:space="preserve">Довільна дія</x:String>
   <x:String x:Key="Text.CommitCM.Drop" xml:space="preserve">Видалити commit</x:String>
-  <x:String x:Key="Text.CommitCM.InteractiveRebase" xml:space="preserve">Інтерактивний rebase</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase" xml:space="preserve">Інтерактивне перебазування</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Drop" xml:space="preserve">Видалити...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Edit" xml:space="preserve">Редагувати...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Fixup" xml:space="preserve">Fixup до батьківського...</x:String>
@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Порівняти з HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Налаштування сховища</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН КОМІТУ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Number of changed files&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Number of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Likes ${files:N}, but without folders</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Зміст шаблону:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Назва шаблону:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">СПЕЦІАЛЬНА ДІЯ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументи:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Repository's path&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Selected tag&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Repository's path&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Selected tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Input control values</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Виконуваний файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Елементи введення:</x:String>
@@ -290,7 +290,7 @@
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">ПРОДОВЖИТИ</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Виявлено порожній коміт! Продовжити (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">ІНДЕКСУВАТИ ВСЕ ТА ЗАКОМІТИТИ</x:String>
-  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">ДОДАТИ ВИБРАНЕ &amp; ЗАФІКСУВАТИ</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">Виявлено порожній коміт! Продовжити (--allow-empty) чи індексувати все та закомітити?</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">Потрібен перезапуск</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">Потрібно перезапустити програму для застосування змін.</x:String>
@@ -539,8 +539,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">Індексувати</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">Видалити з індексу</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">Ініціалізувати сховище</x:String>
-  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
-  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Бажаєте виконати `git init` у цьому каталозі?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Не вдалося відкрити репозиторій. Причина: </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">Шлях:</x:String>
   <x:String x:Key="Text.InitSetup" xml:space="preserve">Початкове налаштування</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">Оберіть бажану мову та теку за замовчуванням для клонування сховищ.</x:String>
@@ -709,7 +709,7 @@
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Локальні зміни:</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Віддалене сховище:</x:String>
-  <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Fetch &amp; Merge)</x:String>
+  <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Отримати &amp; Злити)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Використовувати rebase замість merge</x:String>
   <x:String x:Key="Text.Push" xml:space="preserve">Push (Надіслати)</x:String>
   <x:String x:Key="Text.Push.CheckSubmodules" xml:space="preserve">Переконатися, що підмодулі надіслано</x:String>
@@ -762,7 +762,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Виконати команду `git gc` для цього сховища.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Очистити кеш індексу</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Виконати `git rm -r --cached .` та `git add .` для перебудови індексу.</x:String>
-  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">Більше дій</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Очистити все</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Очистити</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Налаштувати це сховище</x:String>
@@ -797,8 +797,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">ДОДАТИ ВІДДАЛЕНЕ СХОВИЩЕ</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">ВИРІШИТИ</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Пошук коміту</x:String>
-  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
-  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Фільтр файлів</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Пошук схованок</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Автор</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Комітер</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Вміст</x:String>
@@ -839,7 +839,7 @@
   <x:String x:Key="Text.ResetWithoutCheckout.MoveTo" xml:space="preserve">Перемістити до:</x:String>
   <x:String x:Key="Text.ResetWithoutCheckout.Target" xml:space="preserve">Гілка:</x:String>
   <x:String x:Key="Text.RevealFile" xml:space="preserve">Показати у файловому менеджері</x:String>
-  <x:String x:Key="Text.Revert" xml:space="preserve">Revert (Скасувати коміт)</x:String>
+  <x:String x:Key="Text.Revert" xml:space="preserve">Скасувати коміт</x:String>
   <x:String x:Key="Text.Revert.Commit" xml:space="preserve">Коміт:</x:String>
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Закомітити зміни скасування</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Змінити повідомлення коміту</x:String>
@@ -1040,7 +1040,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не вдалося зберегти файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не вдалося зберегти зміни в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не вдалося просканувати репозиторії: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!&#xD;&#xD;&#xD;&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не вдалося запустити '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не вдалося відкрити: {0}</x:String>
@@ -1107,7 +1107,7 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Видалення робочого дерева...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Виконання prune на віддаленому...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Виконання `prune` на віддаленому...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Відправлення тегу...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Перейменування '{0}'</x:String>

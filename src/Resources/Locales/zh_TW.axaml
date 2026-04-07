@@ -91,7 +91,7 @@
   <x:String x:Key="Text.BranchCM.SwitchToWorktree" xml:space="preserve">切換到 ${0}$ (工作區)</x:String>
   <x:String x:Key="Text.BranchCM.Tracking" xml:space="preserve">切換上游分支...</x:String>
   <x:String x:Key="Text.BranchTree.Ahead" xml:space="preserve">領先 {0} 次提交</x:String>
-  <x:String x:Key="Text.BranchTree.AheadBehind" xml:space="preserve">領先 {0} 次提交，落後 {0} 次提交</x:String>
+  <x:String x:Key="Text.BranchTree.AheadBehind" xml:space="preserve">領先 {0} 次提交，落後 {1} 次提交</x:String>
   <x:String x:Key="Text.BranchTree.Behind" xml:space="preserve">落後 {0} 次提交</x:String>
   <x:String x:Key="Text.BranchTree.InvalidUpstream" xml:space="preserve">無效</x:String>
   <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">遠端</x:String>
@@ -114,7 +114,7 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">子模組:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">遠端網址:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">簽出 (checkout) 分支</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">簽出 (checkout) 提交</x:String>
+  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">簽出提交</x:String>
   <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">提交:</x:String>
   <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">注意: 執行該操作後，目前 HEAD 會變為分離 (detached) 狀態!</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">未提交變更:</x:String>
@@ -145,7 +145,7 @@
   <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">分支 &amp; 標籤</x:String>
   <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">自訂動作</x:String>
   <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">檔案列表</x:String>
-  <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">簽出 (checkout) 此提交</x:String>
+  <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">簽出提交</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">揀選 (cherry-pick) 此提交</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">揀選 (cherry-pick)...</x:String>
   <x:String x:Key="Text.CommitCM.CompareWithHead" xml:space="preserve">與目前 HEAD 比較</x:String>
@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">與目前 HEAD 比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">存放庫設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">提交訊息範本</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} 目前分支名稱&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} 已變更檔案數&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} 已變更檔案路徑清單&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} 目前分支名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} 已變更檔案數&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} 已變更檔案路徑清單&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} 類似 ${files:N}，不含資料夾的純檔案名稱</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">範本內容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">範本名稱:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">自訂動作</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">指令參數:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} 存放庫路徑&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} 所選的提交編號&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} 所選的標籤&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} 存放庫路徑&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} 所選的提交編號&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} 所選的標籤&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... 輸入控制項中的值</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">可執行檔案路徑:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">輸入控制項:</x:String>
@@ -539,7 +539,7 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">暫存</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">取消暫存</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">初始化存放庫</x:String>
-  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">在該路徑執行 git init 以初始化 git 倉庫?</x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">在該路徑執行 `git init` 以初始化 git 倉庫?</x:String>
   <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">無法在指定路徑開啟本機儲存庫。原因：</x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">路徑:</x:String>
   <x:String x:Key="Text.InitSetup" xml:space="preserve">初始設定</x:String>
@@ -553,7 +553,7 @@
   <x:String x:Key="Text.InProgress.Rebase.StoppedAt" xml:space="preserve">目前停止於</x:String>
   <x:String x:Key="Text.InProgress.Revert" xml:space="preserve">復原提交操作進行中。</x:String>
   <x:String x:Key="Text.InProgress.Revert.Head" xml:space="preserve">正在復原提交</x:String>
-  <x:String x:Key="Text.InteractiveRebase" xml:space="preserve">互動式重定基底</x:String>
+  <x:String x:Key="Text.InteractiveRebase" xml:space="preserve">互動式重定基底 (rebase -i)</x:String>
   <x:String x:Key="Text.InteractiveRebase.AutoStash" xml:space="preserve">自動擱置變更並復原本機變更</x:String>
   <x:String x:Key="Text.InteractiveRebase.On" xml:space="preserve">起始提交:</x:String>
   <x:String x:Key="Text.InteractiveRebase.ReorderTip" xml:space="preserve">拖曳以重新排序提交</x:String>
@@ -661,8 +661,8 @@
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">顯示語言</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">最大歷史提交數</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">在提交路線圖中顯示修改時間而非提交時間</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">預設顯示 [本機變更] 頁面</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">在提交詳細資訊頁面預設顯示 [變更對比]</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">預設顯示 `本機變更` 頁面</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">在提交詳細資訊頁面預設顯示 `變更對比`</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">在提交詳細資訊中顯示後續提交</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">在路線圖中顯示標籤</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">提交標題字數偵測</x:String>
@@ -705,7 +705,7 @@
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">清理工作區</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">清理在 `$GIT_COMMON_DIR/worktrees` 中的無效工作區資訊</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">拉取 (pull)</x:String>
-  <x:String x:Key="Text.Pull.Branch" xml:space="preserve">拉取分支:</x:String>
+  <x:String x:Key="Text.Pull.Branch" xml:space="preserve">遠端分支:</x:String>
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">本機分支:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">未提交變更:</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">遠端:</x:String>
@@ -762,7 +762,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">本操作將執行 `git gc` 指令。</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">清除索引快取</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">執行 `git rm -r --cached .` 和 `git add .` 以重建索引。</x:String>
-  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">更多操作</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">清空篩選規則</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">清空</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">設定本存放庫</x:String>
@@ -797,8 +797,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">新增遠端</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">解決衝突</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">搜尋提交</x:String>
-  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
-  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">篩選檔案</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">搜尋擱置</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">作者</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">提交者</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">變更內容</x:String>
@@ -839,7 +839,7 @@
   <x:String x:Key="Text.ResetWithoutCheckout.MoveTo" xml:space="preserve">重設位置: </x:String>
   <x:String x:Key="Text.ResetWithoutCheckout.Target" xml:space="preserve">選取分支: </x:String>
   <x:String x:Key="Text.RevealFile" xml:space="preserve">在檔案瀏覽器中檢視</x:String>
-  <x:String x:Key="Text.Revert" xml:space="preserve">復原操作確認</x:String>
+  <x:String x:Key="Text.Revert" xml:space="preserve">復原此提交</x:String>
   <x:String x:Key="Text.Revert.Commit" xml:space="preserve">目標提交:</x:String>
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">復原後提交變更</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">編輯提交訊息</x:String>
@@ -1040,7 +1040,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">儲存檔案失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">儲存修補檔變更失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">掃描儲存庫失敗：{0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！&#xD;&#xD;&#xD;&#xD;
 原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">啟動 '{0}' 失敗。原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開啟失敗：{0}</x:String>
@@ -1107,7 +1107,7 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">推送 {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">正在變基...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">正在移除工作樹...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">正在遠端執行 prune...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">正在遠端執行 `prune`...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">推送 {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">正在推送標籤...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">正在重新命名 '{0}'</x:String>

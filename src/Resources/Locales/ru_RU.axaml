@@ -72,7 +72,7 @@
   <x:String x:Key="Text.BranchCM.CopyName" xml:space="preserve">Копировать имя ветки</x:String>
   <x:String x:Key="Text.BranchCM.CreatePR" xml:space="preserve">Создать PR...</x:String>
   <x:String x:Key="Text.BranchCM.CreatePRForUpstream" xml:space="preserve">Создать PR для основной ветки ${0}$...</x:String>
-  <x:String x:Key="Text.BranchCM.CustomAction" xml:space="preserve">Изменить действие</x:String>
+  <x:String x:Key="Text.BranchCM.CustomAction" xml:space="preserve">Пользовательское действие</x:String>
   <x:String x:Key="Text.BranchCM.Delete" xml:space="preserve">Удалить ${0}$...</x:String>
   <x:String x:Key="Text.BranchCM.DeleteMultiBranches" xml:space="preserve">Удалить выбранные {0} ветки</x:String>
   <x:String x:Key="Text.BranchCM.EditDescription" xml:space="preserve">Править описание для ${0}$...</x:String>
@@ -114,7 +114,7 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Подмодуль:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL-адрес:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Переключить ветку</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Переключение ревизии</x:String>
+  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Переключиться на эту ревизию</x:String>
   <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Ревизия:</x:String>
   <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Предупреждение: После переключения ревизии ваша Голова (HEAD) будет отсоединена</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Локальные изменения:</x:String>
@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Сравнить с ГОЛОВОЙ</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Настройка репозитория</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН РЕВИЗИИ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Количество изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Пути изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Количество изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Пути изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} То же, что и ${files:N}, но только имена файлов</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Cодержание:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Название:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ПОЛЬЗОВАТЕЛЬСКОЕ ДЕЙСТВИЕ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументы:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Путь репозитория&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Хеш выбранной ревизии&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Выбранная метка&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Путь репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Хеш выбранной ревизии&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Выбранная метка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Ввод управляющих значений</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Исполняемый файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Элементы управления вводом:</x:String>
@@ -385,7 +385,7 @@
   <x:String x:Key="Text.Diff.VisualLines.Decr" xml:space="preserve">Меньше видимых строк</x:String>
   <x:String x:Key="Text.Diff.VisualLines.Incr" xml:space="preserve">Больше видимых строк</x:String>
   <x:String x:Key="Text.Diff.Welcome" xml:space="preserve">ВЫБЕРИТЕ ФАЙЛ ДЛЯ ПРОСМОТРА ИЗМЕНЕНИЙ</x:String>
-  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">CLI based tool "{0}" is not supported by this app</x:String>
+  <x:String x:Key="Text.DiffMergeTool.CLIToolNotSupported" xml:space="preserve">Инструмент командной строки «{0}» не поддерживается этим приложением</x:String>
   <x:String x:Key="Text.DiffMergeTool.InvalidSetting" xml:space="preserve">Некорректный инструмент сравнения/слияния в настройках</x:String>
   <x:String x:Key="Text.DiffMergeTool.MissingConfig" xml:space="preserve">Отсутствует конфигурация git: {0}</x:String>
   <x:String x:Key="Text.DirHistories" xml:space="preserve">Каталог историй</x:String>
@@ -661,8 +661,8 @@
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Язык</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Максимальная длина истории</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Показывать время автора вместо времени ревизии на графике</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Показывать вкладку «ЛОКАЛЬНЫЕ ИЗМЕНЕНИЯ» по умолчанию</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Показывать вкладку «Изменения» в сведении ревизии по умолчанию</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Показывать вкладку `ЛОКАЛЬНЫЕ ИЗМЕНЕНИЯ` по умолчанию</x:String>
+  <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Показывать вкладку `Изменения` в сведении ревизии по умолчанию</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Показать наследника в деталях комментария</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Показывать метки на графике</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Длина темы ревизии</x:String>
@@ -762,7 +762,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Запустить команду (git gc) для данного репозитория.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Очистить кеш индекса</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Выполнить `git rm -r --cached .` и `git add .` для пересборки индекса.</x:String>
-  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">Дополнительные действия</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Очистить всё</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Очистить</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Настройка репозитория</x:String>
@@ -797,8 +797,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">ДОБАВИТЬ ВНЕШНИЙ РЕПОЗИТОРИЙ</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">РАЗРЕШИТЬ</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Поиск ревизии</x:String>
-  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
-  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Фильтр файлов</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Поиск тайников</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Автор</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Ревизор</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Содержимое</x:String>
@@ -1040,7 +1040,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не удалось сохранить файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не удалось сохранить изменения в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не удалось просканировать репозитории: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!&#xD;&#xD;&#xD;&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не удалось запустить '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не удалось открыть: {0}</x:String>
@@ -1107,7 +1107,7 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Удаление рабочего дерева...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Выполнение prune на удалённом...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Выполнение `prune` на удалённом...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Отправка тега...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Переименование '{0}'</x:String>

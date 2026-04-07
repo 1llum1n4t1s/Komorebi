@@ -37,10 +37,18 @@ public partial class Repository : UserControl
             repo.PropertyChanged += OnRepoPropertyChanged;
 
             // ListBox(SelectionMode=AlwaysSelected)の初期化がSelectedViewIndexを
-            // 0にリセットする場合があるため、設定に応じてデフォルトビューを再適用する
+            // 0にリセットするため、Dispatcherで遅延適用してListBoxのレイアウト完了後に設定する
             // ベアリポジトリではワーキングコピータブが非表示のためスキップ
             if (!repo.IsBare && ViewModels.Preferences.Instance.ShowLocalChangesByDefault)
-                repo.SelectedViewIndex = 1;
+            {
+                // ListBoxリセット(0)のみ上書きする。
+                // ユーザーが既にスタッシュ(2)等に切り替えていた場合はスキップ。
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    if (repo.SelectedViewIndex == 0)
+                        repo.SelectedViewIndex = 1;
+                }, Avalonia.Threading.DispatcherPriority.Background);
+            }
         }
     }
 
@@ -1103,6 +1111,17 @@ public partial class Repository : UserControl
             };
             menu.Items.Add(prefs);
 
+            // データの保管ディレクトリを開く
+            var appData = new MenuItem();
+            appData.Header = App.Text("OpenAppDataDir");
+            appData.Icon = App.CreateMenuIcon("Icons.Explore");
+            appData.Click += (_, ev) =>
+            {
+                App.OpenAppDataDirCommand.Execute(null);
+                ev.Handled = true;
+            };
+            menu.Items.Add(appData);
+
             // Hotkeys
             var hotkeys = new MenuItem();
             hotkeys.Header = App.Text("Hotkeys");
@@ -1114,6 +1133,23 @@ public partial class Repository : UserControl
             };
             menu.Items.Add(hotkeys);
 
+            menu.Items.Add(new MenuItem() { Header = "-" });
+
+            // 更新を確認（条件付き）
+            if (App.IsCheckForUpdateCommandVisible)
+            {
+                var update = new MenuItem();
+                update.Header = App.Text("SelfUpdate");
+                update.Icon = App.CreateMenuIcon("Icons.SoftwareUpdate");
+                update.Click += (_, ev) =>
+                {
+                    App.CheckForUpdateCommand.Execute(null);
+                    ev.Handled = true;
+                };
+                menu.Items.Add(update);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+            }
+
             // About
             var about = new MenuItem();
             about.Header = App.Text("About");
@@ -1124,6 +1160,17 @@ public partial class Repository : UserControl
                 ev.Handled = true;
             };
             menu.Items.Add(about);
+
+            // 終了
+            var quit = new MenuItem();
+            quit.Header = App.Text("Quit");
+            quit.Icon = App.CreateMenuIcon("Icons.Quit");
+            quit.Click += (_, ev) =>
+            {
+                App.QuitCommand.Execute(null);
+                ev.Handled = true;
+            };
+            menu.Items.Add(quit);
 
             menu.Open(btn);
         }

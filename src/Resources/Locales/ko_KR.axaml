@@ -25,6 +25,7 @@
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Komorebi 숨기기</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">모두 보기</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">패치</x:String>
+  <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3방향 병합</x:String>
   <x:String x:Key="Text.Apply.File" xml:space="preserve">패치 파일:</x:String>
   <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">적용할 .patch 파일을 선택하세요</x:String>
   <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">공백 변경 사항 무시</x:String>
@@ -138,9 +139,9 @@
   <x:String x:Key="Text.Close" xml:space="preserve">닫기</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">에디터</x:String>
   <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
-  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Branches &amp; Tags</x:String>
-  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Repository Custom Actions</x:String>
-  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Revision Files</x:String>
+  <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">브랜치 &amp; 태그</x:String>
+  <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">저장소 사용자 정의 액션</x:String>
+  <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">리비전 파일</x:String>
   <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">커밋 체크아웃</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">커밋 체리픽</x:String>
   <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">체리픽...</x:String>
@@ -206,15 +207,15 @@
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">템플릿 이름:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">사용자 지정 작업</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">인수:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">내장 파라미터: &#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} 저장소 경로&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} 선택한 원격 또는 선택한 브랜치의 원격&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} 선택한 브랜치 (원격 브랜치의 경우 ${REMOTE} 부분 제외)&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 선택한 브랜치의 식별하기 쉬운 이름 (원격 브랜치의 경우 ${REMOTE} 부분 포함)&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} 선택한 커밋의 해시&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} 선택한 태그&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} 저장소 루트에 상대적인 선택된 파일&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">내장 파라미터: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} 저장소 경로&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} 선택한 원격 또는 선택한 브랜치의 원격&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} 선택한 브랜치 (원격 브랜치의 경우 ${REMOTE} 부분 제외)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 선택한 브랜치의 식별하기 쉬운 이름 (원격 브랜치의 경우 ${REMOTE} 부분 포함)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} 선택한 커밋의 해시&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} 선택한 태그&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} 저장소 루트에 상대적인 선택된 파일&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... 입력 컨트롤 값</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">실행 파일:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">입력 컨트롤:</x:String>
@@ -279,7 +280,7 @@
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">계속</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">빈 커밋이 감지되었습니다! 계속하시겠습니까 (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">모두 스테이징 &amp; 커밋</x:String>
-  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">STAGE SELECTED &amp; COMMIT</x:String>
+  <x:String x:Key="Text.ConfirmEmptyCommit.StageSelectedThenCommit" xml:space="preserve">선택 항목 스테이지 &amp; 커밋</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.WithLocalChanges" xml:space="preserve">빈 커밋이 감지되었습니다! 계속하시겠습니까 (--allow-empty) 아니면 모두 스테이징 후 커밋하시겠습니까?</x:String>
   <x:String x:Key="Text.ConfirmRestart.Title" xml:space="preserve">재시작 필요</x:String>
   <x:String x:Key="Text.ConfirmRestart.Message" xml:space="preserve">변경 사항을 적용하려면 앱을 다시 시작해야 합니다.</x:String>
@@ -318,6 +319,7 @@
   <x:String x:Key="Text.CtrlClickTip" xml:space="preserve">Ctrl을 누른 채 클릭하면 바로 시작합니다</x:String>
   <x:String x:Key="Text.Cut" xml:space="preserve">잘라내기</x:String>
   <x:String x:Key="Text.DealWithLocalChanges.Discard" xml:space="preserve">폐기</x:String>
+  <x:String x:Key="Text.DealWithLocalChanges.DoNothing" xml:space="preserve">아무 작업도 하지 않음</x:String>
   <x:String x:Key="Text.DealWithLocalChanges.StashAndReapply" xml:space="preserve">스태시 &amp; 재적용</x:String>
   <x:String x:Key="Text.DeinitSubmodule" xml:space="preserve">서브모듈 초기화 해제</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">로컬 변경 사항이 있어도 강제로 초기화 해제합니다.</x:String>
@@ -504,6 +506,7 @@
   <x:String x:Key="Text.Hotkeys.Repo.Commit" xml:space="preserve">스테이징된 변경 사항 커밋</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitAndPush" xml:space="preserve">스테이징된 변경 사항 커밋 및 푸시</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.CommitWithAutoStage" xml:space="preserve">모든 변경 사항 스테이징 후 커밋</x:String>
+  <x:String x:Key="Text.Hotkeys.Repo.CreateBranch" xml:space="preserve">새 브랜치 만들기</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.Fetch" xml:space="preserve">Fetch (바로 시작)</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoHome" xml:space="preserve">대시보드 모드 (기본)</x:String>
   <x:String x:Key="Text.Hotkeys.Repo.GoToChild" xml:space="preserve">선택한 커밋의 자식으로 이동</x:String>
@@ -526,8 +529,8 @@
   <x:String x:Key="Text.Hunk.Stage" xml:space="preserve">스테이지</x:String>
   <x:String x:Key="Text.Hunk.Unstage" xml:space="preserve">언스테이지</x:String>
   <x:String x:Key="Text.Init" xml:space="preserve">저장소 초기화</x:String>
-  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">Do you want to run `git init` command under this path?</x:String>
-  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">Open repository failed. Reason:  </x:String>
+  <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">이 경로에서 `git init` 명령을 실행하시겠습니까?</x:String>
+  <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">저장소를 열지 못했습니다. 이유: </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">경로:</x:String>
   <x:String x:Key="Text.InitSetup" xml:space="preserve">초기 설정</x:String>
   <x:String x:Key="Text.InitSetup.Message" xml:space="preserve">선호하는 언어와 저장소 복제를 위한 기본 디렉터리를 선택하세요.</x:String>
@@ -614,6 +617,7 @@
   <x:String x:Key="Text.Period.Yesterday" xml:space="preserve">어제</x:String>
   <x:String x:Key="Text.Preferences" xml:space="preserve">환경설정</x:String>
   <x:String x:Key="Text.Preferences.AI" xml:space="preserve">AI</x:String>
+  <x:String x:Key="Text.Preferences.AI.AdditionalPrompt" xml:space="preserve">추가 프롬프트 (`-`를 사용하여 요구사항을 나열하세요)</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">API 키</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">모델</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">이름</x:String>
@@ -748,7 +752,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">이 저장소에 대해 `git gc` 명령을 실행합니다.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">인덱스 캐시 지우기</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">`git rm -r --cached .`와 `git add .`를 실행하여 인덱스를 재구축합니다.</x:String>
-  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">추가 작업</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">모두 지우기</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">지우기</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">이 저장소 설정</x:String>
@@ -783,8 +787,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">원격 추가</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">해결</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">커밋 검색</x:String>
-  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
-  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">파일 필터</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">스태시 검색</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">작성자</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">커밋터</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">내용</x:String>
@@ -1026,7 +1030,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">파일 저장 실패: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">패치 변경 사항 저장 실패: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">저장소 스캔 실패: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">저장소 '{0}'의 감시자 시작 실패. 'F5'를 눌러 저장소를 수동으로 새로고침해야 할 수 있습니다!&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">저장소 '{0}'의 감시자 시작 실패. 'F5'를 눌러 저장소를 수동으로 새로고침해야 할 수 있습니다!&#xD;&#xD;&#xD;&#xD;
 이유: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' 시작 실패. 이유: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">열기 실패: {0}</x:String>
@@ -1093,7 +1097,7 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">푸시 {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">리베이스 중...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">워크트리 제거 중...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">리모트에서 prune 실행 중...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">리모트에서 `prune` 실행 중...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">푸시 {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">태그 푸시 중...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' 이름 변경 중</x:String>

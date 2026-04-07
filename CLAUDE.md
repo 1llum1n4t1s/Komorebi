@@ -61,7 +61,7 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 ## Architecture
 
 ### MVVM Pattern
-- **ViewModels** (`src/ViewModels/`, ~128 files) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class.
+- **ViewModels** (`src/ViewModels/`, ~128 files) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class (which itself inherits `ObservableValidator` for validation support).
 - **Views** (`src/Views/`, ~272 files) — Avalonia XAML (`.axaml`) + code-behind (`.axaml.cs`) with compiled bindings (`x:DataType`)
 - **Models** (`src/Models/`, ~74 files) — plain data classes for git objects and app state
 - **Converters** (`src/Converters/`) — IValueConverters for XAML bindings
@@ -183,6 +183,9 @@ When creating custom `ControlTemplate` for `ToggleButton`, **do not** name `Cont
 
 ### Avalonia style specificity: TemplateBinding vs DynamicResource in templates
 Inside a `ControlTemplate`, `{TemplateBinding Background}` reads the control's `Background` property — which external styles (including Fluent theme pseudo-class styles like `:checked`, `:pointerover`) can change. If you want a template element's background to be immune to external style changes, use `{DynamicResource Brush.MyBrush}` directly instead of `{TemplateBinding Background}`.
+
+### ListBox with SelectionMode=AlwaysSelected resets bound index during layout
+When a `ListBox` with `SelectionMode="AlwaysSelected"` lays out, it forces the selection to index 0, overwriting any programmatically set bound value. If you need to set a default selection that differs from index 0 (e.g., `ShowLocalChangesByDefault`), use `Dispatcher.UIThread.Post(() => ..., DispatcherPriority.Background)` to defer the assignment until after layout completes. When doing so, guard against overwriting explicit user interaction by checking `if (currentIndex == 0)` before setting — this distinguishes the framework reset from a deliberate user selection.
 
 ## Code Style
 

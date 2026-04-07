@@ -65,7 +65,7 @@
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame sobre la Revisión Previa</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace">Ignorar cambios de espacios en blanco</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">¡BLAME EN ESTE ARCHIVO NO SOPORTADO!</x:String>
-  <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">Checkout ${0}$...</x:String>
+  <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">Cambiar a ${0}$...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">Comparar las 2 ramas seleccionadas</x:String>
   <x:String x:Key="Text.BranchCM.CompareWith" xml:space="preserve">Comparar con...</x:String>
   <x:String x:Key="Text.BranchCM.CompareWithHead" xml:space="preserve">Comparar con HEAD</x:String>
@@ -114,16 +114,16 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submódulo:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Checkout Rama</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Checkout Commit</x:String>
+  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Cambiar a Commit</x:String>
   <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
   <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Advertencia: Al hacer un checkout de commit, tu Head se separará</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Cambios Locales:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Rama:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">¡Tu HEAD actual contiene commit(s) que no están conectados a ningunas ramas/etiquetas! ¿Quieres continuar?</x:String>
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Los siguientes submódulos necesitan ser actualizados:{0} ¿Quieres actualizarlos?</x:String>
-  <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout &amp; Fast-Forward</x:String>
+  <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout &amp; Avance Rápido</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Fast-Forward a:</x:String>
-  <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry Pick</x:String>
+  <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Añadir fuente al mensaje de commit</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit(s):</x:String>
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Commit todos los cambios</x:String>
@@ -145,9 +145,9 @@
   <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">Ramas &amp; Etiquetas</x:String>
   <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">Acciones Personalizadas del Repositorio</x:String>
   <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">Archivos de Revisión</x:String>
-  <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">Checkout Commit</x:String>
+  <x:String x:Key="Text.CommitCM.Checkout" xml:space="preserve">Cambiar a Commit</x:String>
   <x:String x:Key="Text.CommitCM.CherryPick" xml:space="preserve">Cherry-Pick Este Commit</x:String>
-  <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Cherry-Pick ...</x:String>
+  <x:String x:Key="Text.CommitCM.CherryPickMultiple" xml:space="preserve">Cherry-Pick (múltiple) ...</x:String>
   <x:String x:Key="Text.CommitCM.CompareWithHead" xml:space="preserve">Comparar con HEAD</x:String>
   <x:String x:Key="Text.CommitCM.CompareWithWorktree" xml:space="preserve">Comparar con Worktree</x:String>
   <x:String x:Key="Text.CommitCM.CopyAuthor" xml:space="preserve">Autor</x:String>
@@ -157,7 +157,7 @@
   <x:String x:Key="Text.CommitCM.CopySubject" xml:space="preserve">Asunto</x:String>
   <x:String x:Key="Text.CommitCM.CustomAction" xml:space="preserve">Acción personalizada</x:String>
   <x:String x:Key="Text.CommitCM.Drop" xml:space="preserve">Eliminar Commit</x:String>
-  <x:String x:Key="Text.CommitCM.InteractiveRebase" xml:space="preserve">Rebase interactivo</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase" xml:space="preserve">Rebase Interactivo</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Drop" xml:space="preserve">Eliminar...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Edit" xml:space="preserve">Editar...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Fixup" xml:space="preserve">Arreglar en el Padre...</x:String>
@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Comparar con HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configurar Repositorio</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">PLANTILLA DE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parámetros incorporados:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Nombre de la rama local actual.&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Número de archivos modificados&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Rutas de archivos modificados&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Número N máximo de rutas de archivos modificados&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Cómo ${files}, pero solo nombres de archivos puros&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parámetros incorporados:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Nombre de la rama local actual.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Número de archivos modificados&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Rutas de archivos modificados&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Número N máximo de rutas de archivos modificados&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Cómo ${files}, pero solo nombres de archivos puros&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Cómo ${files:N}, pero sin carpetas</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contenido de la Plantilla:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nombre de la Plantilla:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACCIÓN PERSONALIZADA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumentos:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parámetros incorporados:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Ruta del repositorio&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Remoto seleccionado o Remoto de la rama seleccionada&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Rama seleccionada, sin la parte ${REMOTE} para ramas remotas&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nombre amigable de la rama seleccionada, contiene la parte ${REMOTE} para ramas remotas&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash del commit seleccionado&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Etiqueta seleccionada&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Archivo seleccionado, relativo a la raíz del repositorio&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parámetros incorporados:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Ruta del repositorio&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Remoto seleccionado o Remoto de la rama seleccionada&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Rama seleccionada, sin la parte ${REMOTE} para ramas remotas&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nombre amigable de la rama seleccionada, contiene la parte ${REMOTE} para ramas remotas&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash del commit seleccionado&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Etiqueta seleccionada&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Archivo seleccionado, relativo a la raíz del repositorio&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Valores de control de entrada</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Archivo Ejecutable:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Controles de entrada:</x:String>
@@ -587,7 +587,7 @@
   <x:String x:Key="Text.MergeConflictEditor.UseMine" xml:space="preserve">USAR MÍOS</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseTheirs" xml:space="preserve">USAR SUYOS</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Undo" xml:space="preserve">DESHACER</x:String>
-  <x:String x:Key="Text.MergeMultiple" xml:space="preserve">Merge (Multiple)</x:String>
+  <x:String x:Key="Text.MergeMultiple" xml:space="preserve">Fusionar (Múltiple)</x:String>
   <x:String x:Key="Text.MergeMultiple.CommitChanges" xml:space="preserve">Commit todos los cambios</x:String>
   <x:String x:Key="Text.MergeMultiple.Strategy" xml:space="preserve">Estrategia:</x:String>
   <x:String x:Key="Text.MergeMultiple.Targets" xml:space="preserve">Destino:</x:String>
@@ -695,11 +695,11 @@
   <x:String x:Key="Text.Preferences.GPG.UserKey" xml:space="preserve">Clave de firma del usuario</x:String>
   <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">Clave de firma gpg del usuario</x:String>
   <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">INTEGRACIÓN</x:String>
-  <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">SHELL/TERMINAL</x:String>
+  <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">TERMINAL</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">Argumentos</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Por favor utiliza '.' para indicar el directorio de trabajo</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Ruta</x:String>
-  <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Shell/Terminal</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Terminal</x:String>
   <x:String x:Key="Text.PruneRemote" xml:space="preserve">Podar Remoto</x:String>
   <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Destino:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Podar Worktrees</x:String>
@@ -709,7 +709,7 @@
   <x:String x:Key="Text.Pull.Into" xml:space="preserve">En:</x:String>
   <x:String x:Key="Text.Pull.LocalChanges" xml:space="preserve">Cambios Locales:</x:String>
   <x:String x:Key="Text.Pull.Remote" xml:space="preserve">Remoto:</x:String>
-  <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Fetch &amp; Merge)</x:String>
+  <x:String x:Key="Text.Pull.Title" xml:space="preserve">Pull (Obtener &amp; Fusionar)</x:String>
   <x:String x:Key="Text.Pull.UseRebase" xml:space="preserve">Usar rebase en lugar de merge</x:String>
   <x:String x:Key="Text.Push" xml:space="preserve">Push</x:String>
   <x:String x:Key="Text.Push.CheckSubmodules" xml:space="preserve">Asegurarse de que los submódulos se hayan hecho push</x:String>
@@ -762,7 +762,7 @@
   <x:String x:Key="Text.Repository.CleanTips" xml:space="preserve">Ejecutar comando `git gc` para este repositorio.</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCache" xml:space="preserve">Limpiar caché del índice</x:String>
   <x:String x:Key="Text.Repository.ClearIndexCacheTips" xml:space="preserve">Ejecutar `git rm -r --cached .` y `git add .` para reconstruir el índice.</x:String>
-  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">More Actions</x:String>
+  <x:String x:Key="Text.Repository.MoreActions" xml:space="preserve">Más Acciones</x:String>
   <x:String x:Key="Text.Repository.ClearAllCommitsFilter" xml:space="preserve">Limpiar todo</x:String>
   <x:String x:Key="Text.Repository.ClearStashes" xml:space="preserve">Limpiar</x:String>
   <x:String x:Key="Text.Repository.Configure" xml:space="preserve">Configurar este repositorio</x:String>
@@ -797,8 +797,8 @@
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">AÑADIR REMOTO</x:String>
   <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">RESOLVER</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Buscar Commit</x:String>
-  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter Files</x:String>
-  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Search Stashes</x:String>
+  <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filtrar Archivos</x:String>
+  <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Buscar Stashes</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Autor</x:String>
   <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Contenido</x:String>
@@ -939,7 +939,7 @@
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Eliminar ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Eliminar {0} etiquetas seleccionadas...</x:String>
   <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Merge ${0}$ en ${1}$...</x:String>
-  <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Push ${0}$...</x:String>
+  <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Enviar ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">Actualizar Submódulos</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Todos los submódulos</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Init" xml:space="preserve">Inicializar según sea necesario</x:String>
@@ -976,7 +976,7 @@
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">Limpiar Historial</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories.Confirm" xml:space="preserve">¿Estás seguro de querer limpiar todo el historial de los mensajes de commit? Esta acción no se puede deshacer.</x:String>
   <x:String x:Key="Text.WorkingCopy.Commit" xml:space="preserve">COMMIT</x:String>
-  <x:String x:Key="Text.WorkingCopy.CommitAndPush" xml:space="preserve">COMMIT &amp; PUSH</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitAndPush" xml:space="preserve">CONFIRMAR &amp; ENVIAR</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitMessageHelper" xml:space="preserve">Plantilla/Historias</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">Activar evento de clic</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">Commit (Editar)</x:String>
@@ -1040,7 +1040,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Error al guardar el archivo: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Error al guardar el cambio como parche: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Error al escanear los repositorios: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Error al iniciar el observador para el repositorio: '{0}'. Es posible que necesite presionar 'F5' para actualizar el repositorio manualmente.&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Error al iniciar el observador para el repositorio: '{0}'. Es posible que necesite presionar 'F5' para actualizar el repositorio manualmente.&#xD;&#xD;&#xD;&#xD;
 Razón: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Error al iniciar '{0}'. Razón: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Error al abrir: {0}</x:String>
@@ -1107,7 +1107,7 @@ Razón: {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Eliminando worktree...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Ejecutando prune en remoto...</x:String>
+  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Ejecutando `prune` en remoto...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Enviando tag...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Renombrando '{0}'</x:String>
