@@ -286,7 +286,7 @@ public class CommitMessagePresenter : SelectableTextBlock
                 {
                     var currentParent = this.FindAncestorOfType<CommitBaseInfo>();
                     if (currentParent is { DataContext: ViewModels.CommitDetail currentDetail } &&
-                        currentDetail.Commit.SHA == lastDetailCommit)
+                        currentDetail.Commit.SHA.Equals(lastDetailCommit, StringComparison.Ordinal))
                     {
                         _inlineCommits.TryAdd(sha, c);
                         if (_lastHover == link && c is not null)
