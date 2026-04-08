@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Komorebi.Models;
 
@@ -43,6 +44,16 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
         AddedRight,
         /// <summary>左方向の追加</summary>
         AddedLeft,
+    }
+
+    /// <summary>
+    /// 文字カテゴリ。ハイライト用の単語分割に使用する。
+    /// </summary>
+    private enum CharCategory : byte
+    {
+        Other,       // デフォルト: 空白・制御・句読点・記号など
+        Letter,      // Unicode Ll/Lu/Lt/Lm + 数字: ASCII/ラテン/ギリシャ/キリル等
+        OtherLetter, // Unicode Lo: CJK、ひらがな、カタカナ、ハングル、タイ、アラビア等
     }
 
     /// <summary>Myersアルゴリズムの編集結果</summary>
@@ -139,18 +150,23 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
         var start = 0;
         var size = text.Length;
         List<Chunk> chunks = [];
-        var delims = new HashSet<char>(" \t+-*/=!,:;.'\"/?|&#@%`<>()[]{}\\".ToCharArray());
+        if (size == 0)
+            return chunks;
 
-        for (int i = 0; i < size; i++)
+        // 文字カテゴリが変わる位置、もしくは Other カテゴリの文字ごとにチャンクを分割する。
+        // 連続する Letter / OtherLetter は一つのチャンクにまとめ、Other は文字単位。
+        var prev = GetCategory(text[0]);
+
+        for (var i = 1; i < size; i++)
         {
             var ch = text[i];
-            if (delims.Contains(ch))
+            var category = GetCategory(ch);
+            if (prev != category || category == CharCategory.Other)
             {
-                if (start != i)
-                    AddChunk(chunks, hashes, text[start..i], start);
-                AddChunk(chunks, hashes, text[i..(i + 1)], i);
-                start = i + 1;
+                AddChunk(chunks, hashes, text[start..i], start);
+                start = i;
             }
+            prev = category;
         }
 
         if (start < size)
@@ -348,4 +364,36 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
         }
         chunks.Add(new Chunk(hash, start, data.Length));
     }
+
+    /// <summary>
+    /// 全 char 値（0..65535）に対するカテゴリを事前計算して返す。
+    /// ロックフリーで O(1) のカテゴリ取得を可能にする。
+    /// </summary>
+    private static CharCategory[] BuildCategoryCache()
+    {
+        var cache = new CharCategory[65536];
+        for (int i = 0; i < 65536; i++)
+        {
+            var ch = (char)i;
+            // Unicode Lo: CJK・ひらがな・カタカナ・ハングル・タイ・アラビア・ヘブライ等
+            // → 連続する同カテゴリをひとつのチャンクにまとめる（空白区切りが無い言語向け）
+            if (char.GetUnicodeCategory(ch) == UnicodeCategory.OtherLetter)
+                cache[i] = CharCategory.OtherLetter;
+
+            // Unicode Ll/Lu/Lt/Lm + 数字: ラテン・ギリシャ・キリル等のアルファベットと数字
+            // → 連続する同カテゴリをひとつのチャンクにまとめる（空白区切り言語の単語向け）
+            else if (char.IsLetterOrDigit(ch))
+                cache[i] = CharCategory.Letter;
+
+            // 上記以外（空白・制御文字・句読点・記号）は Other（既定値）
+        }
+
+        return cache;
+    }
+
+    /// <summary>指定文字のカテゴリを取得する（O(1)）。</summary>
+    private static CharCategory GetCategory(char ch) => s_charCategoryCache[ch];
+
+    /// <summary>全 char 値に対するカテゴリ表（起動時に一度だけ構築される）。</summary>
+    private static readonly CharCategory[] s_charCategoryCache = BuildCategoryCache();
 }
