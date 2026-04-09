@@ -799,15 +799,15 @@ public class WorkingCopy : ObservableObject, IDisposable
         var log = _repo.CreateLog("Commit");
         var succ = await new Commands.Commit(_repo.FullPath, _commitMessage, EnableSignOff, NoVerifyOnCommit, _useAmend, _resetAuthor)
                 .Use(log)
-                .RunAsync()
-                .ConfigureAwait(false);
+                .RunAsync();
 
         log.Complete();
 
         if (succ)
         {
-            CommitMessage = string.Empty;
+            // UseAmend プロパティ経由で更新することで staged changes のリフレッシュを確実に発火させる
             UseAmend = false;
+            CommitMessage = string.Empty;
             // 自動プッシュが有効でリモートがある場合はプッシュダイアログを表示
             if (autoPush && _repo.Remotes.Count > 0)
             {
