@@ -1249,7 +1249,8 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     private static CancellationToken RenewCancellation(ref CancellationTokenSource cts)
     {
-        if (cts is { IsCancellationRequested: false }) cts.Cancel();
+        if (cts is { IsCancellationRequested: false })
+            cts.Cancel();
         cts?.Dispose();
         cts = new CancellationTokenSource();
         return cts.Token;
