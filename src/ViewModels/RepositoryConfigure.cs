@@ -56,8 +56,7 @@ public class RepositoryConfigure : ObservableObject
             {
                 // 前のリモートの編集内容をキャプチャした値で保存（タスクを連鎖して順序を保証）
                 if (old is not null)
-                    _pendingSaveTask = _pendingSaveTask.ContinueWith(_ =>
-                        SavePendingRemoteSettingsAsync(old, pendingName, pendingUrl, pendingUseSSH, pendingSSHKey)).Unwrap();
+                    _pendingSaveTask = ChainSaveAsync(old, pendingName, pendingUrl, pendingUseSSH, pendingSSHKey);
                 if (value is not null)
                     _loadTask = LoadRemoteSettingsAsync(value);
             }
@@ -481,6 +480,14 @@ public class RepositoryConfigure : ObservableObject
         return SavePendingRemoteSettingsAsync(
             _selectedRemote, _selectedRemoteName, _selectedRemoteUrl,
             _selectedRemoteUseSSH, _selectedRemoteSSHKey);
+    }
+
+    /// <summary>前のリモート保存タスクの完了を待ってから次の保存を実行する。</summary>
+    private async Task ChainSaveAsync(
+        Models.Remote remote, string name, string url, bool useSSH, string sshKey)
+    {
+        await _pendingSaveTask.ConfigureAwait(false);
+        await SavePendingRemoteSettingsAsync(remote, name, url, useSSH, sshKey).ConfigureAwait(false);
     }
 
     /// <summary>指定リモートの設定をキャプチャ済みの値でgit configに保存する。</summary>

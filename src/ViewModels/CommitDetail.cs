@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -811,9 +812,9 @@ public partial class CommitDetail : ObservableObject, IDisposable
         }
 
         // コミットSHAパターンにマッチする参照を追加する
-        // 各SHAの検証を並列実行してパフォーマンスを向上させる
+        // 並列度を制限して外部プロセスの過剰起動を防ぐ（最大8並列）
         var shaMatches = REG_SHA_FORMAT().Matches(message);
-        var shaCandidates = new List<(int Start, int Len, string SHA, Task<bool> VerifyTask)>();
+        var shaCandidates = new List<(int Start, int Len, string SHA)>();
         foreach (Match match in shaMatches)
         {
             var start = match.Index;
@@ -821,22 +822,31 @@ public partial class CommitDetail : ObservableObject, IDisposable
             if (inlines.Intersect(start, len) is not null)
                 continue;
 
-            var sha = match.Groups[1].Value;
-            var verifyTask = new Commands.IsCommitSHA(_repo.FullPath, sha).GetResultAsync();
-            shaCandidates.Add((start, len, sha, verifyTask));
+            shaCandidates.Add((start, len, match.Groups[1].Value));
         }
 
         if (shaCandidates.Count > 0)
         {
-            var verifyTasks = new Task<bool>[shaCandidates.Count];
-            for (var i = 0; i < shaCandidates.Count; i++)
-                verifyTasks[i] = shaCandidates[i].VerifyTask;
-
-            await Task.WhenAll(verifyTasks).ConfigureAwait(false);
-            foreach (var (start, len, sha, verifyTask) in shaCandidates)
+            using var semaphore = new SemaphoreSlim(8);
+            var verifyTasks = shaCandidates.Select(async c =>
             {
-                if (verifyTask.Result)
-                    inlines.Add(new Models.InlineElement(Models.InlineElementType.CommitSHA, start, len, sha));
+                await semaphore.WaitAsync().ConfigureAwait(false);
+                try
+                {
+                    var isCommit = await new Commands.IsCommitSHA(_repo.FullPath, c.SHA).GetResultAsync().ConfigureAwait(false);
+                    return (c.Start, c.Len, c.SHA, IsCommit: isCommit);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            }).ToList();
+
+            var results = await Task.WhenAll(verifyTasks).ConfigureAwait(false);
+            foreach (var r in results)
+            {
+                if (r.IsCommit)
+                    inlines.Add(new Models.InlineElement(Models.InlineElementType.CommitSHA, r.Start, r.Len, r.SHA));
             }
         }
 
