@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Bandingkan dengan HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Konfigurasi Repositori</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Nama branch lokal saat ini.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Jumlah berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Maksimal N jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Nama branch lokal saat ini.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Jumlah berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Maksimal N jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Seperti ${files:N}, tapi tanpa folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Konten Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nama Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">AKSI KUSTOM</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumen:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Jalur repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash commit yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Tag yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Jalur repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash commit yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Tag yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Nilai kontrol input</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Berkas Eksekusi:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Kontrol Input:</x:String>
@@ -247,6 +247,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">Menit</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Tipe Conventional Commit</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Remote Default</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remote</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Mode Merge Pilihan</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">PELACAK ISU</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Tambah Aturan Azure DevOps</x:String>
@@ -675,6 +676,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Jangan konversi</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Gunakan CRLF untuk lokal dan remote</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Direktori Clone Default</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Kunci SSH Global</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email Pengguna</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Email pengguna git global</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Aktifkan --prune saat fetch</x:String>
@@ -700,8 +702,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Gunakan '.' untuk menunjukkan direktori kerja</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Jalur</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Terminal</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">Pangkas Remote</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Target:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Prune Worktree</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">Prune informasi worktree di `$GIT_COMMON_DIR/worktrees`</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull</x:String>
@@ -745,7 +745,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Sunting...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Buka di Browser</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Prune</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Konfirmasi Hapus Worktree</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">Aktifkan Opsi `--force`</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Target:</x:String>
@@ -877,7 +876,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ke:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Kunci SSH Privat:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Path kunci privat (bukan .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Tidak ada (bawaan sistem)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Gunakan pengaturan global</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Telusuri...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Anda memilih kunci publik (.pub). Pilih kunci privat (file tanpa ekstensi .pub).</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Global</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Default Sistem</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">MULAI</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Termasuk berkas yang tidak dilacak</x:String>
@@ -1040,7 +1045,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Gagal menyimpan file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Gagal menyimpan perubahan sebagai patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Gagal memindai repositori: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Gagal memulai pengamat untuk repositori '{0}'. Anda mungkin perlu menekan 'F5' untuk memperbarui secara manual!&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Gagal memulai pengamat untuk repositori '{0}'. Anda mungkin perlu menekan 'F5' untuk memperbarui secara manual!&#xD;&#xD;&#xD;&#xD;&#xD;
 Alasan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Gagal memulai '{0}'. Alasan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Gagal membuka: {0}</x:String>
@@ -1107,7 +1112,6 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Menghapus worktree...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Menjalankan `prune` pada remote...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Mengirim tag...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Mengganti nama '{0}'</x:String>

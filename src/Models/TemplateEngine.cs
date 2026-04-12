@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -431,19 +432,13 @@ public class TemplateEngine
     /// <summary>変更ファイルのフルパスをカンマ区切りで取得する</summary>
     private static string GetFiles(Context context)
     {
-        List<string> paths = [];
-        foreach (var c in context.changes)
-            paths.Add(c.Path);
-        return string.Join(", ", paths);
+        return string.Join(", ", context.changes.Select(c => c.Path));
     }
 
     /// <summary>変更ファイルのファイル名のみをカンマ区切りで取得する</summary>
     private static string GetPureFiles(Context context)
     {
-        List<string> names = [];
-        foreach (var c in context.changes)
-            names.Add(Path.GetFileName(c.Path));
-        return string.Join(", ", names);
+        return string.Join(", ", context.changes.Select(c => Path.GetFileName(c.Path)));
     }
 
     /// <summary>スライス付き変数用のデリゲート</summary>

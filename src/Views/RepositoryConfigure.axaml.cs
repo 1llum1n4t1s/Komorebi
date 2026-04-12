@@ -19,15 +19,34 @@ public partial class RepositoryConfigure : ChromelessWindow
         InitializeComponent();
     }
 
+    private bool _saved;
+
     /// <summary>
     /// ウィンドウが閉じられる際の処理。
+    /// 保存完了前にウィンドウが閉じないよう、キャンセル→再Close方式を使用する。
     /// </summary>
     protected override async void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
 
-        if (!Design.IsDesignMode && DataContext is ViewModels.RepositoryConfigure configure)
+        if (_saved || Design.IsDesignMode)
+            return;
+
+        if (DataContext is ViewModels.RepositoryConfigure configure)
+        {
+            e.Cancel = true;
             await configure.SaveAsync();
+
+            // 保存エラー（リモート名の重複等）がある場合はウィンドウを開いたままにする
+            if (configure.HasSaveError)
+            {
+                configure.HasSaveError = false;
+                return;
+            }
+
+            _saved = true;
+            Close();
+        }
     }
 
     /// <summary>
@@ -266,4 +285,5 @@ public partial class RepositoryConfigure : ChromelessWindow
 
         e.Handled = true;
     }
+
 }

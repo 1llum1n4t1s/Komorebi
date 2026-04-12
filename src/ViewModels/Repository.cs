@@ -75,26 +75,8 @@ public class Repository : ObservableObject, Models.IRepository
         get => _selectedViewIndex;
         set
         {
-            if (SetProperty(ref _selectedViewIndex, value))
-            {
-                SelectedView = value switch
-                {
-                    1 => _workingCopy,
-                    2 => _stashesPage,
-                    _ => _histories,
-                };
-            }
+            SetProperty(ref _selectedViewIndex, value);
         }
-    }
-
-    /// <summary>
-    /// 現在選択中のビューオブジェクト（Histories/WorkingCopy/StashesPage）。
-    /// XAMLバインディングからは未使用（Viewキャッシュ方式に移行済み）。Fetch.csの型チェック用に保持。
-    /// </summary>
-    public object SelectedView
-    {
-        get => _selectedView;
-        set => _selectedView = value;
     }
 
     /// <summary>履歴ビューVM。Viewキャッシュ用にXAMLから直接参照する。</summary>
@@ -588,16 +570,7 @@ public class Repository : ObservableObject, Models.IRepository
         _stashesPage = new StashesPage(this);
         _searchCommitContext = new SearchCommitContext(this);
 
-        if (Preferences.Instance.ShowLocalChangesByDefault)
-        {
-            _selectedView = _workingCopy;
-            _selectedViewIndex = 1;
-        }
-        else
-        {
-            _selectedView = _histories;
-            _selectedViewIndex = 0;
-        }
+        _selectedViewIndex = Preferences.Instance.ShowLocalChangesByDefault ? 1 : 0;
 
         _lastFetchTime = DateTime.Now;
         _autoFetchTimer = new Timer(AutoFetchByTimer, null, 5000, 5000);
@@ -610,7 +583,6 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void Close()
     {
-        SelectedView = null; // Viewキャッシュ方式移行後もFetch.csの型チェック用にnullリセット
         Logs.Clear();
 
         _uiStates.Unload(_workingCopy.CommitMessage);
@@ -990,6 +962,22 @@ public class Repository : ObservableObject, Models.IRepository
         RefreshSubmodules();
     }
 
+    /// <summary>
+    /// Detached HEAD状態で到達不能コミットが失われる場合に警告を表示する。
+    /// ユーザーが続行を選択した場合、またはDetached HEADでない場合はtrueを返す。
+    /// </summary>
+    public async Task<bool> WarnIfDetachedHeadLosesCommitsAsync()
+    {
+        if (CurrentBranch is not { IsDetachedHead: true })
+            return true;
+
+        var refs = await new Commands.QueryRefsContainsCommit(FullPath, CurrentBranch.Head).GetResultAsync();
+        if (refs.Count == 0)
+            return await App.AskConfirmAsync(App.Text("Checkout.WarnLostCommits"));
+
+        return true;
+    }
+
     /// <summary>最終フェッチ時刻を現在時刻に更新する。自動フェッチのインターバルリセットに使用する。</summary>
     public void MarkFetched()
     {
@@ -1256,17 +1244,24 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
+    /// CancellationTokenSourceを安全にキャンセル・破棄して新しいインスタンスに差し替え、そのトークンを返す。
+    /// Refresh*メソッド群で繰り返される前処理パターンを共通化する。
+    /// </summary>
+    private static CancellationToken RenewCancellation(ref CancellationTokenSource cts)
+    {
+        if (cts is { IsCancellationRequested: false }) cts.Cancel();
+        cts?.Dispose();
+        cts = new CancellationTokenSource();
+        return cts.Token;
+    }
+
+    /// <summary>
     /// ブランチとリモートの一覧を非同期で再取得し、ブランチツリーを再構築する。
     /// 前回の取得中タスクがあればキャンセルする。
     /// </summary>
     public void RefreshBranches()
     {
-        if (_cancellationRefreshBranches is { IsCancellationRequested: false })
-            _cancellationRefreshBranches.Cancel();
-
-        _cancellationRefreshBranches?.Dispose();
-        _cancellationRefreshBranches = new CancellationTokenSource();
-        var token = _cancellationRefreshBranches.Token;
+        var token = RenewCancellation(ref _cancellationRefreshBranches);
 
         Task.Run(async () =>
         {
@@ -1303,6 +1298,7 @@ public class Repository : ObservableObject, Models.IRepository
                 var hasPendingPullOrPush = CurrentBranch?.IsTrackStatusVisible ?? false;
                 GetOwnerPage()?.ChangeDirtyState(Models.DirtyState.HasPendingPullOrPush, !hasPendingPullOrPush);
             });
+
         }, token);
     }
 
@@ -1323,12 +1319,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshTags()
     {
-        if (_cancellationRefreshTags is { IsCancellationRequested: false })
-            _cancellationRefreshTags.Cancel();
-
-        _cancellationRefreshTags?.Dispose();
-        _cancellationRefreshTags = new CancellationTokenSource();
-        var token = _cancellationRefreshTags.Token;
+        var token = RenewCancellation(ref _cancellationRefreshTags);
 
         Task.Run(async () =>
         {
@@ -1350,12 +1341,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshCommits()
     {
-        if (_cancellationRefreshCommits is { IsCancellationRequested: false })
-            _cancellationRefreshCommits.Cancel();
-
-        _cancellationRefreshCommits?.Dispose();
-        _cancellationRefreshCommits = new CancellationTokenSource();
-        var token = _cancellationRefreshCommits.Token;
+        var token = RenewCancellation(ref _cancellationRefreshCommits);
 
         Task.Run(async () =>
         {
@@ -1483,12 +1469,7 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
-        if (_cancellationRefreshWorkingCopyChanges is { IsCancellationRequested: false })
-            _cancellationRefreshWorkingCopyChanges.Cancel();
-
-        _cancellationRefreshWorkingCopyChanges?.Dispose();
-        _cancellationRefreshWorkingCopyChanges = new CancellationTokenSource();
-        var token = _cancellationRefreshWorkingCopyChanges.Token;
+        var token = RenewCancellation(ref _cancellationRefreshWorkingCopyChanges);
         var noOptionalLocks = Interlocked.Add(ref _queryLocalChangesTimes, 1) > 1;
 
         Task.Run(async () =>
@@ -1531,12 +1512,7 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
-        if (_cancellationRefreshStashes is { IsCancellationRequested: false })
-            _cancellationRefreshStashes.Cancel();
-
-        _cancellationRefreshStashes?.Dispose();
-        _cancellationRefreshStashes = new CancellationTokenSource();
-        var token = _cancellationRefreshStashes.Token;
+        var token = RenewCancellation(ref _cancellationRefreshStashes);
 
         Task.Run(async () =>
         {
@@ -2205,7 +2181,6 @@ public class Repository : ObservableObject, Models.IRepository
     private WorkingCopy _workingCopy = null;                                           // ワーキングコピーVM
     private StashesPage _stashesPage = null;                                           // スタッシュページVM
     private int _selectedViewIndex = 0;                                                // 選択中のビューインデックス
-    private object _selectedView = null;                                               // 選択中のビューオブジェクト
 
     private int _localBranchesCount = 0;                                               // ローカルブランチ数
     private int _localChangesCount = 0;                                                // ローカル変更数

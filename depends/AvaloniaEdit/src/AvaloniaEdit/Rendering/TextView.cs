@@ -2064,6 +2064,10 @@ namespace AvaloniaEdit.Rendering
         /// </summary>
         public virtual double EmptyLineSelectionWidth => 1;
 
+        bool IScrollable.CanHorizontallyScroll => _canHorizontallyScroll;
+
+        bool IScrollable.CanVerticallyScroll => _canVerticallyScroll;
+
         bool ILogicalScrollable.CanHorizontallyScroll
         {
             get => _canHorizontallyScroll;

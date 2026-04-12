@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Vergleichen mit HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Repository-Einstellungen</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">COMMIT-VORLAGE</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${branch_name} Name des aktuellen lokalen Branches.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files_num} Anzahl der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files} Pfade der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files:N} Maximale Anzahl N an Pfaden geänderter Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${pure_files} Wie ${files}, aber nur die reinen Dateinamen&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${branch_name} Name des aktuellen lokalen Branches.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files_num} Anzahl der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files} Pfade der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files:N} Maximale Anzahl N an Pfaden geänderter Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${pure_files} Wie ${files}, aber nur die reinen Dateinamen&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 ${pure_files:N} Wie ${files:N}, aber ohne Ordner</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Vorlageninhalt:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Vorlagenname:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">BENUTZERDEFINIERTE AKTION</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumente:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${REPO} Repository-Pfad&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${REMOTE} Selektierter Remote oder selektierter Branch-Remote&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH} Selektierter Branch, ohne ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH_FRIENDLY_NAME} Benutzerfreundlicher Name des selektierten Branches, enthält ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${SHA} Hash des selektierten Commits&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${TAG} Ausgewählter Tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${FILE} Ausgewählte Datei, relativ zum Stammverzeichnis des Repositorys&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REPO} Repository-Pfad&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REMOTE} Selektierter Remote oder selektierter Branch-Remote&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH} Selektierter Branch, ohne ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH_FRIENDLY_NAME} Benutzerfreundlicher Name des selektierten Branches, enthält ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${SHA} Hash des selektierten Commits&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${TAG} Ausgewählter Tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${FILE} Ausgewählte Datei, relativ zum Stammverzeichnis des Repositorys&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Ausführbare Datei:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Eingabe-Steuerelemente:</x:String>
@@ -247,6 +247,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">Minute(n)</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Konventionelle Commit-Typen</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Standard-Remote</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remote</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Bevorzugter Merge-Modus</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">TICKETSYSTEM</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Beispiel für Azure-DevOps-Regel hinzufügen</x:String>
@@ -675,6 +676,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Nicht konvertieren</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">CRLF für lokal und remote verwenden</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Standard Klon-Ordner</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Globaler SSH-Schlüssel</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Benutzer-E-Mail</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Globale Git Benutzer-E-Mail</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Aktiviere --prune beim Fetchen</x:String>
@@ -700,8 +702,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Bitte verwende ‚.‘ für das aktuelle Verzeichnis</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Pfad</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Shell / Terminal</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">Remote bereinigen</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Worktrees bereinigen</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">Worktree-Informationen in `$GIT_COMMON_DIR/worktrees` bereinigen</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull</x:String>
@@ -745,7 +745,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Bearbeiten…</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Im Browser öffnen</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Prune</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Bestätige das Entfernen des Worktrees</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">Aktiviere `--force` Option</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Ziel:</x:String>
@@ -877,7 +876,13 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Privater SSH-Schlüssel:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Pfad zum privaten Schlüssel (nicht .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Keine (Systemstandard)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Globale Einstellung verwenden</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Durchsuchen...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Sie haben einen öffentlichen Schlüssel (.pub) ausgewählt. Bitte wählen Sie den privaten Schlüssel (die Datei ohne .pub-Endung).</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Global</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Systemstandard</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">START</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Nicht-verfolgte Dateien einbeziehen</x:String>
@@ -1040,7 +1045,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Datei konnte nicht gespeichert werden: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Änderung konnte nicht als Patch gespeichert werden: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Repositorys konnten nicht gescannt werden: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Watcher für Repository '{0}' konnte nicht gestartet werden. Drücken Sie 'F5', um das Repository manuell zu aktualisieren!&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Watcher für Repository '{0}' konnte nicht gestartet werden. Drücken Sie 'F5', um das Repository manuell zu aktualisieren!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 Grund: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' konnte nicht gestartet werden. Grund: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Konnte nicht geöffnet werden: {0}</x:String>
@@ -1107,7 +1112,6 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Worktree wird entfernt...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">`prune` auf Remote wird ausgeführt...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Tag wird gepusht...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' wird umbenannt</x:String>

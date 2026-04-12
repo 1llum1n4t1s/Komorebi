@@ -217,11 +217,31 @@ public class RebaseInProgress : InProgressContext
             ? File.ReadAllText(stoppedSHAPath).Trim()
             : new Commands.QueryRevisionByRefName(repo.FullPath, HeadName).GetResult();
 
-        if (!string.IsNullOrEmpty(stoppedSHA))
-            StoppedAt = new Commands.QuerySingleCommit(repo.FullPath, stoppedSHA).GetResult() ?? new Models.Commit() { SHA = stoppedSHA };
-
         var ontoSHA = File.ReadAllText(Path.Combine(repo.GitDir, "rebase-merge", "onto")).Trim();
-        Onto = new Commands.QuerySingleCommit(repo.FullPath, ontoSHA).GetResult() ?? new Models.Commit() { SHA = ontoSHA };
+
+        if (!string.IsNullOrEmpty(stoppedSHA))
+        {
+            // StoppedAtとOntoの取得を並列実行する（コンストラクタ内のため同期待機）
+            try
+            {
+                var stoppedTask = Task.Run(() => new Commands.QuerySingleCommit(repo.FullPath, stoppedSHA).GetResult());
+                var ontoTask = Task.Run(() => new Commands.QuerySingleCommit(repo.FullPath, ontoSHA).GetResult());
+                Task.WaitAll(stoppedTask, ontoTask);
+
+                StoppedAt = stoppedTask.Result ?? new Models.Commit() { SHA = stoppedSHA };
+                Onto = ontoTask.Result ?? new Models.Commit() { SHA = ontoSHA };
+            }
+            catch
+            {
+                StoppedAt = new Models.Commit() { SHA = stoppedSHA };
+                Onto = new Models.Commit() { SHA = ontoSHA };
+            }
+        }
+        else
+        {
+            Onto = new Commands.QuerySingleCommit(repo.FullPath, ontoSHA).GetResult() ?? new Models.Commit() { SHA = ontoSHA };
+        }
+
         BaseName = Onto.GetFriendlyName();
     }
 }

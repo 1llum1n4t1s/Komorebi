@@ -266,6 +266,7 @@ public partial class LauncherTabBar : UserControl
                 _pressedTab = true;
                 _startDragTab = false;
                 _pressedTabPosition = e.GetPosition(border);
+                _pressedTabEvent = e;
             }
         }
     }
@@ -277,6 +278,7 @@ public partial class LauncherTabBar : UserControl
     {
         _pressedTab = false;
         _startDragTab = false;
+        _pressedTabEvent = null;
     }
 
     /// <summary>
@@ -295,7 +297,8 @@ public partial class LauncherTabBar : UserControl
 
             var data = new DataTransfer();
             data.Add(DataTransferItem.Create(_dndMainTabFormat, page.Node.Id));
-            await DragDrop.DoDragDropAsync(e, data, DragDropEffects.Move);
+            if (_pressedTabEvent is not null)
+                await DragDrop.DoDragDropAsync(_pressedTabEvent, data, DragDropEffects.Move);
         }
         e.Handled = true;
     }
@@ -489,6 +492,11 @@ public partial class LauncherTabBar : UserControl
     /// タブが押下された位置。ドラッグ判定に使用する。
     /// </summary>
     private Point _pressedTabPosition = new();
+
+    /// <summary>
+    /// タブが押下された時の PointerPressedEventArgs。DragDrop に渡すために保存する。
+    /// </summary>
+    private PointerPressedEventArgs _pressedTabEvent = null;
 
     /// <summary>
     /// タブのドラッグ操作が開始されたかどうか。

@@ -33,6 +33,69 @@ public class RepositoryConfigure : ObservableObject
         get;
     }
 
+    /// <summary>リポジトリのリモートオブジェクト一覧（リモート設定セクション用）。</summary>
+    public List<Models.Remote> RemoteObjects
+    {
+        get;
+    }
+
+    /// <summary>選択中のリモートのModelsオブジェクト。</summary>
+    public Models.Remote SelectedRemote
+    {
+        get => _selectedRemote;
+        set
+        {
+            var old = _selectedRemote;
+            // 切替前にUI上の編集値をキャプチャ（SetProperty後はUI値が上書きされるため）
+            var pendingName = _selectedRemoteName;
+            var pendingUrl = _selectedRemoteUrl;
+            var pendingUseSSH = _selectedRemoteUseSSH;
+            var pendingSSHKey = _selectedRemoteSSHKey;
+
+            if (SetProperty(ref _selectedRemote, value))
+            {
+                // 前のリモートの編集内容をキャプチャした値で保存（タスクを連鎖して順序を保証）
+                if (old is not null)
+                    _pendingSaveTask = _pendingSaveTask.ContinueWith(_ =>
+                        SavePendingRemoteSettingsAsync(old, pendingName, pendingUrl, pendingUseSSH, pendingSSHKey)).Unwrap();
+                if (value is not null)
+                    _loadTask = LoadRemoteSettingsAsync(value);
+            }
+        }
+    }
+
+    /// <summary>選択中リモートの名前。</summary>
+    public string SelectedRemoteName
+    {
+        get => _selectedRemoteName;
+        set => SetProperty(ref _selectedRemoteName, value);
+    }
+
+    /// <summary>選択中リモートのURL。</summary>
+    public string SelectedRemoteUrl
+    {
+        get => _selectedRemoteUrl;
+        set
+        {
+            if (SetProperty(ref _selectedRemoteUrl, value))
+                SelectedRemoteUseSSH = Models.Remote.IsSSH(value);
+        }
+    }
+
+    /// <summary>選択中リモートがSSH接続かどうか。</summary>
+    public bool SelectedRemoteUseSSH
+    {
+        get => _selectedRemoteUseSSH;
+        set => SetProperty(ref _selectedRemoteUseSSH, value);
+    }
+
+    /// <summary>選択中リモートのSSHキーパス。</summary>
+    public string SelectedRemoteSSHKey
+    {
+        get => _selectedRemoteSSHKey;
+        set => SetProperty(ref _selectedRemoteSSHKey, value);
+    }
+
     /// <summary>デフォルトのリモート名（Push/Pull時に使用）。</summary>
     public string DefaultRemote
     {
@@ -205,6 +268,9 @@ public class RepositoryConfigure : ObservableObject
         foreach (var remote in _repo.Remotes)
             Remotes.Add(remote.Name);
 
+        // リモートオブジェクト一覧を構築（リモート設定セクション用）
+        RemoteObjects = new List<Models.Remote>(_repo.Remotes);
+
         // OpenAIサービス一覧を構築（「---」= 未選択）
         AvailableOpenAIServices = ["---"];
         foreach (var service in Preferences.Instance.OpenAIServices)
@@ -241,6 +307,10 @@ public class RepositoryConfigure : ObservableObject
                 URLTemplate = rule.URLTemplate,
             });
         }
+
+        // 最初のリモートを自動選択
+        if (RemoteObjects.Count > 0)
+            SelectedRemote = RemoteObjects[0];
     }
 
     /// <summary>HTTPプロキシ設定をクリアする。</summary>
@@ -332,6 +402,9 @@ public class RepositoryConfigure : ObservableObject
     /// 設定をgit configとリポジトリ設定ファイルに保存する。
     /// 変更があったキーのみを書き込む。
     /// </summary>
+    /// <summary>保存中にエラーが発生したかどうか。</summary>
+    public bool HasSaveError { get; set; }
+
     public async Task SaveAsync()
     {
         await SetIfChangedAsync("user.name", UserName, "");
@@ -342,6 +415,14 @@ public class RepositoryConfigure : ObservableObject
         await SetIfChangedAsync("http.proxy", HttpProxy, "");
         await SetIfChangedAsync("fetch.prune", EnablePruneOnFetch ? "true" : "false", "false");
 
+        // リモート設定の読み込み・保存の完了を待ってから現在のリモートを保存
+        await _pendingSaveTask;
+        await _loadTask;
+
+        // リモート設定の保存
+        if (_selectedRemote is not null)
+            await SaveRemoteSettingsAsync();
+
         await ApplyIssueTrackerChangesAsync();
         await _repo.Settings.SaveAsync();
     }
@@ -351,6 +432,109 @@ public class RepositoryConfigure : ObservableObject
     {
         if (value != _cached.GetValueOrDefault(key, defValue))
             await new Commands.Config(_repo.FullPath).SetAsync(key, value);
+    }
+
+    /// <summary>選択されたリモートの設定を読み込む。</summary>
+    private async Task LoadRemoteSettingsAsync(Models.Remote remote)
+    {
+        SelectedRemoteName = remote.Name;
+        SelectedRemoteUrl = remote.URL;
+        SelectedRemoteUseSSH = Models.Remote.IsSSH(remote.URL);
+        SelectedRemoteSSHKey = string.Empty;
+
+        try
+        {
+            if (SelectedRemoteUseSSH)
+            {
+                var key = await new Commands.Config(_repo.FullPath)
+                    .GetAsync($"remote.{remote.Name}.sshkey");
+
+                // await中にリモート選択が変わっていたら結果を破棄する（競合状態防止）
+                if (!ReferenceEquals(_selectedRemote, remote))
+                    return;
+
+                SelectedRemoteSSHKey = key;
+            }
+        }
+        catch (Exception ex)
+        {
+            App.RaiseException(_repo.FullPath, $"Failed to load remote settings: {ex.Message}");
+        }
+    }
+
+    /// <summary>現在選択中のリモートの設定をUI上の値でgit configに保存する。</summary>
+    private Task SaveRemoteSettingsAsync()
+    {
+        if (_selectedRemote is null)
+            return Task.CompletedTask;
+
+        return SavePendingRemoteSettingsAsync(
+            _selectedRemote, _selectedRemoteName, _selectedRemoteUrl,
+            _selectedRemoteUseSSH, _selectedRemoteSSHKey);
+    }
+
+    /// <summary>指定リモートの設定をキャプチャ済みの値でgit configに保存する。</summary>
+    private async Task SavePendingRemoteSettingsAsync(
+        Models.Remote remote, string name, string url, bool useSSH, string sshKey)
+    {
+        var remoteName = remote.Name;
+        var remoteCmd = new Commands.Remote(_repo.FullPath);
+
+        // リモート名の変更
+        if (name != remoteName)
+        {
+            if (await remoteCmd.RenameAsync(remoteName, name))
+            {
+                // DefaultRemote用の名前リストも同期する
+                var idx = Remotes.IndexOf(remoteName);
+                if (idx >= 0)
+                    Remotes[idx] = name;
+
+                if (DefaultRemote == remoteName)
+                    DefaultRemote = name;
+
+                remote.Name = name;
+                remoteName = name;
+            }
+            else
+            {
+                // リネーム失敗時はエラーを通知し、URL/SSHキーの更新も中止する
+                HasSaveError = true;
+                App.RaiseException(_repo.FullPath,
+                    $"Failed to rename remote '{remoteName}' to '{name}'");
+                return;
+            }
+        }
+
+        // URL変更
+        if (url != remote.URL)
+        {
+            var succ = await remoteCmd.SetURLAsync(remoteName, url, false);
+            if (succ)
+            {
+                remote.URL = url;
+
+                // Push URLも同期
+                var pushUrl = await remoteCmd.GetURLAsync(remoteName, true);
+                if (!string.IsNullOrEmpty(pushUrl) && pushUrl != url)
+                    await remoteCmd.SetURLAsync(remoteName, url, true);
+            }
+            else
+            {
+                // URL変更失敗時はエラーを通知し、SSHキーの更新も中止する
+                HasSaveError = true;
+                App.RaiseException(_repo.FullPath,
+                    $"Failed to set URL for remote '{remoteName}'");
+                return;
+            }
+        }
+
+        var config = new Commands.Config(_repo.FullPath);
+
+        // SSHキー設定
+        await config.SetAsync(
+            $"remote.{remoteName}.sshkey",
+            useSSH ? sshKey : null);
     }
 
     /// <summary>
@@ -419,10 +603,17 @@ public class RepositoryConfigure : ObservableObject
         }
     }
 
+    private Task _pendingSaveTask = Task.CompletedTask;                       // 保留中のリモート設定保存タスク
+    private Task _loadTask = Task.CompletedTask;                             // 進行中のリモート設定読み込みタスク
     private readonly Repository _repo;                                       // 対象リポジトリ
     private readonly Dictionary<string, string> _cached;                     // git configの初期値キャッシュ
     private string _httpProxy;                                               // HTTPプロキシ設定
     private Models.CommitTemplate _selectedCommitTemplate = null;            // 選択中のコミットテンプレート
     private Models.IssueTracker _selectedIssueTracker = null;                // 選択中の課題トラッカー
     private Models.CustomAction _selectedCustomAction = null;                // 選択中のカスタムアクション
+    private Models.Remote _selectedRemote;                                   // 選択中のリモート
+    private string _selectedRemoteName = string.Empty;                      // 選択中リモートの名前
+    private string _selectedRemoteUrl = string.Empty;                        // 選択中リモートのURL
+    private bool _selectedRemoteUseSSH;                                      // 選択中リモートがSSH接続か
+    private string _selectedRemoteSSHKey = string.Empty;                     // 選択中リモートのSSHキーパス
 }

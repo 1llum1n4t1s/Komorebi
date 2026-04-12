@@ -192,19 +192,12 @@ public class CreateBranch : Popup
         Use(log);
 
         // チェックアウト予定の場合、デタッチHEAD状態でコミットが失われないか確認
-        if (CheckoutAfterCreated)
+        if (CheckoutAfterCreated
+            && _repo.CurrentBranch is { IsDetachedHead: true }
+            && !_repo.CurrentBranch.Head.Equals(_baseOnRevision, StringComparison.Ordinal))
         {
-            if (_repo.CurrentBranch is { IsDetachedHead: true } && !_repo.CurrentBranch.Head.Equals(_baseOnRevision, StringComparison.Ordinal))
-            {
-                var refs = await new Commands.QueryRefsContainsCommit(_repo.FullPath, _repo.CurrentBranch.Head).GetResultAsync();
-                if (refs.Count == 0)
-                {
-                    var msg = App.Text("Checkout.WarnLostCommits");
-                    var shouldContinue = await App.AskConfirmAsync(msg);
-                    if (!shouldContinue)
-                        return true;
-                }
-            }
+            if (!await _repo.WarnIfDetachedHeadLosesCommitsAsync())
+                return true;
         }
 
         bool succ;

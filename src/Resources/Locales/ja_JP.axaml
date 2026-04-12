@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD と比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">リポジトリの設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">コミットテンプレート</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} 現在のローカルブランチ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} 変更されたファイル数&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} 変更されたファイルへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} 変更されたファイルへのパス (最大 N 件)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} 変更されたファイルの名前&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} 現在のローカルブランチ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} 変更されたファイル数&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} 変更されたファイルへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} 変更されたファイルへのパス (最大 N 件)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} 変更されたファイルの名前&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} 変更されたファイルの名前 (最大 N 件)</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">テンプレートの内容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">テンプレート名:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">カスタムアクション</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">引数:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} リポジトリへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} 選択したコミットのハッシュ&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} 選択したタグ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} リポジトリへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} 選択したコミットのハッシュ&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} 選択したタグ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... 入力プロンプトの値</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">実行ファイル:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">入力プロンプト:</x:String>
@@ -247,6 +247,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">分ごとに自動フェッチ</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">コンベンショナルコミットの種類定義</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">既定のリモート</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">リモート設定</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">優先するマージ方式</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">イシュートラッカー</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Azure DevOps のルールを追加</x:String>
@@ -675,6 +676,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">一切変換しない</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">ローカルとリモート双方をCRLFに設定する</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">既定のクローンディレクトリ</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">グローバルSSHキー</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">ユーザーのメールアドレス</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Git ユーザーのメールアドレス (グローバル設定)</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">フェッチ時に不要なブランチを掃除</x:String>
@@ -700,8 +702,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">作業ディレクトリの明示には '.' を使用してください</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">パス</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">シェル/端末</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">リモートを掃除</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">対象:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">作業ツリーを掃除</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">`$GIT_COMMON_DIR/worktrees` 内の作業ツリー情報を掃除</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">プル</x:String>
@@ -745,7 +745,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">編集...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">フェッチ</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">ブラウザーで開く</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">掃除</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">作業ツリーの削除を確認</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">`--force` オプションを有効化</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">対象:</x:String>
@@ -877,7 +876,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">統合先:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH の秘密鍵:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">秘密鍵のパス（.pub ではない方）</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">指定なし（システムデフォルト）</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">グローバル設定を使用</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">参照...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">公開鍵（.pub）が選択されました。秘密鍵（.pub が付かない方のファイル）を選択してください。</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">リモート固有</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">グローバル</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">システムデフォルト</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">開始</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">スタッシュ</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">未追跡のファイルを含める</x:String>
@@ -1040,7 +1045,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">ファイルの保存に失敗しました: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">パッチへの変更の保存に失敗しました: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">リポジトリのスキャンに失敗しました: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">リポジトリ '{0}' のウォッチャー起動に失敗しました。'F5'キーを押して手動でリポジトリを更新する必要があるかもしれません。&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">リポジトリ '{0}' のウォッチャー起動に失敗しました。'F5'キーを押して手動でリポジトリを更新する必要があるかもしれません。&#xD;&#xD;&#xD;&#xD;&#xD;
 理由: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' の起動に失敗しました。理由: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開けませんでした: {0}</x:String>
@@ -1107,7 +1112,6 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">{0} を {1} にプッシュ中...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">リベース中...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">作業ツリーを削除中...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">リモートで `prune` を実行中...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">{0} を {1}/{2} にプッシュ中...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">タグをプッシュ中...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' をリネーム中</x:String>

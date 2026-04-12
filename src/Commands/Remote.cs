@@ -28,7 +28,7 @@ public class Remote : Command
     public async Task<bool> AddAsync(string name, string url)
     {
         // git remote add: 新しいリモートを追加する
-        Args = $"remote add {name} {url}";
+        Args = $"remote add {name.Quoted()} {url.Quoted()}";
         return await ExecAsync();
     }
 
@@ -55,7 +55,7 @@ public class Remote : Command
     public async Task<bool> RenameAsync(string name, string to)
     {
         // git remote rename: リモート名を変更する
-        Args = $"remote rename {name} {to}";
+        Args = $"remote rename {name.Quoted()} {to.Quoted()}";
         return await ExecAsync();
     }
 
@@ -68,7 +68,7 @@ public class Remote : Command
     public async Task<bool> PruneAsync(string name)
     {
         // git remote prune: リモートに存在しなくなった追跡ブランチを削除する
-        Args = $"remote prune {name}";
+        Args = $"remote prune {name.Quoted()}";
         return await ExecAsync();
     }
 
@@ -82,7 +82,7 @@ public class Remote : Command
     public async Task<string> GetURLAsync(string name, bool isPush)
     {
         // git remote get-url [--push]: リモートのフェッチ/プッシュURLを取得する
-        Args = "remote get-url" + (isPush ? " --push " : " ") + name;
+        Args = "remote get-url" + (isPush ? " --push " : " ") + name.Quoted();
 
         var rs = await ReadToEndAsync();
         return rs.IsSuccess ? rs.StdOut.Trim() : string.Empty;
@@ -99,7 +99,7 @@ public class Remote : Command
     public async Task<bool> SetURLAsync(string name, string url, bool isPush)
     {
         // git remote set-url [--push]: リモートのフェッチ/プッシュURLを設定する
-        Args = "remote set-url" + (isPush ? " --push " : " ") + $"{name} {url}";
+        Args = "remote set-url" + (isPush ? " --push " : " ") + $"{name.Quoted()} {url.Quoted()}";
         return await ExecAsync();
     }
 
@@ -112,11 +112,11 @@ public class Remote : Command
     /// <returns>リモートにブランチが存在すればtrue。</returns>
     public async Task<bool> HasBranchAsync(string remote, string branch)
     {
-        // リモートに紐づくSSH秘密鍵パスをgit configから取得する
-        SSHKey = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey");
+        // リモートに紐づくSSH秘密鍵パスをgit configから取得し、なければグローバル設定にフォールバック
+        await ResolveSSHKeyAsync(remote);
 
         // git ls-remote: リモートの参照一覧を取得して指定ブランチの存在を確認する
-        Args = $"ls-remote {remote} {branch}";
+        Args = $"ls-remote {remote.Quoted()} {branch.Quoted()}";
 
         var rs = await ReadToEndAsync();
         return rs.IsSuccess && rs.StdOut.Trim().Length > 0;

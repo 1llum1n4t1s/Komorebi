@@ -17,6 +17,12 @@ namespace Komorebi.Views;
 /// </summary>
 public partial class CommitSubjectPresenter : Control
 {
+    public CommitSubjectPresenter()
+    {
+        // Render()内ではビジュアル無効化が禁止されているため、コンストラクタでテキストレンダリングモードを設定する
+        TextOptions.SetTextRenderingMode(this, TextRenderingMode.SubpixelAntialias);
+    }
+
     public static readonly StyledProperty<FontFamily> FontFamilyProperty =
         AvaloniaProperty.Register<CommitSubjectPresenter, FontFamily>(nameof(FontFamily));
 
@@ -123,10 +129,8 @@ public partial class CommitSubjectPresenter : Control
 
         var ro = new RenderOptions()
         {
-            TextRenderingMode = TextRenderingMode.SubpixelAntialias,
             EdgeMode = EdgeMode.Antialias
         };
-
         using (context.PushRenderOptions(ro))
         {
             var height = Bounds.Height;

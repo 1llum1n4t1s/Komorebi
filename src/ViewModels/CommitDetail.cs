@@ -811,7 +811,9 @@ public partial class CommitDetail : ObservableObject, IDisposable
         }
 
         // コミットSHAパターンにマッチする参照を追加する
+        // 各SHAの検証を並列実行してパフォーマンスを向上させる
         var shaMatches = REG_SHA_FORMAT().Matches(message);
+        var shaCandidates = new List<(int Start, int Len, string SHA, Task<bool> VerifyTask)>();
         foreach (Match match in shaMatches)
         {
             var start = match.Index;
@@ -819,11 +821,23 @@ public partial class CommitDetail : ObservableObject, IDisposable
             if (inlines.Intersect(start, len) is not null)
                 continue;
 
-            // 実際にコミットSHAとして有効か確認する
             var sha = match.Groups[1].Value;
-            var isCommitSHA = await new Commands.IsCommitSHA(_repo.FullPath, sha).GetResultAsync().ConfigureAwait(false);
-            if (isCommitSHA)
-                inlines.Add(new Models.InlineElement(Models.InlineElementType.CommitSHA, start, len, sha));
+            var verifyTask = new Commands.IsCommitSHA(_repo.FullPath, sha).GetResultAsync();
+            shaCandidates.Add((start, len, sha, verifyTask));
+        }
+
+        if (shaCandidates.Count > 0)
+        {
+            var verifyTasks = new Task<bool>[shaCandidates.Count];
+            for (var i = 0; i < shaCandidates.Count; i++)
+                verifyTasks[i] = shaCandidates[i].VerifyTask;
+
+            await Task.WhenAll(verifyTasks).ConfigureAwait(false);
+            foreach (var (start, len, sha, verifyTask) in shaCandidates)
+            {
+                if (verifyTask.Result)
+                    inlines.Add(new Models.InlineElement(Models.InlineElementType.CommitSHA, start, len, sha));
+            }
         }
 
         // インラインコードパターン（バッククォート囲み）を追加する

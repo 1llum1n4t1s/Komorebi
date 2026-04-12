@@ -125,7 +125,7 @@
               <TextBlock Grid.Row="2" Margin="0,0,0,4" Text="{DynamicResource Text.ConfigureWorkspace.DefaultCloneDir}" VerticalAlignment="Bottom"/>
               <TextBox Grid.Row="3" CornerRadius="3" Height="28"
                        Text="{Binding DefaultCloneDir, Mode=TwoWay}"
-                       Watermark="{DynamicResource Text.ConfigureWorkspace.DefaultCloneDir.Placeholder}">
+                       PlaceholderText="{DynamicResource Text.ConfigureWorkspace.DefaultCloneDir.Placeholder}">
                 <TextBox.InnerRightContent>
                   <Button Classes="icon_button" Width="30" Height="30" Click="SelectDefaultCloneDir">
                     <Path Data="{StaticResource Icons.Folder.Open}" Fill="{DynamicResource Brush.FG1}"/>

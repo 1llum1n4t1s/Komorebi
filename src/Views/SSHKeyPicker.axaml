@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:m="using:Komorebi.Models"
+             xmlns:v="using:Komorebi.Views"
+             x:Class="Komorebi.Views.SSHKeyPicker"
+             x:DataType="v:SSHKeyPicker"
+             x:Name="ThisControl">
+  <ComboBox x:Name="CmbSSHKey"
+            MinHeight="28"
+            HorizontalAlignment="Stretch"
+            SelectionChanged="OnSelectionChanged">
+    <ComboBox.ItemTemplate>
+      <DataTemplate x:DataType="m:SSHKeyInfo">
+        <TextBlock Text="{Binding DisplayName}"/>
+      </DataTemplate>
+    </ComboBox.ItemTemplate>
+  </ComboBox>
+</UserControl>

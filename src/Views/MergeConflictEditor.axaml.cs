@@ -411,7 +411,7 @@ public class MergeConflictTextPresenter : TextEditor
         if (_scrollViewer is not null)
         {
             _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
-            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new Binding("ScrollOffset", BindingMode.OneWay));
+            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new ReflectionBinding("ScrollOffset") { Mode = BindingMode.OneWay });
         }
     }
 

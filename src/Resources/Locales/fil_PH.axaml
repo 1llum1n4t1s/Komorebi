@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">I-configure ang Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE NG COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Katulad ng ${files:N}, ngunit walang mga folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Nilalaman ng Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Pangalan ng Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">CUSTOM NA AKSYON</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Mga Argumento:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Path ng Repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Napiling tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Path ng Repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Napiling tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Mga halaga ng input control</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Maipapatupad na File:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Mga Input Control:</x:String>
@@ -244,6 +244,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">Minuto</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Mga Uri ng Conventional Commit</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Default na Remote</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remote</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Mas Gustong Merge Mode</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">TAGASUBAYBAY NG ISYU</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Magdagdag ng Azure DevOps Rule</x:String>
@@ -672,6 +673,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Huwag i-convert</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Gamitin ang CRLF para sa lokal at remote</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Default na Clone Dir</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Global na SSH Key</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email ng User</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Global na git user email</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Mag-prune ng mga patay na branch pagkatapos mag-fetch</x:String>
@@ -697,8 +699,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Gamitin ang '.' para tukuyin ang working directory</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Path</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Terminal</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">I-prune ang Remote</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Target:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">I-prune ang mga Worktree</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">I-prune ang impormasyon ng worktree sa `$GIT_COMMON_DIR/worktrees`</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull</x:String>
@@ -742,7 +742,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">I-edit...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Buksan sa Browser</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Prune</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Kumpirmahin ang Pag-alis ng Worktree</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">I-enable ang `--force` na Opsyon</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Target:</x:String>
@@ -874,7 +873,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Sa:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH Private Key:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Path ng private key (hindi .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Wala (Default ng System)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Gamitin ang Global na Setting</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Mag-browse...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Pumili ka ng public key (.pub). Piliin ang private key (ang file na walang .pub extension).</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Global</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">System Default</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">SIMULAN</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Isama ang mga untracked na file</x:String>
@@ -1037,7 +1042,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Hindi nagawang i-save ang file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Hindi nagawang i-save ang pagbabago bilang patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Hindi nagawang i-scan ang mga repository: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;&#xD;&#xD;&#xD;&#xD;
 Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Hindi nagawang simulan ang '{0}'. Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Hindi nagawang buksan: {0}</x:String>
@@ -1104,7 +1109,6 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Tinatanggal ang worktree...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Pinapatakbo ang `prune` sa remote...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Pinapu-push ang tag...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Pinapalitan ang pangalan ng '{0}'</x:String>

@@ -72,6 +72,7 @@ namespace AvaloniaEdit.Editing
         private SelectionMode _mode;
         private AnchorSegment _startWord;
         private Point _possibleDragStartMousePos;
+        private PointerPressedEventArgs _dragPressedArgs;
         private Point _lastMousePosition;
 
         #region Constructor + Attach + Detach
@@ -323,7 +324,7 @@ namespace AvaloniaEdit.Editing
         #region Start Drag
         object currentDragDescriptor;
 
-        async void StartDrag(PointerEventArgs e)
+        async void StartDrag(PointerPressedEventArgs e)
         {
             // prevent nested StartDrag calls
             _mode = SelectionMode.Drag;
@@ -462,6 +463,7 @@ namespace AvaloniaEdit.Editing
                             {
                                 _mode = SelectionMode.PossibleDragStart;
                                 _possibleDragStartMousePos = e.GetPosition(TextArea);
+                                _dragPressedArgs = e;
                             }
                             e.Handled = true;
                             return;
@@ -683,7 +685,7 @@ namespace AvaloniaEdit.Editing
                 if (Math.Abs(mouseMovement.X) > MinimumHorizontalDragDistance
                     || Math.Abs(mouseMovement.Y) > MinimumVerticalDragDistance)
                 {
-                    StartDrag(e);
+                    StartDrag(_dragPressedArgs);
                 }
             }
         }

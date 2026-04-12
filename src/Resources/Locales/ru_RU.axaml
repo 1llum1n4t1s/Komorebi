@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Сравнить с ГОЛОВОЙ</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Настройка репозитория</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН РЕВИЗИИ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Количество изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Пути изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Количество изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Пути изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} То же, что и ${files:N}, но только имена файлов</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Cодержание:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Название:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ПОЛЬЗОВАТЕЛЬСКОЕ ДЕЙСТВИЕ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументы:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Путь репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Хеш выбранной ревизии&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Выбранная метка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Путь репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Хеш выбранной ревизии&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Выбранная метка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Ввод управляющих значений</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Исполняемый файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Элементы управления вводом:</x:String>
@@ -247,6 +247,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">Минут(а/ы)</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Общепринятые типы ревизии</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Внешний репозиторий по умолчанию</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Удалённый репозиторий</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Предпочтительный режим слияния</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">ОТСЛЕЖИВАНИЕ ПРОБЛЕМ</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Добавить пример правила Azure DevOps</x:String>
@@ -675,6 +676,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">НЕ конвертировать</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Использовать CRLF как локально, так и удалённо</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Каталог клонирования по умолчанию</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Глобальный SSH-ключ</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Электроная почта пользователя</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Общая электроная почта пользователя git</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Разрешить (--prune) при скачивании</x:String>
@@ -700,8 +702,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Используйте, пожалуйста, точку «.» для индикации рабочего каталога</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Путь</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Оболочка/Терминал</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">Удалить внешний репозиторий</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Цель:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Удалить рабочий каталог</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">Информация об обрезке рабочего каталога в «$GIT_COMMON_DIR/worktrees»</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Загрузить</x:String>
@@ -745,7 +745,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Редактировать...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Извлечь</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Открыть в браузере</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Удалить</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Подтвердить удаление рабочего каталога</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">Включить опцию (--force)</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Цель:</x:String>
@@ -877,7 +876,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватный ключ SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Путь к закрытому ключу (не .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Нет (системный по умолчанию)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Использовать глобальную настройку</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Обзор...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Вы выбрали открытый ключ (.pub). Выберите закрытый ключ (файл без расширения .pub).</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Удалённый</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Глобальный</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Системный по умолчанию</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">ЗАПУСК</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Отложить</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Включить неотслеживаемые файлы</x:String>
@@ -1040,7 +1045,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не удалось сохранить файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не удалось сохранить изменения в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не удалось просканировать репозитории: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!&#xD;&#xD;&#xD;&#xD;&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не удалось запустить '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не удалось открыть: {0}</x:String>
@@ -1107,7 +1112,6 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Удаление рабочего дерева...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Выполнение `prune` на удалённом...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Отправка тега...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Переименование '{0}'</x:String>

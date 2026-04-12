@@ -78,7 +78,7 @@ public partial class Repository : UserControl
     /// <summary>
     /// SearchBoxGotFocusイベントのハンドラ。フォーカス取得のみ（検索モードはEnterキーで有効化）。
     /// </summary>
-    private void OnSearchBoxGotFocus(object _, GotFocusEventArgs e)
+    private void OnSearchBoxGotFocus(object _, FocusChangedEventArgs e)
     {
         // 検索モード（IsSearchingCommits）はEnterキー押下時に有効化する。
         // ここでは何もしない（サジェストはFilter変更で自動起動する）。
@@ -1438,7 +1438,7 @@ public partial class Repository : UserControl
 
         RenderOptions.SetBitmapInterpolationMode(menu, BitmapInterpolationMode.HighQuality);
         RenderOptions.SetEdgeMode(menu, EdgeMode.Antialias);
-        RenderOptions.SetTextRenderingMode(menu, TextRenderingMode.Antialias);
+        TextOptions.SetTextRenderingMode(menu, TextRenderingMode.Antialias);
 
         var explore = new MenuItem();
         explore.Header = App.Text("Repository.Explore");

@@ -98,7 +98,9 @@ public class Fetch : Popup
         using var lockWatcher = _repo.LockWatcher();
 
         // 現在のHEADコミットを表示中かどうかを記憶
-        var navigateToUpstreamHEAD = _repo.SelectedView is Histories { SelectedCommit: { IsCurrentHead: true } };
+        // Histories タブがアクティブかつ現在のHEADコミットを選択中の場合のみ自動ナビゲート
+        var navigateToUpstreamHEAD = _repo.SelectedViewIndex == 0
+            && _repo.HistoriesVM?.SelectedCommit?.IsCurrentHead == true;
         var notags = _repo.UIStates.FetchWithoutTags;
         var force = _repo.UIStates.EnableForceOnFetch;
         var log = _repo.CreateLog("Fetch");

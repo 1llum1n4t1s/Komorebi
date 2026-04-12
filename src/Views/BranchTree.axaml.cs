@@ -300,7 +300,7 @@ public class BranchTreeNodeDescription : TextBlock
             if (DataContext is not Models.Branch branch)
                 break;
 
-            if (e.Root is not PopupRoot { Parent: Popup { Parent: Border owner } })
+            if (e.RootVisual is not PopupRoot { Parent: Popup { Parent: Border owner } })
                 break;
 
             var tree = owner.FindAncestorOfType<BranchTree>();
@@ -1147,26 +1147,6 @@ public partial class BranchTree : UserControl
             e.Handled = true;
         };
 
-        var prune = new MenuItem();
-        prune.Header = App.Text("RemoteCM.Prune");
-        prune.Icon = App.CreateMenuIcon("Icons.Clean");
-        prune.Click += async (_, e) =>
-        {
-            if (repo.CanCreatePopup())
-                await repo.ShowAndStartPopupAsync(new ViewModels.PruneRemote(repo, remote));
-            e.Handled = true;
-        };
-
-        var edit = new MenuItem();
-        edit.Header = App.Text("RemoteCM.Edit");
-        edit.Icon = App.CreateMenuIcon("Icons.Edit");
-        edit.Click += (_, e) =>
-        {
-            if (repo.CanCreatePopup())
-                repo.ShowPopup(new ViewModels.EditRemote(repo, remote));
-            e.Handled = true;
-        };
-
         var delete = new MenuItem();
         delete.Header = App.Text("RemoteCM.Delete");
         delete.Icon = App.CreateMenuIcon("Icons.Clear");
@@ -1187,9 +1167,7 @@ public partial class BranchTree : UserControl
         };
 
         menu.Items.Add(fetch);
-        menu.Items.Add(prune);
         menu.Items.Add(new MenuItem() { Header = "-" });
-        menu.Items.Add(edit);
         menu.Items.Add(delete);
         menu.Items.Add(new MenuItem() { Header = "-" });
         TryToAddCustomActionsToRemoteContextMenu(repo, menu, remote);

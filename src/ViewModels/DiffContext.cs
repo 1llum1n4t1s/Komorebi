@@ -287,8 +287,12 @@ public class DiffContext : ObservableObject
                     var binaryDiff = new Models.BinaryDiff();
                     if (_option.Revisions.Count == 2)
                     {
-                        binaryDiff.OldSize = await new Commands.QueryFileSize(_repo, oldPath, _option.Revisions[0]).GetResultAsync().ConfigureAwait(false);
-                        binaryDiff.NewSize = await new Commands.QueryFileSize(_repo, _option.Path, _option.Revisions[1]).GetResultAsync().ConfigureAwait(false);
+                        // 独立した2つのファイルサイズ取得を並列実行する
+                        var oldSizeTask = new Commands.QueryFileSize(_repo, oldPath, _option.Revisions[0]).GetResultAsync();
+                        var newSizeTask = new Commands.QueryFileSize(_repo, _option.Path, _option.Revisions[1]).GetResultAsync();
+                        await Task.WhenAll(oldSizeTask, newSizeTask).ConfigureAwait(false);
+                        binaryDiff.OldSize = oldSizeTask.Result;
+                        binaryDiff.NewSize = newSizeTask.Result;
                     }
                     else
                     {

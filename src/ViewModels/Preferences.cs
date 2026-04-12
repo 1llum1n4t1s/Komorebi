@@ -387,6 +387,13 @@ public class Preferences : ObservableObject
         set => SetProperty(ref _gitDefaultCloneDir, value);
     }
 
+    /// <summary>グローバルSSH秘密鍵のファイルパス。リモート個別設定がない場合のフォールバック。</summary>
+    public string GlobalSSHKey
+    {
+        get => _globalSSHKey;
+        set => SetProperty(ref _globalSSHKey, value);
+    }
+
     /// <summary>Linux環境でGCMの代わりにlibsecretを資格情報ヘルパーとして使用するかどうか。</summary>
     public bool UseLibsecretInsteadOfGCM
     {
@@ -942,6 +949,7 @@ public class Preferences : ObservableObject
     private Models.ChangeViewMode _stashChangeViewMode = Models.ChangeViewMode.List;      // スタッシュ変更表示モード
 
     private string _gitDefaultCloneDir = string.Empty;               // デフォルトクローン先
+    private string _globalSSHKey = string.Empty;                     // グローバルSSHキー
     private int _shellOrTerminalType = -1;                           // シェル/ターミナル種類
     private uint _statisticsSampleColor = 0xFF00FF00;                // 統計グラフサンプルカラー
 }

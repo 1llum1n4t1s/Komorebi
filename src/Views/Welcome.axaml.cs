@@ -242,11 +242,13 @@ public partial class Welcome : UserControl
             _pressedTreeNode = true;
             _startDragTreeNode = false;
             _pressedTreeNodePosition = e.GetPosition(sender as Grid);
+            _pressedTreeNodeEvent = e;
         }
         else
         {
             _pressedTreeNode = false;
             _startDragTreeNode = false;
+            _pressedTreeNodeEvent = null;
         }
     }
 
@@ -276,7 +278,8 @@ public partial class Welcome : UserControl
 
             var data = new DataTransfer();
             data.Add(DataTransferItem.Create(_dndRepoNode, node.Id));
-            await DragDrop.DoDragDropAsync(e, data, DragDropEffects.Move);
+            if (_pressedTreeNodeEvent is not null)
+                await DragDrop.DoDragDropAsync(_pressedTreeNodeEvent, data, DragDropEffects.Move);
         }
     }
 
@@ -287,6 +290,7 @@ public partial class Welcome : UserControl
     {
         _pressedTreeNode = false;
         _startDragTreeNode = false;
+        _pressedTreeNodeEvent = null;
     }
 
     /// <summary>
@@ -427,6 +431,8 @@ public partial class Welcome : UserControl
     private bool _pressedTreeNode = false;
     /// <summary>ツリーノードのポインター押下位置。</summary>
     private Point _pressedTreeNodePosition = new Point();
+    /// <summary>ツリーノードが押下された時の PointerPressedEventArgs。DragDrop に渡すために保存する。</summary>
+    private PointerPressedEventArgs _pressedTreeNodeEvent = null;
     /// <summary>ドラッグ操作が開始されたかどうか。</summary>
     private bool _startDragTreeNode = false;
     /// <summary>リポジトリノードのドラッグ＆ドロップ用データフォーマット。</summary>
