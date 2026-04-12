@@ -495,10 +495,13 @@ public class RepositoryConfigure : ObservableObject
         {
             if (await remoteCmd.RenameAsync(remoteName, name))
             {
-                // DefaultRemote用の名前リストも同期する
+                // DefaultRemote用の名前リストを再構築してComboBoxに通知する
                 var idx = Remotes.IndexOf(remoteName);
                 if (idx >= 0)
+                {
                     Remotes[idx] = name;
+                    OnPropertyChanged(nameof(Remotes));
+                }
 
                 if (DefaultRemote == remoteName)
                     DefaultRemote = name;

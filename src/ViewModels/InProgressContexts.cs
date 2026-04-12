@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -231,8 +232,9 @@ public class RebaseInProgress : InProgressContext
                 StoppedAt = stoppedTask.Result ?? new Models.Commit() { SHA = stoppedSHA };
                 Onto = ontoTask.Result ?? new Models.Commit() { SHA = ontoSHA };
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Failed to query rebase info: {ex.Message}");
                 StoppedAt = new Models.Commit() { SHA = stoppedSHA };
                 Onto = new Models.Commit() { SHA = ontoSHA };
             }
