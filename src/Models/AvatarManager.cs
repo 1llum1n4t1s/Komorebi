@@ -86,10 +86,11 @@ public partial class AvatarManager
         LoadDefaultAvatar("unrealbot@epicgames.com", "unreal.png");
 
         _cts = new CancellationTokenSource();
+        var token = _cts.Token; // ローカルにコピーして Stop() で _cts が null になっても安全
 
         Task.Run(async () =>
         {
-            while (!_cts.Token.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
                 string email = null;
 
@@ -107,7 +108,7 @@ public partial class AvatarManager
                     // Thread.Sleepはスレッドプールを占有するためTask.Delayに変更
                     try
                     {
-                        await Task.Delay(100, _cts.Token).ConfigureAwait(false);
+                        await Task.Delay(100, token).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)
                     {
@@ -135,19 +136,19 @@ public partial class AvatarManager
                 {
                     // staticなHttpClientを再利用（ソケット枯渇防止・DNS再利用・接続プール活用）
                     // CancellationTokenを渡して、UIキャンセル時にクリーンに中断する
-                    using var rsp = await s_httpClient.GetAsync(url, _cts.Token).ConfigureAwait(false);
+                    using var rsp = await s_httpClient.GetAsync(url, token).ConfigureAwait(false);
                     if (rsp.IsSuccessStatusCode)
                     {
                         // パフォーマンス: MemoryStreamで一度だけ読み込み、ファイル保存とデコードを効率化
                         // 旧: sync CopyTo + 二重ファイルI/O（書き込み→読み込み）
                         using var ms = new MemoryStream();
-                        await rsp.Content.CopyToAsync(ms, _cts.Token).ConfigureAwait(false);
+                        await rsp.Content.CopyToAsync(ms, token).ConfigureAwait(false);
 
                         // ファイルキャッシュに非同期で書き込み
                         ms.Position = 0;
                         await using (var writer = File.Create(localFile))
                         {
-                            await ms.CopyToAsync(writer, _cts.Token).ConfigureAwait(false);
+                            await ms.CopyToAsync(writer, token).ConfigureAwait(false);
                         }
 
                         // MemoryStreamから直接デコード（ディスク再読み込み不要）
@@ -196,10 +197,11 @@ public partial class AvatarManager
     /// </summary>
     public void Stop()
     {
-        // キャンセルのみ行い、Dispose/nullはしない。
-        // ループ側が CancellationRequested を検知して自然に終了するのを待つ。
-        // Dispose/null にするとループ内で _cts.Token 参照時に NullReferenceException が発生する。
+        // ループ側はローカル変数でトークンを参照するため、Dispose/null にしても安全。
+        // null にすることで Start() の再呼び出しガードが解除され、再起動が可能になる。
         _cts?.Cancel();
+        _cts?.Dispose();
+        _cts = null;
     }
 
     /// <summary>

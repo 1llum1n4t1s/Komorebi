@@ -486,8 +486,10 @@ public class RepositoryConfigure : ObservableObject
     private async Task ChainSaveAsync(
         Models.Remote remote, string name, string url, bool useSSH, string sshKey)
     {
-        await _pendingSaveTask.ConfigureAwait(false);
-        await SavePendingRemoteSettingsAsync(remote, name, url, useSSH, sshKey).ConfigureAwait(false);
+        // ConfigureAwait(false) は使わない — SavePendingRemoteSettingsAsync 内で
+        // Remotes リストや OnPropertyChanged 等の UI バインドプロパティを更新するため
+        await _pendingSaveTask;
+        await SavePendingRemoteSettingsAsync(remote, name, url, useSSH, sshKey);
     }
 
     /// <summary>指定リモートの設定をキャプチャ済みの値でgit configに保存する。</summary>
