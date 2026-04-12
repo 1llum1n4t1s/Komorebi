@@ -182,7 +182,19 @@ public partial class SSHKeyPicker : UserControl
 
             case SSHKeyInfo.EntryType.Browse:
                 // ファイルピッカーを開く
-                var path = await ViewHelpers.SelectSSHKeyFileAsync(this);
+                string path;
+                try
+                {
+                    path = await ViewHelpers.SelectSSHKeyFileAsync(this);
+                }
+                catch
+                {
+                    // ファイルピッカーのエラー時は前の選択に戻す
+                    _suppressSelectionChange = true;
+                    CmbSSHKey.SelectedIndex = _previousSelectedIndex;
+                    _suppressSelectionChange = false;
+                    break;
+                }
                 if (path is not null)
                 {
                     // 選択されたパスがリスト内にあるか確認

@@ -74,6 +74,10 @@ public partial class AvatarManager
     /// </summary>
     public void Start()
     {
+        // 再呼び出し防止（複数のバックグラウンドループが走るのを防ぐ）
+        if (_cts is not null)
+            return;
+
         _storePath = Path.Combine(Native.OS.DataDir, "avatars");
         if (!Directory.Exists(_storePath))
             Directory.CreateDirectory(_storePath);

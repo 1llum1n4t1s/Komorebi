@@ -407,24 +407,34 @@ public class RepositoryConfigure : ObservableObject
 
     public async Task SaveAsync()
     {
-        await SetIfChangedAsync("user.name", UserName, "");
-        await SetIfChangedAsync("user.email", UserEmail, "");
-        await SetIfChangedAsync("commit.gpgsign", GPGCommitSigningEnabled ? "true" : "false", "false");
-        await SetIfChangedAsync("tag.gpgsign", GPGTagSigningEnabled ? "true" : "false", "false");
-        await SetIfChangedAsync("user.signingkey", GPGUserSigningKey, "");
-        await SetIfChangedAsync("http.proxy", HttpProxy, "");
-        await SetIfChangedAsync("fetch.prune", EnablePruneOnFetch ? "true" : "false", "false");
+        HasSaveError = false;
 
-        // リモート設定の読み込み・保存の完了を待ってから現在のリモートを保存
-        await _pendingSaveTask;
-        await _loadTask;
+        try
+        {
+            await SetIfChangedAsync("user.name", UserName, "");
+            await SetIfChangedAsync("user.email", UserEmail, "");
+            await SetIfChangedAsync("commit.gpgsign", GPGCommitSigningEnabled ? "true" : "false", "false");
+            await SetIfChangedAsync("tag.gpgsign", GPGTagSigningEnabled ? "true" : "false", "false");
+            await SetIfChangedAsync("user.signingkey", GPGUserSigningKey, "");
+            await SetIfChangedAsync("http.proxy", HttpProxy, "");
+            await SetIfChangedAsync("fetch.prune", EnablePruneOnFetch ? "true" : "false", "false");
 
-        // リモート設定の保存
-        if (_selectedRemote is not null)
-            await SaveRemoteSettingsAsync();
+            // リモート設定の読み込み・保存の完了を待ってから現在のリモートを保存
+            await _pendingSaveTask;
+            await _loadTask;
 
-        await ApplyIssueTrackerChangesAsync();
-        await _repo.Settings.SaveAsync();
+            // リモート設定の保存
+            if (_selectedRemote is not null)
+                await SaveRemoteSettingsAsync();
+
+            await ApplyIssueTrackerChangesAsync();
+            await _repo.Settings.SaveAsync();
+        }
+        catch (Exception ex)
+        {
+            HasSaveError = true;
+            App.RaiseException(_repo.FullPath, $"Failed to save settings: {ex.Message}");
+        }
     }
 
     /// <summary>git configの値が変更されている場合のみ書き込む。</summary>

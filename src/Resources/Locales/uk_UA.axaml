@@ -677,7 +677,6 @@
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Використовувати CRLF як локально, так і віддалено</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Тека клонування за замовчуванням</x:String>
   <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Глобальний SSH-ключ</x:String>
-  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Глобальний SSH-ключ</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email користувача</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Глобальний email користувача git</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Увімкнути --prune при fetch</x:String>

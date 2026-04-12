@@ -676,7 +676,6 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">不进行转换</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">本地和远程均使用CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">默认克隆路径</x:String>
-  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">全局 SSH 密钥</x:String>
   <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">全局SSH密钥</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">邮箱</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">默认GIT用户邮箱</x:String>
