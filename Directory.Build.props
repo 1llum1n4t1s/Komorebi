@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>1.0.60</Version>
+    <Version>1.0.62</Version>
     <!-- IDEコードスタイル分析（IDE0005等）をビルド時にも強制する -->
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <!-- IDE0005（不要なusing検出）にはドキュメント生成が必須 -->

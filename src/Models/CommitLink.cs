@@ -65,6 +65,17 @@ public class CommitLink
                     outs.Add(new($"sourcehut ({route})", $"{link}/commit/"));
                 else if (host.Equals("gitcode.com", StringComparison.Ordinal))
                     outs.Add(new($"GitCode ({route})", $"{link}/commit/"));
+                else if (host.EndsWith(".console.aws.amazon.com", StringComparison.Ordinal))
+                {
+                    var segments = route.Split('/');
+                    // route: "codesuite/codecommit/repositories/{repo}/browse"
+                    if (segments.Length >= 4)
+                    {
+                        var repoName = segments[3];
+                        var repoRoot = link.EndsWith("/browse", StringComparison.Ordinal) ? link[..^"/browse".Length] : link;
+                        outs.Add(new($"CodeCommit ({repoName})", $"{repoRoot}/commit/"));
+                    }
+                }
             }
         }
 

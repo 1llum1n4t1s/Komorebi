@@ -28,6 +28,22 @@ public partial class Remote
     private static partial Regex REG_SSH2();
 
     /// <summary>git@形式からホストとパスを抽出する正規表現</summary>
+    /// <summary>AWS CodeCommit git-remote-codecommit形式のURL検証正規表現（profile@repo形式にも対応）</summary>
+    [GeneratedRegex(@"^codecommit::[\w\-]+://(?:[\w\-\.]+@)?[\w\.\-]+$")]
+    private static partial Regex REG_CODECOMMIT();
+
+    /// <summary>CodeCommit HTTPS URLからリージョンとリポジトリ名を抽出する正規表現</summary>
+    [GeneratedRegex(@"^https?://git-codecommit\.(?<region>[\w\-]+)\.amazonaws\.com/v1/repos/(?<repo>[\w\.\-]+?)(?:\.git)?$")]
+    private static partial Regex REG_CODECOMMIT_HTTPS();
+
+    /// <summary>codecommit::プロトコルURLからリージョン・プロファイル・リポジトリ名を抽出する正規表現</summary>
+    [GeneratedRegex(@"^codecommit::(?<region>[\w\-]+)://(?:(?<profile>[\w\-\.]+)@)?(?<repo>[\w\.\-]+)$")]
+    private static partial Regex REG_CODECOMMIT_GRC();
+
+    /// <summary>CodeCommit SSH URLからリージョンとリポジトリ名を抽出する正規表現</summary>
+    [GeneratedRegex(@"^ssh://[\w\-]*@?git-codecommit\.(?<region>[\w\-]+)\.amazonaws\.com/v1/repos/(?<repo>[\w\.\-]+?)(?:\.git)?$")]
+    private static partial Regex REG_CODECOMMIT_SSH();
+
     [GeneratedRegex(@"^git@([\w\.\-]+):([\w\.\-/~%]+/[\w\-\.%]+)\.git$")]
     private static partial Regex REG_TO_VISIT_URL_CAPTURE();
 
@@ -37,6 +53,7 @@ public partial class Remote
         REG_GIT(),
         REG_SSH1(),
         REG_SSH2(),
+        REG_CODECOMMIT(),
     ];
 
     /// <summary>リモート名</summary>
@@ -58,6 +75,68 @@ public partial class Remote
             return true;
 
         return REG_SSH2().IsMatch(url);
+    }
+
+    /// <summary>codecommit::プロトコルのURLかどうかを判定する</summary>
+    public static bool IsCodeCommitProtocol(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+
+        return REG_CODECOMMIT().IsMatch(url);
+    }
+
+    /// <summary>CodeCommit HTTPS URLからリージョンとリポジトリ名を抽出する</summary>
+    public static bool TryParseCodeCommitHTTPS(string url, out string region, out string repoName)
+    {
+        region = null;
+        repoName = null;
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+
+        var m = REG_CODECOMMIT_HTTPS().Match(url);
+        if (!m.Success)
+            return false;
+
+        region = m.Groups["region"].Value;
+        repoName = m.Groups["repo"].Value;
+        return true;
+    }
+
+    /// <summary>CodeCommit SSH URLからリージョンとリポジトリ名を抽出する</summary>
+    public static bool TryParseCodeCommitSSH(string url, out string region, out string repoName)
+    {
+        region = null;
+        repoName = null;
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+
+        var m = REG_CODECOMMIT_SSH().Match(url);
+        if (!m.Success)
+            return false;
+
+        region = m.Groups["region"].Value;
+        repoName = m.Groups["repo"].Value;
+        return true;
+    }
+
+    /// <summary>codecommit::プロトコルURLからリージョン・プロファイル・リポジトリ名を抽出する</summary>
+    public static bool TryParseCodeCommitGRC(string url, out string region, out string profile, out string repoName)
+    {
+        region = null;
+        profile = null;
+        repoName = null;
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+
+        var m = REG_CODECOMMIT_GRC().Match(url);
+        if (!m.Success)
+            return false;
+
+        region = m.Groups["region"].Value;
+        profile = m.Groups["profile"].Value;
+        repoName = m.Groups["repo"].Value;
+        return true;
     }
 
     /// <summary>
@@ -90,6 +169,27 @@ public partial class Remote
     public bool TryGetVisitURL(out string url)
     {
         url = null;
+
+        // CodeCommit HTTPS URL → AWSコンソールURLに変換（汎用HTTPSハンドラより前に判定）
+        if (TryParseCodeCommitHTTPS(URL, out var ccRegion, out var ccRepo))
+        {
+            url = $"https://{ccRegion}.console.aws.amazon.com/codesuite/codecommit/repositories/{ccRepo}/browse";
+            return true;
+        }
+
+        // CodeCommit SSH URL → AWSコンソールURLに変換
+        if (TryParseCodeCommitSSH(URL, out var ccSshRegion, out var ccSshRepo))
+        {
+            url = $"https://{ccSshRegion}.console.aws.amazon.com/codesuite/codecommit/repositories/{ccSshRepo}/browse";
+            return true;
+        }
+
+        // codecommit::プロトコル → AWSコンソールURLに変換
+        if (TryParseCodeCommitGRC(URL, out var grcRegion, out _, out var grcRepo))
+        {
+            url = $"https://{grcRegion}.console.aws.amazon.com/codesuite/codecommit/repositories/{grcRepo}/browse";
+            return true;
+        }
 
         if (URL.StartsWith("http", StringComparison.Ordinal))
         {
@@ -140,6 +240,19 @@ public partial class Remote
         var host = uri.Host;
         var route = uri.AbsolutePath.TrimStart('/');
         var encodedBranch = HttpUtility.UrlEncode(mergeBranch);
+
+        // AWS CodeCommit（AWSコンソールURL経由）
+        if (host.EndsWith(".console.aws.amazon.com", StringComparison.Ordinal))
+        {
+            var segments = route.Split('/');
+            // segments: "codesuite/codecommit/repositories/{repo}/browse"
+            if (segments.Length >= 4)
+            {
+                var repoName = segments[3];
+                url = $"https://{host}/codesuite/codecommit/repositories/{repoName}/pull-requests/new/refs/heads/{encodedBranch}";
+                return true;
+            }
+        }
 
         if (host.Contains("github.com", StringComparison.Ordinal))
         {

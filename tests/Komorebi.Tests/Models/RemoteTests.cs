@@ -193,5 +193,187 @@ namespace Komorebi.Tests.Models
         }
 
         #endregion
+
+        #region IsSSH - CodeCommit
+
+        [Theory]
+        [InlineData("codecommit::us-east-1://my-repo", false)]
+        [InlineData("codecommit::us-east-1://profile@my-repo", false)]
+        [InlineData("ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo", true)]
+        public void IsSSH_CodeCommit_DetectsCorrectly(string url, bool expected)
+        {
+            Assert.Equal(expected, Remote.IsSSH(url));
+        }
+
+        #endregion
+
+        #region IsValidURL - CodeCommit
+
+        [Theory]
+        [InlineData("codecommit::us-east-1://my-repo", true)]
+        [InlineData("codecommit::us-east-1://profile@my-repo", true)]
+        [InlineData("codecommit::ap-northeast-1://my.repo-name", true)]
+        [InlineData("https://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo", true)]
+        [InlineData("ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo", true)]
+        [InlineData("codecommit::://my-repo", false)]
+        [InlineData("codecommit::", false)]
+        [InlineData("codecommit::us-east-1://profile@repo@extra", false)]
+        [InlineData("codecommit::us-east-1://profile@", false)]
+        public void IsValidURL_CodeCommit_ValidatesCorrectly(string url, bool expected)
+        {
+            Assert.Equal(expected, Remote.IsValidURL(url));
+        }
+
+        #endregion
+
+        #region IsCodeCommitProtocol
+
+        [Theory]
+        [InlineData("codecommit::us-east-1://my-repo", true)]
+        [InlineData("codecommit::us-east-1://profile@my-repo", true)]
+        [InlineData("https://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo", false)]
+        [InlineData("https://github.com/user/repo", false)]
+        public void IsCodeCommitProtocol_DetectsCorrectly(string url, bool expected)
+        {
+            Assert.Equal(expected, Remote.IsCodeCommitProtocol(url));
+        }
+
+        #endregion
+
+        #region TryParseCodeCommitHTTPS
+
+        [Fact]
+        public void TryParseCodeCommitHTTPS_ValidUrl_ExtractsRegionAndRepo()
+        {
+            Assert.True(Remote.TryParseCodeCommitHTTPS(
+                "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo",
+                out var region, out var repo));
+            Assert.Equal("us-east-1", region);
+            Assert.Equal("my-repo", repo);
+        }
+
+        [Fact]
+        public void TryParseCodeCommitHTTPS_WithGitSuffix_ExtractsCorrectly()
+        {
+            Assert.True(Remote.TryParseCodeCommitHTTPS(
+                "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/my-repo.git",
+                out var region, out var repo));
+            Assert.Equal("eu-west-1", region);
+            Assert.Equal("my-repo", repo);
+        }
+
+        [Fact]
+        public void TryParseCodeCommitHTTPS_NonCodeCommitUrl_ReturnsFalse()
+        {
+            Assert.False(Remote.TryParseCodeCommitHTTPS(
+                "https://github.com/user/repo", out _, out _));
+        }
+
+        #endregion
+
+        #region TryParseCodeCommitGRC
+
+        [Fact]
+        public void TryParseCodeCommitGRC_WithProfile_ExtractsAll()
+        {
+            Assert.True(Remote.TryParseCodeCommitGRC(
+                "codecommit::us-east-1://myprofile@my-repo",
+                out var region, out var profile, out var repo));
+            Assert.Equal("us-east-1", region);
+            Assert.Equal("myprofile", profile);
+            Assert.Equal("my-repo", repo);
+        }
+
+        [Fact]
+        public void TryParseCodeCommitGRC_WithoutProfile_ExtractsRegionAndRepo()
+        {
+            Assert.True(Remote.TryParseCodeCommitGRC(
+                "codecommit::ap-northeast-1://my-repo",
+                out var region, out var profile, out var repo));
+            Assert.Equal("ap-northeast-1", region);
+            Assert.Equal("", profile);
+            Assert.Equal("my-repo", repo);
+        }
+
+        #endregion
+
+        #region TryParseCodeCommitSSH
+
+        [Fact]
+        public void TryParseCodeCommitSSH_ValidUrl_ExtractsRegionAndRepo()
+        {
+            Assert.True(Remote.TryParseCodeCommitSSH(
+                "ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo",
+                out var region, out var repo));
+            Assert.Equal("us-east-1", region);
+            Assert.Equal("my-repo", repo);
+        }
+
+        [Fact]
+        public void TryParseCodeCommitSSH_NonCodeCommitUrl_ReturnsFalse()
+        {
+            Assert.False(Remote.TryParseCodeCommitSSH(
+                "ssh://git@github.com/user/repo.git", out _, out _));
+        }
+
+        #endregion
+
+        #region TryGetVisitURL - CodeCommit
+
+        [Fact]
+        public void TryGetVisitURL_CodeCommitHTTPS_ReturnsConsoleUrl()
+        {
+            var remote = new Remote { URL = "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo" };
+            Assert.True(remote.TryGetVisitURL(out var url));
+            Assert.Equal("https://us-east-1.console.aws.amazon.com/codesuite/codecommit/repositories/my-repo/browse", url);
+        }
+
+        [Fact]
+        public void TryGetVisitURL_CodeCommitGRC_ReturnsConsoleUrl()
+        {
+            var remote = new Remote { URL = "codecommit::us-east-1://my-repo" };
+            Assert.True(remote.TryGetVisitURL(out var url));
+            Assert.Equal("https://us-east-1.console.aws.amazon.com/codesuite/codecommit/repositories/my-repo/browse", url);
+        }
+
+        [Fact]
+        public void TryGetVisitURL_CodeCommitGRC_WithProfile_ReturnsConsoleUrl()
+        {
+            var remote = new Remote { URL = "codecommit::ap-northeast-1://profile@my-repo" };
+            Assert.True(remote.TryGetVisitURL(out var url));
+            Assert.Equal("https://ap-northeast-1.console.aws.amazon.com/codesuite/codecommit/repositories/my-repo/browse", url);
+        }
+
+        [Fact]
+        public void TryGetVisitURL_CodeCommitSSH_ReturnsConsoleUrl()
+        {
+            var remote = new Remote { URL = "ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo" };
+            Assert.True(remote.TryGetVisitURL(out var url));
+            Assert.Equal("https://us-east-1.console.aws.amazon.com/codesuite/codecommit/repositories/my-repo/browse", url);
+        }
+
+        #endregion
+
+        #region TryGetCreatePullRequestURL - CodeCommit
+
+        [Fact]
+        public void TryGetCreatePullRequestURL_CodeCommitHTTPS_ReturnsPRUrl()
+        {
+            var remote = new Remote { URL = "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo" };
+            Assert.True(remote.TryGetCreatePullRequestURL(out var url, "feature-branch"));
+            Assert.Contains("pull-requests/new", url);
+            Assert.Contains("feature-branch", url);
+        }
+
+        [Fact]
+        public void TryGetCreatePullRequestURL_CodeCommitGRC_ReturnsPRUrl()
+        {
+            var remote = new Remote { URL = "codecommit::us-east-1://my-repo" };
+            Assert.True(remote.TryGetCreatePullRequestURL(out var url, "feature-branch"));
+            Assert.Contains("pull-requests/new", url);
+            Assert.Contains("feature-branch", url);
+        }
+
+        #endregion
     }
 }

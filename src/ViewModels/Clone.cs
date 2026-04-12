@@ -211,11 +211,19 @@ public class Clone : Popup
         else
         {
             // リモートURLからリポジトリ名を抽出する
-            var name = Path.GetFileName(_remote)!;
-            if (name.EndsWith(".git", StringComparison.Ordinal))
-                name = name[..^4];
-            else if (name.EndsWith(".bundle", StringComparison.Ordinal))
-                name = name[..^7];
+            string name;
+            if (Models.Remote.TryParseCodeCommitGRC(_remote, out _, out _, out var ccRepoName))
+            {
+                name = ccRepoName;
+            }
+            else
+            {
+                name = Path.GetFileName(_remote)!;
+                if (name.EndsWith(".git", StringComparison.Ordinal))
+                    name = name[..^4];
+                else if (name.EndsWith(".bundle", StringComparison.Ordinal))
+                    name = name[..^7];
+            }
 
             path = Path.GetFullPath(Path.Combine(path, name));
         }

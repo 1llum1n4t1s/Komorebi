@@ -36,7 +36,8 @@ public static class HTTPSValidator
                 host.Equals("gitee.com", StringComparison.Ordinal) ||
                 host.Equals("bitbucket.org", StringComparison.Ordinal) ||
                 host.Equals("gitea.org", StringComparison.Ordinal) ||
-                host.Equals("gitcode.com", StringComparison.Ordinal))
+                host.Equals("gitcode.com", StringComparison.Ordinal) ||
+                (host.StartsWith("git-codecommit.", StringComparison.Ordinal) && host.EndsWith(".amazonaws.com", StringComparison.Ordinal)))
                 return;
         }
 
