@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -553,73 +554,40 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// コンフリクトを「相手側（theirs）」で解決する。
     /// 削除コンフリクトはファイルを削除し、その他はcheckout --theirsで解決する。
     /// </summary>
-    public async Task UseTheirsAsync(List<Models.Change> changes)
-    {
-        using var lockWatcher = _repo.LockWatcher();
-
-        List<string> files = [];
-        List<string> needStage = [];
-        var log = _repo.CreateLog("Use Theirs");
-
-        foreach (var change in changes)
-        {
-            if (!change.IsConflicted)
-                continue;
-
-            // 削除系コンフリクトはファイルを直接削除
-            if (change.ConflictReason is Models.ConflictReason.BothDeleted or Models.ConflictReason.DeletedByThem or Models.ConflictReason.AddedByUs)
-            {
-                var fullpath = Path.Combine(_repo.FullPath, change.Path);
-                if (File.Exists(fullpath))
-                    File.Delete(fullpath);
-
-                needStage.Add(change.Path);
-            }
-            else
-            {
-                files.Add(change.Path);
-            }
-        }
-
-        if (files.Count > 0)
-        {
-            var succ = await new Commands.Checkout(_repo.FullPath).Use(log).UseTheirsAsync(files);
-            if (succ)
-                needStage.AddRange(files);
-        }
-
-        // 解決したファイルをステージング
-        if (needStage.Count > 0)
-        {
-            var pathSpecFile = Path.GetTempFileName();
-            await File.WriteAllLinesAsync(pathSpecFile, needStage);
-            await new Commands.Add(_repo.FullPath, pathSpecFile).Use(log).ExecAsync();
-            File.Delete(pathSpecFile);
-        }
-
-        log.Complete();
-        _repo.MarkWorkingCopyDirtyManually();
-    }
+    public Task UseTheirsAsync(List<Models.Change> changes) => ResolveConflictsBySideAsync(changes, useTheirs: true);
 
     /// <summary>
     /// コンフリクトを「自分側（mine/ours）」で解決する。
     /// 削除コンフリクトはファイルを削除し、その他はcheckout --oursで解決する。
     /// </summary>
-    public async Task UseMineAsync(List<Models.Change> changes)
+    public Task UseMineAsync(List<Models.Change> changes) => ResolveConflictsBySideAsync(changes, useTheirs: false);
+
+    /// <summary>
+    /// コンフリクトを指定側（theirs/mine）で解決する共通ヘルパー。
+    /// 削除系コンフリクトはファイルを直接削除し、その他はcheckoutで解決後、ステージングする。
+    /// </summary>
+    private async Task ResolveConflictsBySideAsync(List<Models.Change> changes, bool useTheirs)
     {
         using var lockWatcher = _repo.LockWatcher();
 
         List<string> files = [];
         List<string> needStage = [];
-        var log = _repo.CreateLog("Use Mine");
+        var logName = useTheirs ? "Use Theirs" : "Use Mine";
+        var log = _repo.CreateLog(logName);
 
+        // useTheirs: 「相手側が削除」= DeletedByThem / AddedByUs を削除対象にする
+        // useMine:   「自分側が削除」= DeletedByUs / AddedByThem を削除対象にする
         foreach (var change in changes)
         {
             if (!change.IsConflicted)
                 continue;
 
-            // 削除系コンフリクトはファイルを直接削除
-            if (change.ConflictReason is Models.ConflictReason.BothDeleted or Models.ConflictReason.DeletedByUs or Models.ConflictReason.AddedByThem)
+            var shouldDelete = change.ConflictReason is Models.ConflictReason.BothDeleted
+                || (useTheirs
+                    ? change.ConflictReason is Models.ConflictReason.DeletedByThem or Models.ConflictReason.AddedByUs
+                    : change.ConflictReason is Models.ConflictReason.DeletedByUs or Models.ConflictReason.AddedByThem);
+
+            if (shouldDelete)
             {
                 var fullpath = Path.Combine(_repo.FullPath, change.Path);
                 if (File.Exists(fullpath))
@@ -635,7 +603,10 @@ public class WorkingCopy : ObservableObject, IDisposable
 
         if (files.Count > 0)
         {
-            var succ = await new Commands.Checkout(_repo.FullPath).Use(log).UseMineAsync(files);
+            var checkout = new Commands.Checkout(_repo.FullPath).Use(log);
+            var succ = useTheirs
+                ? await checkout.UseTheirsAsync(files)
+                : await checkout.UseMineAsync(files);
             if (succ)
                 needStage.AddRange(files);
         }
@@ -883,24 +854,33 @@ public class WorkingCopy : ObservableObject, IDisposable
         if (!HasUnsolvedConflicts)
             return changes;
 
+        // コンフリクト解決チェックを並列実行して高速化
+        var conflicted = new List<(Models.Change Change, Task<bool> Task)>();
         List<Models.Change> outs = [];
+
         foreach (var c in changes)
         {
             if (c.IsConflicted)
             {
-                // BothAdded/BothModifiedのみ解決済みかチェック
-                var isResolved = c.ConflictReason switch
-                {
-                    Models.ConflictReason.BothAdded or Models.ConflictReason.BothModified =>
-                        await new Commands.IsConflictResolved(_repo.FullPath, c).GetResultAsync(),
-                    _ => false,
-                };
-
-                if (!isResolved)
-                    continue;
+                // BothAdded/BothModifiedのみ解決済みかチェック（並列実行）
+                if (c.ConflictReason is Models.ConflictReason.BothAdded or Models.ConflictReason.BothModified)
+                    conflicted.Add((c, new Commands.IsConflictResolved(_repo.FullPath, c).GetResultAsync()));
+                // その他のコンフリクトは未解決として除外
             }
+            else
+            {
+                outs.Add(c);
+            }
+        }
 
-            outs.Add(c);
+        if (conflicted.Count > 0)
+        {
+            await Task.WhenAll(conflicted.Select(x => x.Task));
+            foreach (var (change, task) in conflicted)
+            {
+                if (task.Result)
+                    outs.Add(change);
+            }
         }
 
         return outs;

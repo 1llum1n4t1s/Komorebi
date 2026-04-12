@@ -65,6 +65,8 @@ public partial class AvatarManager
     private HashSet<string> _requesting = [];
     /// <summary>デフォルトアバターとして登録済みのメールアドレスセット</summary>
     private HashSet<string> _defaultAvatars = [];
+    /// <summary>バックグラウンドダウンロードループのキャンセルトークンソース</summary>
+    private CancellationTokenSource _cts;
 
     /// <summary>
     /// アバターマネージャーを開始し、バックグラウンドでアバター取得ループを起動する。
@@ -72,6 +74,10 @@ public partial class AvatarManager
     /// </summary>
     public void Start()
     {
+        // 再呼び出し防止（複数のバックグラウンドループが走るのを防ぐ）
+        if (_cts is not null)
+            return;
+
         _storePath = Path.Combine(Native.OS.DataDir, "avatars");
         if (!Directory.Exists(_storePath))
             Directory.CreateDirectory(_storePath);
@@ -79,9 +85,12 @@ public partial class AvatarManager
         LoadDefaultAvatar("noreply@github.com", "github.png");
         LoadDefaultAvatar("unrealbot@epicgames.com", "unreal.png");
 
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token; // ローカルにコピーして Stop() で _cts が null になっても安全
+
         Task.Run(async () =>
         {
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 string email = null;
 
@@ -97,7 +106,15 @@ public partial class AvatarManager
                 if (email is null)
                 {
                     // Thread.Sleepはスレッドプールを占有するためTask.Delayに変更
-                    await Task.Delay(100).ConfigureAwait(false);
+                    try
+                    {
+                        await Task.Delay(100, token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        break;
+                    }
+
                     continue;
                 }
 
@@ -118,25 +135,40 @@ public partial class AvatarManager
                 try
                 {
                     // staticなHttpClientを再利用（ソケット枯渇防止・DNS再利用・接続プール活用）
-                    using var rsp = await s_httpClient.GetAsync(url).ConfigureAwait(false);
+                    // CancellationTokenを渡して、UIキャンセル時にクリーンに中断する
+                    using var rsp = await s_httpClient.GetAsync(url, token).ConfigureAwait(false);
                     if (rsp.IsSuccessStatusCode)
                     {
                         // パフォーマンス: MemoryStreamで一度だけ読み込み、ファイル保存とデコードを効率化
                         // 旧: sync CopyTo + 二重ファイルI/O（書き込み→読み込み）
                         using var ms = new MemoryStream();
-                        await rsp.Content.CopyToAsync(ms).ConfigureAwait(false);
+                        await rsp.Content.CopyToAsync(ms, token).ConfigureAwait(false);
 
                         // ファイルキャッシュに非同期で書き込み
                         ms.Position = 0;
                         await using (var writer = File.Create(localFile))
                         {
-                            await ms.CopyToAsync(writer).ConfigureAwait(false);
+                            await ms.CopyToAsync(writer, token).ConfigureAwait(false);
                         }
 
                         // MemoryStreamから直接デコード（ディスク再読み込み不要）
                         ms.Position = 0;
                         img = Bitmap.DecodeToWidth(ms, 128);
                     }
+                }
+                catch (OperationCanceledException)
+                {
+                    // キャンセルは正常な動作（アプリ終了やUI遷移時）なのでログ不要
+                    break;
+                }
+                catch (HttpRequestException ex)
+                {
+                    Logger.Log($"アバターダウンロード失敗（ネットワークエラー）: {email} - {ex.Message}", LogLevel.Warning);
+                }
+                catch (IOException ex)
+                {
+                    // ソケット切断やTLSストリーム中断（フォントドロップダウンスクロール時等）
+                    Logger.Log($"アバターダウンロード失敗（I/Oエラー）: {email} - {ex.Message}", LogLevel.Warning);
                 }
                 catch (Exception ex)
                 {
@@ -157,6 +189,19 @@ public partial class AvatarManager
 
             // ReSharper disable once FunctionNeverReturns
         });
+    }
+
+    /// <summary>
+    /// バックグラウンドのアバターダウンロードループを停止する。
+    /// アプリケーション終了時に呼び出す。
+    /// </summary>
+    public void Stop()
+    {
+        // ループ側はローカル変数でトークンを参照するため、Dispose/null にしても安全。
+        // null にすることで Start() の再呼び出しガードが解除され、再起動が可能になる。
+        _cts?.Cancel();
+        _cts?.Dispose();
+        _cts = null;
     }
 
     /// <summary>

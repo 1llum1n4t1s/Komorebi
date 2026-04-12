@@ -6,7 +6,6 @@ using System.Runtime.Versioning;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Platform;
 
 namespace Komorebi.Native;
 
@@ -54,7 +53,9 @@ internal class MacOS : OS.IBackend
     /// </summary>
     public void SetupWindow(Window window)
     {
-        window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.SystemChrome;
+        // macOS: システムデコレーション（信号機ボタン）を表示しつつ、
+        // クライアント領域をタイトルバー領域まで拡張してカスタムタイトルバーを描画する
+        window.WindowDecorations = WindowDecorations.Full;
         window.ExtendClientAreaToDecorationsHint = true;
     }
 

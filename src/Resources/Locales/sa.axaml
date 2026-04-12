@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">भण्डारविन्यासः</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">प्रतिबद्धसन्देशप्रारूपम्</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-${branch_name} वर्तमानस्थानीयशाखानाम।&#xD;&#xD;&#xD;&#xD;&#xD;
-${files_num} परिवर्तितसञ्चिकासंख्या&#xD;&#xD;&#xD;&#xD;&#xD;
-${files} परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;
-${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;
-${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${branch_name} वर्तमानस्थानीयशाखानाम।&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files_num} परिवर्तितसञ्चिकासंख्या&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files} परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 ${pure_files:N} ${files:N} सदृशं, किन्तु पत्रिकाभिः विना</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">प्रारूपविषयः:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">प्रारूपनाम:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">परिमितयः:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-${REPO} भण्डारमार्गः&#xD;&#xD;&#xD;&#xD;&#xD;
-${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्&#xD;&#xD;&#xD;&#xD;&#xD;
-${SHA} चयनितप्रतिबद्धस्य हैश्&#xD;&#xD;&#xD;&#xD;&#xD;
-${TAG} चयनितं चिह्नम्&#xD;&#xD;&#xD;&#xD;&#xD;
-${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REPO} भण्डारमार्गः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${SHA} चयनितप्रतिबद्धस्य हैश्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${TAG} चयनितं चिह्नम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 $1, $2 ... निवेशनियन्त्रणमूल्यानि</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">निष्पादनीयसञ्चिका:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">निवेशनियन्त्रणानि:</x:String>
@@ -244,6 +244,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">निमेषः(निमेषाः)</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">परम्परागतप्रतिबद्धप्रकाराः</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">पूर्वनिर्धारितदूरस्थम्</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">दूरस्थम्</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">अभिमतविलयनप्रकारः</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">समस्याअनुसरणम्</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Azure DevOps नियमं योजयतु</x:String>
@@ -672,6 +673,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">परिवर्तनं मा कुरुत</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">स्थानीयं दूरस्थं च द्वयोः कृते CRLF उपयुज्यताम्</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">पूर्वनिर्धारितप्रतिरूपणनिर्देशिका</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">वैश्विक SSH कुञ्चिका</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">उपयोक्तृविद्युत्पत्रम्</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">वैश्विकं Git उपयोक्तृविद्युत्पत्रम्</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">आनयनानन्तरं मृतशाखाः शोधयतु</x:String>
@@ -697,8 +699,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">कार्यनिर्देशिकां सूचयितुं '.' उपयुज्यताम्</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">मार्गः</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">शेल्/सम्प्रेषकम्</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">दूरस्थं शोधयतु</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">लक्ष्यम्:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">कार्यवृक्षान् शोधयतु</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">`$GIT_COMMON_DIR/worktrees` मध्ये कार्यवृक्षसूचनां शोधयतु</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">आकर्षणम्</x:String>
@@ -742,7 +742,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">सम्पादयतु...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">आनयतु</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">अन्तर्जाले उद्घाटयतु</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">शोधयतु</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">कार्यवृक्षापसारणं सुनिश्चितं कुरुत</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">`--force` विकल्पं सक्षमं कुरुत</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">लक्ष्यम्:</x:String>
@@ -874,7 +873,13 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">मध्ये:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH गोपनकुञ्चिका:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">गोपनकुञ्चिकामार्गः (.pub न भवतु)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">किमपि नास्ति (तन्त्रस्य पूर्वनिर्धारितम्)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">वैश्विकसंस्थापनं उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">अन्वेषणम्...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">सार्वजनिककुञ्चिका (.pub) चिता। गोपनकुञ्चिकां (.pub विस्तारं विना सञ्चिकाम्) चिनुत।</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">दूरस्थ</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">वैश्विक</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">प्रणालीगत पूर्वनिर्धारित</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">प्रारभतु</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">निक्षेपः</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">अननुसृतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
@@ -1037,7 +1042,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">सञ्चिकां रक्षितुं न शक्तम्: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Patch परिवर्तनं रक्षितुं न शक्तम्: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">भण्डाराणि अन्वेषितुं न शक्तम्: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">भण्डारस्य '{0}' प्रेक्षकं प्रारभितुं न शक्तम्। 'F5' पीडयित्वा हस्तेन नवीकरणं कर्तव्यम्!&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">भण्डारस्य '{0}' प्रेक्षकं प्रारभितुं न शक्तम्। 'F5' पीडयित्वा हस्तेन नवीकरणं कर्तव्यम्!&#xD;&#xD;&#xD;&#xD;&#xD;
 कारणम्: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' प्रारभितुं न शक्तम्। कारणम्: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">उद्घाटयितुं न शक्तम्: {0}</x:String>
@@ -1104,7 +1109,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Worktree अपनयति...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Remote मध्ये `prune` चालयति...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Tag प्रेषयति...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' पुनर्नामकरोति</x:String>

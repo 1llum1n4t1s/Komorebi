@@ -9,7 +9,6 @@ using System.Text.Json;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Platform;
 using Avalonia.Threading;
 
 namespace Komorebi.Native;
@@ -82,9 +81,8 @@ internal class Windows : OS.IBackend
     /// </summary>
     public void SetupWindow(Window window)
     {
-        // カスタムタイトルバーを使用するためクロムなしに設定する
-        window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
-        window.ExtendClientAreaToDecorationsHint = true;
+        // カスタムタイトルバーを使用するためデコレーションなしに設定する
+        window.WindowDecorations = WindowDecorations.None;
         window.BorderThickness = new Thickness(1);
     }
 

@@ -47,15 +47,4 @@ public partial class Clone : UserControl
         e.Handled = true;
     }
 
-    /// <summary>
-    /// SSHKeyの選択処理を行う。
-    /// </summary>
-    private async void SelectSSHKey(object _, RoutedEventArgs e)
-    {
-        var path = await ViewHelpers.SelectSSHKeyFileAsync(this);
-        if (path is not null)
-            TxtSshKey.Text = path;
-
-        e.Handled = true;
-    }
 }

@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Comparer avec HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configurer le dépôt</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">MODÈLE DE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Nom de la branche locale actuelle.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Nombre de fichiers modifiés&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Chemins des fichiers modifiés&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Nombre maximum N de chemins de fichiers modifiés&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Comme ${files}, mais uniquement les noms de fichiers purs&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Nom de la branche locale actuelle.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Nombre de fichiers modifiés&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Chemins des fichiers modifiés&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Nombre maximum N de chemins de fichiers modifiés&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Comme ${files}, mais uniquement les noms de fichiers purs&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Comme ${files:N}, mais sans les dossiers</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contenu de modèle:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nom de modèle:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTION PERSONNALISÉE</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Arguments :</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Chemin du dépôt&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Dépôt distant sélectionné ou dépôt distant de la branche sélectionnée&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Branche sélectionnée, sans la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nom d'affichage de la branche sélectionnée, contient la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash du commit sélectionné&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Tag sélectionné&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Fichier sélectionné, relatif à la racine du dépôt&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Paramètres intégrés : &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Chemin du dépôt&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Dépôt distant sélectionné ou dépôt distant de la branche sélectionnée&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Branche sélectionnée, sans la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nom d'affichage de la branche sélectionnée, contient la partie ${REMOTE} pour les branches distantes&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash du commit sélectionné&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Tag sélectionné&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Fichier sélectionné, relatif à la racine du dépôt&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Paramètres d'entrée utilisateur</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Fichier exécutable :</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Paramètres d'entrée utilisateur :</x:String>
@@ -247,6 +247,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">minute(s)</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Types de commit conventionnels</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Dépôt par défaut</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Distant</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Mode de fusion préféré</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">SUIVI DES PROBLÈMES</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Ajouter une règle d'exemple Azure DevOps</x:String>
@@ -675,6 +676,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Ne pas convertir</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Utiliser CRLF en local et en distant</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Répertoire de clônage par défaut</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Clé SSH globale</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">E-mail utilsateur</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">E-mail utilsateur global</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Activer --prune pour fetch</x:String>
@@ -700,8 +702,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Veuillez utiliser '.' pour indiquer le répertoire de travail</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Chemin</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Terminal</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">Élaguer une branche distant</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Cible :</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Élaguer les Worktrees</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve"> Élaguer les information de worktree dans `$GIT_COMMON_DIR/worktrees`</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull</x:String>
@@ -745,7 +745,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Editer...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Ouvrir dans le navigateur</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Elaguer</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirmer la suppression du Worktree</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">Activer l'option `--force`</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Cible :</x:String>
@@ -877,7 +876,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Dans :</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clé privée SSH :</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Chemin de la clé privée (pas .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Aucune (par défaut du système)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Utiliser le paramètre global</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Parcourir...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Vous avez sélectionné une clé publique (.pub). Veuillez sélectionner la clé privée (le fichier sans extension .pub).</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Distant</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Global</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Par défaut du système</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">START</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Inclure les fichiers non-suivis</x:String>
@@ -1040,7 +1045,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Échec de l'enregistrement du fichier : {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Échec de l'enregistrement de la modification en tant que patch : {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Échec de l'analyse des dépôts : {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Échec du démarrage de l'observateur pour le dépôt : '{0}'. Vous devrez peut-être appuyer sur 'F5' pour actualiser le dépôt manuellement !&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Échec du démarrage de l'observateur pour le dépôt : '{0}'. Vous devrez peut-être appuyer sur 'F5' pour actualiser le dépôt manuellement !&#xD;&#xD;&#xD;&#xD;&#xD;
 Raison : {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Échec du démarrage de '{0}'. Raison : {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Impossible d'ouvrir : {0}</x:String>
@@ -1107,7 +1112,6 @@ Raison : {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Suppression du worktree...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Exécution de `prune` sur le remote...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Envoi du tag...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Renommage de '{0}'</x:String>

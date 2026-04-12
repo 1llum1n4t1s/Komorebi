@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Порівняти з HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Налаштування сховища</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН КОМІТУ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Number of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Number of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Likes ${files:N}, but without folders</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Зміст шаблону:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Назва шаблону:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">СПЕЦІАЛЬНА ДІЯ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументи:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Repository's path&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Selected tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Repository's path&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Selected tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Input control values</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Виконуваний файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Елементи введення:</x:String>
@@ -247,6 +247,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">хвилин(и)</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Типи Conventional Commit</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Віддалене сховище за замовчуванням</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Віддалене сховище</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Бажаний режим злиття</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">ТРЕКЕР ЗАВДАНЬ</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Додати приклад правила для Azure DevOps</x:String>
@@ -675,6 +676,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Не конвертувати</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Використовувати CRLF як локально, так і віддалено</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Тека клонування за замовчуванням</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Глобальний SSH-ключ</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Email користувача</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Глобальний email користувача git</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Увімкнути --prune при fetch</x:String>
@@ -700,8 +702,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Використовуйте '.' для позначення робочої теки</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Шлях</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Консоль/Термінал</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">Prune для віддаленого сховища</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Ціль:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Prune для робочих дерев</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">Видалити застарілу інформацію про робочі дерева в `$GIT_COMMON_DIR/worktrees`</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull (Витягти)</x:String>
@@ -745,7 +745,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Редагувати...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch (Отримати)</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Відкрити у браузері</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Prune (Очистити)</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Підтвердити видалення робочого дерева</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">Увімкнути опцію `--force`</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Ціль:</x:String>
@@ -877,7 +876,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">До:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватний ключ SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Шлях до приватного ключа (не .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Немає (системне за замовчуванням)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Використовувати глобальне налаштування</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Огляд...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Ви обрали відкритий ключ (.pub). Оберіть приватний ключ (файл без розширення .pub).</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Віддалений</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Глобальний</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Системний за замовчуванням</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">ПОЧАТИ</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash (Сховати)</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Включити невідстежувані файли</x:String>
@@ -1040,7 +1045,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не вдалося зберегти файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не вдалося зберегти зміни в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не вдалося просканувати репозиторії: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не вдалося запустити спостерігач для репозиторію '{0}'. Можливо, потрібно натиснути 'F5' для оновлення вручну!&#xD;&#xD;&#xD;&#xD;&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не вдалося запустити '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не вдалося відкрити: {0}</x:String>
@@ -1107,7 +1112,6 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Видалення робочого дерева...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Виконання `prune` на віддаленому...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Відправлення тегу...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Перейменування '{0}'</x:String>

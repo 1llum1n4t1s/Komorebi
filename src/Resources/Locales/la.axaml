@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Compara cum HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configura Repositorium</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">EXEMPLAR COMMITTENDI</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Nomen rami localis praesentis.&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Numerus documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Semitae documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Maxime N semitae documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Nomen rami localis praesentis.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Numerus documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Semitae documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Maxime N semitae documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Ut ${files:N}, sed sine fasciculis</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contentum Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nomen Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTIO PROPRIA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumenta:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Semita repositorii&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash committi selecti&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Signum selectum&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Semita repositorii&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash committi selecti&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Signum selectum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Valores moderaminum inscriptionis</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Documentum Exsecutabile:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Moderamina Inscriptionis:</x:String>
@@ -244,6 +244,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">Minutum(-a)</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Genera Committorum Conventionalium</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Remotum Praefinitum</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remotum</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Modus Merge Praelatus</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">VESTIGATOR QUAESTIONUM</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Adde Regulam Azure DevOps</x:String>
@@ -672,6 +673,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">NON convertere</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Utere CRLF pro locali et remoto</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Directorium Clonandi Praefinitum</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Clavis SSH Globalis</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">Inscriptio Electronica Usoris</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Inscriptio electronica usoris git globalis</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Puta ramos mortuos post arcesssitionem</x:String>
@@ -697,8 +699,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Utere '.' ad indicandum directorium operis</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Semita</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Concha/Terminale</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">Puta Remotum</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Obiectum:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Puta Arbores Operis</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">Puta informationes arborum operis in `$GIT_COMMON_DIR/worktrees`</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull</x:String>
@@ -742,7 +742,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Recense...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Arcessse</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Aperi In Navigatro</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Puta</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirma Remotionem Arboris Operis</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">Activa Optionem `--force`</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Obiectum:</x:String>
@@ -874,7 +873,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clavis SSH Privata:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Semita clavis privatae (non .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Nulla (defectus systematis)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Uti dispositione globali</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Perlustra...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Clavem publicam (.pub) selegisti. Clavem privatam (archivum sine extensione .pub) selige.</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remotus</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Globalis</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Systema Default</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">INCIPE</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Repone</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Includi documenta non vestigata</x:String>
@@ -1037,7 +1042,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Fasciculum servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Mutationem ad patch servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Repositoria explorare non potuit: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!&#xD;&#xD;&#xD;&#xD;&#xD;
 Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' incipere non potuit. Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Aperire non potuit: {0}</x:String>
@@ -1104,7 +1109,6 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebase...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Worktree removendo...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">`prune` in remote exsequendo...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Tag pellendo...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">'{0}' renominando</x:String>

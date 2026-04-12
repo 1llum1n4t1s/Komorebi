@@ -243,6 +243,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">Minute(s)</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Conventional Commit Types</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Default Remote</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remote</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Preferred Merge Mode</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">ISSUE TRACKER</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Add Azure DevOps Rule</x:String>
@@ -671,6 +672,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">Do NOT convert</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">Use CRLF for both local and remote</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">Default Clone Dir</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">Global SSH Key</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">User Email</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">Global git user email</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">Prune dead branches after fetching</x:String>
@@ -696,8 +698,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">Please use '.' to indicate working directory</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">Path</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">Shell/Terminal</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">Prune Remote</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">Target:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">Prune Worktrees</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">Prune worktree information in `$GIT_COMMON_DIR/worktrees`</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">Pull</x:String>
@@ -741,7 +741,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Edit...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Open In Browser</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">Prune</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirm to Remove Worktree</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">Enable `--force` Option</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">Target:</x:String>
@@ -873,7 +872,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Into:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH Private Key:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Private key path (not .pub)</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">None (System Default)</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Use Global Setting</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Browse...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">You selected a public key (.pub). Please select the private key (the file without .pub extension).</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Global</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">System Default</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">START</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Include untracked files</x:String>
@@ -1107,7 +1112,6 @@ Reason: {1}</x:String>
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">Push {0} -> {1} ...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">Rebasing ...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">Remove worktree ...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">Run `prune` on remote ...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">Push {0} -> {1}/{2} ...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">Pushing tag ...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">Rename '{0}'</x:String>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Avalonia;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -811,7 +811,9 @@ public partial class CommitDetail : ObservableObject, IDisposable
         }
 
         // コミットSHAパターンにマッチする参照を追加する
+        // 並列度を制限して外部プロセスの過剰起動を防ぐ（最大8並列）
         var shaMatches = REG_SHA_FORMAT().Matches(message);
+        var shaCandidates = new List<(int Start, int Len, string SHA)>();
         foreach (Match match in shaMatches)
         {
             var start = match.Index;
@@ -819,11 +821,32 @@ public partial class CommitDetail : ObservableObject, IDisposable
             if (inlines.Intersect(start, len) is not null)
                 continue;
 
-            // 実際にコミットSHAとして有効か確認する
-            var sha = match.Groups[1].Value;
-            var isCommitSHA = await new Commands.IsCommitSHA(_repo.FullPath, sha).GetResultAsync().ConfigureAwait(false);
-            if (isCommitSHA)
-                inlines.Add(new Models.InlineElement(Models.InlineElementType.CommitSHA, start, len, sha));
+            shaCandidates.Add((start, len, match.Groups[1].Value));
+        }
+
+        if (shaCandidates.Count > 0)
+        {
+            using var semaphore = new SemaphoreSlim(8);
+            var verifyTasks = shaCandidates.Select(async c =>
+            {
+                await semaphore.WaitAsync().ConfigureAwait(false);
+                try
+                {
+                    var isCommit = await new Commands.IsCommitSHA(_repo.FullPath, c.SHA).GetResultAsync().ConfigureAwait(false);
+                    return (c.Start, c.Len, c.SHA, IsCommit: isCommit);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            }).ToList();
+
+            var results = await Task.WhenAll(verifyTasks).ConfigureAwait(false);
+            foreach (var r in results)
+            {
+                if (r.IsCommit)
+                    inlines.Add(new Models.InlineElement(Models.InlineElementType.CommitSHA, r.Start, r.Len, r.SHA));
+            }
         }
 
         // インラインコードパターン（バッククォート囲み）を追加する

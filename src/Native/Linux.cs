@@ -6,7 +6,6 @@ using System.Runtime.Versioning;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Platform;
 
 namespace Komorebi.Native;
 
@@ -35,15 +34,13 @@ internal class Linux : OS.IBackend
     {
         if (OS.UseSystemWindowFrame)
         {
-            // システムウィンドウフレームを使用する場合
-            window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.Default;
-            window.ExtendClientAreaToDecorationsHint = false;
+            // システムウィンドウフレームを使用する場合（フルデコレーション）
+            window.WindowDecorations = WindowDecorations.Full;
         }
         else
         {
-            // カスタムウィンドウフレームを使用する場合
-            window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
-            window.ExtendClientAreaToDecorationsHint = true;
+            // カスタムウィンドウフレームを使用する場合（デコレーションなし）
+            window.WindowDecorations = WindowDecorations.None;
             window.Classes.Add("custom_window_frame");
         }
     }

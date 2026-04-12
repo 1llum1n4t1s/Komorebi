@@ -297,7 +297,7 @@ public partial class Command
         {
             var sshCmd = string.IsNullOrEmpty(SSHKey)
                 ? "ssh -o StrictHostKeyChecking=accept-new"
-                : $"ssh -i '{SSHKey}' -o StrictHostKeyChecking=accept-new -F '/dev/null'";
+                : $"ssh -i '{SSHKey.Replace("'", "'\\''")}' -o StrictHostKeyChecking=accept-new -F '/dev/null'";
             start.Environment.Add("GIT_SSH_COMMAND", sshCmd);
         }
 
@@ -392,6 +392,32 @@ public partial class Command
     }
 
     /// <summary>
+    /// 「指定なし（システムデフォルト）」を明示的に選択したことを示す特殊値。
+    /// この値が remote.{name}.sshkey に設定されている場合、グローバルSSHキーへのフォールバックをスキップする。
+    /// </summary>
+    public const string SSHKeyNoneSentinel = "__NONE__";
+
+    /// <summary>リモートに紐づくSSH鍵を取得し、なければグローバル設定にフォールバックする。</summary>
+    /// <param name="remote">リモート名。</param>
+    protected async Task ResolveSSHKeyAsync(string remote)
+    {
+        var configValue = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey").ConfigureAwait(false);
+
+        // 「指定なし」が明示的に選択されている場合はシステムデフォルト（ssh-agent / ~/.ssh/config）を使用
+        if (configValue == SSHKeyNoneSentinel)
+        {
+            SSHKey = string.Empty;
+            return;
+        }
+
+        SSHKey = configValue;
+
+        // リモート個別設定がなければグローバルSSHキーにフォールバック
+        if (string.IsNullOrEmpty(SSHKey))
+            SSHKey = ViewModels.Preferences.Instance?.GlobalSSHKey ?? string.Empty;
+    }
+
+    /// <summary>
     /// リモートに紐づくSSH鍵を取得してから非同期実行する共通メソッド。
     /// Push/Pull/Fetchの重複ロジックを統合。
     /// </summary>
@@ -399,7 +425,7 @@ public partial class Command
     /// <returns>コマンドが成功した場合はtrue。</returns>
     protected async Task<bool> ExecWithSSHKeyAsync(string remote)
     {
-        SSHKey = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey").ConfigureAwait(false);
+        await ResolveSSHKeyAsync(remote).ConfigureAwait(false);
         return await ExecAsync().ConfigureAwait(false);
     }
 

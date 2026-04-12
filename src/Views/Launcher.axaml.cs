@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Platform;
 using Avalonia.VisualTree;
 
 namespace Komorebi.Views;
@@ -69,7 +68,6 @@ public partial class Launcher : ChromelessWindow
         {
             HasLeftCaptionButton = true;
             CaptionHeight = new GridLength(34);
-            ExtendClientAreaChromeHints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
         }
         else if (UseSystemWindowFrame)
         {

@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">與目前 HEAD 比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">存放庫設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">提交訊息範本</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} 目前分支名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} 已變更檔案數&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} 已變更檔案路徑清單&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} 目前分支名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} 已變更檔案數&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} 已變更檔案路徑清單&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} 類似 ${files:N}，不含資料夾的純檔案名稱</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">範本內容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">範本名稱:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">自訂動作</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">指令參數:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} 存放庫路徑&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} 所選的提交編號&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} 所選的標籤&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} 存放庫路徑&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} 所選的提交編號&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} 所選的標籤&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... 輸入控制項中的值</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">可執行檔案路徑:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">輸入控制項:</x:String>
@@ -247,6 +247,7 @@
   <x:String x:Key="Text.Configure.Git.AutoFetchIntervalSuffix" xml:space="preserve">分鐘</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">自訂約定式提交類型</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">預設遠端存放庫</x:String>
+  <x:String x:Key="Text.Configure.Remote" xml:space="preserve">遠端設定</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">預設合併模式</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">Issue 追蹤</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">新增符合 Azure DevOps 規則</x:String>
@@ -675,6 +676,7 @@
   <x:String x:Key="Text.Preferences.Git.CRLF.False" xml:space="preserve">不進行轉換</x:String>
   <x:String x:Key="Text.Preferences.Git.ForceEOLCRLF" xml:space="preserve">本機和遠端均使用CRLF</x:String>
   <x:String x:Key="Text.Preferences.Git.DefaultCloneDir" xml:space="preserve">預設複製 (clone) 路徑</x:String>
+  <x:String x:Key="Text.Preferences.Git.SSHKey" xml:space="preserve">全域SSH金鑰</x:String>
   <x:String x:Key="Text.Preferences.Git.Email" xml:space="preserve">電子郵件</x:String>
   <x:String x:Key="Text.Preferences.Git.Email.Placeholder" xml:space="preserve">預設 Git 使用者電子郵件</x:String>
   <x:String x:Key="Text.Preferences.Git.EnablePruneOnFetch" xml:space="preserve">拉取變更時進行清理</x:String>
@@ -700,8 +702,6 @@
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">請使用「.」標示當前工作目錄</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">安裝路徑</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">終端機/Shell</x:String>
-  <x:String x:Key="Text.PruneRemote" xml:space="preserve">清理遠端已刪除分支</x:String>
-  <x:String x:Key="Text.PruneRemote.Target" xml:space="preserve">目標:</x:String>
   <x:String x:Key="Text.PruneWorktrees" xml:space="preserve">清理工作區</x:String>
   <x:String x:Key="Text.PruneWorktrees.Tip" xml:space="preserve">清理在 `$GIT_COMMON_DIR/worktrees` 中的無效工作區資訊</x:String>
   <x:String x:Key="Text.Pull" xml:space="preserve">拉取 (pull)</x:String>
@@ -745,7 +745,6 @@
   <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">編輯...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">提取 (fetch) 更新</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">在瀏覽器中存取網址</x:String>
-  <x:String x:Key="Text.RemoteCM.Prune" xml:space="preserve">清理遠端已刪除分支</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">刪除工作區操作確認</x:String>
   <x:String x:Key="Text.RemoveWorktree.Force" xml:space="preserve">啟用 [--force] 選項</x:String>
   <x:String x:Key="Text.RemoveWorktree.Target" xml:space="preserve">目標工作區:</x:String>
@@ -877,7 +876,13 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">父提交:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH 金鑰:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">私鑰路徑（不是 .pub）</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">無（系統預設）</x:String>
+  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">使用全域設定</x:String>
+  <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">瀏覽...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">您選擇了公鑰（.pub）。請選擇私鑰（沒有 .pub 副檔名的檔案）。</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">遠端</x:String>
+  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">全域</x:String>
+  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">系統預設</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">開  始</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">擱置變更 (stash)</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">包含未追蹤的檔案</x:String>
@@ -1040,7 +1045,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">儲存檔案失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">儲存修補檔變更失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">掃描儲存庫失敗：{0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！&#xD;&#xD;&#xD;&#xD;&#xD;
 原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">啟動 '{0}' 失敗。原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開啟失敗：{0}</x:String>
@@ -1107,7 +1112,6 @@
   <x:String x:Key="Text.Progress.PushRevision" xml:space="preserve">推送 {0} -&gt; {1}...</x:String>
   <x:String x:Key="Text.Progress.Rebasing" xml:space="preserve">正在變基...</x:String>
   <x:String x:Key="Text.Progress.RemoveWorktree" xml:space="preserve">正在移除工作樹...</x:String>
-  <x:String x:Key="Text.Progress.PruneRemote" xml:space="preserve">正在遠端執行 `prune`...</x:String>
   <x:String x:Key="Text.Progress.Pushing" xml:space="preserve">推送 {0} -&gt; {1}/{2}...</x:String>
   <x:String x:Key="Text.Progress.PushingTag" xml:space="preserve">正在推送標籤...</x:String>
   <x:String x:Key="Text.Progress.RenamingBranch" xml:space="preserve">正在重新命名 '{0}'</x:String>

@@ -1042,7 +1042,7 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
         _scrollViewer = this.FindDescendantOfType<ScrollViewer>();
         if (_scrollViewer is not null)
         {
-            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new Binding("ScrollOffset", BindingMode.TwoWay));
+            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new ReflectionBinding("ScrollOffset") { Mode = BindingMode.TwoWay });
             _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
         }
     }
@@ -1254,7 +1254,7 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
         if (_scrollViewer is not null)
         {
             _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
-            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new Binding("ScrollOffset", BindingMode.OneWay));
+            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new ReflectionBinding("ScrollOffset") { Mode = BindingMode.OneWay });
         }
     }
 

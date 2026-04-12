@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Input.Platform;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -733,6 +732,9 @@ public partial class App : Application
     /// <param name="exitCode">プロセスの終了コード</param>
     public static void Quit(int exitCode)
     {
+        // バックグラウンドのアバターダウンロードを停止して、IOException を防止
+        Models.AvatarManager.Instance.Stop();
+
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // 明示的シャットダウンモードに切り替えてメインウィンドウを閉じる
@@ -775,8 +777,6 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            BindingPlugins.DataValidators.RemoveAt(0);
-
             // UIスレッドの未処理例外をクラッシュログに記録する
             Dispatcher.UIThread.UnhandledException += (_, e) =>
             {

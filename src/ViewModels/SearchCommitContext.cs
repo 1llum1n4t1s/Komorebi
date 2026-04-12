@@ -161,15 +161,17 @@ public class SearchCommitContext : ObservableObject, IDisposable
 
                 if (isCommitSHA)
                 {
-                    var commit = await new Commands.QuerySingleCommit(repoPath, _filter)
-                        .GetResultAsync()
-                        .ConfigureAwait(false);
+                    // コミット情報取得と祖先チェックを並列実行する
+                    var commitTask = new Commands.QuerySingleCommit(repoPath, _filter).GetResultAsync();
+                    var ancestorTask = new Commands.IsAncestor(repoPath, _filter, "HEAD").GetResultAsync();
+                    await Task.WhenAll(commitTask, ancestorTask).ConfigureAwait(false);
 
-                    commit.IsMerged = await new Commands.IsAncestor(repoPath, commit.SHA, "HEAD")
-                        .GetResultAsync()
-                        .ConfigureAwait(false);
-
-                    result.Add(commit);
+                    var commit = commitTask.Result;
+                    if (commit is not null)
+                    {
+                        commit.IsMerged = ancestorTask.Result;
+                        result.Add(commit);
+                    }
                 }
             }
             else if (_onlySearchCurrentBranch)

@@ -61,17 +61,8 @@ public class Checkout : Popup
         Use(log);
 
         // DetachedHEAD状態の場合、到達不能コミットの警告を表示する
-        if (_repo.CurrentBranch is { IsDetachedHead: true })
-        {
-            var refs = await new Commands.QueryRefsContainsCommit(_repo.FullPath, _repo.CurrentBranch.Head).GetResultAsync();
-            if (refs.Count == 0)
-            {
-                var msg = App.Text("Checkout.WarnLostCommits");
-                var shouldContinue = await App.AskConfirmAsync(msg);
-                if (!shouldContinue)
-                    return true;
-            }
-        }
+        if (!await _repo.WarnIfDetachedHeadLosesCommitsAsync())
+            return true;
 
         var succ = false;
         var needPopStash = false;

@@ -217,7 +217,7 @@ namespace AvaloniaEdit.Utils
         #region Snap to device pixels
         public static Point SnapToDevicePixels(this Point p, Visual targetVisual)
         {
-            var root = targetVisual.GetVisualRoot();
+            var root = TopLevel.GetTopLevel(targetVisual);
 
             // Get the root control and its scaling
             var scaling = new Vector(root.RenderScaling, root.RenderScaling);

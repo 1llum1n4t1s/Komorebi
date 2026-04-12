@@ -155,6 +155,10 @@ public class Clone : Popup
     {
         if (ctx.ObjectInstance is Clone { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
         {
+            // センチネル値（「指定なし」選択）はファイルパスではないのでバリデーションをスキップ
+            if (sshkey == Commands.Command.SSHKeyNoneSentinel)
+                return ValidationResult.Success;
+
             if (!File.Exists(sshkey))
                 return new ValidationResult("Given SSH private key can NOT be found!");
 
@@ -178,8 +182,20 @@ public class Clone : Popup
         var log = new CommandLog("Clone");
         Use(log);
 
-        // git cloneコマンドを実行する（SSH鍵がある場合はSSH鍵も渡す）
-        var succ = await new Commands.Clone(_pageId, _parentFolder, _remote, _local, _useSSH ? _sshKey : "", _extraArgs)
+        // SSHキーの特殊値を実際のパスに解決する
+        var resolvedSSHKey = string.Empty;
+        if (_useSSH)
+        {
+            if (_sshKey == Commands.Command.SSHKeyNoneSentinel)
+                resolvedSSHKey = string.Empty; // システムデフォルトを使用
+            else if (string.IsNullOrEmpty(_sshKey))
+                resolvedSSHKey = Preferences.Instance?.GlobalSSHKey ?? string.Empty; // グローバルフォールバック
+            else
+                resolvedSSHKey = _sshKey; // 明示的に選択されたキー
+        }
+
+        // git cloneコマンドを実行する
+        var succ = await new Commands.Clone(_pageId, _parentFolder, _remote, _local, resolvedSSHKey, _extraArgs)
             .Use(log)
             .ExecAsync();
         if (!succ)
@@ -211,7 +227,8 @@ public class Clone : Popup
             return false;
         }
 
-        // SSH鍵が指定されている場合はリポジトリのgit configにSSH鍵パスを設定する
+        // SSH鍵の設定をリポジトリのgit configに保存する
+        // __NONE__ = システムデフォルト明示選択、具体パス = そのキーを使用、空文字 = グローバルフォールバック
         if (_useSSH && !string.IsNullOrEmpty(_sshKey))
         {
             await new Commands.Config(path)
@@ -259,7 +276,7 @@ public class Clone : Popup
     private string _remote = string.Empty;
     /// <summary>SSH接続使用フラグ</summary>
     private bool _useSSH = false;
-    /// <summary>SSH秘密鍵のファイルパス</summary>
+    /// <summary>SSH秘密鍵のファイルパス（空文字 = グローバル設定へフォールバック）</summary>
     private string _sshKey = string.Empty;
     /// <summary>クローン先の親フォルダパス</summary>
     private string _parentFolder = string.Empty;
