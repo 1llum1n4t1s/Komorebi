@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 11.3.x**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.0.0**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
 
 ## Build & Run
 
@@ -76,6 +76,27 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 - `ExecWithSSHKeyAsync(remote)` — fetches SSH key from git config then runs `ExecAsync()` (used by Push/Pull/Fetch)
 - `ResolveGitRelativePath(path)` — resolves a potentially-relative git output path against `WorkingDirectory`
 - `ParseNameStatusLine(line)` — parses `--name-status` output lines (M/A/D/R/C) into `(path, ChangeState)` tuples
+
+### SSH Key Management
+`src/Models/SSHKeyInfo.cs` scans `~/.ssh/` for private keys and provides a unified selection model. `src/Views/SSHKeyPicker.axaml` is a reusable `UserControl` for key selection with entry types: None (system default), GlobalFallback, Key, CustomKey, Browse.
+
+**3-tier fallback strategy** (in `Command.ResolveSSHKeyAsync`):
+1. Per-remote setting (`git config remote.<name>.sshkey`; `__NONE__` sentinel = use system default)
+2. Global SSH key (`Preferences.Instance.GlobalSSHKey`)
+3. ssh-agent / `~/.ssh/config` (when SSHKey is empty)
+
+`GIT_SSH_COMMAND` is built with shell injection prevention via `.Quoted()`.
+
+### AWS CodeCommit Support
+Three URL formats are supported:
+- **HTTPS**: `https://git-codecommit.{region}.amazonaws.com/v1/repos/{repo}`
+- **SSH**: `ssh://git-codecommit.{region}.amazonaws.com/v1/repos/{repo}`
+- **GRC** (git-remote-codecommit): `codecommit::{region}://{profile}@{repo}`
+
+Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS()`, `TryParseCodeCommitSSH()`, `TryParseCodeCommitGRC()`. `TryGetVisitURL()` and `TryGetCreatePullRequestURL()` convert all three forms to AWS Console URLs. `RemoteProtocolSwitcher` hides for CodeCommit URLs (HTTPS↔SSH auto-conversion not applicable).
+
+### Remote Configuration
+`RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including URL editing and per-remote SSH key selection. The former `EditRemote` and `PruneRemote` dialogs were consolidated here.
 
 ### Key ViewModels
 - `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management. `LauncherPage.IsActive` controls visibility for view caching.
@@ -205,11 +226,11 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **release.yml** — triggered by push to `release/**` branches: builds → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
 - **velopack.yml** — reusable workflow creating Velopack packages for 5 RIDs (win-x64, win-arm64, osx-arm64, linux-x64, linux-arm64)
 
-Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.52`). CI reads it directly for both packaging and Velopack.
+Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.62`). CI reads it directly for both packaging and Velopack.
 
 ## Key Dependencies
 
-- **Avalonia 11.3.x** — cross-platform XAML UI
+- **Avalonia 12.0.0** — cross-platform XAML UI
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **Velopack 0.0.1298** — auto-update framework
 - **depends/AvaloniaEdit** — git submodule, text editor for diff/blame

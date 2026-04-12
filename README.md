@@ -39,10 +39,19 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 | **White テーマ** | 純白背景のライトテーマバリアントを追加 |
 | **アプリアイコン刷新** | 木漏れ日をモチーフにしたオリジナルアイコンに変更 |
 
+### SSH 鍵管理・リモート設定
+
+| 項目 | 内容 |
+|------|------|
+| **SSH 鍵管理 UI** | `~/.ssh/` をスキャンし、リモートごと・グローバルで SSH 鍵を選択可能。3 段フォールバック（リモート個別 → グローバル → ssh-agent） |
+| **AWS CodeCommit 対応** | HTTPS / SSH / git-remote-codecommit（`codecommit::` プロトコル）の 3 形式に対応。AWS コンソールへのリンク生成・PR 作成 URL 生成にも対応 |
+| **リモート設定の統合** | リモート URL 編集・SSH 鍵選択・Prune を統合した RepositoryConfigure ダイアログ |
+
 ### アプリケーション基盤
 
 | 項目 | 内容 |
 |------|------|
+| **Avalonia 12 アップグレード** | Avalonia UI 12.0.0 への移行完了。破壊的変更への対応済み |
 | **Velopack 自動アップデート** | Velopack による差分アップデートに対応。起動時にアップデートチェックを行い、ダウンロード進捗を表示 |
 | **日本語 README** | README を全面的に日本語化 |
 
@@ -144,11 +153,11 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 * **コミット検索** — SHA / 著者 / コミッター / メッセージ / パス / 内容で検索
 * **ブックマーク** — 7 色でコミットやブランチにマーク可能
 * **署名検証** — 署名のステータスを色分け表示（有効: 緑 / 期限切れ: オレンジ / 不正: 赤）
-* **コミットリンク** — GitHub / GitLab / Gitee / Bitbucket / Codeberg / Gitea / sourcehut / GitCode への自動リンク生成
+* **コミットリンク** — GitHub / GitLab / Gitee / Bitbucket / Codeberg / Gitea / sourcehut / GitCode / AWS CodeCommit への自動リンク生成
 
 ### AI コミットメッセージ生成
 
-OpenAI または OpenAI 互換 API（Azure OpenAI 含む）を利用してコミットメッセージを自動生成できます。
+OpenAI / Azure OpenAI / Gemini / Anthropic を利用してコミットメッセージを自動生成できます。
 
 * **2 段階生成** — ファイルごとの差分分析 → 最終メッセージ生成
 * **プロンプトのカスタマイズ** — 分析プロンプト・生成プロンプトをそれぞれ変更可能
