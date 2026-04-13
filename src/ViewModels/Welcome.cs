@@ -164,22 +164,6 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
-    /// 新しいgitリポジトリの初期化ダイアログを表示する。
-    /// </summary>
-    public void InitRepository(string path, RepositoryNode parent, string reason)
-    {
-        if (!Preferences.Instance.IsGitConfigured())
-        {
-            App.RaiseException(string.Empty, App.Text("NotConfigured"));
-            return;
-        }
-
-        var activePage = App.GetLauncher().ActivePage;
-        if (activePage is not null && activePage.CanCreatePopup())
-            activePage.Popup = new Init(activePage.Node.Id, path, parent, reason);
-    }
-
-    /// <summary>
     /// リポジトリをツリーに追加し、オプションで開く。
     /// </summary>
     public async Task AddRepositoryAsync(string path, RepositoryNode parent, bool moveNode, bool open)
@@ -205,6 +189,22 @@ public class Welcome : ObservableObject
         var activePage = App.GetLauncher().ActivePage;
         if (activePage is not null && activePage.CanCreatePopup())
             activePage.Popup = new Clone(activePage.Node.Id);
+    }
+
+    /// <summary>
+    /// ローカルリポジトリを開く／初期化するダイアログを表示する。
+    /// </summary>
+    public void OpenLocalRepository()
+    {
+        if (!Preferences.Instance.IsGitConfigured())
+        {
+            App.RaiseException(string.Empty, App.Text("NotConfigured"));
+            return;
+        }
+
+        var activePage = App.GetLauncher().ActivePage;
+        if (activePage is not null && activePage.CanCreatePopup())
+            activePage.Popup = new OpenLocalRepository(activePage.Node.Id, null);
     }
 
     /// <summary>

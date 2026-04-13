@@ -607,6 +607,10 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">Apri Cartella Dati App</x:String>
   <x:String x:Key="Text.OpenFile" xml:space="preserve">Apri File</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Apri nello Strumento di Merge</x:String>
+  <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Apri Repository Locale</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Segnalibro:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">Gruppo:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Cartella:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Opzionale.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Crea Nuova Pagina</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Chiudi Tab</x:String>

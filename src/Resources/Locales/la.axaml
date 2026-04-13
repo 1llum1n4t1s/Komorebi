@@ -604,6 +604,10 @@
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">Aperi Directorium Repositorii Datorum</x:String>
   <x:String x:Key="Text.OpenFile" xml:space="preserve">Aperi Documentum</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Aperi in Instrumento Merge Externo</x:String>
+  <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Localem Repositorium Aperire</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Signaculum:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">Grex:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Plica:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Optionale.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Crea Novam Tabulam</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Claude Tabulam</x:String>

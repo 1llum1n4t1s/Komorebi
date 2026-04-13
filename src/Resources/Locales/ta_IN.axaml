@@ -607,6 +607,10 @@
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">தரவு சேமிப்பக கோப்பகத்தைத் திற</x:String>
   <x:String x:Key="Text.OpenFile" xml:space="preserve">கோப்பைத் திற</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">ஒன்றிணை கருவியில் திற</x:String>
+  <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">உள்ளூர் களஞ்சியத்தைத் திற</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">புத்தகக்குறி:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">குழு:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">கோப்புறை:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">விருப்பத்தேர்வு.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">புதிய பக்கத்தை உருவாக்கு</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">மூடு தாவல்</x:String>
