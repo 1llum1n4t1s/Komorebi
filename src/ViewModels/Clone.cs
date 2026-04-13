@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
@@ -70,6 +71,40 @@ public class Clone : Popup
     }
 
     /// <summary>
+    /// クローン先に追加可能なグループ一覧（リポジトリツリー内の非リポジトリノードをフラット化したもの）。
+    /// </summary>
+    public List<RepositoryNode> Groups
+    {
+        get;
+    }
+
+    /// <summary>
+    /// クローン先として選択されているグループ。null の場合はルートに追加される。
+    /// </summary>
+    public RepositoryNode SelectedGroup
+    {
+        get => _selectedGroup;
+        set => SetProperty(ref _selectedGroup, value);
+    }
+
+    /// <summary>
+    /// 選択可能なブックマーク（色）のインデックス一覧。
+    /// </summary>
+    public List<int> Bookmarks
+    {
+        get;
+    }
+
+    /// <summary>
+    /// 選択されたブックマーク（色）のインデックス。
+    /// </summary>
+    public int Bookmark
+    {
+        get => _bookmark;
+        set => SetProperty(ref _bookmark, value);
+    }
+
+    /// <summary>
     /// git cloneコマンドの追加引数。
     /// </summary>
     public string ExtraArgs
@@ -96,6 +131,17 @@ public class Clone : Popup
     public Clone(string pageId)
     {
         _pageId = pageId;
+
+        // グループ一覧を収集し、先頭をデフォルト選択にする
+        Groups = [];
+        CollectGroups(Groups, Preferences.Instance.RepositoryNodes);
+        if (Groups.Count > 0)
+            SelectedGroup = Groups[0];
+
+        // ブックマーク色のインデックス一覧を構築する
+        Bookmarks = [];
+        for (var i = 0; i < Models.Bookmarks.Brushes.Length; i++)
+            Bookmarks.Add(i);
 
         // アクティブワークスペースのデフォルトクローンディレクトリを取得する
         var activeWorkspace = Preferences.Instance.GetActiveWorkspace();
@@ -250,8 +296,9 @@ public class Clone : Popup
 
         log.Complete();
 
-        // リポジトリノードを設定に登録する
-        var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path, null, true);
+        // リポジトリノードを設定に登録する（選択されたグループ配下に追加、ブックマーク色を適用）
+        var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path, _selectedGroup, true);
+        node.Bookmark = _bookmark;
         await node.UpdateStatusAsync(false, null);
 
         // クローン元のページを検索する
@@ -272,6 +319,22 @@ public class Clone : Popup
         return true;
     }
 
+    /// <summary>
+    /// リポジトリノードツリーを再帰的に探索し、グループノード（非リポジトリ）のみをフラットリストに収集する。
+    /// クローン時のグループ選択ドロップダウンに使用する。
+    /// </summary>
+    private static void CollectGroups(List<RepositoryNode> outs, List<RepositoryNode> collections)
+    {
+        foreach (var node in collections)
+        {
+            if (!node.IsRepository)
+            {
+                outs.Add(node);
+                CollectGroups(outs, node.SubNodes);
+            }
+        }
+    }
+
     /// <summary>クローン操作を行うページのID</summary>
     private string _pageId = string.Empty;
     /// <summary>リモートリポジトリのURL</summary>
@@ -286,4 +349,8 @@ public class Clone : Popup
     private string _local = string.Empty;
     /// <summary>git cloneの追加引数</summary>
     private string _extraArgs = string.Empty;
+    /// <summary>選択されたグループ（null=ルート配下）</summary>
+    private RepositoryNode _selectedGroup = null;
+    /// <summary>選択されたブックマーク色のインデックス</summary>
+    private int _bookmark = 0;
 }

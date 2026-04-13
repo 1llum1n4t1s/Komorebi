@@ -134,6 +134,8 @@
   <x:String x:Key="Text.Clone" xml:space="preserve">Remote-Repository klonen</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Extra-Parameter:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Zusätzliche Argumente für das Klonen des Repositorys. Optional.</x:String>
+  <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Lesezeichen:</x:String>
+  <x:String x:Key="Text.Clone.Group" xml:space="preserve">Gruppe:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Lokaler Name:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Repository-Name. Optional.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Übergeordnetes Verzeichnis:</x:String>

@@ -134,6 +134,8 @@
   <x:String x:Key="Text.Clone" xml:space="preserve">Клонировать внешний репозиторий</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Параметры:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Аргументы git clone (необязательно)</x:String>
+  <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">ﾐ厘ｰﾐｺﾐｻﾐｰﾐｴﾐｺﾐｰ:</x:String>
+  <x:String x:Key="Text.Clone.Group" xml:space="preserve">ﾐ酉ﾑσｿﾐｿﾐｰ:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Локальное имя:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Имя репозитория (необязательно)</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Родительский каталог:</x:String>
