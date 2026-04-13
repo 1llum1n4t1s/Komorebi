@@ -501,6 +501,7 @@
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">다음 탭으로 이동</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">이전 탭으로 이동</x:String>
   <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">새 탭 만들기</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">로컬 저장소 열기</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">환경설정 대화상자 열기</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">작업 공간 드롭다운 메뉴 표시</x:String>
   <x:String x:Key="Text.Hotkeys.Global.SwitchTab" xml:space="preserve">활성 탭 전환</x:String>

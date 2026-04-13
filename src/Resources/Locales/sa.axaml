@@ -508,6 +508,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">अग्रिमपटलं गच्छतु</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">पूर्वपटलं गच्छतु</x:String>
   <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">नवीनपटलं रचयतु</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">स्थानीयं कोशं उद्घाटयतु</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">अभिरुचिसंवादं उद्घाटयतु</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">कार्यस्थलवाचिकां दर्शयतु</x:String>
   <x:String x:Key="Text.Hotkeys.Global.SwitchTab" xml:space="preserve">सक्रियपटलं परिवर्तयतु</x:String>

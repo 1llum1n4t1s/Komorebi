@@ -270,6 +270,17 @@ public partial class Launcher : ChromelessWindow
                 return;
             }
 
+            if (e.Key == Key.O && e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+            {
+                // Ctrl+Shift+O → 新しいタブでローカルリポジトリを開くダイアログを表示する
+                if (vm.ActivePage.Data is not ViewModels.Welcome)
+                    vm.AddNewTab();
+
+                ViewModels.Welcome.Instance.OpenLocalRepository();
+                e.Handled = true;
+                return;
+            }
+
             if (e.Key == Key.T)
             {
                 // Ctrl+T → 新しいタブを追加する

@@ -511,6 +511,7 @@
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">அடுத்த பக்கத்திற்குச் செல்</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">முந்தைய பக்கத்திற்குச் செல்</x:String>
   <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">புதிய பக்கத்தை உருவாக்கு</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">உள்ளூர் களஞ்சியத்தைத் திற</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">விருப்பத்தேர்வுகள் உரையாடலைத் திற</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">பணியிட கீழ்தோன்றல் பட்டியலைக் காட்டு</x:String>
   <x:String x:Key="Text.Hotkeys.Global.SwitchTab" xml:space="preserve">செயலில் உள்ள தாவலை மாற்று</x:String>
