@@ -193,12 +193,30 @@ public static class Logger
     }
 
     /// <summary>
-    /// ロガーを終了する（バッファのフラッシュ等）
+    /// ロガーを終了する（非同期バッファをフラッシュする）。
     /// </summary>
+    /// <remarks>
+    /// 重要: <c>opt.Async = true</c> のため、<c>LogCrash</c> で書き込んだレコードは
+    /// バックグラウンドスレッドでディスクに書かれる。未処理例外ハンドラなど、
+    /// 呼び出し後ただちにプロセスが終了する経路ではこのメソッドを呼んでバッファを
+    /// 強制的にフラッシュしないと、最後のクラッシュログが失われる可能性がある。
+    /// 二重呼び出しされても安全（idempotent）。
+    /// </remarks>
     public static void Dispose()
     {
-        SuperLightLogger.LogManager.Shutdown();
+        if (!s_isConfigured)
+            return;
+
         s_isConfigured = false;
+
+        try
+        {
+            SuperLightLogger.LogManager.Shutdown();
+        }
+        catch
+        {
+            // 終了時のフラッシュ失敗はこれ以上ログにも残せないので無視する
+        }
     }
 
     /// <summary>

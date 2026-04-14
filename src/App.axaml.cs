@@ -48,10 +48,13 @@ public partial class App : Application
         });
         Models.Logger.LogStartup();
 
-        // AppDomain全体の未処理例外をクラッシュログに記録するハンドラを登録する
+        // AppDomain全体の未処理例外をクラッシュログに記録するハンドラを登録する。
+        // CLRはこのハンドラ復帰直後にプロセスを強制終了するため、非同期ログバッファが
+        // ディスクにフラッシュされる保証がない。Logger.Dispose() で同期フラッシュを強制する。
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
             Models.Logger.LogCrash(e.ExceptionObject as Exception, "AppDomain.UnhandledException");
+            Models.Logger.Dispose();
         };
 
         // Task内の未観測例外をクラッシュログに記録し、プロセス終了を防ぐ
