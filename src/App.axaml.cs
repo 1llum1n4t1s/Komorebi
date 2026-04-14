@@ -117,7 +117,7 @@ public partial class App : Application
     }
 
     /// <summary>
-    /// 後方互換性のための例外ログ出力（内部でNLogロガーに委譲する）
+    /// 後方互換性のための例外ログ出力（内部でSuperLightLoggerロガーに委譲する）
     /// </summary>
     public static void LogException(Exception ex, string context = null)
     {

@@ -1,12 +1,15 @@
-﻿using System;
+using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading;
 
-using NLog;
-using NLog.Config;
-using NLog.Targets;
+using Microsoft.Extensions.Logging;
+
+using SuperLightLogger;
+
+using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Komorebi.Models;
 
@@ -43,11 +46,11 @@ public sealed class LoggerConfig
 }
 
 /// <summary>
-/// NLogを使用した汎用ログ出力クラス
+/// SuperLightLoggerを使用した汎用ログ出力クラス
 /// </summary>
 public static class Logger
 {
-    private static NLog.Logger s_logger;
+    private static ILog s_logger;
     private static bool s_isConfigured;
 
     /// <summary>
@@ -74,34 +77,29 @@ public static class Logger
         if (!Directory.Exists(config.LogDirectory))
             Directory.CreateDirectory(config.LogDirectory);
 
-        var nlogConfig = new LoggingConfiguration();
+        var activeFileName = Path.Combine(config.LogDirectory, config.FilePrefix + "_${date:format=yyyyMMdd}.log");
+        var archiveFileName = Path.Combine(config.LogDirectory, config.FilePrefix + "_${date:format=yyyyMMdd}_{#}.log");
 
-        var fileTarget = new FileTarget("file")
+        SuperLightLogger.LogManager.Configure(builder =>
         {
-            FileName = Path.Combine(config.LogDirectory, $"{config.FilePrefix}_${{date:format=yyyyMMdd}}.log"),
-            ArchiveAboveSize = config.MaxSizeMB * 1024 * 1024,
-            ArchiveFileName = Path.Combine(config.LogDirectory, $"{config.FilePrefix}_${{date:format=yyyyMMdd}}_{{#}}.log"),
-            MaxArchiveFiles = config.MaxArchiveFiles,
-            Layout = "${longdate} [${uppercase:${level}}] [${threadid}] ${message}${onexception:inner=${newline}${exception:format=tostring}}",
-            Encoding = System.Text.Encoding.UTF8,
-        };
+            builder.SetMinimumLevel(MsLogLevel.Trace);
+            builder.AddSuperLightFile(opt =>
+            {
+                opt.FileName = activeFileName;
+                opt.ArchiveFileName = archiveFileName;
+                opt.Layout = "${longdate} [${level:uppercase=true}] [${threadid}] ${message}${onexception:${newline}${exception:format=tostring}}";
+                opt.ArchiveAboveSize = config.MaxSizeMB * 1024L * 1024L;
+                opt.MaxArchiveFiles = config.MaxArchiveFiles;
+                opt.ArchiveNumbering = ArchiveNumbering.Sequence;
+                opt.CreateDirectories = true;
+                opt.Async = true;
+            });
+        });
 
-        var consoleTarget = new ConsoleTarget("console")
-        {
-            Layout = "${longdate} [${uppercase:${level}}] [${threadid}] ${message}${onexception:inner=${newline}${exception:format=tostring}}",
-        };
-
-        nlogConfig.AddTarget(fileTarget);
-        nlogConfig.AddTarget(consoleTarget);
-
-        nlogConfig.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, fileTarget);
-        nlogConfig.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, consoleTarget);
-
-        LogManager.Configuration = nlogConfig;
-        s_logger = LogManager.GetLogger(config.FilePrefix);
+        s_logger = SuperLightLogger.LogManager.GetLogger(config.FilePrefix);
         s_isConfigured = true;
 
-        Log("NLogロガーを初期化しました", LogLevel.Debug);
+        Log("SuperLightLoggerロガーを初期化しました", LogLevel.Debug);
         CleanupOldLogFiles(config.LogDirectory, config.FilePrefix, config.RetentionDays);
     }
 
@@ -115,7 +113,24 @@ public static class Logger
         if (level < s_minLogLevel)
             return;
 
-        s_logger?.Log(ToNLogLevel(level), message);
+        if (s_logger is null)
+            return;
+
+        switch (level)
+        {
+            case LogLevel.Debug:
+                s_logger.Debug(message);
+                break;
+            case LogLevel.Info:
+                s_logger.Info(message);
+                break;
+            case LogLevel.Warning:
+                s_logger.Warn(message);
+                break;
+            case LogLevel.Error:
+                s_logger.Error(message);
+                break;
+        }
     }
 
     /// <summary>
@@ -125,7 +140,7 @@ public static class Logger
     /// <param name="exception">例外オブジェクト</param>
     public static void LogException(string message, Exception exception)
     {
-        s_logger?.Error(exception, message);
+        s_logger?.Error(message, exception);
     }
 
     /// <summary>
@@ -155,7 +170,7 @@ public static class Logger
             メモリ使用量: {process.PrivateMemorySize64 / 1024 / 1024} MB
             """;
 
-        s_logger?.Error(exception, message);
+        s_logger?.Error(message, exception);
     }
 
     /// <summary>
@@ -182,7 +197,7 @@ public static class Logger
     /// </summary>
     public static void Dispose()
     {
-        LogManager.Shutdown();
+        SuperLightLogger.LogManager.Shutdown();
         s_isConfigured = false;
     }
 
@@ -207,7 +222,7 @@ public static class Logger
                     var parts = fileName.Split('_');
                     if (parts.Length >= 2 && parts[1].Length == 8 &&
                         DateTime.TryParseExact(parts[1], "yyyyMMdd", null,
-                            System.Globalization.DateTimeStyles.None, out var fileDate))
+                            DateTimeStyles.None, out var fileDate))
                     {
                         if (fileDate < cutoffDate)
                         {
@@ -227,16 +242,4 @@ public static class Logger
             Log($"ログファイルのクリーンアップ中にエラーが発生しました: {ex.Message}", LogLevel.Warning);
         }
     }
-
-    /// <summary>
-    /// 独自LogLevelをNLogのLogLevelに変換
-    /// </summary>
-    private static NLog.LogLevel ToNLogLevel(LogLevel level) => level switch
-    {
-        LogLevel.Debug => NLog.LogLevel.Debug,
-        LogLevel.Info => NLog.LogLevel.Info,
-        LogLevel.Warning => NLog.LogLevel.Warn,
-        LogLevel.Error => NLog.LogLevel.Error,
-        _ => NLog.LogLevel.Info,
-    };
 }
