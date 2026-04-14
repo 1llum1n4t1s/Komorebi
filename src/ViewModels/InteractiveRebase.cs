@@ -210,42 +210,58 @@ public class InteractiveRebase : ObservableObject
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
-            // fixup! コミットを対応する親コミットの直後に移動する（upstream e6ba0534）
+            // fixup!/squash! コミットを対応する親コミットの直後に移動する（upstream e6ba0534 + 0d5185b1）
             List<InteractiveRebaseItem> list = [];
-            List<InteractiveRebaseItem> fixups = [];
+            Dictionary<string, InteractiveRebaseItem> needReorder = [];
             for (var i = 0; i < commits.Count; i++)
             {
                 var c = commits[i];
                 var item = new InteractiveRebaseItem(commits.Count - i, c.Commit, c.Message);
-                if (c.Commit.Subject.StartsWith("fixup! ", StringComparison.Ordinal) && item.OriginalOrder > 1)
-                {
-                    fixups.Add(item);
-                    continue;
-                }
+                var subject = c.Commit.Subject;
 
-                // 対象となる親コミットが見つかった fixup を直後に挿入して Fixup アクションに設定する
-                List<InteractiveRebaseItem> reordered = [];
-                foreach (var f in fixups)
+                if (item.OriginalOrder > 1)
                 {
-                    if (c.Commit.Subject.StartsWith(f.Commit.Subject.Substring(7), StringComparison.Ordinal))
+                    if (subject.StartsWith("fixup! ", StringComparison.Ordinal))
                     {
-                        f.Action = Models.InteractiveRebaseAction.Fixup;
-                        reordered.Add(f);
-                        list.Add(f);
+                        item.Action = Models.InteractiveRebaseAction.Fixup;
+                        needReorder.Add(subject.Substring(7), item);
+                        continue;
+                    }
+
+                    if (subject.StartsWith("squash! ", StringComparison.Ordinal))
+                    {
+                        item.Action = Models.InteractiveRebaseAction.Squash;
+                        needReorder.Add(subject.Substring(8), item);
+                        continue;
                     }
                 }
-                fixups.RemoveAll(x => reordered.Contains(x));
+
+                // 対象となる親コミットが見つかった fixup!/squash! を直後に挿入する
+                List<string> reordered = [];
+                foreach (var (k, v) in needReorder)
+                {
+                    if (subject.StartsWith(k, StringComparison.Ordinal))
+                    {
+                        list.Add(v);
+                        reordered.Add(k);
+                    }
+                }
+
+                foreach (var k in reordered)
+                    needReorder.Remove(k);
+
                 list.Add(item);
             }
 
-            // 親が見つからなかった fixup は元の順序位置に戻す
-            foreach (var f in fixups)
+            // 親が見つからなかった fixup!/squash! は元の順序位置に戻し、安全のため Pick にリセットする
+            foreach (var (_, v) in needReorder)
             {
                 for (var i = 0; i < list.Count; i++)
                 {
-                    if (f.OriginalOrder > list[i].OriginalOrder)
+                    if (v.OriginalOrder > list[i].OriginalOrder)
                     {
-                        list.Insert(i, f);
+                        v.Action = Models.InteractiveRebaseAction.Pick;
+                        list.Insert(i, v);
                         break;
                     }
                 }
@@ -454,7 +470,19 @@ public class InteractiveRebase : ObservableObject
                 item.IsMessageUserEdited = false;
 
                 if (item.Action == Models.InteractiveRebaseAction.Squash)
-                    pendingMessages.Add(item.OriginalFullMessage);
+                {
+                    // squash! プレフィックス付きのコミットは本文（2行目以降）だけを pending に積む（upstream 0d5185b1）
+                    if (item.OriginalFullMessage.StartsWith("squash! ", StringComparison.Ordinal))
+                    {
+                        var firstLineEnd = item.OriginalFullMessage.IndexOf('\n');
+                        if (firstLineEnd > 0)
+                            pendingMessages.Add(item.OriginalFullMessage.Substring(firstLineEnd + 1));
+                    }
+                    else
+                    {
+                        pendingMessages.Add(item.OriginalFullMessage);
+                    }
+                }
 
                 hasPending = true;
                 continue;
