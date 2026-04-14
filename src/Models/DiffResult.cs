@@ -731,8 +731,13 @@ public class SubmoduleDiff
     /// <summary>変更後のサブモジュール情報</summary>
     public RevisionSubmodule New { get; set; } = null;
 
-    /// <summary>サブモジュール詳細ダイアログを開ける条件を満たすか（初期化済みで Old/New 両方がある場合のみ true）</summary>
-    public bool CanOpenDetails => File.Exists(Path.Combine(FullPath, ".git")) && Old != null && New != null;
+    /// <summary>
+    /// サブモジュール詳細ダイアログを開ける条件を満たすか。
+    /// 初期化済みで Old/New 両方があり、かつ両リビジョンが有効（lost submodule revision でない）な場合のみ true。
+    /// </summary>
+    public bool CanOpenDetails => File.Exists(Path.Combine(FullPath, ".git")) &&
+        Old != null && Old.Commit.Author != User.Invalid &&
+        New != null && New.Commit.Author != User.Invalid;
 }
 
 /// <summary>
