@@ -34,21 +34,20 @@ public partial class Repository : UserControl
         UpdateWorkspaceDisplay();
         if (DataContext is ViewModels.Repository repo)
         {
-            repo.PropertyChanged += OnRepoPropertyChanged;
-
-            // ListBox(SelectionMode=AlwaysSelected)の初期化がSelectedViewIndexを
-            // 0にリセットするため、Dispatcherで遅延適用してListBoxのレイアウト完了後に設定する
-            // ベアリポジトリではワーキングコピータブが非表示のためスキップ
-            if (!repo.IsBare && ViewModels.Preferences.Instance.ShowLocalChangesByDefault)
+            // ListBox SelectionMode=AlwaysSelected が初回レイアウトで SelectedIndex を 0 に
+            // リセットするため、VM 側に保持されていた値を遅延適用する。
+            // タブ切替で View が再作成された際にも、保存されていたサブビュー選択（履歴/ローカルの変更/スタッシュ）を維持できる。
+            var desiredIndex = repo.SelectedViewIndex;
+            if (desiredIndex != 0)
             {
-                // ListBoxリセット(0)のみ上書きする。
-                // ユーザーが既にスタッシュ(2)等に切り替えていた場合はスキップ。
                 Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                 {
-                    if (repo.SelectedViewIndex == 0)
-                        repo.SelectedViewIndex = 1;
+                    if (DataContext is ViewModels.Repository current && current.SelectedViewIndex == 0)
+                        current.SelectedViewIndex = desiredIndex;
                 }, Avalonia.Threading.DispatcherPriority.Background);
             }
+
+            repo.PropertyChanged += OnRepoPropertyChanged;
         }
     }
 

@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 
 namespace Komorebi.Views;
 
@@ -33,6 +34,8 @@ public class ChromelessWindow : Window
 
     protected override Type StyleKeyOverride => typeof(Window);
 
+    private const double RESIZE_GRIP_SIZE = 6;
+
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
@@ -43,6 +46,13 @@ public class ChromelessWindow : Window
         Focusable = true;
         // プラットフォーム固有のウィンドウ設定を適用する
         Native.OS.SetupForWindow(this);
+
+        // Windowsではボーダーレスウィンドウのリサイズをトンネルイベントで処理する
+        if (OperatingSystem.IsWindows())
+        {
+            AddHandler(PointerPressedEvent, OnResizeGripPointerPressed, RoutingStrategies.Tunnel);
+            AddHandler(PointerMovedEvent, OnResizeGripPointerMoved, RoutingStrategies.Tunnel);
+        }
     }
 
     /// <summary>
@@ -117,13 +127,13 @@ public class ChromelessWindow : Window
         {
             if (WindowState == WindowState.Maximized)
             {
-                // 最大化時はボーダーを消してパディングで補正する
+                // 最大化時はボーダーとパディングをすべて除去する
                 BorderThickness = new Thickness(0);
-                Padding = new Thickness(8, 6, 8, 8);
+                Padding = new Thickness(0);
             }
             else
             {
-                // 通常時はボーダーを表示してパディングをリセットする
+                // 通常時はボーダーを表示する
                 BorderThickness = new Thickness(1);
                 Padding = new Thickness(0);
             }
@@ -178,5 +188,63 @@ public class ChromelessWindow : Window
         // ボーダーのTagにセットされたWindowEdge方向でリサイズを開始する
         if (sender is Border { Tag: WindowEdge edge } && CanResize)
             BeginResizeDrag(edge, e);
+    }
+
+    /// <summary>
+    /// ウィンドウ端付近のポインター位置からリサイズ方向を判定する。
+    /// </summary>
+    private WindowEdge? DetectResizeEdge(Point pos)
+    {
+        if (WindowState != WindowState.Normal || !CanResize)
+            return null;
+
+        var w = Bounds.Width;
+        var h = Bounds.Height;
+        var left = pos.X < RESIZE_GRIP_SIZE;
+        var right = pos.X > w - RESIZE_GRIP_SIZE;
+        var top = pos.Y < RESIZE_GRIP_SIZE;
+        var bottom = pos.Y > h - RESIZE_GRIP_SIZE;
+
+        // 上端はトンネルイベントで先に処理することで、タイトルバー本体（CaptionHeight 内の
+        // 下半分）の BeginMoveWindow とキャプションボタンの操作はそのまま維持される。
+        if (top && left) return WindowEdge.NorthWest;
+        if (top && right) return WindowEdge.NorthEast;
+        if (top) return WindowEdge.North;
+        if (bottom && left) return WindowEdge.SouthWest;
+        if (bottom && right) return WindowEdge.SouthEast;
+        if (bottom) return WindowEdge.South;
+        if (left) return WindowEdge.West;
+        if (right) return WindowEdge.East;
+
+        return null;
+    }
+
+    /// <summary>
+    /// ウィンドウ端でポインターが押された時にリサイズドラッグを開始する（トンネルイベント）。
+    /// </summary>
+    private void OnResizeGripPointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        var edge = DetectResizeEdge(e.GetPosition(this));
+        if (edge is not null)
+        {
+            BeginResizeDrag(edge.Value, e);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// ウィンドウ端付近でポインターが移動した時にリサイズカーソルを表示する（トンネルイベント）。
+    /// </summary>
+    private void OnResizeGripPointerMoved(object sender, PointerEventArgs e)
+    {
+        var edge = DetectResizeEdge(e.GetPosition(this));
+        Cursor = edge switch
+        {
+            WindowEdge.NorthWest or WindowEdge.SouthEast => new Cursor(StandardCursorType.TopLeftCorner),
+            WindowEdge.NorthEast or WindowEdge.SouthWest => new Cursor(StandardCursorType.TopRightCorner),
+            WindowEdge.North or WindowEdge.South => new Cursor(StandardCursorType.SizeNorthSouth),
+            WindowEdge.West or WindowEdge.East => new Cursor(StandardCursorType.SizeWestEast),
+            _ => Cursor.Default,
+        };
     }
 }

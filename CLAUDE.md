@@ -31,6 +31,12 @@ dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64 -p:DisableAO
 dotnet build -p:DisableUpdateDetection=true
 ```
 
+`Directory.Build.props` enforces strict build-time analysis:
+- `EnforceCodeStyleInBuild=true` — IDE diagnostics (e.g. `IDE0005` unused usings) are promoted to build errors. A failing `dotnet build` may simply be an unused `using` — fix instead of suppressing.
+- `GenerateDocumentationFile=true` — required for `IDE0005` to detect unused usings; produces an XML doc next to the assembly.
+- `NoWarn=CS1591` — silences "missing XML doc comment" warnings so IDE-style analysis stays the only signal.
+- `<Version>` here is the source of truth for both packaging and Velopack.
+
 ## Tests
 
 ```bash
@@ -99,8 +105,8 @@ Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS
 `RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including URL editing and per-remote SSH key selection. The former `EditRemote` and `PruneRemote` dialogs were consolidated here.
 
 ### Key ViewModels
-- `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management. `LauncherPage.IsActive` controls visibility for view caching.
-- `Repository.cs` — central VM for an open repo (branches, tags, history, working copy). Exposes `HistoriesVM`/`WorkingCopyVM`/`StashesPageVM` for cached sub-view binding.
+- `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management. `Launcher.ActivePage` is TwoWay-bound from `LauncherTabBar` (a ListBox) and feeds the page `ContentControl` in `Launcher.axaml`.
+- `Repository.cs` — central VM for an open repo (branches, tags, history, working copy). Caches three sub-view VMs (`_histories`, `_workingCopy`, `_stashesPage`) constructed in `Open()` and exposes them via `HistoriesVM`/`WorkingCopyVM`/`StashesPageVM` for content-toolbar bindings. The `SelectedViewIndex` setter swaps `SelectedView` to the matching cached VM.
 - `Histories.cs` — commit graph and log
 - `WorkingCopy.cs` — staging/unstaging, diff, committing
 - `Popup.cs` — base class for all dialog VMs (`Sure()` = confirm action, `[Required]` validation)
@@ -108,12 +114,12 @@ Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS
 - `InitSetup.cs` — first-launch popup for language + default clone directory selection
 - `SelfUpdate.cs` — handles Velopack download progress and apply
 
-### View Caching Pattern
-Tab switching and sub-view switching use `ItemsControl + Panel + IsVisible` instead of `ContentControl + DataTemplate` to avoid destroying and recreating heavy Views on every switch. This keeps all Views alive in memory and toggles `IsVisible` for instant switching.
+### View Switching Pattern (Upstream-compliant)
+Both tab switching and sub-view switching use `ContentControl + DataTemplate`, matching upstream SourceGit. The fork previously experimented with an `ItemsControl + Panel + IsVisible` view-caching scheme, but it was reverted because forcing View recreation introduced screen flickering and other layout regressions.
 
-- **Tab level** (`Launcher.axaml`): `ItemsControl` bound to `Pages`, each `LauncherPage` view's `IsVisible` binds to `LauncherPage.IsActive`. The `Launcher.ActivePage` setter toggles `IsActive` on old/new page.
-- **Sub-view level** (`Repository.axaml`): `Panel` contains `v:Histories`, `v:WorkingCopy`, `v:StashesPage` directly (not via DataTemplate). Each view's `IsVisible` binds to `SelectedViewIndex` via `IntConverters.IsZero`/`IsOne`/`IsTwo`.
-- **`SelectedView` property**: No longer used for XAML binding (no `PropertyChanged`). Kept only for `Fetch.cs` type checking (`_repo.SelectedView is Histories { ... }`).
+- **Tab level** (`Launcher.axaml`): `<ContentControl Content="{Binding ActivePage}">` with a `<DataTemplate DataType="vm:LauncherPage"><v:LauncherPage/></DataTemplate>`.
+- **Sub-view level** (`Repository.axaml`): `<ContentControl Content="{Binding SelectedView}">` with three `<DataTemplate>` entries for `Histories`, `WorkingCopy`, `StashesPage` VM types. Toolbar visibility for the active sub-view is still gated by `SelectedViewIndex` + `IntConverters.IsZero`/`IsOne`/`IsTwo`.
+- **VM caching, View recycling**: Sub-view VMs are kept alive on `Repository`, so heavy state (history graph, staged changes) survives switches. Avalonia's `ContentPresenter` also recycles the *View* instance when content switches between two instances of the same VM type (see "ContentControl recycles Views" pitfall). State that must follow VM lifecycle should live on the VM, not in code-behind fields.
 
 ### Platform Abstraction
 `src/Native/`:
@@ -207,6 +213,12 @@ Inside a `ControlTemplate`, `{TemplateBinding Background}` reads the control's `
 
 ### ListBox with SelectionMode=AlwaysSelected resets bound index during layout
 When a `ListBox` with `SelectionMode="AlwaysSelected"` lays out, it forces the selection to index 0, overwriting any programmatically set bound value. If you need to set a default selection that differs from index 0 (e.g., `ShowLocalChangesByDefault`), use `Dispatcher.UIThread.Post(() => ..., DispatcherPriority.Background)` to defer the assignment until after layout completes. When doing so, guard against overwriting explicit user interaction by checking `if (currentIndex == 0)` before setting — this distinguishes the framework reset from a deliberate user selection.
+
+### ContentControl recycles Views when the new Content has the same type
+Avalonia's XAML `<DataTemplate>` implements `IRecyclingDataTemplate`. When `ContentControl.Content` switches between two instances of the same VM type (e.g., tab A's `LauncherPage` → tab B's `LauncherPage`, or `Histories` VM A → `Histories` VM B), `ContentPresenter.UpdateChild()` reuses the existing View instance and just swaps `DataContext`. Consequence: the View's `OnLoaded`/`OnUnloaded` only fire on the *first* attach — they do **not** fire on every switch. State that needs to follow VM lifecycle (scroll position, focus, deferred restoration, event subscriptions to the old VM) must be implemented by listening to `DataContextChanged` or by living on the VM, not in code-behind fields. To force recreation, you can implement a custom `IDataTemplate` that does **not** also implement `IRecyclingDataTemplate`, but be aware this caused visible screen flickering on tab switches in this project and was reverted.
+
+### Debug logging in WinExe builds needs Debug.WriteLine
+`Komorebi.csproj` is `<OutputType>WinExe</OutputType>` so there is no attached console — `Console.WriteLine` output goes nowhere. Use `System.Diagnostics.Debug.WriteLine(...)` instead; it routes to the debugger trace listener (Visual Studio "Output" pane, `dotnet trace`, etc.). Always strip temporary `Debug.WriteLine` instrumentation before committing.
 
 ## Code Style
 

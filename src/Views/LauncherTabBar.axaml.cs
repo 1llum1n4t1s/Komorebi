@@ -197,37 +197,50 @@ public partial class LauncherTabBar : UserControl
             InvalidateVisual();
     }
 
+    // Chromeと同じくタブ1個分（200px）ずつスクロールする
+    private const double TAB_SCROLL_AMOUNT = 200;
+
     /// <summary>
-    /// ScrollTabsの処理を行う。
+    /// マウスホイールでタブをスクロールする。
     /// </summary>
     private void ScrollTabs(object _, PointerWheelEventArgs e)
     {
-        if (!e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+        if (!e.KeyModifiers.HasFlag(KeyModifiers.Shift) && e.Delta.Y != 0)
         {
-            if (e.Delta.Y < 0)
-                LauncherTabsScroller.LineRight();
-            else if (e.Delta.Y > 0)
-                LauncherTabsScroller.LineLeft();
+            // デルタ量に比例させる（精密タッチパッドでは小刻み、通常マウスホイールでは1クリック≒200px）
+            var amount = Math.Abs(e.Delta.Y) * TAB_SCROLL_AMOUNT;
+            ScrollTabsByAmount(e.Delta.Y < 0 ? amount : -amount);
             e.Handled = true;
         }
     }
 
     /// <summary>
-    /// ScrollTabsLeftの処理を行う。
+    /// タブを左にスクロールする。
     /// </summary>
     private void ScrollTabsLeft(object _, RoutedEventArgs e)
     {
-        LauncherTabsScroller.LineLeft();
+        ScrollTabsByAmount(-TAB_SCROLL_AMOUNT);
         e.Handled = true;
     }
 
     /// <summary>
-    /// ScrollTabsRightの処理を行う。
+    /// タブを右にスクロールする。
     /// </summary>
     private void ScrollTabsRight(object _, RoutedEventArgs e)
     {
-        LauncherTabsScroller.LineRight();
+        ScrollTabsByAmount(TAB_SCROLL_AMOUNT);
         e.Handled = true;
+    }
+
+    /// <summary>
+    /// 指定量だけ水平スクロールする。
+    /// </summary>
+    private void ScrollTabsByAmount(double delta)
+    {
+        var offset = LauncherTabsScroller.Offset;
+        var maxX = LauncherTabsScroller.Extent.Width - LauncherTabsScroller.Viewport.Width;
+        var newX = Math.Clamp(offset.X + delta, 0, Math.Max(0, maxX));
+        LauncherTabsScroller.Offset = new Vector(newX, offset.Y);
     }
 
     /// <summary>

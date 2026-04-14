@@ -75,17 +75,41 @@ public class Repository : ObservableObject, Models.IRepository
         get => _selectedViewIndex;
         set
         {
-            SetProperty(ref _selectedViewIndex, value);
+            if (SetProperty(ref _selectedViewIndex, value))
+            {
+                SelectedView = value switch
+                {
+                    1 => _workingCopy,
+                    2 => _stashesPage,
+                    _ => _histories,
+                };
+            }
         }
     }
 
-    /// <summary>履歴ビューVM。Viewキャッシュ用にXAMLから直接参照する。</summary>
+    /// <summary>
+    /// 現在表示中のビューVM。ContentControl+DataTemplateで実ビューに変換される。
+    /// SelectedViewIndexの変更に連動して切り替わる。
+    /// </summary>
+    public object SelectedView
+    {
+        get => _selectedView;
+        set => SetProperty(ref _selectedView, value);
+    }
+
+    /// <summary>
+    /// 履歴ビューVM。コンテンツツールバーの検索バインディング用にXAMLから参照する。
+    /// </summary>
     public Histories HistoriesVM => _histories;
 
-    /// <summary>ワーキングコピーVM。Viewキャッシュ用にXAMLから直接参照する。</summary>
+    /// <summary>
+    /// ワーキングコピーVM。コンテンツツールバーの検索バインディング用にXAMLから参照する。
+    /// </summary>
     public WorkingCopy WorkingCopyVM => _workingCopy;
 
-    /// <summary>スタッシュページVM。Viewキャッシュ用にXAMLから直接参照する。</summary>
+    /// <summary>
+    /// スタッシュページVM。コンテンツツールバーの検索バインディング用にXAMLから参照する。
+    /// </summary>
     public StashesPage StashesPageVM => _stashesPage;
 
     /// <summary>履歴をトポロジカル順序で表示するかどうか。変更時にコミット一覧を再取得する。</summary>
@@ -570,7 +594,17 @@ public class Repository : ObservableObject, Models.IRepository
         _stashesPage = new StashesPage(this);
         _searchCommitContext = new SearchCommitContext(this);
 
-        _selectedViewIndex = Preferences.Instance.ShowLocalChangesByDefault ? 1 : 0;
+        // ベアリポジトリはWorkingCopyタブが非表示なので、常にHistoriesを表示する。
+        if (!IsBare && Preferences.Instance.ShowLocalChangesByDefault)
+        {
+            _selectedView = _workingCopy;
+            _selectedViewIndex = 1;
+        }
+        else
+        {
+            _selectedView = _histories;
+            _selectedViewIndex = 0;
+        }
 
         _lastFetchTime = DateTime.Now;
         _autoFetchTimer = new Timer(AutoFetchByTimer, null, 5000, 5000);
@@ -583,6 +617,8 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void Close()
     {
+        // アップストリームに準拠: 既存ウィジェットを解放してGC対象にする。
+        SelectedView = null;
         Logs.Clear();
 
         _uiStates.Unload(_workingCopy.CommitMessage);
@@ -2181,6 +2217,7 @@ public class Repository : ObservableObject, Models.IRepository
     private Histories _histories = null;                                               // 履歴ビューVM
     private WorkingCopy _workingCopy = null;                                           // ワーキングコピーVM
     private StashesPage _stashesPage = null;                                           // スタッシュページVM
+    private object _selectedView = null;                                               // 現在表示中のビューVM（ContentControl用）
     private int _selectedViewIndex = 0;                                                // 選択中のビューインデックス
 
     private int _localBranchesCount = 0;                                               // ローカルブランチ数

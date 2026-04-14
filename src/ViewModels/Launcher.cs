@@ -42,16 +42,8 @@ public class Launcher : ObservableObject
         get => _activePage;
         set
         {
-            var old = _activePage;
             if (SetProperty(ref _activePage, value))
-            {
-                if (old != null)
-                    old.IsActive = false;
-                if (value != null)
-                    value.IsActive = true;
-
                 PostActivePageChanged();
-            }
         }
     }
 

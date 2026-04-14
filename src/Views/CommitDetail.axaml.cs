@@ -23,6 +23,30 @@ public partial class CommitDetail : UserControl
     }
 
     /// <summary>
+    /// コントロールが読み込まれた際の処理。
+    /// </summary>
+    protected override void OnLoaded(Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+
+        if (DataContext is ViewModels.CommitDetail detail)
+        {
+            // ListBox SelectionMode=AlwaysSelected が初回レイアウトで SelectedIndex を 0 に
+            // リセットするため、VM 側に保持されていた値を遅延適用する。
+            // ShowChangesInCommitDetailByDefault 設定や、コミット切替後のタブ位置維持に必要。
+            var desiredIndex = detail.ActiveTabIndex;
+            if (desiredIndex != 0)
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    if (DataContext is ViewModels.CommitDetail current && current.ActiveTabIndex == 0)
+                        current.ActiveTabIndex = desiredIndex;
+                }, Avalonia.Threading.DispatcherPriority.Background);
+            }
+        }
+    }
+
+    /// <summary>
     /// CreateChangeContextMenuByFolderの処理を行う。
     /// </summary>
     public ContextMenu CreateChangeContextMenuByFolder(ViewModels.ChangeTreeNode node, List<Models.Change> changes)
