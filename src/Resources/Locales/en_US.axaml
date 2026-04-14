@@ -872,8 +872,7 @@
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Into:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH Private Key:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Private key path (not .pub)</x:String>
-  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">None (System Default)</x:String>
-  <x:String x:Key="Text.SSHKey.UseGlobal" xml:space="preserve">Use Global Setting</x:String>
+  <x:String x:Key="Text.SSHKey.None" xml:space="preserve">None (Global Setting)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Browse...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">You selected a public key (.pub). Please select the private key (the file without .pub extension).</x:String>
   <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remote</x:String>

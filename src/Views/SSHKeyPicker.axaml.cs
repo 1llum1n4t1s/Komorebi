@@ -18,20 +18,10 @@ public partial class SSHKeyPicker : UserControl
         AvaloniaProperty.Register<SSHKeyPicker, string>(nameof(SSHKeyPath), defaultValue: string.Empty,
             defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
-    /// <summary>グローバル設定を使用する選択肢を表示するかどうか。</summary>
-    public static readonly StyledProperty<bool> ShowGlobalFallbackProperty =
-        AvaloniaProperty.Register<SSHKeyPicker, bool>(nameof(ShowGlobalFallback), defaultValue: true);
-
     public string SSHKeyPath
     {
         get => GetValue(SSHKeyPathProperty);
         set => SetValue(SSHKeyPathProperty, value);
-    }
-
-    public bool ShowGlobalFallback
-    {
-        get => GetValue(ShowGlobalFallbackProperty);
-        set => SetValue(ShowGlobalFallbackProperty, value);
     }
 
     private List<SSHKeyInfo> _items = [];
@@ -64,24 +54,15 @@ public partial class SSHKeyPicker : UserControl
     {
         _items = [];
 
-        // 「指定なし」
+        // 「指定なし（グローバル設定）」
         _items.Add(SSHKeyInfo.CreateNone());
-
-        // 「グローバル設定を使用」（グローバルキーが設定済み＆表示が有効な場合）
-        if (ShowGlobalFallback)
-        {
-            var globalKey = ViewModels.Preferences.Instance?.GlobalSSHKey;
-            if (!string.IsNullOrEmpty(globalKey))
-                _items.Add(SSHKeyInfo.CreateGlobalFallback(globalKey));
-        }
 
         // ~/.ssh/ から検出されたキー
         _items.AddRange(SSHKeyInfo.ScanSSHDirectory());
 
-        // 現在のパスが ~/.ssh/ 外のカスタムパスなら動的追加（センチネル値は除外）
+        // 現在のパスが ~/.ssh/ 外のカスタムパスなら動的追加
         var currentPath = SSHKeyPath;
         if (!string.IsNullOrEmpty(currentPath) &&
-            currentPath != Commands.Command.SSHKeyNoneSentinel &&
             _items.Find(k => k.FilePath == currentPath) is null)
         {
             _items.Add(SSHKeyInfo.FromCustomPath(currentPath));
@@ -101,20 +82,11 @@ public partial class SSHKeyPicker : UserControl
     {
         var path = SSHKeyPath;
 
-        // センチネル値 → 「指定なし」を選択
-        if (path == Commands.Command.SSHKeyNoneSentinel)
+        // 空文字（または旧バージョンのセンチネル値） → 「指定なし」を選択
+        if (string.IsNullOrEmpty(path) || path == "__NONE__")
         {
             CmbSSHKey.SelectedIndex = 0;
             _previousSelectedIndex = 0;
-            return;
-        }
-
-        // 空文字 → グローバルフォールバック項目があればそれを、なければ「指定なし」を選択
-        if (string.IsNullOrEmpty(path))
-        {
-            var globalIdx = _items.FindIndex(k => k.Type == SSHKeyInfo.EntryType.GlobalFallback);
-            CmbSSHKey.SelectedIndex = globalIdx >= 0 ? globalIdx : 0;
-            _previousSelectedIndex = CmbSSHKey.SelectedIndex;
             return;
         }
 
@@ -161,15 +133,7 @@ public partial class SSHKeyPicker : UserControl
         switch (selected.Type)
         {
             case SSHKeyInfo.EntryType.None:
-                // ShowGlobalFallback=false (Preferences画面) の場合は空文字を保存（グローバル設定自体のクリア）。
-                // それ以外（Clone/AddRemote/RepositoryConfigure）はセンチネル値でグローバルフォールバックをスキップ。
-                SetCurrentValue(SSHKeyPathProperty,
-                    ShowGlobalFallback ? Commands.Command.SSHKeyNoneSentinel : string.Empty);
-                _previousSelectedIndex = CmbSSHKey.SelectedIndex;
-                break;
-
-            case SSHKeyInfo.EntryType.GlobalFallback:
-                // 空文字を保存 → ResolveSSHKeyAsync がグローバルキーにフォールバックする。
+                // 空文字を保存 → ResolveSSHKeyAsync がグローバルキー → システムデフォルトへフォールバックする。
                 SetCurrentValue(SSHKeyPathProperty, string.Empty);
                 _previousSelectedIndex = CmbSSHKey.SelectedIndex;
                 break;

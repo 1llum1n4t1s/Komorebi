@@ -108,8 +108,7 @@
                        HorizontalAlignment="Right"
                        Margin="0,0,16,0"/>
             <v:SSHKeyPicker Grid.Row="3" Grid.Column="1"
-                            SSHKeyPath="{Binding GlobalSSHKey, Mode=TwoWay}"
-                            ShowGlobalFallback="False"/>
+                            SSHKeyPath="{Binding GlobalSSHKey, Mode=TwoWay}"/>
 
             <TextBlock Grid.Row="4" Grid.Column="0"
                        Text="{DynamicResource Text.Preferences.General.SubjectGuideLength}"

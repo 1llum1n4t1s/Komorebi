@@ -123,10 +123,6 @@ public class AddRemote : Popup
     {
         if (ctx.ObjectInstance is AddRemote { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
         {
-            // センチネル値（「指定なし」選択）はファイルパスではないのでバリデーションをスキップ
-            if (sshkey == Commands.Command.SSHKeyNoneSentinel)
-                return ValidationResult.Success;
-
             if (!File.Exists(sshkey))
                 return new ValidationResult("Given SSH private key can NOT be found!");
 

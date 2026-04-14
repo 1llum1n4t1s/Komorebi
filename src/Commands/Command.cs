@@ -391,26 +391,14 @@ public partial class Command
             : System.IO.Path.GetFullPath(System.IO.Path.Combine(WorkingDirectory, path));
     }
 
-    /// <summary>
-    /// 「指定なし（システムデフォルト）」を明示的に選択したことを示す特殊値。
-    /// この値が remote.{name}.sshkey に設定されている場合、グローバルSSHキーへのフォールバックをスキップする。
-    /// </summary>
-    public const string SSHKeyNoneSentinel = "__NONE__";
-
     /// <summary>リモートに紐づくSSH鍵を取得し、なければグローバル設定にフォールバックする。</summary>
     /// <param name="remote">リモート名。</param>
     protected async Task ResolveSSHKeyAsync(string remote)
     {
         var configValue = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey").ConfigureAwait(false);
 
-        // 「指定なし」が明示的に選択されている場合はシステムデフォルト（ssh-agent / ~/.ssh/config）を使用
-        if (configValue == SSHKeyNoneSentinel)
-        {
-            SSHKey = string.Empty;
-            return;
-        }
-
-        SSHKey = configValue;
+        // 旧バージョン互換: センチネル値 "__NONE__" は空文字列と同じ扱いにする（グローバルへフォールバック）
+        SSHKey = configValue == "__NONE__" ? string.Empty : configValue;
 
         // リモート個別設定がなければグローバルSSHキーにフォールバック
         if (string.IsNullOrEmpty(SSHKey))

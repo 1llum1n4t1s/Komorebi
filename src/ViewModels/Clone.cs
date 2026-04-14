@@ -155,10 +155,6 @@ public class Clone : Popup
     {
         if (ctx.ObjectInstance is Clone { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
         {
-            // センチネル値（「指定なし」選択）はファイルパスではないのでバリデーションをスキップ
-            if (sshkey == Commands.Command.SSHKeyNoneSentinel)
-                return ValidationResult.Success;
-
             if (!File.Exists(sshkey))
                 return new ValidationResult("Given SSH private key can NOT be found!");
 
@@ -183,15 +179,13 @@ public class Clone : Popup
         Use(log);
 
         // SSHキーの特殊値を実際のパスに解決する
+        // 空文字 → グローバルSSHキー（未設定ならシステムデフォルト）、それ以外 → 明示的に選択されたキー
         var resolvedSSHKey = string.Empty;
         if (_useSSH)
         {
-            if (_sshKey == Commands.Command.SSHKeyNoneSentinel)
-                resolvedSSHKey = string.Empty; // システムデフォルトを使用
-            else if (string.IsNullOrEmpty(_sshKey))
-                resolvedSSHKey = Preferences.Instance?.GlobalSSHKey ?? string.Empty; // グローバルフォールバック
-            else
-                resolvedSSHKey = _sshKey; // 明示的に選択されたキー
+            resolvedSSHKey = string.IsNullOrEmpty(_sshKey)
+                ? Preferences.Instance?.GlobalSSHKey ?? string.Empty
+                : _sshKey;
         }
 
         // git cloneコマンドを実行する
@@ -236,7 +230,7 @@ public class Clone : Popup
         }
 
         // SSH鍵の設定をリポジトリのgit configに保存する
-        // __NONE__ = システムデフォルト明示選択、具体パス = そのキーを使用、空文字 = グローバルフォールバック
+        // 具体パスが指定されていればそれを保存。空文字（「指定なし」）は保存せず、ResolveSSHKeyAsync がグローバル設定にフォールバックする。
         if (_useSSH && !string.IsNullOrEmpty(_sshKey))
         {
             await new Commands.Config(path)

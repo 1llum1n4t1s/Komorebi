@@ -15,10 +15,8 @@ public class SSHKeyInfo
     /// <summary>SSHキーエントリの種別。</summary>
     public enum EntryType
     {
-        /// <summary>指定なし（システムデフォルト）。</summary>
+        /// <summary>指定なし（グローバル設定にフォールバック）。</summary>
         None,
-        /// <summary>グローバル設定を使用。</summary>
-        GlobalFallback,
         /// <summary>検出された秘密鍵ファイル。</summary>
         Key,
         /// <summary>カスタムパスの秘密鍵。</summary>
@@ -47,7 +45,6 @@ public class SSHKeyInfo
             return Type switch
             {
                 EntryType.None => App.Text("SSHKey.None"),
-                EntryType.GlobalFallback => FormatKeyDisplay(App.Text("SSHKey.UseGlobal")),
                 EntryType.Browse => App.Text("SSHKey.Browse"),
                 EntryType.Key or EntryType.CustomKey => FormatKeyDisplay(null),
                 _ => string.Empty,
@@ -66,20 +63,6 @@ public class SSHKeyInfo
 
     /// <summary>「指定なし」センチネル。</summary>
     public static SSHKeyInfo CreateNone() => new() { Type = EntryType.None };
-
-    /// <summary>「グローバル設定を使用」エントリを作成する。</summary>
-    public static SSHKeyInfo CreateGlobalFallback(string globalKeyPath)
-    {
-        var fileName = Path.GetFileName(globalKeyPath);
-        var comment = ReadPublicKeyComment(globalKeyPath);
-        return new SSHKeyInfo
-        {
-            Type = EntryType.GlobalFallback,
-            FilePath = globalKeyPath,
-            FileName = fileName,
-            Comment = comment,
-        };
-    }
 
     /// <summary>「参照...」センチネル。</summary>
     public static SSHKeyInfo CreateBrowse() => new() { Type = EntryType.Browse };
