@@ -391,18 +391,55 @@ public partial class Command
             : System.IO.Path.GetFullPath(System.IO.Path.Combine(WorkingDirectory, path));
     }
 
+    /// <summary>
+    /// 旧バージョンで書き込まれていた「グローバルSSHキーを明示的にスキップ」を意味するセンチネル値。
+    /// 新UIからは書き込まれないが、既存リポジトリの git config に残っている値は読み取り時に尊重する。
+    /// </summary>
+    internal const string LegacySSHKeyOptOutSentinel = "__NONE__";
+
     /// <summary>リモートに紐づくSSH鍵を取得し、なければグローバル設定にフォールバックする。</summary>
     /// <param name="remote">リモート名。</param>
     protected async Task ResolveSSHKeyAsync(string remote)
     {
         var configValue = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey").ConfigureAwait(false);
+        SSHKey = ResolveSSHKeyValue(configValue, ViewModels.Preferences.Instance?.GlobalSSHKey);
+    }
 
-        // 旧バージョン互換: センチネル値 "__NONE__" は空文字列と同じ扱いにする（グローバルへフォールバック）
-        SSHKey = configValue == "__NONE__" ? string.Empty : configValue;
+    /// <summary>
+    /// git config の SSH キー値からアクティブな SSH キーパスを解決する純粋関数。
+    /// 副作用を持たないためユニットテスト可能。
+    /// </summary>
+    /// <remarks>
+    /// 後方互換性ルール:
+    /// <list type="bullet">
+    ///   <item>
+    ///     <description>
+    ///     旧バージョン (案A 以前) では "__NONE__" が「リポ個別にグローバルSSHキーをオプトアウトし、
+    ///     ssh-agent / ~/.ssh/config でシステム解決する」という意味を持っていた。
+    ///     新UIでは設定できないが、既存の git config に残っている値はその意味のまま尊重する。
+    ///     </description>
+    ///   </item>
+    ///   <item>
+    ///     <description>
+    ///     それ以外の空/未設定はグローバル SSH キー (Preferences.GlobalSSHKey) にフォールバックする。
+    ///     </description>
+    ///   </item>
+    /// </list>
+    /// </remarks>
+    /// <param name="configValue">git config remote.{name}.sshkey の値 (null 可)。</param>
+    /// <param name="globalSSHKey">Preferences.Instance.GlobalSSHKey の値 (null 可)。</param>
+    /// <returns>解決後の SSH キーパス。空文字列はシステムデフォルトを意味する。</returns>
+    internal static string ResolveSSHKeyValue(string configValue, string globalSSHKey)
+    {
+        // 旧バージョン互換: "__NONE__" が設定されていればグローバルフォールバックを明示的にスキップする
+        if (configValue == LegacySSHKeyOptOutSentinel)
+            return string.Empty;
+
+        if (!string.IsNullOrEmpty(configValue))
+            return configValue;
 
         // リモート個別設定がなければグローバルSSHキーにフォールバック
-        if (string.IsNullOrEmpty(SSHKey))
-            SSHKey = ViewModels.Preferences.Instance?.GlobalSSHKey ?? string.Empty;
+        return globalSSHKey ?? string.Empty;
     }
 
     /// <summary>

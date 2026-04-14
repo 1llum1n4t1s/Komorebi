@@ -237,5 +237,84 @@ namespace Komorebi.Tests.Commands
 
             Assert.Empty(exceptions);
         }
+
+        // ===============================================================
+        // 🗡️ SSHキー解決の後方互換（案A 以前の "__NONE__" センチネル）
+        // ===============================================================
+
+        /// <adversarial category="compat" severity="critical" />
+        /// <summary>
+        /// 旧バージョンで "__NONE__" を永続化した既存ユーザーが、
+        /// 新バージョンでもグローバルSSHキーを継承せず、システムデフォルトで解決されること。
+        /// これを怠るとマルチアカウント環境で認証主体が勝手に変わる regression になる。
+        /// </summary>
+        [Fact]
+        public void ResolveSSHKeyValue_LegacyNoneSentinel_SkipsGlobalFallback()
+        {
+            var result = Command.ResolveSSHKeyValue("__NONE__", "/home/user/.ssh/id_ed25519");
+            Assert.Equal(string.Empty, result);
+        }
+
+        /// <adversarial category="compat" severity="high" />
+        /// <summary>グローバルSSHキーが未設定でも "__NONE__" は空文字列を返すこと</summary>
+        [Fact]
+        public void ResolveSSHKeyValue_LegacyNoneSentinel_WithNullGlobal_ReturnsEmpty()
+        {
+            var result = Command.ResolveSSHKeyValue("__NONE__", null);
+            Assert.Equal(string.Empty, result);
+        }
+
+        /// <adversarial category="compat" severity="high" />
+        /// <summary>リモート個別のSSHキーが設定されていればそれが最優先になること</summary>
+        [Fact]
+        public void ResolveSSHKeyValue_ExplicitKey_TakesPrecedenceOverGlobal()
+        {
+            var result = Command.ResolveSSHKeyValue("/home/user/.ssh/work_key", "/home/user/.ssh/id_ed25519");
+            Assert.Equal("/home/user/.ssh/work_key", result);
+        }
+
+        /// <adversarial category="compat" severity="high" />
+        /// <summary>
+        /// リモート個別設定が空/未設定で、かつグローバルSSHキーが設定されている場合は
+        /// グローバルSSHキーにフォールバックすること（案A のデフォルト挙動）。
+        /// </summary>
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void ResolveSSHKeyValue_EmptyConfig_FallsBackToGlobal(string? configValue)
+        {
+            var result = Command.ResolveSSHKeyValue(configValue!, "/home/user/.ssh/id_ed25519");
+            Assert.Equal("/home/user/.ssh/id_ed25519", result);
+        }
+
+        /// <adversarial category="compat" severity="medium" />
+        /// <summary>両方とも未設定ならシステムデフォルト（空文字列）で解決されること</summary>
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("", null)]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        public void ResolveSSHKeyValue_BothEmpty_ReturnsEmpty(string? configValue, string? globalSSHKey)
+        {
+            var result = Command.ResolveSSHKeyValue(configValue!, globalSSHKey!);
+            Assert.Equal(string.Empty, result);
+        }
+
+        /// <adversarial category="compat" severity="medium" />
+        /// <summary>
+        /// "__none__"（小文字）や "__NONE__ " （末尾スペース付き）のような
+        /// 似た値は旧センチネルとして扱わないこと — 完全一致のみ後方互換対象。
+        /// </summary>
+        [Theory]
+        [InlineData("__none__")]
+        [InlineData("__NONE__ ")]
+        [InlineData(" __NONE__")]
+        [InlineData("NONE")]
+        public void ResolveSSHKeyValue_NearMissOfLegacySentinel_NotTreatedAsOptOut(string configValue)
+        {
+            // 完全一致しないので通常の "具体パス" として扱われる → そのまま返される
+            var result = Command.ResolveSSHKeyValue(configValue, "/home/user/.ssh/id_ed25519");
+            Assert.Equal(configValue, result);
+        }
     }
 }
