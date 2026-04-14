@@ -210,11 +210,45 @@ public class InteractiveRebase : ObservableObject
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
+            // fixup! コミットを対応する親コミットの直後に移動する（upstream e6ba0534）
             List<InteractiveRebaseItem> list = [];
+            List<InteractiveRebaseItem> fixups = [];
             for (var i = 0; i < commits.Count; i++)
             {
                 var c = commits[i];
-                list.Add(new InteractiveRebaseItem(commits.Count - i, c.Commit, c.Message));
+                var item = new InteractiveRebaseItem(commits.Count - i, c.Commit, c.Message);
+                if (c.Commit.Subject.StartsWith("fixup! ", StringComparison.Ordinal) && item.OriginalOrder > 1)
+                {
+                    fixups.Add(item);
+                    continue;
+                }
+
+                // 対象となる親コミットが見つかった fixup を直後に挿入して Fixup アクションに設定する
+                List<InteractiveRebaseItem> reordered = [];
+                foreach (var f in fixups)
+                {
+                    if (c.Commit.Subject.StartsWith(f.Commit.Subject.Substring(7), StringComparison.Ordinal))
+                    {
+                        f.Action = Models.InteractiveRebaseAction.Fixup;
+                        reordered.Add(f);
+                        list.Add(f);
+                    }
+                }
+                fixups.RemoveAll(x => reordered.Contains(x));
+                list.Add(item);
+            }
+
+            // 親が見つからなかった fixup は元の順序位置に戻す
+            foreach (var f in fixups)
+            {
+                for (var i = 0; i < list.Count; i++)
+                {
+                    if (f.OriginalOrder > list[i].OriginalOrder)
+                    {
+                        list.Insert(i, f);
+                        break;
+                    }
+                }
             }
 
             var selected = list.Count > 0 ? list[0] : null;

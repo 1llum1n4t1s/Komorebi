@@ -23,7 +23,7 @@ public class QueryCommitsForInteractiveRebase : Command
         WorkingDirectory = repo;
         Context = repo;
         // --topo-order: トポロジカル順、--cherry-pick --right-only: チェリーピック済みを除外、--no-merges: マージコミットを除外
-        Args = $"log --topo-order --cherry-pick --right-only --no-merges --no-show-signature --decorate=full --format=\"%H%n%P%n%D%n%aN±%aE%n%at%n%cN±%cE%n%ct%n%B%n{_boundary}\" {on}...HEAD";
+        Args = $"log --topo-order --cherry-pick --right-only --no-merges --no-show-signature --decorate=full --format=\"%H%n%P%n%D%n%aN±%aE%n%at%n%cN±%cE%n%ct%n%s%n%B%n{_boundary}\" {on}...HEAD";
     }
 
     /// <summary>
@@ -72,6 +72,9 @@ public class QueryCommitsForInteractiveRebase : Command
                     break;
                 case 6:
                     current.Commit.CommitterTime = ulong.Parse(line);
+                    break;
+                case 7:
+                    current.Commit.Subject = line;
                     break;
                 default:
                     var boundary = rs.StdOut.IndexOf(_boundary, end + 1, StringComparison.Ordinal);
