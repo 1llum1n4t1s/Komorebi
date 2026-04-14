@@ -18,6 +18,12 @@ namespace Komorebi.ViewModels;
 public record InteractiveRebasePrefill(string SHA, Models.InteractiveRebaseAction Action);
 
 /// <summary>
+/// fixup!/squash! コミットの並び替えキューに積むレコード。
+/// 同じキー（親コミット Subject）を持つ複数エントリを許容するため、Dictionary ではなく List で管理する。
+/// </summary>
+public record InteractiveRebaseReorderItem(string Key, InteractiveRebaseItem Item);
+
+/// <summary>
 /// 対話的リベースの各コミット項目ViewModel。
 /// アクション（pick/reword/edit/squash/fixup/drop）とメッセージ編集状態を管理する。
 /// </summary>
@@ -210,9 +216,10 @@ public class InteractiveRebase : ObservableObject
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
-            // fixup!/squash! コミットを対応する親コミットの直後に移動する（upstream e6ba0534 + 0d5185b1）
+            // fixup!/squash! コミットを対応する親コミットの直後に移動する（upstream e6ba0534 + 0d5185b1 + 1ca4145e）
+            // 同じ親 Subject を持つ複数 fixup/squash に対応するため List<Record> で保持する（Dictionary では無限ループが発生）
             List<InteractiveRebaseItem> list = [];
-            Dictionary<string, InteractiveRebaseItem> needReorder = [];
+            List<InteractiveRebaseReorderItem> needReorder = [];
             for (var i = 0; i < commits.Count; i++)
             {
                 var c = commits[i];
@@ -224,26 +231,26 @@ public class InteractiveRebase : ObservableObject
                     if (subject.StartsWith("fixup! ", StringComparison.Ordinal))
                     {
                         item.Action = Models.InteractiveRebaseAction.Fixup;
-                        needReorder.Add(subject.Substring(7), item);
+                        needReorder.Add(new(subject.Substring(7), item));
                         continue;
                     }
 
                     if (subject.StartsWith("squash! ", StringComparison.Ordinal))
                     {
                         item.Action = Models.InteractiveRebaseAction.Squash;
-                        needReorder.Add(subject.Substring(8), item);
+                        needReorder.Add(new(subject.Substring(8), item));
                         continue;
                     }
                 }
 
                 // 対象となる親コミットが見つかった fixup!/squash! を直後に挿入する
-                List<string> reordered = [];
-                foreach (var (k, v) in needReorder)
+                List<InteractiveRebaseReorderItem> reordered = [];
+                foreach (var o in needReorder)
                 {
-                    if (subject.StartsWith(k, StringComparison.Ordinal))
+                    if (subject.StartsWith(o.Key, StringComparison.Ordinal))
                     {
-                        list.Add(v);
-                        reordered.Add(k);
+                        list.Add(o.Item);
+                        reordered.Add(o);
                     }
                 }
 
@@ -254,14 +261,14 @@ public class InteractiveRebase : ObservableObject
             }
 
             // 親が見つからなかった fixup!/squash! は元の順序位置に戻し、安全のため Pick にリセットする
-            foreach (var (_, v) in needReorder)
+            foreach (var v in needReorder)
             {
                 for (var i = 0; i < list.Count; i++)
                 {
-                    if (v.OriginalOrder > list[i].OriginalOrder)
+                    if (v.Item.OriginalOrder > list[i].OriginalOrder)
                     {
-                        v.Action = Models.InteractiveRebaseAction.Pick;
-                        list.Insert(i, v);
+                        v.Item.Action = Models.InteractiveRebaseAction.Pick;
+                        list.Insert(i, v.Item);
                         break;
                     }
                 }
