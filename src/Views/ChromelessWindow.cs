@@ -207,14 +207,22 @@ public class ChromelessWindow : Window
 
         // 上端はトンネルイベントで先に処理することで、タイトルバー本体（CaptionHeight 内の
         // 下半分）の BeginMoveWindow とキャプションボタンの操作はそのまま維持される。
-        if (top && left) return WindowEdge.NorthWest;
-        if (top && right) return WindowEdge.NorthEast;
-        if (top) return WindowEdge.North;
-        if (bottom && left) return WindowEdge.SouthWest;
-        if (bottom && right) return WindowEdge.SouthEast;
-        if (bottom) return WindowEdge.South;
-        if (left) return WindowEdge.West;
-        if (right) return WindowEdge.East;
+        if (top && left)
+            return WindowEdge.NorthWest;
+        if (top && right)
+            return WindowEdge.NorthEast;
+        if (top)
+            return WindowEdge.North;
+        if (bottom && left)
+            return WindowEdge.SouthWest;
+        if (bottom && right)
+            return WindowEdge.SouthEast;
+        if (bottom)
+            return WindowEdge.South;
+        if (left)
+            return WindowEdge.West;
+        if (right)
+            return WindowEdge.East;
 
         return null;
     }
