@@ -724,10 +724,15 @@ public class NoOrEOLChange;
 /// </summary>
 public class SubmoduleDiff
 {
+    /// <summary>サブモジュールの作業ディレクトリの絶対パス</summary>
+    public string FullPath { get; set; } = string.Empty;
     /// <summary>変更前のサブモジュール情報</summary>
     public RevisionSubmodule Old { get; set; } = null;
     /// <summary>変更後のサブモジュール情報</summary>
     public RevisionSubmodule New { get; set; } = null;
+
+    /// <summary>サブモジュール詳細ダイアログを開ける条件を満たすか（初期化済みで Old/New 両方がある場合のみ true）</summary>
+    public bool CanOpenDetails => File.Exists(Path.Combine(FullPath, ".git")) && Old != null && New != null;
 }
 
 /// <summary>

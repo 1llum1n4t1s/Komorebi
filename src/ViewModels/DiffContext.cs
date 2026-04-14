@@ -238,7 +238,10 @@ public class DiffContext : ObservableObject
                     }
 
                     if (isSubmodule)
+                    {
+                        submoduleDiff.FullPath = submoduleRoot;
                         rs = submoduleDiff;
+                    }
                 }
 
                 if (!isSubmodule)
