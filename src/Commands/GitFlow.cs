@@ -86,11 +86,10 @@ public static class GitFlow
     /// <param name="type">ブランチの種類（Feature, Release, Hotfix）。</param>
     /// <param name="name">完了するブランチ名。</param>
     /// <param name="squash">コミットをスカッシュ（圧縮）するかどうか。</param>
-    /// <param name="push">完了後にリモートにプッシュするかどうか。</param>
     /// <param name="keepBranch">完了後もブランチを保持するかどうか。</param>
     /// <param name="log">コマンドログの出力先。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
-    public static async Task<bool> FinishAsync(string repo, Models.GitFlowBranchType type, string name, bool squash, bool push, bool keepBranch, Models.ICommandLog log)
+    public static async Task<bool> FinishAsync(string repo, Models.GitFlowBranchType type, string name, bool squash, bool keepBranch, Models.ICommandLog log)
     {
         var builder = new StringBuilder();
         builder.Append("flow ");
@@ -117,10 +116,6 @@ public static class GitFlow
         // --squash: コミットを1つにまとめる
         if (squash)
             builder.Append("--squash ");
-
-        // --push: 完了後にリモートへプッシュする
-        if (push)
-            builder.Append("--push ");
 
         // -k: ブランチを削除せず保持する
         if (keepBranch)
