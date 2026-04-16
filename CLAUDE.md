@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.0.0**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.0.1**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
 
 ## Build & Run
 
@@ -84,12 +84,14 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 - `ParseNameStatusLine(line)` — parses `--name-status` output lines (M/A/D/R/C) into `(path, ChangeState)` tuples
 
 ### SSH Key Management
-`src/Models/SSHKeyInfo.cs` scans `~/.ssh/` for private keys and provides a unified selection model. `src/Views/SSHKeyPicker.axaml` is a reusable `UserControl` for key selection with entry types: None (system default), GlobalFallback, Key, CustomKey, Browse.
+`src/Models/SSHKeyInfo.cs` scans `~/.ssh/` for private keys and provides a unified selection model. `src/Views/SSHKeyPicker.axaml` is a reusable `UserControl` for key selection with entry types: None (global setting), Key, CustomKey, Browse.
 
-**3-tier fallback strategy** (in `Command.ResolveSSHKeyAsync`):
-1. Per-remote setting (`git config remote.<name>.sshkey`; `__NONE__` sentinel = use system default)
+**2-tier fallback strategy** (in `Command.ResolveSSHKeyValue` — pure function, unit testable):
+1. Per-remote setting (`git config remote.<name>.sshkey`)
 2. Global SSH key (`Preferences.Instance.GlobalSSHKey`)
-3. ssh-agent / `~/.ssh/config` (when SSHKey is empty)
+3. ssh-agent / `~/.ssh/config` (when both are empty)
+
+**Legacy `__NONE__` sentinel**: 旧バージョンで書き込まれた `__NONE__` は「グローバルフォールバックを明示的にスキップ」として読み取り時に尊重する。新 UI からは書き込まれない（凍結レガシー）。`LegacySSHKeyOptOutSentinel` 定数で管理。
 
 `GIT_SSH_COMMAND` is built with shell injection prevention via `.Quoted()`.
 
@@ -102,7 +104,7 @@ Three URL formats are supported:
 Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS()`, `TryParseCodeCommitSSH()`, `TryParseCodeCommitGRC()`. `TryGetVisitURL()` and `TryGetCreatePullRequestURL()` convert all three forms to AWS Console URLs. `RemoteProtocolSwitcher` hides for CodeCommit URLs (HTTPS↔SSH auto-conversion not applicable).
 
 ### Remote Configuration
-`RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including URL editing and per-remote SSH key selection. The former `EditRemote` and `PruneRemote` dialogs were consolidated here.
+`RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including URL editing, per-remote SSH key selection, and per-remote push prohibition. Push prohibition uses `git remote set-url --push <name> no_push` to set an invalid push URL — this is the standard git idiom for preventing pushes to upstream/fork-parent remotes. The `SelectedRemotePushDisabled` property detects this state by comparing push URL with fetch URL.
 
 ### Key ViewModels
 - `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management. `Launcher.ActivePage` is TwoWay-bound from `LauncherTabBar` (a ListBox) and feeds the page `ContentControl` in `Launcher.axaml`.
@@ -234,17 +236,23 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 
 - **format-check.yml** — `dotnet format --verify-no-changes` on push/PR to `main`
 - **localization-check.yml** — validates locale files against `en_US`
-- **ci.yml** — builds all platforms + packages on push/PR to `main`
-- **release.yml** — triggered by push to `release/**` branches: builds → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
+- **ci.yml** — lightweight: `dotnet build` + `dotnet test` on ubuntu-latest (single runner, no AOT publish)
+- **release.yml** — triggered by push to `release/**` branches: full AOT publish (5 platforms) → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
+- **build.yml** — reusable workflow for 5-platform AOT publish (used by release.yml only)
 - **velopack.yml** — reusable workflow creating Velopack packages for 5 RIDs (win-x64, win-arm64, osx-arm64, linux-x64, linux-arm64)
 
-Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.62`). CI reads it directly for both packaging and Velopack.
+Linux builds run directly on `ubuntu-latest` runner (no Docker container). arm64 cross-compilation adds ports.ubuntu.com sources with dynamic codename detection. RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
+
+Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.65`). CI reads it directly for both packaging and Velopack.
 
 ## Key Dependencies
 
-- **Avalonia 12.0.0** — cross-platform XAML UI
+- **Avalonia 12.0.1** — cross-platform XAML UI
 - **CommunityToolkit.Mvvm** — MVVM source generators
+- **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 0.0.1298** — auto-update framework
 - **depends/AvaloniaEdit** — git submodule, text editor for diff/blame
 - **OpenAI / Azure.AI.OpenAI** — AI commit message generation
 - **LiveChartsCore 2.0.0** — contribution statistics charts
+
+Fonts are **not bundled** — the app uses system fonts with per-locale fallback chains defined in `InstalledFont.GetLocaleDefaults()`. The `Avalonia.Fonts.Inter` NuGet package provides the Inter font for non-CJK locales.
