@@ -66,5 +66,5 @@ chmod 0755 resources/deb/DEBIAN/preinst resources/deb/DEBIAN/prerm
 # Build deb package with gzip compression
 dpkg-deb -Zgzip --root-owner-group --build resources/deb "komorebi_$VERSION-1_$arch.deb"
 
-rpmbuild -bb --target="$target" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version $VERSION"
+rpmbuild -bb --target="$target" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version $VERSION" --define "__strip /bin/true"
 mv "resources/rpm/RPMS/$target/komorebi-$VERSION-1.$target.rpm" ./
