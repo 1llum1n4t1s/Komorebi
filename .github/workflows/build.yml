@@ -18,11 +18,11 @@ jobs:
           - name: Linux
             os: ubuntu-latest
             runtime: linux-x64
-            container: ubuntu:26.04
+            container: ubuntu:24.04
           - name: Linux (arm64)
             os: ubuntu-latest
             runtime: linux-arm64
-            container: ubuntu:26.04
+            container: ubuntu:24.04
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container || '' }}
