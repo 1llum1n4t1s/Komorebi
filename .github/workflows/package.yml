@@ -70,7 +70,6 @@ jobs:
   linux:
     name: Package Linux
     runs-on: ubuntu-latest
-    container: ubuntu:24.04
     strategy:
       matrix:
         include:
@@ -81,12 +80,10 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v6
-      - name: Download package dependencies
+      - name: Install packaging dependencies
         run: |
-          export DEBIAN_FRONTEND=noninteractive
-          ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
-          apt-get update
-          apt-get install -y curl wget git dpkg-dev fakeroot tzdata zip unzip desktop-file-utils rpm libfuse2 file build-essential binutils
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev fakeroot desktop-file-utils rpm libfuse2
       - name: Download build
         uses: actions/download-artifact@v8
         with:
