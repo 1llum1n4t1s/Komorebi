@@ -18,11 +18,11 @@ jobs:
           - name: Linux
             os: ubuntu-latest
             runtime: linux-x64
-            container: ubuntu:22.04
+            container: ubuntu:26.04
           - name: Linux (arm64)
             os: ubuntu-latest
             runtime: linux-arm64
-            container: ubuntu:22.04
+            container: ubuntu:26.04
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container || '' }}
@@ -34,7 +34,7 @@ jobs:
           ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
           apt-get update
           apt-get install -y sudo
-          sudo apt-get install -y curl wget git unzip zip libicu70 tzdata clang
+          sudo apt-get install -y curl wget git unzip zip libicu76 tzdata clang
       - name: Checkout sources
         uses: actions/checkout@v6
         with:
@@ -47,9 +47,10 @@ jobs:
         if: matrix.runtime == 'linux-arm64'
         run: |
           sudo dpkg --add-architecture arm64
-          echo 'deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted' \
+          CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ ${CODENAME} main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ ${CODENAME}-updates main restricted
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ ${CODENAME}-backports main restricted" \
           | sudo tee /etc/apt/sources.list.d/arm64.list
           sudo sed -i -e 's/^deb http/deb [arch=amd64] http/g' /etc/apt/sources.list
           sudo sed -i -e 's/^deb mirror/deb [arch=amd64] mirror/g' /etc/apt/sources.list
