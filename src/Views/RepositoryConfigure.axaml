@@ -44,7 +44,7 @@
           <TextBlock Classes="tab_header" Text="{DynamicResource Text.Configure.Git}"/>
         </TabItem.Header>
 
-        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,Auto,32,32,32,32" ColumnDefinitions="Auto,*">
+        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,Auto,32,32,32,32,32" ColumnDefinitions="Auto,*">
           <TextBlock Grid.Row="0" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
@@ -256,6 +256,12 @@
           <v:SSHKeyPicker Grid.Row="16" Grid.Column="1"
                           SSHKeyPath="{Binding SelectedRemoteSSHKey, Mode=TwoWay}"
                           IsVisible="{Binding SelectedRemoteUseSSH}"/>
+
+          <!-- プッシュ禁止 -->
+          <CheckBox Grid.Row="17" Grid.Column="1"
+                    Content="{DynamicResource Text.Configure.Remote.PushDisabled}"
+                    IsChecked="{Binding SelectedRemotePushDisabled, Mode=TwoWay}"
+                    ToolTip.Tip="git remote set-url --push &lt;name&gt; no_push"/>
 
         </Grid>
       </TabItem>

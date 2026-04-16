@@ -245,6 +245,7 @@
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Mga Uri ng Conventional Commit</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Default na Remote</x:String>
   <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.Configure.Remote.PushDisabled" xml:space="preserve">I-disable ang push sa remote na ito</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Mas Gustong Merge Mode</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">TAGASUBAYBAY NG ISYU</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Magdagdag ng Azure DevOps Rule</x:String>

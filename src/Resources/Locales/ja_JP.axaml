@@ -248,6 +248,7 @@
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">コンベンショナルコミットの種類定義</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">既定のリモート</x:String>
   <x:String x:Key="Text.Configure.Remote" xml:space="preserve">リモート設定</x:String>
+  <x:String x:Key="Text.Configure.Remote.PushDisabled" xml:space="preserve">このリモートへのプッシュを禁止</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">優先するマージ方式</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">イシュートラッカー</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Azure DevOps のルールを追加</x:String>

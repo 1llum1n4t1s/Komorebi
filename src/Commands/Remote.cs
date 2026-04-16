@@ -104,6 +104,20 @@ public class Remote : Command
     }
 
     /// <summary>
+    /// リモートのプッシュ専用URLを削除してフェッチURLに戻す。
+    /// git remote set-url --push --delete を実行する。
+    /// </summary>
+    /// <param name="name">リモート名。</param>
+    /// <param name="pushUrl">削除するプッシュURL。</param>
+    /// <returns>コマンドが成功した場合はtrue。</returns>
+    public async Task<bool> DeletePushURLAsync(string name, string pushUrl)
+    {
+        // git remote set-url --push --delete: プッシュ専用URLを削除する
+        Args = $"remote set-url --push --delete {name.Quoted()} {pushUrl.Quoted()}";
+        return await ExecAsync();
+    }
+
+    /// <summary>
     /// リモートに指定ブランチが存在するかを確認する。
     /// git ls-remote を実行して結果を確認する。
     /// </summary>

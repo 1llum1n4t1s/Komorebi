@@ -248,6 +248,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Konventionelle Commit-Typen</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Standard-Remote</x:String>
   <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.Configure.Remote.PushDisabled" xml:space="preserve">Push zu diesem Remote deaktivieren</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Bevorzugter Merge-Modus</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">TICKETSYSTEM</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Beispiel für Azure-DevOps-Regel hinzufügen</x:String>

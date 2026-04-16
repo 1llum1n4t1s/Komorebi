@@ -245,6 +245,7 @@
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Genera Committorum Conventionalium</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Remotum Praefinitum</x:String>
   <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remotum</x:String>
+  <x:String x:Key="Text.Configure.Remote.PushDisabled" xml:space="preserve">Impellere ad hoc remotum prohibere</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Modus Merge Praelatus</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">VESTIGATOR QUAESTIONUM</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Adde Regulam Azure DevOps</x:String>

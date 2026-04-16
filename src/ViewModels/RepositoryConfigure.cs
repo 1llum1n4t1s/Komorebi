@@ -51,12 +51,13 @@ public class RepositoryConfigure : ObservableObject
             var pendingUrl = _selectedRemoteUrl;
             var pendingUseSSH = _selectedRemoteUseSSH;
             var pendingSSHKey = _selectedRemoteSSHKey;
+            var pendingPushDisabled = _selectedRemotePushDisabled;
 
             if (SetProperty(ref _selectedRemote, value))
             {
                 // 前のリモートの編集内容をキャプチャした値で保存（タスクを連鎖して順序を保証）
                 if (old is not null)
-                    _pendingSaveTask = ChainSaveAsync(old, pendingName, pendingUrl, pendingUseSSH, pendingSSHKey);
+                    _pendingSaveTask = ChainSaveAsync(old, pendingName, pendingUrl, pendingUseSSH, pendingSSHKey, pendingPushDisabled);
                 if (value is not null)
                     _loadTask = LoadRemoteSettingsAsync(value);
             }
@@ -93,6 +94,17 @@ public class RepositoryConfigure : ObservableObject
     {
         get => _selectedRemoteSSHKey;
         set => SetProperty(ref _selectedRemoteSSHKey, value);
+    }
+
+    /// <summary>選択中リモートのプッシュが禁止されているかどうか。</summary>
+    /// <remarks>
+    /// git remote set-url --push &lt;name&gt; no_push で push URL を無効値に設定することで実現する。
+    /// push URL が fetch URL と一致しない場合にプッシュ禁止とみなす。
+    /// </remarks>
+    public bool SelectedRemotePushDisabled
+    {
+        get => _selectedRemotePushDisabled;
+        set => SetProperty(ref _selectedRemotePushDisabled, value);
     }
 
     /// <summary>デフォルトのリモート名（Push/Pull時に使用）。</summary>
@@ -307,6 +319,10 @@ public class RepositoryConfigure : ObservableObject
             });
         }
 
+        // 既定のリモートが未設定でリモートが存在する場合は "origin"（なければ先頭）を自動選択する
+        if (string.IsNullOrEmpty(DefaultRemote) && Remotes.Count > 0)
+            DefaultRemote = Remotes.Contains("origin") ? "origin" : Remotes[0];
+
         // 最初のリモートを自動選択
         if (RemoteObjects.Count > 0)
             SelectedRemote = RemoteObjects[0];
@@ -450,9 +466,19 @@ public class RepositoryConfigure : ObservableObject
         SelectedRemoteUrl = remote.URL;
         SelectedRemoteUseSSH = Models.Remote.IsSSH(remote.URL);
         SelectedRemoteSSHKey = string.Empty;
+        SelectedRemotePushDisabled = false;
 
         try
         {
+            var remoteCmd = new Commands.Remote(_repo.FullPath);
+
+            // プッシュURLを取得し、フェッチURLと異なればプッシュ禁止と判定する
+            var pushUrl = await remoteCmd.GetURLAsync(remote.Name, true);
+            if (!ReferenceEquals(_selectedRemote, remote))
+                return;
+
+            SelectedRemotePushDisabled = !string.IsNullOrEmpty(pushUrl) && pushUrl != remote.URL;
+
             if (SelectedRemoteUseSSH)
             {
                 var key = await new Commands.Config(_repo.FullPath)
@@ -479,22 +505,22 @@ public class RepositoryConfigure : ObservableObject
 
         return SavePendingRemoteSettingsAsync(
             _selectedRemote, _selectedRemoteName, _selectedRemoteUrl,
-            _selectedRemoteUseSSH, _selectedRemoteSSHKey);
+            _selectedRemoteUseSSH, _selectedRemoteSSHKey, _selectedRemotePushDisabled);
     }
 
     /// <summary>前のリモート保存タスクの完了を待ってから次の保存を実行する。</summary>
     private async Task ChainSaveAsync(
-        Models.Remote remote, string name, string url, bool useSSH, string sshKey)
+        Models.Remote remote, string name, string url, bool useSSH, string sshKey, bool pushDisabled)
     {
         // ConfigureAwait(false) は使わない — SavePendingRemoteSettingsAsync 内で
         // Remotes リストや OnPropertyChanged 等の UI バインドプロパティを更新するため
         await _pendingSaveTask;
-        await SavePendingRemoteSettingsAsync(remote, name, url, useSSH, sshKey);
+        await SavePendingRemoteSettingsAsync(remote, name, url, useSSH, sshKey, pushDisabled);
     }
 
     /// <summary>指定リモートの設定をキャプチャ済みの値でgit configに保存する。</summary>
     private async Task SavePendingRemoteSettingsAsync(
-        Models.Remote remote, string name, string url, bool useSSH, string sshKey)
+        Models.Remote remote, string name, string url, bool useSSH, string sshKey, bool pushDisabled)
     {
         var remoteName = remote.Name;
         var remoteCmd = new Commands.Remote(_repo.FullPath);
@@ -536,10 +562,13 @@ public class RepositoryConfigure : ObservableObject
             {
                 remote.URL = url;
 
-                // Push URLも同期
-                var pushUrl = await remoteCmd.GetURLAsync(remoteName, true);
-                if (!string.IsNullOrEmpty(pushUrl) && pushUrl != url)
-                    await remoteCmd.SetURLAsync(remoteName, url, true);
+                // プッシュ禁止中でなければ Push URL を fetch URL に同期する
+                if (!pushDisabled)
+                {
+                    var pushUrl = await remoteCmd.GetURLAsync(remoteName, true);
+                    if (!string.IsNullOrEmpty(pushUrl) && pushUrl != url)
+                        await remoteCmd.SetURLAsync(remoteName, url, true);
+                }
             }
             else
             {
@@ -548,6 +577,23 @@ public class RepositoryConfigure : ObservableObject
                 App.RaiseException(_repo.FullPath,
                     $"Failed to set URL for remote '{remoteName}'");
                 return;
+            }
+        }
+
+        // プッシュ禁止設定
+        var currentPushUrl = await remoteCmd.GetURLAsync(remoteName, true);
+        var isPushCurrentlyDisabled = !string.IsNullOrEmpty(currentPushUrl) && currentPushUrl != (url ?? remote.URL);
+        if (pushDisabled != isPushCurrentlyDisabled)
+        {
+            if (pushDisabled)
+            {
+                // push URL を無効値に設定してプッシュを禁止する
+                await remoteCmd.SetURLAsync(remoteName, "no_push", true);
+            }
+            else
+            {
+                // push URL を削除して fetch URL に戻す
+                await remoteCmd.DeletePushURLAsync(remoteName, currentPushUrl);
             }
         }
 
@@ -638,4 +684,5 @@ public class RepositoryConfigure : ObservableObject
     private string _selectedRemoteUrl = string.Empty;                        // 選択中リモートのURL
     private bool _selectedRemoteUseSSH;                                      // 選択中リモートがSSH接続か
     private string _selectedRemoteSSHKey = string.Empty;                     // 選択中リモートのSSHキーパス
+    private bool _selectedRemotePushDisabled;                                // 選択中リモートのプッシュ禁止状態
 }

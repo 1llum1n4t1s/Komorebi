@@ -248,6 +248,7 @@
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Types de commit conventionnels</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Dépôt par défaut</x:String>
   <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Distant</x:String>
+  <x:String x:Key="Text.Configure.Remote.PushDisabled" xml:space="preserve">Désactiver le push vers ce dépôt distant</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Mode de fusion préféré</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">SUIVI DES PROBLÈMES</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Ajouter une règle d'exemple Azure DevOps</x:String>

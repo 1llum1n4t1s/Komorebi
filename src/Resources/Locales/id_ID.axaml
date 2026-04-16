@@ -248,6 +248,7 @@
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">Tipe Conventional Commit</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">Remote Default</x:String>
   <x:String x:Key="Text.Configure.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.Configure.Remote.PushDisabled" xml:space="preserve">Nonaktifkan push ke remote ini</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">Mode Merge Pilihan</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">PELACAK ISU</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Tambah Aturan Azure DevOps</x:String>

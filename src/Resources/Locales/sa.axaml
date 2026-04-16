@@ -245,6 +245,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Configure.Git.ConventionalTypesOverride" xml:space="preserve">परम्परागतप्रतिबद्धप्रकाराः</x:String>
   <x:String x:Key="Text.Configure.Git.DefaultRemote" xml:space="preserve">पूर्वनिर्धारितदूरस्थम्</x:String>
   <x:String x:Key="Text.Configure.Remote" xml:space="preserve">दूरस्थम्</x:String>
+  <x:String x:Key="Text.Configure.Remote.PushDisabled" xml:space="preserve">अस्मिन् दूरस्थं प्रति प्रेषणं निषेधयतु</x:String>
   <x:String x:Key="Text.Configure.Git.PreferredMergeMode" xml:space="preserve">अभिमतविलयनप्रकारः</x:String>
   <x:String x:Key="Text.Configure.IssueTracker" xml:space="preserve">समस्याअनुसरणम्</x:String>
   <x:String x:Key="Text.Configure.IssueTracker.AddSampleAzure" xml:space="preserve">Azure DevOps नियमं योजयतु</x:String>
