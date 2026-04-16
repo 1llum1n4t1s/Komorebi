@@ -566,16 +566,7 @@ public partial class App : Application
         if (!string.IsNullOrEmpty(defaultFont))
             resDic.Add("Fonts.Default", new FontFamily(defaultFont));
 
-        if (string.IsNullOrEmpty(monospaceFont))
-        {
-            // 等幅フォント未指定: JetBrains Monoをベースにデフォルトフォントをフォールバックに追加する
-            if (!string.IsNullOrEmpty(defaultFont))
-            {
-                monospaceFont = $"fonts:Komorebi#JetBrains Mono,{defaultFont}";
-                resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
-            }
-        }
-        else
+        if (!string.IsNullOrEmpty(monospaceFont))
         {
             // 等幅フォント指定あり: デフォルトフォントをフォールバックに追加する（未含時のみ）
             if (!string.IsNullOrEmpty(defaultFont) && !monospaceFont.Contains(defaultFont, StringComparison.Ordinal))
@@ -1519,39 +1510,18 @@ public partial class App : Application
             }
 
             var name = sb.ToString();
-            var added = false;
 
-            // まずシステムフォントとしてパースを試みる
+            // システムフォントとしてパースを試みる
             try
             {
                 var fontFamily = FontFamily.Parse(name);
                 // タイプフェース（Regular, Bold等）が1つ以上あれば有効なフォントと判定する
                 if (fontFamily.FamilyTypefaces.Count > 0)
-                {
                     trimmed.Add(name);
-                    added = true;
-                }
             }
             catch
             {
                 // フォントパースの例外は無視する（無効なフォント名として扱う）
-            }
-
-            // システムフォントとして見つからなかった場合、バンドルフォントとして再試行する
-            if (!added && !name.StartsWith("fonts:", StringComparison.Ordinal))
-            {
-                try
-                {
-                    // "fonts:Komorebi#" プレフィックスを付けてアプリ内蔵フォントとして解決を試みる
-                    var bundledName = $"fonts:Komorebi#{name}";
-                    var fontFamily = FontFamily.Parse(bundledName);
-                    if (fontFamily.FamilyTypefaces.Count > 0)
-                        trimmed.Add(bundledName);
-                }
-                catch
-                {
-                    // バンドルフォントとしても見つからない場合は除外する
-                }
             }
         }
 

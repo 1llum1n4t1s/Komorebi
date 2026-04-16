@@ -911,8 +911,8 @@ public class Preferences : ObservableObject
     private string _locale = "en_US";                                // UIロケール
     private string _theme = "Default";                               // カラーテーマ
     private string _themeOverrides = string.Empty;                   // テーマオーバーライド
-    private string _defaultFontFamily = s_detectedLocale == "ja_JP" ? "Yu Gothic UI" : "Inter";       // デフォルトフォント
-    private string _monospaceFontFamily = s_detectedLocale == "ja_JP" ? "UDEV Gothic JPDOC" : "JetBrains Mono"; // 等幅フォント
+    private string _defaultFontFamily = Models.InstalledFont.GetLocaleDefaults(s_detectedLocale).Default;   // デフォルトフォント（ロケール依存）
+    private string _monospaceFontFamily = Models.InstalledFont.GetLocaleDefaults(s_detectedLocale).Monospace; // 等幅フォント（ロケール依存）
     private double _defaultFontSize = 13;                            // デフォルトフォントサイズ
     private double _editorFontSize = 13;                             // エディタフォントサイズ
     private int _editorTabWidth = 4;                                 // エディタタブ幅
