@@ -14,7 +14,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input.Platform;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.Media.Fonts;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
@@ -105,14 +104,10 @@ public partial class App : Application
         {
             DefaultFamilyName = "fonts:Inter#Inter"  // アプリ全体のデフォルトフォントをInterに設定する
         });
-        builder.ConfigureFonts(manager =>
-        {
-            // アプリ内蔵の等幅フォント（JetBrains Mono等）をフォントマネージャーに登録する
-            var monospace = new EmbeddedFontCollection(
-                new Uri("fonts:Komorebi", UriKind.Absolute),
-                new Uri("avares://Komorebi/Resources/Fonts", UriKind.Absolute));
-            manager.AddFontCollection(monospace);
-        });
+        // 旧実装ではアプリ内蔵フォント（fonts:Komorebi）を EmbeddedFontCollection として
+        // 登録していたが、バンドルフォントを全廃した後はリソースが空のため何も提供できない。
+        // 残すと `fonts:Komorebi#X` を参照したコードが実行時に GlyphTypeface 生成で例外を
+        // 投げて Render ループを破壊する原因となるため、登録自体を削除する。
 
         // OS固有のウィンドウ装飾やIME設定等を適用する
         Native.OS.SetupApp(builder);

@@ -53,7 +53,12 @@ public class ChangeStatusIcon : Control
         if (Change is null || Bounds.Width <= 0)
             return;
 
-        var typeface = new Typeface("fonts:Komorebi#JetBrains Mono");
+        // 現在の等幅フォント（ユーザ設定 or OS標準）を使用する。
+        // 旧実装は "fonts:Komorebi#JetBrains Mono" をハードコードしていたが、
+        // Komorebi はバンドルフォントを廃止したため typeface 解決時に例外が発生し、
+        // Render ループが崩壊してフリーズする問題があった。
+        var fontFamily = this.FindResource("Fonts.Monospace") as FontFamily ?? FontFamily.Default;
+        var typeface = new Typeface(fontFamily);
 
         var idx = (int)(IsUnstagedChange ? Change.WorkTree : Change.Index);
         var indicator = INDICATOR[idx];
