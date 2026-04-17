@@ -1,10 +1,6 @@
-﻿using System;
-using System.IO;
-
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
 
 namespace Komorebi.Views;
 
@@ -137,60 +133,6 @@ public partial class WelcomeToolbar : UserControl
             menu.Items.Add(quit);
 
             menu.Open(btn);
-        }
-
-        e.Handled = true;
-    }
-
-    /// <summary>
-    /// OpenLocalRepositoryの処理を行う。
-    /// </summary>
-    private async void OpenLocalRepository(object _1, RoutedEventArgs e)
-    {
-        var activePage = App.GetLauncher().ActivePage;
-        if (activePage is null || !activePage.CanCreatePopup())
-            return;
-
-        var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel is null)
-            return;
-
-        var preference = ViewModels.Preferences.Instance;
-        var workspace = preference.GetActiveWorkspace();
-        var initDir = workspace.DefaultCloneDir;
-        if (string.IsNullOrEmpty(initDir) || !Directory.Exists(initDir))
-            initDir = preference.GitDefaultCloneDir;
-
-        var options = new FolderPickerOpenOptions() { AllowMultiple = false };
-        if (Directory.Exists(initDir))
-        {
-            var folder = await topLevel.StorageProvider.TryGetFolderFromPathAsync(initDir);
-            options.SuggestedStartLocation = folder;
-        }
-
-        try
-        {
-            var selected = await topLevel.StorageProvider.OpenFolderPickerAsync(options);
-            if (selected.Count == 1)
-            {
-                var folder = selected[0];
-                var folderPath = folder is { Path: { IsAbsoluteUri: true } path } ? path.LocalPath : folder?.Path.ToString();
-                var repoPath = await ViewModels.Welcome.Instance.GetRepositoryRootAsync(folderPath);
-                if (!string.IsNullOrEmpty(repoPath))
-                {
-                    await ViewModels.Welcome.Instance.AddRepositoryAsync(repoPath, null, false, true);
-                    ViewModels.Welcome.Instance.Refresh();
-                }
-                else if (Directory.Exists(folderPath))
-                {
-                    var test = await new Commands.QueryRepositoryRootPath(folderPath).GetResultAsync();
-                    ViewModels.Welcome.Instance.InitRepository(folderPath, null, test.StdErr);
-                }
-            }
-        }
-        catch (Exception exception)
-        {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToOpenRepository", exception.Message));
         }
 
         e.Handled = true;

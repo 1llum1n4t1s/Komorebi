@@ -134,6 +134,8 @@
   <x:String x:Key="Text.Clone" xml:space="preserve">Cloner repository distant</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Paramètres supplémentaires :</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Arguments additionnels au clônage. Optionnel.</x:String>
+  <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Signet :</x:String>
+  <x:String x:Key="Text.Clone.Group" xml:space="preserve">Groupe :</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Nom local :</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Nom de dépôt. Optionnel.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Dossier parent :</x:String>
@@ -509,6 +511,7 @@
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">Aller à la page suivante</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">Aller à la page précédente</x:String>
   <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">Créer une nouvelle page</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">Ouvrir un dépôt local</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">Ouvrir le dialogue des préférences</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">Afficher le menu déroulant de l'espace de travail</x:String>
   <x:String x:Key="Text.Hotkeys.Global.SwitchTab" xml:space="preserve">Changer d'onglet actif</x:String>
@@ -605,6 +608,10 @@
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">Ouvrir le dossier AppData</x:String>
   <x:String x:Key="Text.OpenFile" xml:space="preserve">Ouvrir le fichier</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Ouvrir dans l'outil de fusion</x:String>
+  <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Ouvrir un dépôt local</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Signet :</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">Groupe :</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Dossier :</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Optionnel.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Créer un nouvel onglet</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Fermer l'onglet</x:String>

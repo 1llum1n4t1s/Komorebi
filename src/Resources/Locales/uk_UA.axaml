@@ -134,6 +134,8 @@
   <x:String x:Key="Text.Clone" xml:space="preserve">Клонувати віддалене сховище</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Додаткові параметри:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Додаткові аргументи для клонування сховища. Необов'язково.</x:String>
+  <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Закладка:</x:String>
+  <x:String x:Key="Text.Clone.Group" xml:space="preserve">Група:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Локальна назва:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Назва сховища. Необов'язково.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Батьківська тека:</x:String>
@@ -509,6 +511,7 @@
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">Перейти до наступної вкладки</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">Перейти до попередньої вкладки</x:String>
   <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">Створити нову вкладку</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">Відкрити локальне сховище</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">Відкрити діалог Налаштування</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">Показати меню робочих просторів</x:String>
   <x:String x:Key="Text.Hotkeys.Global.SwitchTab" xml:space="preserve">Переключити активну вкладку</x:String>
@@ -605,6 +608,10 @@
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">Відкрити теку зберігання даних</x:String>
   <x:String x:Key="Text.OpenFile" xml:space="preserve">Відкрити файл</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Відкрити в інструменті злиття</x:String>
+  <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Відкрити локальне сховище</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Закладка:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">Група:</x:String>
+  <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Тека:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Необов'язково.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Створити нову вкладку</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Закрити вкладку</x:String>
