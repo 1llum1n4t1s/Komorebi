@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Сравнить с ГОЛОВОЙ</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Настройка репозитория</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">ШАБЛОН РЕВИЗИИ</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Количество изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Пути изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Имя текущей локальной ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Количество изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Пути изменённых файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Пути изменённых файлов, не более N&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} То же, что и ${files}, но только имена файлов&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} То же, что и ${files:N}, но только имена файлов</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Cодержание:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Название:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ПОЛЬЗОВАТЕЛЬСКОЕ ДЕЙСТВИЕ</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Аргументы:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Путь репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Хеш выбранной ревизии&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Выбранная метка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Встроенные параметры: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Путь репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Выбранная удаённая ветка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Выбранная ветка, без ${REMOTE} удалённых веток&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Понятное имя выбранной ветки, содержащую ${REMOTE} удалённые ветки&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Хеш выбранной ревизии&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Выбранная метка&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Выбранный файл, относительно корня репозитория&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Ввод управляющих значений</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Исполняемый файл:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Элементы управления вводом:</x:String>
@@ -444,7 +444,6 @@
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">ПРОЦЕСС - Закончить исправление</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">ПРОЦЕСС - Завершить выпуск</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Цель:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithPush" xml:space="preserve">Выложить на удалённый(ые) после завершения</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Втиснуть при слиянии</x:String>
   <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Исправление:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Префикс исправлений:</x:String>
@@ -1045,7 +1044,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Не удалось сохранить файл: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Не удалось сохранить изменения в патч: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Не удалось просканировать репозитории: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Не удалось запустить наблюдатель для репозитория '{0}'. Возможно, потребуется нажать 'F5' для обновления вручную!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Не удалось запустить '{0}'. Причина: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Не удалось открыть: {0}</x:String>

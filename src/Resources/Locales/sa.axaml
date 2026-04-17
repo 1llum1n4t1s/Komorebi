@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD इत्यनेन सह तुलयतु</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">भण्डारविन्यासः</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">प्रतिबद्धसन्देशप्रारूपम्</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${branch_name} वर्तमानस्थानीयशाखानाम।&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files_num} परिवर्तितसञ्चिकासंख्या&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files} परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${branch_name} वर्तमानस्थानीयशाखानाम।&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files_num} परिवर्तितसञ्चिकासंख्या&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files} परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files:N} अधिकतमाः N परिवर्तितसञ्चिकामार्गाः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${pure_files} ${files} सदृशं, किन्तु केवलं सञ्चिकानामानि&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 ${pure_files:N} ${files:N} सदृशं, किन्तु पत्रिकाभिः विना</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">प्रारूपविषयः:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">प्रारूपनाम:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">परिमितयः:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${REPO} भण्डारमार्गः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${SHA} चयनितप्रतिबद्धस्य हैश्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${TAG} चयनितं चिह्नम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">अन्तर्निर्मितपरिमितयः:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REPO} भण्डारमार्गः&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REMOTE} चयनितं दूरस्थं वा चयनितशाखायाः दूरस्थम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH} चयनिता शाखा, दूरस्थशाखानां कृते ${REMOTE} भागं विना&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH_FRIENDLY_NAME} चयनितशाखायाः सुबोधनाम, दूरस्थशाखानां कृते ${REMOTE} भागसहितम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${SHA} चयनितप्रतिबद्धस्य हैश्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${TAG} चयनितं चिह्नम्&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${FILE} चयनिता सञ्चिका, भण्डारमूलसापेक्षा&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 $1, $2 ... निवेशनियन्त्रणमूल्यानि</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">निष्पादनीयसञ्चिका:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">निवेशनियन्त्रणानि:</x:String>
@@ -441,7 +441,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - तात्कालिकसंशोधनं समापयतु</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - प्रकाशनं समापयतु</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">लक्ष्यम्:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithPush" xml:space="preserve">समाप्त्यनन्तरं दूरस्थेषु प्रेषयतु</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">विलयने संपीडयतु</x:String>
   <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">तात्कालिकसंशोधनम्:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">तात्कालिकसंशोधनपूर्वप्रत्ययः:</x:String>
@@ -1042,7 +1041,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">सञ्चिकां रक्षितुं न शक्तम्: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Patch परिवर्तनं रक्षितुं न शक्तम्: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">भण्डाराणि अन्वेषितुं न शक्तम्: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">भण्डारस्य '{0}' प्रेक्षकं प्रारभितुं न शक्तम्। 'F5' पीडयित्वा हस्तेन नवीकरणं कर्तव्यम्!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">भण्डारस्य '{0}' प्रेक्षकं प्रारभितुं न शक्तम्। 'F5' पीडयित्वा हस्तेन नवीकरणं कर्तव्यम्!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 कारणम्: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' प्रारभितुं न शक्तम्। कारणम्: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">उद्घाटयितुं न शक्तम्: {0}</x:String>
