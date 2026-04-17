@@ -810,10 +810,19 @@ public partial class App : Application
                 // する問題があった。ShutdownRequested をキャンセルして、自前の Quit(0) を
                 // UI スレッドへ post することで Komorebi の通常終了フロー（AvatarManager 停止、
                 // Logger フラッシュ等）を経由してから Shutdown するように差し替える。
+                //
+                // 備考: Avalonia の desktop.Shutdown() は programmatic 呼び出しのため
+                // ShutdownRequested は再発火しない（内部 DoShutdown の isProgrammatic=true 経路）が、
+                // 将来の Avalonia 改修やテストシナリオで再入が発生した場合に備えて
+                // `_macOsShutdownHandled` で one-shot ガードする（2 回目以降はキャンセルしない）。
                 if (OperatingSystem.IsMacOS())
                 {
                     desktop.ShutdownRequested += (_, e) =>
                     {
+                        if (_macOsShutdownHandled)
+                            return;
+
+                        _macOsShutdownHandled = true;
                         e.Cancel = true;
                         Dispatcher.UIThread.Post(() => Quit(0));
                     };
@@ -1495,4 +1504,6 @@ public partial class App : Application
     private ResourceDictionary _themeOverrides = null;
     /// <summary>ユーザー指定のフォントオーバーライド（デフォルト・等幅フォント設定）</summary>
     private ResourceDictionary _fontsOverrides = null;
+    /// <summary>macOS の ShutdownRequested を 1 回だけ処理済みかを示すフラグ（再入時の暴走防止）</summary>
+    private bool _macOsShutdownHandled = false;
 }
