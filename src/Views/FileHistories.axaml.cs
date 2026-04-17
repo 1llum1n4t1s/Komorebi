@@ -21,12 +21,17 @@ public partial class FileHistories : ChromelessWindow
     public FileHistories()
     {
         InitializeComponent();
-        PositionChanged += OnPositionChanged;
 
         // サイズは constructor 段階で設定して構わない（Screens を参照しないため）。upstream issue #2100 対応
         // 位置の復元は OnOpened で実施する（Avalonia 11 では Screens が constructor 時点で null）。
         // 初期位置は App.ShowWindow が Show() 前に「アクティブスクリーン中央」をセットしてくれるため、
         // 保存座標が無効／スクリーン外の場合はそれがそのままフォールバックになる。
+        //
+        // 注意: PositionChanged の購読は OnOpened の位置復元完了後に行う。
+        // constructor で購読してしまうと、App.ShowWindow が Show() 前に行う
+        // centering が PositionChanged を発火し、OnPositionChanged が centered 座標を
+        // LayoutInfo に保存してしまう（＝本来復元したかった前回の位置が上書きされる）バグがある
+        // （gemini PR #17 レビュー対応）。
         var layout = ViewModels.Preferences.Instance.Layout;
         Width = layout.FileHistoriesWidth;
         Height = layout.FileHistoriesHeight;
@@ -57,6 +62,12 @@ public partial class FileHistories : ChromelessWindow
         var state = layout.FileHistoriesWindowState;
         if (state == WindowState.Maximized || state == WindowState.FullScreen)
             WindowState = WindowState.Maximized;
+
+        // 位置の初期復元が完了した後に PositionChanged を購読する。
+        // これにより App.ShowWindow の centering / TryRestoreWindowPosition が発火する PositionChanged
+        // を拾わず、以降のユーザー操作による移動だけが LayoutInfo に保存されるようになる
+        // （gemini PR #17 レビュー対応）。
+        PositionChanged += OnPositionChanged;
     }
 
     /// <inheritdoc/>

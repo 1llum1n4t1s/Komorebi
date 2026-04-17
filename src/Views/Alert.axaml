@@ -11,7 +11,8 @@
                     CanResize="True"
                     MinWidth="320" MinHeight="160"
                     WindowStartupLocation="CenterOwner">
-  <Grid RowDefinitions="Auto,Auto,Auto">
+  <!-- リサイズ可能化に伴い、メッセージ行だけ "*" にしてユーザーが縦に伸ばせば広がるようにする -->
+  <Grid RowDefinitions="Auto,*,Auto">
     <!-- タイトルバー（Windows/Linux 用カスタムフレーム、macOS ではシステムフレーム使用） -->
     <Grid Grid.Row="0" Height="28" IsVisible="{Binding !#ThisControl.UseSystemWindowFrame}">
       <Border Background="{DynamicResource Brush.TitleBar}"
@@ -34,8 +35,10 @@
                         IsVisible="{OnPlatform True, macOS=False}"/>
     </Grid>
 
-    <!-- メッセージ本文（長いメッセージは縦スクロール）。MaxWidth により SizeToContent で画面外まで伸びないように制限する -->
-    <Border Grid.Row="1" Margin="16" MaxHeight="480">
+    <!-- メッセージ本文。MaxWidth="520" は初期 SizeToContent で画面外まで伸びないようにする制限。
+         リサイズ時はウィンドウ縦方向拡大で Border が広がり、TextBlock の wrap と ScrollViewer が追従する。
+         Border 側の高さ制限は外す（ユーザーが拡大したら全て表示したいため、gemini PR #17 レビュー対応）。 -->
+    <Border Grid.Row="1" Margin="16">
       <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
         <TextBlock x:Name="Message" MaxWidth="520" MinWidth="240" TextWrapping="Wrap"/>
       </ScrollViewer>
