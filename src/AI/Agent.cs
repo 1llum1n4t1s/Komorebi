@@ -89,7 +89,7 @@ public class Agent
 
                         foreach (var call in completion.ToolCalls)
                         {
-                            var result = await ChatTools.Process(call, onUpdate);
+                            var result = await ChatTools.ProcessAsync(call, onUpdate);
                             messages.Add(result);
                         }
 
