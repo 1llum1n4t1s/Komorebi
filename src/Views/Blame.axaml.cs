@@ -551,6 +551,11 @@ public partial class Blame : ChromelessWindow
         // 「アクティブスクリーン中央に配置」処理を抑止する（上書き競合回避）。
         SuppressShowWindowCentering = true;
 
+        // 復元失敗時のフォールバックとしてオーナー中央を Show() 前に指定する。
+        // OnOpened の段階で WindowStartupLocation を変えてももはや位置に影響しないため、
+        // constructor でセットする（gemini PR #17 レビュー対応）。
+        WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
         // サイズは constructor 段階で設定して構わない（Screens を参照しないため）。upstream issue #2100 対応
         var layout = ViewModels.Preferences.Instance.Layout;
         Width = layout.BlameWidth;
@@ -561,6 +566,7 @@ public partial class Blame : ChromelessWindow
     /// <remarks>
     /// Avalonia 11 では <see cref="WindowBase.Screens"/> が constructor 時点で null の場合があるため、
     /// ウィンドウ位置の復元は OnOpened で実施する（coderabbit PR #17 レビュー対応）。
+    /// 復元失敗時のフォールバック（CenterOwner）は constructor 側で事前指定済み。
     /// </remarks>
     protected override void OnOpened(EventArgs e)
     {
@@ -573,15 +579,13 @@ public partial class Blame : ChromelessWindow
         if (state == WindowState.Maximized || state == WindowState.FullScreen)
             WindowState = WindowState.Maximized;
 
-        // 前回のウィンドウ位置がスクリーン内に収まる場合のみ復元する（複数モニタ対応）
-        if (!TryRestoreWindowPosition(
-                layout.BlamePositionX,
-                layout.BlamePositionY,
-                layout.BlameWidth,
-                layout.BlameHeight))
-        {
-            WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        }
+        // 前回のウィンドウ位置がスクリーン内に収まる場合のみ復元する（複数モニタ対応）。
+        // 失敗時は constructor で指定した CenterOwner が適用された状態のまま。
+        TryRestoreWindowPosition(
+            layout.BlamePositionX,
+            layout.BlamePositionY,
+            layout.BlameWidth,
+            layout.BlameHeight);
     }
 
     /// <inheritdoc/>

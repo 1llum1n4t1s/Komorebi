@@ -34,10 +34,10 @@
                         IsVisible="{OnPlatform True, macOS=False}"/>
     </Grid>
 
-    <!-- メッセージ本文（長いメッセージは縦スクロール、ウィンドウ拡大で横に広がって wrap し直し） -->
+    <!-- メッセージ本文（長いメッセージは縦スクロール）。MaxWidth により SizeToContent で画面外まで伸びないように制限する -->
     <Border Grid.Row="1" Margin="16" MaxHeight="480">
       <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <TextBlock x:Name="Message" MinWidth="240" TextWrapping="Wrap"/>
+        <TextBlock x:Name="Message" MaxWidth="520" MinWidth="240" TextWrapping="Wrap"/>
       </ScrollViewer>
     </Border>
 
