@@ -400,9 +400,12 @@ public partial class Launcher : ChromelessWindow
     {
         base.OnClosed(e);
 
-        if (!Design.IsDesignMode)
-            ViewModels.Preferences.Instance.Save();
+        // Design モード（Hot Reload / Previewer 等）で OnClosed が発火した場合、
+        // Preferences 保存 & App.Quit によるプロセス終了を避け、デザイナーセッションを道連れにしない。
+        if (Design.IsDesignMode)
+            return;
 
+        ViewModels.Preferences.Instance.Save();
         App.Quit(0);
     }
 
