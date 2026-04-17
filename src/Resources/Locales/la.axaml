@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Compara cum HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Configura Repositorium</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">EXEMPLAR COMMITTENDI</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Nomen rami localis praesentis.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Numerus documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Semitae documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Maxime N semitae documentorum mutatorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Ut ${files}, sed solum nomina documentorum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parametri intrinseci:
+
+  ${branch_name} Nomen rami localis praesentis.
+  ${files_num} Numerus documentorum mutatorum
+  ${files} Semitae documentorum mutatorum
+  ${files:N} Maxime N semitae documentorum mutatorum
+  ${pure_files} Ut ${files}, sed solum nomina documentorum
   ${pure_files:N} Ut ${files:N}, sed sine fasciculis</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Contentum Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nomen Exemplaris:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">ACTIO PROPRIA</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumenta:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Semita repositorii&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Remotum selectum vel remotum rami selecti&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash committi selecti&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Signum selectum&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Documentum selectum, relativum ad radicem repositorii&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parametri intrinseci:
+
+  ${REPO} Semita repositorii
+  ${REMOTE} Remotum selectum vel remotum rami selecti
+  ${BRANCH} Ramus selectus, sine ${REMOTE} parte pro ramis remotis
+  ${BRANCH_FRIENDLY_NAME} Nomen amicum rami selecti, continet ${REMOTE} partem pro ramis remotis
+  ${SHA} Hash committi selecti
+  ${TAG} Signum selectum
+  ${FILE} Documentum selectum, relativum ad radicem repositorii
   $1, $2 ... Valores moderaminum inscriptionis</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Documentum Exsecutabile:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Moderamina Inscriptionis:</x:String>
@@ -1041,7 +1041,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Fasciculum servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Mutationem ad patch servare non potuit: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Repositoria explorare non potuit: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Custodem pro repositorio '{0}' incipere non potuit. Fortasse necesse est 'F5' premere ad repositorium manu renovare!
 Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' incipere non potuit. Causa: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Aperire non potuit: {0}</x:String>

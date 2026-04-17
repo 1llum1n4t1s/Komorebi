@@ -719,6 +719,14 @@ public partial class App : Application
     /// <param name="exitCode">プロセスの終了コード</param>
     public static void Quit(int exitCode)
     {
+        // 再入ガード:
+        //   desktop.Shutdown() → MainWindow 自動 Close → OnClosed → 再度 App.Quit(0) の経路が
+        //   macOS Dock Quit 等で発生し得る。Komorebi は upstream と異なり AvatarManager.Stop 等
+        //   の副作用を持つため、複数回実行されないよう 1 回限りの実行に制限する。
+        if (s_isQuitting)
+            return;
+        s_isQuitting = true;
+
         // バックグラウンドのアバターダウンロードを停止して、IOException を防止
         Models.AvatarManager.Instance.Stop();
 
@@ -1506,4 +1514,7 @@ public partial class App : Application
     private ResourceDictionary _fontsOverrides = null;
     /// <summary>macOS の ShutdownRequested を 1 回だけ処理済みかを示すフラグ（再入時の暴走防止）</summary>
     private bool _macOsShutdownHandled = false;
+
+    /// <summary>App.Quit が既に実行開始されたかを示す静的フラグ（複数経路からの再入時の副作用防止）</summary>
+    private static bool s_isQuitting = false;
 }

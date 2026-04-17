@@ -10,5 +10,9 @@ control    text eol=lf
 *.ps1      text eol=crlf
 *.json     text
 
+# .axaml は xml2js の round-trip で Windows の CRLF が &#xD; エンティティとして
+# 累積する問題（localization-check.js 実行時に増殖）を防ぐため LF で固定する。
+*.axaml    text eol=lf
+
 .gitattributes export-ignore
 .gitignore     export-ignore
