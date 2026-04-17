@@ -41,15 +41,21 @@ public class CheckoutBranchFromStash : Popup
 
     /// <summary>
     /// ブランチ名の検証。既存ブランチと衝突しないことを確認する。
-    /// Windows/macOS のケースインセンシティブな FS を想定し、大小文字無視で比較する。
+    /// git refs の衝突判定は下敷きの FS に依存する:
+    ///   - Linux: refs/heads/Foo と refs/heads/foo は別ファイルとして共存可能 → Ordinal で比較
+    ///   - Windows/macOS: ケースインセンシティブ FS のため FS 層で衝突 → OrdinalIgnoreCase で弾く
     /// </summary>
     public static ValidationResult ValidateBranchName(string name, ValidationContext ctx)
     {
         if (ctx.ObjectInstance is CheckoutBranchFromStash caller)
         {
+            var comparison = OperatingSystem.IsLinux()
+                ? StringComparison.Ordinal
+                : StringComparison.OrdinalIgnoreCase;
+
             foreach (var b in caller._repo.Branches)
             {
-                if (b.FriendlyName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                if (b.FriendlyName.Equals(name, comparison))
                     return new ValidationResult("A branch with same name already exists!");
             }
 

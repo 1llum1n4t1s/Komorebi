@@ -108,7 +108,9 @@ public class Discard : Popup
 
     /// <summary>
     /// 変更破棄を実行する確認アクション。
-    /// 全変更破棄の場合はコミットメッセージもクリアする。
+    /// 追跡変更（staged 含む）を実際に破棄した場合のみ、下書きコミットメッセージもクリアする。
+    /// IncludeModified=false（未追跡/無視ファイルのみ破棄）時は、ユーザーがコミット準備中の
+    /// staged 変更が残るため、下書きメッセージも温存する（データ消失を防ぐ）。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -126,7 +128,11 @@ public class Discard : Popup
             {
                 // 全変更破棄：変更/削除済み・追跡外・無視ファイルのオプション付き
                 await Commands.Discard.AllAsync(_repo.FullPath, all.IncludeModified, all.IncludeUntracked, all.IncludeIgnored, log);
-                _repo.ClearCommitMessage();
+
+                // tracked 変更を破棄した場合のみ下書きメッセージをクリアする。
+                // untracked/ignored のみの破棄では staged 変更が残るため、下書きを保持する。
+                if (all.IncludeModified)
+                    _repo.ClearCommitMessage();
             }
             else
             {
