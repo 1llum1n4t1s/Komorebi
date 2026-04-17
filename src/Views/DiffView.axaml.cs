@@ -63,4 +63,17 @@ public partial class DiffView : UserControl
         this.FindDescendantOfType<ThemedTextDiffPresenter>()?.GotoChange(ViewModels.BlockNavigationDirection.Last);
         e.Handled = true;
     }
+
+    /// <summary>
+    /// サブモジュールのリビジョン比較ダイアログを親ウィンドウと同じスクリーンに表示する。
+    /// App.ShowWindow はオーナーの位置を継承してウィンドウを配置するため、明示的な owner 指定は不要。
+    /// </summary>
+    private void OnOpenSubmoduleRevisionCompare(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: Models.SubmoduleDiff diff } && diff.CanOpenDetails)
+        {
+            var vm = new ViewModels.SubmoduleRevisionCompare(diff);
+            App.ShowWindow(vm);
+        }
+    }
 }

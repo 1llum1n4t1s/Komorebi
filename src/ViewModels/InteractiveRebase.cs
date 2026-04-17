@@ -18,6 +18,12 @@ namespace Komorebi.ViewModels;
 public record InteractiveRebasePrefill(string SHA, Models.InteractiveRebaseAction Action);
 
 /// <summary>
+/// fixup!/squash! コミットの並び替えキューに積むレコード。
+/// 同じキー（親コミット Subject）を持つ複数エントリを許容するため、Dictionary ではなく List で管理する。
+/// </summary>
+public record InteractiveRebaseReorderItem(string Key, InteractiveRebaseItem Item);
+
+/// <summary>
 /// 対話的リベースの各コミット項目ViewModel。
 /// アクション（pick/reword/edit/squash/fixup/drop）とメッセージ編集状態を管理する。
 /// </summary>
@@ -210,11 +216,62 @@ public class InteractiveRebase : ObservableObject
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
+            // fixup!/squash! コミットを対応する親コミットの直後に移動する（upstream e6ba0534 + 0d5185b1 + 1ca4145e）
+            // 同じ親 Subject を持つ複数 fixup/squash に対応するため List<Record> で保持する（Dictionary では無限ループが発生）
             List<InteractiveRebaseItem> list = [];
+            List<InteractiveRebaseReorderItem> needReorder = [];
             for (var i = 0; i < commits.Count; i++)
             {
                 var c = commits[i];
-                list.Add(new InteractiveRebaseItem(commits.Count - i, c.Commit, c.Message));
+                var item = new InteractiveRebaseItem(commits.Count - i, c.Commit, c.Message);
+                var subject = c.Commit.Subject;
+
+                if (item.OriginalOrder > 1)
+                {
+                    if (subject.StartsWith("fixup! ", StringComparison.Ordinal))
+                    {
+                        item.Action = Models.InteractiveRebaseAction.Fixup;
+                        needReorder.Add(new(subject.Substring(7), item));
+                        continue;
+                    }
+
+                    if (subject.StartsWith("squash! ", StringComparison.Ordinal))
+                    {
+                        item.Action = Models.InteractiveRebaseAction.Squash;
+                        needReorder.Add(new(subject.Substring(8), item));
+                        continue;
+                    }
+                }
+
+                // 対象となる親コミットが見つかった fixup!/squash! を直後に挿入する
+                List<InteractiveRebaseReorderItem> reordered = [];
+                foreach (var o in needReorder)
+                {
+                    if (subject.StartsWith(o.Key, StringComparison.Ordinal))
+                    {
+                        list.Add(o.Item);
+                        reordered.Add(o);
+                    }
+                }
+
+                foreach (var k in reordered)
+                    needReorder.Remove(k);
+
+                list.Add(item);
+            }
+
+            // 親が見つからなかった fixup!/squash! は元の順序位置に戻し、安全のため Pick にリセットする
+            foreach (var v in needReorder)
+            {
+                for (var i = 0; i < list.Count; i++)
+                {
+                    if (v.Item.OriginalOrder > list[i].OriginalOrder)
+                    {
+                        v.Item.Action = Models.InteractiveRebaseAction.Pick;
+                        list.Insert(i, v.Item);
+                        break;
+                    }
+                }
             }
 
             var selected = list.Count > 0 ? list[0] : null;
@@ -420,7 +477,19 @@ public class InteractiveRebase : ObservableObject
                 item.IsMessageUserEdited = false;
 
                 if (item.Action == Models.InteractiveRebaseAction.Squash)
-                    pendingMessages.Add(item.OriginalFullMessage);
+                {
+                    // squash! プレフィックス付きのコミットは本文（2行目以降）だけを pending に積む（upstream 0d5185b1）
+                    if (item.OriginalFullMessage.StartsWith("squash! ", StringComparison.Ordinal))
+                    {
+                        var firstLineEnd = item.OriginalFullMessage.IndexOf('\n');
+                        if (firstLineEnd > 0)
+                            pendingMessages.Add(item.OriginalFullMessage.Substring(firstLineEnd + 1));
+                    }
+                    else
+                    {
+                        pendingMessages.Add(item.OriginalFullMessage);
+                    }
+                }
 
                 hasPending = true;
                 continue;

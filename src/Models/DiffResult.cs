@@ -155,26 +155,27 @@ public partial class TextDiff
     }
 
     /// <summary>
-    /// 新規ファイルの選択範囲からパッチを生成する
+    /// 新規ファイルの選択範囲からパッチを生成する。
+    /// リネーム/コピーされたファイルでも apply が壊れないよう、`--- a/` 側も常に変更後のパスを使う（upstream 5a35c415）。
     /// </summary>
-    /// <param name="change">変更情報</param>
+    /// <param name="file">対象ファイルのパス（変更後のパス）</param>
     /// <param name="fileBlobGuid">ファイルのBlobハッシュ</param>
     /// <param name="selection">選択範囲</param>
     /// <param name="revert">取り消しパッチかどうか</param>
     /// <param name="output">出力ファイルパス</param>
-    public void GenerateNewPatchFromSelection(Change change, string fileBlobGuid, TextDiffSelection selection, bool revert, string output)
+    public void GenerateNewPatchFromSelection(string file, string fileBlobGuid, TextDiffSelection selection, bool revert, string output)
     {
         var isTracked = !string.IsNullOrEmpty(fileBlobGuid);
         var fileGuid = isTracked ? fileBlobGuid : "00000000";
 
         using var writer = new StreamWriter(output);
         writer.NewLine = "\n";
-        writer.WriteLine($"diff --git a/{change.Path} b/{change.Path}");
+        writer.WriteLine($"diff --git a/{file} b/{file}");
         if (!revert && !isTracked)
             writer.WriteLine("new file mode 100644");
         writer.WriteLine($"index 00000000...{fileGuid}");
-        writer.WriteLine($"--- {(revert || isTracked ? $"a/{change.Path}" : "/dev/null")}");
-        writer.WriteLine($"+++ b/{change.Path}");
+        writer.WriteLine($"--- {(revert || isTracked ? $"a/{file}" : "/dev/null")}");
+        writer.WriteLine($"+++ b/{file}");
 
         var additions = selection.EndLine - selection.StartLine;
         if (selection.StartLine != 1)
@@ -212,23 +213,22 @@ public partial class TextDiff
     }
 
     /// <summary>
-    /// 既存ファイルの選択範囲からパッチを生成する（統合diff表示用）
+    /// 既存ファイルの選択範囲からパッチを生成する（統合diff表示用）。
+    /// リネーム/コピーされたファイルでも apply が壊れないよう、`--- a/` 側も常に変更後のパスを使う（upstream 5a35c415）。
     /// </summary>
-    /// <param name="change">変更情報</param>
+    /// <param name="file">対象ファイルのパス（変更後のパス）</param>
     /// <param name="fileTreeGuid">ファイルのツリーハッシュ</param>
     /// <param name="selection">選択範囲</param>
     /// <param name="revert">取り消しパッチかどうか</param>
     /// <param name="output">出力ファイルパス</param>
-    public void GeneratePatchFromSelection(Change change, string fileTreeGuid, TextDiffSelection selection, bool revert, string output)
+    public void GeneratePatchFromSelection(string file, string fileTreeGuid, TextDiffSelection selection, bool revert, string output)
     {
-        var orgFile = !string.IsNullOrEmpty(change.OriginalPath) ? change.OriginalPath : change.Path;
-
         using var writer = new StreamWriter(output);
         writer.NewLine = "\n";
-        writer.WriteLine($"diff --git a/{change.Path} b/{change.Path}");
+        writer.WriteLine($"diff --git a/{file} b/{file}");
         writer.WriteLine($"index 00000000...{fileTreeGuid} 100644");
-        writer.WriteLine($"--- a/{orgFile}");
-        writer.WriteLine($"+++ b/{change.Path}");
+        writer.WriteLine($"--- a/{file}");
+        writer.WriteLine($"+++ b/{file}");
 
         // If last line of selection is a change. Find one more line.
         string tail = null;
@@ -335,24 +335,23 @@ public partial class TextDiff
     }
 
     /// <summary>
-    /// 既存ファイルの選択範囲からパッチを生成する（左右分割diff表示用）
+    /// 既存ファイルの選択範囲からパッチを生成する（左右分割diff表示用）。
+    /// リネーム/コピーされたファイルでも apply が壊れないよう、`--- a/` 側も常に変更後のパスを使う（upstream 5a35c415）。
     /// </summary>
-    /// <param name="change">変更情報</param>
+    /// <param name="file">対象ファイルのパス（変更後のパス）</param>
     /// <param name="fileTreeGuid">ファイルのツリーハッシュ</param>
     /// <param name="selection">選択範囲</param>
     /// <param name="revert">取り消しパッチかどうか</param>
     /// <param name="isOldSide">変更前（左側）からの選択かどうか</param>
     /// <param name="output">出力ファイルパス</param>
-    public void GeneratePatchFromSelectionSingleSide(Change change, string fileTreeGuid, TextDiffSelection selection, bool revert, bool isOldSide, string output)
+    public void GeneratePatchFromSelectionSingleSide(string file, string fileTreeGuid, TextDiffSelection selection, bool revert, bool isOldSide, string output)
     {
-        var orgFile = !string.IsNullOrEmpty(change.OriginalPath) ? change.OriginalPath : change.Path;
-
         using var writer = new StreamWriter(output);
         writer.NewLine = "\n";
-        writer.WriteLine($"diff --git a/{change.Path} b/{change.Path}");
+        writer.WriteLine($"diff --git a/{file} b/{file}");
         writer.WriteLine($"index 00000000...{fileTreeGuid} 100644");
-        writer.WriteLine($"--- a/{orgFile}");
-        writer.WriteLine($"+++ b/{change.Path}");
+        writer.WriteLine($"--- a/{file}");
+        writer.WriteLine($"+++ b/{file}");
 
         // If last line of selection is a change. Find one more line.
         string tail = null;
@@ -724,10 +723,20 @@ public class NoOrEOLChange;
 /// </summary>
 public class SubmoduleDiff
 {
+    /// <summary>サブモジュールの作業ディレクトリの絶対パス</summary>
+    public string FullPath { get; set; } = string.Empty;
     /// <summary>変更前のサブモジュール情報</summary>
     public RevisionSubmodule Old { get; set; } = null;
     /// <summary>変更後のサブモジュール情報</summary>
     public RevisionSubmodule New { get; set; } = null;
+
+    /// <summary>
+    /// サブモジュール詳細ダイアログを開ける条件を満たすか。
+    /// 初期化済みで Old/New 両方があり、かつ両リビジョンが有効（lost submodule revision でない）な場合のみ true。
+    /// </summary>
+    public bool CanOpenDetails => File.Exists(Path.Combine(FullPath, ".git")) &&
+        Old != null && Old.Commit.Author != User.Invalid &&
+        New != null && New.Commit.Author != User.Invalid;
 }
 
 /// <summary>

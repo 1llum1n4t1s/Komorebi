@@ -53,15 +53,6 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    /// リモートブランチ名のリスト。
-    /// </summary>
-    public List<string> RemoteBranches
-    {
-        get;
-        private set;
-    }
-
-    /// <summary>
     /// 選択されたブランチ名。
     /// </summary>
     public string SelectedBranch
@@ -86,12 +77,21 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    /// 選択されたトラッキングブランチ名。
+    /// リモートブランチのリスト。
     /// </summary>
-    public string SelectedTrackingBranch
+    public List<Models.Branch> RemoteBranches
     {
         get;
-        set;
+        private set;
+    }
+
+    /// <summary>
+    /// 選択されたトラッキングブランチ。
+    /// </summary>
+    public Models.Branch SelectedTrackingBranch
+    {
+        get => _selectedTrackingBranch;
+        set => SetProperty(ref _selectedTrackingBranch, value);
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ public class AddWorktree : Popup
             if (branch.IsLocal)
                 LocalBranches.Add(branch.Name);
             else
-                RemoteBranches.Add(branch.FriendlyName);
+                RemoteBranches.Add(branch);
         }
     }
 
@@ -157,7 +157,7 @@ public class AddWorktree : Popup
 
         // ブランチ名とトラッキングブランチを取得する
         var branchName = _selectedBranch;
-        var tracking = _setTrackingBranch ? SelectedTrackingBranch : string.Empty;
+        var tracking = (_setTrackingBranch && _selectedTrackingBranch != null) ? _selectedTrackingBranch.FriendlyName : string.Empty;
         var log = _repo.CreateLog("Add Worktree");
 
         Use(log);
@@ -182,16 +182,11 @@ public class AddWorktree : Popup
 
         // ブランチ名またはパスのファイル名部分で一致するリモートブランチを探す
         var name = string.IsNullOrEmpty(_selectedBranch) ? System.IO.Path.GetFileName(_path.TrimEnd('/', '\\')) : _selectedBranch;
-        var remoteBranch = RemoteBranches.Find(b => b.EndsWith(name, StringComparison.Ordinal));
-        if (string.IsNullOrEmpty(remoteBranch) && RemoteBranches.Count > 0)
+        var remoteBranch = RemoteBranches.Find(b => b.Name.EndsWith(name, StringComparison.Ordinal));
+        if (remoteBranch == null)
             remoteBranch = RemoteBranches[0];
 
-        // 選択が変わった場合のみプロパティ変更通知を発行する
-        if (!remoteBranch.Equals(SelectedTrackingBranch, StringComparison.Ordinal))
-        {
-            SelectedTrackingBranch = remoteBranch;
-            OnPropertyChanged(nameof(SelectedTrackingBranch));
-        }
+        SelectedTrackingBranch = remoteBranch;
     }
 
     /// <summary>対象リポジトリへの参照</summary>
@@ -204,4 +199,6 @@ public class AddWorktree : Popup
     private string _selectedBranch = string.Empty;
     /// <summary>トラッキングブランチを設定するかどうか</summary>
     private bool _setTrackingBranch = false;
+    /// <summary>選択されたトラッキングブランチ</summary>
+    private Models.Branch _selectedTrackingBranch = null;
 }

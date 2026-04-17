@@ -71,4 +71,6 @@ public class RevisionSubmodule
     public Commit Commit { get; set; } = null;
     /// <summary>コミットの完全なメッセージ</summary>
     public CommitFullMessage FullMessage { get; set; } = null;
+    /// <summary>未コミットの変更数（"-dirty" サフィックス付き SHA の場合のみ 0 以上の値を持つ）</summary>
+    public int UncommittedChanges { get; set; } = 0;
 }
