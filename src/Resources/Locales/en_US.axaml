@@ -1078,6 +1078,7 @@ Reason: {1}</x:String>
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Adding remote ...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Adding Ignored File(s) ...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout and Fast-Forward '{0}' ...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">Checkout branch from stash...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Waiting for branch updated...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout Commit '{0}' ...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Applying stash: {0}</x:String>

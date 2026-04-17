@@ -1078,6 +1078,7 @@
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">正在新增遠端...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">正在新增忽略檔案...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout 並 Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">從貯藏檢出分支...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">等待分支更新...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout 提交 '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">正在套用 stash：{0}</x:String>
