@@ -29,18 +29,28 @@ public static class Discard
             var changes = await new QueryLocalChanges(repo).GetResultAsync().ConfigureAwait(false);
             try
             {
-                // 未追跡・新規追加・リネームされたファイルのディレクトリを削除する
                 foreach (var c in changes)
                 {
-                    if (c.WorkTree == Models.ChangeState.Untracked ||
-                        c.WorkTree == Models.ChangeState.Added ||
-                        c.Index == Models.ChangeState.Added ||
-                        c.Index == Models.ChangeState.Renamed)
+                    // 常に削除対象: 未追跡 / WorkTree 側で新規追加扱い（intent-to-add 等）
+                    var shouldDelete = c.WorkTree == Models.ChangeState.Untracked ||
+                                       c.WorkTree == Models.ChangeState.Added;
+
+                    // Index 側の staged な追加/リネームは tracked 扱い。
+                    // includeModified=true（git reset --hard も走らせる）のときだけ削除対象に含める。
+                    // そうしないと reset がスキップされた場合に staged サブモジュール追加の
+                    // ディレクトリを消しつつ index エントリが残り、working tree と index が壊れる。
+                    if (includeModified)
                     {
-                        var fullPath = Path.Combine(repo, c.Path);
-                        if (Directory.Exists(fullPath))
-                            Directory.Delete(fullPath, true);
+                        shouldDelete |= c.Index == Models.ChangeState.Added ||
+                                        c.Index == Models.ChangeState.Renamed;
                     }
+
+                    if (!shouldDelete)
+                        continue;
+
+                    var fullPath = Path.Combine(repo, c.Path);
+                    if (Directory.Exists(fullPath))
+                        Directory.Delete(fullPath, true);
                 }
             }
             catch (Exception e)
