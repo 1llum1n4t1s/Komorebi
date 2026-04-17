@@ -296,7 +296,9 @@ public class ExecuteCustomAction : Popup
     /// </summary>
     private string PrepareStringByTarget(string org)
     {
-        org = org.Replace("${REPO}", GetWorkdir());
+        // ${REPO} をリポジトリ作業ディレクトリ（OS形式）に展開する（upstream 9144daeb で GetWorkdir を inline 化）
+        var repoPath = OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
+        org = org.Replace("${REPO}", repoPath);
 
         return Target switch
         {
@@ -308,14 +310,6 @@ public class ExecuteCustomAction : Popup
             // Repository scope では ${BRANCH} を現在ブランチ名に展開する（upstream 8395efdd）
             _ => org.Replace("${BRANCH}", _repo.CurrentBranch?.Name ?? "HEAD")
         };
-    }
-
-    /// <summary>
-    /// 作業ディレクトリのパスをOS形式で取得する。
-    /// </summary>
-    private string GetWorkdir()
-    {
-        return OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
     }
 
     /// <summary>
