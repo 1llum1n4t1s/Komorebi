@@ -35,9 +35,10 @@ public partial class OpenLocalRepository : UserControl
             return;
 
         // アクティブワークスペースの既定クローンディレクトリを初期位置にする
+        // GetActiveWorkspace() が null を返しうるため防御的に null-conditional アクセスを使用（Clone.cs と同様）
         var preference = ViewModels.Preferences.Instance;
         var workspace = preference.GetActiveWorkspace();
-        var initDir = workspace.DefaultCloneDir;
+        var initDir = workspace?.DefaultCloneDir;
         if (string.IsNullOrEmpty(initDir) || !Directory.Exists(initDir))
             initDir = preference.GitDefaultCloneDir;
 
