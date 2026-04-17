@@ -115,6 +115,12 @@ public class RepositorySettings
             }
         }
 
+        // JsonSerializer.Deserialize は JSON が "null" や空の場合に例外を投げず null を返す。
+        // その場合は新規インスタンスにフォールバックしないと、後段の Task.Run クロージャーで
+        // setting._orgHash 参照が NullReferenceException を投げ、fire-and-forget なので
+        // スレッドプール上で未観測例外となり CI の IpcChannelTests が検出して失敗する。
+        setting ??= new();
+
         // Serialize setting again to make sure there are no unnecessary whitespaces.
         Task.Run(() =>
         {
