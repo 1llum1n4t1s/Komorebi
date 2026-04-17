@@ -35,8 +35,11 @@ public partial class About : ChromelessWindow
         {
             if (attr.Key.Equals("BuildDate", StringComparison.OrdinalIgnoreCase) && DateTime.TryParse(attr.Value, out var date))
             {
-                // Preferences の DateTimeFormat 設定を反映する（"MMM d yyyy" 固定ではなくユーザー選択形式）
-                TxtReleaseDate.Text = App.Text("About.ReleaseDate", Models.DateTimeFormat.Format(date, true));
+                // Preferences の DateTimeFormat 設定を反映する（"MMM d yyyy" 固定ではなくユーザー選択形式）。
+                // `Models.DateTimeFormat.Format(DateTime, bool)` は引数をローカル時刻と仮定して内部変換しないため、
+                // BuildDate が UTC としてパースされた場合に備えて呼び出し側で `ToLocalTime()` しておく。
+                // （upstream b81c67c9 は `ToLocalTime()` を誤って削除しており、それだと UTC 表示になる回帰を防止）
+                TxtReleaseDate.Text = App.Text("About.ReleaseDate", Models.DateTimeFormat.Format(date.ToLocalTime(), true));
                 break;
             }
         }

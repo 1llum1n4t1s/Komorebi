@@ -23,17 +23,12 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![es__ES](https://img.shields.io/badge/es__ES-99.22%25-yellow)
+### ![es__ES](https://img.shields.io/badge/es__ES-99.65%25-yellow)
 
 <details>
 <summary>Missing keys in es_ES.axaml</summary>
 
-- Text.CheckoutBranchFromStash
-- Text.CheckoutBranchFromStash.Branch
-- Text.CheckoutBranchFromStash.Stash
 - Text.Diff.Submodule.UncommittedChanges
-- Text.Discard.IncludeModified
-- Text.StashCM.Branch
 - Text.SubmoduleRevisionCompare
 - Text.SubmoduleRevisionCompare.OpenDetails
 - Text.Progress.CheckoutBranchFromStash
@@ -176,17 +171,12 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-99.22%25-yellow)
+### ![ru__RU](https://img.shields.io/badge/ru__RU-99.65%25-yellow)
 
 <details>
 <summary>Missing keys in ru_RU.axaml</summary>
 
-- Text.CheckoutBranchFromStash
-- Text.CheckoutBranchFromStash.Branch
-- Text.CheckoutBranchFromStash.Stash
 - Text.Diff.Submodule.UncommittedChanges
-- Text.Discard.IncludeModified
-- Text.StashCM.Branch
 - Text.SubmoduleRevisionCompare
 - Text.SubmoduleRevisionCompare.OpenDetails
 - Text.Progress.CheckoutBranchFromStash
