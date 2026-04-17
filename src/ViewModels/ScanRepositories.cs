@@ -229,19 +229,24 @@ public class ScanRepositories : Popup
 
     /// <summary>
     /// 発見されたリポジトリをツリーに追加する。ディレクトリ構造に基づいてグループを自動作成する。
+    /// パス比較はファイルシステムの流儀に合わせる（Linux: 大小文字区別、Windows/macOS: 区別しない）。
     /// </summary>
     private static async Task AddFoundRepositories(DirectoryInfo rootDir, List<string> found)
     {
+        var comparison = OperatingSystem.IsLinux()
+            ? StringComparison.Ordinal
+            : StringComparison.OrdinalIgnoreCase;
+
         var normalizedRoot = rootDir.FullName.Replace('\\', '/').TrimEnd('/');
         foreach (var f in found)
         {
             var parent = new DirectoryInfo(f).Parent!.FullName.Replace('\\', '/').TrimEnd('/');
-            if (parent.Equals(normalizedRoot, StringComparison.OrdinalIgnoreCase))
+            if (parent.Equals(normalizedRoot, comparison))
             {
                 var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(f, null, false, false);
                 await node.UpdateStatusAsync(false, null);
             }
-            else if (parent.StartsWith(normalizedRoot, StringComparison.OrdinalIgnoreCase))
+            else if (parent.StartsWith(normalizedRoot, comparison))
             {
                 var relative = parent.Substring(normalizedRoot.Length).TrimStart('/');
                 var group = FindOrCreateGroupRecursive(Preferences.Instance.RepositoryNodes, relative);
