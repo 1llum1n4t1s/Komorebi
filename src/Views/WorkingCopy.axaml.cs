@@ -616,7 +616,8 @@ public partial class WorkingCopy : UserControl
                     hasExtra = true;
                 }
 
-                if (repo.IsLFSEnabled())
+                // サブモジュールはファイルではなくディレクトリのため path が存在しない → LFS メニューを非表示にする
+                if (File.Exists(path) && repo.IsLFSEnabled())
                 {
                     var lfs = new MenuItem();
                     lfs.Header = App.Text("GitLFS");
@@ -1116,7 +1117,8 @@ public partial class WorkingCopy : UserControl
             menu.Items.Add(patch);
             menu.Items.Add(new MenuItem() { Header = "-" });
 
-            if (repo.IsLFSEnabled())
+            // サブモジュールはファイルではなくディレクトリのため path が存在しない → LFS メニューを非表示にする
+            if (File.Exists(path) && repo.IsLFSEnabled())
             {
                 var lfs = new MenuItem();
                 lfs.Header = App.Text("GitLFS");
