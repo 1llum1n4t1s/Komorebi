@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -551,9 +549,9 @@ public partial class App : Application
             app._fontsOverrides = null;
         }
 
-        // フォント名を正規化する（余分な空白除去、存在確認、バンドルフォント解決）
-        defaultFont = FixFontFamilyName(defaultFont);
-        monospaceFont = FixFontFamilyName(monospaceFont);
+        // フォント名を正規化する（余分な空白除去、存在確認）
+        defaultFont = StringExtensions.FormatFontNames(defaultFont);
+        monospaceFont = StringExtensions.FormatFontNames(monospaceFont);
 
         var resDic = new ResourceDictionary();
 
@@ -1464,64 +1462,6 @@ public partial class App : Application
                 Models.Logger.Log($"更新結果ダイアログ表示失敗: {ex.Message}", Models.LogLevel.Warning);
             }
         });
-    }
-
-    /// <summary>
-    /// ユーザー入力のフォントファミリー名を正規化・検証する。
-    /// カンマ区切りの各フォント名について以下の処理を行う:
-    /// 1. 前後の空白をトリムし、連続する空白を1つに圧縮する
-    /// 2. システムフォントとしてパースを試み、タイプフェースが存在するか確認する
-    /// 3. システムフォントとして見つからない場合、バンドルフォント（fonts:Komorebi#プレフィックス）として再試行する
-    /// 無効なフォント名は静かに除外される。
-    /// </summary>
-    /// <param name="input">ユーザーが入力したフォントファミリー名（カンマ区切りで複数指定可）</param>
-    /// <returns>検証済みフォント名のカンマ区切り文字列。有効なフォントがない場合は空文字列</returns>
-    private static string FixFontFamilyName(string input)
-    {
-        if (string.IsNullOrEmpty(input))
-            return string.Empty;
-
-        // カンマで分割して各フォント名を個別に処理する
-        var parts = input.Split(',');
-        List<string> trimmed = [];
-
-        foreach (var part in parts)
-        {
-            // 前後の空白をトリムし、空の要素はスキップする
-            var t = part.Trim();
-            if (string.IsNullOrEmpty(t))
-                continue;
-
-            // 連続する空白文字を1つに圧縮する（例: "Noto  Sans" → "Noto Sans"）
-            var sb = new StringBuilder();
-            var prevChar = '\0';
-
-            foreach (var c in t)
-            {
-                if (c == ' ' && prevChar == ' ')
-                    continue;  // 連続空白の2文字目以降をスキップする
-                sb.Append(c);
-                prevChar = c;
-            }
-
-            var name = sb.ToString();
-
-            // システムフォントとしてパースを試みる
-            try
-            {
-                var fontFamily = FontFamily.Parse(name);
-                // タイプフェース（Regular, Bold等）が1つ以上あれば有効なフォントと判定する
-                if (fontFamily.FamilyTypefaces.Count > 0)
-                    trimmed.Add(name);
-            }
-            catch
-            {
-                // フォントパースの例外は無視する（無効なフォント名として扱う）
-            }
-        }
-
-        // 有効なフォントが1つ以上あればカンマ区切りで結合して返す
-        return trimmed.Count > 0 ? string.Join(',', trimmed) : string.Empty;
     }
 
     /// <summary>
