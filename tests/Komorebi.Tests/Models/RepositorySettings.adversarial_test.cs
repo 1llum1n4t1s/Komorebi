@@ -363,19 +363,23 @@ namespace Komorebi.Tests.Models
         }
 
         /// <adversarial category="boundary" severity="high"
-        ///   description="JSON 'null' をデシリアライズするとNullReferenceExceptionが発生する既知バグ"
-        ///   expected="NullReferenceExceptionがスローされる" />
+        ///   description="JSON 'null' をデシリアライズしても NRE を起こさず、空の設定インスタンスへフォールバックする"
+        ///   expected="例外なしで新規 RepositorySettings が返る" />
         [Fact]
-        public void Get_JsonNull_ThrowsNullReferenceException_KnownBug()
+        public void Get_JsonNull_ReturnsFreshInstanceWithoutCrash()
         {
             var dir = Path.Combine(_tempDir, "json_null_bug");
             Directory.CreateDirectory(dir);
             File.WriteAllText(Path.Combine(dir, "komorebi.settings"), "null");
 
-            var ex = Record.Exception(() => Komorebi.Models.RepositorySettings.Get(dir));
+            Komorebi.Models.RepositorySettings result = null;
+            var ex = Record.Exception(() => { result = Komorebi.Models.RepositorySettings.Get(dir); });
 
-            // バグ: "null" JSONをデシリアライズするとnullが返り、後続のプロパティアクセスでNullReferenceException
-            Assert.IsType<NullReferenceException>(ex);
+            // 以前のバグ: "null" JSON を Deserialize すると null が返り、同期の `setting._file = fullpath` と
+            // 非同期の Task.Run クロージャーの両方で NRE が発生した。
+            // 修正後: setting ??= new() で新規インスタンスへフォールバックするため、例外なしで returns。
+            Assert.Null(ex);
+            Assert.NotNull(result);
         }
 
         [Theory]
