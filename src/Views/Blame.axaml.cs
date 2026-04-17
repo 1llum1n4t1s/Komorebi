@@ -547,16 +547,10 @@ public partial class Blame : ChromelessWindow
         InitializeComponent();
         PositionChanged += OnPositionChanged;
 
-        // このウィンドウは OnOpened 内で自前の位置復元を行うため、App.ShowWindow の
-        // 「アクティブスクリーン中央に配置」処理を抑止する（上書き競合回避）。
-        SuppressShowWindowCentering = true;
-
-        // 復元失敗時のフォールバックとしてオーナー中央を Show() 前に指定する。
-        // OnOpened の段階で WindowStartupLocation を変えてももはや位置に影響しないため、
-        // constructor でセットする（gemini PR #17 レビュー対応）。
-        WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
         // サイズは constructor 段階で設定して構わない（Screens を参照しないため）。upstream issue #2100 対応
+        // 位置の復元は OnOpened で実施する（Avalonia 11 では Screens が constructor 時点で null）。
+        // 初期位置は App.ShowWindow が Show() 前に「アクティブスクリーン中央」をセットしてくれるため、
+        // 保存座標が無効／スクリーン外の場合はそれがそのままフォールバックになる。
         var layout = ViewModels.Preferences.Instance.Layout;
         Width = layout.BlameWidth;
         Height = layout.BlameHeight;

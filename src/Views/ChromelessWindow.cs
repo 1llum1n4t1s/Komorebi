@@ -32,18 +32,6 @@ public class ChromelessWindow : Window
         set;
     } = false;
 
-    /// <summary>
-    /// <c>App.ShowWindow()</c> の「アクティブスクリーン中央に配置」処理を抑止するフラグ。
-    /// <c>true</c> にすると、ウィンドウ自身が <c>OnOpened</c> などで位置復元を行う前提となり、
-    /// <c>ShowWindow</c> は <c>WindowStartupLocation</c> と <c>Position</c> を触らない。
-    /// File History / Blame などの位置永続化ウィンドウで使用する（upstream issue #2100 対応）。
-    /// </summary>
-    public bool SuppressShowWindowCentering
-    {
-        get;
-        protected set;
-    } = false;
-
     protected override Type StyleKeyOverride => typeof(Window);
 
     private const double RESIZE_GRIP_SIZE = 6;

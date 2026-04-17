@@ -150,6 +150,21 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 ### Theme System
 `src/Resources/Themes.axaml` defines 5 built-in themes (Default/Light/Dark/White/OneDark) as `ResourceDictionary` entries with `ThemeVariant` keys. Each theme defines `Color.*` resources that `Brush.*` `SolidColorBrush` resources reference via `DynamicResource`. User-customizable color overrides are applied via `Models/ThemeOverrides.cs` which loads a JSON file and merges overrides into the active resource dictionary at runtime. When adding new themed colors, define both the `Color` and `Brush` in `Themes.axaml`, and use `{DynamicResource Brush.MyName}` in AXAML — never hardcode colors.
 
+### Alert Dialog for Modal-Context Errors
+`src/Views/Alert.axaml` is a small child modal dialog for displaying errors that occur **inside** an already-open modal dialog (e.g., file picker failures in the Preferences dialog). Use this instead of `App.RaiseException(...)` in modal-dialog code-behind, because the standard inline notification banner is rendered on the parent Launcher window and gets hidden behind the modal.
+
+Usage: `await new Alert().ShowAsync(this, message, isError: true);` — titles are localized via `Launcher.Error` / `Launcher.Info` keys. The dialog is resizable (`CanResize=True` + `MinWidth/MinHeight`) and wraps long messages in a `ScrollViewer`.
+
+### Window State Persistence Pattern
+Stand-alone windows (FileHistories, Blame, Launcher) persist width/height/position/state across sessions via `ViewModels.LayoutInfo` properties. The pattern:
+
+1. **Constructor**: set `Width` / `Height` from `LayoutInfo` (safe — no `Screens` dependency) and subscribe `PositionChanged`. **Do not** set `Position` in the constructor: `App.ShowWindow(...)` will overwrite it with an active-screen-centered value before calling `Show()`, which serves as a deterministic first-launch fallback.
+2. **OnOpened**: call `TryRestoreWindowPosition(x, y, w, h)` (protected helper on `ChromelessWindow`) — returns true if the saved `PixelRect` fits entirely within a connected screen's working area, and sets `Position` accordingly, overriding the centering from step 1. Also restore `WindowState = Maximized` if previously maximized. If `TryRestoreWindowPosition` returns false (first launch, or saved coords on a disconnected monitor), no action is needed — the step-1 centering remains as fallback.
+3. **OnSizeChanged** / **OnPositionChanged**: save to `LayoutInfo` only when `WindowState == Normal` (avoid saving maximized/snapped sizes).
+4. **OnPropertyChanged(WindowStateProperty)**: save state only when `!= Minimized` (otherwise a taskbar-minimize would cause the next launch to start minimized).
+
+This order means a returning user with a valid saved position may see a one-frame flash at the centered position before `OnOpened` snaps to the saved coordinates (Avalonia 11 has no way to resolve `Screens` pre-`OnOpened` for a cross-monitor save). The flash is acceptable in exchange for correct fallback on first launch.
+
 ### AI Commit Message Generation
 `src/AI/` contains AI integration for generating commit messages. Supported providers: OpenAI, Azure OpenAI, Gemini, Anthropic.
 - `Service.cs` — API client configuration (provider, server, model, API key)
@@ -219,6 +234,18 @@ When a `ListBox` with `SelectionMode="AlwaysSelected"` lays out, it forces the s
 ### ContentControl recycles Views when the new Content has the same type
 Avalonia's XAML `<DataTemplate>` implements `IRecyclingDataTemplate`. When `ContentControl.Content` switches between two instances of the same VM type (e.g., tab A's `LauncherPage` → tab B's `LauncherPage`, or `Histories` VM A → `Histories` VM B), `ContentPresenter.UpdateChild()` reuses the existing View instance and just swaps `DataContext`. Consequence: the View's `OnLoaded`/`OnUnloaded` only fire on the *first* attach — they do **not** fire on every switch. State that needs to follow VM lifecycle (scroll position, focus, deferred restoration, event subscriptions to the old VM) must be implemented by listening to `DataContextChanged` or by living on the VM, not in code-behind fields. To force recreation, you can implement a custom `IDataTemplate` that does **not** also implement `IRecyclingDataTemplate`, but be aware this caused visible screen flickering on tab switches in this project and was reverted.
 
+### Avalonia 11+ `Window.Screens` is null in the constructor
+`TopLevel.Screens` returns `null` until the platform windowing backend finishes initialization (i.e. until `OnOpened` fires). Any logic that queries `Screens` (screen-bounds checks, multi-monitor awareness, `ScreenFromWindow`) must live in `OnOpened` or later, not the constructor. For cross-window reuse, there is a `ChromelessWindow.TryRestoreWindowPosition(x, y, width, height)` helper that already guards against `Screens == null`.
+
+### `App.ShowWindow(...)` sets Position before Show — use it as a fallback, not a conflict
+`App.ShowWindow` (used for non-modal child windows like FileHistories/Blame) computes a center point on the active screen and assigns `window.Position = centeredRect.Position` before calling `Show()`. **Do not** set `Position` in the window's constructor — it will be silently overwritten. Instead, set `Position` in `OnOpened` (which runs after `Show()`) to override the centering when you have a valid saved coordinate. When there's no saved position, the centering remains as a correct first-launch fallback — this is why Avalonia's `WindowStartupLocation.CenterOwner` is **not** suitable here (the windows are opened via owner-less `window.Show()`, so `CenterOwner` degrades to `Manual` / OS default).
+
+### PowerShell script encoding trap (Japanese Windows)
+When running batch edits on locale files via `.ps1` scripts: **use `pwsh` (PowerShell 7+), not `powershell` (Windows PowerShell 5.1)**. PS 5.1 reads UTF-8 `.ps1` files as Shift-JIS on Japanese Windows unless they have a BOM, corrupting any non-ASCII string literals in the script **before** execution. This has historically produced mojibake in ja_JP/ko_KR/ru_RU/sa/ta_IN/uk_UA locale values. Verify locale values with `Grep` after bulk edits.
+
+### `.axaml` files must be committed as LF to prevent `&#xD;` accumulation
+`.gitattributes` pins `*.axaml text eol=lf` (and `docs/TRANSLATION.md text eol=lf`). Without this, Windows git `autocrlf` converts `\n` to `\r\n` on checkout; the xml2js/AXAML round-trip re-encodes each `\r` as `&#xD;`, so every Windows contributor adds a new layer of `&#xD;` markers until the file is unreadable. If you find unexplained `&#xD;` entities in a locale diff, check that `.gitattributes` is in effect (`git check-attr text eol -- src/Resources/Locales/ja_JP.axaml`).
+
 ### Debug logging in WinExe builds needs Debug.WriteLine
 `Komorebi.csproj` is `<OutputType>WinExe</OutputType>` so there is no attached console — `Console.WriteLine` output goes nowhere. Use `System.Diagnostics.Debug.WriteLine(...)` instead; it routes to the debugger trace listener (Visual Studio "Output" pane, `dotnet trace`, etc.). Always strip temporary `Debug.WriteLine` instrumentation before committing.
 
@@ -256,3 +283,13 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 - **LiveChartsCore 2.0.0** — contribution statistics charts
 
 Fonts are **not bundled** — the app uses system fonts with per-locale fallback chains defined in `InstalledFont.GetLocaleDefaults()`. The `Avalonia.Fonts.Inter` NuGet package provides the Inter font for non-CJK locales.
+
+## Upstream-Faithful Policy
+
+Komorebi tracks `sourcegit-scm/sourcegit` via periodic cherry-pick batches. To keep future merges tractable, follow these rules when reviewing AI bot suggestions or writing changes that touch files upstream also maintains:
+
+1. **Accept real bugs / regressions** even when they diverge from upstream — e.g., NPE guards (PR #14 `GetActiveWorkspace()?.DefaultCloneDir`), missed `.ToLocalTime()` in `About` (PR #16), latent conditional logic breakage. Add an inline comment noting the deviation from upstream so future sync can either import an equivalent fix or revert intentionally.
+2. **Decline byte-for-byte stylistic suggestions** that only improve the local file — e.g., "Localize this hardcoded error message", "Extract this duplicated helper", "Rename this method for consistency". These turn every cherry-pick into a 3-way merge conflict without net benefit. The appropriate channel is a PR to upstream.
+3. **Komorebi-only architectural decisions** are preserved regardless of upstream churn: `App.RaiseException` (vs upstream's `Models.Notification.Send`), unified `WelcomeToolbar` (vs removed `RepositoryToolbar`), SSH key picker (`SSHKeyPicker` + `LegacySSHKeyOptOutSentinel`), CodeCommit URL handling, Anthropic AI provider, SuperLightLogger, file-scoped namespaces + Japanese XML doc comments, collection expressions `[]`.
+4. **Cherry-pick batches are tracked in** `plan` documents (e.g., `~/.claude/plans/goofy-finding-ullman.md`) with SHA-level status (applied / declined / deferred). When skipping an upstream commit, record the rationale in the plan so the next sync session doesn't re-evaluate it from scratch.
+5. **When bot reviews repeat the same Decline across rounds**, post one consolidated decline comment and rely on CI-green merges. Bots regularly re-raise closed items; do not mistake recurrence for severity escalation.
