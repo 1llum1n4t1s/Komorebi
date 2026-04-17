@@ -155,11 +155,20 @@ public class TextInlineChange(int dp, int dc, int ap, int ac)
 
         // 文字カテゴリが変わる位置、もしくは Other カテゴリの文字ごとにチャンクを分割する。
         // 連続する Letter / OtherLetter は一つのチャンクにまとめ、Other は文字単位。
+        //
+        // サロゲートペア（絵文字・拡張 CJK 等、U+10000 以降の文字）は
+        // UTF-16 上で 2 つの char に跨る。個々のサロゲート char は
+        // UnicodeCategory.Surrogate → CharCategory.Other に分類されるため、
+        // そのまま処理すると high/low の間で必ず分割が発生してしまう。
+        // low サロゲートをスキップすることでペアが 1 チャンクに保たれる。
         var prev = GetCategory(text[0]);
 
         for (var i = 1; i < size; i++)
         {
             var ch = text[i];
+            if (char.IsLowSurrogate(ch))
+                continue;
+
             var category = GetCategory(ch);
             if (prev != category || category == CharCategory.Other)
             {
