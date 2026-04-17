@@ -810,14 +810,29 @@ public partial class App : Application
             else
             {
                 _ipcChannel.MessageReceived += TryOpenRepository;
+
+                // macOS: Dock からの Quit（⌘+Q 含む）を受け取った際、Avalonia/macOS の
+                // シャットダウンフローが [NSApplication terminate:] 経由で直接 exit() を呼び、
+                // .NET ランタイム収束中に C++ グローバルデストラクタが逆 P/Invoke して abort
+                // する問題があった。ShutdownRequested をキャンセルして、自前の Quit(0) を
+                // UI スレッドへ post することで Komorebi の通常終了フロー（AvatarManager 停止、
+                // Logger フラッシュ等）を経由してから Shutdown するように差し替える。
+                if (OperatingSystem.IsMacOS())
+                {
+                    desktop.ShutdownRequested += (_, e) =>
+                    {
+                        e.Cancel = true;
+                        Dispatcher.UIThread.Post(() => Quit(0));
+                    };
+                }
+
                 desktop.Exit += (_, _) =>
                 {
                     _ipcChannel.Dispose();
 
-                    // macOS: [NSApplication terminate:]がexit()を呼ぶとC++グローバルデストラクタ
-                    // (ComPtr<IAvnDispatcher>::~ComPtr)が実行され、シャットダウン中の.NETランタイムへ
-                    // 逆P/Invokeを試みてabort()でクラッシュする。
-                    // Exit イベント時点（exit()の前）でプロセスを強制終了して回避する。
+                    // macOS: 上記 ShutdownRequested 経由で Quit(0) → desktop.Shutdown() の流れを
+                    // 踏んだ後でも、Avalonia 側の exit() 呼び出しで C++ デストラクタが走る恐れが
+                    // あるため、Exit イベント時点で強制終了してフェイルセーフにする。
                     if (OperatingSystem.IsMacOS())
                         Process.GetCurrentProcess().Kill();
                 };
