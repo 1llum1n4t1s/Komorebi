@@ -61,14 +61,20 @@ public class ChromelessWindow : Window
     /// 複数モニタ環境で別モニタに保存された位置を復元する際に、スクリーン構成変更により
     /// 画面外に出てしまうのを防ぐ（upstream issue #2100 対応の共通化）。
     /// </summary>
-    /// <param name="x">復元対象の X 座標。<see cref="int.MinValue"/> なら未保存扱い。</param>
-    /// <param name="y">復元対象の Y 座標。<see cref="int.MinValue"/> なら未保存扱い。</param>
-    /// <param name="width">ウィンドウの期待幅（ピクセル）。</param>
-    /// <param name="height">ウィンドウの期待高さ（ピクセル）。</param>
+    /// <param name="x">復元対象の X 座標（physical pixels）。<see cref="int.MinValue"/> なら未保存扱い。</param>
+    /// <param name="y">復元対象の Y 座標（physical pixels）。<see cref="int.MinValue"/> なら未保存扱い。</param>
+    /// <param name="width">ウィンドウの期待幅（logical pixels、<c>Window.Width</c> 由来）。</param>
+    /// <param name="height">ウィンドウの期待高さ（logical pixels、<c>Window.Height</c> 由来）。</param>
     /// <returns>位置を適用できた場合 true。スクリーン外／未保存なら false。</returns>
     /// <remarks>
     /// Avalonia 11 では <see cref="WindowBase.Screens"/> が constructor 時点で null の場合があるため、
     /// このメソッドは <c>OnOpened</c> 以降で呼び出す必要がある。
+    /// <para>
+    /// <c>Window.Width</c>/<c>Window.Height</c> は logical pixels だが、
+    /// <c>Screen.WorkingArea</c> は physical pixels。マルチモニタで DPI が異なる場合に
+    /// 収容判定が誤らないよう、各スクリーンの <c>Scaling</c> で物理サイズに換算する
+    /// （gemini PR #17 レビュー対応）。
+    /// </para>
     /// </remarks>
     protected bool TryRestoreWindowPosition(int x, int y, double width, double height)
     {
@@ -76,11 +82,13 @@ public class ChromelessWindow : Window
             return false;
 
         var position = new PixelPoint(x, y);
-        var size = new PixelSize((int)width, (int)height);
-        var desiredRect = new PixelRect(position, size);
         for (var i = 0; i < screens.ScreenCount; i++)
         {
             var screen = screens.All[i];
+            // 各モニタの scaling を掛けて physical pixels に換算した上で収容判定する
+            var physicalWidth = (int)(width * screen.Scaling);
+            var physicalHeight = (int)(height * screen.Scaling);
+            var desiredRect = new PixelRect(position, new PixelSize(physicalWidth, physicalHeight));
             if (screen.WorkingArea.Contains(desiredRect))
             {
                 Position = position;

@@ -536,6 +536,10 @@ public partial class BranchTree : UserControl
             // （coderabbit PR #17 レビュー対応：タイミング依存の silent no-op 防止）
             if (_pendingScrollToCurrentBranch && Rows.Count > 0)
             {
+                // Post 前にフラグをクリアすることで、実行前に NodesProperty 変更が
+                // 連続発火しても重複 Post を防ぐ（gemini PR #17 レビュー対応）
+                _pendingScrollToCurrentBranch = false;
+
                 // レイアウトパス完了を待つため Background priority で遅延実行
                 Avalonia.Threading.Dispatcher.UIThread.Post(
                     ScrollCurrentBranchIntoViewInternal,
