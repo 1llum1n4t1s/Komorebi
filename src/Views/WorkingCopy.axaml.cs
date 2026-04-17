@@ -1007,9 +1007,9 @@ public partial class WorkingCopy : UserControl
 
             if (services.Count == 1)
             {
-                ai.Click += async (_, e) =>
+                ai.Click += (_, e) =>
                 {
-                    await App.ShowDialog(new ViewModels.AIAssistant(repo, services[0], selectedStaged));
+                    DoOpenAIAssistant(repo, services[0], selectedStaged);
                     e.Handled = true;
                 };
             }
@@ -1021,9 +1021,9 @@ public partial class WorkingCopy : UserControl
 
                     var item = new MenuItem();
                     item.Header = service.Name;
-                    item.Click += async (_, e) =>
+                    item.Click += (_, e) =>
                     {
-                        await App.ShowDialog(new ViewModels.AIAssistant(repo, dup, selectedStaged));
+                        DoOpenAIAssistant(repo, dup, selectedStaged);
                         e.Handled = true;
                     };
 
@@ -1455,5 +1455,20 @@ public partial class WorkingCopy : UserControl
 
         menu.Items.Add(custom);
         menu.Items.Add(new MenuItem() { Header = "-" });
+    }
+
+    /// <summary>
+    /// AIAssistant を non-modal（Show()）で開く共通ヘルパー。
+    /// ShowDialog（modal）を廃止し、生成中もメインウィンドウを操作可能にする。
+    /// </summary>
+    private void DoOpenAIAssistant(ViewModels.Repository repo, AI.Service service, System.Collections.Generic.List<Models.Change> changes)
+    {
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        if (owner is null)
+            return;
+
+        var assistant = new ViewModels.AIAssistant(repo, service, changes);
+        var view = new AIAssistant() { DataContext = assistant };
+        view.Show(owner);
     }
 }

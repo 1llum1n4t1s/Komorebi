@@ -641,7 +641,7 @@ public partial class CommitMessageToolBox : UserControl
     /// <summary>
     /// OpenOpenAIHelperイベントのハンドラ。
     /// </summary>
-    private async void OnOpenOpenAIHelper(object sender, RoutedEventArgs e)
+    private void OnOpenOpenAIHelper(object sender, RoutedEventArgs e)
     {
         if (DataContext is ViewModels.WorkingCopy vm && sender is Button button && ShowAdvancedOptions)
         {
@@ -664,7 +664,7 @@ public partial class CommitMessageToolBox : UserControl
 
             if (services.Count == 1)
             {
-                await App.ShowDialog(new ViewModels.AIAssistant(repo, services[0], vm.Staged));
+                DoOpenAIAssistant(repo, services[0], vm.Staged);
                 e.Handled = true;
                 return;
             }
@@ -675,9 +675,9 @@ public partial class CommitMessageToolBox : UserControl
                 var dup = service;
                 var item = new MenuItem();
                 item.Header = service.Name;
-                item.Click += async (_, ev) =>
+                item.Click += (_, ev) =>
                 {
-                    await App.ShowDialog(new ViewModels.AIAssistant(repo, dup, vm.Staged));
+                    DoOpenAIAssistant(repo, dup, vm.Staged);
                     ev.Handled = true;
                 };
 
@@ -715,5 +715,20 @@ public partial class CommitMessageToolBox : UserControl
         builder.Show(owner);
 
         e.Handled = true;
+    }
+
+    /// <summary>
+    /// AIAssistant を non-modal（Show()）で開く共通ヘルパー。
+    /// ShowDialog（modal）を廃止し、生成中もメインウィンドウを操作可能にする。
+    /// </summary>
+    private void DoOpenAIAssistant(ViewModels.Repository repo, AI.Service service, System.Collections.Generic.List<Models.Change> changes)
+    {
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        if (owner is null)
+            return;
+
+        var assistant = new ViewModels.AIAssistant(repo, service, changes);
+        var view = new AIAssistant() { DataContext = assistant };
+        view.Show(owner);
     }
 }
