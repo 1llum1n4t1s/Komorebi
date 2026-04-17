@@ -387,31 +387,15 @@ public partial class LauncherTabBar : UserControl
                 menu.Items.Add(copyPath);
                 menu.Items.Add(new MenuItem() { Header = "-" });
 
-                var bookmark = new MenuItem();
-                bookmark.Header = App.Text("PageTabBar.Tab.Bookmark");
-                bookmark.Icon = App.CreateMenuIcon("Icons.Bookmark");
-
-                for (int i = 0; i < Models.Bookmarks.Brushes.Length; i++)
+                var edit = new MenuItem();
+                edit.Header = App.Text("PageTabBar.Tab.Edit");
+                edit.Icon = App.CreateMenuIcon("Icons.Edit");
+                edit.Click += (_, ev) =>
                 {
-                    var brush = Models.Bookmarks.Brushes[i];
-                    var icon = App.CreateMenuIcon("Icons.Bookmark");
-                    if (brush is not null)
-                        icon.Fill = brush;
-
-                    var dupIdx = i;
-                    var setter = new MenuItem() { Header = icon };
-                    if (i == page.Node.Bookmark)
-                        setter.Icon = App.CreateMenuIcon("Icons.Check");
-                    else
-                        setter.Click += (_, ev) =>
-                        {
-                            page.Node.Bookmark = dupIdx;
-                            ev.Handled = true;
-                        };
-
-                    bookmark.Items.Add(setter);
-                }
-                menu.Items.Add(bookmark);
+                    page.Node.Edit();
+                    ev.Handled = true;
+                };
+                menu.Items.Add(edit);
 
                 var workspaces = ViewModels.Preferences.Instance.Workspaces;
                 if (workspaces.Count > 1)

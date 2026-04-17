@@ -605,11 +605,11 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Aperi in Instrumento Merge Externo</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Optionale.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Crea Novam Tabulam</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Bookmark" xml:space="preserve">Signaculum</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Claude Tabulam</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Claude Alias Tabulas</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Claude Tabulas ad Dextram</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Copia Semitam Repositorii</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Recense</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">Move ad Spatium Operandi</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Renova</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repositoria</x:String>

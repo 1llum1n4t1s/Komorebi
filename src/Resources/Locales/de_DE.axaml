@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Vergleichen mit HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Repository-Einstellungen</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">COMMIT-VORLAGE</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${branch_name} Name des aktuellen lokalen Branches.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files_num} Anzahl der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files} Pfade der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${files:N} Maximale Anzahl N an Pfaden geänderter Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${pure_files} Wie ${files}, aber nur die reinen Dateinamen&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${branch_name} Name des aktuellen lokalen Branches.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files_num} Anzahl der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files} Pfade der geänderten Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${files:N} Maximale Anzahl N an Pfaden geänderter Dateien&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${pure_files} Wie ${files}, aber nur die reinen Dateinamen&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 ${pure_files:N} Wie ${files:N}, aber ohne Ordner</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Vorlageninhalt:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Vorlagenname:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">BENUTZERDEFINIERTE AKTION</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumente:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${REPO} Repository-Pfad&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${REMOTE} Selektierter Remote oder selektierter Branch-Remote&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH} Selektierter Branch, ohne ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${BRANCH_FRIENDLY_NAME} Benutzerfreundlicher Name des selektierten Branches, enthält ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${SHA} Hash des selektierten Commits&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${TAG} Ausgewählter Tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-${FILE} Ausgewählte Datei, relativ zum Stammverzeichnis des Repositorys&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Vordefinierte Parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REPO} Repository-Pfad&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${REMOTE} Selektierter Remote oder selektierter Branch-Remote&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH} Selektierter Branch, ohne ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${BRANCH_FRIENDLY_NAME} Benutzerfreundlicher Name des selektierten Branches, enthält ${REMOTE}-Teil für Remote-Branches&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${SHA} Hash des selektierten Commits&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${TAG} Ausgewählter Tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+${FILE} Ausgewählte Datei, relativ zum Stammverzeichnis des Repositorys&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Ausführbare Datei:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Eingabe-Steuerelemente:</x:String>
@@ -608,11 +608,11 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Öffnen in externem Merge-Tool</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Optional.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Neue Registerkarte erstellen</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Bookmark" xml:space="preserve">Lesezeichen</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Registerkarte schließen</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Andere Registerkarten schließen</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Registerkarten zur Rechten schließen</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Kopiere Repository-Pfad</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Bearbeiten</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">In Arbeitsumgebung verschieben</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Aktualisieren</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repositorys</x:String>
@@ -1045,7 +1045,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Datei konnte nicht gespeichert werden: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Änderung konnte nicht als Patch gespeichert werden: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Repositorys konnten nicht gescannt werden: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Watcher für Repository '{0}' konnte nicht gestartet werden. Drücken Sie 'F5', um das Repository manuell zu aktualisieren!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Watcher für Repository '{0}' konnte nicht gestartet werden. Drücken Sie 'F5', um das Repository manuell zu aktualisieren!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 Grund: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' konnte nicht gestartet werden. Grund: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Konnte nicht geöffnet werden: {0}</x:String>

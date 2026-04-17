@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Bandingkan dengan HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">Konfigurasi Repositori</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Nama branch lokal saat ini.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Jumlah berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Maksimal N jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Nama branch lokal saat ini.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Jumlah berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Maksimal N jalur berkas yang diubah&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Seperti ${files}, tapi hanya nama berkas saja&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Seperti ${files:N}, tapi tanpa folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Konten Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Nama Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">AKSI KUSTOM</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Argumen:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Jalur repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash commit yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Tag yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Parameter bawaan: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Jalur repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Remote yang dipilih atau remote dari branch yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Branch yang dipilih, tanpa bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Nama ramah dari branch yang dipilih, mengandung bagian ${REMOTE} untuk remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash commit yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Tag yang dipilih&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Berkas yang dipilih, relatif terhadap akar repositori&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Nilai kontrol input</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Berkas Eksekusi:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Kontrol Input:</x:String>
@@ -608,11 +608,11 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Buka di Merge Tool</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Opsional.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Buat Tab Baru</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Bookmark" xml:space="preserve">Bookmark</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Tutup Tab</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Tutup Tab Lain</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Tutup Tab di Kanan</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Salin Jalur Repositori</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Sunting</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">Pindahkan ke Workspace</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Segarkan</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repositori</x:String>
@@ -1045,7 +1045,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Gagal menyimpan file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Gagal menyimpan perubahan sebagai patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Gagal memindai repositori: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Gagal memulai pengamat untuk repositori '{0}'. Anda mungkin perlu menekan 'F5' untuk memperbarui secara manual!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Gagal memulai pengamat untuk repositori '{0}'. Anda mungkin perlu menekan 'F5' untuk memperbarui secara manual!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 Alasan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Gagal memulai '{0}'. Alasan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Gagal membuka: {0}</x:String>
