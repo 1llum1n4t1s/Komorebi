@@ -110,7 +110,7 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>アプリケーション終了時に全タブのリポジトリを閉じる。</summary>
-    public void Quit()
+    public void CloseAll()
     {
         _ignoreIndexChange = true;
 
