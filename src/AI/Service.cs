@@ -8,13 +8,13 @@ public class Service
 {
     public static IReadOnlyList<Provider> AllProviders => [Provider.OpenAI, Provider.AzureOpenAI, Provider.Anthropic, Provider.Gemini];
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public Provider Provider { get; set; } = Provider.OpenAI;
-    public string Server { get; set; }
-    public string Model { get; set; }
-    public string ApiKey { get; set; }
-    public bool ReadApiKeyFromEnv { get; set; }
-    public string AdditionalPrompt { get; set; }
+    public string Server { get; set; } = string.Empty;
+    public string Model { get; set; } = string.Empty;
+    public string ApiKey { get; set; } = string.Empty;
+    public bool ReadApiKeyFromEnv { get; set; } = false;
+    public string AdditionalPrompt { get; set; } = string.Empty;
 
     public ApiKeyCredential Credential
     {
