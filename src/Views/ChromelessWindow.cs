@@ -32,6 +32,18 @@ public class ChromelessWindow : Window
         set;
     } = false;
 
+    /// <summary>
+    /// <c>App.ShowWindow()</c> の「アクティブスクリーン中央に配置」処理を抑止するフラグ。
+    /// <c>true</c> にすると、ウィンドウ自身が <c>OnOpened</c> などで位置復元を行う前提となり、
+    /// <c>ShowWindow</c> は <c>WindowStartupLocation</c> と <c>Position</c> を触らない。
+    /// File History / Blame などの位置永続化ウィンドウで使用する（upstream issue #2100 対応）。
+    /// </summary>
+    public bool SuppressShowWindowCentering
+    {
+        get;
+        protected set;
+    } = false;
+
     protected override Type StyleKeyOverride => typeof(Window);
 
     private const double RESIZE_GRIP_SIZE = 6;
@@ -53,6 +65,41 @@ public class ChromelessWindow : Window
             AddHandler(PointerPressedEvent, OnResizeGripPointerPressed, RoutingStrategies.Tunnel);
             AddHandler(PointerMovedEvent, OnResizeGripPointerMoved, RoutingStrategies.Tunnel);
         }
+    }
+
+    /// <summary>
+    /// 保存済みのウィンドウ位置とサイズが接続されているいずれかのスクリーンの作業領域に
+    /// 完全に収まるかを判定し、収まる場合のみ <see cref="Window.Position"/> に適用する。
+    /// 複数モニタ環境で別モニタに保存された位置を復元する際に、スクリーン構成変更により
+    /// 画面外に出てしまうのを防ぐ（upstream issue #2100 対応の共通化）。
+    /// </summary>
+    /// <param name="x">復元対象の X 座標。<see cref="int.MinValue"/> なら未保存扱い。</param>
+    /// <param name="y">復元対象の Y 座標。<see cref="int.MinValue"/> なら未保存扱い。</param>
+    /// <param name="width">ウィンドウの期待幅（ピクセル）。</param>
+    /// <param name="height">ウィンドウの期待高さ（ピクセル）。</param>
+    /// <returns>位置を適用できた場合 true。スクリーン外／未保存なら false。</returns>
+    /// <remarks>
+    /// Avalonia 11 では <see cref="WindowBase.Screens"/> が constructor 時点で null の場合があるため、
+    /// このメソッドは <c>OnOpened</c> 以降で呼び出す必要がある。
+    /// </remarks>
+    protected bool TryRestoreWindowPosition(int x, int y, double width, double height)
+    {
+        if (x == int.MinValue || y == int.MinValue || Screens is not { } screens)
+            return false;
+
+        var position = new PixelPoint(x, y);
+        var size = new PixelSize((int)width, (int)height);
+        var desiredRect = new PixelRect(position, size);
+        for (var i = 0; i < screens.ScreenCount; i++)
+        {
+            var screen = screens.All[i];
+            if (screen.WorkingArea.Contains(desiredRect))
+            {
+                Position = position;
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>

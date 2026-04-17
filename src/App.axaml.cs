@@ -195,6 +195,14 @@ public partial class App : Application
             window.DataContext = data;
         }
 
+        // ウィンドウ自身が位置復元を行う場合（File History / Blame などの永続化ウィンドウ）は
+        // 中央寄せをスキップする。後からの OnOpened で上書きされると振る舞いが不可解になるため。
+        if (window.SuppressShowWindowCentering)
+        {
+            window.Show();
+            return;
+        }
+
         // do-whileブロックでウィンドウ位置の計算を行う（breakで中断可能にするため）
         do
         {

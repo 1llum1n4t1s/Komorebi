@@ -15,50 +15,50 @@ public partial class FileHistories : ChromelessWindow
 {
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
-    /// 前回終了時のサイズと位置を復元する（upstream issue #2100 対応）。
+    /// 前回終了時のサイズは constructor で、位置は <see cref="OnOpened"/> で復元する
+    /// （upstream issue #2100 対応）。
     /// </summary>
     public FileHistories()
     {
         InitializeComponent();
         PositionChanged += OnPositionChanged;
 
-        // 前回のウィンドウサイズを復元する
+        // このウィンドウは OnOpened 内で自前の位置復元を行うため、App.ShowWindow の
+        // 「アクティブスクリーン中央に配置」処理を抑止する（上書き競合回避）。
+        SuppressShowWindowCentering = true;
+
+        // サイズは constructor 段階で設定して構わない（Screens を参照しないため）
         var layout = ViewModels.Preferences.Instance.Layout;
         Width = layout.FileHistoriesWidth;
         Height = layout.FileHistoriesHeight;
-
-        // 前回のウィンドウ位置がスクリーン内に収まる場合のみ復元する（複数モニタ対応）
-        var x = layout.FileHistoriesPositionX;
-        var y = layout.FileHistoriesPositionY;
-        if (x != int.MinValue && y != int.MinValue && Screens is { } screens)
-        {
-            var position = new PixelPoint(x, y);
-            var size = new PixelSize((int)layout.FileHistoriesWidth, (int)layout.FileHistoriesHeight);
-            var desiredRect = new PixelRect(position, size);
-            for (var i = 0; i < screens.ScreenCount; i++)
-            {
-                var screen = screens.All[i];
-                if (screen.WorkingArea.Contains(desiredRect))
-                {
-                    Position = position;
-                    return;
-                }
-            }
-        }
-
-        // スクリーン外の場合はオーナー中央に表示する
-        WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Avalonia 11 では <see cref="WindowBase.Screens"/> が constructor 時点で null の場合があるため、
+    /// ウィンドウ位置の復元は OnOpened で実施する（coderabbit PR #17 レビュー対応）。
+    /// </remarks>
     protected override void OnOpened(EventArgs e)
     {
         base.OnOpened(e);
 
+        var layout = ViewModels.Preferences.Instance.Layout;
+
         // 前回の最大化状態を復元する
-        var state = ViewModels.Preferences.Instance.Layout.FileHistoriesWindowState;
+        var state = layout.FileHistoriesWindowState;
         if (state == WindowState.Maximized || state == WindowState.FullScreen)
             WindowState = WindowState.Maximized;
+
+        // 前回のウィンドウ位置がスクリーン内に収まる場合のみ復元する（複数モニタ対応）
+        if (!TryRestoreWindowPosition(
+                layout.FileHistoriesPositionX,
+                layout.FileHistoriesPositionY,
+                layout.FileHistoriesWidth,
+                layout.FileHistoriesHeight))
+        {
+            // 復元できない場合はオーナー中央に配置する（App.ShowWindow の中央寄せは抑止されているため、ここで補完）
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        }
     }
 
     /// <inheritdoc/>
@@ -69,7 +69,10 @@ public partial class FileHistories : ChromelessWindow
         if (change.Property == WindowStateProperty)
         {
             var state = (WindowState)change.NewValue!;
-            ViewModels.Preferences.Instance.Layout.FileHistoriesWindowState = state;
+            // Minimized を保存してしまうと次回起動時に最小化で復元されて困るのでフィルタする
+            // （ユーザーがタスクバーから最小化しただけで Maximized が失われないように）
+            if (state != WindowState.Minimized)
+                ViewModels.Preferences.Instance.Layout.FileHistoriesWindowState = state;
         }
     }
 

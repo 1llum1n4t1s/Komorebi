@@ -44,35 +44,35 @@ public class LayoutInfo : ObservableObject
         set;
     } = WindowState.Normal;
 
-    /// <summary>File History / Blame ウィンドウの幅（上流 issue #2100 対応）。</summary>
+    /// <summary>File History ウィンドウの幅（upstream issue #2100 対応）。</summary>
     public double FileHistoriesWidth
     {
         get;
         set;
     } = 1280;
 
-    /// <summary>File History / Blame ウィンドウの高さ（上流 issue #2100 対応）。</summary>
+    /// <summary>File History ウィンドウの高さ（upstream issue #2100 対応）。</summary>
     public double FileHistoriesHeight
     {
         get;
         set;
     } = 720;
 
-    /// <summary>File History / Blame ウィンドウの X 座標（複数モニタ対応）。</summary>
+    /// <summary>File History ウィンドウの X 座標（複数モニタ対応）。</summary>
     public int FileHistoriesPositionX
     {
         get;
         set;
     } = int.MinValue;
 
-    /// <summary>File History / Blame ウィンドウの Y 座標（複数モニタ対応）。</summary>
+    /// <summary>File History ウィンドウの Y 座標（複数モニタ対応）。</summary>
     public int FileHistoriesPositionY
     {
         get;
         set;
     } = int.MinValue;
 
-    /// <summary>File History / Blame ウィンドウの状態（通常/最大化）。</summary>
+    /// <summary>File History ウィンドウの状態（通常/最大化）。</summary>
     public WindowState FileHistoriesWindowState
     {
         get;
