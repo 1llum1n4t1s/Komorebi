@@ -653,7 +653,7 @@ namespace Komorebi.Tests.Models
             var tempFile = Path.GetTempFileName();
             try
             {
-                diff.GenerateNewPatchFromSelection(change, "", selection, false, tempFile);
+                diff.GenerateNewPatchFromSelection(change.Path, "", selection, false, tempFile);
                 var content = File.ReadAllText(tempFile);
 
                 Assert.Contains("diff --git a/test.txt b/test.txt", content);
@@ -681,7 +681,7 @@ namespace Komorebi.Tests.Models
             var tempFile = Path.GetTempFileName();
             try
             {
-                diff.GenerateNewPatchFromSelection(change, "abcdef12", selection, false, tempFile);
+                diff.GenerateNewPatchFromSelection(change.Path, "abcdef12", selection, false, tempFile);
                 var content = File.ReadAllText(tempFile);
 
                 Assert.DoesNotContain("new file mode", content);
@@ -708,7 +708,7 @@ namespace Komorebi.Tests.Models
             var tempFile = Path.GetTempFileName();
             try
             {
-                diff.GenerateNewPatchFromSelection(change, "", selection, true, tempFile);
+                diff.GenerateNewPatchFromSelection(change.Path, "", selection, true, tempFile);
                 var content = File.ReadAllText(tempFile);
 
                 Assert.Contains("diff --git a/test.txt b/test.txt", content);
@@ -736,7 +736,7 @@ namespace Komorebi.Tests.Models
             var tempFile = Path.GetTempFileName();
             try
             {
-                diff.GenerateNewPatchFromSelection(change, "", selection, false, tempFile);
+                diff.GenerateNewPatchFromSelection(change.Path, "", selection, false, tempFile);
                 var content = File.ReadAllText(tempFile);
 
                 // Normal lines should be skipped in forward mode
@@ -775,7 +775,7 @@ namespace Komorebi.Tests.Models
             var tempFile = Path.GetTempFileName();
             try
             {
-                diff.GeneratePatchFromSelection(change, "abc123", selection, false, tempFile);
+                diff.GeneratePatchFromSelection(change.Path, "abc123", selection, false, tempFile);
                 var content = File.ReadAllText(tempFile);
 
                 Assert.Contains("diff --git a/test.txt b/test.txt", content);
@@ -790,8 +790,10 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void GeneratePatchFromSelection_WithOriginalPath_UsesOriginalInHeader()
+        public void GeneratePatchFromSelection_RenamedFile_UsesNewPathForBothSides()
         {
+            // upstream 5a35c415: リネーム/コピーファイルでも両側とも変更後パスを使う
+            // （旧挙動の `--- a/<OriginalPath>` だと git apply が reject するケースがあった）
             var diff = new TextDiff();
             diff.Lines.Add(new TextDiffLine(TextDiffLineType.Indicator, "@@ -1,1 +1,1 @@", 0, 0));
             diff.Lines.Add(new TextDiffLine(TextDiffLineType.Normal, "line1", 1, 1));
@@ -802,11 +804,12 @@ namespace Komorebi.Tests.Models
             var tempFile = Path.GetTempFileName();
             try
             {
-                diff.GeneratePatchFromSelection(change, "abc123", selection, false, tempFile);
+                diff.GeneratePatchFromSelection(change.Path, "abc123", selection, false, tempFile);
                 var content = File.ReadAllText(tempFile);
 
-                Assert.Contains("--- a/old_name.txt", content);
+                Assert.Contains("--- a/new_name.txt", content);
                 Assert.Contains("+++ b/new_name.txt", content);
+                Assert.DoesNotContain("old_name.txt", content);
             }
             finally
             {
@@ -827,7 +830,7 @@ namespace Komorebi.Tests.Models
             var tempFile = Path.GetTempFileName();
             try
             {
-                diff.GeneratePatchFromSelection(change, "abc123", selection, false, tempFile);
+                diff.GeneratePatchFromSelection(change.Path, "abc123", selection, false, tempFile);
                 var content = File.ReadAllText(tempFile);
 
                 Assert.Contains("--- a/test.txt", content);
