@@ -305,7 +305,8 @@ public class ExecuteCustomAction : Popup
             Models.Tag t => org.Replace("${TAG}", t.Name),
             Models.Remote r => org.Replace("${REMOTE}", r.Name),
             Models.CustomActionTargetFile f => org.Replace("${FILE}", f.File).Replace("${SHA}", f.Revision?.SHA ?? string.Empty),
-            _ => org
+            // Repository scope では ${BRANCH} を現在ブランチ名に展開する（upstream 8395efdd）
+            _ => org.Replace("${BRANCH}", _repo.CurrentBranch?.Name ?? "HEAD")
         };
     }
 
