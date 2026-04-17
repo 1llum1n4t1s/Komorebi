@@ -96,11 +96,14 @@ public class Reword : Popup
                     .Use(log)
                     .PopAsync("stash@{0}");
 
-            // Reword 後の新 HEAD を履歴ビューで自動選択する
+            // Reword 後の新 HEAD を履歴ビューで自動選択する。
+            // QueryRevisionByRefName は HEAD 解決に失敗すると null/空を返すため、
+            // 念のため空判定してから NavigateToCommit() に渡す（null 伝播で NRE/誤マッチを防ぐ）。
             if (_repo.SelectedViewIndex == 0)
             {
                 var head = await new Commands.QueryRevisionByRefName(_repo.FullPath, "HEAD").GetResultAsync();
-                _repo.NavigateToCommit(head, true);
+                if (!string.IsNullOrEmpty(head))
+                    _repo.NavigateToCommit(head, true);
             }
         }
 

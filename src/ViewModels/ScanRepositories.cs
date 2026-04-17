@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -157,16 +156,31 @@ public class ScanRepositories : Popup
 
     /// <summary>
     /// 既に管理されているリポジトリのIDセットを再帰的に収集する。
+    /// 非 Linux（Windows/macOS のケースインセンシティブ FS）では ToLowerInvariant() で正規化する。
+    /// ロケール非依存（トルコ語の "Turkish-I" 問題などを回避）。
     /// </summary>
     private static void GetManagedRepositories(List<RepositoryNode> group, HashSet<string> repos)
     {
         foreach (var node in group)
         {
             if (node.IsRepository)
-                repos.Add(OperatingSystem.IsLinux() ? node.Id : node.Id.ToLower(CultureInfo.CurrentCulture));
+                repos.Add(OperatingSystem.IsLinux() ? node.Id : node.Id.ToLowerInvariant());
             else
                 GetManagedRepositories(node.SubNodes, repos);
         }
+    }
+
+    /// <summary>
+    /// 指定パスが管理済み集合に含まれるかを判定する。
+    /// GetManagedRepositories() と同じ正規化（非 Linux では ToLowerInvariant()）を適用する。
+    /// これにより、大小文字違いのパス（C:/Repos/Foo と c:/repos/foo 等）を同一視して重複検出を確実にする。
+    /// </summary>
+    private static bool IsManaged(string path, HashSet<string> managed)
+    {
+        if (OperatingSystem.IsLinux())
+            return managed.Contains(path);
+
+        return managed.Contains(path.ToLowerInvariant());
     }
 
     /// <summary>
@@ -185,7 +199,7 @@ public class ScanRepositories : Popup
             onProgress?.Invoke($"Scanning {subdir.FullName}...");
 
             var normalizedSelf = subdir.FullName.Replace('\\', '/').TrimEnd('/');
-            if (managed.Contains(normalizedSelf))
+            if (IsManaged(normalizedSelf, managed))
                 continue;
 
             var gitDir = Path.Combine(subdir.FullName, ".git");
@@ -195,7 +209,7 @@ public class ScanRepositories : Popup
                 if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
                 {
                     var normalized = test.StdOut.Trim().Replace('\\', '/').TrimEnd('/');
-                    if (!managed.Contains(normalized))
+                    if (!IsManaged(normalized, managed))
                         outs.Add(normalized);
                 }
 
