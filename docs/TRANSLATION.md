@@ -6,33 +6,187 @@ This document shows the translation status of each locale file in the repository
 
 ### ![en_US](https://img.shields.io/badge/en__US-%E2%88%9A-brightgreen)
 
-### ![de__DE](https://img.shields.io/badge/de__DE-%E2%88%9A-brightgreen)
+### ![de__DE](https://img.shields.io/badge/de__DE-99.56%25-yellow)
 
-### ![es__ES](https://img.shields.io/badge/es__ES-%E2%88%9A-brightgreen)
+<details>
+<summary>Missing keys in de_DE.axaml</summary>
 
-### ![fil__PH](https://img.shields.io/badge/fil__PH-%E2%88%9A-brightgreen)
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
 
-### ![fr__FR](https://img.shields.io/badge/fr__FR-%E2%88%9A-brightgreen)
+</details>
 
-### ![id__ID](https://img.shields.io/badge/id__ID-%E2%88%9A-brightgreen)
+### ![es__ES](https://img.shields.io/badge/es__ES-99.56%25-yellow)
 
-### ![it__IT](https://img.shields.io/badge/it__IT-%E2%88%9A-brightgreen)
+<details>
+<summary>Missing keys in es_ES.axaml</summary>
 
-### ![ja__JP](https://img.shields.io/badge/ja__JP-%E2%88%9A-brightgreen)
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
 
-### ![ko__KR](https://img.shields.io/badge/ko__KR-%E2%88%9A-brightgreen)
+</details>
 
-### ![la](https://img.shields.io/badge/la-%E2%88%9A-brightgreen)
+### ![fil__PH](https://img.shields.io/badge/fil__PH-99.56%25-yellow)
 
-### ![pt__BR](https://img.shields.io/badge/pt__BR-%E2%88%9A-brightgreen)
+<details>
+<summary>Missing keys in fil_PH.axaml</summary>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-%E2%88%9A-brightgreen)
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
 
-### ![sa](https://img.shields.io/badge/sa-%E2%88%9A-brightgreen)
+</details>
 
-### ![ta__IN](https://img.shields.io/badge/ta__IN-%E2%88%9A-brightgreen)
+### ![fr__FR](https://img.shields.io/badge/fr__FR-99.56%25-yellow)
 
-### ![uk__UA](https://img.shields.io/badge/uk__UA-%E2%88%9A-brightgreen)
+<details>
+<summary>Missing keys in fr_FR.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![id__ID](https://img.shields.io/badge/id__ID-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in id_ID.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![it__IT](https://img.shields.io/badge/it__IT-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in it_IT.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![ja__JP](https://img.shields.io/badge/ja__JP-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in ja_JP.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![ko__KR](https://img.shields.io/badge/ko__KR-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in ko_KR.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![la](https://img.shields.io/badge/la-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in la.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![pt__BR](https://img.shields.io/badge/pt__BR-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in pt_BR.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![ru__RU](https://img.shields.io/badge/ru__RU-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in ru_RU.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![sa](https://img.shields.io/badge/sa-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in sa.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![ta__IN](https://img.shields.io/badge/ta__IN-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in ta_IN.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
+
+### ![uk__UA](https://img.shields.io/badge/uk__UA-99.56%25-yellow)
+
+<details>
+<summary>Missing keys in uk_UA.axaml</summary>
+
+- Text.CheckoutBranchFromStash
+- Text.CheckoutBranchFromStash.Branch
+- Text.CheckoutBranchFromStash.Stash
+- Text.Discard.IncludeModified
+- Text.StashCM.Branch
+
+</details>
 
 ### ![zh__CN](https://img.shields.io/badge/zh__CN-%E2%88%9A-brightgreen)
 
