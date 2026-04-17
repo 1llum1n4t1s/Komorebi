@@ -44,18 +44,19 @@ public partial class FileHistories : ChromelessWindow
 
         var layout = ViewModels.Preferences.Instance.Layout;
 
-        // 前回の最大化状態を復元する
-        var state = layout.FileHistoriesWindowState;
-        if (state == WindowState.Maximized || state == WindowState.FullScreen)
-            WindowState = WindowState.Maximized;
-
-        // 前回のウィンドウ位置がスクリーン内に収まる場合のみ復元する（複数モニタ対応）。
-        // 失敗時は constructor で指定した CenterOwner が適用された状態のまま。
+        // 先に Normal 状態で位置を復元してから、WindowState を Maximized に遷移させる
+        // （逆順だと Position 設定時に最大化が解除されるプラットフォーム対策、gemini PR #17 レビュー対応）。
+        // 位置復元失敗時は App.ShowWindow が Show() 前に適用した「アクティブスクリーン中央」がそのまま残る。
         TryRestoreWindowPosition(
             layout.FileHistoriesPositionX,
             layout.FileHistoriesPositionY,
             layout.FileHistoriesWidth,
             layout.FileHistoriesHeight);
+
+        // 前回の最大化状態を復元する（Normal 位置は上で設定済みなので Restore 時の戻り先もそれになる）
+        var state = layout.FileHistoriesWindowState;
+        if (state == WindowState.Maximized || state == WindowState.FullScreen)
+            WindowState = WindowState.Maximized;
     }
 
     /// <inheritdoc/>
