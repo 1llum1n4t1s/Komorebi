@@ -289,6 +289,20 @@ public class Preferences : ObservableObject
         }
     }
 
+    /// <summary>自動フェッチを有効にするかどうか（v2026.08 以降はグローバル設定）。</summary>
+    public bool EnableAutoFetch
+    {
+        get;
+        set;
+    } = false;
+
+    /// <summary>自動フェッチの間隔（分、v2026.08 以降はグローバル設定）。</summary>
+    public int AutoFetchInterval
+    {
+        get;
+        set;
+    } = 10;
+
     /// <summary>差分表示でホワイトスペースの変更を無視するかどうか。</summary>
     public bool IgnoreWhitespaceChangesInDiff
     {

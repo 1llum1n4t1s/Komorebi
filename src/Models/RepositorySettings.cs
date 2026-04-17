@@ -37,20 +37,6 @@ public class RepositorySettings
         set;
     } = string.Empty;
 
-    /// <summary>自動フェッチを有効にするかどうか</summary>
-    public bool EnableAutoFetch
-    {
-        get;
-        set;
-    } = false;
-
-    /// <summary>自動フェッチの間隔（分）</summary>
-    public int AutoFetchInterval
-    {
-        get;
-        set;
-    } = 10;
-
     /// <summary>サブモジュール自動更新前に確認するかどうか</summary>
     public bool AskBeforeAutoUpdatingSubmodules
     {

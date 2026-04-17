@@ -1,4 +1,4 @@
-<v:ChromelessWindow xmlns="https://github.com/avaloniaui"
+﻿<v:ChromelessWindow xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -44,7 +44,7 @@
           <TextBlock Classes="tab_header" Text="{DynamicResource Text.Configure.Git}"/>
         </TabItem.Header>
 
-        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,Auto,32,32,32,32,32" ColumnDefinitions="Auto,*">
+        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,Auto,32,32,32,32,32" ColumnDefinitions="Auto,*">
           <TextBlock Grid.Row="0" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
@@ -180,35 +180,16 @@
                     Content="{DynamicResource Text.Configure.Git.AskBeforeAutoUpdatingSubmodules}"
                     IsChecked="{Binding AskBeforeAutoUpdatingSubmodules, Mode=TwoWay}"/>
 
-          <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Horizontal">
-            <CheckBox x:Name="AutoFetchCheckBox"
-                      Content="{DynamicResource Text.Configure.Git.AutoFetch}"
-                      IsChecked="{Binding EnableAutoFetch, Mode=TwoWay}"/>
-
-            <NumericUpDown Minimum="1" Maximum="60" Increment="1"
-                           Height="26" Width="110"
-                           Margin="8,0,0,0" Padding="4"
-                           BorderThickness="1" BorderBrush="{DynamicResource Brush.Border1}"
-                           CornerRadius="3"
-                           ParsingNumberStyle="Integer"
-                           FormatString="0"
-                           Value="{Binding AutoFetchInterval, Mode=TwoWay, FallbackValue=10}"
-                           IsEnabled="{Binding #AutoFetchCheckBox.IsChecked}"/>
-
-            <TextBlock VerticalAlignment="Center"
-                       Margin="5,0,0,0"
-                       Text="{DynamicResource Text.Configure.Git.AutoFetchIntervalSuffix}" />
-          </StackPanel>
 
           <!-- セパレーター -->
-          <Rectangle Grid.Row="12" Grid.ColumnSpan="2" Height="1" Margin="0,8" Fill="{DynamicResource Brush.Border2}"/>
+          <Rectangle Grid.Row="11" Grid.ColumnSpan="2" Height="1" Margin="0,8" Fill="{DynamicResource Brush.Border2}"/>
 
           <!-- リモート選択 -->
-          <TextBlock Grid.Row="13" Grid.Column="0"
+          <TextBlock Grid.Row="12" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
                      Text="{DynamicResource Text.Configure.Remote}"/>
-          <ComboBox Grid.Row="13" Grid.Column="1"
+          <ComboBox Grid.Row="12" Grid.Column="1"
                     Height="28" Padding="8,0"
                     VerticalAlignment="Center" HorizontalAlignment="Stretch"
                     ItemsSource="{Binding RemoteObjects}"
@@ -224,21 +205,21 @@
           </ComboBox>
 
           <!-- リモート名 -->
-          <TextBlock Grid.Row="14" Grid.Column="0"
+          <TextBlock Grid.Row="13" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
                      Text="{DynamicResource Text.Remote.Name}"/>
-          <TextBox Grid.Row="14" Grid.Column="1"
+          <TextBox Grid.Row="13" Grid.Column="1"
                    Height="28"
                    CornerRadius="3"
                    Text="{Binding SelectedRemoteName, Mode=TwoWay}"/>
 
           <!-- リモートURL -->
-          <TextBlock Grid.Row="15" Grid.Column="0"
+          <TextBlock Grid.Row="14" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
                      Text="URL"/>
-          <Grid Grid.Row="15" Grid.Column="1" ColumnDefinitions="*,Auto">
+          <Grid Grid.Row="14" Grid.Column="1" ColumnDefinitions="*,Auto">
             <TextBox Grid.Column="0" x:Name="TxtRemoteUrl"
                      Height="28"
                      CornerRadius="3"
@@ -248,17 +229,17 @@
           </Grid>
 
           <!-- SSHキー (SSH接続時のみ表示) -->
-          <TextBlock Grid.Row="16" Grid.Column="0"
+          <TextBlock Grid.Row="15" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
                      Text="{DynamicResource Text.SSHKey}"
                      IsVisible="{Binding SelectedRemoteUseSSH}"/>
-          <v:SSHKeyPicker Grid.Row="16" Grid.Column="1"
+          <v:SSHKeyPicker Grid.Row="15" Grid.Column="1"
                           SSHKeyPath="{Binding SelectedRemoteSSHKey, Mode=TwoWay}"
                           IsVisible="{Binding SelectedRemoteUseSSH}"/>
 
           <!-- プッシュ禁止 -->
-          <CheckBox Grid.Row="17" Grid.Column="1"
+          <CheckBox Grid.Row="16" Grid.Column="1"
                     Content="{DynamicResource Text.Configure.Remote.PushDisabled}"
                     IsChecked="{Binding SelectedRemotePushDisabled, Mode=TwoWay}"
                     ToolTip.Tip="git remote set-url --push &lt;name&gt; no_push"/>
