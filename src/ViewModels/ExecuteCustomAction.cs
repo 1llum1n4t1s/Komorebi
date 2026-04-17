@@ -232,7 +232,35 @@ public class ExecuteCustomAction : Popup
         _repo = repo;
         CustomAction = action;
         Target = scopeTarget ?? new Models.Null();
-        PrepareControlParameters();
+
+        // upstream 770a9184: PrepareControlParameters メソッドを constructor に inline 化
+        foreach (var ctl in CustomAction.Controls)
+        {
+            switch (ctl.Type)
+            {
+                case Models.CustomActionControlType.TextBox:
+                    // upstream fb708065: StringFormatter を渡して ${VALUE} プレースホルダー対応
+                    ControlParameters.Add(new CustomActionControlTextBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue), ctl.StringFormatter));
+                    break;
+                case Models.CustomActionControlType.PathSelector:
+                    ControlParameters.Add(new CustomActionControlPathSelector(ctl.Label, ctl.Description, ctl.BoolValue, PrepareStringByTarget(ctl.StringValue)));
+                    break;
+                case Models.CustomActionControlType.CheckBox:
+                    ControlParameters.Add(new CustomActionControlCheckBox(ctl.Label, ctl.Description, ctl.StringValue, ctl.BoolValue));
+                    break;
+                case Models.CustomActionControlType.ComboBox:
+                    ControlParameters.Add(new CustomActionControlComboBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue)));
+                    break;
+                case Models.CustomActionControlType.LocalBranchSelector:
+                    // ローカルブランチを絞り込んで選択させる（upstream dfe362f2）
+                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, true, false));
+                    break;
+                case Models.CustomActionControlType.RemoteBranchSelector:
+                    // リモートブランチを絞り込んで選択させる。BoolValue=true で FriendlyName を値として使う（upstream dfe362f2）
+                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, false, ctl.BoolValue));
+                    break;
+            }
+        }
     }
 
     /// <summary>
@@ -264,40 +292,6 @@ public class ExecuteCustomAction : Popup
 
         log.Complete();
         return true;
-    }
-
-    /// <summary>
-    /// カスタムアクション定義のコントロール設定からUIパラメータオブジェクトを生成する。
-    /// </summary>
-    private void PrepareControlParameters()
-    {
-        foreach (var ctl in CustomAction.Controls)
-        {
-            switch (ctl.Type)
-            {
-                case Models.CustomActionControlType.TextBox:
-                    // upstream fb708065: StringFormatter を渡して ${VALUE} プレースホルダー対応
-                    ControlParameters.Add(new CustomActionControlTextBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue), ctl.StringFormatter));
-                    break;
-                case Models.CustomActionControlType.PathSelector:
-                    ControlParameters.Add(new CustomActionControlPathSelector(ctl.Label, ctl.Description, ctl.BoolValue, PrepareStringByTarget(ctl.StringValue)));
-                    break;
-                case Models.CustomActionControlType.CheckBox:
-                    ControlParameters.Add(new CustomActionControlCheckBox(ctl.Label, ctl.Description, ctl.StringValue, ctl.BoolValue));
-                    break;
-                case Models.CustomActionControlType.ComboBox:
-                    ControlParameters.Add(new CustomActionControlComboBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue)));
-                    break;
-                case Models.CustomActionControlType.LocalBranchSelector:
-                    // ローカルブランチを絞り込んで選択させる（upstream dfe362f2）
-                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, true, false));
-                    break;
-                case Models.CustomActionControlType.RemoteBranchSelector:
-                    // リモートブランチを絞り込んで選択させる。BoolValue=true で FriendlyName を値として使う（upstream dfe362f2）
-                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, false, ctl.BoolValue));
-                    break;
-            }
-        }
     }
 
     /// <summary>
