@@ -333,7 +333,8 @@ public partial class Preferences : ChromelessWindow
         }
         catch (Exception ex)
         {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectGitExe", ex.Message));
+            // Preferences モーダル内なので親ウィンドウの通知バナーではなく Alert 子モーダルで表示する
+            await new Alert().ShowAsync(this, App.Text("Error.FailedToSelectGitExe", ex.Message), true);
         }
 
         e.Handled = true;
@@ -360,7 +361,8 @@ public partial class Preferences : ChromelessWindow
         }
         catch (Exception ex)
         {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCloneDir", ex.Message));
+            // Preferences モーダル内なので親ウィンドウの通知バナーではなく Alert 子モーダルで表示する
+            await new Alert().ShowAsync(this, App.Text("Error.FailedToSelectCloneDir", ex.Message), true);
         }
 
         e.Handled = true;
@@ -391,7 +393,8 @@ public partial class Preferences : ChromelessWindow
         }
         catch (Exception ex)
         {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectGpg", ex.Message));
+            // Preferences モーダル内なので親ウィンドウの通知バナーではなく Alert 子モーダルで表示する
+            await new Alert().ShowAsync(this, App.Text("Error.FailedToSelectGpg", ex.Message), true);
         }
 
         e.Handled = true;
@@ -425,7 +428,8 @@ public partial class Preferences : ChromelessWindow
         }
         catch (Exception ex)
         {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectTerminal", ex.Message));
+            // Preferences モーダル内なので親ウィンドウの通知バナーではなく Alert 子モーダルで表示する
+            await new Alert().ShowAsync(this, App.Text("Error.FailedToSelectTerminal", ex.Message), true);
         }
 
         e.Handled = true;
@@ -459,7 +463,8 @@ public partial class Preferences : ChromelessWindow
         }
         catch (Exception ex)
         {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectMergeTool", ex.Message));
+            // Preferences モーダル内なので親ウィンドウの通知バナーではなく Alert 子モーダルで表示する
+            await new Alert().ShowAsync(this, App.Text("Error.FailedToSelectMergeTool", ex.Message), true);
         }
 
         e.Handled = true;
@@ -558,7 +563,8 @@ public partial class Preferences : ChromelessWindow
         }
         catch (Exception ex)
         {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCustomAction", ex.Message));
+            // Preferences モーダル内なので親ウィンドウの通知バナーではなく Alert 子モーダルで表示する
+            await new Alert().ShowAsync(this, App.Text("Error.FailedToSelectCustomAction", ex.Message), true);
         }
 
         e.Handled = true;
