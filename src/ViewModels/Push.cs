@@ -84,7 +84,7 @@ public class Push : Popup
         set
         {
             if (SetProperty(ref _selectedRemoteBranch, value, true))
-                IsSetTrackOptionVisible = value is not null && _selectedLocalBranch.Upstream != value.FullName;
+                IsSetTrackOptionVisible = value is not null && (value.Head is null || _selectedLocalBranch.Upstream != value.FullName);
         }
     }
 

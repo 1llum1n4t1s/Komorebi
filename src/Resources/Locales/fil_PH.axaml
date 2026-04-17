@@ -202,27 +202,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">Ikumpara sa HEAD</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">I-configure ang Repository</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">TEMPLATE NG COMMIT</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} Pangalan ng kasalukuyang lokal na branch.&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} Bilang ng mga nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} Mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} Hanggang N na bilang ng mga path ng nabagong file&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} Katulad ng ${files}, ngunit mga pangalan ng file lamang&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} Katulad ng ${files:N}, ngunit walang mga folder</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">Nilalaman ng Template:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">Pangalan ng Template:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">CUSTOM NA AKSYON</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">Mga Argumento:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} Path ng Repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} Napiling tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Mga built-in na parameter:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} Path ng Repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} Napiling remote o remote ng napiling branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} Napiling branch, walang ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name ng napiling branch, may ${REMOTE} na bahagi para sa mga remote branch&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} Hash ng napiling commit&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} Napiling tag&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} Napiling file, relative sa root ng repository&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... Mga halaga ng input control</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">Maipapatupad na File:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">Mga Input Control:</x:String>
@@ -441,7 +441,6 @@
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Tapusin ang Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Tapusin ang Release</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Target:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithPush" xml:space="preserve">I-push sa (mga) remote pagkatapos tapusin</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">I-squash habang nag-merge</x:String>
   <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Unlapi ng Hotfix:</x:String>
@@ -605,11 +604,11 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Buksan sa Panlabas na Merge Tool</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Opsyonal.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Lumikha ng Bagong Tab</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Bookmark" xml:space="preserve">Bookmark</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">Isara ang Tab</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Isara ang Ibang mga Tab</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Isara ang mga Tab sa Kanan</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Kopyahin ang Path ng Repository</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">I-edit</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">Ilipat sa Workspace</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">I-refresh</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Mga Repository</x:String>
@@ -1042,7 +1041,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">Hindi nagawang i-save ang file: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Hindi nagawang i-save ang pagbabago bilang patch: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">Hindi nagawang i-scan ang mga repository: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">Hindi nagawang simulan ang watcher para sa repository '{0}'. Maaaring kailanganin mong pindutin ang 'F5' para manu-manong i-refresh!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">Hindi nagawang simulan ang '{0}'. Dahilan: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">Hindi nagawang buksan: {0}</x:String>

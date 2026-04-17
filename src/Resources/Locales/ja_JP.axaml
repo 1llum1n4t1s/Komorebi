@@ -205,27 +205,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD と比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">リポジトリの設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">コミットテンプレート</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${branch_name} 現在のローカルブランチ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files_num} 変更されたファイル数&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files} 変更されたファイルへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${files:N} 変更されたファイルへのパス (最大 N 件)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${pure_files} 変更されたファイルの名前&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${branch_name} 現在のローカルブランチ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files_num} 変更されたファイル数&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files} 変更されたファイルへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${files:N} 変更されたファイルへのパス (最大 N 件)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${pure_files} 変更されたファイルの名前&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   ${pure_files:N} 変更されたファイルの名前 (最大 N 件)</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">テンプレートの内容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">テンプレート名:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">カスタムアクション</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">引数:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} リポジトリへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} 選択したコミットのハッシュ&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} 選択したタグ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">組み込みのパラメーター:&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} リポジトリへのパス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} 選択したリモート名、または選択したブランチのリモート名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} 選択したブランチ名 (リモートブランチの場合に ${REMOTE} の部分を含まない)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 選択したブランチの分かりやすい名前 (リモートブランチの場合に ${REMOTE} の部分を含む)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} 選択したコミットのハッシュ&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} 選択したタグ名&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} リポジトリのルートから辿った、選択したファイルへの相対パス&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... 入力プロンプトの値</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">実行ファイル:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">入力プロンプト:</x:String>
@@ -444,7 +444,6 @@
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">フロー - 緊急のバグ修正を完了</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">フロー - リリース作業を完了</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">対象:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithPush" xml:space="preserve">コミットの完了後、リモートにプッシュ</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">スカッシュしてマージ</x:String>
   <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">緊急のバグ修正:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">緊急のバグ修正用のプレフィックス:</x:String>
@@ -608,11 +607,11 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">外部のマージツールで開く</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">省略可能</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">新しいタブを作成</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Bookmark" xml:space="preserve">ブックマーク</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">タブを閉じる</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">他のタブを閉じる</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">右側のタブを閉じる</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">リポジトリへのパスをコピー</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">編集</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">ワークスペースに移動</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">再読み込み</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">リポジトリ</x:String>
@@ -1045,7 +1044,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">ファイルの保存に失敗しました: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">パッチへの変更の保存に失敗しました: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">リポジトリのスキャンに失敗しました: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">リポジトリ '{0}' のウォッチャー起動に失敗しました。'F5'キーを押して手動でリポジトリを更新する必要があるかもしれません。&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">リポジトリ '{0}' のウォッチャー起動に失敗しました。'F5'キーを押して手動でリポジトリを更新する必要があるかもしれません。&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 理由: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' の起動に失敗しました。理由: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開けませんでした: {0}</x:String>

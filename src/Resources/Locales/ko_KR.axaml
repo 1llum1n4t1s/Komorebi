@@ -207,15 +207,15 @@
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">템플릿 이름:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">사용자 지정 작업</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">인수:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">내장 파라미터: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REPO} 저장소 경로&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${REMOTE} 선택한 원격 또는 선택한 브랜치의 원격&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH} 선택한 브랜치 (원격 브랜치의 경우 ${REMOTE} 부분 제외)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${BRANCH_FRIENDLY_NAME} 선택한 브랜치의 식별하기 쉬운 이름 (원격 브랜치의 경우 ${REMOTE} 부분 포함)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${SHA} 선택한 커밋의 해시&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${TAG} 선택한 태그&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
-  ${FILE} 저장소 루트에 상대적인 선택된 파일&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">내장 파라미터: &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REPO} 저장소 경로&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${REMOTE} 선택한 원격 또는 선택한 브랜치의 원격&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH} 선택한 브랜치 (원격 브랜치의 경우 ${REMOTE} 부분 제외)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 선택한 브랜치의 식별하기 쉬운 이름 (원격 브랜치의 경우 ${REMOTE} 부분 포함)&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${SHA} 선택한 커밋의 해시&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${TAG} 선택한 태그&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  ${FILE} 저장소 루트에 상대적인 선택된 파일&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
   $1, $2 ... 입력 컨트롤 값</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">실행 파일:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">입력 컨트롤:</x:String>
@@ -434,7 +434,6 @@
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Hotfix 완료</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Release 완료</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">대상:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithPush" xml:space="preserve">완료 후 원격(들)에 푸시</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">병합 시 스쿼시</x:String>
   <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">핫픽스:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Hotfix 접두사:</x:String>
@@ -598,11 +597,11 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">병합 도구에서 열기</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">선택 사항.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">새 탭 만들기</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Bookmark" xml:space="preserve">북마크</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Close" xml:space="preserve">탭 닫기</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">다른 탭 닫기</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">오른쪽 탭 닫기</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">저장소 경로 복사</x:String>
+  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">편집</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">작업 공간으로 이동</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">새로고침</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">저장소</x:String>
@@ -1035,7 +1034,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">파일 저장 실패: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">패치 변경 사항 저장 실패: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">저장소 스캔 실패: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">저장소 '{0}'의 감시자 시작 실패. 'F5'를 눌러 저장소를 수동으로 새로고침해야 할 수 있습니다!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">저장소 '{0}'의 감시자 시작 실패. 'F5'를 눌러 저장소를 수동으로 새로고침해야 할 수 있습니다!&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;
 이유: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' 시작 실패. 이유: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">열기 실패: {0}</x:String>

@@ -197,9 +197,9 @@ public partial class Remote
             {
                 var uri = new Uri(URL.EndsWith(".git", StringComparison.Ordinal) ? URL[..^4] : URL);
                 if (uri.Port != 80 && uri.Port != 443)
-                    url = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.LocalPath}";
+                    url = $"{uri.Scheme}://{uri.Host}:{uri.Port}{uri.AbsolutePath}";
                 else
-                    url = $"{uri.Scheme}://{uri.Host}{uri.LocalPath}";
+                    url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}";
 
                 return true;
             }

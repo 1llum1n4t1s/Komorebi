@@ -35,15 +35,6 @@ public class GitFlowFinish : Popup
     } = false;
 
     /// <summary>
-    /// 完了後に自動的にリモートへプッシュするかどうか。
-    /// </summary>
-    public bool AutoPush
-    {
-        get;
-        set;
-    } = false;
-
-    /// <summary>
     /// 完了後もブランチを削除せず保持するかどうか。
     /// </summary>
     public bool KeepBranch
@@ -76,7 +67,7 @@ public class GitFlowFinish : Popup
         // ブランチ名からプレフィックスを除去して短縮名を取得
         var prefix = _repo.GitFlow.GetPrefix(Type);
         var name = Branch.Name.StartsWith(prefix) ? Branch.Name[prefix.Length..] : Branch.Name;
-        var succ = await Commands.GitFlow.FinishAsync(_repo.FullPath, Type, name, Squash, AutoPush, KeepBranch, log);
+        var succ = await Commands.GitFlow.FinishAsync(_repo.FullPath, Type, name, Squash, KeepBranch, log);
 
         log.Complete();
         return succ;
