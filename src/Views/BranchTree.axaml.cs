@@ -421,6 +421,26 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
+    /// 現在の HEAD が指すブランチ（IsCurrent=true のブランチ）が表示領域内に入るようにスクロールする。
+    /// 選択状態は変更しない（upstream issue #1022 対応）。
+    /// ローカルブランチ数が多くアクティブブランチが見えない場合の UX 改善。
+    /// </summary>
+    public void ScrollCurrentBranchIntoView()
+    {
+        if (Rows == null || Rows.Count == 0)
+            return;
+
+        foreach (var row in Rows)
+        {
+            if (row.Backend is Models.Branch { IsCurrent: true })
+            {
+                BranchesPresenter.ScrollIntoView(row);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
     /// ToggleNodeIsExpandedの処理を行う。
     /// </summary>
     public void ToggleNodeIsExpanded(ViewModels.BranchTreeNode node)

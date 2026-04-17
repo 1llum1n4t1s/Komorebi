@@ -545,6 +545,81 @@ public partial class Blame : ChromelessWindow
     public Blame()
     {
         InitializeComponent();
+        PositionChanged += OnPositionChanged;
+
+        // 前回のウィンドウサイズを復元する（upstream issue #2100 対応）
+        var layout = ViewModels.Preferences.Instance.Layout;
+        Width = layout.BlameWidth;
+        Height = layout.BlameHeight;
+
+        // 前回のウィンドウ位置がスクリーン内に収まる場合のみ復元する（複数モニタ対応）
+        var x = layout.BlamePositionX;
+        var y = layout.BlamePositionY;
+        if (x != int.MinValue && y != int.MinValue && Screens is { } screens)
+        {
+            var position = new PixelPoint(x, y);
+            var size = new PixelSize((int)layout.BlameWidth, (int)layout.BlameHeight);
+            var desiredRect = new PixelRect(position, size);
+            for (var i = 0; i < screens.ScreenCount; i++)
+            {
+                var screen = screens.All[i];
+                if (screen.WorkingArea.Contains(desiredRect))
+                {
+                    Position = position;
+                    return;
+                }
+            }
+        }
+
+        WindowStartupLocation = WindowStartupLocation.CenterOwner;
+    }
+
+    /// <inheritdoc/>
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+
+        var state = ViewModels.Preferences.Instance.Layout.BlameWindowState;
+        if (state == WindowState.Maximized || state == WindowState.FullScreen)
+            WindowState = WindowState.Maximized;
+    }
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == WindowStateProperty)
+        {
+            var state = (WindowState)change.NewValue!;
+            ViewModels.Preferences.Instance.Layout.BlameWindowState = state;
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+
+        if (WindowState == WindowState.Normal)
+        {
+            var layout = ViewModels.Preferences.Instance.Layout;
+            layout.BlameWidth = Width;
+            layout.BlameHeight = Height;
+        }
+    }
+
+    /// <summary>
+    /// ウィンドウ位置変更時のハンドラ。通常状態の場合のみ位置を保存する。
+    /// </summary>
+    private void OnPositionChanged(object sender, PixelPointEventArgs e)
+    {
+        if (WindowState == WindowState.Normal)
+        {
+            var layout = ViewModels.Preferences.Instance.Layout;
+            layout.BlamePositionX = Position.X;
+            layout.BlamePositionY = Position.Y;
+        }
     }
 
     /// <summary>

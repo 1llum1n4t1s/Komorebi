@@ -8,7 +8,8 @@
                     x:Name="ThisControl"
                     Icon="/App.ico"
                     SizeToContent="WidthAndHeight"
-                    CanResize="False"
+                    CanResize="True"
+                    MinWidth="320" MinHeight="160"
                     WindowStartupLocation="CenterOwner">
   <Grid RowDefinitions="Auto,Auto,Auto">
     <!-- タイトルバー（Windows/Linux 用カスタムフレーム、macOS ではシステムフレーム使用） -->
@@ -33,9 +34,11 @@
                         IsVisible="{OnPlatform True, macOS=False}"/>
     </Grid>
 
-    <!-- メッセージ本文 -->
-    <Border Grid.Row="1" Margin="16">
-      <TextBlock x:Name="Message" MaxWidth="520" MinWidth="240" TextWrapping="Wrap"/>
+    <!-- メッセージ本文（長いメッセージは縦スクロール、ウィンドウ拡大で横に広がって wrap し直し） -->
+    <Border Grid.Row="1" Margin="16" MaxHeight="480">
+      <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <TextBlock x:Name="Message" MinWidth="240" TextWrapping="Wrap"/>
+      </ScrollViewer>
     </Border>
 
     <!-- OKボタン -->
