@@ -20,9 +20,11 @@ public class CheckoutBranchFromStash : Popup
 
     /// <summary>
     /// 作成するブランチ名。
+    /// Git の参照名規則に合わせ、'.' や '/' で始まる／終わるもの、'..' を含むものは弾く。
+    /// （参考: CreateTag.cs の tag 名バリデーションと同等の lookahead を採用）
     /// </summary>
     [Required(ErrorMessage = "Branch name is required!")]
-    [RegularExpression(@"^[\w\-/\.#\+]+$", ErrorMessage = "Bad branch name format!")]
+    [RegularExpression(@"^(?!\.)(?!/)(?!.*\.$)(?!.*/$)(?!.*\.\.)[\w\-/\.#\+]+$", ErrorMessage = "Bad branch name format!")]
     [CustomValidation(typeof(CheckoutBranchFromStash), nameof(ValidateBranchName))]
     public string BranchName
     {
