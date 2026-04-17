@@ -35,6 +35,10 @@ public enum CustomActionControlType
     CheckBox,
     /// <summary>ドロップダウン選択</summary>
     ComboBox,
+    /// <summary>ローカルブランチ選択（upstream dfe362f2）</summary>
+    LocalBranchSelector,
+    /// <summary>リモートブランチ選択（upstream dfe362f2）</summary>
+    RemoteBranchSelector,
 }
 
 /// <summary>
