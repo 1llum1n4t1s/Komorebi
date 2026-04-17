@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 using Avalonia.Collections;
@@ -75,7 +76,10 @@ public class LauncherPage : ObservableObject
     public async Task CopyPathAsync()
     {
         if (_node.IsRepository)
-            await App.CopyTextAsync(_node.Id);
+        {
+            var dir = new DirectoryInfo(_node.Id);
+            await App.CopyTextAsync(dir.FullName);
+        }
     }
 
     /// <summary>
