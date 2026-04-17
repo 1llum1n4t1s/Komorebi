@@ -381,18 +381,29 @@ public partial class Launcher : ChromelessWindow
     }
 
     /// <summary>
-    /// ウィンドウが閉じられる際の処理。
+    /// ウィンドウが閉じられる直前の処理。全タブのリポジトリを閉じる。
     /// </summary>
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
 
         if (!Design.IsDesignMode && DataContext is ViewModels.Launcher launcher)
-        {
-            // 設定を保存してランチャーを終了する
+            launcher.CloseAll();
+    }
+
+    /// <summary>
+    /// ウィンドウが閉じられた後の処理。Preferences を保存し、明示的に App.Quit でシャットダウンする。
+    /// ShutdownMode.OnExplicitShutdown の運用に合わせ、MainWindow の Closed イベントで
+    /// 初めて desktop.Shutdown が呼ばれる形に集約している。
+    /// </summary>
+    protected override void OnClosed(EventArgs e)
+    {
+        base.OnClosed(e);
+
+        if (!Design.IsDesignMode)
             ViewModels.Preferences.Instance.Save();
-            launcher.Quit();
-        }
+
+        App.Quit(0);
     }
 
     /// <summary>

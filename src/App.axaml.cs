@@ -723,16 +723,9 @@ public partial class App : Application
         Models.AvatarManager.Instance.Stop();
 
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            // 明示的シャットダウンモードに切り替えてメインウィンドウを閉じる
-            desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            desktop.MainWindow?.Close();
             desktop.Shutdown(exitCode);
-        }
         else
-        {
             Environment.Exit(exitCode);
-        }
     }
     #endregion
 
@@ -1109,7 +1102,11 @@ public partial class App : Application
 
         _launcher = new ViewModels.Launcher(startupRepo);
         desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
-        desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+        // MainWindow クローズで自動終了するのではなく、Views.Launcher の OnClosed から
+        // 明示的に App.Quit(0) を呼び desktop.Shutdown へ落とす流れに統一する。
+        // これにより macOS Dock からの Quit / Preferences 保存 / Logger フラッシュの順序が確定する。
+        desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
         // 初回起動時（デフォルトクローンディレクトリ未設定）はセットアップ画面を表示する
         if (string.IsNullOrEmpty(pref.GitDefaultCloneDir))
