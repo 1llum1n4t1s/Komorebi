@@ -66,12 +66,12 @@ public class OpenLocalRepository : Popup
     public OpenLocalRepository(string pageId, RepositoryNode group)
     {
         _pageId = pageId;
-        _group = group;
 
+        // 先頭に「No Group (Uncategorized)」を配置し、引数の group があればそれを、なければ Uncategorized を既定選択にする
         Groups = [];
+        Groups.Add(new RepositoryNode { Name = "No Group (Uncategorized)", Id = string.Empty });
+        Group = group ?? Groups[0];
         CollectGroups(Groups, Preferences.Instance.RepositoryNodes);
-        if (Groups.Count > 0 && _group is null)
-            Group = Groups[0];
 
         Bookmarks = [];
         for (var i = 0; i < Models.Bookmarks.Brushes.Length; i++)
@@ -96,6 +96,8 @@ public class OpenLocalRepository : Popup
     {
         // ベアリポジトリかどうかを判定する
         var isBare = await new Commands.IsBareRepository(_repoPath).GetResultAsync();
+        // 「No Group (Uncategorized)」（Id=string.Empty）は内部的に null を親として扱う
+        var parent = _group is { Id: not "" } ? _group : null;
         var repoRoot = _repoPath;
         if (!isBare)
         {
@@ -113,7 +115,7 @@ public class OpenLocalRepository : Popup
                 {
                     if (page.Node.Id.Equals(_pageId, StringComparison.Ordinal))
                     {
-                        page.Popup = new Init(page.Node.Id, _repoPath, _group, test.StdErr);
+                        page.Popup = new Init(page.Node.Id, _repoPath, parent, test.StdErr);
                         break;
                     }
                 }
@@ -123,7 +125,7 @@ public class OpenLocalRepository : Popup
         }
 
         // ノード登録してブックマークを反映し、ツリーをリフレッシュしてタブで開く
-        var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repoRoot, _group, true);
+        var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repoRoot, parent, true);
         node.Bookmark = _bookmark;
         await node.UpdateStatusAsync(false, null);
         Welcome.Instance.Refresh();

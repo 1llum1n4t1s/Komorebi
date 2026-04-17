@@ -132,11 +132,11 @@ public class Clone : Popup
     {
         _pageId = pageId;
 
-        // グループ一覧を収集し、先頭をデフォルト選択にする
+        // グループ一覧を構築する（先頭に「No Group (Uncategorized)」を配置し、既定選択にする）
         Groups = [];
+        Groups.Add(new RepositoryNode { Name = "No Group (Uncategorized)", Id = string.Empty });
+        SelectedGroup = Groups[0];
         CollectGroups(Groups, Preferences.Instance.RepositoryNodes);
-        if (Groups.Count > 0)
-            SelectedGroup = Groups[0];
 
         // ブックマーク色のインデックス一覧を構築する
         Bookmarks = [];
@@ -296,8 +296,11 @@ public class Clone : Popup
 
         log.Complete();
 
+        // 「No Group (Uncategorized)」（Id=string.Empty）は内部的に null を親として扱う
+        var parent = _selectedGroup is { Id: not "" } ? _selectedGroup : null;
+
         // リポジトリノードを設定に登録する（選択されたグループ配下に追加、ブックマーク色を適用）
-        var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path, _selectedGroup, true);
+        var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path, parent, true);
         node.Bookmark = _bookmark;
         await node.UpdateStatusAsync(false, null);
 
