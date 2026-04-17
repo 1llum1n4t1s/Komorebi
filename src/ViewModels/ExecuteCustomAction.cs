@@ -30,17 +30,25 @@ public class CustomActionControlTextBox : ICustomActionControlParameter
     public string Placeholder { get; set; }
     /// <summary>入力テキスト。</summary>
     public string Text { get; set; }
+    /// <summary>値を整形するテンプレート文字列（upstream fb708065）。<c>${VALUE}</c> が入力テキストに展開される。</summary>
+    public string Formatter { get; set; }
 
-    /// <summary>コンストラクタ。ラベル、プレースホルダー、デフォルト値を指定する。</summary>
-    public CustomActionControlTextBox(string label, string placeholder, string defaultValue)
+    /// <summary>コンストラクタ。ラベル、プレースホルダー、デフォルト値、フォーマッターを指定する。</summary>
+    public CustomActionControlTextBox(string label, string placeholder, string defaultValue, string formatter)
     {
         Label = label + ":";
         Placeholder = placeholder;
         Text = defaultValue;
+        Formatter = formatter;
     }
 
-    /// <summary>入力テキストを値として返す。</summary>
-    public string GetValue() => Text;
+    /// <summary>入力テキストを値として返す（空ならそのまま空、Formatter が設定されていれば ${VALUE} に差し込む）。</summary>
+    public string GetValue()
+    {
+        if (string.IsNullOrEmpty(Text))
+            return string.Empty;
+        return string.IsNullOrEmpty(Formatter) ? Text : Formatter.Replace("${VALUE}", Text);
+    }
 }
 
 /// <summary>
@@ -268,7 +276,8 @@ public class ExecuteCustomAction : Popup
             switch (ctl.Type)
             {
                 case Models.CustomActionControlType.TextBox:
-                    ControlParameters.Add(new CustomActionControlTextBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue)));
+                    // upstream fb708065: StringFormatter を渡して ${VALUE} プレースホルダー対応
+                    ControlParameters.Add(new CustomActionControlTextBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue), ctl.StringFormatter));
                     break;
                 case Models.CustomActionControlType.PathSelector:
                     ControlParameters.Add(new CustomActionControlPathSelector(ctl.Label, ctl.Description, ctl.BoolValue, PrepareStringByTarget(ctl.StringValue)));
