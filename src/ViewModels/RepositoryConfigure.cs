@@ -191,28 +191,6 @@ public class RepositoryConfigure : ObservableObject
         set => _repo.Settings.AskBeforeAutoUpdatingSubmodules = value;
     }
 
-    /// <summary>自動フェッチを有効にするかどうか。</summary>
-    public bool EnableAutoFetch
-    {
-        get => _repo.Settings.EnableAutoFetch;
-        set => _repo.Settings.EnableAutoFetch = value;
-    }
-
-    /// <summary>自動フェッチの間隔（分）。1未満は無効。</summary>
-    public int? AutoFetchInterval
-    {
-        get => _repo.Settings.AutoFetchInterval;
-        set
-        {
-            if (value is null || value < 1)
-                return;
-
-            var interval = (int)value;
-            if (_repo.Settings.AutoFetchInterval != interval)
-                _repo.Settings.AutoFetchInterval = interval;
-        }
-    }
-
     /// <summary>コミットメッセージテンプレートの一覧。</summary>
     public AvaloniaList<Models.CommitTemplate> CommitTemplates
     {

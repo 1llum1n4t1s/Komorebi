@@ -341,8 +341,7 @@ namespace Komorebi.Tests.Models
 
             Assert.Equal(string.Empty, settings.DefaultRemote);
             Assert.Equal(0, settings.PreferredMergeMode);
-            Assert.False(settings.EnableAutoFetch);
-            Assert.Equal(10, settings.AutoFetchInterval);
+            // EnableAutoFetch / AutoFetchInterval は v2026.08 以降グローバル設定 (Preferences) へ移行済み
         }
 
         /// <adversarial category="boundary" severity="critical"
