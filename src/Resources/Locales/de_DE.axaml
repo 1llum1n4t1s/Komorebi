@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Verwende AI, um Commit-Nachrichten zu generieren</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">Als Commit-Nachricht verwenden</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Komorebi minimieren</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Andere ausblenden</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Alles anzeigen</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Patch</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-Wege-Merge</x:String>

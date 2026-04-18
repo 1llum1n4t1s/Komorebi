@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Використати AI для генерації повідомлення коміту</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">ЗАСТОСУВАТИ ЯК ПОВІДОМЛЕННЯ КОМІТУ</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Сховати Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Сховати інші</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Показати все</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Застосувати</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-стороннє злиття</x:String>

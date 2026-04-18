@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Использовать OpenAI для создания сообщения о ревизии</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">ПРИМЕНИТЬ КАК СООБЩЕНИЕ РЕВИЗИИ</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Скрыть Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Скрыть остальные</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Показать все</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Исправить </x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Трехстороннее слияние</x:String>

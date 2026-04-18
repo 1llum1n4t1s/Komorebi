@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">உறுதிமொழி செய்தியை உருவாக்க செநுவைப் பயன்படுத்து</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">உறுதிமொழி செய்தி என இடு</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Komorebi-ஐ மறை</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">மற்றவற்றை மறை</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">அனைத்தையும் காட்டு</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">ஒட்டு</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-வழி இணைப்பு</x:String>

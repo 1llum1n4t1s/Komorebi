@@ -23,6 +23,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Gamitin ang AI para gumawa ng commit message</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">GAMITIN BILANG COMMIT MESSAGE</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Itago ang Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Itago ang Iba</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Ipakita Lahat</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Patch</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-Way na Merge</x:String>

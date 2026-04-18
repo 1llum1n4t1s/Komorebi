@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Gunakan AI untuk membuat pesan commit</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">TERAPKAN SEBAGAI PESAN COMMIT</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Sembunyikan Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Sembunyikan Lainnya</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Tampilkan Semua</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Patch</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Penggabungan 3-Arah</x:String>

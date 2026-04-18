@@ -45,6 +45,15 @@ internal class Linux : OS.IBackend
         }
     }
 
+    /// <summary>Linux では no-op（upstream 29cf5fc5 互換のスタブ）。</summary>
+    public void HideSelf() { }
+
+    /// <summary>Linux では no-op（upstream 29cf5fc5 互換のスタブ）。</summary>
+    public void HideOtherApplications() { }
+
+    /// <summary>Linux では no-op（upstream 29cf5fc5 互換のスタブ）。</summary>
+    public void ShowAllApplications() { }
+
     /// <summary>
     /// Linuxのアプリケーションデータディレクトリパスを返す。
     /// AppImageポータブルモード、~/.komorebi、旧設定ディレクトリからの移行に対応する。

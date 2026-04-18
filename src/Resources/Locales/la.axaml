@@ -23,6 +23,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Utere AI ad generandum nuntium committendi</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">ADHIBE UT NUNTIUM COMMITTENDI</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Absconde Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Alia Celare</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Ostende Omnia</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Emplastra</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Fusio Tripartita</x:String>

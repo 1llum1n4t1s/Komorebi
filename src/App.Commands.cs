@@ -2,7 +2,6 @@
 using System.Windows.Input;
 
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 
 namespace Komorebi;
 
@@ -105,24 +104,21 @@ public partial class App
     });
 
     /// <summary>
-    /// アプリケーションをバックグラウンドに隠すコマンド（トレイ最小化等）。
-    /// IActivatableLifetimeがサポートされているプラットフォームでのみ動作する。
+    /// 自アプリケーションを隠す macOS 用コマンド（⌘+H 対応）。
+    /// upstream 29cf5fc5 で IActivatableLifetime ベースから Native.OS.HideSelf() 直呼びに変更。
+    /// 非 macOS プラットフォームでは何もしない。
     /// </summary>
-    public static readonly Command HideAppCommand = new(_ =>
-    {
-        // IActivatableLifetime機能を取得し、バックグラウンド状態へ遷移させる
-        if (Current is App app && app.TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime lifetime)
-            lifetime.TryEnterBackground();
-    });
+    public static readonly Command HideAppCommand = new(_ => Native.OS.HideSelf());
 
     /// <summary>
-    /// バックグラウンドからアプリケーションを前面に復帰させるコマンド。
-    /// IActivatableLifetimeがサポートされているプラットフォームでのみ動作する。
+    /// Komorebi 以外のアプリケーションを全て隠す macOS 用コマンド（⌘+Alt+H、upstream 29cf5fc5）。
+    /// 非 macOS プラットフォームでは何もしない。
     /// </summary>
-    public static readonly Command ShowAppCommand = new(_ =>
-    {
-        // IActivatableLifetime機能を取得し、フォアグラウンド状態へ復帰させる
-        if (Current is App app && app.TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime lifetime)
-            lifetime.TryLeaveBackground();
-    });
+    public static readonly Command HideOtherApplicationsCommand = new(_ => Native.OS.HideOtherApplications());
+
+    /// <summary>
+    /// 隠されている全アプリケーションを再表示する macOS 用コマンド（upstream 29cf5fc5）。
+    /// 非 macOS プラットフォームでは何もしない。
+    /// </summary>
+    public static readonly Command ShowAllApplicationsCommand = new(_ => Native.OS.ShowAllApplications());
 }
