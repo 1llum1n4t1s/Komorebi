@@ -475,15 +475,9 @@ public class MergeConflictTextPresenter : TextEditor
 
     /// <summary>
     /// UpdateContentの処理を行う。
-    /// FontSize 変更時にも gutter 幅が正しく更新されるよう、内容更新時に全 LeftMargins の
-    /// InvalidateMeasure を呼ぶ（upstream 8713e586 #2276 対応）。
     /// </summary>
     private void UpdateContent()
     {
-        // FontSize 変更後も全 LeftMargins のレイアウトを再計算する（upstream 8713e586 #2276）
-        foreach (var margin in TextArea.LeftMargins)
-            margin.InvalidateMeasure();
-
         var lines = Lines;
         if (lines is null || lines.Count == 0)
         {
@@ -577,6 +571,10 @@ public class MergeConflictTextPresenter : TextEditor
             SetCurrentValue(DisplayRangeProperty, null);
             return;
         }
+
+        // FontSize 変更後も全 LeftMargins のレイアウトを再計算する（upstream 8713e586 #2276）
+        foreach (var margin in TextArea.LeftMargins)
+            margin.InvalidateMeasure();
 
         var lines = Lines;
         var start = int.MaxValue;
