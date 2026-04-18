@@ -471,8 +471,6 @@ public class MergeConflictTextPresenter : TextEditor
             Models.TextMateHelper.SetThemeByApp(_textMate);
         else if (change.Property == SelectedChunkProperty)
             TextArea.TextView.InvalidateVisual();
-        else if (change.Property == MaxLineNumberProperty)
-            TextArea.LeftMargins[0].InvalidateMeasure();
     }
 
     /// <summary>
@@ -573,6 +571,10 @@ public class MergeConflictTextPresenter : TextEditor
             SetCurrentValue(DisplayRangeProperty, null);
             return;
         }
+
+        // FontSize 変更後も全 LeftMargins のレイアウトを再計算する（upstream 8713e586 #2276）
+        foreach (var margin in TextArea.LeftMargins)
+            margin.InvalidateMeasure();
 
         var lines = Lines;
         var start = int.MaxValue;

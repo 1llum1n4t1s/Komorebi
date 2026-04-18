@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 using Avalonia;
@@ -16,6 +17,42 @@ namespace Komorebi.Native;
 [SupportedOSPlatform("macOS")]
 internal class MacOS : OS.IBackend
 {
+    // upstream 29cf5fc5: objc ランタイム経由で NSApplication の hide/unhideAllApplications を呼ぶための P/Invoke
+    [DllImport("/usr/lib/libobjc.dylib", EntryPoint = "objc_getClass")]
+    private static extern IntPtr objc_getClass(string name);
+
+    [DllImport("/usr/lib/libobjc.dylib", EntryPoint = "sel_registerName")]
+    private static extern IntPtr sel_registerName(string name);
+
+    [DllImport("/usr/lib/libobjc.dylib", EntryPoint = "objc_msgSend")]
+    private static extern IntPtr objc_msgSend(IntPtr receiver, IntPtr selector);
+
+    [DllImport("/usr/lib/libobjc.dylib", EntryPoint = "objc_msgSend")]
+    private static extern IntPtr objc_msgSendWithArg(IntPtr receiver, IntPtr selector, IntPtr arg);
+
+    /// <summary>
+    /// NSApplication のインスタンスメソッドを呼び出す共通ヘルパ（upstream 29cf5fc5）。
+    /// </summary>
+    private static void InvokeNSApplicationSelector(string selectorName)
+    {
+        var nsApplicationClass = objc_getClass("NSApplication");
+        var sharedSelector = sel_registerName("sharedApplication");
+        var nsApp = objc_msgSend(nsApplicationClass, sharedSelector);
+        var methodSelector = sel_registerName(selectorName);
+        var delegateSelector = sel_registerName("delegate");
+        var nsDelegate = objc_msgSend(nsApp, delegateSelector);
+        objc_msgSendWithArg(nsApp, methodSelector, nsDelegate);
+    }
+
+    /// <summary>自アプリケーションを隠す（⌘+H、upstream 29cf5fc5）。</summary>
+    public void HideSelf() => InvokeNSApplicationSelector("hide:");
+
+    /// <summary>他の全アプリケーションを隠す（⌘+Alt+H、upstream 29cf5fc5）。</summary>
+    public void HideOtherApplications() => InvokeNSApplicationSelector("hideOtherApplications:");
+
+    /// <summary>隠されている全アプリケーションを再表示する（upstream 29cf5fc5）。</summary>
+    public void ShowAllApplications() => InvokeNSApplicationSelector("unhideAllApplications:");
+
     /// <summary>
     /// AvaloniaアプリケーションビルダーにmacOS固有の設定を適用する。
     /// デフォルトメニュー項目を無効化し、PATH環境変数を修正する。

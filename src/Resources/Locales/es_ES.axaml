@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Usar OpenAI para generar mensaje de commit</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">APLICAR COMO MENSAJE DE COMMIT</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Ocultar Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Ocultar otros</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Mostrar Todo</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Aplicar Parche</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Merge a 3 vías (3-Way)</x:String>
@@ -286,8 +287,11 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">Etiqueta:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">Opciones:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">Usar '|' como delimitador para las opciones</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">Formateador de Cadenas:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">Opcional. Se utiliza para formatear la cadena de salida. Se ignora cuando la entrada está vacía. Por favor, utilice `${VALUE}` para representar la cadena de entrada.</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">La variables incorporadas ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, y ${TAG} permanecen disponibles aquí</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Tipo:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Usar Nombre Amigable:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Espacios de Trabajo</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Directorio de clonado</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Usa la configuración global si está vacío</x:String>

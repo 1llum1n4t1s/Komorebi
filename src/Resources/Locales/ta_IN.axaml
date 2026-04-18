@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">உறுதிமொழி செய்தியை உருவாக்க செநுவைப் பயன்படுத்து</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">உறுதிமொழி செய்தி என இடு</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Komorebi-ஐ மறை</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">மற்றவற்றை மறை</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">அனைத்தையும் காட்டு</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">ஒட்டு</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-வழி இணைப்பு</x:String>
@@ -283,8 +284,11 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">பெயர்ச்சீட்டு:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">விருப்பங்கள்:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">விருப்பங்களுக்கு '|' பிரிப்பானைப் பயன்படுத்தவும்</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">சரம் வடிவமைப்பான்:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">விருப்பத்தேர்வு. வெளியீட்டுச் சரத்தை வடிவமைக்கப் பயன்படுகிறது. உள்ளீடு காலியாக இருந்தால் புறக்கணிக்கப்படும். உள்ளீட்டுச் சரத்தைக் குறிக்க `${VALUE}` ஐப் பயன்படுத்தவும்.</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">உள்ளமைக்கப்பட்ட மாறிகள் ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, மற்றும் ${TAG} இங்கே கிடைக்கும்</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">வகை:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">நட்பான பெயரைப் பயன்படுத்து:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">பணியிடங்கள்</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">நகலி அடைவு</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">காலியாக இருந்தால் உலகளாவிய அமைப்பைப் பயன்படுத்தும்</x:String>

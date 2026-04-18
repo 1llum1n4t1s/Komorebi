@@ -23,6 +23,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Gamitin ang AI para gumawa ng commit message</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">GAMITIN BILANG COMMIT MESSAGE</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Itago ang Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Itago ang Iba</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Ipakita Lahat</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Patch</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-Way na Merge</x:String>
@@ -280,8 +281,11 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">Label:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">Mga Opsyon:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">Gamitin ang '|' bilang delimiter para sa mga opsyon</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">String Formatter:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">Opsyonal. Ginagamit upang i-format ang output string. Hindi pinapansin kapag walang input. Mangyaring gamitin ang `${VALUE}` upang kumatawan sa input string.</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Ang mga built-in na variable na ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, at ${TAG} ay magagamit pa rin dito</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Uri:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Gamitin ang Friendly Name:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Mga Workspace</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Clone Dir</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Gagamitin ang global na setting kung walang laman</x:String>

@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:String x:Key="Text.About" xml:space="preserve">About</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">About Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Release Date: {0}</x:String>
@@ -22,6 +22,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Use AI to generate commit message</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">APPLY AS COMMIT MESSAGE</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Hide Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Hide Others</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Show All</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Patch</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-Way Merge</x:String>
@@ -282,8 +283,11 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">Label:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">Options:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">Use '|' as delimiter for options</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">String Formatter:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">Optional. Used to format output string. Ignored when input is empty. Please use `${VALUE}` to represent the input string.</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">The built-in variables ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, and ${TAG} remain available here</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Type:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Use Friendly Name:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Workspaces</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Clone Dir</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Uses global setting if empty</x:String>

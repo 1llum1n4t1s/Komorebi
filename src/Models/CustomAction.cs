@@ -35,6 +35,10 @@ public enum CustomActionControlType
     CheckBox,
     /// <summary>ドロップダウン選択</summary>
     ComboBox,
+    /// <summary>ローカルブランチ選択（upstream dfe362f2）</summary>
+    LocalBranchSelector,
+    /// <summary>リモートブランチ選択（upstream dfe362f2）</summary>
+    RemoteBranchSelector,
 }
 
 /// <summary>
@@ -84,6 +88,17 @@ public class CustomActionControl : ObservableObject
     }
 
     /// <summary>
+    /// 文字列入力値のフォーマッター（upstream fb708065）。
+    /// TextBox の入力値を <c>${VALUE}</c> プレースホルダーで包んだテンプレートに差し込んで出力する。
+    /// 例: <c>"--author=${VALUE}"</c>
+    /// </summary>
+    public string StringFormatter
+    {
+        get => _stringFormatter;
+        set => SetProperty(ref _stringFormatter, value);
+    }
+
+    /// <summary>
     /// ブール型の入力値（チェックボックス用）
     /// </summary>
     public bool BoolValue
@@ -96,6 +111,7 @@ public class CustomActionControl : ObservableObject
     private string _label = string.Empty;
     private string _description = string.Empty;
     private string _stringValue = string.Empty;
+    private string _stringFormatter = string.Empty;
     private bool _boolValue = false;
 }
 

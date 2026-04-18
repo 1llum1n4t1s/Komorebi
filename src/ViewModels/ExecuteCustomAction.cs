@@ -30,17 +30,25 @@ public class CustomActionControlTextBox : ICustomActionControlParameter
     public string Placeholder { get; set; }
     /// <summary>入力テキスト。</summary>
     public string Text { get; set; }
+    /// <summary>値を整形するテンプレート文字列（upstream fb708065）。<c>${VALUE}</c> が入力テキストに展開される。</summary>
+    public string Formatter { get; set; }
 
-    /// <summary>コンストラクタ。ラベル、プレースホルダー、デフォルト値を指定する。</summary>
-    public CustomActionControlTextBox(string label, string placeholder, string defaultValue)
+    /// <summary>コンストラクタ。ラベル、プレースホルダー、デフォルト値、フォーマッターを指定する。</summary>
+    public CustomActionControlTextBox(string label, string placeholder, string defaultValue, string formatter)
     {
         Label = label + ":";
         Placeholder = placeholder;
         Text = defaultValue;
+        Formatter = formatter;
     }
 
-    /// <summary>入力テキストを値として返す。</summary>
-    public string GetValue() => Text;
+    /// <summary>入力テキストを値として返す（空ならそのまま空、Formatter が設定されていれば ${VALUE} に差し込む）。</summary>
+    public string GetValue()
+    {
+        if (string.IsNullOrEmpty(Text))
+            return string.Empty;
+        return string.IsNullOrEmpty(Formatter) ? Text : Formatter.Replace("${VALUE}", Text);
+    }
 }
 
 /// <summary>
@@ -116,12 +124,8 @@ public class CustomActionControlComboBox : ObservableObject, ICustomActionContro
     /// <summary>選択肢リスト。</summary>
     public List<string> Options { get; set; } = [];
 
-    /// <summary>現在選択されている値。</summary>
-    public string Value
-    {
-        get => _value;
-        set => SetProperty(ref _value, value);
-    }
+    /// <summary>現在選択されている値（upstream dfe362f2 で auto-property 化）。</summary>
+    public string Value { get; set; }
 
     /// <summary>
     /// コンストラクタ。ラベル、説明、パイプ区切りの選択肢文字列を指定する。
@@ -135,14 +139,59 @@ public class CustomActionControlComboBox : ObservableObject, ICustomActionContro
         if (parts.Length > 0)
         {
             Options.AddRange(parts);
-            _value = parts[0];
+            Value = parts[0];
         }
     }
 
     /// <summary>選択中の値を返す。</summary>
-    public string GetValue() => _value;
+    public string GetValue() => Value;
+}
 
-    private string _value = string.Empty; // 選択中の値
+/// <summary>
+/// ブランチ選択ドロップダウンのコントロールパラメータ（upstream dfe362f2）。
+/// ローカル/リモートブランチを絞り込んで選択させ、Friendly Name / Full Name のどちらを値として返すか切り替えられる。
+/// </summary>
+public class CustomActionControlBranchSelector : ObservableObject, ICustomActionControlParameter
+{
+    /// <summary>ラベルテキスト。</summary>
+    public string Label { get; set; }
+    /// <summary>説明テキスト。</summary>
+    public string Description { get; set; }
+    /// <summary>選択可能なブランチ一覧。</summary>
+    public List<Models.Branch> Branches { get; set; } = [];
+    /// <summary>現在選択されているブランチ。</summary>
+    public Models.Branch SelectedBranch { get; set; }
+
+    /// <summary>
+    /// コンストラクタ。ラベル、説明、対象リポジトリ、ローカル/リモートフラグ、FriendlyName 使用フラグを指定する。
+    /// </summary>
+    public CustomActionControlBranchSelector(string label, string description, Repository repo, bool isLocal, bool useFriendlyName)
+    {
+        Label = label;
+        Description = description;
+        _useFriendlyName = useFriendlyName;
+
+        // HEAD を切り離した状態のブランチは選択肢から除外する
+        foreach (var b in repo.Branches)
+        {
+            if (b.IsLocal == isLocal && !b.IsDetachedHead)
+                Branches.Add(b);
+        }
+
+        if (Branches.Count > 0)
+            SelectedBranch = Branches[0];
+    }
+
+    /// <summary>選択中のブランチ名を返す。useFriendlyName=true の場合は FriendlyName、false の場合は Name。</summary>
+    public string GetValue()
+    {
+        if (SelectedBranch is null)
+            return string.Empty;
+
+        return _useFriendlyName ? SelectedBranch.FriendlyName : SelectedBranch.Name;
+    }
+
+    private bool _useFriendlyName = false;
 }
 
 /// <summary>
@@ -183,7 +232,35 @@ public class ExecuteCustomAction : Popup
         _repo = repo;
         CustomAction = action;
         Target = scopeTarget ?? new Models.Null();
-        PrepareControlParameters();
+
+        // upstream 770a9184: PrepareControlParameters メソッドを constructor に inline 化
+        foreach (var ctl in CustomAction.Controls)
+        {
+            switch (ctl.Type)
+            {
+                case Models.CustomActionControlType.TextBox:
+                    // upstream fb708065: StringFormatter を渡して ${VALUE} プレースホルダー対応
+                    ControlParameters.Add(new CustomActionControlTextBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue), ctl.StringFormatter));
+                    break;
+                case Models.CustomActionControlType.PathSelector:
+                    ControlParameters.Add(new CustomActionControlPathSelector(ctl.Label, ctl.Description, ctl.BoolValue, PrepareStringByTarget(ctl.StringValue)));
+                    break;
+                case Models.CustomActionControlType.CheckBox:
+                    ControlParameters.Add(new CustomActionControlCheckBox(ctl.Label, ctl.Description, ctl.StringValue, ctl.BoolValue));
+                    break;
+                case Models.CustomActionControlType.ComboBox:
+                    ControlParameters.Add(new CustomActionControlComboBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue)));
+                    break;
+                case Models.CustomActionControlType.LocalBranchSelector:
+                    // ローカルブランチを絞り込んで選択させる（upstream dfe362f2）
+                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, true, false));
+                    break;
+                case Models.CustomActionControlType.RemoteBranchSelector:
+                    // リモートブランチを絞り込んで選択させる。BoolValue=true で FriendlyName を値として使う（upstream dfe362f2）
+                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, false, ctl.BoolValue));
+                    break;
+            }
+        }
     }
 
     /// <summary>
@@ -218,36 +295,13 @@ public class ExecuteCustomAction : Popup
     }
 
     /// <summary>
-    /// カスタムアクション定義のコントロール設定からUIパラメータオブジェクトを生成する。
-    /// </summary>
-    private void PrepareControlParameters()
-    {
-        foreach (var ctl in CustomAction.Controls)
-        {
-            switch (ctl.Type)
-            {
-                case Models.CustomActionControlType.TextBox:
-                    ControlParameters.Add(new CustomActionControlTextBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue)));
-                    break;
-                case Models.CustomActionControlType.PathSelector:
-                    ControlParameters.Add(new CustomActionControlPathSelector(ctl.Label, ctl.Description, ctl.BoolValue, PrepareStringByTarget(ctl.StringValue)));
-                    break;
-                case Models.CustomActionControlType.CheckBox:
-                    ControlParameters.Add(new CustomActionControlCheckBox(ctl.Label, ctl.Description, ctl.StringValue, ctl.BoolValue));
-                    break;
-                case Models.CustomActionControlType.ComboBox:
-                    ControlParameters.Add(new CustomActionControlComboBox(ctl.Label, ctl.Description, PrepareStringByTarget(ctl.StringValue)));
-                    break;
-            }
-        }
-    }
-
-    /// <summary>
     /// 文字列内のターゲット関連プレースホルダー（${REPO}, ${BRANCH}, ${SHA}等）を実際の値に置換する。
     /// </summary>
     private string PrepareStringByTarget(string org)
     {
-        org = org.Replace("${REPO}", GetWorkdir());
+        // ${REPO} をリポジトリ作業ディレクトリ（OS形式）に展開する（upstream 9144daeb で GetWorkdir を inline 化）
+        var repoPath = OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
+        org = org.Replace("${REPO}", repoPath);
 
         return Target switch
         {
@@ -256,16 +310,9 @@ public class ExecuteCustomAction : Popup
             Models.Tag t => org.Replace("${TAG}", t.Name),
             Models.Remote r => org.Replace("${REMOTE}", r.Name),
             Models.CustomActionTargetFile f => org.Replace("${FILE}", f.File).Replace("${SHA}", f.Revision?.SHA ?? string.Empty),
-            _ => org
+            // Repository scope では ${BRANCH} を現在ブランチ名に展開する（upstream 8395efdd）
+            _ => org.Replace("${BRANCH}", _repo.CurrentBranch?.Name ?? "HEAD")
         };
-    }
-
-    /// <summary>
-    /// 作業ディレクトリのパスをOS形式で取得する。
-    /// </summary>
-    private string GetWorkdir()
-    {
-        return OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
     }
 
     /// <summary>

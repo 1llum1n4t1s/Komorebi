@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Gunakan AI untuk membuat pesan commit</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">TERAPKAN SEBAGAI PESAN COMMIT</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Sembunyikan Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Sembunyikan Lainnya</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Tampilkan Semua</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Patch</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Penggabungan 3-Arah</x:String>
@@ -283,8 +284,11 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">Label:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">Opsi:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">Gunakan '|' sebagai pembatas untuk opsi</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">Formatter String:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">Opsional. Digunakan untuk memformat string output. Diabaikan jika input kosong. Gunakan `${VALUE}` untuk merepresentasikan string input.</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Variabel bawaan ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, dan ${TAG} tetap tersedia di sini</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Jenis:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Gunakan Nama Ramah:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Workspace</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Direktori Clone</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Menggunakan pengaturan global jika kosong</x:String>

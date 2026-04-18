@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Usa AI per generare il messaggio di commit</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">APPLICA COME MESSAGGIO DI COMMIT</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Nascondi Komorebi</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Nascondi altri</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Mostra Tutto</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">Applica</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">Unione a 3 vie</x:String>
@@ -283,8 +284,11 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">Etichetta:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">Opzioni:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">Usa '|' come delimitatore per le opzioni</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">Formattatore di Stringhe:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">Facoltativo. Usato per formattare la stringa di output. Ignorato quando l'input è vuoto. Usa `${VALUE}` per rappresentare la stringa di input.</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Le variabili integrate ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE} e ${TAG} rimangono disponibili qui</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Tipo:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Usa Nome Amichevole:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Spazi di Lavoro</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">Cartella per cloni</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">Usa l'impostazione globale se vuoto</x:String>

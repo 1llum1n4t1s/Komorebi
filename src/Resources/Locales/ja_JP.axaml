@@ -26,6 +26,7 @@
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">AI を使用してコミットメッセージを生成</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">コミットメッセージとして適用</x:String>
   <x:String x:Key="Text.App.Hide" xml:space="preserve">Komorebi を隠す</x:String>
+  <x:String x:Key="Text.App.HideOthers" xml:space="preserve">ほかを隠す</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">すべて表示</x:String>
   <x:String x:Key="Text.Apply" xml:space="preserve">パッチ</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3ウェイ マージ</x:String>
@@ -283,8 +284,11 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">ラベル:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">選択肢:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">選択肢は '|' で区切って記述します</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">文字列フォーマッター:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">オプション。出力文字列をフォーマットするのに使用。入力が空の場合は無視される。入力文字列を表すには `${VALUE}` を使用。</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">ここでも組み込みの変数 ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, ${TAG} がそのまま利用できます</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">種類:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">フレンドリー名を使用:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">ワークスペース</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">クローンディレクトリ</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">空の場合はグローバル設定を使用</x:String>

@@ -32,6 +32,21 @@ public static partial class OS
         void SetupWindow(Window window);
 
         /// <summary>
+        /// 自アプリケーションを隠す（macOS ⌘+H、upstream 29cf5fc5）。非 macOS では no-op。
+        /// </summary>
+        void HideSelf();
+
+        /// <summary>
+        /// 他の全アプリケーションを隠す（macOS ⌘+Alt+H、upstream 29cf5fc5）。非 macOS では no-op。
+        /// </summary>
+        void HideOtherApplications();
+
+        /// <summary>
+        /// 隠されている全アプリケーションを再表示する（macOS、upstream 29cf5fc5）。非 macOS では no-op。
+        /// </summary>
+        void ShowAllApplications();
+
+        /// <summary>
         /// アプリケーションデータディレクトリのパスを取得する。
         /// </summary>
         string GetDataDir();
@@ -256,6 +271,21 @@ public static partial class OS
     {
         _backend.SetupWindow(window);
     }
+
+    /// <summary>
+    /// 自アプリケーションを隠す（macOS ⌘+H、upstream 29cf5fc5）。非 macOS では no-op。
+    /// </summary>
+    public static void HideSelf() => _backend.HideSelf();
+
+    /// <summary>
+    /// 他の全アプリケーションを隠す（macOS ⌘+Alt+H、upstream 29cf5fc5）。非 macOS では no-op。
+    /// </summary>
+    public static void HideOtherApplications() => _backend.HideOtherApplications();
+
+    /// <summary>
+    /// 隠されている全アプリケーションを再表示する（macOS、upstream 29cf5fc5）。非 macOS では no-op。
+    /// </summary>
+    public static void ShowAllApplications() => _backend.ShowAllApplications();
 
     /// <summary>
     /// システム上のgit実行ファイルを検索して返す。

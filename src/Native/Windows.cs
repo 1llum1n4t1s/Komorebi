@@ -86,6 +86,15 @@ internal class Windows : OS.IBackend
         window.BorderThickness = new Thickness(1);
     }
 
+    /// <summary>Windows では no-op（upstream 29cf5fc5 互換のスタブ）。</summary>
+    public void HideSelf() { }
+
+    /// <summary>Windows では no-op（upstream 29cf5fc5 互換のスタブ）。</summary>
+    public void HideOtherApplications() { }
+
+    /// <summary>Windows では no-op（upstream 29cf5fc5 互換のスタブ）。</summary>
+    public void ShowAllApplications() { }
+
     /// <summary>
     /// アプリケーションデータディレクトリのパスを返す。
     /// ポータブルモード（実行ファイル横のdataフォルダ）を優先する。
