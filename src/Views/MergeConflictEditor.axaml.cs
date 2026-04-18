@@ -471,15 +471,19 @@ public class MergeConflictTextPresenter : TextEditor
             Models.TextMateHelper.SetThemeByApp(_textMate);
         else if (change.Property == SelectedChunkProperty)
             TextArea.TextView.InvalidateVisual();
-        else if (change.Property == MaxLineNumberProperty)
-            TextArea.LeftMargins[0].InvalidateMeasure();
     }
 
     /// <summary>
     /// UpdateContentの処理を行う。
+    /// FontSize 変更時にも gutter 幅が正しく更新されるよう、内容更新時に全 LeftMargins の
+    /// InvalidateMeasure を呼ぶ（upstream 8713e586 #2276 対応）。
     /// </summary>
     private void UpdateContent()
     {
+        // FontSize 変更後も全 LeftMargins のレイアウトを再計算する（upstream 8713e586 #2276）
+        foreach (var margin in TextArea.LeftMargins)
+            margin.InvalidateMeasure();
+
         var lines = Lines;
         if (lines is null || lines.Count == 0)
         {

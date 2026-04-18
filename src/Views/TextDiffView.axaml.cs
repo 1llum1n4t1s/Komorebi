@@ -119,6 +119,27 @@ public class ThemedTextDiffPresenter : TextEditor
             }
         }
 
+        /// <summary>
+        /// LineNumberMargin の幅を MaxLineNumber に応じて動的計算する（upstream 8713e586 #2276）。
+        /// FontSize 変更時にも正しく追従するように MeasureOverride で毎回計算する。
+        /// </summary>
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            if (DataContext is not ViewModels.TextDiffContext ctx)
+                return new Size(0, 0);
+
+            var typeface = new Typeface(TextArea.FontFamily);
+            var test = new FormattedText(
+                $"{ctx.Data.MaxLineNumber}",
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                typeface,
+                TextArea.FontSize,
+                Brushes.White);
+
+            return new Size(test.Width, 0);
+        }
+
         /// <summary>プレゼンターのIsOldプロパティを参照するかどうか。</summary>
         private readonly bool _usePresenter;
         /// <summary>旧側の行番号を表示するかどうか。</summary>
@@ -657,28 +678,8 @@ public class ThemedTextDiffPresenter : TextEditor
     {
         base.OnDataContextChanged(e);
 
-        if (DataContext is ViewModels.TextDiffContext ctx)
-        {
-            var typeface = new Typeface(FontFamily);
-            var test = new FormattedText(
-                $"{ctx.Data.MaxLineNumber}",
-                CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                typeface,
-                FontSize,
-                Brushes.White);
-
-            var width = test.WidthIncludingTrailingWhitespace;
-            foreach (var margin in TextArea.LeftMargins)
-            {
-                if (margin is LineNumberMargin lineNumberMargin)
-                    margin.Width = width;
-            }
-
-            var dock = TextArea.FindDescendantOfType<DockPanel>();
-            dock?.InvalidateArrange();
-        }
-
+        // upstream 8713e586 (#2276): LineNumberMargin の幅計算は MeasureOverride に移動したため、
+        // ここでの事前計算は不要。
         AutoScrollToFirstChange();
     }
 
@@ -822,6 +823,10 @@ public class ThemedTextDiffPresenter : TextEditor
     {
         if (DataContext is not ViewModels.TextDiffContext ctx)
             return;
+
+        // upstream 8713e586 (#2276): FontSize 変更時にも全 LeftMargins のレイアウトが再計算されるよう invalidate する
+        foreach (var margin in TextArea.LeftMargins)
+            margin.InvalidateMeasure();
 
         if (ctx.IsSideBySide() && !IsOld)
             return;
