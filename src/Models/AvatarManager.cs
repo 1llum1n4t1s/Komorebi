@@ -105,15 +105,12 @@ public partial class AvatarManager
 
                 if (email is null)
                 {
-                    // Thread.Sleepはスレッドプールを占有するためTask.Delayに変更
-                    try
-                    {
-                        await Task.Delay(100, token).ConfigureAwait(false);
-                    }
-                    catch (OperationCanceledException)
-                    {
+                    // Task.Delay に token を直接渡すとキャンセル時に毎回 TaskCanceledException が throw される。
+                    // 例外はコストが高く debugger の first-chance exception ノイズにもなるため、
+                    // token を渡さずに待機して、待機後にキャンセル状態を polling する方式に変更。
+                    await Task.Delay(100).ConfigureAwait(false);
+                    if (token.IsCancellationRequested)
                         break;
-                    }
 
                     continue;
                 }
