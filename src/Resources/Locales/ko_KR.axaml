@@ -275,7 +275,7 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">옵션:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">옵션 구분자로 '|'를 사용하세요</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">문자열 포매터:</x:String>
-  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">선택 사항. 출력 문자열 형식을 지정하는 데 사용됩니다. 입력이 비어 있으면 무시됩니다. 입력 문자열을 나타내려면 ``를 사용하세요.</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">선택 사항. 출력 문자열 형식을 지정하는 데 사용됩니다. 입력이 비어 있으면 무시됩니다. 입력 문자열을 나타내려면 `${VALUE}`를 사용하세요.</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">내장 변수 ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, ${TAG}를 여기에서 사용할 수 있습니다</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">유형:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">친숙한 이름 사용:</x:String>

@@ -285,7 +285,7 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">選択肢:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">選択肢は '|' で区切って記述します</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">文字列フォーマッター:</x:String>
-  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">オプション。出力文字列をフォーマットするのに使用。入力が空の場合は無視される。入力文字列を表すには `` を使用。</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">オプション。出力文字列をフォーマットするのに使用。入力が空の場合は無視される。入力文字列を表すには `${VALUE}` を使用。</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">ここでも組み込みの変数 ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, ${TAG} がそのまま利用できます</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">種類:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">フレンドリー名を使用:</x:String>
