@@ -196,6 +196,9 @@ public partial class App : Application
         }
 
         // do-whileブロックでウィンドウ位置の計算を行う（breakで中断可能にするため）
+        // 位置永続化ウィンドウ（File History / Blame）はこの中央寄せを初期値として受け入れ、
+        // OnOpened で保存済み座標が有効なら Position を上書きする。保存座標が無効／スクリーン外の
+        // 場合はこの中央寄せがそのままフォールバックになる（codex PR #17 レビュー対応）。
         do
         {
             if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { Windows: { Count: > 0 } windows })

@@ -545,6 +545,90 @@ public partial class Blame : ChromelessWindow
     public Blame()
     {
         InitializeComponent();
+
+        // サイズは constructor 段階で設定して構わない（Screens を参照しないため）。upstream issue #2100 対応
+        // 位置の復元は OnOpened で実施する（Avalonia 11 では Screens が constructor 時点で null）。
+        // 初期位置は App.ShowWindow が Show() 前に「アクティブスクリーン中央」をセットしてくれるため、
+        // 保存座標が無効／スクリーン外の場合はそれがそのままフォールバックになる。
+        //
+        // 注意: PositionChanged の購読は OnOpened の位置復元完了後に行う。
+        // constructor で購読してしまうと、App.ShowWindow が Show() 前に行う
+        // centering が PositionChanged を発火し、OnPositionChanged が centered 座標を
+        // LayoutInfo に保存してしまう（＝本来復元したかった前回の位置が上書きされる）バグがある
+        // （gemini PR #17 レビュー対応）。
+        var layout = ViewModels.Preferences.Instance.Layout;
+        Width = layout.BlameWidth;
+        Height = layout.BlameHeight;
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Avalonia 11 では <see cref="WindowBase.Screens"/> が constructor 時点で null の場合があるため、
+    /// ウィンドウ位置の復元は OnOpened で実施する（coderabbit PR #17 レビュー対応）。
+    /// 復元失敗時のフォールバック（CenterOwner）は constructor 側で事前指定済み。
+    /// </remarks>
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+
+        var layout = ViewModels.Preferences.Instance.Layout;
+
+        // 先に Normal 状態で位置を復元してから、WindowState を Maximized に遷移させる
+        // （逆順だと Position 設定時に最大化が解除されるプラットフォーム対策、gemini PR #17 レビュー対応）。
+        // 位置復元失敗時は App.ShowWindow が Show() 前に適用した「アクティブスクリーン中央」がそのまま残る。
+        TryRestoreWindowPosition(
+            layout.BlamePositionX,
+            layout.BlamePositionY,
+            layout.BlameWidth,
+            layout.BlameHeight);
+
+        // 前回の最大化状態を復元する（Normal 位置は上で設定済みなので Restore 時の戻り先もそれになる）
+        var state = layout.BlameWindowState;
+        if (state == WindowState.Maximized || state == WindowState.FullScreen)
+            WindowState = WindowState.Maximized;
+
+        // 位置の初期復元が完了した後に PositionChanged を購読する（gemini PR #17 レビュー対応）。
+        PositionChanged += OnPositionChanged;
+    }
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == WindowStateProperty)
+        {
+            var state = (WindowState)change.NewValue!;
+            // Minimized を保存してしまうと次回起動時に最小化で復元されて困るのでフィルタする
+            if (state != WindowState.Minimized)
+                ViewModels.Preferences.Instance.Layout.BlameWindowState = state;
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+
+        if (WindowState == WindowState.Normal)
+        {
+            var layout = ViewModels.Preferences.Instance.Layout;
+            layout.BlameWidth = Width;
+            layout.BlameHeight = Height;
+        }
+    }
+
+    /// <summary>
+    /// ウィンドウ位置変更時のハンドラ。通常状態の場合のみ位置を保存する。
+    /// </summary>
+    private void OnPositionChanged(object sender, PixelPointEventArgs e)
+    {
+        if (WindowState == WindowState.Normal)
+        {
+            var layout = ViewModels.Preferences.Instance.Layout;
+            layout.BlamePositionX = Position.X;
+            layout.BlamePositionY = Position.Y;
+        }
     }
 
     /// <summary>

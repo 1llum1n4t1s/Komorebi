@@ -421,6 +421,45 @@ public partial class BranchTree : UserControl
     }
 
     /// <summary>
+    /// 現在の HEAD が指すブランチ（IsCurrent=true のブランチ）が表示領域内に入るようにスクロールする。
+    /// 選択状態は変更しない（upstream issue #1022 対応）。
+    /// ローカルブランチ数が多くアクティブブランチが見えない場合の UX 改善。
+    /// </summary>
+    /// <remarks>
+    /// 呼び出し時点で <see cref="Rows"/> が空（VM からの <see cref="NodesProperty"/> バインディング
+    /// 更新がまだ走っていない状態）の場合、pending flag を立てて次に <see cref="NodesProperty"/> が
+    /// 更新されたタイミングで自動的に再実行する（coderabbit PR #17 レビュー対応：タブ切替直後の
+    /// サイレント no-op を防止）。
+    /// </remarks>
+    public void ScrollCurrentBranchIntoView()
+    {
+        if (Rows == null || Rows.Count == 0)
+        {
+            _pendingScrollToCurrentBranch = true;
+            return;
+        }
+
+        ScrollCurrentBranchIntoViewInternal();
+    }
+
+    /// <summary>
+    /// Rows が populated されている前提の実際のスクロール処理。
+    /// </summary>
+    private void ScrollCurrentBranchIntoViewInternal()
+    {
+        _pendingScrollToCurrentBranch = false;
+
+        foreach (var row in Rows)
+        {
+            if (row.Backend is Models.Branch { IsCurrent: true })
+            {
+                BranchesPresenter.ScrollIntoView(row);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
     /// ToggleNodeIsExpandedの処理を行う。
     /// </summary>
     public void ToggleNodeIsExpanded(ViewModels.BranchTreeNode node)
@@ -492,6 +531,20 @@ public partial class BranchTree : UserControl
             }
 
             RaiseEvent(new RoutedEventArgs(RowsChangedEvent));
+
+            // タブ切替直後など、Rows 未 populate 時に呼ばれた ScrollCurrentBranchIntoView を再実行する
+            // （coderabbit PR #17 レビュー対応：タイミング依存の silent no-op 防止）
+            if (_pendingScrollToCurrentBranch && Rows.Count > 0)
+            {
+                // Post 前にフラグをクリアすることで、実行前に NodesProperty 変更が
+                // 連続発火しても重複 Post を防ぐ（gemini PR #17 レビュー対応）
+                _pendingScrollToCurrentBranch = false;
+
+                // レイアウトパス完了を待つため Background priority で遅延実行
+                Avalonia.Threading.Dispatcher.UIThread.Post(
+                    ScrollCurrentBranchIntoViewInternal,
+                    Avalonia.Threading.DispatcherPriority.Background);
+            }
         }
         else if (change.Property == IsVisibleProperty)
         {
@@ -1421,4 +1474,9 @@ public partial class BranchTree : UserControl
     }
 
     private bool _disableSelectionChangingEvent = false;
+    /// <summary>
+    /// <see cref="ScrollCurrentBranchIntoView"/> が <see cref="Rows"/> 未 populate 時に呼ばれた場合に
+    /// 次の <see cref="NodesProperty"/> 更新で再実行するための pending フラグ。
+    /// </summary>
+    private bool _pendingScrollToCurrentBranch = false;
 }

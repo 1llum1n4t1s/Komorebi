@@ -79,23 +79,33 @@ public class SubmoduleTreeNodeIcon : UserControl
             return;
         }
 
-        if (node.Module is not null)
-            CreateContent(new Thickness(0, 0, 0, 0), "Icons.Submodule");
+        if (node.Module is { } module)
+        {
+            // 未初期化サブモジュールはアイコンをオレンジ色で強調表示する（upstream issue #1727 対応）。
+            // ダブルクリックしても何も起きない「隠れた未初期化」状態をツリー上で一目で識別できるようにする。
+            var fill = module.Status == Models.SubmoduleStatus.NotInited
+                ? Brushes.Orange
+                : null;
+            CreateContent(new Thickness(0, 0, 0, 0), "Icons.Submodule", fill);
+        }
         else if (node.IsExpanded)
-            CreateContent(new Thickness(0, 2, 0, 0), "Icons.Folder.Open");
+            CreateContent(new Thickness(0, 2, 0, 0), "Icons.Folder.Open", null);
         else
-            CreateContent(new Thickness(0, 2, 0, 0), "Icons.Folder");
+            CreateContent(new Thickness(0, 2, 0, 0), "Icons.Folder", null);
     }
 
     /// <summary>
     /// CreateContentの処理を行う。
     /// </summary>
-    private void CreateContent(Thickness margin, string iconKey)
+    /// <param name="margin">アイコンのマージン。</param>
+    /// <param name="iconKey">StreamGeometry リソースキー。</param>
+    /// <param name="fill">明示的な Fill。null の場合は Avalonia の DynamicResource（通常の Brush.FG1）に委ねる。</param>
+    private void CreateContent(Thickness margin, string iconKey, IBrush fill)
     {
         if (this.FindResource(iconKey) is not StreamGeometry geo)
             return;
 
-        Content = new Avalonia.Controls.Shapes.Path()
+        var path = new Avalonia.Controls.Shapes.Path()
         {
             Width = 12,
             Height = 12,
@@ -104,6 +114,11 @@ public class SubmoduleTreeNodeIcon : UserControl
             Margin = margin,
             Data = geo,
         };
+
+        if (fill is not null)
+            path.Fill = fill;
+
+        Content = path;
     }
 }
 

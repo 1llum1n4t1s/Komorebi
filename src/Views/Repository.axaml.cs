@@ -49,6 +49,30 @@ public partial class Repository : UserControl
 
             repo.PropertyChanged += OnRepoPropertyChanged;
         }
+
+        // HEAD が指すアクティブブランチを表示領域内にスクロールする（upstream issue #1022 対応）。
+        // レイアウト完了後に実行するため Background priority で遅延実行。
+        Avalonia.Threading.Dispatcher.UIThread.Post(
+            () => LocalBranchTree?.ScrollCurrentBranchIntoView(),
+            Avalonia.Threading.DispatcherPriority.Background);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// ContentControl による View 再利用（同型 VM 間でのタブ切替時）は OnLoaded を再発火しないため、
+    /// DataContext 変更時にも HEAD ブランチへのスクロールを実行する（upstream issue #1022 対応）。
+    /// </remarks>
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        // DataContext が Repository（=別リポジトリへの切替）になった場合のみスクロール
+        if (DataContext is ViewModels.Repository)
+        {
+            Avalonia.Threading.Dispatcher.UIThread.Post(
+                () => LocalBranchTree?.ScrollCurrentBranchIntoView(),
+                Avalonia.Threading.DispatcherPriority.Background);
+        }
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)

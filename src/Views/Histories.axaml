@@ -51,7 +51,7 @@
                 ClipboardCopyMode="None"
                 Focusable="False"
                 RowHeight="26"
-                HorizontalScrollBarVisibility="Disabled"
+                HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"
                 Loaded="OnCommitListLoaded"
                 LayoutUpdated="OnCommitListLayoutUpdated"

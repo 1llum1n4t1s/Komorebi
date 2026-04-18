@@ -12,7 +12,8 @@
                     Title="{DynamicResource Text.SelfUpdate.Title}"
                     Icon="/App.ico"
                     SizeToContent="WidthAndHeight"
-                    CanResize="False"
+                    CanResize="True"
+                    MinWidth="480" MinHeight="360"
                     WindowStartupLocation="CenterOwner">
   <Grid RowDefinitions="Auto,*">
     <!-- TitleBar -->

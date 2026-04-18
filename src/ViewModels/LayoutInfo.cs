@@ -44,6 +44,76 @@ public class LayoutInfo : ObservableObject
         set;
     } = WindowState.Normal;
 
+    /// <summary>File History ウィンドウの幅（upstream issue #2100 対応）。</summary>
+    public double FileHistoriesWidth
+    {
+        get;
+        set;
+    } = 1280;
+
+    /// <summary>File History ウィンドウの高さ（upstream issue #2100 対応）。</summary>
+    public double FileHistoriesHeight
+    {
+        get;
+        set;
+    } = 720;
+
+    /// <summary>File History ウィンドウの X 座標（複数モニタ対応）。</summary>
+    public int FileHistoriesPositionX
+    {
+        get;
+        set;
+    } = int.MinValue;
+
+    /// <summary>File History ウィンドウの Y 座標（複数モニタ対応）。</summary>
+    public int FileHistoriesPositionY
+    {
+        get;
+        set;
+    } = int.MinValue;
+
+    /// <summary>File History ウィンドウの状態（通常/最大化）。</summary>
+    public WindowState FileHistoriesWindowState
+    {
+        get;
+        set;
+    } = WindowState.Normal;
+
+    /// <summary>Blame ウィンドウの幅（upstream issue #2100 対応）。</summary>
+    public double BlameWidth
+    {
+        get;
+        set;
+    } = 1280;
+
+    /// <summary>Blame ウィンドウの高さ。</summary>
+    public double BlameHeight
+    {
+        get;
+        set;
+    } = 720;
+
+    /// <summary>Blame ウィンドウの X 座標。</summary>
+    public int BlamePositionX
+    {
+        get;
+        set;
+    } = int.MinValue;
+
+    /// <summary>Blame ウィンドウの Y 座標。</summary>
+    public int BlamePositionY
+    {
+        get;
+        set;
+    } = int.MinValue;
+
+    /// <summary>Blame ウィンドウの状態（通常/最大化）。</summary>
+    public WindowState BlameWindowState
+    {
+        get;
+        set;
+    } = WindowState.Normal;
+
     /// <summary>リポジトリ画面のサイドバー幅。</summary>
     public GridLength RepositorySidebarWidth
     {
