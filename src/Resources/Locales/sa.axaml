@@ -281,8 +281,11 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.ConfigureCustomActionControls.Label" xml:space="preserve">शीर्षकम्:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options" xml:space="preserve">विकल्पाः:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">विकल्पानां विभाजनार्थं '|' उपयुज्यताम्</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter" xml:space="preserve">स्ट्रिंग फ़ॉर्मेटर:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.StringFormatter.Tip" xml:space="preserve">ऐच्छिकम्। निर्गमस्य स्ट्रिंगस्य रूपणार्थं प्रयुज्यते। रिक्ते आगमे उपेक्षितः। आगमस्य स्ट्रिंगस्य निरूपणाय `` प्रयुज्यताम्।</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">अन्तर्निर्मितचराः ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, तथा ${TAG} अत्रापि उपलभ्यन्ते</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">प्रकारः:</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">मित्रनाम प्रयोजयतु:</x:String>
   <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">कार्यस्थलानि</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir" xml:space="preserve">प्रतिरूपणनिर्देशिका</x:String>
   <x:String x:Key="Text.ConfigureWorkspace.DefaultCloneDir.Placeholder" xml:space="preserve">रिक्ते सति वैश्विकविन्यासम् उपयुज्यते</x:String>
