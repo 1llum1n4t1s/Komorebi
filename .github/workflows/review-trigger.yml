@@ -1,4 +1,9 @@
 name: Trigger AI Reviews
+# セキュリティ注意:
+# - REVIEW_PAT は PR コメント投稿のみに使用する。最小権限は「public_repo」(public repo の場合) または
+#   Fine-grained PAT の「Pull requests: Read and write」のみ。
+#   admin:repo / delete_repo / workflow スコープは絶対に付与しないこと。
+# - actions/github-script は Dependabot (github-actions エコシステム) 経由で SHA 固定で自動更新される。
 on:
   pull_request:
     types: [synchronize]

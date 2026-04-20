@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -381,10 +382,17 @@ public static partial class OS
 
     /// <summary>
     /// デフォルトブラウザで指定URLを開く。
+    /// URL は http / https / mailto のみ許可。悪意あるコミットメッセージやリモートURLに含まれる
+    /// 不正スキーム（file、javascript 等）やシェルメタキャラクタを含む文字列が
+    /// 各プラットフォームのバックエンドに直接渡るのを防ぐため、ここで検証する。
     /// </summary>
     public static void OpenBrowser(string url)
     {
-        _backend.OpenBrowser(url);
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            return;
+        if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeMailto)
+            return;
+        _backend.OpenBrowser(uri.AbsoluteUri);
     }
 
     /// <summary>
@@ -468,8 +476,14 @@ public static partial class OS
         try
         {
             using var proc = Process.Start(start)!;
+            // stdout/stderr の両方を並列で読む必要がある。stderr を読まずに stdout.ReadToEnd() を
+            // 呼ぶと、git が stderr に警告を吐く環境（古い git、壊れたホームの設定、特殊フック等）で
+            // stderr バッファ 4KB〜64KB が埋まった瞬間にプロセスがブロックし、UI スレッドごと
+            // 永久フリーズする。これは Command.ReadToEnd と同じパターン。
+            var stderrTask = Task.Run(() => proc.StandardError.ReadToEnd());
             var rs = proc.StandardOutput.ReadToEnd();
             proc.WaitForExit();
+            stderrTask.GetAwaiter().GetResult();
             if (proc.ExitCode == 0 && !string.IsNullOrWhiteSpace(rs))
             {
                 GitVersionString = rs.Trim();

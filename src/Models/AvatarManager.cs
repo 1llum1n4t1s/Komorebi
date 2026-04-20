@@ -57,8 +57,12 @@ public partial class AvatarManager
     private readonly Lock _synclock = new();
     /// <summary>アバター画像のローカルキャッシュディレクトリパス</summary>
     private string _storePath;
-    /// <summary>アバター変更通知を受け取るホストのリスト</summary>
-    private List<IAvatarHost> _avatars = [];
+    /// <summary>
+    /// アバター変更通知を受け取るホストのセット。
+    /// HashSet を使うことで Unsubscribe の計算量を O(n) から O(1) に、
+    /// また同一ホストの二重登録を自然に防ぐ（View 再生成時の Subscribe/Unsubscribe の非対称対策）。
+    /// </summary>
+    private HashSet<IAvatarHost> _avatars = [];
     /// <summary>メールアドレスをキーとしたアバター画像のキャッシュ</summary>
     private Dictionary<string, Bitmap> _resources = [];
     /// <summary>ダウンロードリクエスト待ちのメールアドレスセット</summary>
@@ -205,21 +209,27 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    /// アバターリソース変更の通知を受け取るホストを登録する
+    /// アバターリソース変更の通知を受け取るホストを登録する。
+    /// UI スレッドから呼ばれる前提だが、バックグラウンドの NotifyResourceChanged との
+    /// 反復中変更を避けるため lock で保護する。
     /// </summary>
     /// <param name="host">登録するホスト</param>
     public void Subscribe(IAvatarHost host)
     {
-        _avatars.Add(host);
+        lock (_synclock)
+            _avatars.Add(host);
     }
 
     /// <summary>
-    /// アバターリソース変更の通知登録を解除する
+    /// アバターリソース変更の通知登録を解除する。
+    /// Unsubscribe 漏れでシングルトン(_avatars)がホストを永久保持する事態を防ぐため、
+    /// 呼び出し側(View)で OnAttachedToVisualTree / OnDetachedFromVisualTree の対称性を保つこと。
     /// </summary>
     /// <param name="host">解除するホスト</param>
     public void Unsubscribe(IAvatarHost host)
     {
-        _avatars.Remove(host);
+        lock (_synclock)
+            _avatars.Remove(host);
     }
 
     /// <summary>
@@ -336,13 +346,18 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    /// 全登録ホストにアバターリソース変更を通知する
+    /// 全登録ホストにアバターリソース変更を通知する。
+    /// 反復中に Subscribe/Unsubscribe が呼ばれても壊れないようスナップショットを取る。
     /// </summary>
     /// <param name="email">変更対象のメールアドレス</param>
     /// <param name="image">新しいアバター画像</param>
     private void NotifyResourceChanged(string email, Bitmap image)
     {
-        foreach (var avatar in _avatars)
+        IAvatarHost[] snapshot;
+        lock (_synclock)
+            snapshot = [.. _avatars];
+
+        foreach (var avatar in snapshot)
             avatar.OnAvatarResourceChanged(email, image);
     }
 }

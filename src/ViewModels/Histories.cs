@@ -89,10 +89,38 @@ public class Histories : ObservableObject, IDisposable
                 // 大規模リポジトリでは数万コミットを扱うため、繰り返しのFind()が深刻なボトルネックになる
                 _commitBySha = value.ToDictionary(c => c.SHA);
 
+                // 親SHA→子Commit群の逆引き辞書を同時構築。
+                // OnGotoChild で親→子を辿る際、以前は vm.Commits を O(n×m) 走査していたが、
+                // ここで一度構築すれば O(1) ルックアップで済む。
+                _childrenByParentSha = new Dictionary<string, List<Models.Commit>>(value.Count);
+                foreach (var c in value)
+                {
+                    foreach (var p in c.Parents)
+                    {
+                        if (!_childrenByParentSha.TryGetValue(p, out var list))
+                        {
+                            list = [];
+                            _childrenByParentSha[p] = list;
+                        }
+                        list.Add(c);
+                    }
+                }
+
                 if (value.Count > 0 && lastSelected is not null && _commitBySha.TryGetValue(lastSelected.SHA, out var restored))
                     SelectedCommit = restored;
             }
         }
+    }
+
+    /// <summary>
+    /// 指定された親コミットSHAから、その子コミットのリストを O(1) で取得する。
+    /// OnGotoChild（Alt+↑）のホットパス用。
+    /// </summary>
+    public IReadOnlyList<Models.Commit> GetChildrenBySha(string parentSha)
+    {
+        if (_childrenByParentSha.TryGetValue(parentSha, out var list))
+            return list;
+        return [];
     }
 
     /// <summary>
@@ -184,6 +212,7 @@ public class Histories : ObservableObject, IDisposable
     {
         Commits = [];
         _commitBySha = [];
+        _childrenByParentSha = [];
         _repo = null;
         _graph = null;
         _selectedCommit = null;
@@ -242,14 +271,25 @@ public class Histories : ObservableObject, IDisposable
             return;
         }
 
+        // Dispose 後に非同期コールバックが走ると _repo / DetailContext が破棄済みで NRE になる。
+        // タスク開始時と UI スレッド再入時の両方で _repo の null チェックを入れ、
+        // 閉じたタブへのアクセスを無効化する。
+        var repo = _repo;
+        if (repo is null)
+            return;
+
         Task.Run(async () =>
         {
-            var c = await new Commands.QuerySingleCommit(_repo.FullPath, commitSHA)
+            var c = await new Commands.QuerySingleCommit(repo.FullPath, commitSHA)
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
             Dispatcher.UIThread.Post(() =>
             {
+                // 非同期待ち中に Dispose された場合は何もしない（_repo が null 化されている）
+                if (_repo is null)
+                    return;
+
                 _ignoreSelectionChange = true;
                 SelectedCommit = null;
 
@@ -578,6 +618,8 @@ public class Histories : ObservableObject, IDisposable
     private List<Models.Commit> _commits = []; // コミット一覧
     // パフォーマンス: SHA→CommitのO(1)ルックアップ辞書。Commitsプロパティ設定時に再構築される
     private Dictionary<string, Models.Commit> _commitBySha = [];
+    // パフォーマンス: 親SHA→子Commit群のO(1)逆引き辞書。OnGotoChildで使用
+    private Dictionary<string, List<Models.Commit>> _childrenByParentSha = [];
     private Models.CommitGraph _graph = null; // コミットグラフ描画データ
     private Models.Commit _selectedCommit = null; // 選択中のコミット
     private Models.Bisect _bisect = null; // bisect状態

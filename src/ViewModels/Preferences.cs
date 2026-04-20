@@ -587,12 +587,6 @@ public class Preferences : ObservableObject
         return !string.IsNullOrEmpty(path) && File.Exists(path);
     }
 
-    /// <summary>起動時にアップデートをチェックすべきかどうかを返す。</summary>
-    public bool ShouldCheck4UpdateOnStartup()
-    {
-        return _check4UpdatesOnStartup;
-    }
-
     /// <summary>アクティブなワークスペースを取得する。ワークスペースが空の場合はDefaultを作成する。</summary>
     public Workspace GetActiveWorkspace()
     {

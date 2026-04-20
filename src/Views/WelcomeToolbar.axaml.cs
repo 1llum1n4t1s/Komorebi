@@ -51,7 +51,7 @@ public partial class WelcomeToolbar : UserControl
     }
 
     /// <summary>
-    /// オーバーフローメニュー（···）を表示する。RepositoryToolbarと同一の表現。
+    /// オーバーフローメニュー（···）を表示する。
     /// </summary>
     private void OpenOverflowMenu(object sender, RoutedEventArgs e)
     {

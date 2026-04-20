@@ -242,12 +242,23 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    /// Windowsのcmd /c startコマンドでデフォルトブラウザを開く。
+    /// デフォルトブラウザでURLを開く。
+    /// cmd /c start 経由は cmd.exe のメタキャラクタを解釈するためコマンド注入の余地があり、
+    /// 任意コード実行に至るため、ShellExecute 直叩き（UseShellExecute=true）に切り替える。
+    /// 事前に Uri で http/https/mailto スキームのみを許可することで、不正スキームがシェルに渡るのを防ぐ。
     /// </summary>
     public void OpenBrowser(string url)
     {
-        var info = new ProcessStartInfo("cmd", $"""/c start "" {url.Quoted()}""");
-        info.CreateNoWindow = true;
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            return;
+        if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeMailto)
+            return;
+
+        var info = new ProcessStartInfo
+        {
+            FileName = uri.AbsoluteUri,
+            UseShellExecute = true,
+        };
         Process.Start(info)?.Dispose();
     }
 

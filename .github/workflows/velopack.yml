@@ -60,7 +60,10 @@ jobs:
           tar -xf publish/komorebi.${{ matrix.runtime }}.tar -C publish
           rm publish/komorebi.${{ matrix.runtime }}.tar
       - name: Install Velopack CLI
-        run: dotnet tool install --global vpk
+        # vpk のバージョンを NuGet パッケージ (Velopack 0.0.1298) に合わせて固定する。
+        # サプライチェーン保護: 浮動バージョンだと vpk 側が侵害・更新された場合に気付けない。
+        # Velopack 本体を更新したら、この --version も合わせて更新すること。
+        run: dotnet tool install --global vpk --version 0.0.1298
       - name: Create Velopack package (Windows)
         if: startsWith(matrix.runtime, 'win-')
         run: vpk pack --packId Komorebi --packVersion ${{ inputs.version }} --mainExe ${{ matrix.mainExe }} --packDir publish --outputDir artifacts --channel ${{ matrix.runtime }}

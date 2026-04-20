@@ -338,11 +338,29 @@ public partial class Command
         // StrictHostKeyChecking=accept-new: 新しいホスト鍵は自動承認、変更された鍵は拒否（TOFU）
         // macOSのApple版OpenSSHはSSH_ASKPASSの応答をホスト鍵確認に適用しないため、
         // このオプションでAskpassダイアログを経由せずに新しいホスト鍵を受け入れる
+        // -F でconfigファイルを無効化することでユーザーの ~/.ssh/config の ProxyJump 等の介入を防ぎ、
+        // per-remote SSH鍵のみが使われることを保証する。
+        // Windows の OpenSSH は /dev/null を認識せず、シングルクォートエスケープも Git for Windows の
+        // 内部 sh 呼び出しに頼れないため、プラットフォームごとに quoting と null device を切り替える。
         if (!start.Environment.ContainsKey("GIT_SSH_COMMAND"))
         {
-            var sshCmd = string.IsNullOrEmpty(SSHKey)
-                ? "ssh -o StrictHostKeyChecking=accept-new"
-                : $"ssh -i '{SSHKey.Replace("'", "'\\''")}' -o StrictHostKeyChecking=accept-new -F '/dev/null'";
+            string sshCmd;
+            if (string.IsNullOrEmpty(SSHKey))
+            {
+                sshCmd = "ssh -o StrictHostKeyChecking=accept-new";
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                // Windows: NUL + ダブルクォートエスケープ
+                var escapedKey = SSHKey.Replace("\"", "\\\"");
+                sshCmd = $"ssh -i \"{escapedKey}\" -o StrictHostKeyChecking=accept-new -F \"NUL\"";
+            }
+            else
+            {
+                // Unix (Linux/macOS): /dev/null + POSIX sh シングルクォートエスケープ
+                var escapedKey = SSHKey.Replace("'", "'\\''");
+                sshCmd = $"ssh -i '{escapedKey}' -o StrictHostKeyChecking=accept-new -F '/dev/null'";
+            }
             start.Environment.Add("GIT_SSH_COMMAND", sshCmd);
         }
 
@@ -442,12 +460,21 @@ public partial class Command
     /// </summary>
     internal const string LegacySSHKeyOptOutSentinel = "__NONE__";
 
+    /// <summary>
+    /// グローバルSSH鍵を取得するためのプロバイダ。
+    /// Commands 層が ViewModels 層 (Preferences.Instance) に直接依存しないよう、
+    /// 起動時に App.Main() から `() => Preferences.Instance?.GlobalSSHKey` を登録する設計。
+    /// テスト環境や未設定時は null のまま = 空文字列扱い（ssh-agent / ~/.ssh/config フォールバック）。
+    /// </summary>
+    public static Func<string> GlobalSSHKeyProvider { get; set; }
+
     /// <summary>リモートに紐づくSSH鍵を取得し、なければグローバル設定にフォールバックする。</summary>
     /// <param name="remote">リモート名。</param>
     protected async Task ResolveSSHKeyAsync(string remote)
     {
         var configValue = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey").ConfigureAwait(false);
-        SSHKey = ResolveSSHKeyValue(configValue, ViewModels.Preferences.Instance?.GlobalSSHKey);
+        var globalKey = GlobalSSHKeyProvider?.Invoke();
+        SSHKey = ResolveSSHKeyValue(configValue, globalKey);
     }
 
     /// <summary>

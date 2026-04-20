@@ -123,6 +123,8 @@ namespace Komorebi.Tests.Models
         [InlineData("ja_JP", "\u65e5\u672c\u8a9e")]
         [InlineData("ta_IN", "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd (Tamil)")]
         [InlineData("ko_KR", "\ud55c\uad6d\uc5b4")]
+        [InlineData("sa", "\u0938\u0902\u0938\u094d\u0915\u0943\u0924\u092e\u094d (Sanskrit)")]
+        [InlineData("la", "Latina (Latin)")]
         public void Supported_ContainsExpectedLocale(string expectedKey, string expectedName)
         {
             var locale = Locale.Supported.Find(l => l.Key == expectedKey);

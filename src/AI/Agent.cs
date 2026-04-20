@@ -89,7 +89,7 @@ public class Agent
 
                         foreach (var call in completion.ToolCalls)
                         {
-                            var result = await ChatTools.ProcessAsync(call, onUpdate);
+                            var result = await ChatTools.ProcessAsync(call, repo, onUpdate);
                             messages.Add(result);
                         }
 
@@ -159,7 +159,10 @@ public class Agent
             var stopReason = root.GetProperty("stop_reason").GetString();
             var content = root.GetProperty("content");
 
-            if (stopReason == "end_turn")
+            // end_turn: 正常終了、max_tokens: トークン上限で打ち切り（部分出力のまま終了）。
+            // max_tokens を未処理にすると InvalidOperationException で落ちるため、
+            // OpenAI 側の ChatFinishReason.Length と同等に扱って部分結果を返す。
+            if (stopReason == "end_turn" || stopReason == "max_tokens")
             {
                 onUpdate?.Invoke(string.Empty);
                 onUpdate?.Invoke("# Assistant");
@@ -168,6 +171,9 @@ public class Agent
                     if (item.GetProperty("type").GetString() == "text")
                         onUpdate?.Invoke(item.GetProperty("text").GetString());
                 }
+
+                if (stopReason == "max_tokens")
+                    onUpdate?.Invoke("\n(note: output was truncated because it reached the maximum token limit)");
 
                 var usage = root.GetProperty("usage");
                 var inputTokens = usage.GetProperty("input_tokens").GetInt32();
@@ -196,7 +202,7 @@ public class Agent
                     var toolId = item.GetProperty("id").GetString();
                     var toolName = item.GetProperty("name").GetString();
                     var toolInput = item.GetProperty("input");
-                    var toolResult = await ChatTools.ProcessAnthropicCall(toolId, toolName, toolInput, onUpdate);
+                    var toolResult = await ChatTools.ProcessAnthropicCall(toolId, toolName, toolInput, repo, onUpdate);
                     toolResults.Add(toolResult);
                 }
 

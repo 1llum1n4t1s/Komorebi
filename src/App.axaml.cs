@@ -1126,6 +1126,10 @@ public partial class App : Application
         var pref = ViewModels.Preferences.Instance;
         pref.SetCanModify();
 
+        // Commands 層が ViewModels 層に直接依存しないよう、GlobalSSHKey をデリゲート経由で注入する。
+        // （以前は Commands/Command.cs から Preferences.Instance を直接参照していたレイヤー逆流を解消）
+        Commands.Command.GlobalSSHKeyProvider = () => ViewModels.Preferences.Instance?.GlobalSSHKey;
+
         _launcher = new ViewModels.Launcher(startupRepo);
         desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
 
@@ -1143,7 +1147,7 @@ public partial class App : Application
 
         // 起動時の自動更新チェック（1日1回、更新がある場合のみダイアログ表示）
 #if !DISABLE_UPDATE_DETECTION
-        if (pref.ShouldCheck4UpdateOnStartup())
+        if (pref.Check4UpdatesOnStartup)
             Check4Update(false);
 #endif
 

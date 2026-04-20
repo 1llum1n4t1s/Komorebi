@@ -120,6 +120,21 @@ public class RepositorySettings
     }
 
     /// <summary>
+    /// 指定されたリポジトリ設定をキャッシュから除去する。
+    /// Repository.Close() から呼ばれ、プロセス寿命で成長し続ける _cache を抑制する。
+    /// また、外部エディタで komorebi.settings を書き換えた後に再取得させる手段としても使える。
+    /// Get() と同じロジックで fullpath を算出するため、キー不一致のリスクはない。
+    /// </summary>
+    /// <param name="gitCommonDir">gitの共通ディレクトリパス（Get() に渡したものと同じ）</param>
+    public static void Evict(string gitCommonDir)
+    {
+        if (string.IsNullOrEmpty(gitCommonDir))
+            return;
+        var fullpath = new FileInfo(Path.Combine(gitCommonDir, "komorebi.settings")).FullName;
+        _cache.Remove(fullpath);
+    }
+
+    /// <summary>
     /// 設定をファイルに非同期で保存する。内容が変更されていない場合は保存をスキップする。
     /// </summary>
     public async Task SaveAsync()
@@ -197,8 +212,10 @@ public class RepositorySettings
     /// <summary>文字列のMD5ハッシュを計算して16進文字列で返す</summary>
     private static string HashContent(string source)
     {
-        var hash = MD5.HashData(Encoding.Default.GetBytes(source));
-        // パフォーマンス: ループ内のToString("x2")による16回の文字列割り当てを排除
+        // Encoding.Default はOS・カルチャ依存（日本語Windowsでは CP932 = Shift-JIS）で、
+        // UTF-8 の JSON 文字列を正しく byte 化できず、非ASCII文字を含む設定で毎回ハッシュ不一致となり
+        // komorebi.settings が無駄に上書き保存される不具合を防ぐため、UTF-8 を明示する。
+        var hash = MD5.HashData(Encoding.UTF8.GetBytes(source));
         return Convert.ToHexString(hash).ToLowerInvariant();
     }
 

@@ -1,0 +1,46 @@
+# Dependabot 設定
+# サプライチェーン保護: GitHub Actions と NuGet の依存を自動更新し、
+# タグポイズニング攻撃（actions/*@v7 等の可変タグ）を軽減する。
+# Actions は SHA 固定を推奨するが、Dependabot が SHA と更新 PR を自動で提示する。
+version: 2
+updates:
+  # GitHub Actions のバージョン固定（タグ → SHA 自動更新）
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+
+  # NuGet 依存の自動更新
+  - package-ecosystem: "nuget"
+    directory: "/src"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "nuget"
+    commit-message:
+      prefix: "deps"
+    # ベータ版 (Azure.AI.OpenAI 2.8.0-beta.1 等) は明示的に許可しないと更新されない
+    allow:
+      - dependency-type: "all"
+    # 破壊的変更を含む major バージョンアップは手動確認を要するため、
+    # Dependabot には minor/patch のみを提案させ、major は無視する
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # npm 依存 (build/scripts/ の localization-check.js 用)
+  - package-ecosystem: "npm"
+    directory: "/build/scripts"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "deps"

@@ -54,14 +54,17 @@ public static class Logger
     private static bool s_isConfigured;
 
     /// <summary>
-    /// 最小ログレベル（これ以上のレベルのログのみ出力）
+    /// 最小ログレベル（これ以上のレベルのログのみ出力）。
+    /// リリースビルドは Info まで出す（以前は Warning のみで本番バグ調査に情報が足りなかった）。
+    /// Info レベルには Fetch/Push/Pull 等の主要操作の開始・終了が含まれる想定。
+    /// Debug レベルの詳細トレースはリリースでは引き続き抑制する。
     /// </summary>
 #pragma warning disable CA1802
     private static readonly LogLevel s_minLogLevel =
 #if DEBUG
         LogLevel.Debug;
 #else
-        LogLevel.Warning;
+        LogLevel.Info;
 #endif
 #pragma warning restore CA1802
 

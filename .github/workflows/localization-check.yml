@@ -27,7 +27,11 @@ jobs:
           node-version: '24.x'
 
       - name: Install dependencies
-        run: npm install fs-extra@11.2.0 path@0.12.7 xml2js@0.6.2
+        # npm ci は package-lock.json と厳格に一致するバージョンを取得するため、
+        # サプライチェーン攻撃（レジストリ上のバージョン差し替え）に強い。
+        # path@0.12.7 は node 内蔵モジュールの非推奨 npm 版のため削除（package-lock.json にも含まれていない）。
+        working-directory: build/scripts
+        run: npm ci
 
       - name: Run localization check
         run: node build/scripts/localization-check.js

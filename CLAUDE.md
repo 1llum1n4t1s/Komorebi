@@ -67,13 +67,13 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 ## Architecture
 
 ### MVVM Pattern
-- **ViewModels** (`src/ViewModels/`, ~128 files) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class (which itself inherits `ObservableValidator` for validation support).
-- **Views** (`src/Views/`, ~272 files) — Avalonia XAML (`.axaml`) + code-behind (`.axaml.cs`) with compiled bindings (`x:DataType`)
-- **Models** (`src/Models/`, ~74 files) — plain data classes for git objects and app state
+- **ViewModels** (`src/ViewModels/`, ~131 files) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class (which itself inherits `ObservableValidator` for validation support).
+- **Views** (`src/Views/`, ~142 code-behind files + ~120 `.axaml`) — Avalonia XAML (`.axaml`) + code-behind (`.axaml.cs`) with compiled bindings (`x:DataType`)
+- **Models** (`src/Models/`, ~80 files) — plain data classes for git objects and app state
 - **Converters** (`src/Converters/`) — IValueConverters for XAML bindings
 
 ### Git Command Layer
-`src/Commands/` (~82 files) wraps git CLI invocations:
+`src/Commands/` (~83 files) wraps git CLI invocations:
 - `Command.cs` is the base — configures `Process.StartInfo`, handles stdout/stderr capture
 - Each subclass sets `Args` and calls `Exec()` or `ExecAsync()`
 - Commands are stateless: create, configure, execute
@@ -86,14 +86,14 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 ### SSH Key Management
 `src/Models/SSHKeyInfo.cs` scans `~/.ssh/` for private keys and provides a unified selection model. `src/Views/SSHKeyPicker.axaml` is a reusable `UserControl` for key selection with entry types: None (global setting), Key, CustomKey, Browse.
 
-**2-tier fallback strategy** (in `Command.ResolveSSHKeyValue` — pure function, unit testable):
+**3-tier fallback strategy** (in `Command.ResolveSSHKeyValue` — pure function, unit testable):
 1. Per-remote setting (`git config remote.<name>.sshkey`)
 2. Global SSH key (`Preferences.Instance.GlobalSSHKey`)
 3. ssh-agent / `~/.ssh/config` (when both are empty)
 
 **Legacy `__NONE__` sentinel**: 旧バージョンで書き込まれた `__NONE__` は「グローバルフォールバックを明示的にスキップ」として読み取り時に尊重する。新 UI からは書き込まれない（凍結レガシー）。`LegacySSHKeyOptOutSentinel` 定数で管理。
 
-`GIT_SSH_COMMAND` is built with shell injection prevention via `.Quoted()`.
+`GIT_SSH_COMMAND` is built in `Command.CreateGitStartInfo` with platform-aware quoting — POSIX single-quote escaping (`SSHKey.Replace("'", "'\\''")`) and `-F '/dev/null'` on Unix, Windows uses double-quote escaping and `-F "NUL"`. The `.Quoted()` helper in `App.Extensions.cs` is separately used for git CLI argument paths (double-quote only) and is **not** reused here.
 
 ### AWS CodeCommit Support
 Three URL formats are supported:

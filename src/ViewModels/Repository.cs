@@ -207,11 +207,13 @@ public class Repository : ObservableObject, Models.IRepository
                 // パフォーマンス: ブランチ名→Branchの辞書を再構築（Find()のO(n)→O(1)に改善）
                 _localBranchByName = [];
                 _branchByFriendlyName = [];
+                _branchByFullName = [];
                 foreach (var b in value)
                 {
                     if (b.IsLocal)
                         _localBranchByName[b.Name] = b;
                     _branchByFriendlyName[b.FriendlyName] = b;
+                    _branchByFullName[b.FullName] = b;
                 }
             }
         }
@@ -233,6 +235,12 @@ public class Repository : ObservableObject, Models.IRepository
     public Models.Branch FindBranchByFriendlyName(string name)
     {
         return name is not null && _branchByFriendlyName.TryGetValue(name, out var b) ? b : null;
+    }
+
+    /// <summary>FullName（refs/heads/xxx や refs/remotes/origin/xxx）でブランチを検索する。O(1)。見つからない場合はnullを返す。</summary>
+    public Models.Branch FindBranchByFullName(string fullName)
+    {
+        return fullName is not null && _branchByFullName.TryGetValue(fullName, out var b) ? b : null;
     }
 
     /// <summary>現在チェックアウト中のブランチ。HEAD変更時にAmendモードをリセットする。</summary>
@@ -635,6 +643,10 @@ public class Repository : ObservableObject, Models.IRepository
         _filterDebounceTimer?.Dispose();
         _filterDebounceTimer = null;
 
+        // RepositorySettings の静的キャッシュ(_cache)がプロセス寿命で成長し続けるのを防ぐ。
+        // 同時に、外部で komorebi.settings が更新された場合でも次回 Open で再読込される。
+        Models.RepositorySettings.Evict(_gitCommonDir);
+
         _settings = null;
         _uiStates = null;
         _historyFilterMode = Models.FilterMode.None;
@@ -813,16 +825,25 @@ public class Repository : ObservableObject, Models.IRepository
 
         Task.Run(async () =>
         {
-            List<Models.IssueTracker> issuetrackers = [];
-            await new Commands.IssueTracker(FullPath, true).ReadAllAsync(issuetrackers, true).ConfigureAwait(false);
-            await new Commands.IssueTracker(FullPath, false).ReadAllAsync(issuetrackers, false).ConfigureAwait(false);
+            // 独立した3つのgitコマンド（global IssueTracker / local IssueTracker / Config）を並列実行する。
+            // 各タスクは自前のリストに書き込むためスレッドセーフを確保。
+            List<Models.IssueTracker> globalTrackers = [];
+            List<Models.IssueTracker> localTrackers = [];
+
+            var globalTask = new Commands.IssueTracker(FullPath, true).ReadAllAsync(globalTrackers, true);
+            var localTask = new Commands.IssueTracker(FullPath, false).ReadAllAsync(localTrackers, false);
+            var configTask = new Commands.Config(FullPath).ReadAllAsync();
+
+            await Task.WhenAll(globalTask, localTask, configTask).ConfigureAwait(false);
+
+            List<Models.IssueTracker> issuetrackers = [.. globalTrackers, .. localTrackers];
             Dispatcher.UIThread.Post(() =>
             {
                 IssueTrackers.Clear();
                 IssueTrackers.AddRange(issuetrackers);
             });
 
-            var config = await new Commands.Config(FullPath).ReadAllAsync().ConfigureAwait(false);
+            var config = await configTask.ConfigureAwait(false);
             _hasAllowedSignersFile = config.TryGetValue("gpg.ssh.allowedsignersfile", out var allowedSignersFile) && !string.IsNullOrEmpty(allowedSignersFile);
 
             if (config.TryGetValue("gitflow.branch.master", out var masterName))
@@ -1450,38 +1471,47 @@ public class Repository : ObservableObject, Models.IRepository
                 return;
             }
 
-            Dispatcher.UIThread.Invoke(() =>
+            // パフォーマンス: 差分比較のための Dictionary 構築と foreach を UI スレッドから外す。
+            // 以前は UI スレッド Invoke 内で 2 ループ ＋ Dictionary 構築を行っており、
+            // サブモジュールが多い（100+）リポジトリで Watcher ティック毎に UI ジャンクを誘発していた。
+            // 現スレッド（Task.Run）で _submodules のスナップショットだけ UI スレッドから取り、
+            // 比較処理はここで行い、最終代入のみ UI スレッドで行う。
+            List<Models.Submodule> currentSnapshot = null;
+            Dispatcher.UIThread.Invoke(() => currentSnapshot = [.. _submodules]);
+
+            bool hasChanged = currentSnapshot.Count != submodules.Count;
+            if (!hasChanged)
             {
-                bool hasChanged = _submodules.Count != submodules.Count;
-                if (!hasChanged)
+                var old = new Dictionary<string, Models.Submodule>(currentSnapshot.Count);
+                foreach (var module in currentSnapshot)
+                    old[module.Path] = module;
+
+                foreach (var module in submodules)
                 {
-                    Dictionary<string, Models.Submodule> old = [];
-                    foreach (var module in _submodules)
-                        old.Add(module.Path, module);
-
-                    foreach (var module in submodules)
+                    if (!old.TryGetValue(module.Path, out var exist))
                     {
-                        if (!old.TryGetValue(module.Path, out var exist))
-                        {
-                            hasChanged = true;
-                            break;
-                        }
+                        hasChanged = true;
+                        break;
+                    }
 
-                        hasChanged = !exist.SHA.Equals(module.SHA, StringComparison.Ordinal) ||
-                                     !exist.Branch.Equals(module.Branch, StringComparison.Ordinal) ||
-                                     !exist.URL.Equals(module.URL, StringComparison.Ordinal) ||
-                                     exist.Status != module.Status;
-
-                        if (hasChanged)
-                            break;
+                    if (!exist.SHA.Equals(module.SHA, StringComparison.Ordinal) ||
+                        !exist.Branch.Equals(module.Branch, StringComparison.Ordinal) ||
+                        !exist.URL.Equals(module.URL, StringComparison.Ordinal) ||
+                        exist.Status != module.Status)
+                    {
+                        hasChanged = true;
+                        break;
                     }
                 }
+            }
 
-                if (hasChanged)
-                {
-                    Submodules = submodules;
-                    VisibleSubmodules = BuildVisibleSubmodules();
-                }
+            if (!hasChanged)
+                return;
+
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                Submodules = submodules;
+                VisibleSubmodules = BuildVisibleSubmodules();
             });
         });
     }
@@ -1496,6 +1526,8 @@ public class Repository : ObservableObject, Models.IRepository
             return;
 
         var token = RenewCancellation(ref _cancellationRefreshWorkingCopyChanges);
+        // 2回目以降の QueryLocalChanges は noOptionalLocks=true で optional locks を取得しない。
+        // これは意図的で、FSW 連打時の index.lock 競合を避けるための最適化（初回のみ index 更新を許可）。
         var noOptionalLocks = Interlocked.Add(ref _queryLocalChangesTimes, 1) > 1;
 
         Task.Run(async () =>
@@ -2203,6 +2235,7 @@ public class Repository : ObservableObject, Models.IRepository
     private Dictionary<string, Models.Remote> _remoteByName = [];
     private Dictionary<string, Models.Branch> _localBranchByName = [];
     private Dictionary<string, Models.Branch> _branchByFriendlyName = [];
+    private Dictionary<string, Models.Branch> _branchByFullName = [];
     private Models.Branch _currentBranch = null;                                       // 現在のブランチ
     private List<BranchTreeNode> _localBranchTrees = [];                               // ローカルブランチツリー
     private List<BranchTreeNode> _remoteBranchTrees = [];                              // リモートブランチツリー

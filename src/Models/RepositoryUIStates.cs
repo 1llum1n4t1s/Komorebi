@@ -221,7 +221,7 @@ public class RepositoryUIStates
     {
         get;
         set;
-    } = false;
+    } = true;
 
     /// <summary>サイドバーでタグを展開するかどうか</summary>
     public bool IsTagsExpandedInSideBar
@@ -235,7 +235,7 @@ public class RepositoryUIStates
     {
         get;
         set;
-    } = false;
+    } = true;
 
     /// <summary>サイドバーでワークツリーを展開するかどうか</summary>
     public bool IsWorktreeExpandedInSideBar

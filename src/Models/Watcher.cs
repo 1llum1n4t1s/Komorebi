@@ -157,6 +157,10 @@ public class Watcher : IDisposable
     /// <summary>ファイル監視とタイマーを停止・破棄する</summary>
     public void Dispose()
     {
+        // Tick() 側が Dispose 後も走り続けて破棄済み VM を触るのを防ぐため、
+        // フラグ立て → タイマー停止 → ハンドラ解除の順で閉じる。
+        Volatile.Write(ref _disposed, 1);
+
         foreach (var watcher in _watchers)
         {
             watcher.EnableRaisingEvents = false;
@@ -164,7 +168,7 @@ public class Watcher : IDisposable
         }
 
         _watchers.Clear();
-        _timer.Dispose();
+        _timer?.Dispose();
         _timer = null;
     }
 
@@ -174,6 +178,10 @@ public class Watcher : IDisposable
     /// </summary>
     private void Tick(object sender)
     {
+        // Dispose 後に残存 Tick がリポジトリを触ってクラッシュするのを防ぐ
+        if (Volatile.Read(ref _disposed) != 0)
+            return;
+
         // ロック中は更新をスキップ
         if (Interlocked.Read(ref _lockCount) > 0)
             return;
@@ -385,7 +393,9 @@ public class Watcher : IDisposable
         }
 
         var dir = Directory.Exists(fullpath) ? fullpath : Path.GetDirectoryName(fullpath);
-        if (IsInSubmodule(dir))
+        // サブモジュールを持たないリポジトリでは IsInSubmodule による再帰 I/O を完全スキップ。
+        // これで FSW バースト時の File.Exists 多発（ディレクトリ階層×イベント数）を防ぐ。
+        if (_repo.MayHaveSubmodules() && IsInSubmodule(dir))
         {
             Interlocked.Exchange(ref _updateSubmodules, DateTime.Now.AddSeconds(1).ToFileTime());
             return;
@@ -395,20 +405,45 @@ public class Watcher : IDisposable
     }
 
     /// <summary>
-    /// 指定フォルダがサブモジュール内にあるかどうかを再帰的に判定する。
+    /// 指定フォルダがサブモジュール内にあるかどうかを判定する。
     /// .gitファイル（ディレクトリではなくファイル）の存在でサブモジュールを検出する。
+    /// 以前は無制限再帰で、別ドライブ worktree や symbolic link ループで
+    /// ディスクルートまで遡り続ける危険があった。現在はループに書き換え、
+    /// (1) リポジトリ外へ出た時点で即終了、(2) 最大深度 32 段で強制打ち切り
+    /// の二重ガードを設けている。
     /// </summary>
     /// <param name="folder">判定対象のフォルダパス</param>
     /// <returns>サブモジュール内の場合true</returns>
     private bool IsInSubmodule(string folder)
     {
-        if (string.IsNullOrEmpty(folder) || folder.Equals(_root, StringComparison.Ordinal))
+        if (string.IsNullOrEmpty(folder))
             return false;
 
-        if (File.Exists($"{folder}/.git"))
-            return true;
+        // パス比較の正規化: Windows のケース非依存を考慮
+        var cmp = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+        var rootWithSep = _root.EndsWith(Path.DirectorySeparatorChar) ? _root : _root + Path.DirectorySeparatorChar;
 
-        return IsInSubmodule(Path.GetDirectoryName(folder));
+        var current = folder;
+        for (int depth = 0; depth < 32; depth++)
+        {
+            if (string.IsNullOrEmpty(current))
+                return false;
+
+            // リポジトリルートに到達したら終了（サブモジュールではない）
+            if (string.Equals(current, _root, cmp))
+                return false;
+
+            // リポジトリルート配下でなければ終了（別ドライブ worktree などの範囲外）
+            if (!current.StartsWith(rootWithSep, cmp))
+                return false;
+
+            if (File.Exists(Path.Combine(current, ".git")))
+                return true;
+
+            current = Path.GetDirectoryName(current);
+        }
+
+        return false;
     }
 
     /// <summary>監視対象のリポジトリ</summary>
@@ -432,4 +467,6 @@ public class Watcher : IDisposable
     private long _updateStashes;
     /// <summary>タグ更新の予定時刻（FileTime形式）</summary>
     private long _updateTags;
+    /// <summary>Dispose 済みフラグ（0=稼働中、1=破棄済み）。Tick からの参照を早期遮断するのに使う。</summary>
+    private int _disposed;
 }

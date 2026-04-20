@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -856,8 +857,6 @@ public partial class Repository : UserControl
         e.Handled = true;
     }
 
-    // ========== 以下、旧 RepositoryToolbar.axaml.cs から移植 ==========
-
     /// <summary>
     /// ワーキングコピー検索ボックスにフォーカスを移す（Ctrl+F 用）。
     /// </summary>
@@ -1054,7 +1053,7 @@ public partial class Repository : UserControl
             var bisect = new MenuItem();
             bisect.Header = App.Text("Bisect");
             bisect.Icon = App.CreateMenuIcon("Icons.Bisect");
-            bisect.Click += (_, ev) => StartBisectFromMenu(repo, ev);
+            bisect.Click += (_, ev) => _ = StartBisectFromMenuAsync(repo, ev);
             if (!repo.IsBare)
                 menu.Items.Add(bisect);
 
@@ -1400,20 +1399,31 @@ public partial class Repository : UserControl
 
     /// <summary>
     /// Bisect開始をメニューから実行する。
+    /// ラムダから呼ばれるため async Task で例外をアプリ通知に流し、
+    /// AppDomain.UnhandledException への昇格によるプロセスクラッシュを防ぐ。
     /// </summary>
-    private static async void StartBisectFromMenu(ViewModels.Repository repo, RoutedEventArgs e)
+    private static async Task StartBisectFromMenuAsync(ViewModels.Repository repo, RoutedEventArgs e)
     {
-        if (repo is { IsBisectCommandRunning: false, InProgressContext: null } && repo.CanCreatePopup())
+        try
         {
-            if (repo.LocalChangesCount > 0)
-                App.RaiseException(repo.FullPath, App.Text("Error.BisectHasLocalChanges"));
-            else if (repo.IsBisectCommandRunning || repo.BisectState != Models.BisectState.None)
-                App.RaiseException(repo.FullPath, App.Text("Error.BisectAlreadyRunning"));
-            else
-                await repo.ExecBisectCommandAsync("start");
+            if (repo is { IsBisectCommandRunning: false, InProgressContext: null } && repo.CanCreatePopup())
+            {
+                if (repo.LocalChangesCount > 0)
+                    App.RaiseException(repo.FullPath, App.Text("Error.BisectHasLocalChanges"));
+                else if (repo.IsBisectCommandRunning || repo.BisectState != Models.BisectState.None)
+                    App.RaiseException(repo.FullPath, App.Text("Error.BisectAlreadyRunning"));
+                else
+                    await repo.ExecBisectCommandAsync("start");
+            }
         }
-
-        e.Handled = true;
+        catch (Exception ex)
+        {
+            App.RaiseException(repo?.FullPath ?? string.Empty, ex.Message);
+        }
+        finally
+        {
+            e.Handled = true;
+        }
     }
 
     /// <summary>

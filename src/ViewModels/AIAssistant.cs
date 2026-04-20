@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -124,10 +125,24 @@ public class AIAssistant : ObservableObject
                     message => Dispatcher.UIThread.Post(() => Text += message + "\n"),
                     _cancel.Token).ConfigureAwait(false);
             }
+            catch (OperationCanceledException)
+            {
+                // キャンセルはエラーバナーに出さない
+            }
             catch (Exception e)
             {
+                // 生の e.ToString() / e.Message をバナーに出すと、HttpRequestException 経由で
+                // Azure カスタムエンドポイント URL や、稀に 401 レスポンスボディの一部が画面共有・
+                // スクリーンショット経由で露出する。詳細はログに回し、UI には型名のみを出す。
+                var safeSummary = e switch
+                {
+                    HttpRequestException http => $"HTTP {(int?)http.StatusCode} {http.StatusCode}",
+                    TaskCanceledException => "Request timeout",
+                    _ => e.GetType().Name
+                };
+                Models.Logger.LogException("AI commit message generation failed", e);
                 Dispatcher.UIThread.Post(() =>
-                    App.RaiseException(_repo.FullPath, App.Text("Error.FailedToGenerateCommitMessage", e)));
+                    App.RaiseException(_repo.FullPath, App.Text("Error.FailedToGenerateCommitMessage", safeSummary)));
             }
 
             // 生成完了後にUIスレッドでフラグを解除する

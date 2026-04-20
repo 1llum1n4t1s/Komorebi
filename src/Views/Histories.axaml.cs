@@ -294,19 +294,10 @@ public partial class Histories : UserControl
         if (selected[0] is not Models.Commit { Parents.Count: > 0 } commit)
             return;
 
-        List<Models.Commit> children = [];
-        var sha = commit.SHA;
-        foreach (var c in vm.Commits)
-        {
-            foreach (var p in c.Parents)
-            {
-                if (sha.StartsWith(p, StringComparison.Ordinal))
-                    children.Add(c);
-            }
-
-            if (sha.Equals(c.SHA, StringComparison.Ordinal))
-                break;
-        }
+        // パフォーマンス: 以前は O(n×m) で vm.Commits を線形走査しつつ各子の全親と比較していた。
+        // 10万コミットのリポジトリでは UI スレッドで数十msブロックし、Alt+↑ 連打でフリーズ。
+        // Histories._childrenByParentSha による O(1) 逆引きに切り替え。
+        var children = vm.GetChildrenBySha(commit.SHA);
 
         if (children.Count == 1)
         {
@@ -744,11 +735,15 @@ public partial class Histories : UserControl
                         FillCurrentBranchMenu(menu, repo, current);
                         break;
                     case Models.DecoratorType.LocalBranchHead:
-                        var lb = repo.Branches.Find(x => x.IsLocal && d.Name == x.Name);
+                        // パフォーマンス: O(n) の List.Find を Repository の O(1) 辞書ルックアップに置き換え。
+                        // 1000 ブランチのリポジトリで、デコレータ1個あたり 1000 回の比較が 1 回の辞書参照に。
+                        var lb = repo.FindLocalBranchByName(d.Name);
                         FillOtherLocalBranchMenu(menu, repo, lb, current, commit.IsMerged);
                         break;
                     case Models.DecoratorType.RemoteBranchHead:
-                        var rb = repo.Branches.Find(x => !x.IsLocal && d.Name == x.FriendlyName);
+                        // FindBranchByFriendlyName は Local も返しうるため、IsLocal でない方を取る
+                        var rbCandidate = repo.FindBranchByFriendlyName(d.Name);
+                        var rb = rbCandidate is { IsLocal: false } ? rbCandidate : null;
                         FillRemoteBranchMenu(menu, repo, rb, current, commit.IsMerged);
                         break;
                     case Models.DecoratorType.Tag:
@@ -1017,7 +1012,8 @@ public partial class Histories : UserControl
         {
             if (current.Ahead.Contains(commit.SHA))
             {
-                var upstream = repo.Branches.Find(x => x.FullName.Equals(current.Upstream, StringComparison.Ordinal));
+                // O(n) List.Find を Repository の O(1) FullName 辞書ルックアップに置換
+                var upstream = repo.FindBranchByFullName(current.Upstream);
                 var pushRevision = new MenuItem();
                 pushRevision.Header = App.Text("CommitCM.PushRevision", commit.SHA[..10], upstream.FriendlyName);
                 pushRevision.Icon = App.CreateMenuIcon("Icons.Push");
@@ -1222,7 +1218,8 @@ public partial class Histories : UserControl
             fastForward.IsEnabled = current.Ahead.Count == 0 && current.Behind.Count > 0;
             fastForward.Click += async (_, e) =>
             {
-                var b = repo.Branches.Find(x => x.FriendlyName == upstream);
+                // O(n) List.Find を Repository の O(1) 辞書ルックアップに置換
+                var b = repo.FindBranchByFriendlyName(upstream);
                 if (b is null)
                     return;
 

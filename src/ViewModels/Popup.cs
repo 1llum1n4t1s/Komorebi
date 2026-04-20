@@ -74,10 +74,12 @@ public class Popup : ObservableValidator, Models.ICommandLogReceiver
     /// <summary>
     /// ダイアログの確認アクション。派生クラスでオーバーライドして
     /// git操作などの実際の処理を実装する。成功時にtrueを返す。
+    /// オーバーライドを忘れた場合でも NullReferenceException を起こさないよう
+    /// デフォルトで Task.FromResult(true) を返す（= ダイアログを即座に閉じる挙動）。
     /// </summary>
     public virtual Task<bool> Sure()
     {
-        return null;
+        return Task.FromResult(true);
     }
 
     /// <summary>

@@ -113,12 +113,21 @@ public static class Discard
         }
 
         // git restoreで復元するファイルがある場合、一時ファイル経由で実行する
+        // 例外時もファイルを必ず削除するよう try/finally で囲む（Tag.cs / Commit.cs と同じパターン）
         if (restores.Count > 0)
         {
             var pathSpecFile = Path.GetTempFileName();
-            await File.WriteAllLinesAsync(pathSpecFile, restores).ConfigureAwait(false);
-            await new Restore(repo, pathSpecFile).Use(log).ExecAsync().ConfigureAwait(false);
-            File.Delete(pathSpecFile);
+            try
+            {
+                await File.WriteAllLinesAsync(pathSpecFile, restores).ConfigureAwait(false);
+                await new Restore(repo, pathSpecFile).Use(log).ExecAsync().ConfigureAwait(false);
+            }
+            finally
+            {
+                try
+                { File.Delete(pathSpecFile); }
+                catch { /* 削除失敗は無視 */ }
+            }
         }
     }
 }
