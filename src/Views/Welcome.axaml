@@ -106,7 +106,7 @@
           <DataTemplate DataType="vm:RepositoryNode">
             <Grid Background="Transparent"
                   Height="30"
-                  ColumnDefinitions="16,18,*,Auto,8"
+                  ColumnDefinitions="12,16,18,*,Auto,8"
                   Margin="{Binding Depth, Converter={x:Static c:IntConverters.ToTreeMargin}}"
                   ClipToBounds="True"
                   ContextRequested="OnTreeNodeContextRequested"
@@ -117,21 +117,39 @@
                   DragDrop.AllowDrop="True"
                   DragDrop.DragOver="DragOverTreeNode"
                   DragDrop.Drop="DropOnTreeNode">
-              <v:RepositoryTreeNodeToggleButton Grid.Column="0"
+              <!-- リモート到達性バッジ（リポジトリノードのみ、ブックマークの左） -->
+              <Ellipse Grid.Column="0"
+                       Width="8" Height="8"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Fill="{Binding RemoteReachability, Converter={x:Static c:RemoteReachabilityConverters.ToBadgeBrush}}"
+                       IsVisible="{Binding RemoteReachability, Converter={x:Static c:RemoteReachabilityConverters.IsBadgeVisible}}">
+                <ToolTip.Tip>
+                  <StackPanel>
+                    <TextBlock Text="{DynamicResource Text.Welcome.RemoteReachability.AllReachable}" IsVisible="{Binding RemoteReachability, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:RemoteReachability.AllReachable}}"/>
+                    <TextBlock Text="{DynamicResource Text.Welcome.RemoteReachability.SomeUnreachable}" IsVisible="{Binding RemoteReachability, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:RemoteReachability.SomeUnreachable}}"/>
+                    <TextBlock Text="{DynamicResource Text.Welcome.RemoteReachability.AllUnreachable}" IsVisible="{Binding RemoteReachability, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:RemoteReachability.AllUnreachable}}"/>
+                    <TextBlock Text="{DynamicResource Text.Welcome.RemoteReachability.NoRemotes}" IsVisible="{Binding RemoteReachability, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:RemoteReachability.NoRemotes}}"/>
+                    <TextBlock Margin="0,2,0,0" FontSize="11" Foreground="{DynamicResource Brush.FG2}" Text="{Binding UnreachableRemotesText}" IsVisible="{Binding UnreachableRemotesText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                  </StackPanel>
+                </ToolTip.Tip>
+              </Ellipse>
+
+              <v:RepositoryTreeNodeToggleButton Grid.Column="1"
                                                 Classes="tree_expander"
                                                 Focusable="False"
                                                 HorizontalAlignment="Center"
                                                 IsChecked="{Binding IsExpanded, Mode=OneWay}"
                                                 IsVisible="{Binding !IsRepository}"/>
 
-              <Path Grid.Column="1"
+              <Path Grid.Column="2"
                     Width="14" Height="14"
                     Fill="{Binding Bookmark, Converter={x:Static c:IntConverters.ToBookmarkBrush}}"
                     HorizontalAlignment="Center"
                     Data="{StaticResource Icons.Bookmark}"
                     IsVisible="{Binding IsRepository}"/>
 
-              <ToggleButton Grid.Column="1"
+              <ToggleButton Grid.Column="2"
                             Classes="folder"
                             Focusable="False"
                             Width="14" Height="14"
@@ -140,7 +158,7 @@
                             IsChecked="{Binding IsExpanded}"
                             IsVisible="{Binding !IsRepository}"/>
 
-              <StackPanel Grid.Column="2" Orientation="Horizontal" ClipToBounds="True">
+              <StackPanel Grid.Column="3" Orientation="Horizontal" ClipToBounds="True">
                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}"/>
                 <TextBlock Margin="4,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource Brush.FG2}" Text="{Binding Id, StringFormat=({0}), Converter={x:Static c:PathConverters.RelativeToHome}}">
                   <TextBlock.IsVisible>
@@ -157,7 +175,7 @@
                       IsVisible="{Binding IsInvalid}"/>
               </StackPanel>
 
-              <ContentControl Grid.Column="3"
+              <ContentControl Grid.Column="4"
                               Margin="6,0,0,0"
                               Content="{Binding Status, Mode=OneWay}"
                               IsVisible="{Binding Status, Converter={x:Static ObjectConverters.NotEqual}}">

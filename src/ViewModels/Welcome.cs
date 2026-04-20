@@ -94,6 +94,16 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
+    /// グローバル自動フェッチ＆リモート到達性スキャンのバックグラウンド処理を即座に 1 サイクル走らせる。
+    /// 実行ゲート・インターバル管理・並列制御はすべて <see cref="AutoFetchService"/> 側が持つため、
+    /// ここは単に手動トリガを送るだけの薄いブリッジ。ツールバー上の「今すぐスキャン」ボタンから呼ばれる。
+    /// </summary>
+    public void ScanAllRemotesReachabilityNow()
+    {
+        AutoFetchService.Instance.TriggerNow();
+    }
+
+    /// <summary>
     /// ノードの展開/折りたたみを切り替え、行リストを更新する。
     /// </summary>
     public void ToggleNodeIsExpanded(RepositoryNode node)

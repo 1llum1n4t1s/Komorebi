@@ -105,16 +105,16 @@ public partial class AvatarManager
 
                 if (email is null)
                 {
-                    // Thread.Sleepはスレッドプールを占有するためTask.Delayに変更
-                    try
+                    // Task.Delay(delay, token) は token キャンセル時に TaskCanceledException を投げるため
+                    // アプリ終了時にデバッガ first-chance ノイズが出る。Register + TaskCompletionSource 方式で
+                    // 例外を投げずに待機する。
+                    var tcs = new TaskCompletionSource();
+                    using (token.Register(() => tcs.TrySetResult()))
                     {
-                        await Task.Delay(100, token).ConfigureAwait(false);
+                        await Task.WhenAny(Task.Delay(100), tcs.Task).ConfigureAwait(false);
                     }
-                    catch (OperationCanceledException)
-                    {
+                    if (token.IsCancellationRequested)
                         break;
-                    }
-
                     continue;
                 }
 

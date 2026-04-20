@@ -982,6 +982,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Open Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Open Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Rescan Repositories in Default Clone Dir</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Search Repositories...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">LOCAL CHANGES</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>

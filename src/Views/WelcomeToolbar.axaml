@@ -44,6 +44,13 @@
         <Path Width="14" Height="14" Data="{StaticResource Icons.Scan}"/>
       </Button>
 
+      <Button Classes="icon_button"
+              Width="32"
+              Command="{Binding ScanAllRemotesReachabilityNow}"
+              ToolTip.Tip="{DynamicResource Text.Welcome.ScanRemotesReachability}">
+        <Path Width="14" Height="14" Data="{StaticResource Icons.CheckCircled}"/>
+      </Button>
+
       <!-- セパレーター -->
       <Rectangle Width="1" Height="16" Margin="8,0" VerticalAlignment="Center" Fill="{DynamicResource Brush.Border2}"/>
 

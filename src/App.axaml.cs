@@ -733,6 +733,9 @@ public partial class App : Application
         // バックグラウンドのアバターダウンロードを停止して、IOException を防止
         Models.AvatarManager.Instance.Stop();
 
+        // グローバル自動フェッチサービスを停止する
+        ViewModels.AutoFetchService.Instance.Stop();
+
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             desktop.Shutdown(exitCode);
         else
@@ -1110,6 +1113,9 @@ public partial class App : Application
         // 外部ツール（diffツール等）の検出とアバター取得を開始する
         Native.OS.SetupExternalTools();
         Models.AvatarManager.Instance.Start();
+
+        // グローバル自動フェッチ＆リモート到達性スキャンのバックグラウンドサービスを開始する
+        ViewModels.AutoFetchService.Instance.Start();
 
         // 起動引数にリポジトリパスが指定されていれば初期表示に使用する
         string startupRepo = null;

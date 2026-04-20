@@ -133,7 +133,6 @@ public class Fetch : Popup
             }
         }
 
-        _repo.MarkFetched();
         return true;
     }
 

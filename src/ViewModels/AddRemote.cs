@@ -167,7 +167,6 @@ public class AddRemote : Popup
         log.Complete();
 
         // リポジトリの状態を更新する
-        _repo.MarkFetched();
         _repo.MarkBranchesDirtyManually();
         return succ;
     }

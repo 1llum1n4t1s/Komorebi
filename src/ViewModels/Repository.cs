@@ -606,8 +606,6 @@ public class Repository : ObservableObject, Models.IRepository
             _selectedViewIndex = 0;
         }
 
-        _lastFetchTime = DateTime.Now;
-        _autoFetchTimer = new Timer(AutoFetchByTimer, null, 5000, 5000);
         RefreshAll();
     }
 
@@ -636,9 +634,6 @@ public class Repository : ObservableObject, Models.IRepository
 
         _filterDebounceTimer?.Dispose();
         _filterDebounceTimer = null;
-
-        _autoFetchTimer.Dispose();
-        _autoFetchTimer = null;
 
         _settings = null;
         _uiStates = null;
@@ -1012,12 +1007,6 @@ public class Repository : ObservableObject, Models.IRepository
             return await App.AskConfirmAsync(App.Text("Checkout.WarnLostCommits"));
 
         return true;
-    }
-
-    /// <summary>最終フェッチ時刻を現在時刻に更新する。自動フェッチのインターバルリセットに使用する。</summary>
-    public void MarkFetched()
-    {
-        _lastFetchTime = DateTime.Now;
     }
 
     /// <summary>指定されたSHAのコミットに履歴ビューをナビゲートする。遅延モードではコミット読み込み完了後にナビゲートする。</summary>
@@ -2129,56 +2118,34 @@ public class Repository : ObservableObject, Models.IRepository
         return null;
     }
 
-    /// <summary>タイマーコールバック。UIスレッドで自動フェッチを実行する。</summary>
-    private void AutoFetchByTimer(object sender)
-    {
-        try
-        {
-            Dispatcher.UIThread.Invoke(AutoFetchOnUIThread);
-        }
-        catch
-        {
-            // Ignore exception.
-        }
-    }
-
     /// <summary>
-    /// UIスレッド上で自動フェッチを実行する。
-    /// 設定の有効/無効、ロックファイルの存在、前回フェッチからの経過時間をチェックし、
-    /// 条件を満たした場合に全リモートまたはデフォルトリモートからフェッチする。
+    /// UI スレッド上で 1 回分の自動フェッチを実行する。
+    /// <see cref="AutoFetchService"/> から呼び出される。インターバル判定はサービス側で行うため、
+    /// ここではリポジトリ固有の安全条件（クローズ中・ロックファイル・ポップアップ中・リモート無し）のみチェックする。
     /// </summary>
-    private async Task AutoFetchOnUIThread()
+    public async Task RunAutoFetchAsync()
     {
         if (_uiStates is null)
             return;
 
-        CommandLog log = null;
+        if (!CanCreatePopup())
+            return;
 
+        var lockFile = Path.Combine(GitDir, "index.lock");
+        if (File.Exists(lockFile))
+            return;
+
+        List<string> remotes = [];
+        foreach (var r in _remotes)
+            remotes.Add(r.Name);
+
+        if (remotes.Count == 0)
+            return;
+
+        CommandLog log = null;
+        IsAutoFetching = true;
         try
         {
-            if (!Preferences.Instance.EnableAutoFetch || !CanCreatePopup())
-            {
-                _lastFetchTime = DateTime.Now;
-                return;
-            }
-
-            var lockFile = Path.Combine(GitDir, "index.lock");
-            if (File.Exists(lockFile))
-                return;
-
-            var now = DateTime.Now;
-            var desire = _lastFetchTime.AddMinutes(Preferences.Instance.AutoFetchInterval);
-            if (desire > now)
-                return;
-
-            List<string> remotes = [];
-            foreach (var r in _remotes)
-                remotes.Add(r.Name);
-
-            if (remotes.Count == 0)
-                return;
-
-            IsAutoFetching = true;
             log = CreateLog("Auto-Fetch");
 
             if (_uiStates.FetchAllRemotes)
@@ -2194,16 +2161,18 @@ public class Repository : ObservableObject, Models.IRepository
 
                 await new Commands.Fetch(FullPath, remote).Use(log).RunAsync();
             }
-
-            _lastFetchTime = DateTime.Now;
-            IsAutoFetching = false;
         }
         catch
         {
-            // Ignore all exceptions.
+            // Ignore all exceptions — autofetch failures must never impair UI interactivity.
         }
-
-        log?.Complete();
+        finally
+        {
+            // 例外経路でも IsAutoFetching を必ず戻す。true のまま固着すると CanCreatePopup() が false を返し
+            // ポップアップが永久に開けなくなるため critical。
+            IsAutoFetching = false;
+            log?.Complete();
+        }
     }
 
     private readonly string _gitCommonDir = null;                                    // 共有gitディレクトリパス（worktree用）
@@ -2245,8 +2214,7 @@ public class Repository : ObservableObject, Models.IRepository
     private string _navigateToCommitDelayed = string.Empty;                            // 遅延ナビゲーション先コミットSHA
 
     private bool _isAutoFetching = false;                                              // 自動フェッチ実行中フラグ
-    private Timer _autoFetchTimer = null;                                              // 自動フェッチタイマー
-    private DateTime _lastFetchTime = DateTime.MinValue;                               // 最終フェッチ時刻
+    // 自動フェッチタイマーは AutoFetchService に移行（グローバル 1 本化）
 
     private Models.BisectState _bisectState = Models.BisectState.None;                 // Bisect状態
     private bool _isBisectCommandRunning = false;                                      // Bisectコマンド実行中フラグ

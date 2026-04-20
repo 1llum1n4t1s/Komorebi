@@ -978,6 +978,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">களஞ்சியத்தைத் திற</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">முனையத்தைத் திற</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">இயல்புநிலை நகலி அடைவில் களஞ்சியங்களை மீண்டும் வருடு</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">களஞ்சியங்களைத் தேடு...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">உள்ளக மாற்றங்கள்</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">அறிவிலி புறக்கணி</x:String>

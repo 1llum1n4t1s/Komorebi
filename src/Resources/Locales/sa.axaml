@@ -975,6 +975,11 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">भण्डारम् उद्घाटयतु</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">सम्प्रेषकम् उद्घाटयतु</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">पूर्वनिर्धारितप्रतिरूपणनिर्देशिकायां भण्डाराणि पुनः परीक्षतु</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">भण्डाराणि अन्विष्यतु...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">स्थानीयपरिवर्तनानि</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git उपेक्षा</x:String>

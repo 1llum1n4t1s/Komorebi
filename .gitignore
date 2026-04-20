@@ -3,6 +3,7 @@
 .idea/
 .claude/
 .claude/settings.local.json
+.serena/
 
 *.sln.docstates
 *.user

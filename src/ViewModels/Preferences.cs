@@ -709,7 +709,11 @@ public class Preferences : ObservableObject
         RemoveInvalidRepositoriesRecursive(RepositoryNodes);
     }
 
-    /// <summary>設定をpreference.jsonファイルに保存する。読み込み中またはリードオンリーの場合はスキップする。</summary>
+    /// <summary>
+    /// 設定をpreference.jsonファイルに保存する。読み込み中またはリードオンリーの場合はスキップする。
+    /// アトミック書き込み: tmp に全量書き → File.Move で置換することで、書き込み途中のクラッシュ・電源断で
+    /// preference.json が破損して全設定ロストするのを防ぐ。
+    /// </summary>
     public void Save()
     {
         if (_isLoading || _isReadonly)
@@ -717,15 +721,31 @@ public class Preferences : ObservableObject
 
         ExtensionData = null;
 
+        var file = Path.Combine(Native.OS.DataDir, "preference.json");
+        var tmp = file + ".tmp";
         try
         {
-            var file = Path.Combine(Native.OS.DataDir, "preference.json");
-            using var stream = File.Create(file);
-            JsonSerializer.Serialize(stream, this, JsonCodeGen.Default.Preferences);
+            using (var stream = File.Create(tmp))
+            {
+                JsonSerializer.Serialize(stream, this, JsonCodeGen.Default.Preferences);
+            }
+
+            File.Move(tmp, file, overwrite: true);
         }
         catch (Exception ex)
         {
             Models.Logger.LogException("設定ファイルの保存に失敗しました", ex);
+
+            // tmp ファイルが残っている場合はクリーンアップ（失敗は無視）
+            try
+            {
+                if (File.Exists(tmp))
+                    File.Delete(tmp);
+            }
+            catch
+            {
+                // ignore cleanup failure
+            }
         }
     }
 

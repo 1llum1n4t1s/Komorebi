@@ -224,7 +224,8 @@ public partial class Command
 
     /// <summary>
     /// gitコマンドを非同期で実行し、標準出力と標準エラーを全て読み取る。
-    /// ReadToEndの非同期版。
+    /// ReadToEndの非同期版。キャンセルトークンが設定されている場合、キャンセル時に子プロセスを
+    /// 強制終了してゾンビ化を防ぐ（ネットワーク I/O やSSH handshakeでハングした ls-remote 等）。
     /// </summary>
     /// <returns>実行結果を含むResultオブジェクト。</returns>
     protected async Task<Result> ReadToEndAsync()
@@ -242,14 +243,58 @@ public partial class Command
             return Result.Failed(e.Message);
         }
 
-        // stdout/stderrを並列で読み取る（逐次読み取りはバッファ満杯時にデッドロックする）
+        // キャンセルトークンが設定されている場合、キャンセル時にプロセスを強制終了する。
+        // これをしないと、タイムアウト発火後も git プロセスが残り続けてソケット・CPU を食う。
+        var captured = new CapturedProcess() { Process = proc };
+        var capturedLock = new object();
+        CancellationTokenRegistration killRegistration = default;
+        if (CancellationToken.CanBeCanceled)
+        {
+            killRegistration = CancellationToken.Register(() =>
+            {
+                lock (capturedLock)
+                {
+                    if (captured is { Process: { HasExited: false } })
+                    {
+                        try
+                        {
+                            captured.Process.Kill(entireProcessTree: true);
+                        }
+                        catch
+                        {
+                            // プロセスが既に終了している等の競合は無視する
+                        }
+                    }
+                }
+            });
+        }
+
         var rs = new Result() { IsSuccess = true };
-        var stdoutTask = proc.StandardOutput.ReadToEndAsync(CancellationToken);
-        var stderrTask = proc.StandardError.ReadToEndAsync(CancellationToken);
-        await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
-        rs.StdOut = await stdoutTask.ConfigureAwait(false);
-        rs.StdErr = await stderrTask.ConfigureAwait(false);
-        await proc.WaitForExitAsync(CancellationToken).ConfigureAwait(false);
+        try
+        {
+            // stdout/stderrを並列で読み取る（逐次読み取りはバッファ満杯時にデッドロックする）
+            var stdoutTask = proc.StandardOutput.ReadToEndAsync(CancellationToken);
+            var stderrTask = proc.StandardError.ReadToEndAsync(CancellationToken);
+            await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
+            rs.StdOut = await stdoutTask.ConfigureAwait(false);
+            rs.StdErr = await stderrTask.ConfigureAwait(false);
+            await proc.WaitForExitAsync(CancellationToken).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            // キャンセル時はプロセスは kill 済み（上の Register コールバック経由）。失敗として Result を返す。
+            rs.IsSuccess = false;
+            return rs;
+        }
+        finally
+        {
+            // プロセス参照をクリアしてキャンセルハンドラでの二重終了を防ぐ
+            lock (capturedLock)
+            {
+                captured.Process = null;
+            }
+            killRegistration.Dispose();
+        }
 
         // 終了コードで成功/失敗を判定する
         rs.IsSuccess = proc.ExitCode == 0;

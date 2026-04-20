@@ -986,6 +986,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">開啟本機存放庫</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">開啟終端機</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">重新掃描預設複製 (clone) 目錄下的存放庫</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">快速搜尋存放庫...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">本機變更</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">加入至 .gitignore 忽略清單</x:String>

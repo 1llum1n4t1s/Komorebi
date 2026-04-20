@@ -978,6 +978,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">リポジトリを開く</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">端末を開く</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">既定のクローンディレクトリ内のリポジトリを再スキャン</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">全リポジトリのリモート到達性を確認</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">全リモート到達可能</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">一部のリモートが到達不可</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">全リモートが到達不可</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">リモート未設定</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">リポジトリを検索...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">ローカルの変更</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">無視</x:String>

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Komorebi.Commands;
@@ -115,6 +116,58 @@ public class Remote : Command
         // git remote set-url --push --delete: プッシュ専用URLを削除する
         Args = $"remote set-url --push --delete {name.Quoted()} {pushUrl.Quoted()}";
         return await ExecAsync();
+    }
+
+    /// <summary>
+    /// リモートの到達可能性を確認する。
+    /// git ls-remote --quiet を実行し、接続が成功すれば到達可能と判定する。
+    /// 参照ゼロ件（空リポジトリ、タグのみのリポジトリ）も「接続できた」として到達可能扱いする。
+    /// </summary>
+    /// <param name="remote">確認するリモート名。</param>
+    /// <param name="cancelToken">タイムアウト用のキャンセルトークン。</param>
+    /// <returns>到達可能ならtrue、失敗・タイムアウト・認証エラーならfalse。</returns>
+    public async Task<bool> CheckReachabilityAsync(string remote, CancellationToken cancelToken)
+    {
+        // リモート個別のSSHキー設定を反映する（git config を 1 回起動するコスト）
+        await ResolveSSHKeyAsync(remote);
+        return await RunLsRemoteAsync(remote, cancelToken);
+    }
+
+    /// <summary>
+    /// 事前に解決済みの SSH キーを使ってリモートの到達可能性を確認する。
+    /// 呼び出し側が <see cref="Config.ReadAllAsync"/> で全 remote.*.sshkey を一括取得済みの場合に使う。
+    /// これにより、リモート 1 件ごとに git config プロセスを起動せずに済み、プロセス起動コストを削減する。
+    /// </summary>
+    /// <param name="remote">確認するリモート名。</param>
+    /// <param name="preResolvedSSHKey">
+    /// <see cref="Command.ResolveSSHKeyValue"/> で解決済みの SSH キーパス。空文字列はシステムデフォルト。
+    /// </param>
+    /// <param name="cancelToken">タイムアウト用のキャンセルトークン。</param>
+    /// <returns>到達可能ならtrue、失敗・タイムアウト・認証エラーならfalse。</returns>
+    public async Task<bool> CheckReachabilityAsync(string remote, string preResolvedSSHKey, CancellationToken cancelToken)
+    {
+        SSHKey = preResolvedSSHKey ?? string.Empty;
+        return await RunLsRemoteAsync(remote, cancelToken);
+    }
+
+    /// <summary>
+    /// <see cref="CheckReachabilityAsync(string, CancellationToken)"/> と
+    /// <see cref="CheckReachabilityAsync(string, string, CancellationToken)"/> の共通実装部分。
+    /// SSH キー解決後の ls-remote 実行と結果判定を行う。
+    /// </summary>
+    private async Task<bool> RunLsRemoteAsync(string remote, CancellationToken cancelToken)
+    {
+        // --quiet: 進捗表示を抑制。--exit-code と --heads は故意に付けない。
+        //   --exit-code + --heads だと「ブランチゼロ件のリモート」が exit 2 になり、接続できているのに
+        //   到達不可と誤判定されるため（新規作成直後の空リポ、タグ専用リポ等）。
+        Args = $"ls-remote --quiet {remote.Quoted()}";
+
+        // バックグラウンド確認のためエラートーストを抑制する
+        RaiseError = false;
+        CancellationToken = cancelToken;
+
+        var rs = await ReadToEndAsync();
+        return rs.IsSuccess;
     }
 
     /// <summary>

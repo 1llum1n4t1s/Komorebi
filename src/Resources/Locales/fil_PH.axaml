@@ -975,6 +975,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Buksan ang Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Buksan ang Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Muling I-scan ang mga Repository sa Default na Clone Dir</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Maghanap ng mga Repository...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">MGA LOKAL NA PAGBABAGO</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>

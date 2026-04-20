@@ -23,7 +23,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![es__ES](https://img.shields.io/badge/es__ES-99.65%25-yellow)
+### ![es__ES](https://img.shields.io/badge/es__ES-99.66%25-yellow)
 
 <details>
 <summary>Missing keys in es_ES.axaml</summary>
@@ -171,7 +171,7 @@ This document shows the translation status of each locale file in the repository
 
 </details>
 
-### ![ru__RU](https://img.shields.io/badge/ru__RU-99.65%25-yellow)
+### ![ru__RU](https://img.shields.io/badge/ru__RU-99.66%25-yellow)
 
 <details>
 <summary>Missing keys in ru_RU.axaml</summary>
