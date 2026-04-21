@@ -165,4 +165,19 @@ public partial class AIAssistant : ChromelessWindow
 
         e.Handled = true;
     }
+
+    /// <summary>
+    /// "Use" ボタンクリック時のハンドラ。生成済みコミットメッセージを Repository.SetCommitMessage 経由で適用してダイアログを閉じる。
+    /// upstream cace869b 由来。Komorebi では vm.Apply() がメッセージ全体 (Text) を渡す形で配線済み。
+    /// </summary>
+    private void OnUseClicked(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.AIAssistant vm && !string.IsNullOrEmpty(vm.Text))
+        {
+            vm.Apply();
+            Close();
+        }
+
+        e.Handled = true;
+    }
 }

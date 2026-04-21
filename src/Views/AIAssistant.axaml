@@ -50,6 +50,13 @@
         <v:LoadingIcon Width="14" Height="14"
                        Margin="0,0,8,0"
                        IsVisible="{Binding IsGenerating}"/>
+        <!-- upstream cace869b: 生成済みテキストをコミットメッセージに適用する Use ボタン -->
+        <Button Classes="flat"
+                Height="28"
+                Margin="0,0,8,0" Padding="12,0"
+                Content="{DynamicResource Text.AIAssistant.Use}"
+                IsEnabled="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                Click="OnUseClicked"/>
         <Button Classes="flat"
                 Height="28"
                 Padding="12,0"
