@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Text;
 
 using Avalonia;
 using Avalonia.Input;
@@ -94,18 +96,32 @@ public partial class Askpass : ChromelessWindow
         if (_isHostKeyPrompt)
         {
             Console.Out.WriteLine("yes");
+            // App.Quit()でプロセスが終了する前にバッファをフラッシュする。
+            // SSHは子プロセス（Askpass）のstdoutから応答を読み取るため、
+            // フラッシュしないとシャットダウン時にバッファが失われ、
+            // 空の応答として処理されてHost key verification failedになる。
+            Console.Out.Flush();
         }
         else
         {
+            // upstream 6feae0bd: UTF-8 パスフレーズを直接バイト列で書き出し、終了前に ZeroMemory でクリア。
+            // Console.Out.WriteLine() は CodePage 依存で非 ASCII passphrase を破損させる恐れがあったため
+            // OpenStandardOutput() で UTF-8 バイト列をそのまま書き、入力欄も Clear する。
             var passphrase = TxtPassphrase.Text ?? string.Empty;
-            Console.Out.WriteLine(passphrase);
+            byte[] passBytes = Encoding.UTF8.GetBytes(passphrase);
+            try
+            {
+                var outStream = Console.OpenStandardOutput();
+                outStream.Write(passBytes, 0, passBytes.Length);
+                outStream.WriteByte((byte)'\n');
+                outStream.Flush();
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(passBytes);
+                TxtPassphrase.Text = string.Empty;
+            }
         }
-
-        // App.Quit()でプロセスが終了する前にバッファをフラッシュする。
-        // SSHは子プロセス（Askpass）のstdoutから応答を読み取るため、
-        // フラッシュしないとシャットダウン時にバッファが失われ、
-        // 空の応答として処理されてHost key verification failedになる。
-        Console.Out.Flush();
 
         if (_isPreview)
             Close();
