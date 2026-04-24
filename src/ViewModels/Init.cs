@@ -23,13 +23,14 @@ public class Init : Popup
     }
 
     /// <summary>
-    /// コンストラクタ。ページID、パス、親ノード、理由を指定して初期化する。
+    /// コンストラクタ。ページID、パス、親ノード、ブックマーク色 ID (upstream 95279943)、理由を指定して初期化する。
     /// </summary>
-    public Init(string pageId, string path, RepositoryNode parent, string reason)
+    public Init(string pageId, string path, RepositoryNode parent, int bookmark, string reason)
     {
         _pageId = pageId;
         _targetPath = path;
         _parentNode = parent;
+        _bookmark = bookmark;
 
         Reason = string.IsNullOrEmpty(reason) ? "unknown error" : reason;
         Reason = Reason.Trim();
@@ -56,6 +57,7 @@ public class Init : Popup
         if (succ)
         {
             var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(_targetPath, _parentNode, true);
+            node.Bookmark = _bookmark;
             await node.UpdateStatusAsync(false, null);
 
             Welcome.Instance.Refresh();
@@ -66,4 +68,5 @@ public class Init : Popup
     private readonly string _pageId = null; // ページID
     private string _targetPath = null; // 初期化対象パス
     private readonly RepositoryNode _parentNode = null; // 親ノード
+    private readonly int _bookmark = 0; // upstream 95279943: Open Repository ポップアップで選択されたブックマーク色を継承
 }
