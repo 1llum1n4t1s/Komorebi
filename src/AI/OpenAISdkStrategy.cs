@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,6 +30,13 @@ internal sealed class OpenAISdkStrategy : IGenerationStrategy
         var client = CreateClient();
         var chatClient = client.GetChatClient(_service.Model);
         var options = new ChatCompletionOptions() { Tools = { ChatTools.GetDetailChangesInFile } };
+
+        // upstream 356ab729: Anthropic / Qwen 系の "thinking" モードがコミットメッセージ生成の応答に
+        // 思考プロセス本文を混入させるのを抑制する (Patch API は実験的なので SCME0001 抑止)。
+#pragma warning disable SCME0001
+        options.Patch.Set("$.thinking"u8, Encoding.UTF8.GetBytes("""{"type": "disabled"}"""));
+        options.Patch.Set("$.enable_thinking"u8, false);
+#pragma warning restore SCME0001
 
         List<ChatMessage> messages = [new UserChatMessage(Agent.BuildUserMessage(_service, repo, changeList))];
 
