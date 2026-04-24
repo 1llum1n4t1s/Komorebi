@@ -145,7 +145,11 @@ public class RepositorySettings
             var hash = HashContent(content);
             if (!hash.Equals(_orgHash, StringComparison.Ordinal))
             {
-                await File.WriteAllTextAsync(_file, content);
+                // upstream 50367b7e: アトミック書き込み (tmp に書いてから rename) で書き込み途中のクラッシュ・電源断で
+                // 設定ファイル破損による全設定ロストを防ぐ。
+                var tmpfile = $"{_file}.tmp";
+                await File.WriteAllTextAsync(tmpfile, content);
+                File.Move(tmpfile, _file, true);
                 _orgHash = hash;
             }
         }

@@ -404,6 +404,8 @@ public class RepositoryConfigure : ObservableObject
 
         try
         {
+            _repo.Settings.Save();
+
             await SetIfChangedAsync("user.name", UserName, "");
             await SetIfChangedAsync("user.email", UserEmail, "");
             await SetIfChangedAsync("commit.gpgsign", GPGCommitSigningEnabled ? "true" : "false", "false");
@@ -421,7 +423,6 @@ public class RepositoryConfigure : ObservableObject
                 await SaveRemoteSettingsAsync();
 
             await ApplyIssueTrackerChangesAsync();
-            await _repo.Settings.SaveAsync();
         }
         catch (Exception ex)
         {

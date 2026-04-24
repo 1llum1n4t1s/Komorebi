@@ -306,8 +306,12 @@ public class RepositoryUIStates
         try
         {
             LastCommitMessage = lastCommitMessage;
-            using var stream = File.Create(_file);
-            JsonSerializer.Serialize(stream, this, JsonCodeGen.Default.RepositoryUIStates);
+            // upstream 50367b7e: アトミック書き込み (tmp に書いてから rename) で書き込み途中のクラッシュ・電源断で
+            // UI 状態ファイルが破損するのを防ぐ。
+            var content = JsonSerializer.Serialize(this, JsonCodeGen.Default.RepositoryUIStates);
+            var tmpfile = $"{_file}.tmp";
+            File.WriteAllText(tmpfile, content);
+            File.Move(tmpfile, _file, true);
         }
         catch
         {
