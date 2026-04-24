@@ -30,8 +30,8 @@ public class Tag : Command
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> AddAsync(string basedOn)
     {
-        // git tag --no-sign: 署名なしの軽量タグを作成する
-        Args = $"tag --no-sign {_name} {basedOn}";
+        // git tag --no-sign: 署名なしの軽量タグを作成する（Quoted() で引数境界を守る）
+        Args = $"tag --no-sign {_name.Quoted()} {basedOn.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 
@@ -51,9 +51,9 @@ public class Tag : Command
         builder
             .Append("tag ")
             .Append(sign ? "--sign -a " : "--no-sign -a ")
-            .Append(_name)
+            .Append(_name.Quoted())
             .Append(' ')
-            .Append(basedOn);
+            .Append(basedOn.Quoted());
 
         if (!string.IsNullOrEmpty(message))
         {
@@ -76,9 +76,9 @@ public class Tag : Command
             }
         }
 
-        // メッセージが空の場合はタグ名をメッセージとして使用する
+        // メッセージが空の場合はタグ名をメッセージとして使用する（Quoted() で引数境界を守る）
         builder.Append(" -m ");
-        builder.Append(_name);
+        builder.Append(_name.Quoted());
 
         Args = builder.ToString();
         return await ExecAsync().ConfigureAwait(false);
@@ -91,8 +91,8 @@ public class Tag : Command
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> DeleteAsync()
     {
-        // git tag --delete: 指定タグを削除する
-        Args = $"tag --delete {_name}";
+        // git tag --delete: 指定タグを削除する（Quoted() で引数境界を守る）
+        Args = $"tag --delete {_name.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 

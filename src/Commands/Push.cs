@@ -48,8 +48,9 @@ public class Push : Command
         if (force)
             builder.Append("--force-with-lease ");
 
-        // <remote> <local>:<remoteBranch> 形式でプッシュ先を指定する
-        builder.Append(remote).Append(' ').Append(local).Append(':').Append(remoteBranch);
+        // <remote> <local>:<remoteBranch> 形式でプッシュ先を指定する。
+        // refspec の "local:remoteBranch" は 1 つの引数として Quoted し、引数境界を守る。
+        builder.Append(remote.Quoted()).Append(' ').Append($"{local}:{remoteBranch}".Quoted());
         Args = builder.ToString();
     }
 
@@ -76,8 +77,8 @@ public class Push : Command
         if (isDelete)
             builder.Append("--delete ");
 
-        // リモートと参照名を指定する
-        builder.Append(remote).Append(' ').Append(refname);
+        // リモートと参照名を指定する（Quoted() で引数境界を守る）
+        builder.Append(remote.Quoted()).Append(' ').Append(refname.Quoted());
 
         Args = builder.ToString();
     }

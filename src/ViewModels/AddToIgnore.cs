@@ -49,27 +49,32 @@ public class AddToIgnore : Popup
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.AddingIgnoredFiles");
 
         // 保存先ファイルのフルパスを取得する
         var file = StorageFile.GetFullPath(_repo.FullPath, _repo.GitDir);
-        if (!File.Exists(file))
+
+        // LockWatcher はファイル書き込み中だけ保持する。MarkWorkingCopyDirtyManually を
+        // ロック保持中に呼ぶと FSW イベントの重複処理で UI 更新が消失する（Discard.cs パターン準拠）。
+        using (_repo.LockWatcher())
         {
-            // ファイルが存在しない場合は新規作成してパターンを書き込む
-            await File.WriteAllLinesAsync(file!, [_pattern]);
-        }
-        else
-        {
-            // 既存ファイルの末尾に改行がない場合は空行を挿入してからパターンを追記する
-            var org = await File.ReadAllTextAsync(file);
-            if (!org.EndsWith('\n'))
-                await File.AppendAllLinesAsync(file, ["", _pattern]);
+            if (!File.Exists(file))
+            {
+                // ファイルが存在しない場合は新規作成してパターンを書き込む
+                await File.WriteAllLinesAsync(file!, [_pattern]);
+            }
             else
-                await File.AppendAllLinesAsync(file, [_pattern]);
+            {
+                // 既存ファイルの末尾に改行がない場合は空行を挿入してからパターンを追記する
+                var org = await File.ReadAllTextAsync(file);
+                if (!org.EndsWith('\n'))
+                    await File.AppendAllLinesAsync(file, ["", _pattern]);
+                else
+                    await File.AppendAllLinesAsync(file, [_pattern]);
+            }
         }
 
-        // ワーキングコピーの状態を更新する
+        // ワーキングコピーの状態を更新する（ロック解除後）
         _repo.MarkWorkingCopyDirtyManually();
         return true;
     }

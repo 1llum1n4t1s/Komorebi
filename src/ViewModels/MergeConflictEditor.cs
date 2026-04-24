@@ -264,11 +264,11 @@ public class MergeConflictEditor : ObservableObject
             var fullPath = Path.Combine(_repo.FullPath, _filePath);
             await File.WriteAllTextAsync(fullPath, builder.ToString());
 
-            // 一時ファイル経由でgit addを実行しステージングする
-            var pathSpecFile = Path.GetTempFileName();
-            await File.WriteAllTextAsync(pathSpecFile, _filePath);
-            await new Commands.Add(_repo.FullPath, pathSpecFile).ExecAsync();
-            File.Delete(pathSpecFile);
+            // 一時ファイル経由でgit addを実行しステージングする。
+            // TempFileScope で例外時の一時ファイルリークを防ぐ（catch 経路でも Dispose は走る）。
+            using var temp = new TempFileScope();
+            await File.WriteAllTextAsync(temp.Path, _filePath);
+            await new Commands.Add(_repo.FullPath, temp.Path).ExecAsync();
 
             // ワーキングコピーの変更を手動で通知
             _repo.MarkWorkingCopyDirtyManually();

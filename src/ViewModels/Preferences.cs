@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -21,18 +22,30 @@ public class Preferences : ObservableObject
     {
         get
         {
-            if (_instance is not null)
+            // 通常パス: 既に初期化済みなら volatile read だけで返す（ホットパスを汚さない）
+            var local = _instance;
+            if (local is not null)
+                return local;
+
+            // 初回パス: 二重チェックロックで多重初期化を防ぐ。
+            // IPC 受信 / AutoFetchService 起動 / UI スレッドのいずれが最初に Instance を要求しても、
+            // PrepareGit() などの副作用付き初期化が 1 回だけ走ることを保証する。
+            lock (s_instanceLock)
+            {
+                if (_instance is not null)
+                    return _instance;
+
+                var loaded = Load();
+                loaded._isLoading = false;
+
+                loaded.PrepareGit();
+                loaded.PrepareShellOrTerminal();
+                PrepareExternalDiffMergeTool();
+                loaded.PrepareWorkspaces();
+
+                _instance = loaded;
                 return _instance;
-
-            _instance = Load();
-            _instance._isLoading = false;
-
-            _instance.PrepareGit();
-            _instance.PrepareShellOrTerminal();
-            PrepareExternalDiffMergeTool();
-            _instance.PrepareWorkspaces();
-
-            return _instance;
+            }
         }
     }
 
@@ -717,11 +730,27 @@ public class Preferences : ObservableObject
 
         var file = Path.Combine(Native.OS.DataDir, "preference.json");
         var tmp = file + ".tmp";
+        var bak = file + ".bak";
         try
         {
             using (var stream = File.Create(tmp))
             {
                 JsonSerializer.Serialize(stream, this, JsonCodeGen.Default.Preferences);
+            }
+
+            // 直前まで正常だった preference.json を .bak に退避してから上書きする。
+            // OS クラッシュ・電源断で preference.json が破損した場合の復旧手段になる
+            // （Load() が破損を検知すると .bak からのフォールバックを試みる）。
+            if (File.Exists(file))
+            {
+                try
+                {
+                    File.Copy(file, bak, overwrite: true);
+                }
+                catch
+                {
+                    // バックアップ失敗は致命的でないため握り潰す（保存自体は続行）
+                }
             }
 
             File.Move(tmp, file, overwrite: true);
@@ -743,7 +772,9 @@ public class Preferences : ObservableObject
         }
     }
 
-    /// <summary>preference.jsonから設定を読み込む。ファイルが存在しない場合はデフォルト設定を返す。</summary>
+    /// <summary>preference.jsonから設定を読み込む。ファイルが存在しない場合はデフォルト設定を返す。
+    /// 読み込み失敗時は preference.json.bak からのフォールバックを試み、それも失敗した場合のみ
+    /// デフォルト設定を返す。</summary>
     private static Preferences Load()
     {
         var path = Path.Combine(Native.OS.DataDir, "preference.json");
@@ -757,7 +788,28 @@ public class Preferences : ObservableObject
         }
         catch (Exception ex)
         {
-            Models.Logger.Log($"設定ファイルの読み込みに失敗、デフォルト設定を使用: {ex.Message}", Models.LogLevel.Warning);
+            Models.Logger.Log($"設定ファイルの読み込みに失敗、バックアップから復旧を試みます: {ex.Message}", Models.LogLevel.Warning);
+
+            // .bak からのフォールバック（NTFS 強制終了等で 0 バイト破損した場合の最後の砦）
+            var bak = path + ".bak";
+            if (File.Exists(bak))
+            {
+                try
+                {
+                    using var stream = File.OpenRead(bak);
+                    var loaded = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences);
+                    if (loaded is not null)
+                    {
+                        Models.Logger.Log("バックアップから設定を復旧しました", Models.LogLevel.Warning);
+                        return loaded;
+                    }
+                }
+                catch (Exception bakEx)
+                {
+                    Models.Logger.Log($"バックアップからの復旧も失敗、デフォルト設定を使用: {bakEx.Message}", Models.LogLevel.Warning);
+                }
+            }
+
             return new Preferences();
         }
     }
@@ -928,19 +980,30 @@ public class Preferences : ObservableObject
         return "en_US";
     }
 
-    private static Preferences _instance = null;                     // シングルトンインスタンス
+    // シングルトンインスタンス。volatile: IPC スレッド等の非 UI スレッドから Instance プロパティが
+    // 同時アクセスされる場合に、PrepareGit() などの初期化を 2 回走らせて Native.OS.GitExecutable を
+    // 上書きするレースを防ぐ。Instance ゲッタ側に Lock を入れる選択肢もあるが、初期化済の通常パスの
+    // ホットパスを汚さないよう、volatile read + lock 二重チェックの方針を採用する。
+    private static volatile Preferences _instance = null;
+    // Instance 取得時の二重初期化防止ロック。
+    private static readonly Lock s_instanceLock = new();
     private static readonly string s_detectedLocale = DetectDefaultLocale(); // 自動検出されたロケール
 
     /// <summary>システムから自動検出されたデフォルトロケール。</summary>
     internal static string DetectedLocale => s_detectedLocale;
 
-    private bool _isLoading = true;                                  // 設定読み込み中フラグ
-    private bool _isReadonly = true;                                  // 読み取り専用フラグ
+    // _isLoading / _isReadonly は Save() のガードに使われる。Save は PropertyChanged から呼ばれ、
+    // PropertyChanged は UI スレッドが基本だが、IPC や AutoFetchService 経由で別スレッドからの
+    // SetProperty も発生しうるため、可視性を保証する volatile を付与する。
+    private volatile bool _isLoading = true;                         // 設定読み込み中フラグ
+    private volatile bool _isReadonly = true;                         // 読み取り専用フラグ
     private string _locale = "en_US";                                // UIロケール
     private string _theme = "Default";                               // カラーテーマ
     private string _themeOverrides = string.Empty;                   // テーマオーバーライド
-    private string _defaultFontFamily = Models.InstalledFont.GetLocaleDefaults(s_detectedLocale).Default;   // デフォルトフォント（ロケール依存）
-    private string _monospaceFontFamily = Models.InstalledFont.GetLocaleDefaults(s_detectedLocale).Monospace; // 等幅フォント（ロケール依存）
+    // 設定画面の ComboBox は単一フォント名を SelectedItem として扱うため、初期値もインストール済みの単一名に解決する。
+    // カンマ区切り候補のままだと SelectedItem がリストに一致せず、設定画面でフォントが未選択表示になっていた。
+    private string _defaultFontFamily = Models.InstalledFont.ResolveDefaultFont(s_detectedLocale);
+    private string _monospaceFontFamily = Models.InstalledFont.ResolveMonospaceFont(s_detectedLocale);
     private double _defaultFontSize = 13;                            // デフォルトフォントサイズ
     private double _editorFontSize = 13;                             // エディタフォントサイズ
     private int _editorTabWidth = 4;                                 // エディタタブ幅

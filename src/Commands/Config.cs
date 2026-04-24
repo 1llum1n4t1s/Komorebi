@@ -83,8 +83,8 @@ public class Config : Command
     /// <returns>設定値の文字列。</returns>
     public string Get(string key)
     {
-        // git config <key>: 指定キーの値を取得する
-        Args = $"config {key}";
+        // git config <key>: 指定キーの値を取得する（Quoted() で引数境界を守る）
+        Args = $"config {key.Quoted()}";
         return ReadToEnd().StdOut.Trim();
     }
 
@@ -96,8 +96,8 @@ public class Config : Command
     /// <returns>設定値の文字列。</returns>
     public async Task<string> GetAsync(string key)
     {
-        // git config <key>: 指定キーの値を取得する
-        Args = $"config {key}";
+        // git config <key>: 指定キーの値を取得する（Quoted() で引数境界を守る）
+        Args = $"config {key.Quoted()}";
 
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         return rs.StdOut.Trim();
@@ -117,11 +117,11 @@ public class Config : Command
         var scope = _isLocal ? "--local" : "--global";
 
         if (!allowEmpty && string.IsNullOrWhiteSpace(value))
-            // 値が空の場合はキーを削除する
-            Args = $"config {scope} --unset {key}";
+            // 値が空の場合はキーを削除する（Quoted() で引数境界を守る）
+            Args = $"config {scope} --unset {key.Quoted()}";
         else
-            // 指定されたキーに値を設定する
-            Args = $"config {scope} {key} {value.Quoted()}";
+            // 指定されたキーに値を設定する（Quoted() で引数境界を守る）
+            Args = $"config {scope} {key.Quoted()} {value.Quoted()}";
 
         return await ExecAsync().ConfigureAwait(false);
     }

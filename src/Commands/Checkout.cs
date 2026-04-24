@@ -38,7 +38,8 @@ public class Checkout : Command
         if (force)
             builder.Append("--force ");
 
-        builder.Append(branch);
+        // ブランチ名は Quoted() で引数境界を守る
+        builder.Append(branch.Quoted());
 
         Args = builder.ToString();
         return await ExecAsync().ConfigureAwait(false);
@@ -65,10 +66,10 @@ public class Checkout : Command
         // -B: 同名ブランチの上書きを許可、-b: 新規作成のみ
         builder.Append(allowOverwrite ? "-B " : "-b ");
 
-        // 新しいブランチ名と基点リビジョンを指定する
-        builder.Append(branch);
+        // 新しいブランチ名と基点リビジョンを指定する（Quoted() で引数境界を守る）
+        builder.Append(branch.Quoted());
         builder.Append(" ");
-        builder.Append(basedOn);
+        builder.Append(basedOn.Quoted());
 
         Args = builder.ToString();
         return await ExecAsync().ConfigureAwait(false);
@@ -85,8 +86,8 @@ public class Checkout : Command
     {
         var option = force ? "--force" : string.Empty;
 
-        // git checkout --detach: HEADをブランチから切り離して特定コミットに移動する
-        Args = $"checkout {option} --detach --progress {commitId}";
+        // git checkout --detach: HEADをブランチから切り離して特定コミットに移動する（Quoted() で引数境界を守る）
+        Args = $"checkout {option} --detach --progress {commitId.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 
@@ -136,8 +137,8 @@ public class Checkout : Command
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> FileWithRevisionAsync(string file, string revision)
     {
-        // git checkout --no-overlay: リビジョンに存在しないファイルを削除する
-        Args = $"checkout --no-overlay {revision} -- {file.Quoted()}";
+        // git checkout --no-overlay: リビジョンに存在しないファイルを削除する（Quoted() で引数境界を守る）
+        Args = $"checkout --no-overlay {revision.Quoted()} -- {file.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 
@@ -152,10 +153,10 @@ public class Checkout : Command
     {
         var builder = new StringBuilder();
 
-        // git checkout --no-overlay: リビジョンに存在しないファイルを削除する
+        // git checkout --no-overlay: リビジョンに存在しないファイルを削除する（Quoted() で引数境界を守る）
         builder
             .Append("checkout --no-overlay ")
-            .Append(revision)
+            .Append(revision.Quoted())
             .Append(" --");
 
         // 復元対象の各ファイルパスを引数に追加する

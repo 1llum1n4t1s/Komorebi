@@ -334,12 +334,20 @@ public partial class Command
         if (!OperatingSystem.IsLinux())
             start.Environment.Add("DISPLAY", "required");
 
-        // GIT_SSH_COMMANDを設定する
-        // StrictHostKeyChecking=accept-new: 新しいホスト鍵は自動承認、変更された鍵は拒否（TOFU）
+        // GIT_SSH_COMMANDを設定する。
+        // 信頼モデル方針 (SSH 信頼モデル C 案): 「企業環境配慮」を採る。
+        //   1. ContainsKey ガードで親プロセスの GIT_SSH_COMMAND を尊重する。
+        //      これによりユーザーが shell rcfile / wrapper script で GIT_SSH_COMMAND を上書きしている
+        //      環境（社内 SSH proxy 等）でも Komorebi がそれを潰さない。
+        //   2. SSHKey が未設定なら -F でユーザー config を無効化しない（~/.ssh/config の ProxyJump 等を尊重）。
+        //   3. SSHKey が明示設定された場合のみ -F /dev/null（または NUL）で config を無効化し、
+        //      per-remote SSH 鍵が確実に使われるよう厳格化する。
+        // 副作用: per-remote 鍵を厳守したいユーザーで親シェルが GIT_SSH_COMMAND を設定していると
+        //   per-remote 設定が無視される。これは C 案の意図的トレードオフ。
+        //
+        // StrictHostKeyChecking=accept-new: 新しいホスト鍵は自動承認、変更された鍵は拒否（TOFU）。
         // macOSのApple版OpenSSHはSSH_ASKPASSの応答をホスト鍵確認に適用しないため、
-        // このオプションでAskpassダイアログを経由せずに新しいホスト鍵を受け入れる
-        // -F でconfigファイルを無効化することでユーザーの ~/.ssh/config の ProxyJump 等の介入を防ぎ、
-        // per-remote SSH鍵のみが使われることを保証する。
+        // このオプションでAskpassダイアログを経由せずに新しいホスト鍵を受け入れる。
         // Windows の OpenSSH は /dev/null を認識せず、シングルクォートエスケープも Git for Windows の
         // 内部 sh 呼び出しに頼れないため、プラットフォームごとに quoting と null device を切り替える。
         if (!start.Environment.ContainsKey("GIT_SSH_COMMAND"))
@@ -351,8 +359,11 @@ public partial class Command
             }
             else if (OperatingSystem.IsWindows())
             {
-                // Windows: NUL + ダブルクォートエスケープ
-                var escapedKey = SSHKey.Replace("\"", "\\\"");
+                // Windows: NUL + ダブルクォートエスケープ。
+                // Git for Windows の内部 sh 解釈を考慮して、バックスラッシュとダブルクォートの両方をエスケープする。
+                // 例えば SSHKey に `C:\path\key" -o ProxyCommand=evil` のような細工された値が
+                // .git/config 経由で混入しても、引数境界が破綻しないよう防衛する。
+                var escapedKey = SSHKey.Replace("\\", "\\\\").Replace("\"", "\\\"");
                 sshCmd = $"ssh -i \"{escapedKey}\" -o StrictHostKeyChecking=accept-new -F \"NUL\"";
             }
             else

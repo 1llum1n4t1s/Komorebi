@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,6 +59,12 @@ public class TemplateEngine
     private const char NEWLINE = '\n';
     private const RegexOptions REGEX_OPTIONS = RegexOptions.Singleline | RegexOptions.IgnoreCase;
     private static readonly TimeSpan s_regexTimeout = TimeSpan.FromSeconds(1);
+
+    // パース時の Regex コンパイルをキャッシュする。
+    // コミット詳細表示やテンプレート適用のたびに同じパターンが繰り返しコンパイルされるのを防ぎ、
+    // 大規模履歴ブラウジング時の累積コストを削減する。上限を設けないのは、テンプレート内の正規表現は
+    // ユーザーが明示的に書く有限個のパターンに限られるため。
+    private static readonly ConcurrentDictionary<string, Regex> s_regexCache = new(StringComparer.Ordinal);
 
     /// <summary>
     /// テンプレート文字列を評価し、変数を展開した結果を返す
@@ -298,9 +305,9 @@ public class TemplateEngine
             var pattern = sb.ToString();
             if (pattern.Length == 0)
                 return null;
-            var regex = new Regex(pattern, REGEX_OPTIONS, s_regexTimeout);
 
-            return regex;
+            // 同一パターンの Regex 再コンパイルを避ける（コミット詳細表示の累積コスト削減）
+            return s_regexCache.GetOrAdd(pattern, p => new Regex(p, REGEX_OPTIONS, s_regexTimeout));
         }
         catch (RegexParseException)
         {

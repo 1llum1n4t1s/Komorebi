@@ -389,6 +389,9 @@ public class Watcher : IDisposable
             var desired = DateTime.Now.AddSeconds(1).ToFileTime();
             Interlocked.Exchange(ref _updateSubmodules, desired);
             Interlocked.Exchange(ref _updateWC, desired);
+            // Repository 側の MayHaveSubmodules() キャッシュを即時無効化し、
+            // .gitmodules の新規作成・削除が正しく反映されるようにする。
+            _repo.InvalidateSubmoduleCache();
             return;
         }
 

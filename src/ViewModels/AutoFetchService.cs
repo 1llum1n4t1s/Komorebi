@@ -122,8 +122,9 @@ public class AutoFetchService
         // 次回インターバルチェックを回避するため最終実行時刻をリセットする
         _lastRun = DateTime.MinValue;
 
-        // 実行中なら終了後に再実行を予約、非実行中ならウェイトを解除して即ティック
-        Volatile.Write(ref _pendingTrigger, true);
+        // 実行中なら終了後に再実行を予約、非実行中ならウェイトを解除して即ティック。
+        // _pendingTrigger は volatile 宣言済みのため、直接代入で acquire/release セマンティクスが保証される。
+        _pendingTrigger = true;
 
         lock (_syncLock)
         {
@@ -143,7 +144,7 @@ public class AutoFetchService
             return;
 
         var enabled = Preferences.Instance.EnableAutoFetch;
-        var forced = Volatile.Read(ref _pendingTrigger);
+        var forced = _pendingTrigger;
 
         if (!enabled && !forced)
         {
@@ -161,7 +162,7 @@ public class AutoFetchService
             return;
 
         // このサイクルが手動トリガ分を消費する
-        Volatile.Write(ref _pendingTrigger, false);
+        _pendingTrigger = false;
 
         _isRunning = true;
         try
@@ -286,20 +287,31 @@ public class AutoFetchService
             }
         });
 
+        // 複数タブのフェッチを並列実行する。git fetch は I/O バウンドなので、
+        // 逐次実行だと N タブで N×フェッチ時間の待機になるが、Task.WhenAll なら最長フェッチ時間のみ。
+        // RunAutoFetchAsync は UI スレッド前提なので個別に Dispatcher.InvokeAsync を通す。
+        var tasks = new List<Task>(repos.Count);
         foreach (var repo in repos)
         {
             if (token.IsCancellationRequested)
                 break;
+            tasks.Add(SafeRunAutoFetchAsync(repo));
+        }
 
-            try
-            {
-                // Repository の自動フェッチ実装は UI スレッド前提（_uiStates / _settings を触るため）
-                await Dispatcher.UIThread.InvokeAsync(repo.RunAutoFetchAsync);
-            }
-            catch
-            {
-                // 個別リポの失敗は全体を止めない
-            }
+        if (tasks.Count > 0)
+            await Task.WhenAll(tasks).ConfigureAwait(false);
+    }
+
+    /// <summary>個別リポジトリの自動フェッチを例外安全にラップする。失敗は握り潰し全体を止めない。</summary>
+    private static async Task SafeRunAutoFetchAsync(Repository repo)
+    {
+        try
+        {
+            await Dispatcher.UIThread.InvokeAsync(repo.RunAutoFetchAsync);
+        }
+        catch
+        {
+            // 個別リポの失敗は全体を止めない
         }
     }
 
@@ -323,5 +335,7 @@ public class AutoFetchService
     private TaskCompletionSource _forceTrigger;
     // volatile: 外部スレッド（UI 側）からも IsRunning プロパティ経由で参照されるため可視性保証が必要
     private volatile bool _isRunning;
-    private bool _pendingTrigger;
+    // volatile: TriggerNow() は UI スレッドから呼ばれ、TickAsync() はバックグラウンドループで読む非対称構造。
+    // Volatile.Read/Write で保護しているが、将来の保守者が直接アクセスに変えてもサイレントバグ化しないよう宣言自体も volatile にする。
+    private volatile bool _pendingTrigger;
 }

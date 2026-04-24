@@ -151,13 +151,12 @@ public class StashChanges : Popup
             foreach (var c in changes)
                 paths.Add(c.Path);
 
-            var pathSpecFile = Path.GetTempFileName();
-            await File.WriteAllLinesAsync(pathSpecFile, paths);
+            using var temp = new TempFileScope();
+            await File.WriteAllLinesAsync(temp.Path, paths);
             succ = await new Commands.Stash(_repo.FullPath)
                 .Use(log)
-                .PushAsync(Message, pathSpecFile, keepIndex)
+                .PushAsync(Message, temp.Path, keepIndex)
                 .ConfigureAwait(false);
-            File.Delete(pathSpecFile);
         }
         else
         {

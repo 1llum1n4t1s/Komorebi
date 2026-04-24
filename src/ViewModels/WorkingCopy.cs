@@ -460,19 +460,20 @@ public class WorkingCopy : ObservableObject, IDisposable
         IsStaging = true;
         _selectedUnstaged = next is not null ? [next] : [];
 
-        using var lockWatcher = _repo.LockWatcher();
-
-        // パスリストを一時ファイルに書き出してgit addを実行
+        // パスリストを一時ファイルに書き出してgit addを実行。
+        // LockWatcher はコマンド実行中だけ保持する（ブロック構文）。MarkWorkingCopyDirtyManually を
+        // ロック保持中に呼ぶと FSW イベントの重複処理で UI 更新が消失することがある（Discard.cs 同パターン）。
         var log = _repo.CreateLog("Stage");
-        var pathSpecFile = Path.GetTempFileName();
-        await using (var writer = new StreamWriter(pathSpecFile))
+        using var temp = new TempFileScope();
+        await using (var writer = new StreamWriter(temp.Path))
         {
             foreach (var c in canStaged)
                 await writer.WriteLineAsync(c.Path);
         }
 
-        await new Commands.Add(_repo.FullPath, pathSpecFile).Use(log).ExecAsync();
-        File.Delete(pathSpecFile);
+        using (_repo.LockWatcher())
+            await new Commands.Add(_repo.FullPath, temp.Path).Use(log).ExecAsync();
+
         log.Complete();
 
         _repo.MarkWorkingCopyDirtyManually();
@@ -491,20 +492,21 @@ public class WorkingCopy : ObservableObject, IDisposable
         IsUnstaging = true;
         _selectedStaged = next is not null ? [next] : [];
 
-        using var lockWatcher = _repo.LockWatcher();
-
+        // LockWatcher はコマンド実行中だけ保持する（ブロック構文）。
+        // MarkWorkingCopyDirtyManually はロック解除後に呼ぶ（Discard.cs パターン準拠）。
         var log = _repo.CreateLog("Unstage");
         if (_useAmend)
         {
             // amend中はupdate-indexコマンドを使用
             log.AppendLine("$ git update-index --index-info ");
-            await new Commands.UpdateIndexInfo(_repo.FullPath, changes).ExecAsync();
+            using (_repo.LockWatcher())
+                await new Commands.UpdateIndexInfo(_repo.FullPath, changes).ExecAsync();
         }
         else
         {
             // リネームされたファイルは元のパスも含める
-            var pathSpecFile = Path.GetTempFileName();
-            await using (var writer = new StreamWriter(pathSpecFile))
+            using var temp = new TempFileScope();
+            await using (var writer = new StreamWriter(temp.Path))
             {
                 foreach (var c in changes)
                 {
@@ -514,8 +516,8 @@ public class WorkingCopy : ObservableObject, IDisposable
                 }
             }
 
-            await new Commands.Reset(_repo.FullPath, pathSpecFile).Use(log).ExecAsync();
-            File.Delete(pathSpecFile);
+            using (_repo.LockWatcher())
+                await new Commands.Reset(_repo.FullPath, temp.Path).Use(log).ExecAsync();
         }
         log.Complete();
 
@@ -614,10 +616,9 @@ public class WorkingCopy : ObservableObject, IDisposable
         // 解決したファイルをステージング
         if (needStage.Count > 0)
         {
-            var pathSpecFile = Path.GetTempFileName();
-            await File.WriteAllLinesAsync(pathSpecFile, needStage);
-            await new Commands.Add(_repo.FullPath, pathSpecFile).Use(log).ExecAsync();
-            File.Delete(pathSpecFile);
+            using var temp = new TempFileScope();
+            await File.WriteAllLinesAsync(temp.Path, needStage);
+            await new Commands.Add(_repo.FullPath, temp.Path).Use(log).ExecAsync();
         }
 
         log.Complete();

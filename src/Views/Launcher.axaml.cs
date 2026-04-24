@@ -155,8 +155,9 @@ public partial class Launcher : ChromelessWindow
                 // 最大化時はキャプション高さを小さくする
                 CaptionHeight = new GridLength(state == WindowState.Maximized ? 30 : 38);
 
-            // ウィンドウ状態を設定に保存する
-            ViewModels.Preferences.Instance.Layout.LauncherWindowState = state;
+            // ウィンドウ状態を設定に保存する（Minimized は除外。タスクバー最小化で次回起動が最小化状態になるのを防ぐ）
+            if (state != WindowState.Minimized)
+                ViewModels.Preferences.Instance.Layout.LauncherWindowState = state;
         }
         else if (change.Property == IsActiveProperty)
         {

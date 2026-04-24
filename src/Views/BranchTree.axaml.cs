@@ -837,7 +837,7 @@ public partial class BranchTree : UserControl
     {
         var current = repo.CurrentBranch;
         var menu = new ContextMenu();
-        var upstream = repo.Branches.Find(x => x.FullName.Equals(branch.Upstream, StringComparison.Ordinal));
+        var upstream = repo.FindBranchByFullName(branch.Upstream);
 
         var push = new MenuItem();
         push.Header = App.Text("BranchCM.Push", branch.Name);
@@ -1101,7 +1101,7 @@ public partial class BranchTree : UserControl
 
         if (upstream is not null)
         {
-            var remote = repo.Remotes.Find(x => x.Name.Equals(upstream.Remote, StringComparison.Ordinal));
+            var remote = repo.FindRemoteByName(upstream.Remote);
             if (remote is not null && remote.TryGetCreatePullRequestURL(out var prURL, upstream.Name))
             {
                 var createPR = new MenuItem();
@@ -1366,7 +1366,7 @@ public partial class BranchTree : UserControl
         menu.Items.Add(createBranch);
         menu.Items.Add(createTag);
 
-        var remote = repo.Remotes.Find(x => x.Name.Equals(branch.Remote, StringComparison.Ordinal));
+        var remote = repo.FindRemoteByName(branch.Remote);
         if (remote is not null && remote.TryGetCreatePullRequestURL(out var prURL, branch.Name))
         {
             var createPR = new MenuItem();

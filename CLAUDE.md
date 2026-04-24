@@ -205,7 +205,7 @@ The app uses a unified toolbar design (RepositoryToolbar was removed):
 `ReadToEnd()` and `ReadToEndAsync()` in `Command.cs` read stdout and stderr in parallel to avoid deadlocks. When adding new process-spawning code, **never** read stdout fully before starting to read stderr — if the stderr buffer fills (4KB–64KB), the process blocks waiting for stderr to be consumed, while the caller blocks waiting for stdout to finish.
 
 ### Temporary files need try/finally cleanup
-When using `Path.GetTempFileName()` for git `--file=` or `-F` options, always wrap in `try/finally` to ensure deletion even if `ExecAsync()` throws. See `Commit.cs` and `Tag.cs` for the pattern.
+When using `Path.GetTempFileName()` for git `--file=` or `-F` options, always wrap cleanup so the file is deleted even if `ExecAsync()` throws. **Prefer `using var temp = new TempFileScope();`** (defined in `App.Extensions.cs`) over hand-rolled `try/finally`; it provides RAII delete semantics with idempotent multi-Dispose. Existing `try/finally` patterns in `Commit.cs`, `Tag.cs`, `Commands/Discard.cs` are equivalent — when refactoring touches them, prefer migrating to `TempFileScope`. Never call `File.Delete(path)` after `await ExecAsync()` without try/finally (or `TempFileScope`) guard; if the await throws, the temp file leaks into `%TEMP%`.
 
 ### Independent git commands should run in parallel
 When a ViewModel needs results from multiple independent git commands, use `Task.WhenAll` instead of sequential awaits. Examples: `BlameCommandPalette.cs`, `Compare.cs`, `Histories.cs`.
@@ -214,7 +214,9 @@ When a ViewModel needs results from multiple independent git commands, use `Task
 `AvatarManager.cs` uses a static `HttpClient` instance. Never create `new HttpClient()` per request — it causes socket exhaustion.
 
 ### Watcher lock scope must not include MarkWorkingCopyDirtyManually
-When using `LockWatcher()` in a `Popup.Sure()` override, the lock must be released **before** calling `MarkWorkingCopyDirtyManually()`. If the lock is held during the call, FileSystemWatcher events that were buffered during the lock get delivered after unlock, causing `_updateWC` to be re-set. This triggers a second `RefreshWorkingCopyChanges()` that cancels the first one's `CancellationToken`, resulting in the UI not updating. Use a block-scoped `using (_repo.LockWatcher()) { ... }` around the command execution only, then call `MarkWorkingCopyDirtyManually()` outside the block. See `Discard.cs` for the correct pattern.
+When using `LockWatcher()` in a `Popup.Sure()` override, the lock must be released **before** calling `MarkWorkingCopyDirtyManually()` / `MarkBranchesDirtyManually()`. If the lock is held during the call, FileSystemWatcher events that were buffered during the lock get delivered after unlock, causing `_updateWC` to be re-set. This triggers a second `RefreshWorkingCopyChanges()` that cancels the first one's `CancellationToken`, resulting in the UI not updating. **Always** use a block-scoped `using (_repo.LockWatcher()) { ... }` around git command execution only, then call `MarkWorkingCopyDirtyManually()` outside the block. **Never** use the method-scoped `using var lockWatcher = ...;` form when the method also needs to call `MarkWorkingCopyDirtyManually()` — the lock won't release until the method returns.
+
+`LockContext.Dispose()` is **not idempotent** (`Interlocked.Decrement` runs every time), so don't double-Dispose by mixing `using var` with manual `lockWatcher.Dispose()`. Use the block scope to express the intended lock range explicitly. See `Discard.cs` and `WorkingCopy.cs` (Stage/Unstage) for the correct pattern.
 
 ### CommitGraph performance considerations
 `CommitGraph.Parse()` processes potentially tens of thousands of commits. It uses `HashSet` for O(1) color recycling checks and `Dictionary` for O(1) parent lookups. When modifying this code, avoid introducing `List.Find()`, `List.Contains()`, or `List.Remove()` in inner loops.

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 using Avalonia.Threading;
@@ -312,18 +311,17 @@ public class StashesPage : ObservableObject, IDisposable
                 opts.Add(new Models.DiffOption(_selectedStash.Parents[0], _selectedStash.SHA, c));
         }
 
-        var saveTo = Path.GetTempFileName();
-        var succ = await Commands.SaveChangesAsPatch.ProcessStashChangesAsync(_repo.FullPath, opts, saveTo);
+        using var temp = new TempFileScope();
+        var succ = await Commands.SaveChangesAsPatch.ProcessStashChangesAsync(_repo.FullPath, opts, temp.Path);
         if (!succ)
             return;
 
         var log = _repo.CreateLog($"Apply changes from '{_selectedStash.Name}'");
-        await new Commands.Apply(_repo.FullPath, saveTo, true, string.Empty, string.Empty)
+        await new Commands.Apply(_repo.FullPath, temp.Path, true, string.Empty, string.Empty)
             .Use(log)
             .ExecAsync();
 
         log.Complete();
-        File.Delete(saveTo);
     }
 
     /// <summary>

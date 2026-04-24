@@ -125,9 +125,20 @@ public partial class App : Application
     /// <summary>
     /// ViewModelオブジェクトに対応するViewコントロールを名前規約で自動解決して生成する。
     /// 名前空間の ".ViewModels." を ".Views." に置換して対応するViewの型を探す。
+    /// AOT セーフ性: Komorebi.csproj の &lt;TrimmerRootAssembly Include="Komorebi" /&gt; により
+    /// Komorebi.Views.* も含めて全型がアセンブリレベルで root 化されているため、
+    /// Type.GetType / Activator.CreateInstance による動的解決が AOT 後も機能する。
     /// </summary>
     /// <param name="data">対応するViewを生成したいViewModelオブジェクト</param>
     /// <returns>生成されたViewコントロール。対応するViewが見つからない場合はnull</returns>
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage(
+        "Trimming",
+        "IL2057:Unrecognized value passed to the parameter 'typeName' of method 'System.Type.GetType'",
+        Justification = "<TrimmerRootAssembly Include=\"Komorebi\" /> により Komorebi.Views.* は AOT 後も保持される")]
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage(
+        "Trimming",
+        "IL2072:Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to 'System.Activator.CreateInstance(Type)'",
+        Justification = "Komorebi.Views.* は parameterless constructor を保持する慣習で統一しており、TrimmerRootAssembly により保持される")]
     public static Control CreateViewForViewModel(object data)
     {
         // ViewModelの完全修飾名を取得し、".ViewModels."を含むか確認する
@@ -752,9 +763,15 @@ public partial class App : Application
     {
         AvaloniaXamlLoader.Load(this);
 
-        // 設定変更時に自動保存するハンドラを登録する
+        // 設定変更時に自動保存するハンドラを登録する。
+        // Initialize() は通常 1 回のみ呼ばれるが、万一多重呼び出しされた場合に Save() が N 重発火して
+        // プロパティ変更毎に I/O が N 回走るのを防ぐため、二重登録をガードする。
         var pref = ViewModels.Preferences.Instance;
-        pref.PropertyChanged += (_, _) => pref.Save();
+        if (!s_prefAutoSaveRegistered)
+        {
+            pref.PropertyChanged += OnPreferencesPropertyChanged;
+            s_prefAutoSaveRegistered = true;
+        }
 
         // ユーザー設定に基づいてロケール・テーマ・フォントを初期適用する
         SetLocale(pref.Locale);
@@ -1530,4 +1547,14 @@ public partial class App : Application
 
     /// <summary>App.Quit が既に実行開始されたかを示す静的フラグ（複数経路からの再入時の副作用防止）</summary>
     private static bool s_isQuitting = false;
+
+    /// <summary>Preferences の自動保存ハンドラが登録済みかを示す静的フラグ（Initialize() の多重呼び出し保護）</summary>
+    private static bool s_prefAutoSaveRegistered = false;
+
+    /// <summary>Preferences 変更時の自動保存ハンドラ。Save() は I/O を含むため多重登録を避ける。</summary>
+    private static void OnPreferencesPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (sender is ViewModels.Preferences pref)
+            pref.Save();
+    }
 }

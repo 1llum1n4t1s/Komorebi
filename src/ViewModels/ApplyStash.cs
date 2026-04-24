@@ -52,21 +52,25 @@ public class ApplyStash : Popup
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.ApplyingStash", Stash.Name);
 
         // コマンドログを作成する
         var log = _repo.CreateLog("Apply Stash");
         Use(log);
 
-        // git stash applyコマンドを実行する
-        var succ = await new Commands.Stash(_repo.FullPath)
-            .Use(log)
-            .ApplyAsync(Stash.Name, RestoreIndex);
+        // git stash applyコマンドを実行する。LockWatcher はコマンド実行中だけ保持する（ブロック構文）。
+        // MarkWorkingCopyDirtyManually はロック解除後に呼ぶ（Discard.cs パターン準拠）。
+        bool succ;
+        using (_repo.LockWatcher())
+        {
+            succ = await new Commands.Stash(_repo.FullPath)
+                .Use(log)
+                .ApplyAsync(Stash.Name, RestoreIndex);
+        }
 
         if (succ)
         {
-            // ワーキングコピーの状態を更新する
+            // ワーキングコピーの状態を更新する（ロック解除後）
             _repo.MarkWorkingCopyDirtyManually();
 
             // 適用後削除オプションが有効な場合、スタッシュを削除する

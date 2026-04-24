@@ -264,7 +264,9 @@ public class Statistics
     public void AddCommit(string author, double timestamp)
     {
         var emailIdx = author.IndexOf('±');
-        var email = author[(emailIdx + 1)..].ToLower(CultureInfo.CurrentCulture);
+        // メールアドレスは ASCII ドメイン前提なので ToLowerInvariant() で十分（ロケール依存処理は不要）。
+        // AvatarManager.GetEmailHash() と動作を揃えるためにも Invariant 系に統一する。
+        var email = author[(emailIdx + 1)..].ToLowerInvariant();
         if (!_users.TryGetValue(email, out var user))
         {
             user = User.FindOrAdd(author);

@@ -318,13 +318,19 @@ internal class Windows : OS.IBackend
     }
 
     /// <summary>
-    /// Windowsのcmd /c startコマンドでデフォルトエディタを開く。
+    /// デフォルトエディタで指定ファイルを開く。
+    /// cmd /c start 経由は cmd.exe のメタキャラクタ（&amp;, ^, |, () 等）を解釈するため
+    /// ファイル名にこれらが含まれると任意コマンド注入の余地があり、ShellExecute 直叩きに切り替える
+    /// （<see cref="OpenBrowser"/> と同じ方針）。
     /// </summary>
     public void OpenWithDefaultEditor(string file)
     {
         var info = new FileInfo(file);
-        var start = new ProcessStartInfo("cmd", $"""/c start "" {info.FullName.Quoted()}""");
-        start.CreateNoWindow = true;
+        var start = new ProcessStartInfo
+        {
+            FileName = info.FullName,
+            UseShellExecute = true,
+        };
         Process.Start(start)?.Dispose();
     }
 

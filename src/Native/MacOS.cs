@@ -183,10 +183,12 @@ internal class MacOS : OS.IBackend
 
     /// <summary>
     /// macOSのopenコマンドでデフォルトブラウザを開く。
+    /// URL は <see cref="OS.OpenBrowser"/> facade で http/https/mailto に検証済みだが、
+    /// 引数境界保護として Quoted() で囲む（URL に %20 ではなく空白が混入したケース等への防衛）。
     /// </summary>
     public void OpenBrowser(string url)
     {
-        Process.Start("open", url)?.Dispose();
+        Process.Start("open", url.Quoted())?.Dispose();
     }
 
     /// <summary>

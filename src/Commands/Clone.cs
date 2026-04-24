@@ -34,8 +34,9 @@ public class Clone : Command
         if (!string.IsNullOrEmpty(extraArgs))
             builder.Append(extraArgs).Append(' ');
 
-        // クローン元URLを指定する
-        builder.Append(url).Append(' ');
+        // クローン元URLを指定する。Quoted() で囲んで、URL に空白や引用符を含む値が
+        // 渡されても引数境界が崩れないように防衛する（他 Command の規約と統一）。
+        builder.Append(url.Quoted()).Append(' ');
 
         // ローカルディレクトリ名が指定されている場合に追加する
         if (!string.IsNullOrEmpty(localName))

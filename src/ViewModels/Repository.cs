@@ -1281,12 +1281,30 @@ public class Repository : ObservableObject, Models.IRepository
         IsBisectCommandRunning = false;
     }
 
-    /// <summary>サブモジュールが存在する可能性があるかを判定する（.gitmodulesの存在とサイズで判断）。</summary>
+    /// <summary>サブモジュールが存在する可能性があるかを判定する（.gitmodulesの存在とサイズで判断）。
+    /// Watcher.Tick は 100ms 周期で呼ばれ、FSW イベント毎にも呼ばれるため、結果を 1 秒 TTL でキャッシュする。
+    /// .gitmodules の新規作成・削除が Watcher で検知された場合は <see cref="InvalidateSubmoduleCache"/>
+    /// で即時無効化される。</summary>
     public bool MayHaveSubmodules()
     {
+        var now = Environment.TickCount64;
+        if (_submoduleCacheExpiryTick > now)
+            return _submoduleCacheValue;
+
         var modulesFile = Path.Combine(FullPath, ".gitmodules");
         var info = new FileInfo(modulesFile);
-        return info.Exists && info.Length > 20;
+        var result = info.Exists && info.Length > 20;
+
+        _submoduleCacheValue = result;
+        _submoduleCacheExpiryTick = now + 1000;   // 1 秒 TTL
+        return result;
+    }
+
+    /// <summary><see cref="MayHaveSubmodules"/> のキャッシュを即時無効化する。
+    /// .gitmodules の作成・削除・更新を Watcher 側で検知したときに呼ぶ。</summary>
+    public void InvalidateSubmoduleCache()
+    {
+        _submoduleCacheExpiryTick = 0;
     }
 
     /// <summary>
@@ -2258,4 +2276,9 @@ public class Repository : ObservableObject, Models.IRepository
     private CancellationTokenSource _cancellationRefreshWorkingCopyChanges = null;     // ワーキングコピー更新キャンセルトークン
     private CancellationTokenSource _cancellationRefreshCommits = null;                // コミット更新キャンセルトークン
     private CancellationTokenSource _cancellationRefreshStashes = null;                // スタッシュ更新キャンセルトークン
+
+    // MayHaveSubmodules() のキャッシュ。Watcher.Tick の高頻度呼び出しで毎回 FileInfo を new する
+    // コストを避けるため 1 秒 TTL でキャッシュする。キャッシュミス時のみディスク I/O が走る。
+    private bool _submoduleCacheValue;
+    private long _submoduleCacheExpiryTick;
 }

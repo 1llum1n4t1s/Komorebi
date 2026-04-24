@@ -37,10 +37,10 @@ public class Branch : Command
         if (force)
             builder.Append("-f ");
 
-        // ブランチ名と基点リビジョンを指定する
-        builder.Append(_name);
+        // ブランチ名と基点リビジョンを指定する（Quoted() で引数境界を守る）
+        builder.Append(_name.Quoted());
         builder.Append(" ");
-        builder.Append(basedOn);
+        builder.Append(basedOn.Quoted());
 
         Args = builder.ToString();
         return await ExecAsync().ConfigureAwait(false);
@@ -55,7 +55,7 @@ public class Branch : Command
     public async Task<bool> RenameAsync(string to)
     {
         // git branch -M: ブランチ名を強制的にリネームする（同名が存在しても上書き）
-        Args = $"branch -M {_name} {to}";
+        Args = $"branch -M {_name.Quoted()} {to.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 
@@ -69,10 +69,10 @@ public class Branch : Command
     {
         if (tracking is null)
             // 上流ブランチの設定を解除する
-            Args = $"branch {_name} --unset-upstream";
+            Args = $"branch {_name.Quoted()} --unset-upstream";
         else
             // 上流ブランチを指定されたリモートブランチに設定する
-            Args = $"branch {_name} -u {tracking.FriendlyName}";
+            Args = $"branch {_name.Quoted()} -u {tracking.FriendlyName.Quoted()}";
 
         return await ExecAsync().ConfigureAwait(false);
     }
@@ -85,7 +85,7 @@ public class Branch : Command
     public async Task<bool> DeleteLocalAsync()
     {
         // git branch -D: マージ状態に関わらずブランチを強制削除する
-        Args = $"branch -D {_name}";
+        Args = $"branch -D {_name.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 
@@ -97,8 +97,9 @@ public class Branch : Command
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> DeleteRemoteAsync(string remote)
     {
-        // git branch -D -r: リモートトラッキングブランチの参照を強制削除する
-        Args = $"branch -D -r {remote}/{_name}";
+        // git branch -D -r: リモートトラッキングブランチの参照を強制削除する。
+        // remote/name の形を 1 個の引数として Quoted する（途中スラッシュは git refspec として有効）
+        Args = $"branch -D -r {$"{remote}/{_name}".Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 

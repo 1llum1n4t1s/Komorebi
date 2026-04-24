@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Avalonia.Controls;
@@ -87,7 +86,11 @@ public class Histories : ObservableObject, IDisposable
             {
                 // パフォーマンス: SHA→Commit辞書を構築。Find()のO(n)→TryGetValueのO(1)に改善
                 // 大規模リポジトリでは数万コミットを扱うため、繰り返しのFind()が深刻なボトルネックになる
-                _commitBySha = value.ToDictionary(c => c.SHA);
+                // TryAdd を使うのは git の正常動作で SHA は一意だが、QueryCommits のパース異常や
+                // 将来の拡張で重複が混入してもクラッシュさせない防御的設計（最初の出現を勝ちとする）
+                _commitBySha = new Dictionary<string, Models.Commit>(value.Count);
+                foreach (var c in value)
+                    _commitBySha.TryAdd(c.SHA, c);
 
                 // 親SHA→子Commit群の逆引き辞書を同時構築。
                 // OnGotoChild で親→子を辿る際、以前は vm.Commits を O(n×m) 走査していたが、

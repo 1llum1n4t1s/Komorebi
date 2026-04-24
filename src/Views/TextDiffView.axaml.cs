@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -1704,26 +1703,26 @@ public partial class TextDiffView : UserControl
         if (repoView?.DataContext is not ViewModels.Repository repo)
             return;
 
-        using var lockWatcher = repo.LockWatcher();
-
-        var tmpFile = Path.GetTempFileName();
+        // LockWatcher はコマンド実行中だけ保持。MarkWorkingCopyDirtyManually はロック解除後に呼ぶ
+        // （Discard.cs パターン準拠）。TempFileScope で例外時のリークを防ぐ（async void なので特に重要）。
+        using var temp = new TempFileScope();
         if (change.WorkTree == Models.ChangeState.Untracked)
         {
-            diff.GenerateNewPatchFromSelection(change.Path, null, selection, false, tmpFile);
+            diff.GenerateNewPatchFromSelection(change.Path, null, selection, false, temp.Path);
         }
         else if (chunk.Combined)
         {
             var treeGuid = await new Commands.QueryStagedFileBlobGuid(repo.FullPath, change.Path).GetResultAsync();
-            diff.GeneratePatchFromSelection(change.Path, treeGuid, selection, false, tmpFile);
+            diff.GeneratePatchFromSelection(change.Path, treeGuid, selection, false, temp.Path);
         }
         else
         {
             var treeGuid = await new Commands.QueryStagedFileBlobGuid(repo.FullPath, change.Path).GetResultAsync();
-            diff.GeneratePatchFromSelectionSingleSide(change.Path, treeGuid, selection, false, chunk.IsOldSide, tmpFile);
+            diff.GeneratePatchFromSelectionSingleSide(change.Path, treeGuid, selection, false, chunk.IsOldSide, temp.Path);
         }
 
-        await new Commands.Apply(repo.FullPath, tmpFile, true, "nowarn", "--cache --index").ExecAsync();
-        File.Delete(tmpFile);
+        using (repo.LockWatcher())
+            await new Commands.Apply(repo.FullPath, temp.Path, true, "nowarn", "--cache --index").ExecAsync();
 
         vm.BlockNavigation.UpdateByChunk(chunk);
         repo.MarkWorkingCopyDirtyManually();
@@ -1745,19 +1744,19 @@ public partial class TextDiffView : UserControl
         if (repoView?.DataContext is not ViewModels.Repository repo)
             return;
 
-        using var lockWatcher = repo.LockWatcher();
-
+        // LockWatcher はコマンド実行中だけ保持。MarkWorkingCopyDirtyManually はロック解除後に呼ぶ
+        // （Discard.cs パターン準拠）。TempFileScope で例外時のリークを防ぐ。
         var treeGuid = await new Commands.QueryStagedFileBlobGuid(repo.FullPath, change.Path).GetResultAsync();
-        var tmpFile = Path.GetTempFileName();
+        using var temp = new TempFileScope();
         if (change.Index == Models.ChangeState.Added)
-            diff.GenerateNewPatchFromSelection(change.Path, treeGuid, selection, true, tmpFile);
+            diff.GenerateNewPatchFromSelection(change.Path, treeGuid, selection, true, temp.Path);
         else if (chunk.Combined)
-            diff.GeneratePatchFromSelection(change.Path, treeGuid, selection, true, tmpFile);
+            diff.GeneratePatchFromSelection(change.Path, treeGuid, selection, true, temp.Path);
         else
-            diff.GeneratePatchFromSelectionSingleSide(change.Path, treeGuid, selection, true, chunk.IsOldSide, tmpFile);
+            diff.GeneratePatchFromSelectionSingleSide(change.Path, treeGuid, selection, true, chunk.IsOldSide, temp.Path);
 
-        await new Commands.Apply(repo.FullPath, tmpFile, true, "nowarn", "--cache --index --reverse").ExecAsync();
-        File.Delete(tmpFile);
+        using (repo.LockWatcher())
+            await new Commands.Apply(repo.FullPath, temp.Path, true, "nowarn", "--cache --index --reverse").ExecAsync();
 
         vm.BlockNavigation.UpdateByChunk(chunk);
         repo.MarkWorkingCopyDirtyManually();
@@ -1779,26 +1778,26 @@ public partial class TextDiffView : UserControl
         if (repoView?.DataContext is not ViewModels.Repository repo)
             return;
 
-        using var lockWatcher = repo.LockWatcher();
-
-        var tmpFile = Path.GetTempFileName();
+        // LockWatcher はコマンド実行中だけ保持。MarkWorkingCopyDirtyManually はロック解除後に呼ぶ
+        // （Discard.cs パターン準拠）。TempFileScope で例外時のリークを防ぐ。
+        using var temp = new TempFileScope();
         if (change.WorkTree == Models.ChangeState.Untracked)
         {
-            diff.GenerateNewPatchFromSelection(change.Path, null, selection, true, tmpFile);
+            diff.GenerateNewPatchFromSelection(change.Path, null, selection, true, temp.Path);
         }
         else if (chunk.Combined)
         {
             var treeGuid = await new Commands.QueryStagedFileBlobGuid(repo.FullPath, change.Path).GetResultAsync();
-            diff.GeneratePatchFromSelection(change.Path, treeGuid, selection, true, tmpFile);
+            diff.GeneratePatchFromSelection(change.Path, treeGuid, selection, true, temp.Path);
         }
         else
         {
             var treeGuid = await new Commands.QueryStagedFileBlobGuid(repo.FullPath, change.Path).GetResultAsync();
-            diff.GeneratePatchFromSelectionSingleSide(change.Path, treeGuid, selection, true, chunk.IsOldSide, tmpFile);
+            diff.GeneratePatchFromSelectionSingleSide(change.Path, treeGuid, selection, true, chunk.IsOldSide, temp.Path);
         }
 
-        await new Commands.Apply(repo.FullPath, tmpFile, true, "nowarn", "--reverse").ExecAsync();
-        File.Delete(tmpFile);
+        using (repo.LockWatcher())
+            await new Commands.Apply(repo.FullPath, temp.Path, true, "nowarn", "--reverse").ExecAsync();
 
         vm.BlockNavigation.UpdateByChunk(chunk);
         repo.MarkWorkingCopyDirtyManually();

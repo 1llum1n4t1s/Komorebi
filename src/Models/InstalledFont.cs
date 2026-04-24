@@ -84,4 +84,54 @@ public static class InstalledFont
                   "Cascadia Mono, Consolas, Menlo, DejaVu Sans Mono"),
         };
     }
+
+    /// <summary>
+    /// ロケールに応じたデフォルトUIフォントを「単一の」フォント名として解決する。
+    /// <see cref="GetLocaleDefaults"/> の候補リストの中で、システムに実際に
+    /// インストールされている最初のフォント名を返す。一致するものがなければ
+    /// 候補リスト先頭の名前をそのまま返す（Avalonia 側のフォントフォールバックに委ねる）。
+    /// 設定画面の <c>ComboBox</c> は単一フォント名を <c>SelectedItem</c> として扱うため、
+    /// 初期値もカンマ区切り文字列ではなく単一名でなければ未選択表示になる。
+    /// </summary>
+    public static string ResolveDefaultFont(string locale)
+        => PickFirstInstalled(GetLocaleDefaults(locale).Default, All);
+
+    /// <summary>
+    /// ロケールに応じた等幅フォントを「単一の」フォント名として解決する。
+    /// 仕様は <see cref="ResolveDefaultFont"/> と同様で、Monospace 候補と
+    /// <see cref="Monospace"/> 一覧を突き合わせる。
+    /// </summary>
+    public static string ResolveMonospaceFont(string locale)
+        => PickFirstInstalled(GetLocaleDefaults(locale).Monospace, Monospace);
+
+    private static string PickFirstInstalled(string candidates, List<string> installed)
+    {
+        if (string.IsNullOrEmpty(candidates))
+            return string.Empty;
+
+        var parts = candidates.Split(',');
+
+        if (installed.Count > 0)
+        {
+            var set = new HashSet<string>(installed, StringComparer.OrdinalIgnoreCase);
+            foreach (var part in parts)
+            {
+                var name = part.Trim();
+                if (name.Length > 0 && set.Contains(name))
+                    return name;
+            }
+        }
+
+        // インストール済みフォント一覧が取得できない（FontManager 未初期化等）か、
+        // 候補が一つもインストールされていない場合は、先頭候補をそのまま返して
+        // Avalonia のフォントフォールバックに任せる。
+        foreach (var part in parts)
+        {
+            var name = part.Trim();
+            if (name.Length > 0)
+                return name;
+        }
+
+        return string.Empty;
+    }
 }

@@ -5,6 +5,15 @@
     <ApplicationManifest>App.manifest</ApplicationManifest>
     <ApplicationIcon>App.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <!--
+      Trim 解析警告は意図的に抑制する。理由:
+      下の <TrimmerRootAssembly Include="Komorebi" /> でアセンブリ全体を root 化しており、
+      App.CreateViewForViewModel が Type.GetType / Activator.CreateInstance で動的解決する
+      Views.* も含めて全型が保持される。Avalonia / CommunityToolkit.Mvvm / Velopack 等
+      サードパーティ側の警告は対処不能なノイズになるため一括抑制する。
+      Komorebi 自身のコードで AOT 安全性に懸念がある箇所には個別に
+      [UnconditionalSuppressMessage] / [DynamicDependency] 属性を付けて意図を明示する。
+    -->
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
 
     <Product>Komorebi</Product>

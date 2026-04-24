@@ -93,6 +93,48 @@ public static class StringExtensions
 }
 
 /// <summary>
+/// 一時ファイルのライフサイクルを RAII で管理するスコープ。
+/// <see cref="Path.GetTempFileName"/> で取得した一時ファイルを Dispose 時に必ず削除する。
+/// 例外発生時のリークを防ぐため、生 <c>try/finally</c> の代わりに使用する:
+/// <code>
+/// using var temp = new TempFileScope();
+/// await DoSomethingWith(temp.Path);
+/// // Dispose 時に File.Delete が走る（例外パスでも保証）
+/// </code>
+/// </summary>
+public sealed class TempFileScope : IDisposable
+{
+    /// <summary>一時ファイルのフルパス。</summary>
+    public string Path { get; }
+
+    private bool _disposed;
+
+    /// <summary>新しい一時ファイルを作成する。</summary>
+    public TempFileScope()
+    {
+        Path = System.IO.Path.GetTempFileName();
+    }
+
+    /// <summary>一時ファイルを削除する。多重 Dispose は安全に無視される。</summary>
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+
+        try
+        {
+            File.Delete(Path);
+        }
+        catch
+        {
+            // 削除失敗は無視する（既に消えている / ロック中 / 権限なし等のケースで例外を伝播させない）
+        }
+    }
+}
+
+/// <summary>
 /// <see cref="Commands.Command"/>に対する拡張メソッド群。
 /// コマンド実行時のログ出力先を流暢に設定するために使用する。
 /// </summary>

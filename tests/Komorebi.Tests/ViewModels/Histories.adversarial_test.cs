@@ -115,21 +115,29 @@ namespace Komorebi.Tests.ViewModels
         // ================================================================
 
         /// <summary>
-        /// 重複SHAのコミットリストを設定した場合、ArgumentExceptionが発生すること。
-        /// ToDictionary は重複キーを許容しないため。
+        /// 重複SHAのコミットリストを設定しても例外を投げず、最初の出現が辞書に登録されること。
+        /// 仕様変更（防御的設計）: ToDictionary → TryAdd に切り替えたため、重複は静かに無視され、
+        /// QueryCommits のパース異常等で重複が混入しても UI クラッシュしない。
         /// </summary>
         [Fact]
-        public void Commits_DuplicateSHA_ThrowsArgumentException()
+        public void Commits_DuplicateSHA_DoesNotThrowAndKeepsFirst()
         {
             var histories = new Histories(_repo);
+            var sha = "deadbeef" + new string('0', 32);
+            var first = MakeCommit(sha);
+            var second = MakeCommit(sha);
             var commits = new List<Commit>
             {
-                MakeCommit("deadbeef" + new string('0', 32)),
-                MakeCommit("deadbeef" + new string('0', 32)), // 重複SHA
+                first,
+                second, // 重複SHA。TryAdd により無視される（先勝ち）
             };
 
-            // ToDictionary は重複キーで ArgumentException をスローする
-            Assert.Throws<ArgumentException>(() => histories.Commits = commits);
+            // 例外を投げないこと
+            histories.Commits = commits;
+
+            // SelectedCommit など外部観測可能な状態が壊れていないことを軽く確認する
+            // （NavigateTo で SHA から復元する経路は同じ辞書を使うため、最初の出現が引き当たる）
+            Assert.Equal(2, histories.Commits.Count);
         }
 
         // ================================================================

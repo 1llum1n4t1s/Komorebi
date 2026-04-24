@@ -62,7 +62,6 @@ public class CheckoutAndFastForward : Popup
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.CheckoutAndFastForward", LocalBranch.Name);
 
         var log = _repo.CreateLog($"Checkout and Fast-Forward '{LocalBranch.Name}' ...");
@@ -74,55 +73,67 @@ public class CheckoutAndFastForward : Popup
 
         var succ = false;
         var needPopStash = false;
+        var stashFailed = false;
 
-        if (DealWithLocalChanges == Models.DealWithLocalChanges.DoNothing)
+        // LockWatcher は git コマンド実行中だけ保持する（ブロック構文）。
+        // MarkWorkingCopyDirtyManually / MarkBranchesDirtyManually はロック解除後に呼ぶ
+        // （Discard.cs パターン準拠）。
+        using (_repo.LockWatcher())
         {
-            succ = await new Commands.Checkout(_repo.FullPath)
-                .Use(log)
-                .BranchAsync(LocalBranch.Name, RemoteBranch.Head, false, true);
-        }
-        else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
-        {
-            var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
-            if (changes > 0)
+            if (DealWithLocalChanges == Models.DealWithLocalChanges.DoNothing)
             {
-                succ = await new Commands.Stash(_repo.FullPath)
+                succ = await new Commands.Checkout(_repo.FullPath)
                     .Use(log)
-                    .PushAsync("CHECKOUT_AND_FASTFORWARD_AUTO_STASH", false);
-                if (!succ)
+                    .BranchAsync(LocalBranch.Name, RemoteBranch.Head, false, true);
+            }
+            else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
+            {
+                var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
+                if (changes > 0)
                 {
-                    log.Complete();
-                    _repo.MarkWorkingCopyDirtyManually();
-                    return false;
+                    succ = await new Commands.Stash(_repo.FullPath)
+                        .Use(log)
+                        .PushAsync("CHECKOUT_AND_FASTFORWARD_AUTO_STASH", false);
+                    if (!succ)
+                        stashFailed = true;
+                    else
+                        needPopStash = true;
                 }
 
-                needPopStash = true;
+                if (!stashFailed)
+                {
+                    succ = await new Commands.Checkout(_repo.FullPath)
+                        .Use(log)
+                        .BranchAsync(LocalBranch.Name, RemoteBranch.Head, false, true);
+                }
+            }
+            else
+            {
+                succ = await new Commands.Checkout(_repo.FullPath)
+                    .Use(log)
+                    .BranchAsync(LocalBranch.Name, RemoteBranch.Head, true, true);
             }
 
-            succ = await new Commands.Checkout(_repo.FullPath)
-                .Use(log)
-                .BranchAsync(LocalBranch.Name, RemoteBranch.Head, false, true);
-        }
-        else
-        {
-            succ = await new Commands.Checkout(_repo.FullPath)
-                .Use(log)
-                .BranchAsync(LocalBranch.Name, RemoteBranch.Head, true, true);
-        }
+            if (succ && !stashFailed)
+            {
+                // サブモジュールを自動更新する
+                await _repo.AutoUpdateSubmodulesAsync(log);
 
-        if (succ)
-        {
-            // サブモジュールを自動更新する
-            await _repo.AutoUpdateSubmodulesAsync(log);
-
-            // 自動スタッシュを行った場合はポップして復元する
-            if (needPopStash)
-                await new Commands.Stash(_repo.FullPath)
-                    .Use(log)
-                    .PopAsync("stash@{0}");
+                // 自動スタッシュを行った場合はポップして復元する
+                if (needPopStash)
+                    await new Commands.Stash(_repo.FullPath)
+                        .Use(log)
+                        .PopAsync("stash@{0}");
+            }
         }
 
         log.Complete();
+
+        if (stashFailed)
+        {
+            _repo.MarkWorkingCopyDirtyManually();
+            return false;
+        }
 
         // フィルタモードでチェックアウトしたブランチをIncludedに設定する
         if (_repo.HistoryFilterMode == Models.FilterMode.Included)
