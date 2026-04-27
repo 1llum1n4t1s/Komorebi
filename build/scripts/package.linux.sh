@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+# ICU versions to support (Debian has no virtual package, must list all)
+# Format: space-separated version numbers
+ICU_VERSIONS="78 77 76 74 72 71 70 69 68 67 66 65 63"
+
 arch=
 appimage_arch=
 target=
@@ -54,15 +58,27 @@ cp -f Komorebi/* resources/deb/opt/komorebi
 ln -rsf resources/deb/opt/komorebi/komorebi resources/deb/usr/bin
 cp -r resources/_common/applications resources/deb/usr/share
 cp -r resources/_common/icons resources/deb/usr/share
+
 # Calculate installed size in KB
 installed_size=$(du -sk resources/deb | cut -f1)
-# Update the control file
+
+# Generate ICU dependencies string for Debian
+# Debian lacks libicu virtual package, must list all versions with OR operator
+icu_deps="libicu"
+for v in $ICU_VERSIONS; do
+    icu_deps="$icu_deps | libicu$v"
+done
+
+# Update the control file (replace placeholder, not whole Depends line)
 sed -i -e "s/^Version:.*/Version: $VERSION/" \
     -e "s/^Architecture:.*/Architecture: $arch/" \
     -e "s/^Installed-Size:.*/Installed-Size: $installed_size/" \
+    -e "s/@ICU_DEPS@/$icu_deps/" \
     resources/deb/DEBIAN/control
-# Ensure maintainer scripts are executable (required by dpkg-deb)
-chmod 0755 resources/deb/DEBIAN/preinst resources/deb/DEBIAN/prerm
+# Ensure maintainer scripts are executable (required by dpkg-deb).
+# upstream a6bbcab1 で postinst も追加されたため chmod 対象に含める。
+chmod 0755 resources/deb/DEBIAN/preinst resources/deb/DEBIAN/postinst resources/deb/DEBIAN/prerm
+
 # Build deb package with gzip compression
 dpkg-deb -Zgzip --root-owner-group --build resources/deb "komorebi_$VERSION-1_$arch.deb"
 
