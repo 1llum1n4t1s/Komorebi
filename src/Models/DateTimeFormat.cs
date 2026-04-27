@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Komorebi.Models;
 
@@ -54,11 +55,27 @@ public class DateTimeFormat
     }
 
     /// <summary>
-    /// 現在日時をこのフォーマットで表示した例文
+    /// 現在日時をこのフォーマットで表示した例文。
+    /// upstream b2aba44c: 区切り文字が culture (例: de_DE) で "." に書き換えられないよう固定 culture を使う。
     /// </summary>
     public string Example
     {
-        get => DateTime.Now.ToString(DateFormat);
+        get => DateTime.Now.ToString(DateFormat, _culture);
+    }
+
+    /// <summary>
+    /// "/" と ":" を区切り文字として固定するための CultureInfo。
+    /// upstream b2aba44c: 既定 culture では DateTime.ToString が "/" を文化圏依存の区切り (".") に置換するため、
+    /// CurrentCulture を Clone して区切りだけ固定する。
+    /// </summary>
+    private static readonly CultureInfo _culture = CreateCulture();
+
+    private static CultureInfo CreateCulture()
+    {
+        var culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+        culture.DateTimeFormat.DateSeparator = "/";
+        culture.DateTimeFormat.TimeSeparator = ":";
+        return culture;
     }
 
     /// <summary>
@@ -93,10 +110,11 @@ public class DateTimeFormat
     {
         var actived = Supported[ActiveIndex];
         if (dateOnly)
-            return localTime.ToString(actived.DateFormat);
+            return localTime.ToString(actived.DateFormat, _culture);
 
         // 24時間制か12時間制（AM/PM付き）かでフォーマットを切り替え
+        // upstream b2aba44c: 区切り文字が culture 依存で書き換わらないよう固定 culture を渡す
         var format = Use24Hours ? $"{actived.DateFormat} HH:mm:ss" : $"{actived.DateFormat} hh:mm:ss tt";
-        return localTime.ToString(format);
+        return localTime.ToString(format, _culture);
     }
 }
