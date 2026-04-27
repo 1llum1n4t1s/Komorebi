@@ -231,23 +231,26 @@ public class InteractiveRebase : ObservableObject
                     if (subject.StartsWith("fixup! ", StringComparison.Ordinal))
                     {
                         item.Action = Models.InteractiveRebaseAction.Fixup;
-                        needReorder.Add(new(subject.Substring(7), item));
+                        // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去
+                        needReorder.Add(new(subject.Substring(7).Trim(), item));
                         continue;
                     }
 
                     if (subject.StartsWith("squash! ", StringComparison.Ordinal))
                     {
                         item.Action = Models.InteractiveRebaseAction.Squash;
-                        needReorder.Add(new(subject.Substring(8), item));
+                        // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去
+                        needReorder.Add(new(subject.Substring(8).Trim(), item));
                         continue;
                     }
-                }
 
                 // 対象となる親コミットが見つかった fixup!/squash! を直後に挿入する
                 List<InteractiveRebaseReorderItem> reordered = [];
                 foreach (var o in needReorder)
                 {
-                    if (subject.StartsWith(o.Key, StringComparison.Ordinal))
+                    // upstream 6e53d949: 件名の "startsWith" だと「fixup! foo」「fixup! foo bar」が両方マッチしてしまうので
+                    // ターゲット件名と Trim().Equals で完全一致を要求する
+                    if (subject.Trim().Equals(o.Key, StringComparison.Ordinal))
                     {
                         list.Add(o.Item);
                         reordered.Add(o);
