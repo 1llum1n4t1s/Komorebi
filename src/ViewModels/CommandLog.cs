@@ -19,6 +19,8 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     {
         get;
         private set;
+        private List<Models.ICommandLogReceiver> _receivers = new List<Models.ICommandLogReceiver>();
+>>>>>>> d8916c53 (fix: `NullReferenceException` occurs when `Complete` is called before `AppendLine` (#2305))
     }
 
     /// <summary>
@@ -100,8 +102,13 @@ public class CommandLog : ObservableObject, Models.ICommandLog
         else
         {
             // StringBuilderに行を追加する
+            // upstream d8916c53: Complete() で _builder = null した後の AppendLine 呼び出しで
+            // NullReferenceException が出る race を回避する。null 時は _content に直接アペンド。
             var newline = line ?? string.Empty;
-            _builder.AppendLine(newline);
+            if (_builder != null)
+                _builder.AppendLine(newline);
+            else
+                _content = $"{_content}{newline}\n";
 
             // 全レシーバーに新しいログ行を通知する
             foreach (var receiver in _receivers)
