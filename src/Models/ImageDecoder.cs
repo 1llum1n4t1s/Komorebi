@@ -13,4 +13,6 @@ public enum ImageDecoder
     Pfim,
     /// <summary>TIFFデコーダー</summary>
     Tiff,
+    /// <summary>StbImage デコーダー（PSD 等）</summary>
+    StbImage,
 }

@@ -71,6 +71,7 @@
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.2" />
     <PackageReference Include="OpenAI" Version="2.10.0" />
     <PackageReference Include="Pfim" Version="0.11.4" />
+    <PackageReference Include="StbImageSharp" Version="2.30.15" />
     <PackageReference Include="SuperLightLogger" Version="1.0.6" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.93.0" />
     <PackageReference Include="Velopack" Version="0.0.1298" />

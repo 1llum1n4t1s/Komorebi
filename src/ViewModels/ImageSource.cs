@@ -8,6 +8,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using BitMiracle.LibTiff.Classic;
 using Pfim;
+using StbImageSharp;
 
 namespace Komorebi.ViewModels;
 
@@ -46,6 +47,8 @@ public class ImageSource
             ".ico" or ".bmp" or ".gif" or ".jpg" or ".jpeg" or ".png" or ".webp" => Models.ImageDecoder.Builtin,
             ".tga" or ".dds" => Models.ImageDecoder.Pfim,
             ".tif" or ".tiff" => Models.ImageDecoder.Tiff,
+            // upstream 203c51f3: PSD ファイルを StbImageSharp 経由でデコード
+            ".psd" => Models.ImageDecoder.StbImage,
             _ => Models.ImageDecoder.None,
         };
     }
@@ -105,6 +108,9 @@ public class ImageSource
                         return DecodeWithPfim(stream, size);
                     case Models.ImageDecoder.Tiff:
                         return DecodeWithTiff(stream, size);
+                    case Models.ImageDecoder.StbImage:
+                        // upstream 203c51f3: PSD ファイルを StbImageSharp 経由でデコード
+                        return DecodeWithStbImage(stream, size);
                 }
             }
             catch (Exception e)
@@ -232,5 +238,22 @@ public class ImageSource
             Marshal.Copy(pixels, 0, frameBuffer.Address, pixels.Length);
             return new ImageSource(bitmap, size);
         }
+
+    /// <summary>
+    /// StbImageSharp (PSD 等) で画像を読み込む。
+    /// upstream 203c51f3 由来。Rgba8888 / Unpremul に正規化したうえで Avalonia Bitmap を構築する。
+    /// </summary>
+    private static ImageSource DecodeWithStbImage(Stream stream, long size)
+    {
+        var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+        var data = image.Data;
+        var stride = image.Width * (int)image.Comp;
+
+        var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
+        var pixelSize = new PixelSize(image.Width, image.Height);
+        var dpi = new Vector(96, 96);
+        var bitmap = new Bitmap(PixelFormat.Rgba8888, AlphaFormat.Unpremul, ptr, pixelSize, dpi, stride);
+        return new ImageSource(bitmap, size);
     }
 }
