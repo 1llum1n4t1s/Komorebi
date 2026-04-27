@@ -42,6 +42,19 @@ public partial class About : ChromelessWindow
                 TxtReleaseDate.Text = App.Text("About.ReleaseDate", Models.DateTimeFormat.Format(date.ToLocalTime(), true));
                 break;
             }
+
+            // upstream 63a06ba2: AssemblyInformationalVersion から git source revision を抽出して About に表示
+            var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            if (informationVersion != null)
+            {
+                var infoVer = informationVersion.InformationalVersion;
+                var idx = infoVer.IndexOf('+');
+                if (idx > 0 && infoVer.Length > idx + 11)
+                {
+                    TxtGitSourceRevision.Text = infoVer.Substring(idx + 1, 10);
+                    PnlGitSourceRevision.IsVisible = true;
+                }
+            }
         }
 
         // 著作権情報を表示する
