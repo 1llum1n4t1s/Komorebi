@@ -509,12 +509,15 @@ public class InteractiveRebase : ObservableObject
                 {
                     if (!item.IsMessageUserEdited)
                     {
-                        var builder = new StringBuilder();
-                        builder.Append(item.OriginalFullMessage);
-                        for (var j = pendingMessages.Count - 1; j >= 0; j--)
-                            builder.Append("\n").Append(pendingMessages[j]);
+                        if (pendingMessages.Count > 0)
+                        {
+                            var builder = new StringBuilder();
+                            builder.Append(item.OriginalFullMessage);
+                            for (var j = pendingMessages.Count - 1; j >= 0; j--)
+                                builder.Append("\n").Append(pendingMessages[j]);
 
-                        item.FullMessage = builder.ToString();
+                            item.FullMessage = builder.ToString();
+                        }
                     }
 
                     hasPending = false;
