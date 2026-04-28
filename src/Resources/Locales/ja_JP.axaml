@@ -55,16 +55,16 @@
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">画像を選択...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">再読み込み</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">バイナリファイルはサポートされていません！！！</x:String>
-  <x:String x:Key="Text.Bisect">問題の発生源を特定</x:String>
-  <x:String x:Key="Text.Bisect.Abort">中止</x:String>
-  <x:String x:Key="Text.Bisect.Bad">問題あり</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">問題の発生源となったコミットを特定しています。現在の HEAD に問題はありませんか？</x:String>
-  <x:String x:Key="Text.Bisect.Good">問題なし</x:String>
-  <x:String x:Key="Text.Bisect.Skip">スキップ</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">問題の発生源となったコミットを特定しています。現在のコミットに問題があるかどうかを調査したあと、別のコミットをチェックアウトしてみてください。</x:String>
+  <x:String x:Key="Text.Bisect" xml:space="preserve">問題の発生源を特定</x:String>
+  <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">中止</x:String>
+  <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">問題あり</x:String>
+  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">問題の発生源となったコミットを特定しています。現在の HEAD に問題はありませんか？</x:String>
+  <x:String x:Key="Text.Bisect.Good" xml:space="preserve">問題なし</x:String>
+  <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">スキップ</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">問題の発生源となったコミットを特定しています。現在のコミットに問題があるかどうかを調査したあと、別のコミットをチェックアウトしてみてください。</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">著者の履歴</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">前のリビジョンの著者の履歴</x:String>
-  <x:String x:Key="Text.Blame.IgnoreWhitespace">空白文字の変更を無視</x:String>
+  <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">空白文字の変更を無視</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">このファイルに著者の履歴は表示できません！！！</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">${0}$ をチェックアウト...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">選択した 2 つのブランチを比較</x:String>
@@ -124,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">これらのサブモジュールを更新する必要があります:{0}更新しますか？</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">チェックアウト &amp; 早送り</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">早送り先:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">スタッシュからブランチをチェックアウト</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">新しいブランチ:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">スタッシュ:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">コミットを取り込む</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">取り込み元をコミットメッセージに明記</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">コミット:</x:String>
@@ -214,8 +217,8 @@
   ${files_num} 変更されたファイル数
   ${files} 変更されたファイルへのパス
   ${files:N} 変更されたファイルへのパス (最大 N 件)
-  ${pure_files} 変更されたファイルの名前
-  ${pure_files:N} 変更されたファイルの名前 (最大 N 件)</x:String>
+  ${pure_files} ${files} と同様ですが、ファイル名のみ
+  ${pure_files:N} ${files:N} と同様ですが、フォルダーを除いたファイル名のみ</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">テンプレートの内容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">テンプレート名:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">カスタムアクション</x:String>
@@ -385,6 +388,7 @@
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">サブモジュール</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">新規</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} 件の未コミットの変更</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">入れ替え</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">構文を強調表示</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">行を折り返す</x:String>
@@ -404,6 +408,7 @@
   <x:String x:Key="Text.Discard.All" xml:space="preserve">作業コピーに対するローカルのすべての変更</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">変更:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">無視されたファイルを含める</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">変更済み/削除済みのファイルを含める</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">未追跡のファイルを含める</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} 件の変更が破棄されます</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">この操作は元に戻せません！！！</x:String>
@@ -904,6 +909,7 @@
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">ローカルの変更をスタッシュ</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">適用</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">変更を適用</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">新しいブランチをチェックアウト</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">メッセージをコピー</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">パッチとして保存...</x:String>
@@ -940,6 +946,8 @@
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">未マージ</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">更新</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">サブモジュールの変更詳細</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">詳細を開く</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">OK</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">タグの作成者</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">日時</x:String>
@@ -1001,8 +1009,8 @@
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">クリックイベントを発動</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">コミット (編集)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">すべての変更をステージに上げてコミット</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">切断された HEAD にコミットを作成しようとしています。それでも続行しますか？</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">ステージに上げた {0} 個のファイルのうち、{1} 個のファイルのみが表示されています ({2} 個のファイルは非表示状態です)。続行しますか？</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">切断された HEAD にコミットを作成しようとしています。それでも続行しますか？</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">ステージに上げた {0} 個のファイルのうち、{1} 個のファイルのみが表示されています ({2} 個のファイルは非表示状態です)。続行しますか？</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">衝突が検出されました</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">マージ</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">外部ツールでマージ</x:String>
@@ -1088,6 +1096,7 @@
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">リモートを追加中...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">無視ファイルを追加中...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">チェックアウトとファストフォワード '{0}' ...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">スタッシュからブランチをチェックアウト中...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">ブランチの更新を待機中...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">コミット '{0}' をチェックアウト中...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">スタッシュを適用中: {0}</x:String>

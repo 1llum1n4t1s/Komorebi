@@ -55,13 +55,13 @@
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Muat Gambar...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Segarkan</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">BERKAS BINARY TIDAK DIDUKUNG!!!</x:String>
-  <x:String x:Key="Text.Bisect">Bisect</x:String>
-  <x:String x:Key="Text.Bisect.Abort">Batalkan</x:String>
-  <x:String x:Key="Text.Bisect.Bad">Buruk</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">Bisect berjalan. Apakah HEAD saat ini baik atau buruk?</x:String>
-  <x:String x:Key="Text.Bisect.Good">Baik</x:String>
-  <x:String x:Key="Text.Bisect.Skip">Lewati</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">Bisect berjalan. Tandai commit saat ini sebagai baik atau buruk dan checkout yang lain.</x:String>
+  <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
+  <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Batalkan</x:String>
+  <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Buruk</x:String>
+  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisect berjalan. Apakah HEAD saat ini baik atau buruk?</x:String>
+  <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Baik</x:String>
+  <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Lewati</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisect berjalan. Tandai commit saat ini sebagai baik atau buruk dan checkout yang lain.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame pada Revisi Sebelumnya</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Abaikan perubahan whitespace</x:String>
@@ -124,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Submodul berikut perlu diperbarui:{0}Apakah Anda ingin memperbaruinya?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout &amp; Maju Cepat</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Fast-Forward ke:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Beralih ke Branch dari Stash</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Branch Baru:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Tambahkan sumber ke pesan commit</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit:</x:String>
@@ -385,6 +388,7 @@
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">PERUBAHAN SUBMODULE</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">DIHAPUS</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">BARU</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} Perubahan Belum Di-commit</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">Tukar</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Penyorotan Sintaks</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">Word Wrap Baris</x:String>
@@ -404,6 +408,7 @@
   <x:String x:Key="Text.Discard.All" xml:space="preserve">Semua perubahan lokal dalam working copy.</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">Perubahan:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">Termasuk berkas yang diabaikan</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">Termasuk berkas yang dimodifikasi/dihapus</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">Termasuk berkas yang tidak dilacak</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} perubahan akan dibuang</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Anda tidak dapat membatalkan aksi ini!!!</x:String>
@@ -904,6 +909,7 @@
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Stash Perubahan Lokal</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Terapkan</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Terapkan Perubahan</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">Beralih ke Branch Baru</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Salin Pesan</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Drop</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Simpan sebagai Patch...</x:String>
@@ -940,6 +946,8 @@
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">belum di-merge</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">Perbarui</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">Detail Perubahan Submodule</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">BUKA DETAIL</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">OK</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">TAGGER</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">WAKTU</x:String>
@@ -1001,8 +1009,8 @@
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">Picu event klik</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">Commit (Sunting)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">Stage semua perubahan dan commit</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">Anda membuat commit pada HEAD yang terlepas. Lanjutkan?</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">Anda telah stage {0} berkas tetapi hanya {1} berkas yang ditampilkan ({2} berkas disaring). Lanjutkan?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">Anda membuat commit pada HEAD yang terlepas. Lanjutkan?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">Anda telah stage {0} berkas tetapi hanya {1} berkas yang ditampilkan ({2} berkas disaring). Lanjutkan?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">KONFLIK TERDETEKSI</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">GABUNG</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">Gabung dengan Alat Eksternal</x:String>
@@ -1088,6 +1096,7 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Menambahkan remote...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Menambahkan file yang diabaikan...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout dan Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">Beralih ke branch dari stash...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Menunggu pembaruan branch...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout commit '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Menerapkan stash: {0}</x:String>

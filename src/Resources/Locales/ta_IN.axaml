@@ -124,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">பின்வரும் submodule-கள் புதுப்பிக்கப்பட வேண்டும்:{0}அவற்றை புதுப்பிக்க விரும்புகிறீர்களா?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">செக்அவுட் &amp; ஃபாஸ்ட்-ஃபார்வர்ட்</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Fast-Forward செய்ய:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">பதுக்கிவைத்ததிலிருந்து கிளையை சரிபார்</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">புதிய கிளை:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">பதுக்கிவைத்தது:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">கனி பறி</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">உறுதிமொழி செய்திக்கு மூலத்தைச் சேர்</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">உறுதிமொழி(கள்):</x:String>
@@ -385,6 +388,7 @@
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">துணைத் தொகுதி</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">நீக்கப்பட்டது</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">புதிய</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} சமர்ப்பிக்காத மாற்றங்கள்</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">இடமாற்று</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">தொடரியல் சிறப்பம்சமாக்கல்</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">வரி சொல் மடக்கு</x:String>
@@ -404,6 +408,7 @@
   <x:String x:Key="Text.Discard.All" xml:space="preserve">செயல்படும் நகலில் உள்ள அனைத்து உள்ளக மாற்றங்கள்.</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">மாற்றங்கள்:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">புறக்கணிக்கப்பட்ட கோப்புகளைச் சேர்</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">மாற்றிய/நீக்கிய கோப்புகளைச் சேர்</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">கண்காணிக்கப்படாத கோப்புகளை சேர்</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} மாற்றங்கள் நிராகரிக்கப்படும்</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">இந்தச் செயலை நீங்கள் செயல்தவிர்க்க முடியாது!!!</x:String>
@@ -904,6 +909,7 @@
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">உள்ளக மாற்றங்களை பதுக்கிவை</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">இடு</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">மாற்றங்களைப் பொருத்து</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">புதிய கிளையை சரிபார்</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">செய்தியை நகலெடு</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">கைவிடு</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">ஒட்டாகச் சேமி...</x:String>
@@ -940,6 +946,8 @@
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">merge செய்யப்படவில்லை</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">புதுப்பி</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">துணைத் தொகுதி மாற்ற விவரங்கள்</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">விவரங்களைத் திற</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">சரி</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">TAGGER</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">TIME</x:String>
@@ -1002,7 +1010,7 @@
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">உறுதிமொழி (திருத்து)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">அனைத்து மாற்றங்களையும் நிலைப்படுத்தி உறுதிமொழி</x:String>
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">நீங்கள் ஒரு பிரிந்த HEAD-இல் commit உருவாக்குகிறீர்கள். தொடர விரும்புகிறீர்களா?</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">நீங்கள் {0} கோப்புகளை நிலைப்படுத்தியுள்ளீர்கள், ஆனால் {1} கோப்புகள் மட்டுமே காட்டப்பட்டுள்ளன ({2} கோப்புகள் வடிகட்டப்பட்டுள்ளன). தொடர விரும்புகிறீர்களா?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">நீங்கள் {0} கோப்புகளை நிலைப்படுத்தியுள்ளீர்கள், ஆனால் {1} கோப்புகள் மட்டுமே காட்டப்பட்டுள்ளன ({2} கோப்புகள் வடிகட்டப்பட்டுள்ளன). தொடர விரும்புகிறீர்களா?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">மோதல்கள் கண்டறியப்பட்டது</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">MERGE</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">வெளிப்புறக் கருவியுடன் Merge செய்</x:String>
@@ -1088,6 +1096,7 @@
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Remote சேர்க்கிறது...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">புறக்கணிக்கப்பட்ட கோப்புகளைச் சேர்க்கிறது...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout மற்றும் Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">பதுக்கிவைத்ததிலிருந்து கிளையை சரிபார்க்கிறது...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Branch புதுப்பிப்புக்காகக் காத்திருக்கிறது...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Commit '{0}' checkout செய்கிறது...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Stash பயன்படுத்துகிறது: {0}</x:String>

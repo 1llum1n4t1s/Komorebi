@@ -55,16 +55,16 @@
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Bild laden…</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Aktualisieren</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">BINÄRE DATEI WIRD NICHT UNTERSTÜTZT!!!</x:String>
-  <x:String x:Key="Text.Bisect">Bisect</x:String>
-  <x:String x:Key="Text.Bisect.Abort">Abbrechen</x:String>
-  <x:String x:Key="Text.Bisect.Bad">Schlecht</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">Bisecting. Ist der aktuelle HEAD gut oder schlecht?</x:String>
-  <x:String x:Key="Text.Bisect.Good">Gut</x:String>
-  <x:String x:Key="Text.Bisect.Skip">Überspringen</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">Bisecting. Aktuellen Commit als gut oder schlecht markieren und einen anderen auschecken.</x:String>
+  <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
+  <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Abbrechen</x:String>
+  <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Schlecht</x:String>
+  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisecting. Ist der aktuelle HEAD gut oder schlecht?</x:String>
+  <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Gut</x:String>
+  <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Überspringen</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisecting. Aktuellen Commit als gut oder schlecht markieren und einen anderen auschecken.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame auf vorheriger Revision</x:String>
-  <x:String x:Key="Text.Blame.IgnoreWhitespace">Leerzeichen-Änderungen ignorieren</x:String>
+  <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Leerzeichen-Änderungen ignorieren</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">BLAME WIRD BEI DIESER DATEI NICHT UNTERSTÜTZT!!!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">Auschecken von ${0}$…</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">Ausgewählte 2 Branches vergleichen</x:String>
@@ -124,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Die folgenden Submodule müssen aktualisiert werden:{0}Möchtest du sie aktualisieren?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Auschecken &amp; Fast Forward</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Fast Forward zu:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Branch aus Stash auschecken</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Neuer Branch:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Quelle an Commit-Nachricht anhängen</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit(s):</x:String>
@@ -385,6 +388,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">SUBMODUL</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">GELÖSCHT</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">NEU</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} nicht committete Änderungen</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">Seiten tauschen</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Syntax-Hervorhebung</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">Zeilenumbruch</x:String>
@@ -404,6 +408,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Discard.All" xml:space="preserve">Alle Änderungen in der Arbeitskopie.</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">Änderungen:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">Ignorierte Dateien einbeziehen</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">Geänderte/gelöschte Dateien einbeziehen</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">Nicht-verfolgte Dateien einbeziehen</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} Änderungen werden verworfen</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Du kannst das nicht rückgängig machen!!!</x:String>
@@ -904,6 +909,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Lokale Änderungen stashen</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Anwenden</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Änderungen anwenden</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">Neuen Branch auschecken</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Kopiere Nachricht</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Entfernen</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Als Patch speichern…</x:String>
@@ -940,6 +946,8 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">nicht gemerged</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">Aktualisieren</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">Details zu Submodul-Änderungen</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">DETAILS ÖFFNEN</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">OK</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">TAGGER</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">ZEIT</x:String>
@@ -1001,8 +1009,8 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">Klick-Ereignis auslösen</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">Commit (Bearbeitung)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">Alle Änderungen stagen und committen</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">Du erzeugst einen Commit auf einem losgelösten (‚detached‘) HEAD. Möchtest du trotzdem fortfahren?</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">Du hast {0} Datei(en) gestaged, aber nur {1} werden angezeigt ({2} sind herausgefiltert). Möchtest du trotzdem fortfahren?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">Du erzeugst einen Commit auf einem losgelösten (‚detached‘) HEAD. Möchtest du trotzdem fortfahren?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">Du hast {0} Datei(en) gestaged, aber nur {1} werden angezeigt ({2} sind herausgefiltert). Möchtest du trotzdem fortfahren?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">KONFLIKTE ERKANNT</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">MERGE</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">Merge mit externem Tool</x:String>
@@ -1088,6 +1096,7 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Remote wird hinzugefügt...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Ignorierte Datei(en) werden hinzugefügt...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout und Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">Branch aus Stash auschecken...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Warte auf Branch-Aktualisierung...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout Commit '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Stash wird angewendet: {0}</x:String>

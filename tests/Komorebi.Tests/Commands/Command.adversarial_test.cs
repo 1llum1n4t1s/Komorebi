@@ -316,5 +316,40 @@ namespace Komorebi.Tests.Commands
             var result = Command.ResolveSSHKeyValue(configValue, "/home/user/.ssh/id_ed25519");
             Assert.Equal(configValue, result);
         }
+
+        [Fact]
+        public void RedactSensitiveText_HttpRemoteUrl_HidesToken()
+        {
+            var text = "clone \"https://user:secret-token@example.com/org/repo.git\"";
+            var redacted = Command.RedactSensitiveText(text);
+
+            Assert.DoesNotContain("secret-token", redacted);
+            Assert.Contains("https://user:***@example.com/org/repo.git", redacted);
+        }
+
+        [Fact]
+        public void CreateGitStartInfo_UsesCredentialHelperResetAndAskHostKeyChecking()
+        {
+            var oldHelper = Komorebi.Native.OS.CredentialHelper;
+            try
+            {
+                Komorebi.Native.OS.CredentialHelper = "manager";
+                var command = new TestableCommand { Args = "status" };
+                var start = command.BuildStartInfo();
+
+                Assert.Contains("-c credential.helper= -c credential.helper=manager", start.Arguments);
+                Assert.DoesNotContain("StrictHostKeyChecking=accept-new", start.Environment["GIT_SSH_COMMAND"]);
+                Assert.Contains("StrictHostKeyChecking=ask", start.Environment["GIT_SSH_COMMAND"]);
+            }
+            finally
+            {
+                Komorebi.Native.OS.CredentialHelper = oldHelper;
+            }
+        }
+
+        private sealed class TestableCommand : Command
+        {
+            public System.Diagnostics.ProcessStartInfo BuildStartInfo() => CreateGitStartInfo(true);
+        }
     }
 }

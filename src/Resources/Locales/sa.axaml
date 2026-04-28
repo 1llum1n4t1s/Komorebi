@@ -1,4 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceInclude Source="avares://Komorebi/Resources/Locales/en_US.axaml"/>
+  </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">विषये</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Komorebi विषये</x:String>
@@ -52,16 +55,16 @@
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">चित्रं लोडयतु...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">पुनः आनयतु</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">द्विचरसञ्चिका असमर्थिता!!!</x:String>
-  <x:String x:Key="Text.Bisect">द्विभाजनम्</x:String>
-  <x:String x:Key="Text.Bisect.Abort">परित्यजतु</x:String>
-  <x:String x:Key="Text.Bisect.Bad">दुष्टम्</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">द्विभाजनं प्रवर्तते। वर्तमानं HEAD सुष्ठु वा दुष्टं वा?</x:String>
-  <x:String x:Key="Text.Bisect.Good">सुष्ठु</x:String>
-  <x:String x:Key="Text.Bisect.Skip">लङ्घयतु</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">द्विभाजनं प्रवर्तते। वर्तमानप्रतिबद्धं सुष्ठु वा दुष्टं वा इति चिह्नयतु अन्यच्च निष्कासयतु।</x:String>
+  <x:String x:Key="Text.Bisect" xml:space="preserve">द्विभाजनम्</x:String>
+  <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">परित्यजतु</x:String>
+  <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">दुष्टम्</x:String>
+  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">द्विभाजनं प्रवर्तते। वर्तमानं HEAD सुष्ठु वा दुष्टं वा?</x:String>
+  <x:String x:Key="Text.Bisect.Good" xml:space="preserve">सुष्ठु</x:String>
+  <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">लङ्घयतु</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">द्विभाजनं प्रवर्तते। वर्तमानप्रतिबद्धं सुष्ठु वा दुष्टं वा इति चिह्नयतु अन्यच्च निष्कासयतु।</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">दोषारोपणम्</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">पूर्वसंशोधने दोषारोपणम्</x:String>
-  <x:String x:Key="Text.Blame.IgnoreWhitespace">रिक्तस्थानपरिवर्तनानि उपेक्षन्ताम्</x:String>
+  <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">रिक्तस्थानपरिवर्तनानि उपेक्षन्ताम्</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">अस्यां सञ्चिकायां दोषारोपणम् असमर्थितम्!!!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">${0}$ निष्कासयतु...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">चयनिते द्वे शाखे तुलयतु</x:String>
@@ -121,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">एतेषाम् उपमॉड्यूलानाम् अद्यतनम् आवश्यकम्:{0}किं भवान् तान् अद्यतनयितुम् इच्छति?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">निष्कासनं तथा द्रुतप्रसारणम्</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">द्रुतप्रसारणं प्रति:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">निक्षेपात् शाखां निष्कासयतु</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">नवीना शाखा:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">निक्षेपः:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">चयनोद्धरणम्</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">स्रोतं प्रतिबद्धसन्देशे योजयतु</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">प्रतिबद्धम्(प्रतिबद्धानि):</x:String>
@@ -382,6 +388,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">उपमॉड्यूलम्</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">विलोपितम्</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">नवीनम्</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} अप्रतिबद्धपरिवर्तनानि</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">विनिमयः</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">वाक्यरचनाप्रकाशनम्</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">पङ्क्तिशब्दवलनम्</x:String>
@@ -401,6 +408,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Discard.All" xml:space="preserve">कार्यप्रतौ सर्वाणि स्थानीयपरिवर्तनानि।</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">परिवर्तनानि:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">उपेक्षितसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">परिवर्तित/अपनीतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">अननुसृतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} परिवर्तनानि त्यक्ष्यन्ते</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">एतत् कर्म पूर्ववत् कर्तुं न शक्यते!!!</x:String>
@@ -901,6 +909,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">स्थानीयपरिवर्तनानि निक्षिपतु</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">प्रयोजयतु</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">परिवर्तनानि प्रयोजयतु</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">नवीनां शाखां निष्कासयतु</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">सन्देशं प्रतिलिखतु</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">त्यजतु</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">पैच्रूपेण रक्षतु...</x:String>
@@ -937,6 +946,8 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">अविलीनम्</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">अद्यतनयतु</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">उपमॉड्यूलपरिवर्तनविवरणम्</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">विवरणानि उद्घाटयतु</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">अस्तु</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">चिह्नकर्ता</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">कालः</x:String>
@@ -998,8 +1009,8 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">क्लिक्-घटनां प्रवर्तयतु</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">प्रतिबध्नातु (सम्पादनम्)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">सर्वपरिवर्तनानि स्थापयित्वा प्रतिबध्नातु</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">भवान् विच्छिन्नशीर्षे प्रतिबद्धं रचयति। किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">भवता {0} सञ्चिकाः स्थापिताः किन्तु केवलं {1} सञ्चिकाः प्रदर्श्यन्ते ({2} सञ्चिकाः छानिताः)। किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">भवान् विच्छिन्नशीर्षे प्रतिबद्धं रचयति। किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">भवता {0} सञ्चिकाः स्थापिताः किन्तु केवलं {1} सञ्चिकाः प्रदर्श्यन्ते ({2} सञ्चिकाः छानिताः)। किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">विरोधाः अवगताः</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">विलयनम्</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">बाह्यसाधनेन विलयनम्</x:String>
@@ -1085,6 +1096,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Remote योजयति...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">उपेक्षितसञ्चिकाः योजयति...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout तथा Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">निक्षेपात् शाखां निष्कासयति...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Branch नवीकरणं प्रतीक्षते...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Commit '{0}' checkout करोति...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Stash प्रयुनक्ति: {0}</x:String>

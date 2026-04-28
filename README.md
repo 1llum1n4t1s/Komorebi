@@ -43,7 +43,7 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 | 項目 | 内容 |
 |------|------|
 | **SSH 鍵管理 UI** | `~/.ssh/` をスキャンし、リモートごと・グローバルで SSH 鍵を選択可能。3 段フォールバック（リモート個別 → グローバル → ssh-agent） |
-| **AWS CodeCommit 対応** | HTTPS / SSH / git-remote-codecommit（`codecommit::` プロトコル）の 3 形式に対応。AWS コンソールへのリンク生成・PR 作成 URL 生成にも対応 |
+| **AWS CodeCommit 対応** | HTTPS / SSH / git-remote-codecommit（`codecommit://` / `codecommit::region://`）に対応。FIPS・China・GovCloud エンドポイント、AWS コンソールへのリンク生成・PR 作成 URL 生成にも対応 |
 | **リモート設定の統合** | リモート URL 編集・SSH 鍵選択・Prune を統合した RepositoryConfigure ダイアログ |
 
 ### アプリケーション基盤

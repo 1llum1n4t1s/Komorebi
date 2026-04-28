@@ -156,7 +156,7 @@ public class Clone : Popup
             try
             {
                 var text = await App.GetClipboardTextAsync();
-                if (Models.Remote.IsValidURL(text))
+                if (string.IsNullOrWhiteSpace(Remote) && Models.Remote.IsValidURL(text))
                     Remote = text;
             }
             catch
@@ -252,7 +252,7 @@ public class Clone : Popup
         {
             // リモートURLからリポジトリ名を抽出する
             string name;
-            if (Models.Remote.TryParseCodeCommitGRC(_remote, out _, out _, out var ccRepoName))
+            if (Models.Remote.TryGetCodeCommitRepositoryName(_remote, out var ccRepoName))
             {
                 name = ccRepoName;
             }

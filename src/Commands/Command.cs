@@ -104,7 +104,7 @@ public partial class Command
     public async Task<bool> ExecAsync()
     {
         // コマンドラインをログに記録する
-        Log?.AppendLine($"$ git {Args}\n");
+        Log?.AppendLine($"$ git {RedactSensitiveText(Args)}\n");
 
         // エラーメッセージ収集用のスレッドセーフコレクション
         // OutputDataReceived/ErrorDataReceivedはスレッドプールから呼ばれるため
@@ -345,9 +345,7 @@ public partial class Command
         // 副作用: per-remote 鍵を厳守したいユーザーで親シェルが GIT_SSH_COMMAND を設定していると
         //   per-remote 設定が無視される。これは C 案の意図的トレードオフ。
         //
-        // StrictHostKeyChecking=accept-new: 新しいホスト鍵は自動承認、変更された鍵は拒否（TOFU）。
-        // macOSのApple版OpenSSHはSSH_ASKPASSの応答をホスト鍵確認に適用しないため、
-        // このオプションでAskpassダイアログを経由せずに新しいホスト鍵を受け入れる。
+        // StrictHostKeyChecking=ask: 初回ホスト鍵を自動登録せず、SSH の確認境界に委ねる。
         // Windows の OpenSSH は /dev/null を認識せず、シングルクォートエスケープも Git for Windows の
         // 内部 sh 呼び出しに頼れないため、プラットフォームごとに quoting と null device を切り替える。
         if (!start.Environment.ContainsKey("GIT_SSH_COMMAND"))
@@ -355,7 +353,7 @@ public partial class Command
             string sshCmd;
             if (string.IsNullOrEmpty(SSHKey))
             {
-                sshCmd = "ssh -o StrictHostKeyChecking=accept-new";
+                sshCmd = "ssh -o StrictHostKeyChecking=ask";
             }
             else if (OperatingSystem.IsWindows())
             {
@@ -364,13 +362,13 @@ public partial class Command
                 // 例えば SSHKey に `C:\path\key" -o ProxyCommand=evil` のような細工された値が
                 // .git/config 経由で混入しても、引数境界が破綻しないよう防衛する。
                 var escapedKey = SSHKey.Replace("\\", "\\\\").Replace("\"", "\\\"");
-                sshCmd = $"ssh -i \"{escapedKey}\" -o StrictHostKeyChecking=accept-new -F \"NUL\"";
+                sshCmd = $"ssh -i \"{escapedKey}\" -o StrictHostKeyChecking=ask -F \"NUL\"";
             }
             else
             {
                 // Unix (Linux/macOS): /dev/null + POSIX sh シングルクォートエスケープ
                 var escapedKey = SSHKey.Replace("'", "'\\''");
-                sshCmd = $"ssh -i '{escapedKey}' -o StrictHostKeyChecking=accept-new -F '/dev/null'";
+                sshCmd = $"ssh -i '{escapedKey}' -o StrictHostKeyChecking=ask -F '/dev/null'";
             }
             start.Environment.Add("GIT_SSH_COMMAND", sshCmd);
         }
@@ -386,7 +384,7 @@ public partial class Command
         // gitコマンドの共通オプションを構築する
         var builder = new StringBuilder(2048);
         builder
-            .Append("--no-pager -c core.quotepath=off -c credential.helper=")
+            .Append("--no-pager -c core.quotepath=off -c credential.helper= -c credential.helper=")
             .Append(Native.OS.CredentialHelper)
             .Append(' ');
 
@@ -548,28 +546,47 @@ public partial class Command
         if (line is null)
             return;
 
+        var safeLine = RedactSensitiveText(line);
+
         // ログに出力行を記録する
-        Log?.AppendLine(line);
+        Log?.AppendLine(safeLine);
 
         // Lines to hide in error message.
         // エラーメッセージに表示しない行をフィルタリングする
-        if (line.Length > 0)
+        if (safeLine.Length > 0)
         {
             // リモート操作の進捗行やヒント行は除外する
-            if (line.StartsWith("remote: Enumerating objects:", StringComparison.Ordinal) ||
-                line.StartsWith("remote: Counting objects:", StringComparison.Ordinal) ||
-                line.StartsWith("remote: Compressing objects:", StringComparison.Ordinal) ||
-                line.StartsWith("Filtering content:", StringComparison.Ordinal) ||
-                line.StartsWith("hint:", StringComparison.Ordinal))
+            if (safeLine.StartsWith("remote: Enumerating objects:", StringComparison.Ordinal) ||
+                safeLine.StartsWith("remote: Counting objects:", StringComparison.Ordinal) ||
+                safeLine.StartsWith("remote: Compressing objects:", StringComparison.Ordinal) ||
+                safeLine.StartsWith("Filtering content:", StringComparison.Ordinal) ||
+                safeLine.StartsWith("hint:", StringComparison.Ordinal))
                 return;
 
             // パーセンテージ表示の進捗行は除外する
-            if (REG_PROGRESS().IsMatch(line))
+            if (REG_PROGRESS().IsMatch(safeLine))
                 return;
         }
 
         // フィルタリングされなかった行をエラーキューに追加する
-        errs.Enqueue(line);
+        errs.Enqueue(safeLine);
+    }
+
+    /// <summary>
+    /// ログやエラーメッセージに出す文字列から、HTTP(S) URL の認証情報を伏せる。
+    /// </summary>
+    internal static string RedactSensitiveText(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text;
+
+        return REG_HTTP_URL_CREDENTIALS().Replace(text, match =>
+        {
+            var userInfo = match.Groups["userinfo"].Value;
+            var colon = userInfo.IndexOf(':');
+            var replacement = colon > 0 ? $"{userInfo[..colon]}:***@" : "***@";
+            return $"{match.Groups["scheme"].Value}{replacement}";
+        });
     }
 
     /// <summary>
@@ -593,4 +610,10 @@ public partial class Command
     /// </summary>
     [GeneratedRegex(@"\d+%")]
     private static partial Regex REG_PROGRESS();
+
+    /// <summary>
+    /// HTTP(S) URL の userinfo 部分を検出する正規表現。
+    /// </summary>
+    [GeneratedRegex(@"(?<scheme>https?://)(?<userinfo>[^/\s""'@]+@)", RegexOptions.IgnoreCase)]
+    private static partial Regex REG_HTTP_URL_CREDENTIALS();
 }

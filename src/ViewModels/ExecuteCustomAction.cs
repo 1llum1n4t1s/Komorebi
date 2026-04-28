@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,14 @@ public interface ICustomActionControlParameter
     /// パラメータの値を取得する。
     /// </summary>
     string GetValue();
+
+    /// <summary>
+    /// コマンドラインに展開するためにエスケープ済みの値を取得する。
+    /// </summary>
+    string GetCommandLineValue(string executable)
+    {
+        return ExecuteCustomAction.QuoteTemplateValue(GetValue(), executable);
+    }
 }
 
 /// <summary>
@@ -48,6 +57,15 @@ public class CustomActionControlTextBox : ICustomActionControlParameter
         if (string.IsNullOrEmpty(Text))
             return string.Empty;
         return string.IsNullOrEmpty(Formatter) ? Text : Formatter.Replace("${VALUE}", Text);
+    }
+
+    public string GetCommandLineValue(string executable)
+    {
+        if (string.IsNullOrEmpty(Text))
+            return string.Empty;
+
+        var value = ExecuteCustomAction.QuoteTemplateValue(Text, executable);
+        return string.IsNullOrEmpty(Formatter) ? value : Formatter.Replace("${VALUE}", value);
     }
 }
 
@@ -82,6 +100,11 @@ public class CustomActionControlPathSelector : ObservableObject, ICustomActionCo
     /// <summary>選択パスを値として返す。</summary>
     public string GetValue() => _path;
 
+    public string GetCommandLineValue(string executable)
+    {
+        return ExecuteCustomAction.QuoteTemplateValue(_path, executable);
+    }
+
     private string _path; // 選択されたパス
 }
 
@@ -110,6 +133,8 @@ public class CustomActionControlCheckBox : ICustomActionControlParameter
 
     /// <summary>チェック時はCheckedValue、未チェック時は空文字を返す。</summary>
     public string GetValue() => IsChecked ? CheckedValue : string.Empty;
+
+    public string GetCommandLineValue(string executable) => GetValue();
 }
 
 /// <summary>
@@ -145,6 +170,8 @@ public class CustomActionControlComboBox : ObservableObject, ICustomActionContro
 
     /// <summary>選択中の値を返す。</summary>
     public string GetValue() => Value;
+
+    public string GetCommandLineValue(string executable) => GetValue();
 }
 
 /// <summary>
@@ -189,6 +216,11 @@ public class CustomActionControlBranchSelector : ObservableObject, ICustomAction
             return string.Empty;
 
         return _useFriendlyName ? SelectedBranch.FriendlyName : SelectedBranch.Name;
+    }
+
+    public string GetCommandLineValue(string executable)
+    {
+        return ExecuteCustomAction.QuoteTemplateValue(GetValue(), executable);
     }
 
     private bool _useFriendlyName = false;
@@ -273,11 +305,11 @@ public class ExecuteCustomAction : Popup
         ProgressDescription = App.Text("Progress.RunCustomAction");
 
         // コマンドライン引数のプレースホルダーを実際の値に置換
-        var cmdline = PrepareStringByTarget(CustomAction.Arguments);
+        var cmdline = PrepareArgumentStringByTarget(CustomAction.Arguments);
         for (var i = ControlParameters.Count - 1; i >= 0; i--)
         {
             var param = ControlParameters[i];
-            cmdline = cmdline.Replace($"${i + 1}", param.GetValue());
+            cmdline = cmdline.Replace($"${i + 1}", param.GetCommandLineValue(CustomAction.Executable), StringComparison.Ordinal);
         }
 
         var log = _repo.CreateLog(CustomAction.Name);
@@ -313,6 +345,52 @@ public class ExecuteCustomAction : Popup
             // Repository scope では ${BRANCH} を現在ブランチ名に展開する（upstream 8395efdd）
             _ => org.Replace("${BRANCH}", _repo.CurrentBranch?.Name ?? "HEAD")
         };
+    }
+
+    /// <summary>
+    /// コマンド引数用にターゲット関連プレースホルダーを安全な形で置換する。
+    /// </summary>
+    private string PrepareArgumentStringByTarget(string org)
+    {
+        var repoPath = OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
+        org = org.Replace("${REPO}", QuoteTemplateValue(repoPath, CustomAction.Executable), StringComparison.Ordinal);
+
+        return Target switch
+        {
+            Models.Branch b => org
+                .Replace("${BRANCH_FRIENDLY_NAME}", QuoteTemplateValue(b.FriendlyName, CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${BRANCH}", QuoteTemplateValue(b.Name, CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${REMOTE}", QuoteTemplateValue(b.Remote, CustomAction.Executable), StringComparison.Ordinal),
+            Models.Commit c => org.Replace("${SHA}", QuoteTemplateValue(c.SHA, CustomAction.Executable), StringComparison.Ordinal),
+            Models.Tag t => org.Replace("${TAG}", QuoteTemplateValue(t.Name, CustomAction.Executable), StringComparison.Ordinal),
+            Models.Remote r => org.Replace("${REMOTE}", QuoteTemplateValue(r.Name, CustomAction.Executable), StringComparison.Ordinal),
+            Models.CustomActionTargetFile f => org
+                .Replace("${FILE}", QuoteTemplateValue(f.File, CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${SHA}", QuoteTemplateValue(f.Revision?.SHA ?? string.Empty, CustomAction.Executable), StringComparison.Ordinal),
+            _ => org.Replace("${BRANCH}", QuoteTemplateValue(_repo.CurrentBranch?.Name ?? "HEAD", CustomAction.Executable), StringComparison.Ordinal)
+        };
+    }
+
+    /// <summary>
+    /// カスタムアクションのプレースホルダー値を、対象シェルの構文で1引数として扱われるように引用する。
+    /// </summary>
+    internal static string QuoteTemplateValue(string value, string executable)
+    {
+        value ??= string.Empty;
+        var shell = Path.GetFileNameWithoutExtension(executable ?? string.Empty).ToLowerInvariant();
+        if (shell is "sh" or "bash" or "zsh" or "fish")
+            return $"'{value.Replace("'", "'\\''", StringComparison.Ordinal)}'";
+
+        if (shell is "pwsh" or "powershell")
+            return $"'{value.Replace("'", "''", StringComparison.Ordinal)}'";
+
+        if (shell is "cmd")
+            return $"\"{value.Replace("\"", "\\\"", StringComparison.Ordinal).Replace("%", "%%", StringComparison.Ordinal)}\"";
+
+        if (OperatingSystem.IsWindows())
+            return value.Quoted();
+
+        return $"'{value.Replace("'", "'\\''", StringComparison.Ordinal)}'";
     }
 
     /// <summary>

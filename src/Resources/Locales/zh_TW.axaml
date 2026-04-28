@@ -55,16 +55,16 @@
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">載入本機圖片...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">重新載入</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">二進位檔案不支援該操作!</x:String>
-  <x:String x:Key="Text.Bisect">二分搜尋 (bisect)</x:String>
-  <x:String x:Key="Text.Bisect.Abort">中止</x:String>
-  <x:String x:Key="Text.Bisect.Bad">標記為錯誤</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">二分搜尋進行中。目前的提交是「良好」是「錯誤」?</x:String>
-  <x:String x:Key="Text.Bisect.Good">標記為良好</x:String>
-  <x:String x:Key="Text.Bisect.Skip">無法確認</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">二分搜尋進行中。請標記目前的提交為「良好」或「錯誤」，然後簽出另一個提交。</x:String>
+  <x:String x:Key="Text.Bisect" xml:space="preserve">二分搜尋 (bisect)</x:String>
+  <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">中止</x:String>
+  <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">標記為錯誤</x:String>
+  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">二分搜尋進行中。目前的提交是「良好」是「錯誤」?</x:String>
+  <x:String x:Key="Text.Bisect.Good" xml:space="preserve">標記為良好</x:String>
+  <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">無法確認</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">二分搜尋進行中。請標記目前的提交為「良好」或「錯誤」，然後簽出另一個提交。</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">逐行溯源 (blame)</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">對上一個版本執行逐行溯源</x:String>
-  <x:String x:Key="Text.Blame.IgnoreWhitespace">忽略空白符號變化</x:String>
+  <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">忽略空白符號變化</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">所選擇的檔案不支援該操作!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">簽出 (checkout) ${0}$...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">比較所選的 2 個分支</x:String>
@@ -227,8 +227,8 @@
 
   ${REPO} 存放庫路徑
   ${REMOTE} 所選的遠端存放庫或所選分支的遠端
-  ${BRANCH} 所選的分支。對於遠端分支，不包含遠端名稱
-  ${BRANCH_FRIENDLY_NAME} 所選的分支。對於遠端分支，不包含遠端名稱
+  ${BRANCH} 所選的分支。對於遠端分支，不包含 ${REMOTE} 部分
+  ${BRANCH_FRIENDLY_NAME} 所選分支的易讀名稱。對於遠端分支，包含 ${REMOTE} 部分
   ${SHA} 所選的提交編號
   ${TAG} 所選的標籤
   ${FILE} 所選的檔案，相對於存放庫根目錄的路徑
@@ -909,7 +909,7 @@
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">擱置本機變更</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">套用 (apply)</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">套用 (apply) 所選變更</x:String>
-  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">簽出分支</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">簽出新分支</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">複製描述訊息</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">刪除 (drop)</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">另存為修補檔 (patch)...</x:String>
@@ -1009,7 +1009,7 @@
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">觸發點擊事件</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">提交 (修改原始提交)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">自動暫存全部變更並提交</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">您正在向一个分離狀態的 HEAD 提交變更，您確定要繼續提交嗎?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">您正在向一个分離狀態的 HEAD 提交變更，您確定要繼續提交嗎?</x:String>
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">您已暫存 {0} 個檔案，但只顯示 {1} 個檔案 ({2} 個檔案被篩選器隱藏)。您確定要繼續提交嗎?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">偵測到衝突</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">解決衝突</x:String>
@@ -1096,7 +1096,7 @@
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">正在新增遠端...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">正在新增忽略檔案...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout 並 Fast-Forward '{0}'...</x:String>
-  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">從貯藏檢出分支...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">從擱置簽出分支...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">等待分支更新...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout 提交 '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">正在套用 stash：{0}</x:String>

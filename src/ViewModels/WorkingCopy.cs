@@ -855,17 +855,17 @@ public class WorkingCopy : ObservableObject, IDisposable
         if (!HasUnsolvedConflicts)
             return changes;
 
-        // コンフリクト解決チェックを並列実行して高速化
-        var conflicted = new List<(Models.Change Change, Task<bool> Task)>();
+        // git プロセスを無制限に増やさないよう、解決チェックは小さく並列化する
+        List<Models.Change> conflicted = [];
         List<Models.Change> outs = [];
 
         foreach (var c in changes)
         {
             if (c.IsConflicted)
             {
-                // BothAdded/BothModifiedのみ解決済みかチェック（並列実行）
+                // BothAdded/BothModifiedのみ解決済みかチェック
                 if (c.ConflictReason is Models.ConflictReason.BothAdded or Models.ConflictReason.BothModified)
-                    conflicted.Add((c, new Commands.IsConflictResolved(_repo.FullPath, c).GetResultAsync()));
+                    conflicted.Add(c);
                 // その他のコンフリクトは未解決として除外
             }
             else
@@ -876,10 +876,28 @@ public class WorkingCopy : ObservableObject, IDisposable
 
         if (conflicted.Count > 0)
         {
-            await Task.WhenAll(conflicted.Select(x => x.Task));
-            foreach (var (change, task) in conflicted)
+            var maxParallel = Math.Clamp(Environment.ProcessorCount, 1, 4);
+            using var throttler = new SemaphoreSlim(maxParallel);
+            var tasks = conflicted.Select(async change =>
             {
-                if (task.Result)
+                await throttler.WaitAsync().ConfigureAwait(false);
+                try
+                {
+                    var resolved = await new Commands.IsConflictResolved(_repo.FullPath, change)
+                        .GetResultAsync()
+                        .ConfigureAwait(false);
+                    return (change, resolved);
+                }
+                finally
+                {
+                    throttler.Release();
+                }
+            });
+
+            var results = await Task.WhenAll(tasks).ConfigureAwait(false);
+            foreach (var (change, resolved) in results)
+            {
+                if (resolved)
                     outs.Add(change);
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -70,11 +71,15 @@ public partial class Diff : Command
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
 
-            // 標準出力を全て読み取ってから解析する
-            var text = await proc.StandardOutput.ReadToEndAsync().ConfigureAwait(false);
-            result = ParseDiffOutput(text);
+            var parser = new DiffParser();
+            var stderrDrain = DrainReaderAsync(proc.StandardError);
+            while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
+                parser.Parse(line);
+
+            result = parser.Complete();
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
+            await stderrDrain.ConfigureAwait(false);
         }
         catch
         {
@@ -91,38 +96,19 @@ public partial class Diff : Command
     /// <returns>解析された差分結果</returns>
     internal static Models.DiffResult ParseDiffOutput(string text)
     {
-        var result = new Models.DiffResult() { TextDiff = new Models.TextDiff() };
-        List<Models.TextDiffLine> deleted = [];
-        List<Models.TextDiffLine> added = [];
-        Models.TextDiffLine last = null;
-        var oldLine = 0;
-        var newLine = 0;
+        var parser = new DiffParser();
+        using var reader = new StringReader(text);
+        while (reader.ReadLine() is { } line)
+            parser.Parse(line);
+        return parser.Complete();
+    }
 
-        var start = 0;
-        var end = text.IndexOf('\n', start);
-        while (end > 0)
+    /// <summary>標準エラーを詰まらせないために読み捨てる。</summary>
+    private static async Task DrainReaderAsync(StreamReader reader)
+    {
+        while (await reader.ReadLineAsync().ConfigureAwait(false) is not null)
         {
-            var line = text[start..end];
-            ParseLine(line, result, deleted, added, ref last, ref oldLine, ref newLine);
-
-            start = end + 1;
-            end = text.IndexOf('\n', start);
         }
-
-        if (start < text.Length)
-            ParseLine(text[start..], result, deleted, added, ref last, ref oldLine, ref newLine);
-
-        if (result.IsBinary || result.IsLFS || result.TextDiff.Lines.Count == 0)
-        {
-            result.TextDiff = null;
-        }
-        else
-        {
-            FlushInlineHighlights(result, deleted, added);
-            result.TextDiff.MaxLineNumber = Math.Max(newLine, oldLine);
-        }
-
-        return result;
     }
 
     /// <summary>
@@ -362,6 +348,37 @@ public partial class Diff : Command
     private void ProcessInlineHighlights()
     {
         FlushInlineHighlights(_result, _deleted, _added);
+    }
+
+    /// <summary>diff出力を1行ずつ受け取って結果モデルを組み立てる状態オブジェクト。</summary>
+    private sealed class DiffParser
+    {
+        public void Parse(string line)
+        {
+            ParseLine(line, _result, _deleted, _added, ref _last, ref _oldLine, ref _newLine);
+        }
+
+        public Models.DiffResult Complete()
+        {
+            if (_result.IsBinary || _result.IsLFS || _result.TextDiff.Lines.Count == 0)
+            {
+                _result.TextDiff = null;
+            }
+            else
+            {
+                FlushInlineHighlights(_result, _deleted, _added);
+                _result.TextDiff.MaxLineNumber = Math.Max(_newLine, _oldLine);
+            }
+
+            return _result;
+        }
+
+        private readonly Models.DiffResult _result = new Models.DiffResult() { TextDiff = new Models.TextDiff() };
+        private readonly List<Models.TextDiffLine> _deleted = [];
+        private readonly List<Models.TextDiffLine> _added = [];
+        private Models.TextDiffLine _last = null;
+        private int _oldLine = 0;
+        private int _newLine = 0;
     }
 
     private const int MaxLineLengthForInlineDiff = 1024;

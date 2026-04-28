@@ -124,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">I seguenti sottomoduli devono essere aggiornati:{0}Vuoi aggiornarli?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Checkout &amp; Avanzamento Veloce</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Avanzamento Veloce verso:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Cambia a un Branch dallo Stash</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Nuova Branch:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Aggiungi sorgente al messaggio di commit</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit(s):</x:String>
@@ -385,6 +388,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">SOTTOMODULO</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">ELIMINATO</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">NUOVO</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} modifiche non committate</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">Scambia</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Evidenziazione Sintassi</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">Avvolgimento delle Parole</x:String>
@@ -404,6 +408,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Discard.All" xml:space="preserve">Tutte le modifiche locali nella copia di lavoro.</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">Modifiche:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">Includi file ignorati</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">Includi file modificati/eliminati</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">Includi file non tracciati</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">Un totale di {0} modifiche saranno scartate</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Questa azione non può essere annullata!!!</x:String>
@@ -904,6 +909,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Stasha Modifiche Locali</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Applica</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Applica Modifiche</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">Cambia a Nuova Branch</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Copia Messaggio</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Elimina</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Salva come Patch...</x:String>
@@ -940,6 +946,8 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">non unito</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">Aggiorna</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">Dettagli Modifiche Sottomodulo</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">APRI DETTAGLI</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">OK</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">AUTORE TAG</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">DATA</x:String>
@@ -1088,6 +1096,7 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Aggiunta remote...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Aggiunta file ignorati...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout e Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">Checkout branch da stash...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">In attesa dell'aggiornamento del branch...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout del commit '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Applicazione stash: {0}</x:String>

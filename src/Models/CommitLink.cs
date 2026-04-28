@@ -20,15 +20,25 @@ public class CommitLink
     public string URLPrefix { get; } = null;
 
     /// <summary>
+    /// コミットSHAの後ろに追加するURLサフィックス。
+    /// </summary>
+    public string URLSuffix { get; } = string.Empty;
+
+    /// <summary>
     /// CommitLinkの新しいインスタンスを初期化する。
     /// </summary>
     /// <param name="name">リンクの表示名。</param>
     /// <param name="prefix">コミットURLのプレフィックス。</param>
-    public CommitLink(string name, string prefix)
+    /// <param name="suffix">コミットSHAの後ろに追加するURLサフィックス。</param>
+    public CommitLink(string name, string prefix, string suffix = "")
     {
         Name = name;
         URLPrefix = prefix;
+        URLSuffix = suffix;
     }
+
+    /// <summary>SHAを含む完全なコミットURLを生成する。</summary>
+    public string GetURL(string sha) => $"{URLPrefix}{sha}{URLSuffix}";
 
     /// <summary>
     /// リモートリポジトリのURLからコミットリンク一覧を生成する。
@@ -65,16 +75,9 @@ public class CommitLink
                     outs.Add(new($"sourcehut ({route})", $"{link}/commit/"));
                 else if (host.Equals("gitcode.com", StringComparison.Ordinal))
                     outs.Add(new($"GitCode ({route})", $"{link}/commit/"));
-                else if (host.EndsWith(".console.aws.amazon.com", StringComparison.Ordinal))
+                else if (Remote.TryParseCodeCommitConsoleURL(uri, out var repoName, out var repoRootURL, out var query))
                 {
-                    var segments = route.Split('/');
-                    // route: "codesuite/codecommit/repositories/{repo}/browse"
-                    if (segments.Length >= 4)
-                    {
-                        var repoName = segments[3];
-                        var repoRoot = link.EndsWith("/browse", StringComparison.Ordinal) ? link[..^"/browse".Length] : link;
-                        outs.Add(new($"CodeCommit ({repoName})", $"{repoRoot}/commit/"));
-                    }
+                    outs.Add(new($"CodeCommit ({repoName})", $"{repoRootURL}/commit/", query));
                 }
             }
         }

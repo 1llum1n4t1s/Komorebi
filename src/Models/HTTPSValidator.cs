@@ -37,7 +37,7 @@ public static class HTTPSValidator
                 host.Equals("bitbucket.org", StringComparison.Ordinal) ||
                 host.Equals("gitea.org", StringComparison.Ordinal) ||
                 host.Equals("gitcode.com", StringComparison.Ordinal) ||
-                (host.StartsWith("git-codecommit.", StringComparison.Ordinal) && host.EndsWith(".amazonaws.com", StringComparison.Ordinal)))
+                IsCodeCommitHost(host))
                 return;
         }
 
@@ -91,6 +91,19 @@ public static class HTTPSValidator
 
             return false;
         }
+    }
+
+    /// <summary>AWS CodeCommitのHTTPS Git接続ホストかどうかを判定する。</summary>
+    private static bool IsCodeCommitHost(string host)
+    {
+        if (!(host.EndsWith(".amazonaws.com", StringComparison.Ordinal) ||
+            host.EndsWith(".amazonaws.com.cn", StringComparison.Ordinal)))
+            return false;
+
+        return host.StartsWith("git-codecommit.", StringComparison.Ordinal) ||
+            host.StartsWith("codecommit.", StringComparison.Ordinal) ||
+            host.StartsWith("git-codecommit-fips.", StringComparison.Ordinal) ||
+            host.StartsWith("codecommit-fips.", StringComparison.Ordinal);
     }
 
     /// <summary>スレッドセーフなアクセスのための排他ロック</summary>

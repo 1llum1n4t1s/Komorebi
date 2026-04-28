@@ -1,4 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceInclude Source="avares://Komorebi/Resources/Locales/en_US.axaml"/>
+  </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">De Programmate</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">De Komorebi</x:String>
@@ -52,16 +55,16 @@
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Onera Imaginem...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Renova</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">DOCUMENTUM BINARIUM NON SUSTINETUR!!!</x:String>
-  <x:String x:Key="Text.Bisect">Biseca</x:String>
-  <x:String x:Key="Text.Bisect.Abort">Abrumpe</x:String>
-  <x:String x:Key="Text.Bisect.Bad">Malum</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">Bisecans. Estne HEAD praesens bonum an malum?</x:String>
-  <x:String x:Key="Text.Bisect.Good">Bonum</x:String>
-  <x:String x:Key="Text.Bisect.Skip">Omitte</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">Bisecans. Nota committum praesens ut bonum vel malum et elige aliud.</x:String>
+  <x:String x:Key="Text.Bisect" xml:space="preserve">Biseca</x:String>
+  <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Abrumpe</x:String>
+  <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Malum</x:String>
+  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisecans. Estne HEAD praesens bonum an malum?</x:String>
+  <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Bonum</x:String>
+  <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Omitte</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisecans. Nota committum praesens ut bonum vel malum et elige aliud.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Culpa</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Culpa in Revisione Priore</x:String>
-  <x:String x:Key="Text.Blame.IgnoreWhitespace">Ignora mutationes spatii vacui</x:String>
+  <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Ignora mutationes spatii vacui</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">CULPA HUIUS DOCUMENTI NON SUSTINETUR!!!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">Elige ${0}$...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">Compara 2 ramos selectos</x:String>
@@ -121,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Hi submoduli renovandi sunt:{0}Visne eos renovare?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Elige &amp; Promove Celeriter</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Promove Celeriter ad:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Elige Ramum ex Reposito</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Ramus Novus:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Repositum:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Excerpe</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Adde fontem ad nuntium committendi</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Committum(-a):</x:String>
@@ -382,6 +388,7 @@
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">SUBMODULUS</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">DELETUM</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">NOVUM</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} Mutationes Non Commissae</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">Permuta</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Illuminatio Syntaxis</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">Involutio Verborum Lineae</x:String>
@@ -401,6 +408,7 @@
   <x:String x:Key="Text.Discard.All" xml:space="preserve">Omnes mutationes locales in copia operis.</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">Mutationes:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">Includi documenta ignorata</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">Includi documenta mutata/deleta</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">Includi documenta non vestigata</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} mutationes abicientur</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Hanc actionem revocare non potes!!!</x:String>
@@ -901,6 +909,7 @@
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Repone Mutationes Locales</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Applica</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Applica Mutationes</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">Elige Ramum Novum</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Copia Nuntium</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Abice</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Serva ut Emplastra...</x:String>
@@ -937,6 +946,8 @@
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">non unitum</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">Renova</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">Singula Mutationum Submoduli</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">APERIRE SINGULA</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">ESTO</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">SIGNATOR</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">TEMPUS</x:String>
@@ -998,8 +1009,8 @@
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">Excita eventum pressionis</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">Committe (Recense)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">Propone omnes mutationes et committe</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">Committum in capite separato creas. Visne pergere?</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">Proposuisti {0} documentum(-a) sed solum {1} documentum(-a) ostenduntur ({2} documenta filtrata sunt). Visne pergere?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">Committum in capite separato creas. Visne pergere?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">Proposuisti {0} documentum(-a) sed solum {1} documentum(-a) ostenduntur ({2} documenta filtrata sunt). Visne pergere?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">CONFLICTA DETECTA</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">MERGE</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">Merge cum Instrumento Externo</x:String>
@@ -1085,6 +1096,7 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Remote addendo...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Fasciculos ignoratos addendo...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout et Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">Elige ramum ex reposito...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Renovationem branch exspectando...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout commit '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Stash applicando: {0}</x:String>

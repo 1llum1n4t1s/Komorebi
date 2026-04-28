@@ -30,6 +30,8 @@ obj/
 node_modules/
 package.json
 package-lock.json
+!build/scripts/package.json
+!build/scripts/package-lock.json
 
 
 build/resources/*

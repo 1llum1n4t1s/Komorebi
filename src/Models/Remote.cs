@@ -27,21 +27,16 @@ public partial class Remote
     [GeneratedRegex(@"^ssh://([\w\-]+@)?[\w\.\-]+(\:[0-9]+)?/([a-zA-z0-9~%][\w\-\./~%]*)?[a-zA-Z0-9](\.git)?$")]
     private static partial Regex REG_SSH2();
 
-    /// <summary>git@形式からホストとパスを抽出する正規表現</summary>
-    /// <summary>AWS CodeCommit git-remote-codecommit形式のURL検証正規表現（profile@repo形式にも対応）</summary>
-    [GeneratedRegex(@"^codecommit::[\w\-]+://(?:[\w\-\.]+@)?[\w\.\-]+$")]
+    /// <summary>AWS CodeCommit git-remote-codecommit形式のURL検証正規表現（既定リージョン/プロファイル指定/明示リージョンに対応）</summary>
+    [GeneratedRegex(@"^codecommit(?:::(?<region>[\w\-]+))?://(?:(?<profile>[\w\-\.]+)@)?(?<repo>(?![\w\.\-]*\.git$)[\w\.\-]+)$")]
     private static partial Regex REG_CODECOMMIT();
 
     /// <summary>CodeCommit HTTPS URLからリージョンとリポジトリ名を抽出する正規表現</summary>
-    [GeneratedRegex(@"^https?://git-codecommit\.(?<region>[\w\-]+)\.amazonaws\.com/v1/repos/(?<repo>[\w\.\-]+?)(?:\.git)?$")]
+    [GeneratedRegex(@"^https?://(?:[^/@]+@)?(?:git-codecommit|codecommit)(?:-fips)?\.(?<region>[\w\-]+)\.amazonaws\.com(?:\.cn)?/v1/repos/(?<repo>[\w\.\-]+?)(?:\.git)?/?$")]
     private static partial Regex REG_CODECOMMIT_HTTPS();
 
-    /// <summary>codecommit::プロトコルURLからリージョン・プロファイル・リポジトリ名を抽出する正規表現</summary>
-    [GeneratedRegex(@"^codecommit::(?<region>[\w\-]+)://(?:(?<profile>[\w\-\.]+)@)?(?<repo>[\w\.\-]+)$")]
-    private static partial Regex REG_CODECOMMIT_GRC();
-
     /// <summary>CodeCommit SSH URLからリージョンとリポジトリ名を抽出する正規表現</summary>
-    [GeneratedRegex(@"^ssh://[\w\-]*@?git-codecommit\.(?<region>[\w\-]+)\.amazonaws\.com/v1/repos/(?<repo>[\w\.\-]+?)(?:\.git)?$")]
+    [GeneratedRegex(@"^ssh://(?:[\w\-\.]+@)?git-codecommit\.(?<region>[\w\-]+)\.amazonaws\.com(?:\.cn)?/v1/repos/(?<repo>[\w\.\-]+?)(?:\.git)?/?$")]
     private static partial Regex REG_CODECOMMIT_SSH();
 
     [GeneratedRegex(@"^git@([\w\.\-]+):([\w\.\-/~%]+/[\w\-\.%]+)\.git$")]
@@ -77,13 +72,24 @@ public partial class Remote
         return REG_SSH2().IsMatch(url);
     }
 
-    /// <summary>codecommit::プロトコルのURLかどうかを判定する</summary>
+    /// <summary>codecommit:// / codecommit::region:// プロトコルのURLかどうかを判定する</summary>
     public static bool IsCodeCommitProtocol(string url)
     {
         if (string.IsNullOrWhiteSpace(url))
             return false;
 
         return REG_CODECOMMIT().IsMatch(url);
+    }
+
+    /// <summary>CodeCommitのいずれかの公式Git URL形式かどうかを判定する</summary>
+    public static bool IsCodeCommitURL(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+
+        return IsCodeCommitProtocol(url) ||
+            TryParseCodeCommitHTTPS(url, out _, out _) ||
+            TryParseCodeCommitSSH(url, out _, out _);
     }
 
     /// <summary>CodeCommit HTTPS URLからリージョンとリポジトリ名を抽出する</summary>
@@ -120,7 +126,7 @@ public partial class Remote
         return true;
     }
 
-    /// <summary>codecommit::プロトコルURLからリージョン・プロファイル・リポジトリ名を抽出する</summary>
+    /// <summary>codecommit:// / codecommit::region:// プロトコルURLからリージョン・プロファイル・リポジトリ名を抽出する</summary>
     public static bool TryParseCodeCommitGRC(string url, out string region, out string profile, out string repoName)
     {
         region = null;
@@ -129,7 +135,7 @@ public partial class Remote
         if (string.IsNullOrWhiteSpace(url))
             return false;
 
-        var m = REG_CODECOMMIT_GRC().Match(url);
+        var m = REG_CODECOMMIT().Match(url);
         if (!m.Success)
             return false;
 
@@ -137,6 +143,74 @@ public partial class Remote
         profile = m.Groups["profile"].Value;
         repoName = m.Groups["repo"].Value;
         return true;
+    }
+
+    /// <summary>CodeCommit URLからリポジトリ名を抽出する</summary>
+    public static bool TryGetCodeCommitRepositoryName(string url, out string repoName)
+    {
+        repoName = null;
+
+        if (TryParseCodeCommitHTTPS(url, out _, out repoName))
+            return true;
+
+        if (TryParseCodeCommitSSH(url, out _, out repoName))
+            return true;
+
+        if (TryParseCodeCommitGRC(url, out _, out _, out repoName))
+            return true;
+
+        return false;
+    }
+
+    /// <summary>AWS CodeCommitコンソールのホストかどうかを判定する</summary>
+    public static bool IsCodeCommitConsoleHost(string host)
+    {
+        return host.Equals("console.aws.amazon.com", StringComparison.Ordinal) ||
+            host.EndsWith(".console.aws.amazon.com", StringComparison.Ordinal) ||
+            host.Equals("console.www.amazonaws.cn", StringComparison.Ordinal) ||
+            host.Equals("console.amazonaws-us-gov.com", StringComparison.Ordinal);
+    }
+
+    /// <summary>CodeCommitコンソールURLからリポジトリ名・リポジトリルートURL・クエリを抽出する</summary>
+    public static bool TryParseCodeCommitConsoleURL(Uri uri, out string repoName, out string repoRootURL, out string query)
+    {
+        repoName = null;
+        repoRootURL = null;
+        query = null;
+
+        if (uri is null || !IsCodeCommitConsoleHost(uri.Host))
+            return false;
+
+        var segments = uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Length != 5 ||
+            !segments[0].Equals("codesuite", StringComparison.Ordinal) ||
+            !segments[1].Equals("codecommit", StringComparison.Ordinal) ||
+            !segments[2].Equals("repositories", StringComparison.Ordinal) ||
+            !segments[4].Equals("browse", StringComparison.Ordinal) ||
+            string.IsNullOrWhiteSpace(segments[3]))
+            return false;
+
+        repoName = segments[3];
+        var port = uri.IsDefaultPort ? string.Empty : $":{uri.Port}";
+        repoRootURL = $"{uri.Scheme}://{uri.Host}{port}/codesuite/codecommit/repositories/{repoName}";
+        query = uri.Query;
+        return true;
+    }
+
+    /// <summary>CodeCommitコンソールのURLを生成する</summary>
+    private static string MakeCodeCommitConsoleURL(string region, string repoName, string route)
+    {
+        var repoRoute = $"/codesuite/codecommit/repositories/{repoName}/{route}";
+        if (string.IsNullOrWhiteSpace(region))
+            return $"https://console.aws.amazon.com{repoRoute}";
+
+        if (region.StartsWith("cn-", StringComparison.Ordinal))
+            return $"https://console.www.amazonaws.cn{repoRoute}?region={HttpUtility.UrlEncode(region)}";
+
+        if (region.StartsWith("us-gov-", StringComparison.Ordinal))
+            return $"https://console.amazonaws-us-gov.com{repoRoute}?region={HttpUtility.UrlEncode(region)}";
+
+        return $"https://{region}.console.aws.amazon.com{repoRoute}";
     }
 
     /// <summary>
@@ -173,21 +247,21 @@ public partial class Remote
         // CodeCommit HTTPS URL → AWSコンソールURLに変換（汎用HTTPSハンドラより前に判定）
         if (TryParseCodeCommitHTTPS(URL, out var ccRegion, out var ccRepo))
         {
-            url = $"https://{ccRegion}.console.aws.amazon.com/codesuite/codecommit/repositories/{ccRepo}/browse";
+            url = MakeCodeCommitConsoleURL(ccRegion, ccRepo, "browse");
             return true;
         }
 
         // CodeCommit SSH URL → AWSコンソールURLに変換
         if (TryParseCodeCommitSSH(URL, out var ccSshRegion, out var ccSshRepo))
         {
-            url = $"https://{ccSshRegion}.console.aws.amazon.com/codesuite/codecommit/repositories/{ccSshRepo}/browse";
+            url = MakeCodeCommitConsoleURL(ccSshRegion, ccSshRepo, "browse");
             return true;
         }
 
-        // codecommit::プロトコル → AWSコンソールURLに変換
+        // codecommit:// / codecommit::region:// プロトコル → AWSコンソールURLに変換
         if (TryParseCodeCommitGRC(URL, out var grcRegion, out _, out var grcRepo))
         {
-            url = $"https://{grcRegion}.console.aws.amazon.com/codesuite/codecommit/repositories/{grcRepo}/browse";
+            url = MakeCodeCommitConsoleURL(grcRegion, grcRepo, "browse");
             return true;
         }
 
@@ -238,20 +312,13 @@ public partial class Remote
 
         var uri = new Uri(baseURL);
         var host = uri.Host;
-        var route = uri.AbsolutePath.TrimStart('/');
         var encodedBranch = HttpUtility.UrlEncode(mergeBranch);
 
         // AWS CodeCommit（AWSコンソールURL経由）
-        if (host.EndsWith(".console.aws.amazon.com", StringComparison.Ordinal))
+        if (TryParseCodeCommitConsoleURL(uri, out _, out var repoRootURL, out var query))
         {
-            var segments = route.Split('/');
-            // segments: "codesuite/codecommit/repositories/{repo}/browse"
-            if (segments.Length >= 4)
-            {
-                var repoName = segments[3];
-                url = $"https://{host}/codesuite/codecommit/repositories/{repoName}/pull-requests/new/refs/heads/{encodedBranch}";
-                return true;
-            }
+            url = $"{repoRootURL}/pull-requests/new/refs/heads/{encodedBranch}{query}";
+            return true;
         }
 
         if (host.Contains("github.com", StringComparison.Ordinal))

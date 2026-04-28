@@ -55,16 +55,16 @@
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Загрузить картинку...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Обновить</x:String>
   <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">ДВОИЧНЫЙ ФАЙЛ НЕ ПОДДЕРЖИВАЕТСЯ!!!</x:String>
-  <x:String x:Key="Text.Bisect">Раздвоить</x:String>
-  <x:String x:Key="Text.Bisect.Abort">О</x:String>
-  <x:String x:Key="Text.Bisect.Bad">Плохая</x:String>
-  <x:String x:Key="Text.Bisect.Detecting">Раздвоение. Текущая ГОЛОВА (HEAD) хорошая или плохая?</x:String>
-  <x:String x:Key="Text.Bisect.Good">Хорошая</x:String>
-  <x:String x:Key="Text.Bisect.Skip">Пропустить</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange">Раздвоение. Сделать текущую ревизию хорошей или плохой и переключиться на другой.</x:String>
+  <x:String x:Key="Text.Bisect" xml:space="preserve">Раздвоить</x:String>
+  <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">О</x:String>
+  <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Плохая</x:String>
+  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Раздвоение. Текущая ГОЛОВА (HEAD) хорошая или плохая?</x:String>
+  <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Хорошая</x:String>
+  <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Пропустить</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Раздвоение. Сделать текущую ревизию хорошей или плохой и переключиться на другой.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Расследование</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Расследование на предыдущей редакции</x:String>
-  <x:String x:Key="Text.Blame.IgnoreWhitespace">Игнорировать изменения пробелов</x:String>
+  <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Игнорировать изменения пробелов</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">РАССЛЕДОВАНИЕ В ЭТОМ ФАЙЛЕ НЕ ПОДДЕРЖИВАЕТСЯ!!!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">Переключиться на ${0}$...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">Сравнить две выбранные ветки</x:String>
@@ -124,9 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Подмодулям требуется обновление:{0}Обновить их?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Переключиться и перемотать</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Перемотать к:</x:String>
-  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Переключить ветку из отложенного</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Переключить на ветку из отложенных изменений</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Новая ветка:</x:String>
-  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Отложенный:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Отложенные изменения:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve"> Частичный выбор</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Добавить источник для ревизии сообщения</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Ревизия(и):</x:String>
@@ -388,6 +388,7 @@
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">ПОДМОДУЛЬ</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">УДАЛЁН</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">НОВЫЙ</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} неподтверждённых изменений</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">Обмен</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Подсветка синтаксиса </x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">Перенос слов в строке</x:String>
@@ -908,7 +909,7 @@
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Отложить локальные изменения</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Принять</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Применить изменения</x:String>
-  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">Переключить на новую ветку</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">Переключиться на новую ветку</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Копировать сообщение</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Отбросить</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Сохранить как заплатку...</x:String>
@@ -945,6 +946,8 @@
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">не слита</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">Обновить</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL-адрес</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">Сведения об изменениях подмодуля</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">ОТКРЫТЬ СВЕДЕНИЯ</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">ОК</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">РАЗМЕТЧИК</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">ВРЕМЯ</x:String>
@@ -1006,8 +1009,8 @@
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">Запустить событие щелчка</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">Зафиксировать (Редактировать)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">Сформировать все изменения и зафиксировать</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead">Вы создаёте ревизию на отсоединённой ГОЛОВЕ. Вы хотите продолжить?</x:String>
-  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter">Вы сформировали {0} файл(ов), но отображается только {1} файл(ов) ({2} файл(ов) отфильтровано). Вы хотите продолжить?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">Вы создаёте ревизию на отсоединённой ГОЛОВЕ. Вы хотите продолжить?</x:String>
+  <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">Вы сформировали {0} файл(ов), но отображается только {1} файл(ов) ({2} файл(ов) отфильтровано). Вы хотите продолжить?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">ОБНАРУЖЕНЫ КОНФЛИКТЫ</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">СЛИТЬ</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">Слить с помощью внешнего инструмента</x:String>
@@ -1093,6 +1096,7 @@
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Добавление удалённого...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Добавление игнорируемых файлов...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout и Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">Переключение на ветку из отложенных изменений...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Ожидание обновления ветки...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout коммита '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Применение stash: {0}</x:String>

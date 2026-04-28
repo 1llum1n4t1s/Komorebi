@@ -44,8 +44,7 @@ public partial class RemoteProtocolSwitcher : UserControl
             var url = Url ?? string.Empty;
 
             // CodeCommit URLはHTTPS↔SSH自動変換が不可能なためプロトコル切替を非表示
-            if (Models.Remote.IsCodeCommitProtocol(url) ||
-                url.Contains("git-codecommit.", StringComparison.Ordinal))
+            if (Models.Remote.IsCodeCommitURL(url))
             {
                 SetCurrentValue(IsVisibleProperty, false);
                 return;

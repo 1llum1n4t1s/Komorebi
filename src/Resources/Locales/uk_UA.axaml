@@ -124,6 +124,9 @@
   <x:String x:Key="Text.Checkout.WarnUpdatingSubmodules" xml:space="preserve">Наступні підмодулі потребують оновлення:{0}Бажаєте оновити їх?</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward" xml:space="preserve">Перемкнути &amp; Перемотати</x:String>
   <x:String x:Key="Text.Checkout.WithFastForward.Upstream" xml:space="preserve">Fast-Forward до:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Перейти на гілку зі схованки</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Нова гілка:</x:String>
+  <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Схованка:</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Додати джерело до повідомлення коміту</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Коміт(и):</x:String>
@@ -385,6 +388,7 @@
   <x:String x:Key="Text.Diff.Submodule" xml:space="preserve">ПІДМОДУЛЬ</x:String>
   <x:String x:Key="Text.Diff.Submodule.Deleted" xml:space="preserve">ВИДАЛЕНО</x:String>
   <x:String x:Key="Text.Diff.Submodule.New" xml:space="preserve">НОВИЙ</x:String>
+  <x:String x:Key="Text.Diff.Submodule.UncommittedChanges" xml:space="preserve">+ {0} незакомічених змін</x:String>
   <x:String x:Key="Text.Diff.SwapCommits" xml:space="preserve">Поміняти місцями</x:String>
   <x:String x:Key="Text.Diff.SyntaxHighlight" xml:space="preserve">Підсвітка синтаксису</x:String>
   <x:String x:Key="Text.Diff.ToggleWordWrap" xml:space="preserve">Перенос слів</x:String>
@@ -404,6 +408,7 @@
   <x:String x:Key="Text.Discard.All" xml:space="preserve">Усі локальні зміни в робочій копії.</x:String>
   <x:String x:Key="Text.Discard.Changes" xml:space="preserve">Зміни:</x:String>
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">Включити файли, які ігноруються</x:String>
+  <x:String x:Key="Text.Discard.IncludeModified" xml:space="preserve">Включити змінені/видалені файли</x:String>
   <x:String x:Key="Text.Discard.IncludeUntracked" xml:space="preserve">Включити невідстежувані файли</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">{0} змін будуть відхилені</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Ви не можете скасувати цю дію!!!</x:String>
@@ -904,6 +909,7 @@
   <x:String x:Key="Text.Stash.Title" xml:space="preserve">Сховати локальні зміни</x:String>
   <x:String x:Key="Text.StashCM.Apply" xml:space="preserve">Застосувати</x:String>
   <x:String x:Key="Text.StashCM.ApplyFileChanges" xml:space="preserve">Застосувати зміни</x:String>
+  <x:String x:Key="Text.StashCM.Branch" xml:space="preserve">Перейти на нову гілку</x:String>
   <x:String x:Key="Text.StashCM.CopyMessage" xml:space="preserve">Копіювати повідомлення</x:String>
   <x:String x:Key="Text.StashCM.Drop" xml:space="preserve">Видалити</x:String>
   <x:String x:Key="Text.StashCM.SaveAsPatch" xml:space="preserve">Зберегти як патч...</x:String>
@@ -940,6 +946,8 @@
   <x:String x:Key="Text.Submodule.Status.Unmerged" xml:space="preserve">не злито</x:String>
   <x:String x:Key="Text.Submodule.Update" xml:space="preserve">Оновити</x:String>
   <x:String x:Key="Text.Submodule.URL" xml:space="preserve">URL</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare" xml:space="preserve">Відомості про зміни підмодуля</x:String>
+  <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">ВІДКРИТИ ВІДОМОСТІ</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">OK</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">TAGGER</x:String>
   <x:String x:Key="Text.Tag.Time" xml:space="preserve">TIME</x:String>
@@ -1088,6 +1096,7 @@
   <x:String x:Key="Text.Progress.AddingRemote" xml:space="preserve">Додавання віддаленого...</x:String>
   <x:String x:Key="Text.Progress.AddingIgnoredFiles" xml:space="preserve">Додавання ігнорованих файлів...</x:String>
   <x:String x:Key="Text.Progress.CheckoutAndFastForward" xml:space="preserve">Checkout та Fast-Forward '{0}'...</x:String>
+  <x:String x:Key="Text.Progress.CheckoutBranchFromStash" xml:space="preserve">Перехід на гілку зі схованки...</x:String>
   <x:String x:Key="Text.Progress.WaitingBranchUpdate" xml:space="preserve">Очікування оновлення гілки...</x:String>
   <x:String x:Key="Text.Progress.CheckoutCommit" xml:space="preserve">Checkout коміту '{0}'...</x:String>
   <x:String x:Key="Text.Progress.ApplyingStash" xml:space="preserve">Застосування stash: {0}</x:String>
