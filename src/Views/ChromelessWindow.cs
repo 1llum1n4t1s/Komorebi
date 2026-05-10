@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace Komorebi.Views;
 
@@ -35,6 +36,10 @@ public class ChromelessWindow : Window
     protected override Type StyleKeyOverride => typeof(Window);
 
     private const double RESIZE_GRIP_SIZE = 6;
+
+    // スクリーン構成変化時、自身が非アクティブだった場合に再最大化を保留しておくフラグ。
+    // アクティブになった際に追従処理を実行することで、他アプリ（Chrome 等）からフォーカスを奪うのを避ける。
+    private bool _pendingMaximizedSync;
 
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
@@ -124,6 +129,79 @@ public class ChromelessWindow : Window
     }
 
     /// <summary>
+    /// 派生クラスでスクリーン構成変化（モニタ追加・削除、解像度変更、DPI 変更、リモートデスクトップ接続/再接続）に
+    /// 追従して最大化サイズを再計算するかどうかを表す opt-in プロパティ。
+    /// 既定は false。最大化を頻繁に使う Launcher / Blame / FileHistories のみ true を返す。
+    /// 短命なダイアログ（Alert / Confirm / Askpass 等）では追従不要のため false で良い。
+    /// </summary>
+    protected virtual bool TrackScreenChanges => false;
+
+    /// <summary>
+    /// ウィンドウが開かれた際の処理。スクリーン構成変化の監視を開始する（opt-in）。
+    /// </summary>
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+
+        // 大量に存在する短命ダイアログまで Screens.Changed を購読すると、構成変化時に
+        // 全インスタンスが ScheduleMaximizedSync を投げてフォーカスが奪われる事故源になる。
+        // 派生クラス側で opt-in したウィンドウのみ監視する。
+        if (TrackScreenChanges && Screens is { } screens)
+            screens.Changed += OnScreensChanged;
+    }
+
+    /// <summary>
+    /// ウィンドウが閉じられた際の処理。スクリーン構成変化の監視を解除する。
+    /// </summary>
+    protected override void OnClosed(EventArgs e)
+    {
+        if (TrackScreenChanges && Screens is { } screens)
+            screens.Changed -= OnScreensChanged;
+
+        base.OnClosed(e);
+    }
+
+    /// <summary>
+    /// スクリーン構成（モニタ追加・削除、解像度変更、DPI 変更、リモートデスクトップ接続/再接続）が
+    /// 変化した際に、最大化中のウィンドウを新しい WorkingArea に追従させる。
+    /// 例: 接続元の 3440x1440 モニタから 2560x1440 モニタへリモートデスクトップを移動すると
+    /// 接続先の解像度が縮小されるが、Maximized 状態のままだと旧解像度のサイズが残ってしまう。
+    /// </summary>
+    private void OnScreensChanged(object sender, EventArgs e)
+    {
+        if (WindowState != WindowState.Maximized)
+            return;
+
+        // 自身が非アクティブな場合はその場で再最大化せず、アクティブ化時まで保留する。
+        // Normal → Maximized のトグルは Win32 ShowWindow を伴いフォアグラウンドを奪う動作のため、
+        // 他アプリ（例: Chrome）を操作中に Komorebi に勝手に切り替わるのを防ぐ。
+        if (!IsActive)
+        {
+            _pendingMaximizedSync = true;
+            return;
+        }
+
+        ScheduleMaximizedSync();
+    }
+
+    /// <summary>
+    /// 最大化サイズを現在のスクリーン WorkingArea に再追従させる。
+    /// 同期的に Normal → Maximized すると Avalonia 内部のスクリーン構成更新と競合して
+    /// 旧 WorkingArea が拾われる可能性があるため、レイアウトパス完了後に Background で実行する。
+    /// </summary>
+    private void ScheduleMaximizedSync()
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (WindowState != WindowState.Maximized)
+                return;
+
+            WindowState = WindowState.Normal;
+            WindowState = WindowState.Maximized;
+        }, DispatcherPriority.Background);
+    }
+
+    /// <summary>
     /// テンプレート適用時の処理を行う。
     /// </summary>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -180,6 +258,13 @@ public class ChromelessWindow : Window
                 BorderThickness = new Thickness(1);
                 Padding = new Thickness(0);
             }
+        }
+        else if (change.Property == IsActiveProperty && IsActive && _pendingMaximizedSync)
+        {
+            // 非アクティブ時に発生したスクリーン構成変化に対する再最大化を、アクティブ化のタイミングで消化する
+            _pendingMaximizedSync = false;
+            if (WindowState == WindowState.Maximized)
+                ScheduleMaximizedSync();
         }
     }
 

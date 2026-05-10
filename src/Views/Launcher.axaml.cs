@@ -111,6 +111,9 @@ public partial class Launcher : ChromelessWindow
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
     }
 
+    /// <summary>メインウィンドウは最大化前提で使われるため、スクリーン構成変化に追従する。</summary>
+    protected override bool TrackScreenChanges => true;
+
     /// <summary>
     /// ウィンドウを最前面に表示する。
     /// </summary>

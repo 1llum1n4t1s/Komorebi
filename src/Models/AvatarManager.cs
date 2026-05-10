@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -52,8 +53,18 @@ public partial class AvatarManager
     [GeneratedRegex(@"^(?:(\d+)\+)?(.+?)@.+\.github\.com$")]
     private static partial Regex REG_GITHUB_USER_EMAIL();
 
-    // HttpClientはスレッドセーフで再利用可能。ループ内で毎回new するとソケット枯渇の原因になる
-    private static readonly HttpClient s_httpClient = new() { Timeout = TimeSpan.FromSeconds(2) };
+    // HttpClientはスレッドセーフで再利用可能。ループ内で毎回new するとソケット枯渇の原因になる。
+    // MaxResponseContentBufferSize: MITM や DNS 汚染で巨大レスポンスが返った場合の OOM を防ぐ（512KB 上限）。
+    private static readonly HttpClient s_httpClient = new()
+    {
+        Timeout = TimeSpan.FromSeconds(2),
+        MaxResponseContentBufferSize = 512 * 1024,
+    };
+    /// <summary>HTTP レスポンスから受け入れる最大バイト数（Content-Length 早期判定用）</summary>
+    private const long MaxAvatarBytes = 512 * 1024;
+    /// <summary>並行ダウンロード上限（過剰並列でローカル/ネットワークリソースを枯渇させないため）</summary>
+    private const int MaxParallelDownloads = 4;
+
     private readonly Lock _synclock = new();
     /// <summary>アバター画像のローカルキャッシュディレクトリパス</summary>
     private string _storePath;
@@ -63,12 +74,20 @@ public partial class AvatarManager
     /// また同一ホストの二重登録を自然に防ぐ（View 再生成時の Subscribe/Unsubscribe の非対称対策）。
     /// </summary>
     private HashSet<IAvatarHost> _avatars = [];
-    /// <summary>メールアドレスをキーとしたアバター画像のキャッシュ</summary>
-    private Dictionary<string, Bitmap> _resources = [];
+    /// <summary>
+    /// メールアドレスをキーとしたアバター画像のキャッシュ。
+    /// UI スレッドの Request / バックグラウンドダウンロードループの Post / SetFromLocal が
+    /// 並行アクセスし得るため、ConcurrentDictionary でロックフリーに保護する。
+    /// </summary>
+    private readonly ConcurrentDictionary<string, Bitmap> _resources = new();
     /// <summary>ダウンロードリクエスト待ちのメールアドレスセット</summary>
     private HashSet<string> _requesting = [];
-    /// <summary>デフォルトアバターとして登録済みのメールアドレスセット</summary>
-    private HashSet<string> _defaultAvatars = [];
+    /// <summary>
+    /// デフォルトアバターとして登録済みのメールアドレスセット。
+    /// LoadDefaultAvatar 後は読み取り専用扱いだが、Request からの並行 Contains を
+    /// 安全に走らせるため ConcurrentDictionary を使う（value 部はダミー）。
+    /// </summary>
+    private readonly ConcurrentDictionary<string, byte> _defaultAvatars = new();
     /// <summary>バックグラウンドダウンロードループのキャンセルトークンソース</summary>
     private CancellationTokenSource _cts;
 
@@ -94,20 +113,30 @@ public partial class AvatarManager
 
         Task.Run(async () =>
         {
+            // 並列ダウンロードを抑制するセマフォ。Gravatar/GitHub avatars 共にレートリミットは緩いが、
+            // 過剰並列で local I/O や Bitmap.DecodeToWidth が競合するのを避ける。
+            using var semaphore = new SemaphoreSlim(MaxParallelDownloads, MaxParallelDownloads);
+            var inflight = new List<Task>();
+
             while (!token.IsCancellationRequested)
             {
-                string email = null;
+                List<string> batch = null;
 
                 lock (_synclock)
                 {
-                    foreach (var one in _requesting)
+                    if (_requesting.Count > 0)
                     {
-                        email = one;
-                        break;
+                        batch = new List<string>(Math.Min(_requesting.Count, MaxParallelDownloads));
+                        foreach (var one in _requesting)
+                        {
+                            batch.Add(one);
+                            if (batch.Count >= MaxParallelDownloads)
+                                break;
+                        }
                     }
                 }
 
-                if (email is null)
+                if (batch is null)
                 {
                     // Task.Delay(delay, token) は token キャンセル時に TaskCanceledException を投げるため
                     // アプリ終了時にデバッガ first-chance ノイズが出る。Register + TaskCompletionSource 方式で
@@ -122,29 +151,64 @@ public partial class AvatarManager
                     continue;
                 }
 
-                var md5 = GetEmailHash(email);
-                var matchGitHubUser = REG_GITHUB_USER_EMAIL().Match(email);
-                var url = $"https://www.gravatar.com/avatar/{md5}?d=404";
-                if (matchGitHubUser.Success)
+                inflight.Clear();
+                foreach (var email in batch)
                 {
-                    var githubUser = matchGitHubUser.Groups[2].Value;
-                    if (githubUser.EndsWith("[bot]", StringComparison.OrdinalIgnoreCase))
-                        githubUser = githubUser[..^5];
-
-                    url = $"https://avatars.githubusercontent.com/{githubUser}";
+                    try
+                    {
+                        await semaphore.WaitAsync(token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return;
+                    }
+                    inflight.Add(DownloadOneAsync(email, semaphore, token));
                 }
+                await Task.WhenAll(inflight).ConfigureAwait(false);
+            }
 
-                var localFile = Path.Combine(_storePath, md5);
-                Bitmap img = null;
-                try
+            // ReSharper disable once FunctionNeverReturns
+        });
+    }
+
+    /// <summary>
+    /// 1 件分のアバターをダウンロードし、結果を UI スレッドにポストする。並列実行用。
+    /// </summary>
+    private async Task DownloadOneAsync(string email, SemaphoreSlim semaphore, CancellationToken token)
+    {
+        try
+        {
+            var md5 = GetEmailHash(email);
+            var matchGitHubUser = REG_GITHUB_USER_EMAIL().Match(email);
+            var url = $"https://www.gravatar.com/avatar/{md5}?d=404";
+            if (matchGitHubUser.Success)
+            {
+                var githubUser = matchGitHubUser.Groups[2].Value;
+                if (githubUser.EndsWith("[bot]", StringComparison.OrdinalIgnoreCase))
+                    githubUser = githubUser[..^5];
+
+                url = $"https://avatars.githubusercontent.com/{githubUser}";
+            }
+
+            var localFile = Path.Combine(_storePath, md5);
+            Bitmap img = null;
+            try
+            {
+                // staticなHttpClientを再利用（ソケット枯渇防止・DNS再利用・接続プール活用）。
+                // ResponseHeadersRead + Content-Length 早期判定で巨大レスポンスを弾く（OOM 対策）。
+                using var rsp = await s_httpClient
+                    .GetAsync(url, HttpCompletionOption.ResponseHeadersRead, token)
+                    .ConfigureAwait(false);
+                if (rsp.IsSuccessStatusCode)
                 {
-                    // staticなHttpClientを再利用（ソケット枯渇防止・DNS再利用・接続プール活用）
-                    // CancellationTokenを渡して、UIキャンセル時にクリーンに中断する
-                    using var rsp = await s_httpClient.GetAsync(url, token).ConfigureAwait(false);
-                    if (rsp.IsSuccessStatusCode)
+                    var contentLength = rsp.Content.Headers.ContentLength;
+                    if (contentLength.HasValue && contentLength.Value > MaxAvatarBytes)
+                    {
+                        Logger.Log($"アバターサイズ超過によりスキップ: {email} ({contentLength.Value} bytes)", LogLevel.Warning);
+                    }
+                    else
                     {
                         // パフォーマンス: MemoryStreamで一度だけ読み込み、ファイル保存とデコードを効率化
-                        // 旧: sync CopyTo + 二重ファイルI/O（書き込み→読み込み）
                         using var ms = new MemoryStream();
                         await rsp.Content.CopyToAsync(ms, token).ConfigureAwait(false);
 
@@ -160,39 +224,41 @@ public partial class AvatarManager
                         img = Bitmap.DecodeToWidth(ms, 128);
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    // キャンセルは正常な動作（アプリ終了やUI遷移時）なのでログ不要
-                    break;
-                }
-                catch (HttpRequestException ex)
-                {
-                    Logger.Log($"アバターダウンロード失敗（ネットワークエラー）: {email} - {ex.Message}", LogLevel.Warning);
-                }
-                catch (IOException ex)
-                {
-                    // ソケット切断やTLSストリーム中断（フォントドロップダウンスクロール時等）
-                    Logger.Log($"アバターダウンロード失敗（I/Oエラー）: {email} - {ex.Message}", LogLevel.Warning);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log($"アバターダウンロード失敗: {email} - {ex.Message}", LogLevel.Warning);
-                }
-
-                lock (_synclock)
-                {
-                    _requesting.Remove(email);
-                }
-
-                Dispatcher.UIThread.Post(() =>
-                {
-                    _resources[email] = img;
-                    NotifyResourceChanged(email, img);
-                });
+            }
+            catch (OperationCanceledException)
+            {
+                // キャンセルは正常動作（アプリ終了/UI 遷移時）なのでログ不要
+                return;
+            }
+            catch (HttpRequestException ex)
+            {
+                Logger.Log($"アバターダウンロード失敗（ネットワークエラー）: {email} - {ex.Message}", LogLevel.Warning);
+            }
+            catch (IOException ex)
+            {
+                // ソケット切断やTLSストリーム中断（フォントドロップダウンスクロール時等）
+                Logger.Log($"アバターダウンロード失敗（I/Oエラー）: {email} - {ex.Message}", LogLevel.Warning);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"アバターダウンロード失敗: {email} - {ex.Message}", LogLevel.Warning);
             }
 
-            // ReSharper disable once FunctionNeverReturns
-        });
+            lock (_synclock)
+            {
+                _requesting.Remove(email);
+            }
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                _resources[email] = img;
+                NotifyResourceChanged(email, img);
+            });
+        }
+        finally
+        {
+            semaphore.Release();
+        }
     }
 
     /// <summary>
@@ -243,10 +309,10 @@ public partial class AvatarManager
     {
         if (forceRefetch)
         {
-            if (_defaultAvatars.Contains(email))
+            if (_defaultAvatars.ContainsKey(email))
                 return null;
 
-            _resources.Remove(email);
+            _resources.TryRemove(email, out _);
 
             var localFile = Path.Combine(_storePath, GetEmailHash(email));
             if (File.Exists(localFile))
@@ -267,7 +333,7 @@ public partial class AvatarManager
                     using (var stream = File.OpenRead(localFile))
                     {
                         var img = Bitmap.DecodeToWidth(stream, 128);
-                        _resources.Add(email, img);
+                        _resources.TryAdd(email, img);
                         return img;
                     }
                 }
@@ -327,8 +393,8 @@ public partial class AvatarManager
     private void LoadDefaultAvatar(string key, string img)
     {
         var icon = AssetLoader.Open(new Uri($"avares://Komorebi/Resources/Images/{img}", UriKind.RelativeOrAbsolute));
-        _resources.Add(key, new Bitmap(icon));
-        _defaultAvatars.Add(key);
+        _resources.TryAdd(key, new Bitmap(icon));
+        _defaultAvatars.TryAdd(key, 0);
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -348,19 +349,29 @@ public partial class Command
         // StrictHostKeyChecking=ask: 初回ホスト鍵を自動登録せず、SSH の確認境界に委ねる。
         // Windows の OpenSSH は /dev/null を認識せず、シングルクォートエスケープも Git for Windows の
         // 内部 sh 呼び出しに頼れないため、プラットフォームごとに quoting と null device を切り替える。
-        if (!start.Environment.ContainsKey("GIT_SSH_COMMAND"))
+        // SSHKey 信頼境界の方針:
+        //  - per-remote SSHKey (`.git/config remote.<name>.sshkey`) または GlobalSSHKey が UI/設定で
+        //    明示的に設定されている場合は、親シェルの GIT_SSH_COMMAND よりも UI 設定を優先する。
+        //    旧設計では「親環境を尊重」だったが、これでは Komorebi UI の per-remote 設定が
+        //    親シェルの環境変数で silent に無視される問題があった。
+        //  - SSHKey 値はファイルパスとして実在し、かつシェルメタ文字を含まないことを検証する。
+        //    `.git/config` 経由で `key" -o ProxyCommand=...` のような細工値が混入しても引数境界を
+        //    破綻させない多層防御。検証失敗時は SSHKey を空扱いにして親環境フォールバックする。
+        //  - SSHKey 未設定で親環境にも GIT_SSH_COMMAND が無いときのみ、デフォルトの ssh コマンドを設定する。
+        //
+        // StrictHostKeyChecking=ask: 初回ホスト鍵を自動登録せず、SSH の確認境界に委ねる。
+        // Windows の OpenSSH は /dev/null を認識せず、シングルクォートエスケープも Git for Windows の
+        // 内部 sh 呼び出しに頼れないため、プラットフォームごとに quoting と null device を切り替える。
+        var sshKeyValid = !string.IsNullOrEmpty(SSHKey) && IsSafeSshKeyPath(SSHKey);
+        var hasParentSshCmd = start.Environment.ContainsKey("GIT_SSH_COMMAND");
+
+        if (sshKeyValid)
         {
+            // UI で per-remote/global SSHKey を明示設定したケース → 親環境より優先
             string sshCmd;
-            if (string.IsNullOrEmpty(SSHKey))
-            {
-                sshCmd = "ssh -o StrictHostKeyChecking=ask";
-            }
-            else if (OperatingSystem.IsWindows())
+            if (OperatingSystem.IsWindows())
             {
                 // Windows: NUL + ダブルクォートエスケープ。
-                // Git for Windows の内部 sh 解釈を考慮して、バックスラッシュとダブルクォートの両方をエスケープする。
-                // 例えば SSHKey に `C:\path\key" -o ProxyCommand=evil` のような細工された値が
-                // .git/config 経由で混入しても、引数境界が破綻しないよう防衛する。
                 var escapedKey = SSHKey.Replace("\\", "\\\\").Replace("\"", "\\\"");
                 sshCmd = $"ssh -i \"{escapedKey}\" -o StrictHostKeyChecking=ask -F \"NUL\"";
             }
@@ -370,16 +381,32 @@ public partial class Command
                 var escapedKey = SSHKey.Replace("'", "'\\''");
                 sshCmd = $"ssh -i '{escapedKey}' -o StrictHostKeyChecking=ask -F '/dev/null'";
             }
-            start.Environment.Add("GIT_SSH_COMMAND", sshCmd);
+            start.Environment["GIT_SSH_COMMAND"] = sshCmd;
         }
-
-        // Force using en_US.UTF-8 locale
-        // Linuxの場合、ロケールをCに強制してgit出力を英語にする
-        if (OperatingSystem.IsLinux())
+        else if (!string.IsNullOrEmpty(SSHKey))
         {
-            start.Environment.Add("LANG", "C");
-            start.Environment.Add("LC_ALL", "C");
+            // SSHKey は設定されているが検証で弾かれた → 親環境にフォールバック（ログ警告）
+            Models.Logger.Log(
+                $"設定された SSH 鍵パスが不正です（実在しないか危険文字を含む）。親環境または ssh-agent にフォールバックします: {SSHKey}",
+                Models.LogLevel.Warning);
+            if (!hasParentSshCmd)
+                start.Environment.Add("GIT_SSH_COMMAND", "ssh -o StrictHostKeyChecking=ask");
         }
+        else if (!hasParentSshCmd)
+        {
+            // SSHKey 未設定かつ親環境にも GIT_SSH_COMMAND が無い → デフォルト ssh を設定
+            start.Environment.Add("GIT_SSH_COMMAND", "ssh -o StrictHostKeyChecking=ask");
+        }
+        // 上記いずれにも該当しない（SSHKey 空 + 親環境 GIT_SSH_COMMAND あり）場合は親環境を尊重
+
+        // 全 OS で git 出力を英語に固定する。
+        // Linux のみだった旧仕様では、macOS の日本語ロケール (LANG=ja_JP.UTF-8) で
+        // 進捗メッセージが日本語化し、HandleOutput の英語フィルタをすり抜けて
+        // 偽エラーダイアログが出る問題があった。Add ではなくインデクサ代入で
+        // 既存の親環境変数も上書きする (LC_MESSAGES 等の細かいバリアントも上書きされない可能性
+        // があるため、LANG/LC_ALL の 2 つを強制する)。
+        start.Environment["LANG"] = "C";
+        start.Environment["LC_ALL"] = "C";
 
         // gitコマンドの共通オプションを構築する
         var builder = new StringBuilder(2048);
@@ -521,6 +548,39 @@ public partial class Command
 
         // リモート個別設定がなければグローバルSSHキーにフォールバック
         return globalSSHKey ?? string.Empty;
+    }
+
+    /// <summary>
+    /// SSHKey 値がコマンドラインに埋め込んでも安全なパスかを検証する。
+    /// </summary>
+    /// <remarks>
+    /// SSHKey は <c>.git/config remote.&lt;name&gt;.sshkey</c> 経由で外部入力扱いされるため、
+    /// シェルインジェクション (例: <c>"key" -o ProxyCommand=evil"</c>) を防ぐ多層防御として、
+    /// 実在確認と危険文字チェックを行う。`Replace` ベースのエスケープと併せて二重防衛にする。
+    /// </remarks>
+    /// <param name="path">検証する SSH 鍵パス。</param>
+    /// <returns>パスが実在し、危険文字を含まない場合 true。</returns>
+    internal static bool IsSafeSshKeyPath(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+            return false;
+
+        // シェル/引数境界破壊文字を含むパスは拒否（Windows/Unix 共通の防御）
+        foreach (var c in path)
+        {
+            if ("\"&|;()$`!\r\n".IndexOf(c) >= 0)
+                return false;
+        }
+
+        // 実在確認: 鍵ファイルが実際にあること
+        try
+        {
+            return File.Exists(path);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>

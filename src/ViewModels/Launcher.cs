@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
@@ -177,7 +177,6 @@ public class Launcher : ObservableObject
         _ignoreIndexChange = false;
         PostActivePageChanged();
         Preferences.Instance.Save();
-        GC.Collect();
 
         var cloneDir = to.DefaultCloneDir;
         if (string.IsNullOrEmpty(cloneDir))
@@ -259,7 +258,6 @@ public class Launcher : ObservableObject
                 last.Popup = null;
 
                 PostActivePageChanged();
-                GC.Collect();
             }
             else
             {
@@ -278,7 +276,6 @@ public class Launcher : ObservableObject
 
         CloseRepositoryInTab(page);
         Pages.RemoveAt(removeIdx);
-        GC.Collect();
     }
 
     /// <summary>アクティブタブ以外の全タブを閉じる。</summary>
@@ -301,7 +298,6 @@ public class Launcher : ObservableObject
 
         _activeWorkspace.ActiveIdx = 0;
         _ignoreIndexChange = false;
-        GC.Collect();
     }
 
     /// <summary>アクティブタブより右側の全タブを閉じる。</summary>
@@ -317,7 +313,6 @@ public class Launcher : ObservableObject
         }
 
         _ignoreIndexChange = false;
-        GC.Collect();
     }
 
     /// <summary>

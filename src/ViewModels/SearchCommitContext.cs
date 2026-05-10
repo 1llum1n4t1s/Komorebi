@@ -218,7 +218,6 @@ public class SearchCommitContext : ObservableObject, IDisposable
         _worktreeFiles = null;
         Suggestions = null;
         Results = null;
-        GC.Collect();
     }
 
     /// <summary>

@@ -53,3 +53,6 @@ build.command
 src/Properties/launchSettings.json
 __pycache__/
 .dotnet/
+
+# Claude Code セッション固有の MCP サーバー設定（個人/環境依存のため共有しない）
+.mcp.json

@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>1.0.72</Version>
+    <Version>1.0.73</Version>
     <!-- IDEコードスタイル分析（IDE0005等）をビルド時にも強制する -->
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <!-- IDE0005（不要なusing検出）にはドキュメント生成が必須 -->
@@ -12,7 +12,10 @@
     <!-- Condition: submodule (depends/AvaloniaEdit) では lockfile を生成しない。 -->
     <!--            submodule は外部リポジトリで Komorebi 側から管理すべきでないため。 -->
     <RestorePackagesWithLockFile Condition="!$(MSBuildProjectDirectory.Contains('depends'))">true</RestorePackagesWithLockFile>
-    <!-- CI ビルド時のみ lockfile を厳格モードで検証する（ローカル開発では新規パッケージ追加を許可） -->
-    <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true' And !$(MSBuildProjectDirectory.Contains('depends'))">true</RestoreLockedMode>
+    <!-- CI ビルド時のみ lockfile を厳格モードで検証する（ローカル開発では新規パッケージ追加を許可）。
+         GitHub Actions / GitLab CI / Travis CI などの主要 CI ランナーでは CI=true が自動設定されるため、
+         旧来の $(ContinuousIntegrationBuild) ではなく $(CI) で判定する（Microsoft.Build.Tasks.Git
+         パッケージを参照しない構成でも有効化されるよう変更）。 -->
+    <RestoreLockedMode Condition="'$(CI)' == 'true' And !$(MSBuildProjectDirectory.Contains('depends'))">true</RestoreLockedMode>
   </PropertyGroup>
 </Project>

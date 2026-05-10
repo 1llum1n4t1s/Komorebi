@@ -302,7 +302,6 @@ public partial class RevisionFileTreeView : UserControl
         }
 
         Rows.AddRange(rows);
-        GC.Collect();
     }
 
     /// <summary>

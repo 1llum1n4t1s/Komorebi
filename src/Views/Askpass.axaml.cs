@@ -13,6 +13,7 @@ namespace Komorebi.Views;
 public partial class Askpass : ChromelessWindow
 {
     private bool _isHostKeyPrompt;
+    private bool _isHostKeyChangedWarning;
     private bool _isPreview;
 
     /// <summary>
@@ -52,11 +53,13 @@ public partial class Askpass : ChromelessWindow
 
         // ホスト鍵プロンプトの場合、入力欄を隠す
         _isHostKeyPrompt = hintKey is "Text.Askpass.Hint.HostKeyNew" or "Text.Askpass.Hint.HostKeyChanged";
+        // ホスト鍵「変更」警告は MITM の可能性があるため、いかなる経路でも yes を送ってはならない
+        _isHostKeyChangedWarning = hintKey is "Text.Askpass.Hint.HostKeyChanged";
         if (_isHostKeyPrompt)
             TxtPassphrase.IsVisible = false;
 
         // ホスト鍵変更警告の場合、接続不可なのでOKボタンも隠す
-        if (hintKey is "Text.Askpass.Hint.HostKeyChanged")
+        if (_isHostKeyChangedWarning)
             BtnOk.IsVisible = false;
 
         if (string.IsNullOrEmpty(hintKey))
@@ -75,6 +78,19 @@ public partial class Askpass : ChromelessWindow
     /// </summary>
     private void EnterPassword(object _1, RoutedEventArgs _2)
     {
+        // 防御: HostKeyChanged 警告中は HotKey="Enter" 経由などで意図せず到達しても
+        // "yes" を絶対に送らない。MITM 攻撃を受けたホストへの自動承認を防ぐ。
+        if (_isHostKeyChangedWarning)
+        {
+            Console.Out.WriteLine("no");
+            Console.Out.Flush();
+            if (_isPreview)
+                Close();
+            else
+                App.Quit(-1);
+            return;
+        }
+
         if (_isHostKeyPrompt)
         {
             Console.Out.WriteLine("yes");

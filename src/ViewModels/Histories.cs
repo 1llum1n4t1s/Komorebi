@@ -321,16 +321,30 @@ public class Histories : ObservableObject, IDisposable
         if (_ignoreSelectionChange)
             return;
 
+        // SearchCommitContext は Repository.Open() 後に初期化される。
+        // テストや遷移直後など Open 前の経路でも落とさず動くよう null ガードする。
+        var searchContext = _repo.SearchCommitContext;
+
         if (commits.Count == 0)
         {
-            _repo.SearchCommitContext.Selected = null;
+            if (searchContext is not null)
+                searchContext.Selected = null;
             DetailContext = null;
         }
         else if (commits.Count == 1)
         {
-            var commit = (commits[0] as Models.Commit)!;
-            if (_repo.SearchCommitContext.Selected is null || !_repo.SearchCommitContext.Selected.SHA.Equals(commit.SHA, StringComparison.Ordinal))
-                _repo.SearchCommitContext.Selected = _repo.SearchCommitContext.Results?.Find(x => x.SHA.Equals(commit.SHA, StringComparison.Ordinal));
+            // 型安全化: 想定外の要素型（例: テストや IList API 経由）が紛れた場合は静かに無視
+            if (commits[0] is not Models.Commit commit)
+            {
+                DetailContext = null;
+                return;
+            }
+
+            if (searchContext is not null &&
+                (searchContext.Selected is null || !searchContext.Selected.SHA.Equals(commit.SHA, StringComparison.Ordinal)))
+            {
+                searchContext.Selected = searchContext.Results?.Find(x => x.SHA.Equals(commit.SHA, StringComparison.Ordinal));
+            }
 
             SelectedCommit = commit;
             NavigationId = _navigationId + 1;
@@ -348,15 +362,22 @@ public class Histories : ObservableObject, IDisposable
         }
         else if (commits.Count == 2)
         {
-            _repo.SearchCommitContext.Selected = null;
+            if (searchContext is not null)
+                searchContext.Selected = null;
 
             var end = commits[0] as Models.Commit;
             var start = commits[1] as Models.Commit;
+            if (start is null || end is null)
+            {
+                DetailContext = null;
+                return;
+            }
             DetailContext = new RevisionCompare(_repo, start, end);
         }
         else
         {
-            _repo.SearchCommitContext.Selected = null;
+            if (searchContext is not null)
+                searchContext.Selected = null;
             DetailContext = new Models.Count(commits.Count);
         }
     }
@@ -596,7 +617,10 @@ public class Histories : ObservableObject, IDisposable
         var head = _commits.Find(x => x.IsCurrentHead);
         if (head is null)
         {
-            _repo.SearchCommitContext.Selected = null;
+            // SearchCommitContext は Repository.Open() 後に初期化されるため null チェックが必要
+            if (_repo.SearchCommitContext is not null)
+                _repo.SearchCommitContext.Selected = null;
+
             head = await new Commands.QuerySingleCommit(_repo.FullPath, "HEAD").GetResultAsync();
             if (head is not null)
                 DetailContext = new RevisionCompare(_repo, commit, head);

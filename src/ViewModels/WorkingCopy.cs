@@ -143,10 +143,19 @@ public class WorkingCopy : ObservableObject, IDisposable
                     ResetAuthor = false;
                 }
 
-                // ステージング状態を再計算
-                Staged = GetStagedChanges(_cached);
-                VisibleStaged = GetVisibleChanges(_staged);
-                SelectedStaged = [];
+                // ステージング状態の再計算は amend 切替時に HEAD 取得 + 差分照会の git を発行する。
+                // 大規模リポでは数秒かかり得るため、UI スレッドをブロックせず Task.Run で実行する。
+                var snapshot = _cached;
+                Task.Run(() =>
+                {
+                    var staged = GetStagedChanges(snapshot);
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        Staged = staged;
+                        VisibleStaged = GetVisibleChanges(_staged);
+                        SelectedStaged = [];
+                    });
+                });
             }
         }
     }
@@ -570,58 +579,63 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// </summary>
     private async Task ResolveConflictsBySideAsync(List<Models.Change> changes, bool useTheirs)
     {
-        using var lockWatcher = _repo.LockWatcher();
-
         List<string> files = [];
         List<string> needStage = [];
         var logName = useTheirs ? "Use Theirs" : "Use Mine";
         var log = _repo.CreateLog(logName);
 
-        // useTheirs: 「相手側が削除」= DeletedByThem / AddedByUs を削除対象にする
-        // useMine:   「自分側が削除」= DeletedByUs / AddedByThem を削除対象にする
-        foreach (var change in changes)
+        // ロック保持中に MarkWorkingCopyDirtyManually を呼ぶと FSW バッファイベントが解除後に
+        // 再 _updateWC をセットして RefreshWorkingCopyChanges のキャンセルを引き起こすため、
+        // git コマンド実行のみブロックスコープでロックし、Mark 呼び出しはロック外に出す。
+        using (_repo.LockWatcher())
         {
-            if (!change.IsConflicted)
-                continue;
-
-            var shouldDelete = change.ConflictReason is Models.ConflictReason.BothDeleted
-                || (useTheirs
-                    ? change.ConflictReason is Models.ConflictReason.DeletedByThem or Models.ConflictReason.AddedByUs
-                    : change.ConflictReason is Models.ConflictReason.DeletedByUs or Models.ConflictReason.AddedByThem);
-
-            if (shouldDelete)
+            // useTheirs: 「相手側が削除」= DeletedByThem / AddedByUs を削除対象にする
+            // useMine:   「自分側が削除」= DeletedByUs / AddedByThem を削除対象にする
+            foreach (var change in changes)
             {
-                var fullpath = Path.Combine(_repo.FullPath, change.Path);
-                if (File.Exists(fullpath))
-                    File.Delete(fullpath);
+                if (!change.IsConflicted)
+                    continue;
 
-                needStage.Add(change.Path);
+                var shouldDelete = change.ConflictReason is Models.ConflictReason.BothDeleted
+                    || (useTheirs
+                        ? change.ConflictReason is Models.ConflictReason.DeletedByThem or Models.ConflictReason.AddedByUs
+                        : change.ConflictReason is Models.ConflictReason.DeletedByUs or Models.ConflictReason.AddedByThem);
+
+                if (shouldDelete)
+                {
+                    var fullpath = Path.Combine(_repo.FullPath, change.Path);
+                    if (File.Exists(fullpath))
+                        File.Delete(fullpath);
+
+                    needStage.Add(change.Path);
+                }
+                else
+                {
+                    files.Add(change.Path);
+                }
             }
-            else
+
+            if (files.Count > 0)
             {
-                files.Add(change.Path);
+                var checkout = new Commands.Checkout(_repo.FullPath).Use(log);
+                var succ = useTheirs
+                    ? await checkout.UseTheirsAsync(files)
+                    : await checkout.UseMineAsync(files);
+                if (succ)
+                    needStage.AddRange(files);
             }
+
+            // 解決したファイルをステージング
+            if (needStage.Count > 0)
+            {
+                using var temp = new TempFileScope();
+                await File.WriteAllLinesAsync(temp.Path, needStage);
+                await new Commands.Add(_repo.FullPath, temp.Path).Use(log).ExecAsync();
+            }
+
+            log.Complete();
         }
 
-        if (files.Count > 0)
-        {
-            var checkout = new Commands.Checkout(_repo.FullPath).Use(log);
-            var succ = useTheirs
-                ? await checkout.UseTheirsAsync(files)
-                : await checkout.UseMineAsync(files);
-            if (succ)
-                needStage.AddRange(files);
-        }
-
-        // 解決したファイルをステージング
-        if (needStage.Count > 0)
-        {
-            using var temp = new TempFileScope();
-            await File.WriteAllLinesAsync(temp.Path, needStage);
-            await new Commands.Add(_repo.FullPath, temp.Path).Use(log).ExecAsync();
-        }
-
-        log.Complete();
         _repo.MarkWorkingCopyDirtyManually();
     }
 
@@ -789,40 +803,51 @@ public class WorkingCopy : ObservableObject, IDisposable
             }
         }
 
-        using var lockWatcher = _repo.LockWatcher();
         IsCommitting = true;
-        _repo.Settings.PushCommitMessage(_commitMessage);
 
-        // 自動ステージが有効な場合は全アンステージド変更をステージ
-        if (autoStage && _unstaged.Count > 0)
-            await StageChangesAsync(_unstaged, null);
+        // ロック保持中に MarkBranchesDirtyManually や ShowAndStartPopupAsync（モーダル待ち）を呼ぶと
+        // FSW バッファイベントが解除後に Refresh をキャンセルさせるため、git コマンド実行のみ
+        // ブロックスコープでロックし、後続処理はロック外に出す。
+        bool succ;
+        bool needPush = false;
+        Models.Branch pushBranch = null;
 
-        var log = _repo.CreateLog("Commit");
-        var succ = await new Commands.Commit(_repo.FullPath, _commitMessage, EnableSignOff, NoVerifyOnCommit, _useAmend, _resetAuthor)
-                .Use(log)
-                .RunAsync();
-
-        log.Complete();
-
-        if (succ)
+        using (_repo.LockWatcher())
         {
-            // UseAmend プロパティ経由で更新することで staged changes のリフレッシュを確実に発火させる
-            UseAmend = false;
-            CommitMessage = string.Empty;
-            // 自動プッシュが有効でリモートがある場合はプッシュダイアログを表示
-            if (autoPush && _repo.Remotes.Count > 0)
-            {
-                Models.Branch pushBranch = null;
-                if (_repo.CurrentBranch is null)
-                {
-                    var currentBranchName = await new Commands.QueryCurrentBranch(_repo.FullPath).GetResultAsync();
-                    pushBranch = new Models.Branch() { Name = currentBranchName };
-                }
+            _repo.Settings.PushCommitMessage(_commitMessage);
 
-                if (_repo.CanCreatePopup())
-                    await _repo.ShowAndStartPopupAsync(new Push(_repo, pushBranch));
+            // 自動ステージが有効な場合は全アンステージド変更をステージ
+            if (autoStage && _unstaged.Count > 0)
+                await StageChangesAsync(_unstaged, null);
+
+            var log = _repo.CreateLog("Commit");
+            succ = await new Commands.Commit(_repo.FullPath, _commitMessage, EnableSignOff, NoVerifyOnCommit, _useAmend, _resetAuthor)
+                    .Use(log)
+                    .RunAsync();
+
+            log.Complete();
+
+            if (succ)
+            {
+                // UseAmend プロパティ経由で更新することで staged changes のリフレッシュを確実に発火させる
+                UseAmend = false;
+                CommitMessage = string.Empty;
+                // 自動プッシュが有効でリモートがある場合はプッシュ意思を覚えておき、ロック外で処理する
+                if (autoPush && _repo.Remotes.Count > 0)
+                {
+                    if (_repo.CurrentBranch is null)
+                    {
+                        var currentBranchName = await new Commands.QueryCurrentBranch(_repo.FullPath).GetResultAsync();
+                        pushBranch = new Models.Branch() { Name = currentBranchName };
+                    }
+                    needPush = true;
+                }
             }
         }
+
+        // モーダル Push ダイアログはロック解除後に表示する（ダイアログ表示中に FSW を遮断したくない）
+        if (needPush && _repo.CanCreatePopup())
+            await _repo.ShowAndStartPopupAsync(new Push(_repo, pushBranch));
 
         _repo.MarkBranchesDirtyManually();
         IsCommitting = false;

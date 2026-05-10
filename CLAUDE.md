@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.0.1**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.0.2**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
 
 ## Build & Run
 
@@ -276,13 +276,16 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 
 ## Key Dependencies
 
-- **Avalonia 12.0.1** — cross-platform XAML UI
+- **Avalonia 12.0.2** — cross-platform XAML UI (Note: `Avalonia.Controls.DataGrid` is intentionally pinned to 12.0.0 — bump together with main Avalonia after compatibility check)
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 0.0.1298** — auto-update framework
 - **depends/AvaloniaEdit** — git submodule, text editor for diff/blame
-- **OpenAI / Azure.AI.OpenAI** — AI commit message generation
-- **LiveChartsCore 2.0.0** — contribution statistics charts
+- **OpenAI / Azure.AI.OpenAI 2.8.0-beta.1** — AI commit message generation
+- **LiveChartsCore 2.0.2** — contribution statistics charts
+- **BitMiracle.LibTiff.NET / Pfim** — TIFF / DDS image format support in ImageDiffView
+- **Tmds.DBus.Protocol** — Linux desktop DBus integration (notifications, etc.)
+- **CRDebugger.Avalonia** (Debug builds only) — Avalonia diagnostics helper
 
 Fonts are **not bundled** — the app uses system fonts with per-locale fallback chains defined in `InstalledFont.GetLocaleDefaults()`. The `Avalonia.Fonts.Inter` NuGet package provides the Inter font for non-CJK locales.
 

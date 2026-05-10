@@ -19,6 +19,11 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
     private static readonly HttpClient s_httpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
     private const string AnthropicApiVersion = "2023-06-01";
     private const int AnthropicMaxTokens = 4096;
+    /// <summary>
+    /// tool_use ループの最大反復回数。AI が永続的に tool_use を返し続ける（プロンプトインジェクション
+    /// や API バグ等）場合の無限ループ防止。通常のコミットメッセージ生成では 1〜3 回で収束する。
+    /// </summary>
+    private const int MaxToolCallIterations = 20;
 
     private readonly Service _service;
 
@@ -56,8 +61,14 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
             new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(_service, repo, changeList) }
         };
 
+        var iterations = 0;
         do
         {
+            if (++iterations > MaxToolCallIterations)
+                throw new InvalidOperationException(
+                    $"Anthropic tool_use loop exceeded {MaxToolCallIterations} iterations. " +
+                    "This may indicate a prompt injection or model malfunction.");
+
             var requestBody = new JsonObject
             {
                 ["model"] = _service.Model,

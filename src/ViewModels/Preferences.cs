@@ -29,7 +29,12 @@ public class Preferences : ObservableObject
 
             // 初回パス: 二重チェックロックで多重初期化を防ぐ。
             // IPC 受信 / AutoFetchService 起動 / UI スレッドのいずれが最初に Instance を要求しても、
-            // PrepareGit() などの副作用付き初期化が 1 回だけ走ることを保証する。
+            // 多重 Load / 多重 _instance 代入が起きないことを保証する。
+            // 注意: PrepareGit() / PrepareShellOrTerminal() などはディスク I/O や PATH スキャンを
+            // 伴うため lock 外で実行する。lock 内で実行すると別スレッドが Instance を待たされ、
+            // 万一プロパティ setter が UI 副作用 (App.SetLocale 等) を発火させた際にデッドロック様の
+            // 待機が発生し得る。`_isLoading=false` 後の追加初期化はロック解除後で十分。
+            Preferences toInitialize = null;
             lock (s_instanceLock)
             {
                 if (_instance is not null)
@@ -37,15 +42,20 @@ public class Preferences : ObservableObject
 
                 var loaded = Load();
                 loaded._isLoading = false;
-
-                loaded.PrepareGit();
-                loaded.PrepareShellOrTerminal();
-                PrepareExternalDiffMergeTool();
-                loaded.PrepareWorkspaces();
-
                 _instance = loaded;
-                return _instance;
+                toInitialize = loaded;
             }
+
+            // ロック解除後に副作用付き初期化を行う。並行する別スレッドの Instance アクセスは
+            // 既に _instance を返せるが、これらの初期化が完了する前に Git 関連の操作は
+            // _isLoading=false なので setter 副作用 (App.SetLocale 等) が走り得る点は許容する
+            // (Locale setter は Avalonia の UI スレッド外でも ResourceDictionary 切替を行うが、
+            //  Komorebi はメインの起動経路で Instance を最初に触るため実害は低い)。
+            toInitialize.PrepareGit();
+            toInitialize.PrepareShellOrTerminal();
+            PrepareExternalDiffMergeTool();
+            toInitialize.PrepareWorkspaces();
+            return toInitialize;
         }
     }
 

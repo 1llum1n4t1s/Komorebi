@@ -288,18 +288,19 @@ namespace Komorebi.Tests.ViewModels
         // ================================================================
 
         /// <summary>
-        /// Select に空のリストを渡した場合、DetailContext が null になること。
-        /// （注: SearchCommitContext にアクセスするためリポジトリのOpen()が必要だが、
-        /// ここではOpen()なしで呼ぶと NullReferenceException になることを検証）
+        /// Select に空のリストを渡した場合、SearchCommitContext が null（Open前）でも
+        /// 例外を投げず、DetailContext を null にして静かに完了すること。
         /// </summary>
         [Fact]
-        public void Select_EmptyList_ThrowsWithoutRepoOpen()
+        public void Select_EmptyList_WithoutRepoOpen_SetsDetailContextNull()
         {
             var histories = new Histories(_repo);
             IList emptyList = new ArrayList();
 
-            // _repo.SearchCommitContext は Open() していないと null
-            Assert.Throws<NullReferenceException>(() => histories.Select(emptyList));
+            // null ガードにより例外は出ない（旧仕様: NRE）
+            histories.Select(emptyList);
+
+            Assert.Null(histories.DetailContext);
         }
 
         // ================================================================
@@ -307,19 +308,19 @@ namespace Komorebi.Tests.ViewModels
         // ================================================================
 
         /// <summary>
-        /// Select に Commit でないオブジェクトを含む1要素リストを渡した場合、
-        /// InvalidCastException または NullReferenceException になること。
-        /// （IList は型安全でないため）
+        /// Select に Commit でないオブジェクトを含むリストが渡された場合でも、
+        /// 型ガードにより例外を投げず、DetailContext を null にして安全に処理されること。
         /// </summary>
         [Fact]
-        public void Select_NonCommitObject_ThrowsException()
+        public void Select_NonCommitObject_WithoutRepoOpen_SetsDetailContextNull()
         {
             var histories = new Histories(_repo);
             IList badList = new ArrayList { "not a commit" };
 
-            // (commits[0] as Models.Commit)! はキャスト失敗でnullになるが、
-            // !演算子でnull抑制しているため、そのあとの.SHAアクセスでNullReferenceException
-            Assert.ThrowsAny<Exception>(() => histories.Select(badList));
+            // 型ガード（is not Models.Commit）により例外は出ない（旧仕様: NRE）
+            histories.Select(badList);
+
+            Assert.Null(histories.DetailContext);
         }
 
         // ================================================================
@@ -445,11 +446,11 @@ namespace Komorebi.Tests.ViewModels
 
         /// <summary>
         /// コミットリストに IsCurrentHead が存在しない場合、
-        /// CompareWithHeadAsync は _repo.SearchCommitContext にアクセスするため、
-        /// Open() されていないリポジトリでは NullReferenceException が発生すること。
+        /// SearchCommitContext が null（Open前）でも例外を投げず、
+        /// QuerySingleCommit で HEAD 取得を試みた上で null を返すこと。
         /// </summary>
         [Fact]
-        public async Task CompareWithHeadAsync_NoCurrentHead_WithoutRepoOpen_ThrowsNullRef()
+        public async Task CompareWithHeadAsync_NoCurrentHead_WithoutRepoOpen_ReturnsNull()
         {
             var histories = new Histories(_repo);
             histories.Commits = [
@@ -457,9 +458,11 @@ namespace Komorebi.Tests.ViewModels
                 MakeCommit("bbb" + new string('0', 37)),
             ];
 
-            // Open() されていないリポジトリでは SearchCommitContext が null
-            await Assert.ThrowsAsync<NullReferenceException>(
-                () => histories.CompareWithHeadAsync(histories.Commits[0]));
+            // null ガードにより例外は出ない（旧仕様: NRE）。
+            // 実際に git HEAD は無い空リポなので結果は null（DetailContext も設定されない）。
+            var result = await histories.CompareWithHeadAsync(histories.Commits[0]);
+
+            Assert.Null(result);
         }
 
         // ================================================================

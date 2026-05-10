@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -85,7 +85,6 @@ public class RevisionTextFileView : TextEditor
             _textMate = null;
         }
 
-        GC.Collect();
     }
 
     /// <summary>
@@ -170,7 +169,6 @@ public class RevisionTextFileView : TextEditor
         {
             _textMate.Dispose();
             _textMate = null;
-            GC.Collect();
 
             TextArea.TextView.Redraw();
         }

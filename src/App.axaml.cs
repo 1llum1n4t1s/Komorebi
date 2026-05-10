@@ -54,11 +54,14 @@ public partial class App : Application
             Models.Logger.Dispose();
         };
 
-        // Task内の未観測例外をクラッシュログに記録し、プロセス終了を防ぐ
+        // Task内の未観測例外をクラッシュログに記録し、プロセス終了を防ぐ。
+        // Logger.Dispose() は idempotent なので、AppDomain.UnhandledException や finally ブロックと
+        // 二重 Dispose になっても安全。非同期バッファのフラッシュ保証のため明示的に呼ぶ。
         TaskScheduler.UnobservedTaskException += (_, e) =>
         {
             Models.Logger.LogCrash(e.Exception, "UnobservedTaskException");
             e.SetObserved();
+            Models.Logger.Dispose();
         };
 
         try
@@ -152,6 +155,13 @@ public partial class App : Application
         if (viewType is not null)
             return Activator.CreateInstance(viewType) as Control;
 
+        // 文字列置換による命名規約解決: View をサブフォルダに移動・リネームすると
+        // 静かに null を返してダイアログが開かない silent failure を起こす。
+        // 警告ログで原因特定を可能にする（Source Generator 化は別フェーズで検討）。
+        Models.Logger.Log(
+            $"[CreateViewForViewModel] No View resolved for '{dataTypeName}' (looked up '{viewTypeName}'). " +
+            "If you renamed/moved the view, ensure the View namespace mirrors the ViewModel namespace.",
+            Models.LogLevel.Warning);
         return null;
     }
 

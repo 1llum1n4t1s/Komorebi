@@ -76,39 +76,19 @@ public class Avatar : Control, Models.IAvatarHost
         }
         else if (!UseGitHubStyleAvatar)
         {
-            // フォールバック: イニシャル文字をグラデーション背景に描画する
-            var fallback = GetFallbackString(User.Name);
-            // 現在の等幅フォント（ユーザ設定 or OS標準）を使用する。
-            // 旧実装は "fonts:Komorebi#JetBrains Mono" をハードコードしていたが、
-            // Komorebi はバンドルフォントを廃止したため typeface 解決時に例外が発生し、
-            // Render ループが崩壊してフリーズする問題があった。
-            var fontFamily = this.FindResource("Fonts.Monospace") as FontFamily ?? FontFamily.Default;
-            var typeface = new Typeface(fontFamily);
-            var label = new FormattedText(
-                fallback,
-                CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                typeface,
-                Math.Max(Bounds.Width * 0.65, 10),
-                Brushes.White);
+            // フォールバック: イニシャル文字をグラデーション背景に描画する。
+            // FormattedText / LinearGradientBrush は毎フレーム new するとアロケーション圧が高いため、
+            // (User.Name, Bounds.Width) をキーにキャッシュする。
+            EnsureFallbackCache();
 
-            // 文字コードの合計値からグラデーション色を決定する
-            var chars = fallback.ToCharArray();
-            var sum = 0;
-            foreach (var c in chars)
-                sum += Math.Abs(c);
-
-            var bg = new LinearGradientBrush()
+            var label = _cachedFallbackText;
+            var bg = _cachedFallbackBrush;
+            if (label is not null && bg is not null)
             {
-                GradientStops = FALLBACK_GRADIENTS[sum % FALLBACK_GRADIENTS.Length],
-                StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-                EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
-            };
-
-            // テキストを中央に配置して描画する
-            Point textOrigin = new Point((Bounds.Width - label.Width) * 0.5, (Bounds.Height - label.Height) * 0.5);
-            context.DrawRectangle(bg, null, new Rect(0, 0, Bounds.Width, Bounds.Height), corner, corner);
-            context.DrawText(label, textOrigin);
+                Point textOrigin = new Point((Bounds.Width - label.Width) * 0.5, (Bounds.Height - label.Height) * 0.5);
+                context.DrawRectangle(bg, null, new Rect(0, 0, Bounds.Width, Bounds.Height), corner, corner);
+                context.DrawText(label, textOrigin);
+            }
         }
         else
         {
@@ -122,10 +102,12 @@ public class Avatar : Control, Models.IAvatarHost
             var stepX = (Bounds.Width - offsetX * 2) / 5.0;
             var stepY = (Bounds.Height - offsetY * 2) / 5.0;
 
-            // メールアドレスのMD5ハッシュから色とパターンを決定する
+            // メールアドレスのMD5ハッシュから色とパターンを決定する。
+            // AvatarManager.GetEmailHash と同じ正規化 (Trim + ToLowerInvariant + UTF-8) を使い、
+            // 取得 URL とフォールバック描画のハッシュ整合性を保つ。
             var user = User;
-            var lowered = user.Email.ToLower(CultureInfo.CurrentCulture).Trim();
-            var hash = MD5.HashData(Encoding.Default.GetBytes(lowered));
+            var lowered = user.Email.Trim().ToLowerInvariant();
+            var hash = MD5.HashData(Encoding.UTF8.GetBytes(lowered));
 
             var brush = new SolidColorBrush(new Color(255, hash[0], hash[1], hash[2]));
             var switches = new bool[15];
@@ -211,6 +193,10 @@ public class Avatar : Control, Models.IAvatarHost
 
         if (change.Property == UserProperty)
         {
+            // ユーザー変更時はフォールバックキャッシュを破棄
+            _cachedFallbackText = null;
+            _cachedFallbackBrush = null;
+
             // ユーザーが変更された場合、新しいアバター画像をリクエストして再描画する
             var user = User;
             if (user is null)
@@ -225,6 +211,46 @@ public class Avatar : Control, Models.IAvatarHost
             if (_img is null)
                 InvalidateVisual();
         }
+        else if (change.Property == BoundsProperty)
+        {
+            // サイズ変化時はフォールバックの FormattedText を再計算（Bounds.Width に依存するため）
+            _cachedFallbackText = null;
+        }
+    }
+
+    /// <summary>
+    /// フォールバック描画の FormattedText / LinearGradientBrush をキャッシュ。
+    /// User.Name または Bounds.Width が変わるまで再利用してホットパスのアロケーションを抑える。
+    /// </summary>
+    private void EnsureFallbackCache()
+    {
+        if (_cachedFallbackText is not null && _cachedFallbackBrush is not null)
+            return;
+
+        var fallback = GetFallbackString(User.Name);
+        // 旧実装は "fonts:Komorebi#JetBrains Mono" をハードコードしていたが、
+        // バンドルフォントを廃止したため typeface 解決時に例外で Render が崩壊した。
+        var fontFamily = this.FindResource("Fonts.Monospace") as FontFamily ?? FontFamily.Default;
+        var typeface = new Typeface(fontFamily);
+        _cachedFallbackText = new FormattedText(
+            fallback,
+            CultureInfo.CurrentCulture,
+            FlowDirection.LeftToRight,
+            typeface,
+            Math.Max(Bounds.Width * 0.65, 10),
+            Brushes.White);
+
+        // 文字コードの合計値からグラデーション色を決定する（決定的なので同名なら同色になる）
+        var sum = 0;
+        foreach (var c in fallback)
+            sum += Math.Abs(c);
+
+        _cachedFallbackBrush = new LinearGradientBrush()
+        {
+            GradientStops = FALLBACK_GRADIENTS[sum % FALLBACK_GRADIENTS.Length],
+            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+            EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
+        };
     }
 
     /// <summary>
@@ -359,4 +385,8 @@ public class Avatar : Control, Models.IAvatarHost
     ];
 
     private Bitmap _img = null;
+
+    // フォールバック描画ホットパス用のキャッシュ（User.Name / Bounds.Width 変化時に破棄）
+    private FormattedText _cachedFallbackText;
+    private LinearGradientBrush _cachedFallbackBrush;
 }

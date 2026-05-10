@@ -13,6 +13,9 @@ namespace Komorebi.Views;
 /// </summary>
 public partial class FileHistories : ChromelessWindow
 {
+    /// <summary>FileHistories ウィンドウも最大化前提で使われるため、スクリーン構成変化に追従する。</summary>
+    protected override bool TrackScreenChanges => true;
+
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
     /// 前回終了時のサイズは constructor で、位置は <see cref="OnOpened"/> で復元する

@@ -823,6 +823,8 @@ public class Repository : ObservableObject, Models.IRepository
         RefreshWorkingCopyChanges();
         RefreshStashes();
 
+        // タブクローズ後にバックグラウンド処理が UI に介入するのを防ぐため、Close で破棄される
+        // _watcher の状態を最終ガードとして使う（専用 CancellationTokenSource 化はリファクタ範囲が大きいため）。
         Task.Run(async () =>
         {
             // 独立した3つのgitコマンド（global IssueTracker / local IssueTracker / Config）を並列実行する。
@@ -839,12 +841,29 @@ public class Repository : ObservableObject, Models.IRepository
             List<Models.IssueTracker> issuetrackers = [.. globalTrackers, .. localTrackers];
             Dispatcher.UIThread.Post(() =>
             {
+                // Close 後に Post が配信されたら何もしない（_watcher が null になっているなら破棄済み）
+                if (_watcher is null)
+                    return;
                 IssueTrackers.Clear();
                 IssueTrackers.AddRange(issuetrackers);
             });
 
             var config = await configTask.ConfigureAwait(false);
-            _hasAllowedSignersFile = config.TryGetValue("gpg.ssh.allowedsignersfile", out var allowedSignersFile) && !string.IsNullOrEmpty(allowedSignersFile);
+            // _hasAllowedSignersFile は HasAllowedSignersFile プロパティを通じて UI バインドされるため、
+            // バックグラウンドスレッドからの直接書き込みではなく UI スレッド経由で更新して
+            // PropertyChanged 通知を発火させる。
+            var hasAllowed = config.TryGetValue("gpg.ssh.allowedsignersfile", out var allowedSignersFile)
+                             && !string.IsNullOrEmpty(allowedSignersFile);
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (_watcher is null)
+                    return;
+                if (_hasAllowedSignersFile != hasAllowed)
+                {
+                    _hasAllowedSignersFile = hasAllowed;
+                    OnPropertyChanged(nameof(HasAllowedSignersFile));
+                }
+            });
 
             if (config.TryGetValue("gitflow.branch.master", out var masterName))
                 GitFlow.Master = masterName;
@@ -1260,13 +1279,18 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public async Task ExecBisectCommandAsync(string subcmd)
     {
-        using var lockWatcher = _watcher?.Lock();
         IsBisectCommandRunning = true;
 
         var log = CreateLog($"Bisect({subcmd})");
 
-        var succ = await new Commands.Bisect(FullPath, subcmd).Use(log).ExecAsync();
-        log.Complete();
+        // ロック保持中に MarkBranchesDirtyManually を呼ぶと FSW バッファイベントが解除後に
+        // Refresh のキャンセルを引き起こすため、git コマンドのみブロックスコープでロックする。
+        bool succ;
+        using (_watcher?.Lock())
+        {
+            succ = await new Commands.Bisect(FullPath, subcmd).Use(log).ExecAsync();
+            log.Complete();
+        }
 
         var head = await new Commands.QueryRevisionByRefName(FullPath, "HEAD").GetResultAsync();
         var nlIdx = log.Content.IndexOf('\n');
@@ -2230,7 +2254,7 @@ public class Repository : ObservableObject, Models.IRepository
     private Models.RepositoryUIStates _uiStates = null;                                // UI状態（フィルタ、展開状態等）
     private Models.FilterMode _historyFilterMode = Models.FilterMode.None;             // 履歴フィルタモード
     private bool _hasAllowedSignersFile = false;                                       // GPG許可署名者ファイルの存在フラグ
-    private ulong _queryLocalChangesTimes = 0;                                         // ローカル変更クエリの実行回数
+    private long _queryLocalChangesTimes = 0;                                          // ローカル変更クエリの実行回数（Interlocked.Add のオーバーロード型に合わせ long）
 
     private Models.Watcher _watcher = null;                                            // ファイルシステム監視
     private Histories _histories = null;                                               // 履歴ビューVM

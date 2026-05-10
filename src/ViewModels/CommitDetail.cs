@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -940,7 +940,6 @@ public partial class CommitDetail : ObservableObject, IDisposable
         {
             // フィルタが空の場合はサジェストをクリアしてGCを促す
             RevisionFileSearchSuggestion = null;
-            GC.Collect();
         }
     }
 

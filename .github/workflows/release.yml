@@ -15,7 +15,7 @@ jobs:
       tag: ${{ steps.version.outputs.tag }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Output version string
         id: version
         run: |
@@ -42,7 +42,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Delete existing releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -55,13 +55,13 @@ jobs:
             gh release delete "velopack-$TAG" --yes --cleanup-tag
           fi
       - name: Download package artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           pattern: package.*
           path: packages
           merge-multiple: true
       - name: Download Velopack artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           pattern: velopack.*
           path: velopack-packages

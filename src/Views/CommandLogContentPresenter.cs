@@ -143,7 +143,6 @@ public class CommandLogContentPresenter : TextEditor, Models.ICommandLogReceiver
             _textMate = null;
         }
 
-        GC.Collect();
     }
 
     /// <summary>

@@ -398,7 +398,7 @@ public class Watcher : IDisposable
         var dir = Directory.Exists(fullpath) ? fullpath : Path.GetDirectoryName(fullpath);
         // サブモジュールを持たないリポジトリでは IsInSubmodule による再帰 I/O を完全スキップ。
         // これで FSW バースト時の File.Exists 多発（ディレクトリ階層×イベント数）を防ぐ。
-        if (_repo.MayHaveSubmodules() && IsInSubmodule(dir))
+        if (_repo.MayHaveSubmodules() && IsInSubmoduleCached(dir))
         {
             Interlocked.Exchange(ref _updateSubmodules, DateTime.Now.AddSeconds(1).ToFileTime());
             return;
@@ -448,6 +448,32 @@ public class Watcher : IDisposable
 
         return false;
     }
+
+    /// <summary>
+    /// <see cref="IsInSubmodule"/> の結果を短期キャッシュした版。
+    /// FSW バースト時に同一ディレクトリで連続的に問い合わせされるケース
+    /// （`git checkout` / `git add -A` 等で大量ファイルが変更されるとき）に
+    /// `File.Exists` 連発によるディスク I/O 圧を回避する。
+    /// </summary>
+    /// <param name="folder">判定対象のフォルダパス</param>
+    /// <returns>サブモジュール内の場合 true</returns>
+    private bool IsInSubmoduleCached(string folder)
+    {
+        const long CacheTtlMs = 500;
+        var now = Environment.TickCount64;
+        if (string.Equals(_submoduleCheckDir, folder, StringComparison.Ordinal) && now < _submoduleCheckExpiry)
+            return _submoduleCheckResult;
+
+        var result = IsInSubmodule(folder);
+        _submoduleCheckDir = folder;
+        _submoduleCheckResult = result;
+        _submoduleCheckExpiry = now + CacheTtlMs;
+        return result;
+    }
+
+    private string _submoduleCheckDir;
+    private bool _submoduleCheckResult;
+    private long _submoduleCheckExpiry;
 
     /// <summary>監視対象のリポジトリ</summary>
     private readonly IRepository _repo;

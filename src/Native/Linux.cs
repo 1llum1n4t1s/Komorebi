@@ -158,11 +158,48 @@ internal class Linux : OS.IBackend
     /// </summary>
     public void OpenBrowser(string url)
     {
-        // BROWSER環境変数が設定されていればそれを使用し、なければxdg-openを使う
-        var browser = Environment.GetEnvironmentVariable("BROWSER");
+        // BROWSER 環境変数を尊重するが、悪意あるリポジトリの .envrc 等で
+        // 任意バイナリへのパスが仕込まれる経路を防ぐため、絶対パス指定の場合は
+        // 実在ファイルかを確認する。POSIX の BROWSER 仕様ではコロン区切りの
+        // フォールバックリストが許容されるため、最初に File.Exists を満たす絶対パス、
+        // または相対コマンド名（PATH 検索に任せる安全寄り）を採用する。
+        var browser = ResolveBrowserCommand(Environment.GetEnvironmentVariable("BROWSER"));
         if (string.IsNullOrEmpty(browser))
             browser = "xdg-open";
         Process.Start(browser, url.Quoted())?.Dispose();
+    }
+
+    /// <summary>
+    /// BROWSER 環境変数の値を検証して安全に使えるコマンド名を返す。
+    /// 絶対パスは File.Exists で実在を確認し、危険文字を含むエントリは無視する。
+    /// </summary>
+    private static string ResolveBrowserCommand(string browserEnv)
+    {
+        if (string.IsNullOrEmpty(browserEnv))
+            return null;
+
+        foreach (var candidate in browserEnv.Split(':', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var trimmed = candidate.Trim();
+            if (string.IsNullOrEmpty(trimmed))
+                continue;
+
+            // シェルメタ文字や引数境界破壊文字を含むエントリは弾く
+            if (trimmed.IndexOfAny(['"', '\'', '`', '$', ';', '&', '|', '\n', '\r']) >= 0)
+                continue;
+
+            // 絶対パスは実在ファイルのみ許可
+            if (Path.IsPathRooted(trimmed))
+            {
+                if (File.Exists(trimmed))
+                    return trimmed;
+                continue;
+            }
+
+            // 相対 / コマンド名は PATH 検索に任せる（OS 側の実行可能ファイル解決を信用）
+            return trimmed;
+        }
+        return null;
     }
 
     /// <summary>

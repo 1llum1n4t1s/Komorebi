@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -80,7 +80,6 @@ public class AIResponseView : TextEditor
             _textMate = null;
         }
 
-        GC.Collect();
     }
 
     /// <summary>

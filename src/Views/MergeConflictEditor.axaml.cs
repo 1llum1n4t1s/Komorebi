@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -865,7 +865,6 @@ public partial class MergeConflictEditor : ChromelessWindow
     protected override void OnClosed(EventArgs e)
     {
         base.OnClosed(e);
-        GC.Collect();
     }
 
     /// <summary>

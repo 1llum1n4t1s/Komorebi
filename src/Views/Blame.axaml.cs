@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -539,6 +539,9 @@ public class BlameTextEditor : TextEditor
 /// </summary>
 public partial class Blame : ChromelessWindow
 {
+    /// <summary>Blame ウィンドウは最大化したまま使われるケースが多いため、スクリーン構成変化に追従する。</summary>
+    protected override bool TrackScreenChanges => true;
+
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
@@ -637,7 +640,6 @@ public partial class Blame : ChromelessWindow
     protected override void OnClosed(EventArgs e)
     {
         base.OnClosed(e);
-        GC.Collect();
     }
 
     /// <summary>

@@ -180,7 +180,6 @@ public static class TextMateHelper
             {
                 reg.LastScope = scope;
                 installation.SetGrammar(reg.GetScope(filePath));
-                GC.Collect();
             }
         }
     }

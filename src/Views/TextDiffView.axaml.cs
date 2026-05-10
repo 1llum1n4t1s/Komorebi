@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -900,7 +900,6 @@ public class ThemedTextDiffPresenter : TextEditor
             {
                 _textMate.Dispose();
                 _textMate = null;
-                GC.Collect();
 
                 TextArea.TextView.Redraw();
             }
@@ -1097,7 +1096,6 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
             Text = string.Empty;
         }
 
-        GC.Collect();
     }
 
     /// <summary>
@@ -1274,7 +1272,6 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
         }
 
         base.OnUnloaded(e);
-        GC.Collect();
     }
 
     /// <summary>
