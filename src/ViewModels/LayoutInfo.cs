@@ -1,3 +1,5 @@
+using System;
+
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -153,13 +155,23 @@ public class LayoutInfo : ObservableObject
     public DataGridLength AuthorColumnWidth
     {
         get => _authorColumnWidth;
-        set => SetProperty(ref _authorColumnWidth, new DataGridLength(value.Value, DataGridLengthUnitType.Pixel, 0, value.DisplayValue));
+        set
+        {
+            // 永続化された巨大値や 0 / 負値を防ぐため両端をクランプ。
+            // XAML 側の MinWidth=80 / MaxWidth=400 と一致させる。
+            var clamped = Math.Clamp(value.Value, AuthorColumnMinWidth, AuthorColumnMaxWidth);
+            SetProperty(ref _authorColumnWidth, new DataGridLength(clamped, DataGridLengthUnitType.Pixel, 0, clamped));
+        }
     }
+
+    private const double AuthorColumnMinWidth = 80;
+    private const double AuthorColumnMaxWidth = 400;
+    private const double AuthorColumnDefaultWidth = 120;
 
     private GridLength _repositorySidebarWidth = new GridLength(250, GridUnitType.Pixel);
     private GridLength _workingCopyLeftWidth = new GridLength(300, GridUnitType.Pixel);
     private GridLength _stashesLeftWidth = new GridLength(300, GridUnitType.Pixel);
     private GridLength _commitDetailChangesLeftWidth = new GridLength(256, GridUnitType.Pixel);
     private GridLength _commitDetailFilesLeftWidth = new GridLength(256, GridUnitType.Pixel);
-    private DataGridLength _authorColumnWidth = new DataGridLength(120, DataGridLengthUnitType.Pixel, 0, 120);
+    private DataGridLength _authorColumnWidth = new DataGridLength(AuthorColumnDefaultWidth, DataGridLengthUnitType.Pixel, 0, AuthorColumnDefaultWidth);
 }

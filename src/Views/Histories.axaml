@@ -51,7 +51,7 @@
                 ClipboardCopyMode="None"
                 Focusable="False"
                 RowHeight="26"
-                HorizontalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled"
                 VerticalScrollBarVisibility="Auto"
                 Loaded="OnCommitListLoaded"
                 LayoutUpdated="OnCommitListLayoutUpdated"
@@ -121,7 +121,7 @@
         </DataGrid.Styles>
 
         <DataGrid.Columns>
-          <DataGridTemplateColumn Width="*" IsReadOnly="True">
+          <DataGridTemplateColumn Width="*" MinWidth="200" IsReadOnly="True">
             <DataGridTemplateColumn.Header>
               <TextBlock Classes="table_header" Text="{DynamicResource Text.Histories.Header.GraphAndSubject}" HorizontalAlignment="Center"/>
             </DataGridTemplateColumn.Header>
@@ -173,7 +173,7 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
-          <DataGridTemplateColumn MinWidth="80" CanUserResize="True" IsReadOnly="True" IsVisible="{Binding IsAuthorColumnVisible, Mode=OneWay}">
+          <DataGridTemplateColumn MinWidth="80" MaxWidth="400" CanUserResize="True" IsReadOnly="True" IsVisible="{Binding IsAuthorColumnVisible, Mode=OneWay}">
             <DataGridTemplateColumn.Width>
               <Binding Source="{x:Static vm:Preferences.Instance}"
                        Path="Layout.AuthorColumnWidth"
@@ -206,7 +206,7 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
-          <DataGridTemplateColumn MinWidth="100" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsSHAColumnVisible, Mode=OneWay}">
+          <DataGridTemplateColumn Width="120" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsSHAColumnVisible, Mode=OneWay}">
             <DataGridTemplateColumn.Header>
               <TextBlock Classes="table_header" Text="{DynamicResource Text.Histories.Header.SHA}" HorizontalAlignment="Center"/>
             </DataGridTemplateColumn.Header>
@@ -222,7 +222,7 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
-          <DataGridTemplateColumn MinWidth="160" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsDateTimeColumnVisible, Mode=OneWay}">
+          <DataGridTemplateColumn Width="180" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsDateTimeColumnVisible, Mode=OneWay}">
             <DataGridTemplateColumn.Header>
               <Grid HorizontalAlignment="Center">
                 <TextBlock Classes="table_header"
