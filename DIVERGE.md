@@ -68,7 +68,7 @@ cherry-pick による上流追従戦略 (`Upstream-Faithful Policy`、CLAUDE.md 
 | 領域 | Upstream | Komorebi | 理由 |
 |---|---|---|---|
 | Actions 参照 | `actions/*@vN` 浮動タグ | **SHA ピン止め + Dependabot** | タグ付け替え攻撃対策 |
-| RestoreLockedMode | なし | **`$(CI) == true` で有効化** | NuGet リパッケージ攻撃の検知 |
+| RestoreLockedMode | `$(ContinuousIntegrationBuild)` で実質無効 | 同左を維持（lockfile 生成のみ強制） | **AOT + multi-RID 展開** で transitive deps (`Microsoft.DotNet.ILCompiler` / `Microsoft.NET.ILLink.Tasks`) が lockfile と整合せず NU1004 で落ちる。v1.0.73 で `$(CI)` 化を試みたが構造的に両立困難と判明し revert。`packages.lock.json` 生成は維持されるため、リパッケージ攻撃の基本検知 (lockfile diff) は機能する。完全な locked mode が必要なら AOT を捨てるか multi-RID lockfile を CI で生成するパイプライン拡張が必要 |
 | homebrew-notify | 文字列補間 JSON | **`jq` 構造化 JSON 生成** | タグ名 JSON インジェクション防御 |
 
 ---
