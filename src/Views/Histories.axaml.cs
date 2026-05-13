@@ -226,6 +226,34 @@ public partial class Histories : UserControl
 
         if (dataGrid.SelectedItems.Count == 1)
             dataGrid.ScrollIntoView(dataGrid.SelectedItem, null);
+
+        // 著者列の Gripper リサイズは Avalonia DataGrid 内部で SetCurrentValue を使うため、
+        // TwoWay バインディングのソース書き戻しが発生しない。WidthProperty を直接観測して
+        // Preferences.Layout.AuthorColumnWidth に書き戻すことで永続化を機能させる。
+        if (!_authorColumnWidthSubscribed && dataGrid.Columns.Count > 1)
+        {
+            dataGrid.Columns[1].PropertyChanged += OnAuthorColumnPropertyChanged;
+            _authorColumnWidthSubscribed = true;
+        }
+    }
+
+    /// <summary>
+    /// 著者列の WidthProperty 変更を Preferences へ書き戻すハンドラ。
+    /// </summary>
+    private void OnAuthorColumnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property != DataGridColumn.WidthProperty || sender is not DataGridColumn column)
+            return;
+
+        var width = column.Width;
+        // Pixel 単位以外（Auto/Star 等）は永続化対象外。LayoutInfo setter 側で clamp されるが、
+        // ここで UnitType ガードを掛けることで Auto→Pixel 変換等の意図しない書き込みを防ぐ。
+        if (width.UnitType != DataGridLengthUnitType.Pixel)
+            return;
+
+        var layout = ViewModels.Preferences.Instance.Layout;
+        if (!layout.AuthorColumnWidth.Equals(width))
+            layout.AuthorColumnWidth = width;
     }
 
     /// <summary>
@@ -1524,6 +1552,11 @@ public partial class Histories : UserControl
 
         menu.Items.Add(submenu);
     }
+
+    /// <summary>
+    /// 著者列の WidthProperty を購読済みかどうか。OnCommitListLoaded の多重発火に対する idempotency 用。
+    /// </summary>
+    private bool _authorColumnWidthSubscribed = false;
 
     /// <summary>
     /// 前回のグラフ描画開始Y座標のキャッシュ。

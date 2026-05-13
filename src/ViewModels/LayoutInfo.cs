@@ -160,7 +160,11 @@ public class LayoutInfo : ObservableObject
             // 永続化された巨大値や 0 / 負値を防ぐため両端をクランプ。
             // XAML 側の MinWidth=80 / MaxWidth=400 と一致させる。
             var clamped = Math.Clamp(value.Value, AuthorColumnMinWidth, AuthorColumnMaxWidth);
-            SetProperty(ref _authorColumnWidth, new DataGridLength(clamped, DataGridLengthUnitType.Pixel, 0, clamped));
+            // 2 引数コンストラクタで Value/DesiredValue/DisplayValue を統一する。
+            // Histories.axaml.cs の WidthProperty 観測経由で DataGrid から書き戻される
+            // DataGridLength（DesiredValue=DisplayValue）と struct 等価判定が一致し、
+            // バインディング往復による ping-pong を避けられる。
+            SetProperty(ref _authorColumnWidth, new DataGridLength(clamped, DataGridLengthUnitType.Pixel));
         }
     }
 
@@ -173,5 +177,5 @@ public class LayoutInfo : ObservableObject
     private GridLength _stashesLeftWidth = new GridLength(300, GridUnitType.Pixel);
     private GridLength _commitDetailChangesLeftWidth = new GridLength(256, GridUnitType.Pixel);
     private GridLength _commitDetailFilesLeftWidth = new GridLength(256, GridUnitType.Pixel);
-    private DataGridLength _authorColumnWidth = new DataGridLength(AuthorColumnDefaultWidth, DataGridLengthUnitType.Pixel, 0, AuthorColumnDefaultWidth);
+    private DataGridLength _authorColumnWidth = new DataGridLength(AuthorColumnDefaultWidth, DataGridLengthUnitType.Pixel);
 }

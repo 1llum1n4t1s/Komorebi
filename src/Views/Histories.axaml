@@ -173,11 +173,17 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
+          <!-- 著者列は CommitListContainer.Columns[1]。コードビハインドで WidthProperty を観測して永続化する。 -->
           <DataGridTemplateColumn MinWidth="80" MaxWidth="400" CanUserResize="True" IsReadOnly="True" IsVisible="{Binding IsAuthorColumnVisible, Mode=OneWay}">
+            <!--
+              Width はコードビハインドで初期復元 + リサイズ書き戻しを行う。
+              理由: Avalonia DataGrid の Gripper リサイズは SetCurrentValue 経由で内部更新するため、
+              TwoWay バインディングのソース書き戻しが発生せず、永続化が機能しない。
+            -->
             <DataGridTemplateColumn.Width>
               <Binding Source="{x:Static vm:Preferences.Instance}"
                        Path="Layout.AuthorColumnWidth"
-                       Mode="TwoWay"/>
+                       Mode="OneWay"/>
             </DataGridTemplateColumn.Width>
             <DataGridTemplateColumn.Header>
               <TextBlock Classes="table_header" Text="{DynamicResource Text.Histories.Header.Author}" HorizontalAlignment="Center"/>
@@ -206,7 +212,7 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
-          <DataGridTemplateColumn Width="120" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsSHAColumnVisible, Mode=OneWay}">
+          <DataGridTemplateColumn Width="Auto" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsSHAColumnVisible, Mode=OneWay}">
             <DataGridTemplateColumn.Header>
               <TextBlock Classes="table_header" Text="{DynamicResource Text.Histories.Header.SHA}" HorizontalAlignment="Center"/>
             </DataGridTemplateColumn.Header>
@@ -222,7 +228,7 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
-          <DataGridTemplateColumn Width="180" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsDateTimeColumnVisible, Mode=OneWay}">
+          <DataGridTemplateColumn Width="Auto" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsDateTimeColumnVisible, Mode=OneWay}">
             <DataGridTemplateColumn.Header>
               <Grid HorizontalAlignment="Center">
                 <TextBlock Classes="table_header"
