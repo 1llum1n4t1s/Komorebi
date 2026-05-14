@@ -23,6 +23,13 @@ public class Clone : Command
         WorkingDirectory = path;
         SSHKey = sshKey;
 
+        // AWS CodeCommit (GRC / HTTPS / SSH 形式) なら GCM を完全抑止する。
+        // GRC URL (`codecommit::region://...`) 形式では git-remote-codecommit が SigV4 署名済みの
+        // 巨大な一時 HTTPS URL を内部生成し、その資格情報を GCM が Windows 資格情報マネージャに
+        // 保存しようとして 0x6c6 (ERROR_INVALID_BOUND 系) で clone / fetch / pull が失敗するため。
+        if (Models.Remote.IsCodeCommitURL(url))
+            DisableCredentialHelper = true;
+
         var builder = new StringBuilder(1024);
 
         // git clone: リモートリポジトリをローカルにコピーする

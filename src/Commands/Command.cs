@@ -93,6 +93,15 @@ public partial class Command
     public bool RaiseError { get; set; } = true;
 
     /// <summary>
+    /// 共通オプション組み立て時に credential helper（GCM 等）を完全無効化するフラグ。
+    /// AWS CodeCommit (GRC / HTTPS / SSH) のリモートは git-remote-codecommit が SigV4 署名済みの
+    /// 巨大な一時 HTTPS URL を返すため、GCM が Windows 資格情報マネージャに保存しようとして
+    /// 'fatal: Failed to write item to store.[0x6c6]'（ERROR_INVALID_BOUND 系）で fetch/pull が失敗する。
+    /// この場合はヘルパーを完全に外し、`-c credential.helper=` のみで GCM 連鎖を断ち切る。
+    /// </summary>
+    protected bool DisableCredentialHelper { get; set; }
+
+    /// <summary>
     /// コマンドログの出力先。nullの場合はログを記録しない。
     /// </summary>
     public Models.ICommandLog Log { get; set; } = null;
@@ -409,11 +418,17 @@ public partial class Command
         start.Environment["LC_ALL"] = "C";
 
         // gitコマンドの共通オプションを構築する
+        // credential.helper の処理は通常時とCodeCommit時で挙動を切り替える:
+        //  - 通常時: `-c credential.helper=` で system/global ヘルパーをクリアした後、
+        //    Komorebi が選んだヘルパー (Windows: manager / Linux: manager または libsecret) を再設定する。
+        //  - DisableCredentialHelper=true: ヘルパー再設定を行わず空のままにする。
+        //    AWS CodeCommit (GRC/HTTPS/SSH) では git-remote-codecommit が返す SigV4 署名済み URL を
+        //    GCM が Windows 資格情報マネージャに保存しようとして 0x6c6 で失敗するため、
+        //    GCM 連鎖そのものを断ち切る必要がある。
         var builder = new StringBuilder(2048);
-        builder
-            .Append("--no-pager -c core.quotepath=off -c credential.helper= -c credential.helper=")
-            .Append(Native.OS.CredentialHelper)
-            .Append(' ');
+        builder.Append("--no-pager -c core.quotepath=off -c credential.helper= ");
+        if (!DisableCredentialHelper)
+            builder.Append("-c credential.helper=").Append(Native.OS.CredentialHelper).Append(' ');
 
         // エディタ種別に応じてcore.editorを設定する
         switch (Editor)
@@ -508,9 +523,23 @@ public partial class Command
     /// <param name="remote">リモート名。</param>
     protected async Task ResolveSSHKeyAsync(string remote)
     {
-        var configValue = await new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey").ConfigureAwait(false);
+        // SSH 鍵設定とリモート URL を並列で読み出す。
+        // URL は CodeCommit 判定にのみ使い、GCM 抑止のためのフラグ (DisableCredentialHelper) を立てる。
+        // 既存の Config.GetAsync はキー欠損時に空文字を返す（exit code != 0 でも例外を投げない）。
+        // Config は内部で Args をミューテートするため、並列実行用に別インスタンスを作る。
+        var sshKeyTask = new Config(WorkingDirectory).GetAsync($"remote.{remote}.sshkey");
+        var urlTask = new Config(WorkingDirectory).GetAsync($"remote.{remote}.url");
+        await Task.WhenAll(sshKeyTask, urlTask).ConfigureAwait(false);
+
         var globalKey = GlobalSSHKeyProvider?.Invoke();
-        SSHKey = ResolveSSHKeyValue(configValue, globalKey);
+        SSHKey = ResolveSSHKeyValue(sshKeyTask.Result, globalKey);
+
+        // AWS CodeCommit (GRC / HTTPS / SSH) なら GCM を抑止する。
+        // GRC URL では git-remote-codecommit が SigV4 署名済みの一時 HTTPS URL を内部で生成し、
+        // GCM がその巨大なクレデンシャル文字列を Windows 資格情報マネージャに保存しようとして
+        // 0x6c6 (ERROR_INVALID_BOUND 系) で fetch/pull が失敗する。
+        if (Models.Remote.IsCodeCommitURL(urlTask.Result))
+            DisableCredentialHelper = true;
     }
 
     /// <summary>

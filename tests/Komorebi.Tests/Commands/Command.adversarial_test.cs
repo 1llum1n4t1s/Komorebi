@@ -347,8 +347,111 @@ namespace Komorebi.Tests.Commands
             }
         }
 
+        // ===============================================================
+        // 🗡️ AWS CodeCommit / GCM 抑止（DisableCredentialHelper）
+        // ===============================================================
+
+        /// <adversarial category="codecommit" severity="critical" />
+        /// <summary>
+        /// DisableCredentialHelper=true なら -c credential.helper= だけが残り、
+        /// `Native.OS.CredentialHelper` の値（manager / libsecret 等）は付与されないこと。
+        /// CodeCommit GRC / HTTPS / SSH URL では GCM を完全に外す必要がある。
+        /// </summary>
+        [Fact]
+        public void CreateGitStartInfo_DisableCredentialHelper_DropsManagerHelper()
+        {
+            var oldHelper = Komorebi.Native.OS.CredentialHelper;
+            try
+            {
+                Komorebi.Native.OS.CredentialHelper = "manager";
+                var command = new TestableCommand
+                {
+                    Args = "fetch --progress --verbose origin",
+                    DisableCredentialHelperPublic = true,
+                };
+                var start = command.BuildStartInfo();
+
+                // クリア用の `-c credential.helper=` は残るが、後段の `manager` 再設定は消えること
+                Assert.Contains("-c credential.helper= ", start.Arguments);
+                Assert.DoesNotContain("credential.helper=manager", start.Arguments);
+                Assert.DoesNotContain("credential.helper=libsecret", start.Arguments);
+            }
+            finally
+            {
+                Komorebi.Native.OS.CredentialHelper = oldHelper;
+            }
+        }
+
+        /// <adversarial category="codecommit" severity="critical" />
+        /// <summary>
+        /// CodeCommit URL（GRC / HTTPS / SSH）を Clone コンストラクタに渡すと
+        /// DisableCredentialHelper が自動で立ち、GCM 抑止構成の引数が生成されること。
+        /// </summary>
+        [Theory]
+        [InlineData("codecommit::us-east-1://my-repo")]
+        [InlineData("codecommit://my-repo")]
+        [InlineData("codecommit::ap-northeast-1://profile@my-repo")]
+        [InlineData("https://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-repo")]
+        [InlineData("ssh://git-codecommit.eu-west-1.amazonaws.com/v1/repos/my-repo")]
+        public void Clone_CodeCommitUrl_DisablesCredentialHelper(string url)
+        {
+            var oldHelper = Komorebi.Native.OS.CredentialHelper;
+            try
+            {
+                Komorebi.Native.OS.CredentialHelper = "manager";
+                var clone = new TestableClone("ctx", System.IO.Path.GetTempPath(), url, "local", string.Empty, string.Empty);
+                var start = clone.BuildStartInfo();
+
+                Assert.DoesNotContain("credential.helper=manager", start.Arguments);
+            }
+            finally
+            {
+                Komorebi.Native.OS.CredentialHelper = oldHelper;
+            }
+        }
+
+        /// <adversarial category="codecommit" severity="high" />
+        /// <summary>
+        /// 通常の GitHub / GitLab 等の URL では Clone は credential helper を維持すること（誤検知防止）。
+        /// </summary>
+        [Theory]
+        [InlineData("https://github.com/user/repo.git")]
+        [InlineData("git@github.com:user/repo.git")]
+        [InlineData("ssh://git@gitlab.com/user/repo.git")]
+        [InlineData("https://example.com/codecommit-mirror/repo.git")]
+        public void Clone_NonCodeCommitUrl_KeepsCredentialHelper(string url)
+        {
+            var oldHelper = Komorebi.Native.OS.CredentialHelper;
+            try
+            {
+                Komorebi.Native.OS.CredentialHelper = "manager";
+                var clone = new TestableClone("ctx", System.IO.Path.GetTempPath(), url, "local", string.Empty, string.Empty);
+                var start = clone.BuildStartInfo();
+
+                Assert.Contains("-c credential.helper= -c credential.helper=manager", start.Arguments);
+            }
+            finally
+            {
+                Komorebi.Native.OS.CredentialHelper = oldHelper;
+            }
+        }
+
         private sealed class TestableCommand : Command
         {
+            public bool DisableCredentialHelperPublic
+            {
+                get => DisableCredentialHelper;
+                set => DisableCredentialHelper = value;
+            }
+
+            public System.Diagnostics.ProcessStartInfo BuildStartInfo() => CreateGitStartInfo(true);
+        }
+
+        private sealed class TestableClone : Clone
+        {
+            public TestableClone(string ctx, string path, string url, string localName, string sshKey, string extraArgs)
+                : base(ctx, path, url, localName, sshKey, extraArgs) { }
+
             public System.Diagnostics.ProcessStartInfo BuildStartInfo() => CreateGitStartInfo(true);
         }
     }
