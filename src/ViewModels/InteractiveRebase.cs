@@ -218,8 +218,11 @@ public class InteractiveRebase : ObservableObject
 
             // fixup!/squash! コミットを対応する親コミットの直後に移動する（upstream e6ba0534 + 0d5185b1 + 1ca4145e）
             // 同じ親 Subject を持つ複数 fixup/squash に対応するため List<Record> で保持する（Dictionary では無限ループが発生）
+            // upstream 9c75eb90: 並び替えを 3 パス化（First-pass で needReorder を蓄積 → Second-pass で逆順検索 → Last-pass で残りを pick として挿入）
+            // First-pass: 通常コミットを list に積み、fixup!/squash! は needReorder にキー付きで保存する。
             List<InteractiveRebaseItem> list = [];
             List<InteractiveRebaseReorderItem> needReorder = [];
+            var needReorderKeySet = new HashSet<string>();
             for (var i = 0; i < commits.Count; i++)
             {
                 var c = commits[i];
@@ -232,7 +235,9 @@ public class InteractiveRebase : ObservableObject
                     {
                         item.Action = Models.InteractiveRebaseAction.Fixup;
                         // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去
-                        needReorder.Add(new(subject.Substring(7).Trim(), item));
+                        var targetSubject = subject.Substring(7).Trim();
+                        needReorder.Add(new(targetSubject, item));
+                        needReorderKeySet.Add(targetSubject);
                         continue;
                     }
 
@@ -240,42 +245,60 @@ public class InteractiveRebase : ObservableObject
                     {
                         item.Action = Models.InteractiveRebaseAction.Squash;
                         // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去
-                        needReorder.Add(new(subject.Substring(8).Trim(), item));
+                        var targetSubject = subject.Substring(8).Trim();
+                        needReorder.Add(new(targetSubject, item));
+                        needReorderKeySet.Add(targetSubject);
                         continue;
                     }
                 }
 
-                // 対象となる親コミットが見つかった fixup!/squash! を直後に挿入する
-                List<InteractiveRebaseReorderItem> reordered = [];
-                foreach (var o in needReorder)
-                {
-                    // upstream 6e53d949: 件名の "startsWith" だと「fixup! foo」「fixup! foo bar」が両方マッチしてしまうので
-                    // ターゲット件名と Trim().Equals で完全一致を要求する
-                    if (subject.Trim().Equals(o.Key, StringComparison.Ordinal))
-                    {
-                        list.Add(o.Item);
-                        reordered.Add(o);
-                    }
-                }
-
-                foreach (var k in reordered)
-                    needReorder.Remove(k);
-
                 list.Add(item);
             }
 
-            // 親が見つからなかった fixup!/squash! は元の順序位置に戻し、安全のため Pick にリセットする
-            foreach (var v in needReorder)
+            // Second-pass: list を逆順ループし、件名が needReorderKeySet にマッチしたら直後に挿入する。
+            // 逆順にすることで「`fixup! foo` を `foo` の直後に挿入」が安定し、複数 fixup の重なりも順序を保つ。
+            // KeySet による O(1) ガードで、件名一致候補が無い場合は全 needReorder スキャンを回避できる。
+            for (var i = list.Count - 1; i >= 0; i--)
             {
-                for (var i = 0; i < list.Count; i++)
+                var subject = list[i].Commit.Subject.Trim();
+                if (!needReorderKeySet.Contains(subject))
+                    continue;
+
+                for (var j = needReorder.Count - 1; j >= 0; j--)
                 {
-                    if (v.Item.OriginalOrder > list[i].OriginalOrder)
+                    var test = needReorder[j];
+                    if (subject.Equals(test.Key, StringComparison.Ordinal))
                     {
-                        v.Item.Action = Models.InteractiveRebaseAction.Pick;
-                        list.Insert(i, v.Item);
-                        break;
+                        list.Insert(i, test.Item);
+                        needReorder.RemoveAt(j);
                     }
                 }
+
+                needReorderKeySet.Remove(subject);
+                if (needReorderKeySet.Count == 0)
+                    break;
+            }
+
+            // Last-pass: 親が見つからなかった fixup!/squash! は安全のため Pick にリセットし、
+            // 元の順序位置 (OriginalOrder で隣接する pick コミットの直後) に挿入し直す。
+            foreach (var v in needReorder)
+            {
+                v.Item.Action = Models.InteractiveRebaseAction.Pick;
+
+                var insertPos = 0;
+                for (var i = 0; i < list.Count; i++)
+                {
+                    var existing = list[i];
+                    if (existing.Action == Models.InteractiveRebaseAction.Pick)
+                    {
+                        if (v.Item.OriginalOrder < existing.OriginalOrder)
+                            insertPos = i + 1;
+                        else
+                            break;
+                    }
+                }
+
+                list.Insert(insertPos, v.Item);
             }
 
             var selected = list.Count > 0 ? list[0] : null;
