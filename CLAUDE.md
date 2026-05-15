@@ -201,6 +201,11 @@ The app uses a unified toolbar design (RepositoryToolbar was removed):
 
 ## Common Pitfalls
 
+### Repository.Close — async race ガードは `_isClosed` フラグで
+`Repository.Close()` は走行中の非同期タスク (Fetch/Pull/Refresh*) が VM 内部フィールドを参照中の可能性があるため、async から触られうるフィールド (`_uiStates`, `_watcher`, `_histories`, `_workingCopy`, `_stashesPage`, `_searchCommitContext`) には **null 代入しない**。代わりに Close 冒頭で `_isClosed = true` を立て、各 async タスク (`RefreshCommits`/`RefreshWorkingCopyChanges`/`RunAutoFetchAsync` 等) は冒頭または `await` 前後で `if (_isClosed) return;` ガードする。フィールドの解放は GC + 各 VM の `Dispose()` に任せる。
+
+同期 UI 経路でしか参照されないフィールド (`_settings`, `_filterDebounceTimer`, `_visibleTags`, `_visibleSubmodules`) は従来通り null 代入する (race 対象外)。Komorebi の Close 設計は upstream `c1d08e29` (#2289) の IDisposable 全剥がしと Komorebi 旧設計 (全 null 代入) の中間で、これは独自路線として確定済み。次回 upstream sync で sourcegit のリソース解放戦略変更があっても、`_isClosed` フラグは維持する。
+
 ### Process stdout/stderr must be read concurrently
 `ReadToEnd()` and `ReadToEndAsync()` in `Command.cs` read stdout and stderr in parallel to avoid deadlocks. When adding new process-spawning code, **never** read stdout fully before starting to read stderr — if the stderr buffer fills (4KB–64KB), the process blocks waiting for stderr to be consumed, while the caller blocks waiting for stdout to finish.
 

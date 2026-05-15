@@ -663,10 +663,15 @@ public class Repository : ObservableObject, Models.IRepository
         _searchCommitContext.Dispose();
 
         // upstream c1d08e29 (#2289) + /rere P0#1: Close 中に走っている非同期アクション (Fetch/Pull など) が
-        // _uiStates / _watcher / _histories / _workingCopy などへアクセスすると、null 代入直後の race で
-        // NullReferenceException でクラッシュする問題への対策として、null 代入を一切行わない。
-        // 代わりに _isClosed フラグで Close 済み判定を行い、async タスクは早期 return する。
-        // フィールドの解放は GC に任せる (Dispose 済みなのでリソースリークは無い)。
+        // 触りうるフィールド ─ 具体的には _uiStates / _watcher / _histories / _workingCopy / _stashesPage /
+        // _searchCommitContext ─ には null 代入を行わない。null 代入直後の race で NullReferenceException が
+        // 出る経路を遮断し、代わりに _isClosed フラグで Close 済み判定を行って async タスクは早期 return する。
+        // これらフィールドの解放は GC に任せる (Dispose 済みなのでリソースリークは無い)。
+        //
+        // 例外として、同期的にしか参照されないフィールド (_settings, _filterDebounceTimer, _visibleTags,
+        // _visibleSubmodules) は従来通り null 代入する (上記 line 650/656/679/681)。これらは async から
+        // 参照されないため race の対象外。Komorebi の Close 設計は upstream の IDisposable 全剥がしと
+        // 旧設計 (全 null 代入) の中間で、リソース所有権を明示する選択。
 
         _localChangesCount = 0;
         _stashesCount = 0;
