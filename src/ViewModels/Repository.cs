@@ -623,6 +623,12 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void Close()
     {
+        // 先に _isClosed フラグを立てて、走行中の async タスクが冒頭または途中の
+        // _isClosed チェックで早期 return できるようにする。null クリアより前に立てるのが重要。
+        // /rere レビュー P0#1: 「_uiStates = null + _watcher は null にしない」の非対称が
+        // race condition を生んでいた問題への対策。
+        _isClosed = true;
+
         // アップストリームに準拠: 既存ウィジェットを解放してGC対象にする。
         SelectedView = null;
         Logs.Clear();
@@ -648,7 +654,6 @@ public class Repository : ObservableObject, Models.IRepository
         Models.RepositorySettings.Evict(_gitCommonDir);
 
         _settings = null;
-        _uiStates = null;
         _historyFilterMode = Models.FilterMode.None;
 
         _watcher?.Dispose();
@@ -657,10 +662,11 @@ public class Repository : ObservableObject, Models.IRepository
         _stashesPage.Dispose();
         _searchCommitContext.Dispose();
 
-        // upstream c1d08e29 (#2289): Close 中に走っている非同期アクション (Fetch/Pull など) が
-        // _watcher / _histories / _workingCopy などへアクセスすると、null 代入直後の race で
-        // NullReferenceException でクラッシュする問題への対策として、null 代入を行わない。
-        // フィールドの解放は GC に任せる（Dispose 済みなのでリソースリークは無い）。
+        // upstream c1d08e29 (#2289) + /rere P0#1: Close 中に走っている非同期アクション (Fetch/Pull など) が
+        // _uiStates / _watcher / _histories / _workingCopy などへアクセスすると、null 代入直後の race で
+        // NullReferenceException でクラッシュする問題への対策として、null 代入を一切行わない。
+        // 代わりに _isClosed フラグで Close 済み判定を行い、async タスクは早期 return する。
+        // フィールドの解放は GC に任せる (Dispose 済みなのでリソースリークは無い)。
 
         _localChangesCount = 0;
         _stashesCount = 0;
@@ -841,8 +847,9 @@ public class Repository : ObservableObject, Models.IRepository
             List<Models.IssueTracker> issuetrackers = [.. globalTrackers, .. localTrackers];
             Dispatcher.UIThread.Post(() =>
             {
-                // Close 後に Post が配信されたら何もしない（_watcher が null になっているなら破棄済み）
-                if (_watcher is null)
+                // Close 後に Post が配信されたら何もしない (/rere P0#1: 旧 _watcher is null sentinel は
+                // null 代入削除後に永遠に false だったため _isClosed フラグへ移行)
+                if (_isClosed)
                     return;
                 IssueTrackers.Clear();
                 IssueTrackers.AddRange(issuetrackers);
@@ -856,7 +863,7 @@ public class Repository : ObservableObject, Models.IRepository
                              && !string.IsNullOrEmpty(allowedSignersFile);
             Dispatcher.UIThread.Post(() =>
             {
-                if (_watcher is null)
+                if (_isClosed)
                     return;
                 if (_hasAllowedSignersFile != hasAllowed)
                 {
@@ -1140,7 +1147,8 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>ブランチツリーノードの展開状態をUI状態に永続化する。フィルタ適用中は無視する。</summary>
     public void UpdateBranchNodeIsExpanded(BranchTreeNode node)
     {
-        if (_uiStates is null || !string.IsNullOrWhiteSpace(_filter))
+        // /rere P0#1: _uiStates は null クリアしない方針になったため、Close 済み検出は _isClosed フラグで行う
+        if (_isClosed || !string.IsNullOrWhiteSpace(_filter))
             return;
 
         if (node.IsExpanded)
@@ -1436,7 +1444,19 @@ public class Repository : ObservableObject, Models.IRepository
         {
             try
             {
-                await Dispatcher.UIThread.InvokeAsync(() => _histories.IsLoading = true);
+                // /rere P0#1: Close 後の async タスクは _uiStates / _histories へアクセスする前に早期 return する
+                if (_isClosed || token.IsCancellationRequested)
+                    return;
+
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (_isClosed)
+                        return;
+                    _histories.IsLoading = true;
+                });
+
+                if (_isClosed || token.IsCancellationRequested)
+                    return;
 
                 var builder = new StringBuilder();
                 builder
@@ -1446,6 +1466,10 @@ public class Repository : ObservableObject, Models.IRepository
                 Models.Logger.Log($"RefreshCommits開始: {FullPath}", Models.LogLevel.Debug);
                 var commits = await new Commands.QueryCommits(FullPath, builder.ToString()).GetResultAsync().ConfigureAwait(false);
                 Models.Logger.Log($"RefreshCommits: {commits.Count}件取得、グラフ解析開始", Models.LogLevel.Debug);
+
+                if (_isClosed || token.IsCancellationRequested)
+                    return;
+
                 var graph = Models.CommitGraph.Parse(commits, _uiStates.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly));
 
                 Dispatcher.UIThread.Invoke(() =>
@@ -1576,11 +1600,16 @@ public class Repository : ObservableObject, Models.IRepository
         {
             try
             {
+                // /rere P0#1: Close 後の async タスクは _uiStates へアクセスする前に早期 return
+                if (_isClosed || token.IsCancellationRequested)
+                    return;
+
                 var changes = await new Commands.QueryLocalChanges(FullPath, _uiStates.IncludeUntrackedInLocalChanges, noOptionalLocks)
                     .GetResultAsync()
                     .ConfigureAwait(false);
 
-                if (_workingCopy is null || token.IsCancellationRequested)
+                // _workingCopy も null クリアしない方針なので _isClosed で判定
+                if (_isClosed || token.IsCancellationRequested)
                     return;
 
                 changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
@@ -2199,7 +2228,8 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public async Task RunAutoFetchAsync()
     {
-        if (_uiStates is null)
+        // /rere P0#1: _uiStates は null クリアしない方針になったため、Close 済み検出は _isClosed フラグで行う
+        if (_isClosed)
             return;
 
         if (!CanCreatePopup())
@@ -2260,6 +2290,7 @@ public class Repository : ObservableObject, Models.IRepository
     private Histories _histories = null;                                               // 履歴ビューVM
     private WorkingCopy _workingCopy = null;                                           // ワーキングコピーVM
     private StashesPage _stashesPage = null;                                           // スタッシュページVM
+    private bool _isClosed = false;                                                    // Close() 済み判定フラグ (race-safe な sentinel)
     private object _selectedView = null;                                               // 現在表示中のビューVM（ContentControl用）
     private int _selectedViewIndex = 0;                                                // 選択中のビューインデックス
 
