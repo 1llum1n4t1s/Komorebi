@@ -19,8 +19,6 @@ public class CommandLog : ObservableObject, Models.ICommandLog
     {
         get;
         private set;
-        private List<Models.ICommandLogReceiver> _receivers = new List<Models.ICommandLogReceiver>();
->>>>>>> d8916c53 (fix: `NullReferenceException` occurs when `Complete` is called before `AppendLine` (#2305))
     }
 
     /// <summary>

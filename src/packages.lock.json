@@ -124,6 +124,12 @@
         "resolved": "0.11.4",
         "contentHash": "B3KDFyxY1NTqbeqGEaOM9uE+G71GG2TxWqVSs57e1pWYPf2vNLMIxk+x55MXdkon0iGeaekolFTlLS2CkgktYg=="
       },
+      "StbImageSharp": {
+        "type": "Direct",
+        "requested": "[2.30.15, )",
+        "resolved": "2.30.15",
+        "contentHash": "7QqbupVhz2kcFUPTgMw4iHR9rYDHGundzzee19Mwmd1typ2Lnv8EVJcLJxlkeBM2+4ex0NwsMtdbGSJctp1XCQ=="
+      },
       "SuperLightLogger": {
         "type": "Direct",
         "requested": "[1.0.6, )",

@@ -238,6 +238,7 @@ public class ImageSource
             Marshal.Copy(pixels, 0, frameBuffer.Address, pixels.Length);
             return new ImageSource(bitmap, size);
         }
+    }
 
     /// <summary>
     /// StbImageSharp (PSD 等) で画像を読み込む。

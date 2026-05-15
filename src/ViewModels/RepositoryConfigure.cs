@@ -404,8 +404,6 @@ public class RepositoryConfigure : ObservableObject
 
         try
         {
-            _repo.Settings.Save();
-
             await SetIfChangedAsync("user.name", UserName, "");
             await SetIfChangedAsync("user.email", UserEmail, "");
             await SetIfChangedAsync("commit.gpgsign", GPGCommitSigningEnabled ? "true" : "false", "false");
@@ -423,6 +421,10 @@ public class RepositoryConfigure : ObservableObject
                 await SaveRemoteSettingsAsync();
 
             await ApplyIssueTrackerChangesAsync();
+
+            // upstream 50367b7e で Save() (sync) が冒頭に追加されたが、Komorebi は async ファイル I/O の SaveAsync() を末尾で呼ぶ構造を維持する
+            // （リモート設定とイシュートラッカー設定が全て確定してから komorebi.settings へ atomically rename で書き込む）
+            await _repo.Settings.SaveAsync();
         }
         catch (Exception ex)
         {
