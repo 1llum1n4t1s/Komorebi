@@ -535,6 +535,12 @@ public class Repository : ObservableObject, Models.IRepository
         private set => SetProperty(ref _isAutoFetching, value);
     }
 
+    /// <summary>
+    /// Close() 済みかを返す。Models.IRepository 経由で Watcher など外部から参照する用途。
+    /// /rere 10 人分隊 P0#11 (B1-C1): _isClosed が Models 層から見えなかった問題への対策。
+    /// </summary>
+    public bool IsClosed => _isClosed;
+
     /// <summary>課題トラッカー（Issue Tracker）のルール一覧。git configから読み込まれる。</summary>
     public AvaloniaList<Models.IssueTracker> IssueTrackers
     {
@@ -629,22 +635,36 @@ public class Repository : ObservableObject, Models.IRepository
         // race condition を生んでいた問題への対策。
         _isClosed = true;
 
+        // /rere 10 人分隊 P0#12 (F-CRIT-2): Close 時刻をログに残す。
+        // 「タブ閉じた直後にクラッシュ」報告でクラッシュ時刻と Close 時刻の比較が
+        // 切り分けの起点になる。FullPath は PII (ユーザー名) を含むが、ログは
+        // ローカルファイルでユーザー自身しか見ないため許容。
+        Models.Logger.Log($"Repository.Close: {FullPath}", Models.LogLevel.Info);
+
         // アップストリームに準拠: 既存ウィジェットを解放してGC対象にする。
         SelectedView = null;
         Logs.Clear();
 
         _uiStates.Unload(_workingCopy.CommitMessage);
 
+        // /rere 10 人分隊 P0#2 (B2-C1): CTS を Dispose した後 null 化する。
+        // 旧コードは Dispose 後も非 null だったため、RenewCancellation 内の
+        // `cts.IsCancellationRequested` アクセスで ObjectDisposedException が出る経路があった。
         _cancellationRefreshBranches?.Cancel();
         _cancellationRefreshBranches?.Dispose();
+        _cancellationRefreshBranches = null;
         _cancellationRefreshTags?.Cancel();
         _cancellationRefreshTags?.Dispose();
+        _cancellationRefreshTags = null;
         _cancellationRefreshWorkingCopyChanges?.Cancel();
         _cancellationRefreshWorkingCopyChanges?.Dispose();
+        _cancellationRefreshWorkingCopyChanges = null;
         _cancellationRefreshCommits?.Cancel();
         _cancellationRefreshCommits?.Dispose();
+        _cancellationRefreshCommits = null;
         _cancellationRefreshStashes?.Cancel();
         _cancellationRefreshStashes?.Dispose();
+        _cancellationRefreshStashes = null;
 
         _filterDebounceTimer?.Dispose();
         _filterDebounceTimer = null;
@@ -1347,6 +1367,9 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>
     /// CancellationTokenSourceを安全にキャンセル・破棄して新しいインスタンスに差し替え、そのトークンを返す。
     /// Refresh*メソッド群で繰り返される前処理パターンを共通化する。
+    /// /rere 10 人分隊 P0#2: Close 後に呼ばれた場合は、Disposed CTS への IsCancellationRequested アクセスを
+    /// 避けるため、呼び出し側が _isClosed をチェックしてから呼ぶ責任を持つ (この static メソッドは
+    /// Repository 状態を知らないため、呼び出し側でガードする方が責任分担として明確)。
     /// </summary>
     private static CancellationToken RenewCancellation(ref CancellationTokenSource cts)
     {
@@ -1363,6 +1386,9 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshBranches()
     {
+        // /rere 10 人分隊 P0#2: Close 後の Watcher.Tick から呼ばれた場合、Disposed CTS への
+        // アクセスを避けるため早期 return。
+        if (_isClosed) return;
         var token = RenewCancellation(ref _cancellationRefreshBranches);
 
         Task.Run(async () =>
@@ -1421,6 +1447,8 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshTags()
     {
+        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        if (_isClosed) return;
         var token = RenewCancellation(ref _cancellationRefreshTags);
 
         Task.Run(async () =>
@@ -1443,6 +1471,8 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshCommits()
     {
+        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        if (_isClosed) return;
         var token = RenewCancellation(ref _cancellationRefreshCommits);
 
         Task.Run(async () =>
@@ -1596,6 +1626,8 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
+        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        if (_isClosed) return;
         var token = RenewCancellation(ref _cancellationRefreshWorkingCopyChanges);
         // 2回目以降の QueryLocalChanges は noOptionalLocks=true で optional locks を取得しない。
         // これは意図的で、FSW 連打時の index.lock 競合を避けるための最適化（初回のみ index 更新を許可）。
@@ -1646,6 +1678,8 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
+        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        if (_isClosed) return;
         var token = RenewCancellation(ref _cancellationRefreshStashes);
 
         Task.Run(async () =>
@@ -2295,7 +2329,11 @@ public class Repository : ObservableObject, Models.IRepository
     private Histories _histories = null;                                               // 履歴ビューVM
     private WorkingCopy _workingCopy = null;                                           // ワーキングコピーVM
     private StashesPage _stashesPage = null;                                           // スタッシュページVM
-    private bool _isClosed = false;                                                    // Close() 済み判定フラグ (race-safe な sentinel)
+    // /rere 10 人分隊 P0#15 (B2-I1): volatile で別スレッドからの可視性を保証。
+    // UI スレッドで Close() が `_isClosed = true` をセットし、Task.Run 上で動く Refresh* タスクが
+    // バックグラウンドスレッドから `if (_isClosed)` を読む。x86 では強メモリモデルで実害は出にくいが、
+    // ARM64 (win-arm64/linux-arm64/macOS-arm64) では reorder で stale read する経路があり得るため明示。
+    private volatile bool _isClosed = false;                                           // Close() 済み判定フラグ (race-safe な sentinel)
     private object _selectedView = null;                                               // 現在表示中のビューVM（ContentControl用）
     private int _selectedViewIndex = 0;                                                // 選択中のビューインデックス
 

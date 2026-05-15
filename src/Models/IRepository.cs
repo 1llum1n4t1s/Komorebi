@@ -5,6 +5,13 @@
 /// </summary>
 public interface IRepository
 {
+    /// <summary>
+    /// Repository が Close 済みかを返す。Watcher など Models 層からの Refresh 呼び出し時に、
+    /// Close 済みオブジェクトへのアクセスを早期 return するためのガード。
+    /// /rere 10 人分隊 P0#11 (B1-C1) で導入。
+    /// </summary>
+    bool IsClosed { get; }
+
     /// <summary>サブモジュールが存在する可能性があるかを返す</summary>
     bool MayHaveSubmodules();
 

@@ -162,7 +162,8 @@ public class StashesPage : ObservableObject, IDisposable
         _selectedChanges?.Clear();
         _untracked.Clear();
 
-        _repo = null;
+        // /rere 10 人分隊 P0#13 (B1-C2): Repository は `_stashesPage = null` を行わない方針なので、
+        // ここで `_repo = null` を行うと非対称になる。両方とも参照を維持し GC に任せる。
         _selectedStash = null;
         _diffContext = null;
     }

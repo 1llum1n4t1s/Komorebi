@@ -213,10 +213,13 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public void Dispose()
     {
+        // /rere 10 人分隊 P0#13 (B1-C2): Repository.Close は `_histories = null` を行わない方針なので、
+        // ここで `_repo = null` を行うと「Repository は _histories への参照を保持しているのに
+        // _histories.Repo が null」という非対称が race の温床になる。両方とも参照を維持し GC に任せる。
+        // データクリア (Commits = []) は維持し、循環参照は GC root が解けた時点で消える。
         Commits = [];
         _commitBySha = [];
         _childrenByParentSha = [];
-        _repo = null;
         _graph = null;
         _selectedCommit = null;
         _detailContext?.Dispose();
