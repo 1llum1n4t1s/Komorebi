@@ -1388,7 +1388,8 @@ public class Repository : ObservableObject, Models.IRepository
     {
         // /rere 10 人分隊 P0#2: Close 後の Watcher.Tick から呼ばれた場合、Disposed CTS への
         // アクセスを避けるため早期 return。
-        if (_isClosed) return;
+        if (_isClosed)
+            return;
         var token = RenewCancellation(ref _cancellationRefreshBranches);
 
         Task.Run(async () =>
@@ -1448,7 +1449,8 @@ public class Repository : ObservableObject, Models.IRepository
     public void RefreshTags()
     {
         // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed) return;
+        if (_isClosed)
+            return;
         var token = RenewCancellation(ref _cancellationRefreshTags);
 
         Task.Run(async () =>
@@ -1472,7 +1474,8 @@ public class Repository : ObservableObject, Models.IRepository
     public void RefreshCommits()
     {
         // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed) return;
+        if (_isClosed)
+            return;
         var token = RenewCancellation(ref _cancellationRefreshCommits);
 
         Task.Run(async () =>
@@ -1627,7 +1630,8 @@ public class Repository : ObservableObject, Models.IRepository
             return;
 
         // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed) return;
+        if (_isClosed)
+            return;
         var token = RenewCancellation(ref _cancellationRefreshWorkingCopyChanges);
         // 2回目以降の QueryLocalChanges は noOptionalLocks=true で optional locks を取得しない。
         // これは意図的で、FSW 連打時の index.lock 競合を避けるための最適化（初回のみ index 更新を許可）。
@@ -1679,7 +1683,8 @@ public class Repository : ObservableObject, Models.IRepository
             return;
 
         // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed) return;
+        if (_isClosed)
+            return;
         var token = RenewCancellation(ref _cancellationRefreshStashes);
 
         Task.Run(async () =>
