@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Komorebi.ViewModels"
+             xmlns:v="using:Komorebi.Views"
              xmlns:c="using:Komorebi.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Komorebi.Views.LauncherPagesCommandPalette"
@@ -46,7 +47,7 @@
                Foreground="{DynamicResource Brush.FG2}"
                IsVisible="{Binding VisiblePages, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"/>
 
-    <ListBox Grid.Row="2"
+    <v:ListBoxEx Grid.Row="2"
              x:Name="PageListBox"
              MaxHeight="250"
              Margin="4,0"
@@ -109,7 +110,7 @@
           </Grid>
         </DataTemplate>
       </ListBox.ItemTemplate>
-    </ListBox>
+    </v:ListBoxEx>
 
     <TextBlock Grid.Row="3"
                Margin="6,8,0,4"
@@ -118,7 +119,7 @@
                Foreground="{DynamicResource Brush.FG2}"
                IsVisible="{Binding VisibleRepos, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"/>
 
-    <ListBox Grid.Row="4"
+    <v:ListBoxEx Grid.Row="4"
              x:Name="RepoListBox"
              MaxHeight="300"
              Margin="4,0"
@@ -171,6 +172,6 @@
           </Grid>
         </DataTemplate>
       </ListBox.ItemTemplate>
-    </ListBox>
+    </v:ListBoxEx>
   </Grid>
 </UserControl>

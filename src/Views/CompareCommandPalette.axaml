@@ -70,7 +70,7 @@
                FontWeight="Bold"
                Foreground="{DynamicResource Brush.FG2}"/>
 
-    <ListBox Grid.Row="2"
+    <v:ListBoxEx Grid.Row="2"
              x:Name="RefsListBox"
              MaxHeight="360"
              Margin="4,8"
@@ -134,6 +134,6 @@
           </Grid>
         </DataTemplate>
       </ListBox.DataTemplates>
-    </ListBox>
+    </v:ListBoxEx>
   </Grid>
 </UserControl>

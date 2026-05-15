@@ -30,8 +30,10 @@ public class RepositoryTreeNodeToggleButton : ToggleButton
 
 /// <summary>
 /// RepositoryListBoxクラス。
+/// upstream fbe82dbf: 親 ListBoxEx が Enter/Space を自前消化しないように継承元を差し替え、
+/// 下記 OnKeyDown 内の Enter ハンドラーが上位 (Repository.Open) に確実に届くようにする。
 /// </summary>
-public class RepositoryListBox : ListBox
+public class RepositoryListBox : ListBoxEx
 {
     protected override Type StyleKeyOverride => typeof(ListBox);
 

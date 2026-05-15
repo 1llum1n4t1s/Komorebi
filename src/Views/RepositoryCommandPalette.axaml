@@ -47,7 +47,7 @@
                Foreground="{DynamicResource Brush.FG2}"
                IsVisible="{Binding VisibleCmds, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"/>
 
-    <ListBox Grid.Row="2"
+    <v:ListBoxEx Grid.Row="2"
              x:Name="CmdListBox"
              MaxHeight="420"
              Margin="4,0"
@@ -104,6 +104,6 @@
           </Grid>
         </DataTemplate>
       </ListBox.ItemTemplate>
-    </ListBox>
+    </v:ListBoxEx>
   </Grid>
 </UserControl>

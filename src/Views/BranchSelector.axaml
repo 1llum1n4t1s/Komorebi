@@ -100,7 +100,7 @@
                     </TextBox.InnerRightContent>
                   </TextBox>
 
-                  <ListBox Grid.Row="1"
+                  <v:ListBoxEx Grid.Row="1"
                            Focusable="True"
                            Margin="0,4"
                            MaxHeight="360"
@@ -130,7 +130,7 @@
                         </StackPanel>
                       </DataTemplate>
                     </ListBox.ItemTemplate>
-                  </ListBox>
+                  </v:ListBoxEx>
                 </Grid>
               </Border>
             </Popup>

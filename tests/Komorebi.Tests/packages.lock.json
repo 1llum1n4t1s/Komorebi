@@ -513,6 +513,11 @@
         "resolved": "3.119.4-preview.1.1",
         "contentHash": "BYwNLG02IAYMsBPgU9lM37xJgCM3B/2X5z1FQEBR34dmn+Hxvcw8X83PInY2rzix7mlbcv7OF8UHjf7yMbsDaA=="
       },
+      "StbImageSharp": {
+        "type": "Transitive",
+        "resolved": "2.30.15",
+        "contentHash": "7QqbupVhz2kcFUPTgMw4iHR9rYDHGundzzee19Mwmd1typ2Lnv8EVJcLJxlkeBM2+4ex0NwsMtdbGSJctp1XCQ=="
+      },
       "SuperLightLogger": {
         "type": "Transitive",
         "resolved": "1.0.6",
@@ -667,6 +672,7 @@
           "LiveChartsCore.SkiaSharpView.Avalonia": "[2.0.2, )",
           "OpenAI": "[2.10.0, )",
           "Pfim": "[0.11.4, )",
+          "StbImageSharp": "[2.30.15, )",
           "SuperLightLogger": "[1.0.6, )",
           "Tmds.DBus.Protocol": "[0.93.0, )",
           "Velopack": "[0.0.1298, )"

@@ -36,7 +36,7 @@
                         IsVisible="{OnPlatform True, macOS=False}"/>
     </Grid>
     
-    <ListBox Grid.Row="1"
+    <v:ListBoxEx Grid.Row="1"
              x:Name="RevisionList"
              Focusable="True"
              Margin="8" Padding="4"
@@ -95,6 +95,6 @@
             </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
-      </ListBox>
+      </v:ListBoxEx>
   </Grid>
 </v:ChromelessWindow>

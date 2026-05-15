@@ -57,7 +57,7 @@
                FontWeight="Bold"
                Foreground="{DynamicResource Brush.FG2}"/>
 
-    <ListBox Grid.Row="2"
+    <v:ListBoxEx Grid.Row="2"
              x:Name="ActionListBox"
              MaxHeight="360"
              Margin="4,8"
@@ -110,7 +110,7 @@
           </Grid>
         </DataTemplate>
       </ListBox.ItemTemplate>
-    </ListBox>
+    </v:ListBoxEx>
 
     <Path Grid.Row="2"
           Width="64" Height="64"

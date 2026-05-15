@@ -39,13 +39,14 @@ public class ChangeTreeNodeToggleButton : ToggleButton
 /// <summary>
 /// ChangeCollectionContainerクラス。
 /// </summary>
-public class ChangeCollectionContainer : ListBox
+public class ChangeCollectionContainer : ListBoxEx
 {
     /// <summary>スタイルキーをListBoxに設定。</summary>
     protected override Type StyleKeyOverride => typeof(ListBox);
 
     /// <summary>
     /// キーが押された際のイベント処理。
+    /// upstream fbe82dbf: 親 ListBoxEx が Enter/Space を抑止するので、自前で Enter/Space を弾く判定は不要になった。
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
@@ -59,7 +60,7 @@ public class ChangeCollectionContainer : ListBox
             }
         }
 
-        if (!e.Handled && e.Key != Key.Space && e.Key != Key.Enter)
+        if (!e.Handled)
             base.OnKeyDown(e);
     }
 }
