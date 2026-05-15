@@ -45,11 +45,44 @@ public class Service
     {
         get
         {
+            // /rere 10 人分隊 P2#A1-#4: ReadApiKeyFromEnv 有効時に ApiKey (= 環境変数名) が空だと
+            // Environment.GetEnvironmentVariable("") は実装依存で ArgumentException を投げる。
+            // 事前にバリデーションして InvalidOperationException で統一する。
+            if (ReadApiKeyFromEnv && string.IsNullOrWhiteSpace(ApiKey))
+                throw new InvalidOperationException("API key environment variable name is not configured.");
+
             var key = ReadApiKeyFromEnv ? Environment.GetEnvironmentVariable(ApiKey) : ApiKey;
             if (string.IsNullOrEmpty(key))
                 throw new InvalidOperationException("API key is not configured.");
             return key;
         }
+    }
+
+    /// <summary>
+    /// 設定された <see cref="Server"/> URL の安全性検証。HTTPS / localhost / loopback 以外は弾く。
+    /// /rere 10 人分隊 P0#19 (A3-1A): ユーザーが誤って `http://` の Server を設定した場合に
+    /// API key を平文で LAN/WAN に流す事故を防ぐ。各 Strategy で HTTP リクエスト送信前に呼ぶ。
+    /// </summary>
+    public void ValidateServerScheme()
+    {
+        if (string.IsNullOrWhiteSpace(Server))
+            return; // 空文字列はデフォルト URL (https://) を使うので OK
+
+        if (!Uri.TryCreate(Server, UriKind.Absolute, out var uri))
+            throw new InvalidOperationException($"AI Server URL is invalid: {Server}");
+
+        if (uri.Scheme == Uri.UriSchemeHttps)
+            return;
+
+        // localhost / 127.0.0.1 / ::1 は debug 用途として http://も許可
+        var host = uri.Host;
+        var isLoopback = uri.IsLoopback ||
+                        string.Equals(host, "localhost", StringComparison.OrdinalIgnoreCase);
+        if (uri.Scheme == Uri.UriSchemeHttp && isLoopback)
+            return;
+
+        throw new InvalidOperationException(
+            $"AI Server URL must use HTTPS (or http://localhost for debug). Got: {uri.Scheme}://{host}");
     }
 
     private string _apiKey = string.Empty;

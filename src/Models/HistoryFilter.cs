@@ -1,3 +1,5 @@
+using System.Linq;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.Models;
@@ -38,12 +40,31 @@ public enum FilterMode
 public class HistoryFilter : ObservableObject
 {
     /// <summary>
-    /// フィルター対象のパターン文字列（ブランチ名、タグ名等）
+    /// フィルター対象のパターン文字列（ブランチ名、タグ名等）。
+    /// /rere 10 人分隊 P0#3 (A2-C1): JSON deserialize 経由で悪意ある Pattern が入ると
+    /// BuildHistoryParams で git CLI 引数文字列に補間されて引数注入される脆弱性があるため、
+    /// setter で `"`, `\r`, `\n`, NUL 文字を弾く。これにより `.git/komorebi.uistates` 経由の
+    /// `--output=...` などの引数追加攻撃を遮断。
     /// </summary>
     public string Pattern
     {
         get => _pattern;
-        set => SetProperty(ref _pattern, value);
+        set => SetProperty(ref _pattern, SanitizePattern(value));
+    }
+
+    /// <summary>
+    /// Pattern 値のサニタイズ: 引数境界破壊文字 (`"`, `\r`, `\n`, NUL) を除去。
+    /// /rere 10 人分隊 P0#3 由来。
+    /// </summary>
+    private static string SanitizePattern(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return value;
+        // 引数境界破壊文字を除去する。Pattern は git ref 文法 (英数+/-.) しか想定していないので
+        // これらを除いても正常利用には影響しない。
+        if (value.IndexOfAny(['"', '\r', '\n', '\0']) < 0)
+            return value;
+        return new string([.. value.Where(c => c != '"' && c != '\r' && c != '\n' && c != '\0')]);
     }
 
     /// <summary>

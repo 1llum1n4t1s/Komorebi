@@ -27,6 +27,9 @@ internal sealed class OpenAISdkStrategy : IGenerationStrategy
 
     public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
     {
+        // /rere 10 人分隊 P0#19 (A3-1A): HTTPS 強制で API key の平文流出を防ぐ (OpenAI/Azure/Gemini 共通)
+        _service.ValidateServerScheme();
+
         var client = CreateClient();
         var chatClient = client.GetChatClient(_service.Model);
         var options = new ChatCompletionOptions() { Tools = { ChatTools.GetDetailChangesInFile } };

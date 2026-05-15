@@ -34,6 +34,9 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
 
     public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
     {
+        // /rere 10 人分隊 P0#19 (A3-1A): HTTPS 強制で API key の平文流出を防ぐ
+        _service.ValidateServerScheme();
+
         var baseUrl = string.IsNullOrEmpty(_service.Server) ? "https://api.anthropic.com" : _service.Server.TrimEnd('/');
 
         var tools = new JsonArray

@@ -57,7 +57,13 @@ public partial class Askpass : ChromelessWindow
         _isHostKeyPrompt = hintKey is "Text.Askpass.Hint.HostKeyNew" or "Text.Askpass.Hint.HostKeyChanged";
         // ホスト鍵「変更」警告は MITM の可能性があるため、いかなる経路でも yes を送ってはならない
         _isHostKeyChangedWarning = hintKey is "Text.Askpass.Hint.HostKeyChanged";
-        if (_isHostKeyPrompt)
+
+        // /rere 10 人分隊 P0#6 (A2-C2): HostKeyNew (= 新規ホスト鍵プロンプト) で OK ボタンに Enter キー一発で
+        // "yes" を自動承認する経路を遮断するため、HostKeyNew でも TxtPassphrase は表示したまま、明示的に
+        // "yes" を入力させる。これにより OpenSSH CLI の `(yes/no/[fingerprint])` 挙動を踏襲し、MITM 攻撃時の
+        // 承認ハードルを CLI と同等まで戻す。EnterPassword 内で TxtPassphrase.Text を "yes" と厳密一致比較する。
+        // HostKeyChanged 警告だけは依然 TxtPassphrase 非表示 (BtnOk も非表示なので入力不可)。
+        if (_isHostKeyChangedWarning)
             TxtPassphrase.IsVisible = false;
 
         // ホスト鍵変更警告の場合、接続不可なのでOKボタンも隠す
@@ -95,7 +101,13 @@ public partial class Askpass : ChromelessWindow
 
         if (_isHostKeyPrompt)
         {
-            Console.Out.WriteLine("yes");
+            // /rere 10 人分隊 P0#6 (A2-C2): HostKeyNew プロンプトで「Enter 一発で yes」を防ぐ。
+            // TxtPassphrase.Text が "yes" / "YES" / "y" と厳密一致した場合のみ承認し、それ以外は "no" 送信。
+            // OpenSSH CLI の `(yes/no/[fingerprint])` 動作を踏襲し、MITM 攻撃を受けたホストへの誤承認を防ぐ。
+            var userInput = (TxtPassphrase.Text ?? string.Empty).Trim();
+            var isYes = userInput.Equals("yes", StringComparison.OrdinalIgnoreCase) ||
+                        userInput.Equals("y", StringComparison.OrdinalIgnoreCase);
+            Console.Out.WriteLine(isYes ? "yes" : "no");
             // App.Quit()でプロセスが終了する前にバッファをフラッシュする。
             // SSHは子プロセス（Askpass）のstdoutから応答を読み取るため、
             // フラッシュしないとシャットダウン時にバッファが失われ、
