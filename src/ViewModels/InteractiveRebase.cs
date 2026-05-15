@@ -258,6 +258,13 @@ public class InteractiveRebase : ObservableObject
             // Second-pass: list を逆順ループし、件名が needReorderKeySet にマッチしたら直後に挿入する。
             // 逆順にすることで「`fixup! foo` を `foo` の直後に挿入」が安定し、複数 fixup の重なりも順序を保つ。
             // KeySet による O(1) ガードで、件名一致候補が無い場合は全 needReorder スキャンを回避できる。
+            //
+            // /rere P0#5: 早期終了 (`if (needReorderKeySet.Count == 0) break;`) は削除した。
+            // 理由: 同名コミット (例: `foo`, `fixup! foo`, `foo`, `fixup! foo`) が存在する場合、
+            // 最初の `foo` で needReorderKeySet.Remove(subject) するとキーが消え、
+            // 2 番目の `foo` への fixup 配置がスキャンから外れる経路があった。
+            // Komorebi 独自の「List<InteractiveRebaseReorderItem> で同 key 重複登録を許容」する設計と
+            // 早期終了が相容れないため、O(n) のフルスキャンに統一する (通常 n は数十〜数百で実害なし)。
             for (var i = list.Count - 1; i >= 0; i--)
             {
                 var subject = list[i].Commit.Subject.Trim();
@@ -273,10 +280,6 @@ public class InteractiveRebase : ObservableObject
                         needReorder.RemoveAt(j);
                     }
                 }
-
-                needReorderKeySet.Remove(subject);
-                if (needReorderKeySet.Count == 0)
-                    break;
             }
 
             // Last-pass: 親が見つからなかった fixup!/squash! は安全のため Pick にリセットし、
