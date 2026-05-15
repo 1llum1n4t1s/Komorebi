@@ -243,6 +243,7 @@ public class InteractiveRebase : ObservableObject
                         needReorder.Add(new(subject.Substring(8).Trim(), item));
                         continue;
                     }
+                }
 
                 // 対象となる親コミットが見つかった fixup!/squash! を直後に挿入する
                 List<InteractiveRebaseReorderItem> reordered = [];
