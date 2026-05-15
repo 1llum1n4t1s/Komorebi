@@ -244,9 +244,19 @@ public class ImageSource
     /// StbImageSharp (PSD 等) で画像を読み込む。
     /// upstream 203c51f3 由来。Rgba8888 / Unpremul に正規化したうえで Avalonia Bitmap を構築する。
     /// </summary>
+    /// <remarks>
+    /// 巨大画像 (Width &gt;= 2^29) に対する stride 計算の int オーバーフローを防止するため、
+    /// (long) 演算で評価し int.MaxValue を超えるサイズは ImageSource.Invalid として扱う。
+    /// 悪意ある PSD ヘッダ (Width = int.MaxValue 等) によるメモリ破損 / AccessViolationException を防ぐ。
+    /// </remarks>
     private static ImageSource DecodeWithStbImage(Stream stream, long size)
     {
         var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+        // 防御的サイズ検証: 0 以下 / int オーバーフローを起こすサイズは弾く。
+        // Width * 4 (RGBA) が int.MaxValue を超えると stride が負値になり Avalonia Bitmap で未定義動作になる。
+        if (image.Width <= 0 || image.Height <= 0 || (long)image.Width * 4 > int.MaxValue)
+            return new ImageSource(null, 0);
 
         var data = image.Data;
         var stride = image.Width * (int)image.Comp;

@@ -293,6 +293,11 @@ public class RepositoryUIStates
             }
         }
 
+        // JsonSerializer.Deserialize は JSON が "null" や空の場合に例外を投げず null を返す。
+        // その場合は新規インスタンスにフォールバックしないと、直後の states._file 代入で NRE が起きる。
+        // RepositorySettings.Get() に同等のガードがあるのに対し、こちらに対称ガードが無かったため追加。
+        states ??= new RepositoryUIStates();
+
         states._file = fullpath;
         return states;
     }

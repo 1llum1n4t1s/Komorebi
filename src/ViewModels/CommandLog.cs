@@ -104,13 +104,21 @@ public class CommandLog : ObservableObject, Models.ICommandLog
             // NullReferenceException が出る race を回避する。null 時は _content に直接アペンド。
             var newline = line ?? string.Empty;
             if (_builder != null)
+            {
                 _builder.AppendLine(newline);
-            else
-                _content = $"{_content}{newline}\n";
 
-            // 全レシーバーに新しいログ行を通知する
-            foreach (var receiver in _receivers)
-                receiver.OnReceiveCommandLog(newline);
+                // 全レシーバーに新しいログ行を通知する（_builder が生きている = まだ受信中の経路のみ）。
+                // Complete() 後の _receivers.Clear() 済み経路では receivers が空なので、ループは self-guard で no-op。
+                foreach (var receiver in _receivers)
+                    receiver.OnReceiveCommandLog(newline);
+            }
+            else
+            {
+                // Complete 後の遅延追記。Content プロパティは IsComplete=true 時に _content を返すので、
+                // _content への追記後に Content の PropertyChanged を発火させないと UI バインディングが更新されない。
+                _content = $"{_content}{newline}\n";
+                OnPropertyChanged(nameof(Content));
+            }
         }
     }
 
