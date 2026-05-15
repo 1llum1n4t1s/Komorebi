@@ -77,11 +77,30 @@ public class AIAssistant : ObservableObject
 
     /// <summary>
     /// 生成処理をキャンセルする。
+    /// /rere 10 人分隊 P0#31 (B2-C3): Cancel と Dispose の間に他経路アクセスがある場合に
+    /// ObjectDisposedException が出る経路を catch でブロック。Dispose は cancel 完了を待たず即実行する
+    /// 仕様だが、子の token.Register コールバックが走行中に Dispose されると例外パスがあるため。
     /// </summary>
     public void Cancel()
     {
-        _cancel?.Cancel();
-        _cancel?.Dispose();
+        try
+        {
+            _cancel?.Cancel();
+        }
+        catch (ObjectDisposedException)
+        {
+            // 既に Dispose 済み (race)。無視して Dispose を試みる
+        }
+
+        try
+        {
+            _cancel?.Dispose();
+        }
+        catch (ObjectDisposedException)
+        {
+            // 二重 Dispose は許容
+        }
+
         _cancel = null;
     }
 
@@ -94,7 +113,12 @@ public class AIAssistant : ObservableObject
         Text = string.Empty;
         IsGenerating = true;
 
-        _cancel = new CancellationTokenSource();
+        // /rere 10 人分隊 P0#7 (B2-C2): クロージャから `_cancel` フィールドではなく **ローカル変数経由**で
+        // CTS の Token を参照する。フィールドだと Regen() 連打で `_cancel` が差し替わった瞬間に旧 Task が
+        // 新しい CTS を読む経路があり、さらに旧 CTS が Dispose 済みなら ObjectDisposedException。
+        // ローカル変数 (cts) なら Task.Run のクロージャは作成時点で固定される。
+        var cts = new CancellationTokenSource();
+        _cancel = cts;
         Task.Run(async () =>
         {
             try
@@ -123,11 +147,15 @@ public class AIAssistant : ObservableObject
                     _repo.FullPath,
                     changeListBuilder.ToString(),
                     message => Dispatcher.UIThread.Post(() => Text += message + "\n"),
-                    _cancel.Token).ConfigureAwait(false);
+                    cts.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
                 // キャンセルはエラーバナーに出さない
+            }
+            catch (ObjectDisposedException)
+            {
+                // Cancel() と並走した場合の Dispose 済み CTS アクセス。キャンセル相当として扱う
             }
             catch (Exception e)
             {
@@ -147,7 +175,7 @@ public class AIAssistant : ObservableObject
 
             // 生成完了後にUIスレッドでフラグを解除する
             Dispatcher.UIThread.Post(() => IsGenerating = false);
-        }, _cancel.Token);
+        }, cts.Token);
     }
 
     /// <summary>対象リポジトリへの参照</summary>
