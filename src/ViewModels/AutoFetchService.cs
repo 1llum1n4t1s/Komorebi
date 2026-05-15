@@ -39,8 +39,11 @@ public class AutoFetchService
 
     private static AutoFetchService s_instance;
 
-    /// <summary>バックグラウンド処理が 1 サイクル分進行中かどうか。</summary>
-    public bool IsRunning => _isRunning;
+    /// <summary>
+    /// バックグラウンド処理が 1 サイクル分進行中かどうか。
+    /// /rere 10 人分隊 P1#26 (B2-I5): TOCTOU 回避のため int + Interlocked.CompareExchange ベースに変更。
+    /// </summary>
+    public bool IsRunning => Volatile.Read(ref _isRunningInt) != 0;
 
     /// <summary>
     /// バックグラウンドループを開始する。再呼び出しは無視される（多重起動防止）。
@@ -83,9 +86,15 @@ public class AutoFetchService
                 {
                     await TickAsync(token).ConfigureAwait(false);
                 }
-                catch
+                catch (OperationCanceledException)
                 {
-                    // 個々のティック失敗はループ全体を止めない
+                    // キャンセルは正常経路、ログ不要
+                }
+                catch (Exception ex)
+                {
+                    // /rere 10 人分隊 P0#4 (F-CRIT-1): 個別ティック失敗をログに残す。
+                    // シナリオ D 「auto-fetch が遅い/効かない」の切り分け起点として必須。
+                    Models.Logger.LogException("AutoFetch tick failed", ex);
                 }
             }
         });
@@ -140,7 +149,9 @@ public class AutoFetchService
     /// </summary>
     private async Task TickAsync(CancellationToken token)
     {
-        if (_isRunning)
+        // /rere 10 人分隊 P1#26 (B2-I5): TOCTOU 回避のため atomic CompareExchange でロックを取得。
+        // 旧: `if (_isRunning) return; ... _isRunning = true;` で 2 つのスレッドが同時に通過する race があった。
+        if (Interlocked.CompareExchange(ref _isRunningInt, 1, 0) != 0)
             return;
 
         var enabled = Preferences.Instance.EnableAutoFetch;
@@ -164,7 +175,7 @@ public class AutoFetchService
         // このサイクルが手動トリガ分を消費する
         _pendingTrigger = false;
 
-        _isRunning = true;
+        // CompareExchange で既にロック取得済み (上の冒頭ガード参照)
         try
         {
             // オフライン判定: ネットワーク未接続なら前回値を保持したままスキャンをスキップする
@@ -179,15 +190,23 @@ public class AutoFetchService
             await ScanReachabilityAsync(token).ConfigureAwait(false);
 
             // Phase A 完了時点のスキャン結果を preference.json に永続化する。
+            // /rere 10 人分隊 P0#9 (C2-S1-1): UI スレッドで同期 I/O (Serialize + File.Copy + File.Move) を
+            // 走らせると、Phase A 完了直後にユーザーが UI 操作する瞬間に 5-30ms (NVMe) / 100-500ms (HDD/AV) の
+            // フリーズが発生する。Task.Run でワーカースレッドに完全に外す。
             if (!token.IsCancellationRequested)
             {
                 try
                 {
-                    await Dispatcher.UIThread.InvokeAsync(() => Preferences.Instance.Save());
+                    await Task.Run(() => Preferences.Instance.Save(), token).ConfigureAwait(false);
                 }
-                catch
+                catch (OperationCanceledException)
                 {
-                    // 保存失敗はループ全体を止めない
+                    // キャンセル経路は正常
+                }
+                catch (Exception ex)
+                {
+                    // /rere 10 人分隊 P0#4: 保存失敗もログに残す (今までは握り潰し)
+                    Models.Logger.LogException("AutoFetch Phase A 後の Preferences.Save 失敗", ex);
                 }
             }
 
@@ -205,7 +224,7 @@ public class AutoFetchService
         }
         finally
         {
-            _isRunning = false;
+            Interlocked.Exchange(ref _isRunningInt, 0);
         }
     }
 
@@ -246,9 +265,14 @@ public class AutoFetchService
                 {
                     await node.CheckRemotesReachabilityAsync(token).ConfigureAwait(false);
                 }
-                catch
+                catch (OperationCanceledException)
                 {
-                    // 個別ノード失敗は全体を止めない
+                    // キャンセルは正常経路
+                }
+                catch (Exception ex)
+                {
+                    // /rere 10 人分隊 P0#4: 個別ノード失敗をログに残す (node.Name で特定可能化)
+                    Models.Logger.LogException($"AutoFetch reachability check failed: {node.Name}", ex);
                 }
                 finally
                 {
@@ -261,9 +285,15 @@ public class AutoFetchService
         {
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
-        catch
+        catch (OperationCanceledException)
         {
-            // 個別例外は上位で握りつぶす
+            // キャンセル経路は正常
+        }
+        catch (Exception ex)
+        {
+            // /rere 10 人分隊 P0#4: 個別例外は WhenAll 内の Task.Run catch でログ済みだが、
+            // WhenAll 自体の集約例外 (例: 全タスクの cancellation) も記録する
+            Models.Logger.LogException("AutoFetch reachability scan aggregate failed", ex);
         }
     }
 
@@ -302,16 +332,23 @@ public class AutoFetchService
             await Task.WhenAll(tasks).ConfigureAwait(false);
     }
 
-    /// <summary>個別リポジトリの自動フェッチを例外安全にラップする。失敗は握り潰し全体を止めない。</summary>
+    /// <summary>
+    /// 個別リポジトリの自動フェッチを例外安全にラップする。失敗は記録するがループ全体は止めない。
+    /// /rere 10 人分隊 P0#4 (F-CRIT-1): リポジトリ単位の失敗もログに残す。
+    /// </summary>
     private static async Task SafeRunAutoFetchAsync(Repository repo)
     {
         try
         {
             await Dispatcher.UIThread.InvokeAsync(repo.RunAutoFetchAsync);
         }
-        catch
+        catch (OperationCanceledException)
         {
-            // 個別リポの失敗は全体を止めない
+            // キャンセル経路は正常
+        }
+        catch (Exception ex)
+        {
+            Models.Logger.LogException($"AutoFetch failed: {repo.FullPath}", ex);
         }
     }
 
@@ -333,8 +370,9 @@ public class AutoFetchService
     private DateTime _lastRun = DateTime.MinValue;
     private readonly Lock _syncLock = new();
     private TaskCompletionSource _forceTrigger;
-    // volatile: 外部スレッド（UI 側）からも IsRunning プロパティ経由で参照されるため可視性保証が必要
-    private volatile bool _isRunning;
+    // /rere 10 人分隊 P1#26 (B2-I5): TOCTOU 回避のため int (0=idle, 1=running) + Interlocked.CompareExchange に変更。
+    // 旧 `volatile bool _isRunning` だと Test-Then-Set が 2 命令に分割されて race の余地があった。
+    private int _isRunningInt;
     // volatile: TriggerNow() は UI スレッドから呼ばれ、TickAsync() はバックグラウンドループで読む非対称構造。
     // Volatile.Read/Write で保護しているが、将来の保守者が直接アクセスに変えてもサイレントバグ化しないよう宣言自体も volatile にする。
     private volatile bool _pendingTrigger;
