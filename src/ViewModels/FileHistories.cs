@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Avalonia.Collections;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -275,12 +274,20 @@ public class FileHistories : ObservableObject
         set => SetProperty(ref _revisions, value);
     }
 
-    /// <summary>選択中のリビジョン。1つ選択で詳細表示、2つ選択で比較表示。</summary>
-    public AvaloniaList<Models.FileVersion> SelectedRevisions
+    /// <summary>選択中のリビジョン。1つ選択で詳細表示、2つ選択で比較表示。
+    /// View 側（OnRevisionsSelectionChanged）から「新しい List を代入」する形で更新する。
+    /// AvaloniaList + CollectionChanged 監視にしてしまうと ListBox.SelectedItems の
+    /// TwoWay バインドと共有参照になり、code-behind の Clear → Add で自身を空にする
+    /// 自己破壊バグが起きるため、upstream と同じ参照置換パターンに揃えてある。</summary>
+    public List<Models.FileVersion> SelectedRevisions
     {
-        get;
-        set;
-    } = [];
+        get => _selectedRevisions;
+        set
+        {
+            if (SetProperty(ref _selectedRevisions, value))
+                RefreshViewContent();
+        }
+    }
 
     /// <summary>詳細パネルのコンテンツ（単一リビジョン表示または比較表示）。</summary>
     public object ViewContent
@@ -312,22 +319,26 @@ public class FileHistories : ObservableObject
             {
                 IsLoading = false;
                 Revisions = revisions;
-                if (revisions.Count > 0)
-                    SelectedRevisions.Add(revisions[0]);
+                // 初回選択は View 側の OnRevisionsPropertyChanged → SelectedIndex=0 → SelectionChanged で
+                // SelectedRevisions が代入されるため、ここでは触らない（upstream と同じパターン）。
             });
         });
+    }
 
-        SelectedRevisions.CollectionChanged += (_, _) =>
+    /// <summary>
+    /// 選択件数に応じて右ペインの内容（単一リビジョン詳細／比較／プレースホルダー）を切り替える。
+    /// </summary>
+    private void RefreshViewContent()
+    {
+        if (_viewContent is FileHistoriesSingleRevision singleRevision)
+            _prevIsDiffMode = singleRevision.IsDiffMode;
+
+        var count = _selectedRevisions?.Count ?? 0;
+        ViewContent = count switch
         {
-            if (_viewContent is FileHistoriesSingleRevision singleRevision)
-                _prevIsDiffMode = singleRevision.IsDiffMode;
-
-            ViewContent = SelectedRevisions.Count switch
-            {
-                1 => new FileHistoriesSingleRevision(_repo, SelectedRevisions[0], _prevIsDiffMode),
-                2 => new FileHistoriesCompareRevisions(_repo, SelectedRevisions[0], SelectedRevisions[1]),
-                _ => SelectedRevisions.Count,
-            };
+            1 => new FileHistoriesSingleRevision(_repo, _selectedRevisions[0], _prevIsDiffMode),
+            2 => new FileHistoriesCompareRevisions(_repo, _selectedRevisions[0], _selectedRevisions[1]),
+            _ => count,
         };
     }
 
@@ -368,6 +379,7 @@ public class FileHistories : ObservableObject
     private bool _isLoading = true; // 読み込み中フラグ
     private bool _prevIsDiffMode = true; // 前回のdiffモード状態
     private List<Models.FileVersion> _revisions = null; // リビジョン一覧
+    private List<Models.FileVersion> _selectedRevisions = []; // 選択中のリビジョン
     private Dictionary<string, string> _fullCommitMessages = new(); // コミットメッセージキャッシュ
     private object _viewContent = null; // 詳細パネルのコンテンツ
 }

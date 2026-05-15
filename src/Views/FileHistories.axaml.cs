@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -127,19 +128,29 @@ public partial class FileHistories : ChromelessWindow
 
     /// <summary>
     /// リビジョンリストの選択が変更された際のハンドラ。
+    /// ListBox.SelectedItems から新しい <see cref="List{T}"/> を組み立てて
+    /// VM の <c>SelectedRevisions</c> プロパティに代入する（setter 経由で右ペインを更新）。
+    /// 旧実装は VM の AvaloniaList を Clear → Add していたが、TwoWay バインドで
+    /// ListBox.SelectedItems と同一参照になるため Clear で iteration 元が空になり
+    /// 選択が永遠に空になっていた。upstream と同じ参照置換パターンに揃えてある。
     /// </summary>
     private void OnRevisionsSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is ListBox listBox && DataContext is ViewModels.FileHistories vm)
         {
-            vm.SelectedRevisions.Clear();
             if (listBox.SelectedItems is { } selected)
             {
+                var revs = new List<Models.FileVersion>(selected.Count);
                 foreach (var item in selected)
                 {
                     if (item is Models.FileVersion ver)
-                        vm.SelectedRevisions.Add(ver);
+                        revs.Add(ver);
                 }
+                vm.SelectedRevisions = revs;
+            }
+            else
+            {
+                vm.SelectedRevisions = [];
             }
         }
     }
