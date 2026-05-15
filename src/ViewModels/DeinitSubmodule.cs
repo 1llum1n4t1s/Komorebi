@@ -40,15 +40,20 @@ public class DeinitSubmodule : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.DeinitSubmodule");
 
         var log = _repo.CreateLog("De-initialize Submodule");
         Use(log);
 
-        var succ = await new Commands.Submodule(_repo.FullPath)
-            .Use(log)
-            .DeinitAsync(Submodule, false);
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkSubmodulesDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
+        bool succ;
+        using (_repo.LockWatcher())
+        {
+            succ = await new Commands.Submodule(_repo.FullPath)
+                .Use(log)
+                .DeinitAsync(Submodule, false);
+        }
 
         log.Complete();
         _repo.MarkSubmodulesDirtyManually();

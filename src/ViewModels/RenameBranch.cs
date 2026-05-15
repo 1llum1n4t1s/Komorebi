@@ -71,7 +71,6 @@ public class RenameBranch : Popup
         if (Target.Name.Equals(_name, StringComparison.Ordinal))
             return true;
 
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.RenamingBranch", Target.Name);
 
         var log = _repo.CreateLog($"Rename Branch '{Target.Name}'");
@@ -80,14 +79,20 @@ public class RenameBranch : Popup
         var isCurrent = Target.IsCurrent;
         var oldName = Target.FullName;
 
-        // git branch -m コマンドでリネーム実行
-        var succ = await new Commands.Branch(_repo.FullPath, Target.Name)
-            .Use(log)
-            .RenameAsync(_name);
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkBranchesDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
+        bool succ;
+        using (_repo.LockWatcher())
+        {
+            // git branch -m コマンドでリネーム実行
+            succ = await new Commands.Branch(_repo.FullPath, Target.Name)
+                .Use(log)
+                .RenameAsync(_name);
 
-        // リネーム成功時はUIフィルタのブランチ名を更新
-        if (succ)
-            _repo.UIStates.RenameBranchFilter(Target.FullName, _name);
+            // リネーム成功時はUIフィルタのブランチ名を更新
+            if (succ)
+                _repo.UIStates.RenameBranchFilter(Target.FullName, _name);
+        }
 
         log.Complete();
         // ブランチ一覧の再読み込みをトリガー

@@ -41,25 +41,29 @@ public class DeleteMultipleTags : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.DeletingMultipleTags");
 
         var log = _repo.CreateLog("Delete Multiple Tags");
         Use(log);
 
-        // 各タグを順番に削除
-        foreach (var tag in Tags)
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkTagsDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
+        using (_repo.LockWatcher())
         {
-            var succ = await new Commands.Tag(_repo.FullPath, tag.Name)
-            .Use(log)
-            .DeleteAsync();
-
-            if (succ && DeleteFromRemote)
+            // 各タグを順番に削除
+            foreach (var tag in Tags)
             {
-                foreach (var r in _repo.Remotes)
-                    await new Commands.Push(_repo.FullPath, r.Name, $"refs/tags/{tag.Name}", true)
-                        .Use(log)
-                        .RunAsync();
+                var succ = await new Commands.Tag(_repo.FullPath, tag.Name)
+                .Use(log)
+                .DeleteAsync();
+
+                if (succ && DeleteFromRemote)
+                {
+                    foreach (var r in _repo.Remotes)
+                        await new Commands.Push(_repo.FullPath, r.Name, $"refs/tags/{tag.Name}", true)
+                            .Use(log)
+                            .RunAsync();
+                }
             }
         }
 

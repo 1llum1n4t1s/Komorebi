@@ -64,30 +64,34 @@ public class DeleteBranch : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.DeletingBranch");
 
         var log = _repo.CreateLog("Delete Branch");
         Use(log);
 
-        // ローカルブランチの場合
-        if (Target.IsLocal)
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkBranchesDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
+        using (_repo.LockWatcher())
         {
-            await new Commands.Branch(_repo.FullPath, Target.Name)
-                .Use(log)
-                .DeleteLocalAsync();
-            _repo.UIStates.RemoveHistoryFilter(Target.FullName, Models.FilterType.LocalBranch);
-
-            if (_alsoDeleteTrackingRemote && TrackingRemoteBranch is not null)
+            // ローカルブランチの場合
+            if (Target.IsLocal)
             {
-                await DeleteRemoteBranchAsync(TrackingRemoteBranch, log);
-                _repo.UIStates.RemoveHistoryFilter(TrackingRemoteBranch.FullName, Models.FilterType.RemoteBranch);
+                await new Commands.Branch(_repo.FullPath, Target.Name)
+                    .Use(log)
+                    .DeleteLocalAsync();
+                _repo.UIStates.RemoveHistoryFilter(Target.FullName, Models.FilterType.LocalBranch);
+
+                if (_alsoDeleteTrackingRemote && TrackingRemoteBranch is not null)
+                {
+                    await DeleteRemoteBranchAsync(TrackingRemoteBranch, log);
+                    _repo.UIStates.RemoveHistoryFilter(TrackingRemoteBranch.FullName, Models.FilterType.RemoteBranch);
+                }
             }
-        }
-        else
-        {
-            await DeleteRemoteBranchAsync(Target, log);
-            _repo.UIStates.RemoveHistoryFilter(Target.FullName, Models.FilterType.RemoteBranch);
+            else
+            {
+                await DeleteRemoteBranchAsync(Target, log);
+                _repo.UIStates.RemoveHistoryFilter(Target.FullName, Models.FilterType.RemoteBranch);
+            }
         }
 
         log.Complete();

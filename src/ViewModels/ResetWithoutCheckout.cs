@@ -56,16 +56,21 @@ public class ResetWithoutCheckout : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.ResettingWithoutCheckout", Target.Name, _revision);
 
         var log = _repo.CreateLog($"Reset '{Target.Name}' to '{_revision}'");
         Use(log);
 
-        // ブランチポインタを強制的に移動（チェックアウトなし）
-        var succ = await new Commands.Branch(_repo.FullPath, Target.Name)
-            .Use(log)
-            .CreateAsync(_revision, true);
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkBranchesDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
+        bool succ;
+        using (_repo.LockWatcher())
+        {
+            // ブランチポインタを強制的に移動（チェックアウトなし）
+            succ = await new Commands.Branch(_repo.FullPath, Target.Name)
+                .Use(log)
+                .CreateAsync(_revision, true);
+        }
 
         log.Complete();
         // ブランチ一覧の再読み込みをトリガー

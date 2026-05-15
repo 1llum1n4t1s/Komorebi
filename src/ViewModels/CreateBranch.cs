@@ -186,8 +186,6 @@ public class CreateBranch : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
-
         var log = _repo.CreateLog($"Create Branch '{_name}'");
         Use(log);
 
@@ -200,71 +198,76 @@ public class CreateBranch : Popup
                 return true;
         }
 
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkBranchesDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
         bool succ;
-        // チェックアウト付きブランチ作成（ベアリポジトリ以外）
-        if (CheckoutAfterCreated && !_repo.IsBare)
+        using (_repo.LockWatcher())
         {
-            // ローカル変更がある場合の処理
-            var needPopStash = false;
-            if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
+            // チェックアウト付きブランチ作成（ベアリポジトリ以外）
+            if (CheckoutAfterCreated && !_repo.IsBare)
             {
-                var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
-                if (changes > 0)
+                // ローカル変更がある場合の処理
+                var needPopStash = false;
+                if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
                 {
-                    succ = await new Commands.Stash(_repo.FullPath)
-                        .Use(log)
-                        .PushAsync("CREATE_BRANCH_AUTO_STASH", false);
-                    if (!succ)
+                    var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
+                    if (changes > 0)
                     {
-                        log.Complete();
-                        return false;
-                    }
+                        succ = await new Commands.Stash(_repo.FullPath)
+                            .Use(log)
+                            .PushAsync("CREATE_BRANCH_AUTO_STASH", false);
+                        if (!succ)
+                        {
+                            log.Complete();
+                            return false;
+                        }
 
-                    needPopStash = true;
+                        needPopStash = true;
+                    }
+                }
+
+                var forceDiscard = DealWithLocalChanges == Models.DealWithLocalChanges.Discard;
+                succ = await new Commands.Checkout(_repo.FullPath)
+                    .Use(log)
+                    .BranchAsync(_name, _baseOnRevision, forceDiscard, _allowOverwrite);
+
+                if (succ)
+                {
+                    await _repo.AutoUpdateSubmodulesAsync(log);
+
+                    if (needPopStash)
+                        await new Commands.Stash(_repo.FullPath)
+                            .Use(log)
+                            .PopAsync("stash@{0}");
                 }
             }
-
-            var forceDiscard = DealWithLocalChanges == Models.DealWithLocalChanges.Discard;
-            succ = await new Commands.Checkout(_repo.FullPath)
-                .Use(log)
-                .BranchAsync(_name, _baseOnRevision, forceDiscard, _allowOverwrite);
-
-            if (succ)
+            else
             {
-                await _repo.AutoUpdateSubmodulesAsync(log);
-
-                if (needPopStash)
-                    await new Commands.Stash(_repo.FullPath)
-                        .Use(log)
-                        .PopAsync("stash@{0}");
-            }
-        }
-        else
-        {
-            succ = await new Commands.Branch(_repo.FullPath, _name)
-                .Use(log)
-                .CreateAsync(_baseOnRevision, _allowOverwrite);
-        }
-
-        // リモートブランチと同名のローカルブランチを作成した場合、上流ブランチを自動設定
-        if (succ && BasedOn is Models.Branch { IsLocal: false } basedOn && _name.Equals(basedOn.Name, StringComparison.Ordinal))
-        {
-            await new Commands.Branch(_repo.FullPath, _name)
+                succ = await new Commands.Branch(_repo.FullPath, _name)
                     .Use(log)
-                    .SetUpstreamAsync(basedOn);
-        }
+                    .CreateAsync(_baseOnRevision, _allowOverwrite);
+            }
 
-        // 作成したブランチをリモートにプッシュ
-        if (succ && PushAfterCreated && _repo.Remotes.Count > 0)
-        {
-            Models.Remote remote = null;
-            if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
-                remote = _repo.FindRemoteByName(_repo.Settings.DefaultRemote);
-            remote ??= _repo.Remotes[0];
+            // リモートブランチと同名のローカルブランチを作成した場合、上流ブランチを自動設定
+            if (succ && BasedOn is Models.Branch { IsLocal: false } basedOn && _name.Equals(basedOn.Name, StringComparison.Ordinal))
+            {
+                await new Commands.Branch(_repo.FullPath, _name)
+                        .Use(log)
+                        .SetUpstreamAsync(basedOn);
+            }
 
-            await new Commands.Push(_repo.FullPath, _name, remote.Name, _name, false, false, true, false)
-                .Use(log)
-                .RunAsync();
+            // 作成したブランチをリモートにプッシュ
+            if (succ && PushAfterCreated && _repo.Remotes.Count > 0)
+            {
+                Models.Remote remote = null;
+                if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
+                    remote = _repo.FindRemoteByName(_repo.Settings.DefaultRemote);
+                remote ??= _repo.Remotes[0];
+
+                await new Commands.Push(_repo.FullPath, _name, remote.Name, _name, false, false, true, false)
+                    .Use(log)
+                    .RunAsync();
+            }
         }
 
         log.Complete();

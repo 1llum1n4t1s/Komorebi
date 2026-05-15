@@ -42,7 +42,6 @@ public class DeleteTag : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.DeletingTag", Target.Name);
 
         // プッシュ先のリモート一覧を取得
@@ -50,18 +49,24 @@ public class DeleteTag : Popup
         var log = _repo.CreateLog("Delete Tag");
         Use(log);
 
-        var succ = await new Commands.Tag(_repo.FullPath, Target.Name)
-            .Use(log)
-            .DeleteAsync();
-
-        if (succ)
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkTagsDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
+        bool succ;
+        using (_repo.LockWatcher())
         {
-            // パフォーマンス: 独立したリモートへのpushを並列実行（旧: 逐次await）
-            var pushTasks = remotes.Select(r =>
-                new Commands.Push(_repo.FullPath, r.Name, $"refs/tags/{Target.Name}", true)
-                    .Use(log)
-                    .RunAsync());
-            await Task.WhenAll(pushTasks).ConfigureAwait(false);
+            succ = await new Commands.Tag(_repo.FullPath, Target.Name)
+                .Use(log)
+                .DeleteAsync();
+
+            if (succ)
+            {
+                // パフォーマンス: 独立したリモートへのpushを並列実行（旧: 逐次await）
+                var pushTasks = remotes.Select(r =>
+                    new Commands.Push(_repo.FullPath, r.Name, $"refs/tags/{Target.Name}", true)
+                        .Use(log)
+                        .RunAsync());
+                await Task.WhenAll(pushTasks).ConfigureAwait(false);
+            }
         }
 
         log.Complete();

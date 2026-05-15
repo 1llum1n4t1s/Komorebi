@@ -139,29 +139,34 @@ public class AddRemote : Popup
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.AddingRemote");
 
         // コマンドログを作成する
         var log = _repo.CreateLog("Add Remote");
         Use(log);
 
-        // git remote addコマンドを実行してリモートを追加する
-        var succ = await new Commands.Remote(_repo.FullPath)
-            .Use(log)
-            .AddAsync(_name, _url);
-
-        if (succ)
+        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkBranchesDirtyManually は
+        // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
+        bool succ;
+        using (_repo.LockWatcher())
         {
-            // SSH鍵の設定をgit configに保存する
-            await new Commands.Config(_repo.FullPath)
+            // git remote addコマンドを実行してリモートを追加する
+            succ = await new Commands.Remote(_repo.FullPath)
                 .Use(log)
-                .SetAsync($"remote.{_name}.sshkey", _useSSH ? SSHKey : null);
+                .AddAsync(_name, _url);
 
-            // 追加したリモートからフェッチを実行する
-            await new Commands.Fetch(_repo.FullPath, _name, false, false)
-                .Use(log)
-                .RunAsync();
+            if (succ)
+            {
+                // SSH鍵の設定をgit configに保存する
+                await new Commands.Config(_repo.FullPath)
+                    .Use(log)
+                    .SetAsync($"remote.{_name}.sshkey", _useSSH ? SSHKey : null);
+
+                // 追加したリモートからフェッチを実行する
+                await new Commands.Fetch(_repo.FullPath, _name, false, false)
+                    .Use(log)
+                    .RunAsync();
+            }
         }
 
         log.Complete();
