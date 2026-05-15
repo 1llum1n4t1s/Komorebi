@@ -657,10 +657,10 @@ public class Repository : ObservableObject, Models.IRepository
         _stashesPage.Dispose();
         _searchCommitContext.Dispose();
 
-        _watcher = null;
-        _histories = null;
-        _workingCopy = null;
-        _stashesPage = null;
+        // upstream c1d08e29 (#2289): Close 中に走っている非同期アクション (Fetch/Pull など) が
+        // _watcher / _histories / _workingCopy などへアクセスすると、null 代入直後の race で
+        // NullReferenceException でクラッシュする問題への対策として、null 代入を行わない。
+        // フィールドの解放は GC に任せる（Dispose 済みなのでリソースリークは無い）。
 
         _localChangesCount = 0;
         _stashesCount = 0;
