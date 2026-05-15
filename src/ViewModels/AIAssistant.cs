@@ -152,10 +152,10 @@ public class AIAssistant : ObservableObject
 
     /// <summary>対象リポジトリへの参照</summary>
     private readonly Repository _repo = null;
-    /// <summary>OpenAIサービス設定</summary>
-    private AI.Service _service = null;
-    /// <summary>コミットメッセージ生成対象の変更リスト</summary>
-    private List<Models.Change> _changes = null;
+    /// <summary>OpenAIサービス設定 (/rere P2#17: コンストラクタ後変更なし → readonly)</summary>
+    private readonly AI.Service _service = null;
+    /// <summary>コミットメッセージ生成対象の変更リスト (/rere P2#17: 同上)</summary>
+    private readonly List<Models.Change> _changes = null;
     /// <summary>生成処理のキャンセルトークンソース</summary>
     private CancellationTokenSource _cancel = null;
     /// <summary>生成中フラグ</summary>

@@ -104,9 +104,14 @@ public partial class Askpass : ChromelessWindow
         }
         else
         {
-            // upstream 6feae0bd: UTF-8 パスフレーズを直接バイト列で書き出し、終了前に ZeroMemory でクリア。
+            // upstream 6feae0bd: UTF-8 パスフレーズを直接バイト列で書き出し、終了前に passBytes を ZeroMemory でゼロ化。
             // Console.Out.WriteLine() は CodePage 依存で非 ASCII passphrase を破損させる恐れがあったため
-            // OpenStandardOutput() で UTF-8 バイト列をそのまま書き、入力欄も Clear する。
+            // OpenStandardOutput() で UTF-8 バイト列をそのまま書く。TxtPassphrase.Text も string.Empty で参照を切る。
+            //
+            // /rere P2#19 注記: C# string は immutable + GC 管理のため、TxtPassphrase.Text 内部の
+            // 旧 string オブジェクト自体は GC が回収するまでヒープに残る。完全な秘密保護は SecureString
+            // または char[] ベースのカスタムコントロールが必要だが、.NET 5+ では SecureString が非推奨扱いで
+            // ベストエフォートに留まる (Askpass プロセスは短命なので現実的リスクは限定)。
             var passphrase = TxtPassphrase.Text ?? string.Empty;
             byte[] passBytes = Encoding.UTF8.GetBytes(passphrase);
             try

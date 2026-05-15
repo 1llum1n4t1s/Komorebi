@@ -15,7 +15,7 @@ namespace Komorebi.ViewModels;
 /// <summary>
 /// 画像ソースを管理するクラス。
 /// ファイル、Gitリビジョン、LFSオブジェクトから各種画像フォーマットを読み込む。
-/// 対応形式: ICO, BMP, GIF, JPG, PNG, WebP, TGA, DDS, TIFF。
+/// 対応形式: ICO, BMP, GIF, JPG, PNG, WebP, TGA, DDS, TIFF, PSD (upstream 203c51f3 で StbImageSharp 経由追加)。
 /// </summary>
 public class ImageSource
 {
