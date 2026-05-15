@@ -739,7 +739,8 @@ public class Preferences : ObservableObject
         ExtensionData = null;
 
         var file = Path.Combine(Native.OS.DataDir, "preference.json");
-        var tmp = file + ".tmp";
+        // /rere P1#15: 並行プロセス (複数 Komorebi インスタンス) との tmp ファイル衝突を避けるためランダム拡張子付き
+        var tmp = $"{file}.tmp.{Guid.NewGuid():N}";
         var bak = file + ".bak";
         try
         {

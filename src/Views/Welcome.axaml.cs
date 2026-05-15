@@ -35,7 +35,8 @@ public class RepositoryTreeNodeToggleButton : ToggleButton
 /// </summary>
 public class RepositoryListBox : ListBoxEx
 {
-    protected override Type StyleKeyOverride => typeof(ListBox);
+    // StyleKeyOverride は親 ListBoxEx で typeof(ListBox) を返しており、ここで再宣言する必要はない
+    // (/rere P1#10 で重複削除)
 
     /// <summary>
     /// キーが押された際のイベント処理。

@@ -80,8 +80,10 @@ internal static class ApiKeyProtector
     /// <summary>
     /// 1 セッション中の鍵をメモリキャッシュ。Lazy 化することで Protect/Unprotect の高頻度呼び出しでも
     /// ファイル I/O を発生させない。
+    /// volatile は Double-Checked Locking パターンで ARM64 等の弱メモリモデル CPU で stale read を
+    /// 防ぐため必要 (/rere P1#6)。
     /// </summary>
-    private static byte[] s_cachedKey;
+    private static volatile byte[] s_cachedKey;
     private static string s_cachedKeyDir;
 
     internal static string KeyDirectoryOverride

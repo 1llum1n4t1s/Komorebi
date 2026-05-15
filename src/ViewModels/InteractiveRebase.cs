@@ -234,20 +234,28 @@ public class InteractiveRebase : ObservableObject
                     if (subject.StartsWith("fixup! ", StringComparison.Ordinal))
                     {
                         item.Action = Models.InteractiveRebaseAction.Fixup;
-                        // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去
+                        // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去 ("fixup! ".Length = 7)
                         var targetSubject = subject.Substring(7).Trim();
-                        needReorder.Add(new(targetSubject, item));
-                        needReorderKeySet.Add(targetSubject);
+                        // /rere P1#13: 空文字列キーは Second-pass で「件名が空の全コミット」に意図せずマッチするため除外
+                        if (targetSubject.Length > 0)
+                        {
+                            needReorder.Add(new(targetSubject, item));
+                            needReorderKeySet.Add(targetSubject);
+                        }
                         continue;
                     }
 
                     if (subject.StartsWith("squash! ", StringComparison.Ordinal))
                     {
                         item.Action = Models.InteractiveRebaseAction.Squash;
-                        // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去
+                        // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去 ("squash! ".Length = 8)
                         var targetSubject = subject.Substring(8).Trim();
-                        needReorder.Add(new(targetSubject, item));
-                        needReorderKeySet.Add(targetSubject);
+                        // /rere P1#13: 空文字列キーガード (上記同様)
+                        if (targetSubject.Length > 0)
+                        {
+                            needReorder.Add(new(targetSubject, item));
+                            needReorderKeySet.Add(targetSubject);
+                        }
                         continue;
                     }
                 }
