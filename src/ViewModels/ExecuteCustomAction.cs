@@ -190,9 +190,9 @@ public class CustomActionControlBranchSelector : ObservableObject, ICustomAction
     public Models.Branch SelectedBranch { get; set; }
 
     /// <summary>
-    /// コンストラクタ。ラベル、説明、対象リポジトリ、ローカル/リモートフラグ、FriendlyName 使用フラグを指定する。
+    /// コンストラクタ。ラベル、説明、対象リポジトリ、ローカル/リモートフラグ、FriendlyName 使用フラグ、初期選択ヒント (target) を指定する。
     /// </summary>
-    public CustomActionControlBranchSelector(string label, string description, Repository repo, bool isLocal, bool useFriendlyName)
+    public CustomActionControlBranchSelector(string label, string description, Repository repo, bool isLocal, bool useFriendlyName, object target)
     {
         Label = label;
         Description = description;
@@ -205,8 +205,33 @@ public class CustomActionControlBranchSelector : ObservableObject, ICustomAction
                 Branches.Add(b);
         }
 
-        if (Branches.Count > 0)
-            SelectedBranch = Branches[0];
+        if (Branches.Count == 0)
+            return;
+
+        // upstream 3176bcc8: target がブランチ情報を持つ場合、対応するブランチを優先選択
+        if (target is Models.Branch branch)
+        {
+            if (isLocal)
+            {
+                var prefer = Branches.Find(b => b.FullName.Equals(branch.FullName, StringComparison.Ordinal));
+                if (prefer != null)
+                {
+                    SelectedBranch = prefer;
+                    return;
+                }
+            }
+            else if (!string.IsNullOrEmpty(branch.Upstream))
+            {
+                var upstream = Branches.Find(b => b.FullName.Equals(branch.Upstream, StringComparison.Ordinal));
+                if (upstream != null)
+                {
+                    SelectedBranch = upstream;
+                    return;
+                }
+            }
+        }
+
+        SelectedBranch = Branches[0];
     }
 
     /// <summary>選択中のブランチ名を返す。useFriendlyName=true の場合は FriendlyName、false の場合は Name。</summary>
@@ -285,11 +310,13 @@ public class ExecuteCustomAction : Popup
                     break;
                 case Models.CustomActionControlType.LocalBranchSelector:
                     // ローカルブランチを絞り込んで選択させる（upstream dfe362f2）
-                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, true, false));
+                    // upstream 3176bcc8: scopeTarget が Branch なら対応するローカルブランチを自動選択
+                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, true, false, scopeTarget ?? _repo.CurrentBranch));
                     break;
                 case Models.CustomActionControlType.RemoteBranchSelector:
                     // リモートブランチを絞り込んで選択させる。BoolValue=true で FriendlyName を値として使う（upstream dfe362f2）
-                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, false, ctl.BoolValue));
+                    // upstream 3176bcc8: scopeTarget がローカルブランチなら upstream を、Repository スコープなら CurrentBranch.Upstream を自動選択
+                    ControlParameters.Add(new CustomActionControlBranchSelector(ctl.Label, ctl.Description, _repo, false, ctl.BoolValue, scopeTarget ?? _repo.CurrentBranch));
                     break;
             }
         }
