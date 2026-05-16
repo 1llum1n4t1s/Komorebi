@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 using Microsoft.Extensions.Logging;
@@ -119,6 +120,9 @@ public static class Logger
         if (s_logger is null)
             return;
 
+        // /rere 10 人分隊 P1#21: PII redaction を全ログ経路に適用
+        message = Redact(message);
+
         switch (level)
         {
             case LogLevel.Debug:
@@ -143,8 +147,72 @@ public static class Logger
     /// <param name="exception">例外オブジェクト</param>
     public static void LogException(string message, Exception exception)
     {
-        s_logger?.Error(message, exception);
+        // /rere 10 人分隊 P1#21: PII redaction を例外メッセージにも適用
+        s_logger?.Error(Redact(message), exception);
     }
+
+    /// <summary>
+    /// /rere 10 人分隊 P1#21: 個人情報・秘密情報のマスキング処理。
+    /// ログ・クラッシュレポート・Issue にコピペされる可能性のあるすべての出力に適用する。
+    ///
+    /// マスキング対象:
+    /// - Windows ユーザーホーム: <c>C:\Users\&lt;name&gt;\...</c> → <c>C:\Users\***\...</c>
+    /// - Unix ユーザーホーム: <c>/home/&lt;name&gt;/...</c> / <c>/Users/&lt;name&gt;/...</c> → <c>/home/***/...</c>
+    /// - Git URL の credentials: <c>https://user:token@host</c> → <c>https://***:***@host</c>
+    /// - Bearer/Authorization トークン: <c>Bearer xxx</c> → <c>Bearer ***</c>
+    /// - OpenAI 形式 API キー: <c>sk-...</c>, <c>sk-proj-...</c> → <c>sk-***</c>
+    /// - Email アドレス: <c>user@example.com</c> → <c>***@example.com</c>
+    ///
+    /// 注意: ファイル内容そのものや commit メッセージ本体はマスキングしない（誤検出すると
+    /// 開発者が読める情報が壊れる）。あくまで「環境依存の識別子」のみを対象とする。
+    /// </summary>
+    public static string Redact(string message)
+    {
+        if (string.IsNullOrEmpty(message))
+            return message;
+
+        // Git URL の credentials: scheme://user:pass@host → scheme://***:***@host
+        message = s_gitCredsRegex.Replace(message, "$1***:***@");
+
+        // Bearer / Token / api_key: ヘッダ・JSON フィールドで頻出するパターン
+        message = s_bearerRegex.Replace(message, "$1 ***");
+        message = s_apiKeyJsonRegex.Replace(message, "$1***");
+
+        // OpenAI 形式 API キー
+        message = s_openAiKeyRegex.Replace(message, "sk-***");
+
+        // ユーザーホームパス (Windows / Linux / macOS)
+        message = s_winHomeRegex.Replace(message, @"C:\Users\***");
+        message = s_unixHomeRegex.Replace(message, "$1/***");
+
+        // Email アドレス（@ より前のみをマスク。コミット作者名でも漏らさない）
+        message = s_emailRegex.Replace(message, "***$1");
+
+        return message;
+    }
+
+    // 正規表現は一度だけコンパイルして再利用する（毎呼び出し new だと CPU を食う）
+    private static readonly Regex s_gitCredsRegex = new(
+        @"(https?://|git\+ssh://|ssh://)[^/\s@:]+:[^/\s@]+@",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex s_bearerRegex = new(
+        @"(Bearer|Token)\s+[A-Za-z0-9\-._~+/]+=*",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex s_apiKeyJsonRegex = new(
+        @"(""(?:api[_\-]?key|password|secret|token|x[_\-]api[_\-]key)""\s*[:=]\s*"")[^""]+",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex s_openAiKeyRegex = new(
+        @"sk-(?:proj-)?[A-Za-z0-9_\-]{16,}",
+        RegexOptions.Compiled);
+    private static readonly Regex s_winHomeRegex = new(
+        @"[A-Za-z]:\\Users\\[^\\\/\s""']+",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex s_unixHomeRegex = new(
+        @"(/home|/Users)/[^/\s""']+",
+        RegexOptions.Compiled);
+    private static readonly Regex s_emailRegex = new(
+        @"[A-Za-z0-9._%+\-]+(@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})",
+        RegexOptions.Compiled);
 
     /// <summary>
     /// 未処理例外の詳細情報をログに記録する（クラッシュレポート用）
@@ -173,7 +241,9 @@ public static class Logger
             メモリ使用量: {process.PrivateMemorySize64 / 1024 / 1024} MB
             """;
 
-        s_logger?.Error(message, exception);
+        // /rere 10 人分隊 P1#21: クラッシュレポートは Issue にコピペされる可能性が高い経路のため
+        // PII redaction を必ず適用する。
+        s_logger?.Error(Redact(message), exception);
     }
 
     /// <summary>
@@ -185,14 +255,16 @@ public static class Logger
             return;
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;
-        s_logger?.Debug(
+        var startupMessage =
             $"""
             === Komorebi 起動ログ ===
             起動時刻: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}
             バージョン: {version}
             OS: {Environment.OSVersion}
             実行ファイルパス: {Environment.ProcessPath}
-            """);
+            """;
+        // /rere 10 人分隊 P1#21: 実行ファイルパスにユーザー名が含まれるため Redact 必須
+        s_logger?.Debug(Redact(startupMessage));
     }
 
     /// <summary>
