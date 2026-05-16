@@ -72,18 +72,28 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
                     $"Anthropic tool_use loop exceeded {MaxToolCallIterations} iterations. " +
                     "This may indicate a prompt injection or model malfunction.");
 
+            // /rere 10 人分隊 P1#27: messages.DeepClone() は tool_use ループの反復ごとに
+            // O(n) のコピーが走るため、メッセージ列が伸びるたびに合計 O(n²) になっていた。
+            // JsonNode は親が 1 つしか持てない制約があるため DeepClone していたが、
+            // 「一旦親に attach → ToJsonString で serialize → Remove で detach」の
+            // パターンに置き換えることで clone を省略できる。Remove は子の Parent を null
+            // に戻すので、次の反復で再 attach できる。
             var requestBody = new JsonObject
             {
                 ["model"] = _service.Model,
                 ["max_tokens"] = AnthropicMaxTokens,
                 ["tools"] = tools,
-                ["messages"] = messages.DeepClone()
+                ["messages"] = messages
             };
+            var requestBodyJson = requestBody.ToJsonString();
+            // 次の反復で tools / messages を再利用できるよう、明示的に detach する
+            requestBody.Remove("tools");
+            requestBody.Remove("messages");
 
             using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/v1/messages");
             request.Headers.Add("x-api-key", _service.ResolvedApiKey);
             request.Headers.Add("anthropic-version", AnthropicApiVersion);
-            request.Content = new StringContent(requestBody.ToJsonString(), Encoding.UTF8, "application/json");
+            request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
             using var response = await s_httpClient.SendAsync(request, cancellation);
             response.EnsureSuccessStatusCode();
 

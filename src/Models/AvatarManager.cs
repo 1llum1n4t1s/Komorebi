@@ -64,6 +64,15 @@ public partial class AvatarManager
     private const long MaxAvatarBytes = 512 * 1024;
     /// <summary>並行ダウンロード上限（過剰並列でローカル/ネットワークリソースを枯渇させないため）</summary>
     private const int MaxParallelDownloads = 4;
+    /// <summary>
+    /// /rere 10 人分隊 P1#30: メモリ上に保持するアバター Bitmap の最大件数。
+    /// 1 枚あたり ~100KB (128px PNG decoded) × 1024 件 ≒ 100MB を上限とする。
+    /// 大規模リポジトリで数千の異なる commit author を閲覧してもキャッシュが
+    /// 無制限に肥大化しないよう、超過時に <see cref="EvictOldest"/> で 25% を捨てる。
+    /// </summary>
+    private const int MaxCachedAvatars = 1024;
+    /// <summary>超過時に削除する件数（一度に大量削除して GC を回すよりも段階的に減らす）</summary>
+    private const int EvictionBatchSize = MaxCachedAvatars / 4;
 
     private readonly Lock _synclock = new();
     /// <summary>アバター画像のローカルキャッシュディレクトリパス</summary>
@@ -80,6 +89,13 @@ public partial class AvatarManager
     /// 並行アクセスし得るため、ConcurrentDictionary でロックフリーに保護する。
     /// </summary>
     private readonly ConcurrentDictionary<string, Bitmap> _resources = new();
+    /// <summary>
+    /// /rere 10 人分隊 P1#30: アバターのキャッシュ追加順序を保持する FIFO キュー。
+    /// LRU の代わりに FIFO ベースで evict する（厳密な LRU は読み取りごとの並べ替えコストが
+    /// かかるが、avatar の使用パターンはほぼ「最近見たコミットの author」に偏るため
+    /// FIFO でも実用上は十分に近い動作になる）。デフォルトアバターはエビクション対象外。
+    /// </summary>
+    private readonly ConcurrentQueue<string> _resourceInsertionOrder = new();
     /// <summary>ダウンロードリクエスト待ちのメールアドレスセット</summary>
     private HashSet<string> _requesting = [];
     /// <summary>
@@ -251,7 +267,7 @@ public partial class AvatarManager
 
             Dispatcher.UIThread.Post(() =>
             {
-                _resources[email] = img;
+                InsertCachedAvatar(email, img);
                 NotifyResourceChanged(email, img);
             });
         }
@@ -333,7 +349,7 @@ public partial class AvatarManager
                     using (var stream = File.OpenRead(localFile))
                     {
                         var img = Bitmap.DecodeToWidth(stream, 128);
-                        _resources.TryAdd(email, img);
+                        InsertCachedAvatar(email, img);
                         return img;
                     }
                 }
@@ -368,7 +384,7 @@ public partial class AvatarManager
                 image = Bitmap.DecodeToWidth(stream, 128);
             }
 
-            _resources[email] = image;
+            InsertCachedAvatar(email, image);
 
             lock (_synclock)
             {
@@ -393,8 +409,55 @@ public partial class AvatarManager
     private void LoadDefaultAvatar(string key, string img)
     {
         var icon = AssetLoader.Open(new Uri($"avares://Komorebi/Resources/Images/{img}", UriKind.RelativeOrAbsolute));
+        // /rere 10 人分隊 P1#30: デフォルトアバターはエビクション対象外なので InsertCachedAvatar は呼ばず
+        // 直接 _resources に登録する。_defaultAvatars に登録されているキーは EvictOldest で skip される。
         _resources.TryAdd(key, new Bitmap(icon));
         _defaultAvatars.TryAdd(key, 0);
+    }
+
+    /// <summary>
+    /// /rere 10 人分隊 P1#30: アバターを LRU(FIFO) キャッシュに登録する。
+    /// 容量超過時はデフォルトアバター以外を古い順に <see cref="EvictionBatchSize"/> 件削除する。
+    ///
+    /// 並行性: ConcurrentDictionary + ConcurrentQueue は個別にスレッドセーフだが、
+    /// 「Count を見て evict する」全体は ABA 的に若干オーバーシュートし得る（複数スレッドが
+    /// 同時に閾値を越えると evict が複数回走る）。実害は無く、最大でも 1〜2 バッチ分の余分
+    /// な削除 / 保留に留まるため許容する。
+    /// </summary>
+    private void InsertCachedAvatar(string email, Bitmap image)
+    {
+        if (_defaultAvatars.ContainsKey(email))
+        {
+            _resources[email] = image;
+            return;
+        }
+
+        _resources[email] = image;
+        _resourceInsertionOrder.Enqueue(email);
+
+        if (_resources.Count > MaxCachedAvatars)
+            EvictOldest();
+    }
+
+    /// <summary>
+    /// /rere 10 人分隊 P1#30: 古い順に <see cref="EvictionBatchSize"/> 件のアバターを削除する。
+    /// デフォルトアバターはエビクションしない。削除した Bitmap は GC に任せる（明示的な Dispose は
+    /// 別 View からの読み取り中に Bitmap が破棄されると Avalonia が AccessViolation を起こす危険があるため避ける）。
+    /// </summary>
+    private void EvictOldest()
+    {
+        var evicted = 0;
+        while (evicted < EvictionBatchSize && _resourceInsertionOrder.TryDequeue(out var key))
+        {
+            if (_defaultAvatars.ContainsKey(key))
+                continue;
+
+            if (_resources.TryRemove(key, out _))
+                evicted++;
+        }
+
+        if (evicted > 0)
+            Logger.Log($"アバターキャッシュ {evicted} 件をエビクト（現在 {_resources.Count}/{MaxCachedAvatars}）", LogLevel.Debug);
     }
 
     /// <summary>

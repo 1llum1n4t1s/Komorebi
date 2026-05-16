@@ -53,13 +53,25 @@ public class HistoryFilter : ObservableObject
     }
 
     /// <summary>
-    /// Pattern 値のサニタイズ: 引数境界破壊文字 (`"`, `\r`, `\n`, NUL) を除去。
-    /// /rere 10 人分隊 P0#3 由来。
+    /// Pattern 値のサニタイズ: 引数境界破壊文字 (`"`, `\r`, `\n`, NUL) を除去 + 長さ制限。
+    /// /rere 10 人分隊 P0#3 + P1#25 由来。
+    ///
+    /// 長さ制限の理由 (P1#25): JSON deserialize 経由で巨大 Pattern (MB 級) が入ると、
+    /// BuildHistoryParams で git CLI 引数組み立て時の文字列補間が CPU/メモリを消耗する
+    /// (.NET の string concatenation で O(n²) 的にコピーが発生)。Git ref 名は仕様上
+    /// 255 byte 程度が現実的な上限なので、1024 文字でクランプしても通常利用には影響なし。
     /// </summary>
+    private const int MaxPatternLength = 1024;
+
     private static string SanitizePattern(string value)
     {
         if (string.IsNullOrEmpty(value))
             return value;
+
+        // P1#25: 長さ制限を先に適用 (LINQ Where で全走査する前に切り詰める)
+        if (value.Length > MaxPatternLength)
+            value = value[..MaxPatternLength];
+
         // 引数境界破壊文字を除去する。Pattern は git ref 文法 (英数+/-.) しか想定していないので
         // これらを除いても正常利用には影響しない。
         if (value.IndexOfAny(['"', '\r', '\n', '\0']) < 0)
