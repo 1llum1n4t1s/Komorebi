@@ -867,12 +867,10 @@
   <x:String x:Key="Text.ScanRepositories.UseCustomDir" xml:space="preserve">Mag-scan ng isa pang custom na direktoryo</x:String>
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">Suriin ang mga Update...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">May bagong bersyon ng software na ito: </x:String>
-  <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">Kasalukuyang Bersyon: </x:String>
-  <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Nabigo ang pagsuri ng mga update!</x:String>
+  <x:String x:Key="Text.SelfUpdate.Checking" xml:space="preserve">Tinitingnan ang mga update...</x:String>
   <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">I-download &amp; I-install</x:String>
-  <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">I-download</x:String>
+  <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">Nabigo ang pagsuri ng mga update!</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">Laktawan ang Bersyon na Ito</x:String>
-  <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">Petsa ng Paglabas ng Bagong Bersyon: </x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">Update ng Software</x:String>
   <x:String x:Key="Text.SelfUpdate.UpToDate" xml:space="preserve">Kasalukuyang walang mga update na magagamit.</x:String>
   <x:String x:Key="Text.SetSubmoduleBranch" xml:space="preserve">Itakda ang Branch ng Submodule</x:String>

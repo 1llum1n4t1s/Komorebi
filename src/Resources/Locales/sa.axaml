@@ -867,12 +867,10 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.ScanRepositories.UseCustomDir" xml:space="preserve">अन्यां अभिरुचिनिर्देशिकां परीक्षतु</x:String>
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">अद्यतनं परीक्षतु...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">अस्य तन्त्रांशस्य नवीनसंस्करणम् उपलभ्यते: </x:String>
-  <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">वर्तमानसंस्करणम्: </x:String>
-  <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">अद्यतनपरीक्षणं विफलम्!</x:String>
+  <x:String x:Key="Text.SelfUpdate.Checking" xml:space="preserve">अद्यतनं परीक्ष्यते...</x:String>
   <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">अवतारयतु तथा संस्थापयतु</x:String>
-  <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">अवतारयतु</x:String>
+  <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">अद्यतनपरीक्षणं विफलम्!</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">एतत् संस्करणं लङ्घयतु</x:String>
-  <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">नवीनसंस्करणप्रकाशनतिथिः: </x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">तन्त्रांशाद्यतनम्</x:String>
   <x:String x:Key="Text.SelfUpdate.UpToDate" xml:space="preserve">सम्प्रति कोऽपि अद्यतनं नोपलभ्यते।</x:String>
   <x:String x:Key="Text.SetSubmoduleBranch" xml:space="preserve">उपमॉड्यूलशाखां निर्धारयतु</x:String>

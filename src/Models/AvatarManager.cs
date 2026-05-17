@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -35,17 +35,11 @@ public interface IAvatarHost
 public partial class AvatarManager
 {
     /// <summary>
-    /// シングルトンインスタンスを取得する
+    /// シングルトンインスタンスを取得する。Lazy で thread-safe な遅延初期化を保証する。
     /// </summary>
-    public static AvatarManager Instance
-    {
-        get
-        {
-            return _instance ??= new AvatarManager();
-        }
-    }
+    public static AvatarManager Instance => s_instance.Value;
 
-    private static AvatarManager _instance = null;
+    private static readonly Lazy<AvatarManager> s_instance = new(() => new AvatarManager(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
     /// GitHubのnoreplyメールアドレスからユーザー名を抽出する正規表現
@@ -65,7 +59,7 @@ public partial class AvatarManager
     /// <summary>並行ダウンロード上限（過剰並列でローカル/ネットワークリソースを枯渇させないため）</summary>
     private const int MaxParallelDownloads = 4;
     /// <summary>
-    /// /rere 10 人分隊 P1#30: メモリ上に保持するアバター Bitmap の最大件数。
+    /// メモリ上に保持するアバター Bitmap の最大件数。
     /// 1 枚あたり ~100KB (128px PNG decoded) × 1024 件 ≒ 100MB を上限とする。
     /// 大規模リポジトリで数千の異なる commit author を閲覧してもキャッシュが
     /// 無制限に肥大化しないよう、超過時に <see cref="EvictOldest"/> で 25% を捨てる。
@@ -82,7 +76,7 @@ public partial class AvatarManager
     /// HashSet を使うことで Unsubscribe の計算量を O(n) から O(1) に、
     /// また同一ホストの二重登録を自然に防ぐ（View 再生成時の Subscribe/Unsubscribe の非対称対策）。
     /// </summary>
-    private HashSet<IAvatarHost> _avatars = [];
+    private readonly HashSet<IAvatarHost> _avatars = [];
     /// <summary>
     /// メールアドレスをキーとしたアバター画像のキャッシュ。
     /// UI スレッドの Request / バックグラウンドダウンロードループの Post / SetFromLocal が
@@ -90,14 +84,14 @@ public partial class AvatarManager
     /// </summary>
     private readonly ConcurrentDictionary<string, Bitmap> _resources = new();
     /// <summary>
-    /// /rere 10 人分隊 P1#30: アバターのキャッシュ追加順序を保持する FIFO キュー。
+    /// アバターのキャッシュ追加順序を保持する FIFO キュー。
     /// LRU の代わりに FIFO ベースで evict する（厳密な LRU は読み取りごとの並べ替えコストが
     /// かかるが、avatar の使用パターンはほぼ「最近見たコミットの author」に偏るため
     /// FIFO でも実用上は十分に近い動作になる）。デフォルトアバターはエビクション対象外。
     /// </summary>
     private readonly ConcurrentQueue<string> _resourceInsertionOrder = new();
     /// <summary>ダウンロードリクエスト待ちのメールアドレスセット</summary>
-    private HashSet<string> _requesting = [];
+    private readonly HashSet<string> _requesting = [];
     /// <summary>
     /// デフォルトアバターとして登録済みのメールアドレスセット。
     /// LoadDefaultAvatar 後は読み取り専用扱いだが、Request からの並行 Contains を
@@ -409,14 +403,14 @@ public partial class AvatarManager
     private void LoadDefaultAvatar(string key, string img)
     {
         var icon = AssetLoader.Open(new Uri($"avares://Komorebi/Resources/Images/{img}", UriKind.RelativeOrAbsolute));
-        // /rere 10 人分隊 P1#30: デフォルトアバターはエビクション対象外なので InsertCachedAvatar は呼ばず
+        // デフォルトアバターはエビクション対象外なので InsertCachedAvatar は呼ばず
         // 直接 _resources に登録する。_defaultAvatars に登録されているキーは EvictOldest で skip される。
         _resources.TryAdd(key, new Bitmap(icon));
         _defaultAvatars.TryAdd(key, 0);
     }
 
     /// <summary>
-    /// /rere 10 人分隊 P1#30: アバターを LRU(FIFO) キャッシュに登録する。
+    /// アバターを LRU(FIFO) キャッシュに登録する。
     /// 容量超過時はデフォルトアバター以外を古い順に <see cref="EvictionBatchSize"/> 件削除する。
     ///
     /// 並行性: ConcurrentDictionary + ConcurrentQueue は個別にスレッドセーフだが、
@@ -440,7 +434,7 @@ public partial class AvatarManager
     }
 
     /// <summary>
-    /// /rere 10 人分隊 P1#30: 古い順に <see cref="EvictionBatchSize"/> 件のアバターを削除する。
+    /// 古い順に <see cref="EvictionBatchSize"/> 件のアバターを削除する。
     /// デフォルトアバターはエビクションしない。削除した Bitmap は GC に任せる（明示的な Dispose は
     /// 別 View からの読み取り中に Bitmap が破棄されると Avalonia が AccessViolation を起こす危険があるため避ける）。
     /// </summary>

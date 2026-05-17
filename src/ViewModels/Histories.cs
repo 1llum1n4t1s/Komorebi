@@ -84,7 +84,6 @@ public class Histories : ObservableObject, IDisposable
             var lastSelected = SelectedCommit;
             if (SetProperty(ref _commits, value))
             {
-                // パフォーマンス: SHA→Commit辞書を構築。Find()のO(n)→TryGetValueのO(1)に改善
                 // 大規模リポジトリでは数万コミットを扱うため、繰り返しのFind()が深刻なボトルネックになる
                 // TryAdd を使うのは git の正常動作で SHA は一意だが、QueryCommits のパース異常や
                 // 将来の拡張で重複が混入してもクラッシュさせない防御的設計（最初の出現を勝ちとする）
@@ -213,7 +212,7 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public void Dispose()
     {
-        // /rere 10 人分隊 P0#13 (B1-C2): Repository.Close は `_histories = null` を行わない方針なので、
+        // Repository.Close は `_histories = null` を行わない方針なので、
         // ここで `_repo = null` を行うと「Repository は _histories への参照を保持しているのに
         // _histories.Repo が null」という非対称が race の温床になる。両方とも参照を維持し GC に任せる。
         // データクリア (Commits = []) は維持し、循環参照は GC root が解けた時点で消える。
@@ -267,7 +266,6 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public void NavigateTo(string commitSHA)
     {
-        // パフォーマンス: 完全一致をO(1)辞書で試行し、失敗時のみプレフィックス検索にフォールバック
         _commitBySha.TryGetValue(commitSHA, out var commit);
         commit ??= _commits.Find(x => x.SHA.StartsWith(commitSHA, StringComparison.Ordinal));
         if (commit is not null)
@@ -346,7 +344,7 @@ public class Histories : ObservableObject, IDisposable
             if (searchContext is not null &&
                 (searchContext.Selected is null || !searchContext.Selected.SHA.Equals(commit.SHA, StringComparison.Ordinal)))
             {
-                searchContext.Selected = searchContext.Results?.Find(x => x.SHA.Equals(commit.SHA, StringComparison.Ordinal));
+                searchContext.Selected = searchContext.FindResultBySha(commit.SHA);
             }
 
             SelectedCommit = commit;
@@ -410,7 +408,6 @@ public class Histories : ObservableObject, IDisposable
 
         if (decorator.Type == Models.DecoratorType.LocalBranchHead)
         {
-            // パフォーマンス: O(n)のFind→O(1)の辞書ルックアップ
             var b = _repo.FindLocalBranchByName(decorator.Name);
             if (b is null)
                 return false;
@@ -421,7 +418,6 @@ public class Histories : ObservableObject, IDisposable
 
         if (decorator.Type == Models.DecoratorType.RemoteBranchHead)
         {
-            // パフォーマンス: O(n)のFind→O(1)の辞書ルックアップ
             var rb = _repo.FindBranchByFriendlyName(decorator.Name);
             if (rb is null)
                 return false;
@@ -462,7 +458,6 @@ public class Histories : ObservableObject, IDisposable
         {
             if (d.Type == Models.DecoratorType.LocalBranchHead)
             {
-                // パフォーマンス: O(n)のFind→O(1)の辞書ルックアップ
                 var b = _repo.FindLocalBranchByName(d.Name);
                 if (b is null)
                     continue;
@@ -473,7 +468,6 @@ public class Histories : ObservableObject, IDisposable
 
             if (d.Type == Models.DecoratorType.RemoteBranchHead)
             {
-                // パフォーマンス: O(n)のFind→O(1)の辞書ルックアップ
                 var rb = _repo.FindBranchByFriendlyName(d.Name);
                 if (rb is null)
                     continue;
@@ -515,7 +509,6 @@ public class Histories : ObservableObject, IDisposable
                 List<Models.Commit> parents = [];
                 foreach (var sha in commit.Parents)
                 {
-                    // パフォーマンス: O(n)のFind→O(1)の辞書ルックアップ（ループ内でO(n²)→O(n)に改善）
                     if (!_commitBySha.TryGetValue(sha, out var parent))
                         parent = await new Commands.QuerySingleCommit(_repo.FullPath, sha).GetResultAsync();
 
@@ -574,7 +567,6 @@ public class Histories : ObservableObject, IDisposable
         if (head.Parents.Count == 0)
             return;
 
-        // パフォーマンス: O(n)のFind→O(1)の辞書ルックアップ
         if (!_commitBySha.TryGetValue(head.Parents[0], out var parent))
             parent = await new Commands.QuerySingleCommit(_repo.FullPath, head.Parents[0]).GetResultAsync();
 
@@ -616,7 +608,6 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public async Task<Models.Commit> CompareWithHeadAsync(Models.Commit commit)
     {
-        // パフォーマンス: IsCurrentHeadはデコレーター検査が必要なのでFind()を維持（辞書化不可）
         var head = _commits.Find(x => x.IsCurrentHead);
         if (head is null)
         {
@@ -646,9 +637,7 @@ public class Histories : ObservableObject, IDisposable
     private CommitDetailSharedData _commitDetailSharedData = null; // コミット詳細の共有データ
     private bool _isLoading = true; // 読み込み中フラグ
     private List<Models.Commit> _commits = []; // コミット一覧
-    // パフォーマンス: SHA→CommitのO(1)ルックアップ辞書。Commitsプロパティ設定時に再構築される
     private Dictionary<string, Models.Commit> _commitBySha = [];
-    // パフォーマンス: 親SHA→子Commit群のO(1)逆引き辞書。OnGotoChildで使用
     private Dictionary<string, List<Models.Commit>> _childrenByParentSha = [];
     private Models.CommitGraph _graph = null; // コミットグラフ描画データ
     private Models.Commit _selectedCommit = null; // 選択中のコミット

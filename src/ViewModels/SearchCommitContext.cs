@@ -75,12 +75,32 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    /// 検索結果のコミットリスト。
+    /// 検索結果のコミットリスト。setter で SHA→Commit の lookup 辞書も同期更新する。
     /// </summary>
     public List<Models.Commit> Results
     {
         get => _results;
-        private set => SetProperty(ref _results, value);
+        private set
+        {
+            if (SetProperty(ref _results, value))
+            {
+                _resultsBySha.Clear();
+                if (value is not null)
+                {
+                    foreach (var c in value)
+                        _resultsBySha[c.SHA] = c;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 検索結果から指定 SHA のコミットを O(1) で取得する。見つからなければ null。
+    /// Histories の選択コミット変更時に O(n) Find を回避するためのアクセサ。
+    /// </summary>
+    public Models.Commit FindResultBySha(string sha)
+    {
+        return _resultsBySha.TryGetValue(sha, out var commit) ? commit : null;
     }
 
     /// <summary>
@@ -112,6 +132,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
         _repo = null;
         _suggestions?.Clear();
         _results?.Clear();
+        _resultsBySha.Clear();
         _worktreeFiles?.Clear();
     }
 
@@ -280,6 +301,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     private List<string> _suggestions = null;
     private bool _isQuerying = false;
     private List<Models.Commit> _results = null;
+    private readonly Dictionary<string, Models.Commit> _resultsBySha = new(StringComparer.Ordinal);
     private Models.Commit _selected = null;
     private bool _requestingWorktreeFiles = false;
     private List<string> _worktreeFiles = null;

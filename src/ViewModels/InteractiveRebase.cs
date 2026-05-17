@@ -236,7 +236,7 @@ public class InteractiveRebase : ObservableObject
                         item.Action = Models.InteractiveRebaseAction.Fixup;
                         // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去 ("fixup! ".Length = 7)
                         var targetSubject = subject.Substring(7).Trim();
-                        // /rere P1#13: 空文字列キーは Second-pass で「件名が空の全コミット」に意図せずマッチするため除外
+                        // 空文字列キーは Second-pass で「件名が空の全コミット」に意図せずマッチするため除外
                         if (targetSubject.Length > 0)
                         {
                             needReorder.Add(new(targetSubject, item));
@@ -250,7 +250,7 @@ public class InteractiveRebase : ObservableObject
                         item.Action = Models.InteractiveRebaseAction.Squash;
                         // upstream 6e53d949: ターゲット件名と完全一致比較するため Trim() で前後空白を除去 ("squash! ".Length = 8)
                         var targetSubject = subject.Substring(8).Trim();
-                        // /rere P1#13: 空文字列キーガード (上記同様)
+                        // 空文字列キーガード (上記同様)
                         if (targetSubject.Length > 0)
                         {
                             needReorder.Add(new(targetSubject, item));
@@ -267,7 +267,7 @@ public class InteractiveRebase : ObservableObject
             // 逆順にすることで「`fixup! foo` を `foo` の直後に挿入」が安定し、複数 fixup の重なりも順序を保つ。
             // KeySet による O(1) ガードで、件名一致候補が無い場合は全 needReorder スキャンを回避できる。
             //
-            // /rere P0#5: 早期終了 (`if (needReorderKeySet.Count == 0) break;`) は削除した。
+            // 早期終了 (`if (needReorderKeySet.Count == 0) break;`) は削除した。
             // 理由: 同名コミット (例: `foo`, `fixup! foo`, `foo`, `fixup! foo`) が存在する場合、
             // 最初の `foo` で needReorderKeySet.Remove(subject) するとキーが消え、
             // 2 番目の `foo` への fixup 配置がスキャンから外れる経路があった。

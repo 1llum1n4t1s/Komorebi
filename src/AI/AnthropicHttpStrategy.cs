@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -14,9 +16,14 @@ namespace Komorebi.AI;
 /// JSON ペイロードと tool_use ループを手書きする。
 /// 将来 Anthropic 用の公式 .NET SDK が安定したら、この戦略は SDK 経路に置換可能。
 /// </summary>
-internal sealed class AnthropicHttpStrategy : IGenerationStrategy
+internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrategy
 {
-    private static readonly HttpClient s_httpClient = new() { Timeout = TimeSpan.FromSeconds(60) };
+    private static readonly HttpClient s_httpClient = new()
+    {
+        Timeout = TimeSpan.FromSeconds(60),
+        // 異常応答（巨大 thinking ブロック等）が無限に流れ込む OOM を防ぐ。AvatarManager の HttpClient と同方針。
+        MaxResponseContentBufferSize = 8 * 1024 * 1024,
+    };
     private const string AnthropicApiVersion = "2023-06-01";
     private const int AnthropicMaxTokens = 4096;
     /// <summary>
@@ -25,19 +32,12 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
     /// </summary>
     private const int MaxToolCallIterations = 20;
 
-    private readonly Service _service;
-
-    public AnthropicHttpStrategy(Service service)
-    {
-        _service = service;
-    }
-
     public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
     {
-        // /rere 10 人分隊 P0#19 (A3-1A): HTTPS 強制で API key の平文流出を防ぐ
-        _service.ValidateServerScheme();
+        // HTTPS 強制で API key の平文流出を防ぐ
+        service.ValidateServerScheme();
 
-        var baseUrl = string.IsNullOrEmpty(_service.Server) ? "https://api.anthropic.com" : _service.Server.TrimEnd('/');
+        var baseUrl = string.IsNullOrEmpty(service.Server) ? "https://api.anthropic.com" : service.Server.TrimEnd('/');
 
         var tools = new JsonArray
         {
@@ -61,7 +61,7 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
 
         var messages = new JsonArray
         {
-            new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(_service, repo, changeList) }
+            new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(service, repo, changeList) }
         };
 
         var iterations = 0;
@@ -72,7 +72,7 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
                     $"Anthropic tool_use loop exceeded {MaxToolCallIterations} iterations. " +
                     "This may indicate a prompt injection or model malfunction.");
 
-            // /rere 10 人分隊 P1#27: messages.DeepClone() は tool_use ループの反復ごとに
+            // messages.DeepClone() は tool_use ループの反復ごとに
             // O(n) のコピーが走るため、メッセージ列が伸びるたびに合計 O(n²) になっていた。
             // JsonNode は親が 1 つしか持てない制約があるため DeepClone していたが、
             // 「一旦親に attach → ToJsonString で serialize → Remove で detach」の
@@ -80,7 +80,7 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
             // に戻すので、次の反復で再 attach できる。
             var requestBody = new JsonObject
             {
-                ["model"] = _service.Model,
+                ["model"] = service.Model,
                 ["max_tokens"] = AnthropicMaxTokens,
                 ["tools"] = tools,
                 ["messages"] = messages
@@ -91,7 +91,7 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
             requestBody.Remove("messages");
 
             using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/v1/messages");
-            request.Headers.Add("x-api-key", _service.ResolvedApiKey);
+            request.Headers.Add("x-api-key", service.ResolvedApiKey);
             request.Headers.Add("anthropic-version", AnthropicApiVersion);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
             using var response = await s_httpClient.SendAsync(request, cancellation);
@@ -136,19 +136,28 @@ internal sealed class AnthropicHttpStrategy : IGenerationStrategy
                     ["content"] = JsonNode.Parse(content.GetRawText())
                 });
 
-                // ツールを実行して結果を収集
-                var toolResults = new JsonArray();
+                // tool_use を抽出して並列実行する。
+                // ChatTools.ProcessAnthropicCall は read-only な git diff 取得なので副作用がなく、
+                // 1 ターンで複数 tool_use が来ても Task.WhenAll で並列化可能（5〜15 ファイル diff で
+                // 0.5〜1.5 秒短縮、tool_use ループが回る分倍増する）。CommitDetail.cs の SHA 検証経路と
+                // 同じ並列パターン。
+                var toolCalls = new List<(string Id, string Name, JsonElement Input)>();
                 foreach (var item in content.EnumerateArray())
                 {
                     if (item.GetProperty("type").GetString() != "tool_use")
                         continue;
-
-                    var toolId = item.GetProperty("id").GetString();
-                    var toolName = item.GetProperty("name").GetString();
-                    var toolInput = item.GetProperty("input");
-                    var toolResult = await ChatTools.ProcessAnthropicCall(toolId, toolName, toolInput, repo, onUpdate);
-                    toolResults.Add(toolResult);
+                    toolCalls.Add((
+                        item.GetProperty("id").GetString(),
+                        item.GetProperty("name").GetString(),
+                        item.GetProperty("input")));
                 }
+
+                var toolResultObjects = await Task.WhenAll(toolCalls.Select(c =>
+                    ChatTools.ProcessAnthropicCall(c.Id, c.Name, c.Input, repo, onUpdate))).ConfigureAwait(false);
+
+                var toolResults = new JsonArray();
+                foreach (var r in toolResultObjects)
+                    toolResults.Add(r);
 
                 messages.Add(new JsonObject { ["role"] = "user", ["content"] = toolResults });
             }

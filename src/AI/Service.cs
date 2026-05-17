@@ -60,7 +60,7 @@ public class Service
 
     /// <summary>
     /// 設定された <see cref="Server"/> URL の安全性検証。HTTPS / localhost / loopback 以外は弾く。
-    /// /rere 10 人分隊 P0#19 (A3-1A): ユーザーが誤って `http://` の Server を設定した場合に
+    /// ユーザーが誤って `http://` の Server を設定した場合に
     /// API key を平文で LAN/WAN に流す事故を防ぐ。各 Strategy で HTTP リクエスト送信前に呼ぶ。
     /// </summary>
     public void ValidateServerScheme()
@@ -94,7 +94,7 @@ public class Service
 /// Windows では DPAPI (CurrentUser) でラップして他ユーザーから読み取れないようにする。
 /// Unix では chmod 600 で守る。
 /// </summary>
-internal static class ApiKeyProtector
+internal static partial class ApiKeyProtector
 {
     private const string Prefix = "komorebi:v1:aes:";
     private const string KeyFileName = "ai-api-key.key";
@@ -109,12 +109,12 @@ internal static class ApiKeyProtector
     /// <summary>
     /// 鍵生成・読み込みを直列化するロック。File.Exists → ReadAllText → WriteAllText の TOCTOU を防ぐ。
     /// </summary>
-    private static readonly object s_keyLock = new();
+    private static readonly System.Threading.Lock s_keyLock = new();
     /// <summary>
     /// 1 セッション中の鍵をメモリキャッシュ。Lazy 化することで Protect/Unprotect の高頻度呼び出しでも
     /// ファイル I/O を発生させない。
     /// volatile は Double-Checked Locking パターンで ARM64 等の弱メモリモデル CPU で stale read を
-    /// 防ぐため必要 (/rere P1#6)。
+    /// 防ぐため必要 ()。
     /// </summary>
     private static volatile byte[] s_cachedKey;
     private static string s_cachedKeyDir;
@@ -329,7 +329,7 @@ internal static class ApiKeyProtector
 
     // ===== Windows DPAPI P/Invoke =====
     // System.Security.Cryptography.ProtectedData は別 NuGet 配布で AOT trim ハンドリングが煩雑なため、
-    // crypt32.dll を直接呼ぶ source-generated P/Invoke を使う。
+    // crypt32.dll を直接呼ぶ source-generated P/Invoke ([LibraryImport]) を使う。
 
     [StructLayout(LayoutKind.Sequential)]
     private struct DATA_BLOB
@@ -339,59 +339,42 @@ internal static class ApiKeyProtector
     }
 
     [SupportedOSPlatform("windows")]
-    [DllImport("crypt32.dll", EntryPoint = "CryptProtectData", SetLastError = true)]
+    [LibraryImport("crypt32.dll", EntryPoint = "CryptProtectData", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool CryptProtectData(
+    private static partial bool CryptProtectData(
         ref DATA_BLOB pDataIn, IntPtr szDataDescr, IntPtr pOptionalEntropy,
         IntPtr pvReserved, IntPtr pPromptStruct, int dwFlags, out DATA_BLOB pDataOut);
 
     [SupportedOSPlatform("windows")]
-    [DllImport("crypt32.dll", EntryPoint = "CryptUnprotectData", SetLastError = true)]
+    [LibraryImport("crypt32.dll", EntryPoint = "CryptUnprotectData", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool CryptUnprotectData(
+    private static partial bool CryptUnprotectData(
         ref DATA_BLOB pDataIn, IntPtr ppszDataDescr, IntPtr pOptionalEntropy,
         IntPtr pvReserved, IntPtr pPromptStruct, int dwFlags, out DATA_BLOB pDataOut);
 
     [SupportedOSPlatform("windows")]
-    [DllImport("kernel32.dll", EntryPoint = "LocalFree")]
-    private static extern IntPtr LocalFree(IntPtr hMem);
+    [LibraryImport("kernel32.dll", EntryPoint = "LocalFree")]
+    private static partial IntPtr LocalFree(IntPtr hMem);
 
     [SupportedOSPlatform("windows")]
-    private static byte[] DpapiProtect(byte[] data)
+    private static byte[] DpapiProtect(byte[] data) => DpapiCrypt(data, protect: true);
+
+    [SupportedOSPlatform("windows")]
+    private static byte[] DpapiUnprotect(byte[] data) => DpapiCrypt(data, protect: false);
+
+    [SupportedOSPlatform("windows")]
+    private static byte[] DpapiCrypt(byte[] data, bool protect)
     {
         var pbData = Marshal.AllocHGlobal(data.Length);
         try
         {
             Marshal.Copy(data, 0, pbData, data.Length);
             var dataIn = new DATA_BLOB { cbData = data.Length, pbData = pbData };
-            if (!CryptProtectData(ref dataIn, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, CRYPTPROTECT_UI_FORBIDDEN, out var dataOut))
-                throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
-            try
-            {
-                var result = new byte[dataOut.cbData];
-                Marshal.Copy(dataOut.pbData, result, 0, dataOut.cbData);
-                return result;
-            }
-            finally
-            {
-                LocalFree(dataOut.pbData);
-            }
-        }
-        finally
-        {
-            Marshal.FreeHGlobal(pbData);
-        }
-    }
-
-    [SupportedOSPlatform("windows")]
-    private static byte[] DpapiUnprotect(byte[] data)
-    {
-        var pbData = Marshal.AllocHGlobal(data.Length);
-        try
-        {
-            Marshal.Copy(data, 0, pbData, data.Length);
-            var dataIn = new DATA_BLOB { cbData = data.Length, pbData = pbData };
-            if (!CryptUnprotectData(ref dataIn, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, CRYPTPROTECT_UI_FORBIDDEN, out var dataOut))
+            DATA_BLOB dataOut;
+            var ok = protect
+                ? CryptProtectData(ref dataIn, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, CRYPTPROTECT_UI_FORBIDDEN, out dataOut)
+                : CryptUnprotectData(ref dataIn, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, CRYPTPROTECT_UI_FORBIDDEN, out dataOut);
+            if (!ok)
                 throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
             try
             {

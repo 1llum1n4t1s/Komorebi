@@ -69,7 +69,7 @@ public class DeleteBranch : Popup
         var log = _repo.CreateLog("Delete Branch");
         Use(log);
 
-        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkBranchesDirtyManually は
+        // Watcher ロックは git コマンド実行範囲に限定し、MarkBranchesDirtyManually は
         // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
         using (_repo.LockWatcher())
         {

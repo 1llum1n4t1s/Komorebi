@@ -70,72 +70,53 @@ public static class ChatTools
         return (true, expectedFull, claimedFile);
     }
 
+    /// <summary>
+    /// GetDetailChangesInFile ツールの共通実装。OpenAI / Anthropic 両経路で入力 JsonElement の
+    /// "repo" / "file" / "originalFile" を取り出し、パス検証 → git diff 取得 → 結果文字列を返す。
+    /// 各 Process* は結果文字列を SDK 固有のメッセージ型に包むだけ。
+    /// </summary>
+    private static async Task<string> GetDetailChangesContentAsync(JsonElement input, string expectedRepoFullPath, Action<string> output)
+    {
+        var hasRepo = input.TryGetProperty("repo", out var repoPath);
+        var hasFile = input.TryGetProperty("file", out var filePath);
+        var hasOriginalFile = input.TryGetProperty("originalFile", out var originalFilePath);
+        if (!hasRepo)
+            throw new ArgumentException("The repo argument is required", "repo");
+        if (!hasFile)
+            throw new ArgumentException("The file argument is required", "file");
+
+        var check = ValidatePaths(expectedRepoFullPath, repoPath.GetString(), filePath.GetString());
+        if (!check.Ok)
+            return $"refused: {check.File}";
+
+        output?.Invoke($"Read changes in file: {check.File}");
+
+        var orgFilePath = hasOriginalFile ? originalFilePath.GetString() : string.Empty;
+        var rs = await new Commands.GetFileChangeForAI(check.Repo, check.File, orgFilePath).ReadAsync();
+        return rs.IsSuccess ? rs.StdOut : $"Failed to get diff for '{check.File}'. Error: {rs.StdErr}";
+    }
+
     public static async Task<ToolChatMessage> ProcessAsync(ChatToolCall call, string expectedRepoFullPath, Action<string> output)
     {
+        if (!call.FunctionName.Equals(GetDetailChangesInFile.FunctionName))
+            throw new NotSupportedException($"The tool {call.FunctionName} is not supported");
+
         using var doc = JsonDocument.Parse(call.FunctionArguments);
-
-        if (call.FunctionName.Equals(GetDetailChangesInFile.FunctionName))
-        {
-            var hasRepo = doc.RootElement.TryGetProperty("repo", out var repoPath);
-            var hasFile = doc.RootElement.TryGetProperty("file", out var filePath);
-            var hasOriginalFile = doc.RootElement.TryGetProperty("originalFile", out var originalFilePath);
-            if (!hasRepo)
-                throw new ArgumentException("The repo argument is required", "repo");
-            if (!hasFile)
-                throw new ArgumentException("The file argument is required", "file");
-
-            var check = ValidatePaths(expectedRepoFullPath, repoPath.GetString(), filePath.GetString());
-            if (!check.Ok)
-                return new ToolChatMessage(call.Id, $"refused: {check.File}");
-
-            output?.Invoke($"Read changes in file: {check.File}");
-
-            var orgFilePath = hasOriginalFile ? originalFilePath.GetString() : string.Empty;
-            var rs = await new Commands.GetFileChangeForAI(check.Repo, check.File, orgFilePath).ReadAsync();
-            var message = rs.IsSuccess ? rs.StdOut : $"Failed to get diff for '{check.File}'. Error: {rs.StdErr}";
-            return new ToolChatMessage(call.Id, message);
-        }
-
-        throw new NotSupportedException($"The tool {call.FunctionName} is not supported");
+        var message = await GetDetailChangesContentAsync(doc.RootElement, expectedRepoFullPath, output);
+        return new ToolChatMessage(call.Id, message);
     }
 
     public static async Task<JsonObject> ProcessAnthropicCall(string toolId, string toolName, JsonElement toolInput, string expectedRepoFullPath, Action<string> output)
     {
-        if (toolName == GetDetailChangesInFile.FunctionName)
+        if (toolName != GetDetailChangesInFile.FunctionName)
+            throw new NotSupportedException($"The tool {toolName} is not supported");
+
+        var message = await GetDetailChangesContentAsync(toolInput, expectedRepoFullPath, output);
+        return new JsonObject
         {
-            var hasRepo = toolInput.TryGetProperty("repo", out var repoPath);
-            var hasFile = toolInput.TryGetProperty("file", out var filePath);
-            var hasOriginalFile = toolInput.TryGetProperty("originalFile", out var originalFilePath);
-            if (!hasRepo)
-                throw new ArgumentException("The repo argument is required", "repo");
-            if (!hasFile)
-                throw new ArgumentException("The file argument is required", "file");
-
-            var check = ValidatePaths(expectedRepoFullPath, repoPath.GetString(), filePath.GetString());
-            if (!check.Ok)
-            {
-                return new JsonObject
-                {
-                    ["type"] = "tool_result",
-                    ["tool_use_id"] = toolId,
-                    ["content"] = $"refused: {check.File}"
-                };
-            }
-
-            output?.Invoke($"Read changes in file: {check.File}");
-
-            var orgFilePath = hasOriginalFile ? originalFilePath.GetString() : string.Empty;
-            var rs = await new Commands.GetFileChangeForAI(check.Repo, check.File, orgFilePath).ReadAsync();
-            var message = rs.IsSuccess ? rs.StdOut : $"Failed to get diff for '{check.File}'. Error: {rs.StdErr}";
-
-            return new JsonObject
-            {
-                ["type"] = "tool_result",
-                ["tool_use_id"] = toolId,
-                ["content"] = message
-            };
-        }
-
-        throw new NotSupportedException($"The tool {toolName} is not supported");
+            ["type"] = "tool_result",
+            ["tool_use_id"] = toolId,
+            ["content"] = message
+        };
     }
 }

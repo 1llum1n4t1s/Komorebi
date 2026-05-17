@@ -139,7 +139,7 @@ public class ImageSource
     {
         using (var pfiImage = Pfimage.FromStream(stream))
         {
-            // /rere 10 人分隊 P0#24 (A2-I1): 悪意 TGA/DDS ヘッダで int オーバーフロー → 負値 stride で
+            // 悪意 TGA/DDS ヘッダで int オーバーフロー → 負値 stride で
             // AccessViolation のリスク。Width/Height/Width*4 を long で評価し、危険値は弾く。
             if (pfiImage.Width <= 0 || pfiImage.Height <= 0 ||
                 (long)pfiImage.Width * 4 > int.MaxValue ||
@@ -211,7 +211,7 @@ public class ImageSource
                     return new ImageSource(null, 0);
             }
 
-            // /rere 10 人分隊 P0#5 (A2-I2 / C2-S2-1): Marshal.UnsafeAddrOfPinnedArrayElement は名前に Pinned が
+            // Marshal.UnsafeAddrOfPinnedArrayElement は名前に Pinned が
             // 入っているが実際には配列を pin しない (MSDN 明記)。GC が data を移動した直後に Bitmap ctor が
             // 古いアドレスを参照すると AV。GCHandle.Alloc(Pinned) で明示的に pin する。
             var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -245,7 +245,7 @@ public class ImageSource
             var width = tiff.GetField(TiffTag.IMAGEWIDTH)[0].ToInt();
             var height = tiff.GetField(TiffTag.IMAGELENGTH)[0].ToInt();
 
-            // /rere 10 人分隊 P0#24 (A2-I1): 悪意 TIFF ヘッダで `width * height` の int オーバーフローを防止。
+            // 悪意 TIFF ヘッダで `width * height` の int オーバーフローを防止。
             // `new int[width * height]` が負値サイズで OverflowException、または極小サイズ確保後の
             // ReadRGBAImageOriented で範囲外書き込み → メモリ破壊の経路を遮断。
             if (width <= 0 || height <= 0 || (long)width * height > 0x10000000L)
@@ -285,7 +285,7 @@ public class ImageSource
         var data = image.Data;
         var stride = image.Width * (int)image.Comp;
 
-        // /rere 10 人分隊 P0#5 (A2-I2 / C2-S2-1): Marshal.UnsafeAddrOfPinnedArrayElement は名前と異なり
+        // Marshal.UnsafeAddrOfPinnedArrayElement は名前と異なり
         // 実際には配列を pin しない (MSDN 明記)。GC 移動で AV のリスクがあるため GCHandle.Alloc(Pinned) で
         // 明示的に pin する。Avalonia Bitmap ctor が同期コピーするので Free 後にアクセスされる経路はない。
         var handle = GCHandle.Alloc(data, GCHandleType.Pinned);

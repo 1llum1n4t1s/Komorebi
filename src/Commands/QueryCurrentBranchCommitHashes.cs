@@ -38,12 +38,14 @@ public class QueryCurrentBranchCommitHashes : Command
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+            var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             // 8文字以上の行をSHAとして追加
             while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { Length: > 8 } line)
                 outs.Add(line);
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
+            await stderrDrain.ConfigureAwait(false);
         }
         catch
         {

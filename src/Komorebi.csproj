@@ -15,6 +15,8 @@
       [UnconditionalSuppressMessage] / [DynamicDependency] 属性を付けて意図を明示する。
     -->
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+    <!-- LibraryImport source generator が marshalling stub に unsafe コードを生成するため必要 (ユーザーコードに unsafe を許可するわけではない) -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <Product>Komorebi</Product>
     <Description>OpenSource GIT client</Description>
@@ -58,23 +60,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.0.2" />
+    <PackageReference Include="Avalonia" Version="12.0.3" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.0.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.2" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.2" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.3" />
     <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Azure.AI.OpenAI" Version="2.8.0-beta.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="CRDebugger.Avalonia" Version="1.0.24" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.2" />
+    <PackageReference Include="CRDebugger.Avalonia" Version="1.0.26" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.4" />
     <PackageReference Include="OpenAI" Version="2.10.0" />
     <PackageReference Include="Pfim" Version="0.11.4" />
     <PackageReference Include="StbImageSharp" Version="2.30.15" />
-    <PackageReference Include="SuperLightLogger" Version="1.0.6" />
+    <PackageReference Include="SuperLightLogger" Version="1.0.7" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.93.0" />
     <PackageReference Include="Velopack" Version="0.0.1298" />
+    <PackageReference Include="VelopackUpdateDialog.Avalonia" Version="1.0.3" />
 
     <ProjectReference Include="../depends/AvaloniaEdit/src/AvaloniaEdit.TextMate/AvaloniaEdit.TextMate.csproj" />
   </ItemGroup>

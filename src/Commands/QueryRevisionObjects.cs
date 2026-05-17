@@ -50,6 +50,7 @@ public partial class QueryRevisionObjects : Command
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+            var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
             {

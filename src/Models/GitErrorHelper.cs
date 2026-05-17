@@ -269,15 +269,21 @@ public static partial class GitErrorHelper
             return null;
 
         // "Permissions XXXX for '/path/to/key' are too open"
-        var match = Regex.Match(errorMessage, @"Permissions\s+\d+\s+for\s+'([^']+)'");
+        var match = PermissionKeyPathRegex().Match(errorMessage);
         if (match.Success)
             return match.Groups[1].Value;
 
         // "Load key \"/path/to/key\": bad permissions"
-        match = Regex.Match(errorMessage, @"Load key\s+""([^""]+)""");
+        match = LoadKeyPathRegex().Match(errorMessage);
         if (match.Success)
             return match.Groups[1].Value;
 
         return null;
     }
+
+    [GeneratedRegex(@"Permissions\s+\d+\s+for\s+'([^']+)'")]
+    private static partial Regex PermissionKeyPathRegex();
+
+    [GeneratedRegex(@"Load key\s+""([^""]+)""")]
+    private static partial Regex LoadKeyPathRegex();
 }

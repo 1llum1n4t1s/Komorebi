@@ -313,7 +313,7 @@ public class RepositoryUIStates
             LastCommitMessage = lastCommitMessage;
             // upstream 50367b7e: アトミック書き込み (tmp に書いてから rename) で書き込み途中のクラッシュ・電源断で
             // UI 状態ファイルが破損するのを防ぐ。
-            // /rere P1#15: 同一リポジトリ並行操作時の tmp ファイル衝突を避けるためランダム拡張子付き。
+            // 同一リポジトリ並行操作時の tmp ファイル衝突を避けるためランダム拡張子付き。
             var content = JsonSerializer.Serialize(this, JsonCodeGen.Default.RepositoryUIStates);
             var tmpfile = $"{_file}.tmp.{Guid.NewGuid():N}";
             File.WriteAllText(tmpfile, content);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -58,7 +58,7 @@ public partial class Askpass : ChromelessWindow
         // ホスト鍵「変更」警告は MITM の可能性があるため、いかなる経路でも yes を送ってはならない
         _isHostKeyChangedWarning = hintKey is "Text.Askpass.Hint.HostKeyChanged";
 
-        // /rere 10 人分隊 P0#6 (A2-C2): HostKeyNew (= 新規ホスト鍵プロンプト) で OK ボタンに Enter キー一発で
+        // HostKeyNew (= 新規ホスト鍵プロンプト) で OK ボタンに Enter キー一発で
         // "yes" を自動承認する経路を遮断するため、HostKeyNew でも TxtPassphrase は表示したまま、明示的に
         // "yes" を入力させる。これにより OpenSSH CLI の `(yes/no/[fingerprint])` 挙動を踏襲し、MITM 攻撃時の
         // 承認ハードルを CLI と同等まで戻す。EnterPassword 内で TxtPassphrase.Text を "yes" と厳密一致比較する。
@@ -101,7 +101,7 @@ public partial class Askpass : ChromelessWindow
 
         if (_isHostKeyPrompt)
         {
-            // /rere 10 人分隊 P0#6 (A2-C2): HostKeyNew プロンプトで「Enter 一発で yes」を防ぐ。
+            // HostKeyNew プロンプトで「Enter 一発で yes」を防ぐ。
             // TxtPassphrase.Text が "yes" / "YES" / "y" と厳密一致した場合のみ承認し、それ以外は "no" 送信。
             // OpenSSH CLI の `(yes/no/[fingerprint])` 動作を踏襲し、MITM 攻撃を受けたホストへの誤承認を防ぐ。
             var userInput = (TxtPassphrase.Text ?? string.Empty).Trim();
@@ -120,7 +120,7 @@ public partial class Askpass : ChromelessWindow
             // Console.Out.WriteLine() は CodePage 依存で非 ASCII passphrase を破損させる恐れがあったため
             // OpenStandardOutput() で UTF-8 バイト列をそのまま書く。TxtPassphrase.Text も string.Empty で参照を切る。
             //
-            // /rere P2#19 注記: C# string は immutable + GC 管理のため、TxtPassphrase.Text 内部の
+            // 注記: C# string は immutable + GC 管理のため、TxtPassphrase.Text 内部の
             // 旧 string オブジェクト自体は GC が回収するまでヒープに残る。完全な秘密保護は SecureString
             // または char[] ベースのカスタムコントロールが必要だが、.NET 5+ では SecureString が非推奨扱いで
             // ベストエフォートに留まる (Askpass プロセスは短命なので現実的リスクは限定)。

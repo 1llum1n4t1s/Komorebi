@@ -323,7 +323,7 @@ public class WorkingCopy : ObservableObject, IDisposable
         if (_inProgressContext is not null && !string.IsNullOrEmpty(_commitMessage))
             File.WriteAllText(Path.Combine(_repo.GitDir, "MERGE_MSG"), _commitMessage);
 
-        // /rere 10 人分隊 P0#13 (B1-C2): Repository は `_workingCopy = null` を行わない方針なので、
+        // Repository は `_workingCopy = null` を行わない方針なので、
         // ここで `_repo = null` を行うと非対称になる。両方とも参照を維持し GC に任せる。
         _inProgressContext = null;
 

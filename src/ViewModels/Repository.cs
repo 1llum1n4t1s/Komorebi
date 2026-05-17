@@ -537,7 +537,7 @@ public class Repository : ObservableObject, Models.IRepository
 
     /// <summary>
     /// Close() 済みかを返す。Models.IRepository 経由で Watcher など外部から参照する用途。
-    /// /rere 10 人分隊 P0#11 (B1-C1): _isClosed が Models 層から見えなかった問題への対策。
+    /// _isClosed が Models 層から見えなかった問題への対策。
     /// </summary>
     public bool IsClosed => _isClosed;
 
@@ -635,7 +635,7 @@ public class Repository : ObservableObject, Models.IRepository
         // race condition を生んでいた問題への対策。
         _isClosed = true;
 
-        // /rere 10 人分隊 P0#12 (F-CRIT-2): Close 時刻をログに残す。
+        // Close 時刻をログに残す。
         // 「タブ閉じた直後にクラッシュ」報告でクラッシュ時刻と Close 時刻の比較が
         // 切り分けの起点になる。FullPath は PII (ユーザー名) を含むが、ログは
         // ローカルファイルでユーザー自身しか見ないため許容。
@@ -647,7 +647,7 @@ public class Repository : ObservableObject, Models.IRepository
 
         _uiStates.Unload(_workingCopy.CommitMessage);
 
-        // /rere 10 人分隊 P0#2 (B2-C1): CTS を Dispose した後 null 化する。
+        // CTS を Dispose した後 null 化する。
         // 旧コードは Dispose 後も非 null だったため、RenewCancellation 内の
         // `cts.IsCancellationRequested` アクセスで ObjectDisposedException が出る経路があった。
         _cancellationRefreshBranches?.Cancel();
@@ -682,7 +682,7 @@ public class Repository : ObservableObject, Models.IRepository
         _stashesPage.Dispose();
         _searchCommitContext.Dispose();
 
-        // upstream c1d08e29 (#2289) + /rere P0#1: Close 中に走っている非同期アクション (Fetch/Pull など) が
+        // upstream c1d08e29 (#2289) + Close 中に走っている非同期アクション (Fetch/Pull など) が
         // 触りうるフィールド ─ 具体的には _uiStates / _watcher / _histories / _workingCopy / _stashesPage /
         // _searchCommitContext ─ には null 代入を行わない。null 代入直後の race で NullReferenceException が
         // 出る経路を遮断し、代わりに _isClosed フラグで Close 済み判定を行って async タスクは早期 return する。
@@ -872,7 +872,7 @@ public class Repository : ObservableObject, Models.IRepository
             List<Models.IssueTracker> issuetrackers = [.. globalTrackers, .. localTrackers];
             Dispatcher.UIThread.Post(() =>
             {
-                // Close 後に Post が配信されたら何もしない (/rere P0#1: 旧 _watcher is null sentinel は
+                // Close 後に Post が配信されたら何もしない (旧 _watcher is null sentinel は
                 // null 代入削除後に永遠に false だったため _isClosed フラグへ移行)
                 if (_isClosed)
                     return;
@@ -1172,7 +1172,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>ブランチツリーノードの展開状態をUI状態に永続化する。フィルタ適用中は無視する。</summary>
     public void UpdateBranchNodeIsExpanded(BranchTreeNode node)
     {
-        // /rere P0#1: _uiStates は null クリアしない方針になったため、Close 済み検出は _isClosed フラグで行う
+        // _uiStates は null クリアしない方針になったため、Close 済み検出は _isClosed フラグで行う
         if (_isClosed || !string.IsNullOrWhiteSpace(_filter))
             return;
 
@@ -1367,7 +1367,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>
     /// CancellationTokenSourceを安全にキャンセル・破棄して新しいインスタンスに差し替え、そのトークンを返す。
     /// Refresh*メソッド群で繰り返される前処理パターンを共通化する。
-    /// /rere 10 人分隊 P0#2: Close 後に呼ばれた場合は、Disposed CTS への IsCancellationRequested アクセスを
+    /// Close 後に呼ばれた場合は、Disposed CTS への IsCancellationRequested アクセスを
     /// 避けるため、呼び出し側が _isClosed をチェックしてから呼ぶ責任を持つ (この static メソッドは
     /// Repository 状態を知らないため、呼び出し側でガードする方が責任分担として明確)。
     /// </summary>
@@ -1386,7 +1386,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshBranches()
     {
-        // /rere 10 人分隊 P0#2: Close 後の Watcher.Tick から呼ばれた場合、Disposed CTS への
+        // Close 後の Watcher.Tick から呼ばれた場合、Disposed CTS への
         // アクセスを避けるため早期 return。
         if (_isClosed)
             return;
@@ -1448,7 +1448,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshTags()
     {
-        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        // Close 済みなら Disposed CTS 回避のため早期 return
         if (_isClosed)
             return;
         var token = RenewCancellation(ref _cancellationRefreshTags);
@@ -1473,7 +1473,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshCommits()
     {
-        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        // Close 済みなら Disposed CTS 回避のため早期 return
         if (_isClosed)
             return;
         var token = RenewCancellation(ref _cancellationRefreshCommits);
@@ -1482,7 +1482,7 @@ public class Repository : ObservableObject, Models.IRepository
         {
             try
             {
-                // /rere P0#1: Close 後の async タスクは _uiStates / _histories へアクセスする前に早期 return する
+                // Close 後の async タスクは _uiStates / _histories へアクセスする前に早期 return する
                 if (_isClosed || token.IsCancellationRequested)
                     return;
 
@@ -1629,7 +1629,7 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
-        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        // Close 済みなら Disposed CTS 回避のため早期 return
         if (_isClosed)
             return;
         var token = RenewCancellation(ref _cancellationRefreshWorkingCopyChanges);
@@ -1641,7 +1641,7 @@ public class Repository : ObservableObject, Models.IRepository
         {
             try
             {
-                // /rere P0#1: Close 後の async タスクは _uiStates へアクセスする前に早期 return
+                // Close 後の async タスクは _uiStates へアクセスする前に早期 return
                 if (_isClosed || token.IsCancellationRequested)
                     return;
 
@@ -1682,7 +1682,7 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
-        // /rere 10 人分隊 P0#2: Close 済みなら Disposed CTS 回避のため早期 return
+        // Close 済みなら Disposed CTS 回避のため早期 return
         if (_isClosed)
             return;
         var token = RenewCancellation(ref _cancellationRefreshStashes);
@@ -2272,7 +2272,7 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public async Task RunAutoFetchAsync()
     {
-        // /rere P0#1: _uiStates は null クリアしない方針になったため、Close 済み検出は _isClosed フラグで行う
+        // _uiStates は null クリアしない方針になったため、Close 済み検出は _isClosed フラグで行う
         if (_isClosed)
             return;
 
@@ -2334,7 +2334,7 @@ public class Repository : ObservableObject, Models.IRepository
     private Histories _histories = null;                                               // 履歴ビューVM
     private WorkingCopy _workingCopy = null;                                           // ワーキングコピーVM
     private StashesPage _stashesPage = null;                                           // スタッシュページVM
-    // /rere 10 人分隊 P0#15 (B2-I1): volatile で別スレッドからの可視性を保証。
+    // volatile で別スレッドからの可視性を保証。
     // UI スレッドで Close() が `_isClosed = true` をセットし、Task.Run 上で動く Refresh* タスクが
     // バックグラウンドスレッドから `if (_isClosed)` を読む。x86 では強メモリモデルで実害は出にくいが、
     // ARM64 (win-arm64/linux-arm64/macOS-arm64) では reorder で stale read する経路があり得るため明示。

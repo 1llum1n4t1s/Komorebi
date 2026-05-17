@@ -53,6 +53,7 @@ public partial class QueryLocalChanges : Command
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+            var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
             {
@@ -60,6 +61,9 @@ public partial class QueryLocalChanges : Command
                 if (change is not null)
                     outs.Add(change);
             }
+
+            await proc.WaitForExitAsync().ConfigureAwait(false);
+            await stderrDrain.ConfigureAwait(false);
         }
         catch
         {

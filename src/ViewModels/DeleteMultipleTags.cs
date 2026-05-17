@@ -46,7 +46,7 @@ public class DeleteMultipleTags : Popup
         var log = _repo.CreateLog("Delete Multiple Tags");
         Use(log);
 
-        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkTagsDirtyManually は
+        // Watcher ロックは git コマンド実行範囲に限定し、MarkTagsDirtyManually は
         // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
         using (_repo.LockWatcher())
         {

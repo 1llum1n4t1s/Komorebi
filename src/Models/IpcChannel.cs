@@ -79,12 +79,11 @@ public class IpcChannel : IDisposable
                 {
                     writer.WriteLine(cmd);
                     writer.Flush();
+                    if (OperatingSystem.IsWindows())
+                        client.WaitForPipeDrain();
                 }
-
-                if (OperatingSystem.IsWindows())
-                    client.WaitForPipeDrain();
-                else
-                    System.Threading.Thread.Sleep(1000);
+                // POSIX では writer Dispose で write end が close され、サーバー側 ReadToEndAsync が EOF で完了する。
+                // 旧コードは Thread.Sleep(1000) で代替していたが、CLI 起動シナリオで毎回 1 秒遅延の原因だった。
             }
         }
         catch

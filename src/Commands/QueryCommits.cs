@@ -86,6 +86,7 @@ public class QueryCommits : Command
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+            var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             var findHead = false;
             while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
@@ -99,6 +100,7 @@ public class QueryCommits : Command
             }
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
+            await stderrDrain.ConfigureAwait(false);
 
             // HEADが見つからなかった場合、現在ブランチのコミットハッシュと照合してマージ済みフラグを設定
             if (_markMerged && !findHead && commits.Count > 0)

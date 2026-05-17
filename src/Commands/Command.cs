@@ -625,6 +625,27 @@ public partial class Command
     }
 
     /// <summary>
+    /// 子プロセスの StandardError を末尾まで読み捨てる共通ヘルパー。
+    /// stdout のみを ReadLineAsync で消費する streaming コマンドで、stderr バッファ満杯による
+    /// プロセス hang を防ぐために stdout と並列で起動する (`Task t = DrainReaderAsync(proc.StandardError);`)。
+    /// 例外は飲み込む（プロセス側 hang を引き起こさないことが最優先）。
+    /// </summary>
+    /// <param name="reader">読み捨てる StreamReader（通常は <c>proc.StandardError</c>）。</param>
+    protected static async Task DrainReaderAsync(StreamReader reader)
+    {
+        try
+        {
+            while (await reader.ReadLineAsync().ConfigureAwait(false) is not null)
+            {
+            }
+        }
+        catch
+        {
+            // pipe closed / encoding error 等は無視する
+        }
+    }
+
+    /// <summary>
     /// プロセス出力の各行を処理し、ログへの記録とエラー収集を行う。
     /// 進捗表示や不要な行はフィルタリングする。
     /// </summary>

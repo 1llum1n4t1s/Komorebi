@@ -103,14 +103,6 @@ public partial class Diff : Command
         return parser.Complete();
     }
 
-    /// <summary>標準エラーを詰まらせないために読み捨てる。</summary>
-    private static async Task DrainReaderAsync(StreamReader reader)
-    {
-        while (await reader.ReadLineAsync().ConfigureAwait(false) is not null)
-        {
-        }
-    }
-
     /// <summary>
     /// diff出力の1行を解析し、結果モデルに追加する。
     /// </summary>

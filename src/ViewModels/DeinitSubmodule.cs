@@ -45,7 +45,7 @@ public class DeinitSubmodule : Popup
         var log = _repo.CreateLog("De-initialize Submodule");
         Use(log);
 
-        // /rere 10 人分隊 P0#13: Watcher ロックは git コマンド実行範囲に限定し、MarkSubmodulesDirtyManually は
+        // Watcher ロックは git コマンド実行範囲に限定し、MarkSubmodulesDirtyManually は
         // ロック解除後に呼ぶ。ロック中に呼ぶと、ロック解除後に届く FS イベントが Refresh をキャンセルする。
         bool succ;
         using (_repo.LockWatcher())

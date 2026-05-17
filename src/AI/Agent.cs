@@ -11,27 +11,19 @@ namespace Komorebi.AI;
 /// 新規プロバイダ追加時はこの switch に分岐を 1 行追加し、対応する Strategy クラスを実装するだけで済む
 /// （以前は 1 メソッドに 2 経路が混在し、肥大化していた）。
 /// </summary>
-public class Agent
+public class Agent(Service service)
 {
-    public Agent(Service service)
-    {
-        _service = service;
-    }
-
     public Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
     {
         var strategy = CreateStrategy();
         return strategy.GenerateCommitMessageAsync(repo, changeList, onUpdate, cancellation);
     }
 
-    private IGenerationStrategy CreateStrategy()
+    private IGenerationStrategy CreateStrategy() => service.Provider switch
     {
-        return _service.Provider switch
-        {
-            Provider.Anthropic => new AnthropicHttpStrategy(_service),
-            _ => new OpenAISdkStrategy(_service),
-        };
-    }
+        Provider.Anthropic => new AnthropicHttpStrategy(service),
+        _ => new OpenAISdkStrategy(service),
+    };
 
     /// <summary>
     /// すべての Strategy で共通利用するユーザーメッセージのプロンプト構築。
@@ -53,6 +45,4 @@ public class Agent
 
         return sb.ToString();
     }
-
-    private readonly Service _service;
 }

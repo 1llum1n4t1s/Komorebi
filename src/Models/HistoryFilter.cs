@@ -41,7 +41,7 @@ public class HistoryFilter : ObservableObject
 {
     /// <summary>
     /// フィルター対象のパターン文字列（ブランチ名、タグ名等）。
-    /// /rere 10 人分隊 P0#3 (A2-C1): JSON deserialize 経由で悪意ある Pattern が入ると
+    /// JSON deserialize 経由で悪意ある Pattern が入ると
     /// BuildHistoryParams で git CLI 引数文字列に補間されて引数注入される脆弱性があるため、
     /// setter で `"`, `\r`, `\n`, NUL 文字を弾く。これにより `.git/komorebi.uistates` 経由の
     /// `--output=...` などの引数追加攻撃を遮断。
@@ -54,7 +54,7 @@ public class HistoryFilter : ObservableObject
 
     /// <summary>
     /// Pattern 値のサニタイズ: 引数境界破壊文字 (`"`, `\r`, `\n`, NUL) を除去 + 長さ制限。
-    /// /rere 10 人分隊 P0#3 + P1#25 由来。
+    /// + P1#25 由来。
     ///
     /// 長さ制限の理由 (P1#25): JSON deserialize 経由で巨大 Pattern (MB 級) が入ると、
     /// BuildHistoryParams で git CLI 引数組み立て時の文字列補間が CPU/メモリを消耗する

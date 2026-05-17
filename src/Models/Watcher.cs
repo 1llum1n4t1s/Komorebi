@@ -451,9 +451,10 @@ public class Watcher : IDisposable
 
     /// <summary>
     /// <see cref="IsInSubmodule"/> の結果を短期キャッシュした版。
-    /// FSW バースト時に同一ディレクトリで連続的に問い合わせされるケース
-    /// （`git checkout` / `git add -A` 等で大量ファイルが変更されるとき）に
+    /// FSW バースト時に複数の異なるディレクトリで連続的に問い合わせされるケース
+    /// （monorepo で `git checkout main` 後に多階層 dir 配下が一斉に変更されるとき）でも
     /// `File.Exists` 連発によるディスク I/O 圧を回避する。
+    /// 旧実装は単一エントリだけ覚えていたため、別 dir が来るたびにキャッシュ miss していた。
     /// </summary>
     /// <param name="folder">判定対象のフォルダパス</param>
     /// <returns>サブモジュール内の場合 true</returns>
@@ -461,19 +462,33 @@ public class Watcher : IDisposable
     {
         const long CacheTtlMs = 500;
         var now = Environment.TickCount64;
-        if (string.Equals(_submoduleCheckDir, folder, StringComparison.Ordinal) && now < _submoduleCheckExpiry)
-            return _submoduleCheckResult;
+        if (_submoduleCheckCache.TryGetValue(folder, out var entry) && now < entry.Expiry)
+            return entry.Result;
 
         var result = IsInSubmodule(folder);
-        _submoduleCheckDir = folder;
-        _submoduleCheckResult = result;
-        _submoduleCheckExpiry = now + CacheTtlMs;
+        _submoduleCheckCache[folder] = (result, now + CacheTtlMs);
+
+        // 期限切れエントリを掃除（上限 128 件に達したら）
+        if (_submoduleCheckCache.Count > 128)
+        {
+            List<string> expiredKeys = null;
+            foreach (var kv in _submoduleCheckCache)
+            {
+                if (kv.Value.Expiry < now)
+                    (expiredKeys ??= []).Add(kv.Key);
+            }
+            if (expiredKeys is not null)
+            {
+                foreach (var k in expiredKeys)
+                    _submoduleCheckCache.Remove(k);
+            }
+        }
+
         return result;
     }
 
-    private string _submoduleCheckDir;
-    private bool _submoduleCheckResult;
-    private long _submoduleCheckExpiry;
+    private readonly Dictionary<string, (bool Result, long Expiry)> _submoduleCheckCache = new(
+        OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
 
     /// <summary>監視対象のリポジトリ</summary>
     private readonly IRepository _repo;

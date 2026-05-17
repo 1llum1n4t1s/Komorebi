@@ -337,6 +337,7 @@ public partial class App : Application
                         }
                         catch (Exception e)
                         {
+                            Models.Logger.LogException("SSH鍵のパーミッション修正失敗", e);
                             app._launcher.DispatchNotification(context, e.Message, true);
                         }
                     };
@@ -1449,12 +1450,12 @@ public partial class App : Application
     private static int _isCheckingUpdate;
 
     /// <summary>
-    /// GitHubリリースから最新バージョンを確認し、更新がある場合はダイアログを表示する。
-    /// バックグラウンドスレッドで非同期実行される。
+    /// VelopackUpdateDialog.Avalonia ライブラリに更新チェックとダイアログ表示を委譲する。
+    /// 自動チェック時はサイレント、手動チェック時は結果ダイアログを表示する。
     /// </summary>
     /// <param name="manually">
-    /// true: 手動チェック（結果を常に表示、無視タグをスキップ）
-    /// false: 自動チェック（更新がある場合のみ表示、無視タグを確認）
+    /// true: 手動チェック（最新版/失敗でも結果ダイアログを表示、無視タグをスキップ）
+    /// false: 自動チェック（更新がありかつ無視タグと一致しない場合のみダイアログ表示）
     /// </param>
     private static void Check4Update(bool manually = false)
     {
@@ -1462,7 +1463,7 @@ public partial class App : Application
         if (Interlocked.CompareExchange(ref _isCheckingUpdate, 1, 0) != 0)
             return;
 
-        Task.Run(async () =>
+        Dispatcher.UIThread.InvokeAsync(async () =>
         {
             try
             {
@@ -1470,65 +1471,35 @@ public partial class App : Application
                 var source = new GithubSource("https://github.com/1llum1n4t1s/Komorebi", string.Empty, false);
                 var mgr = new UpdateManager(source);
 
-                // Velopackでインストールされていない場合（開発環境等）はチェックをスキップする
-                if (!mgr.IsInstalled)
-                {
-                    if (manually)
-                        ShowSelfUpdateResult(new Models.AlreadyUpToDate());
-                    return;
-                }
+                // ライブラリへ Komorebi 流のローカライズ・アイコン・無視タグを注入する
+                var pref = ViewModels.Preferences.Instance;
+                var owner = (Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
 
-                // 最新バージョンの有無を確認する
-                var newVersion = await mgr.CheckForUpdatesAsync();
-                if (newVersion is null)
+                var options = new VelopackUpdateDialog.UpdateDialogOptions
                 {
-                    if (manually)
-                        ShowSelfUpdateResult(new Models.AlreadyUpToDate());
-                    return;
-                }
+                    Strings = Models.UpdateDialogStrings.Instance,
+                    Icons = Models.UpdateDialogIcons.Instance,
+                    AccentBrush = Current?.FindResource("Brush.Accent") as IBrush,
+                    IgnoredTagName = string.IsNullOrEmpty(pref.IgnoreUpdateTag) ? null : pref.IgnoreUpdateTag,
+                    SuppressUpToDateOnAutoCheck = true,
+                };
 
-                // 自動チェック時はユーザーが無視指定したバージョンをスキップする
-                if (!manually)
-                {
-                    var pref = ViewModels.Preferences.Instance;
-                    var newTag = $"v{newVersion.TargetFullRelease.Version}";
-                    if (newTag == pref.IgnoreUpdateTag)
-                        return;
-                }
+                // 「このバージョンを無視」を Preferences へ永続化する
+                options.VersionIgnored += tag => ViewModels.Preferences.Instance.IgnoreUpdateTag = tag;
 
-                // 更新ダイアログを表示する
-                ShowSelfUpdateResult(new Models.VelopackUpdate(mgr, newVersion));
+                // チェック / ダウンロード中の例外をログへ流す（手動チェック時はライブラリ側でエラーダイアログも出る）
+                options.ErrorOccurred += ex => Models.Logger.LogException("更新チェック失敗", ex);
+
+                // 手動=true ならウィンドウ即表示でチェック進捗を可視化、自動=false ならチェック完了まで非表示
+                await VelopackUpdateDialog.UpdateDialogWindow.ShowAsync(owner, mgr, options, manualCheck: manually);
             }
             catch (Exception e)
             {
                 Models.Logger.LogException("更新チェック失敗", e);
-
-                // 手動チェック時のみエラーを表示する
-                if (manually)
-                    ShowSelfUpdateResult(new Models.SelfUpdateFailed(e));
             }
             finally
             {
                 Interlocked.Exchange(ref _isCheckingUpdate, 0);
-            }
-        });
-    }
-
-    /// <summary>
-    /// 更新チェック結果をUIスレッドでダイアログ表示する。
-    /// </summary>
-    /// <param name="data">表示データ（VelopackUpdate / AlreadyUpToDate / SelfUpdateFailed）</param>
-    private static void ShowSelfUpdateResult(object data)
-    {
-        Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            try
-            {
-                await ShowDialog(new ViewModels.SelfUpdate { Data = data });
-            }
-            catch (Exception ex)
-            {
-                Models.Logger.Log($"更新結果ダイアログ表示失敗: {ex.Message}", Models.LogLevel.Warning);
             }
         });
     }

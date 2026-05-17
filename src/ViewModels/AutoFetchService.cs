@@ -34,14 +34,14 @@ public class AutoFetchService
     /// </summary>
     private static readonly TimeSpan TickInterval = TimeSpan.FromSeconds(30);
 
-    /// <summary>シングルトンインスタンス。</summary>
-    public static AutoFetchService Instance => s_instance ??= new AutoFetchService();
+    /// <summary>シングルトンインスタンス。Lazy で thread-safe な遅延初期化を保証する。</summary>
+    public static AutoFetchService Instance => s_instance.Value;
 
-    private static AutoFetchService s_instance;
+    private static readonly Lazy<AutoFetchService> s_instance = new(() => new AutoFetchService(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
     /// バックグラウンド処理が 1 サイクル分進行中かどうか。
-    /// /rere 10 人分隊 P1#26 (B2-I5): TOCTOU 回避のため int + Interlocked.CompareExchange ベースに変更。
+    /// TOCTOU 回避のため int + Interlocked.CompareExchange ベースに変更。
     /// </summary>
     public bool IsRunning => Volatile.Read(ref _isRunningInt) != 0;
 
@@ -92,7 +92,7 @@ public class AutoFetchService
                 }
                 catch (Exception ex)
                 {
-                    // /rere 10 人分隊 P0#4 (F-CRIT-1): 個別ティック失敗をログに残す。
+                    // 個別ティック失敗をログに残す。
                     // シナリオ D 「auto-fetch が遅い/効かない」の切り分け起点として必須。
                     Models.Logger.LogException("AutoFetch tick failed", ex);
                 }
@@ -149,7 +149,7 @@ public class AutoFetchService
     /// </summary>
     private async Task TickAsync(CancellationToken token)
     {
-        // /rere 10 人分隊 P1#26 (B2-I5): TOCTOU 回避のため atomic CompareExchange でロックを取得。
+        // TOCTOU 回避のため atomic CompareExchange でロックを取得。
         // 旧: `if (_isRunning) return; ... _isRunning = true;` で 2 つのスレッドが同時に通過する race があった。
         if (Interlocked.CompareExchange(ref _isRunningInt, 1, 0) != 0)
             return;
@@ -190,7 +190,7 @@ public class AutoFetchService
             await ScanReachabilityAsync(token).ConfigureAwait(false);
 
             // Phase A 完了時点のスキャン結果を preference.json に永続化する。
-            // /rere 10 人分隊 P0#9 (C2-S1-1): UI スレッドで同期 I/O (Serialize + File.Copy + File.Move) を
+            // UI スレッドで同期 I/O (Serialize + File.Copy + File.Move) を
             // 走らせると、Phase A 完了直後にユーザーが UI 操作する瞬間に 5-30ms (NVMe) / 100-500ms (HDD/AV) の
             // フリーズが発生する。Task.Run でワーカースレッドに完全に外す。
             if (!token.IsCancellationRequested)
@@ -205,7 +205,7 @@ public class AutoFetchService
                 }
                 catch (Exception ex)
                 {
-                    // /rere 10 人分隊 P0#4: 保存失敗もログに残す (今までは握り潰し)
+                    // 保存失敗もログに残す (今までは握り潰し)
                     Models.Logger.LogException("AutoFetch Phase A 後の Preferences.Save 失敗", ex);
                 }
             }
@@ -271,7 +271,7 @@ public class AutoFetchService
                 }
                 catch (Exception ex)
                 {
-                    // /rere 10 人分隊 P0#4: 個別ノード失敗をログに残す (node.Name で特定可能化)
+                    // 個別ノード失敗をログに残す (node.Name で特定可能化)
                     Models.Logger.LogException($"AutoFetch reachability check failed: {node.Name}", ex);
                 }
                 finally
@@ -291,7 +291,7 @@ public class AutoFetchService
         }
         catch (Exception ex)
         {
-            // /rere 10 人分隊 P0#4: 個別例外は WhenAll 内の Task.Run catch でログ済みだが、
+            // 個別例外は WhenAll 内の Task.Run catch でログ済みだが、
             // WhenAll 自体の集約例外 (例: 全タスクの cancellation) も記録する
             Models.Logger.LogException("AutoFetch reachability scan aggregate failed", ex);
         }
@@ -334,7 +334,7 @@ public class AutoFetchService
 
     /// <summary>
     /// 個別リポジトリの自動フェッチを例外安全にラップする。失敗は記録するがループ全体は止めない。
-    /// /rere 10 人分隊 P0#4 (F-CRIT-1): リポジトリ単位の失敗もログに残す。
+    /// リポジトリ単位の失敗もログに残す。
     /// </summary>
     private static async Task SafeRunAutoFetchAsync(Repository repo)
     {
@@ -370,7 +370,7 @@ public class AutoFetchService
     private DateTime _lastRun = DateTime.MinValue;
     private readonly Lock _syncLock = new();
     private TaskCompletionSource _forceTrigger;
-    // /rere 10 人分隊 P1#26 (B2-I5): TOCTOU 回避のため int (0=idle, 1=running) + Interlocked.CompareExchange に変更。
+    // TOCTOU 回避のため int (0=idle, 1=running) + Interlocked.CompareExchange に変更。
     // 旧 `volatile bool _isRunning` だと Test-Then-Set が 2 命令に分割されて race の余地があった。
     private int _isRunningInt;
     // volatile: TriggerNow() は UI スレッドから呼ばれ、TickAsync() はバックグラウンドループで読む非対称構造。

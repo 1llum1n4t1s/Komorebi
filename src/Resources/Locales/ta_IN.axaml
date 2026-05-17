@@ -867,12 +867,10 @@
   <x:String x:Key="Text.ScanRepositories.UseCustomDir" xml:space="preserve">மற்றொரு தனிப்பயன் கோப்புறையை ஸ்கேன் செய்</x:String>
   <x:String x:Key="Text.SelfUpdate" xml:space="preserve">புதுப்பிப்புகளைச் சரிபார்...</x:String>
   <x:String x:Key="Text.SelfUpdate.Available" xml:space="preserve">இந்த மென்பொருளின் புதிய பதிப்பு கிடைக்கிறது: </x:String>
-  <x:String x:Key="Text.SelfUpdate.CurrentVersion" xml:space="preserve">தற்போதைய பதிப்பு: </x:String>
-  <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை!</x:String>
+  <x:String x:Key="Text.SelfUpdate.Checking" xml:space="preserve">புதுப்பிப்புகளைச் சரிபார்க்கிறது...</x:String>
   <x:String x:Key="Text.SelfUpdate.DownloadAndInstall" xml:space="preserve">பதிவிறக்கி நிறுவு</x:String>
-  <x:String x:Key="Text.SelfUpdate.GotoDownload" xml:space="preserve">பதிவிறக்கம்</x:String>
+  <x:String x:Key="Text.SelfUpdate.Error" xml:space="preserve">புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை!</x:String>
   <x:String x:Key="Text.SelfUpdate.IgnoreThisVersion" xml:space="preserve">இந்தப் பதிப்பைத் தவிர்</x:String>
-  <x:String x:Key="Text.SelfUpdate.ReleaseDate" xml:space="preserve">புதிய பதிப்பு வெளியீட்டு தேதி: </x:String>
   <x:String x:Key="Text.SelfUpdate.Title" xml:space="preserve">மென்பொருள் புதுப்பி</x:String>
   <x:String x:Key="Text.SelfUpdate.UpToDate" xml:space="preserve">தற்போது புதுப்பிப்புகள் எதுவும் கிடைக்கவில்லை.</x:String>
   <x:String x:Key="Text.SetSubmoduleBranch" xml:space="preserve">Submodule-இன் கிளையை அமை</x:String>

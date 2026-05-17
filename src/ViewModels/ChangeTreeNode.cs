@@ -150,21 +150,13 @@ public class ChangeTreeNode : ObservableObject
     }
 
     /// <summary>
-    /// フォルダノードをコレクション内のファイルノードの前に挿入する。
+    /// フォルダノードを挿入する。SortAndSetDepth で最終的にフォルダ→ファイル順に並べ替えるので、
+    /// ここでの前置挿入 O(N) は不要。append のみ。
     /// </summary>
     /// <param name="collection">挿入先のノードリスト</param>
     /// <param name="subFolder">挿入するフォルダノード</param>
     private static void InsertFolder(List<ChangeTreeNode> collection, ChangeTreeNode subFolder)
     {
-        for (int i = 0; i < collection.Count; i++)
-        {
-            if (!collection[i].IsFolder)
-            {
-                collection.Insert(i, subFolder);
-                return;
-            }
-        }
-
         collection.Add(subFolder);
     }
 

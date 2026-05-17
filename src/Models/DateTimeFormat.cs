@@ -68,7 +68,7 @@ public class DateTimeFormat
     /// upstream b2aba44c: 既定 culture では DateTime.ToString が "/" を文化圏依存の区切り (".") に置換するため、
     /// CurrentCulture を Clone して区切りだけ固定する。
     /// <para>
-    /// /rere P2#18: 起動時の <see cref="CultureInfo.CurrentCulture"/> をスナップショットするため、
+    /// 起動時の <see cref="CultureInfo.CurrentCulture"/> をスナップショットするため、
     /// ランタイム中のロケール変更 (アプリ内で SetLocale を呼んだ後) には追従しない。
     /// "MMM d yyyy" / "d MMM yyyy" 形式の月名略称は起動時のカルチャに依存する点に注意。
     /// </para>

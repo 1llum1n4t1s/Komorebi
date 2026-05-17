@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
@@ -36,7 +36,7 @@ public class RepositoryTreeNodeToggleButton : ToggleButton
 public class RepositoryListBox : ListBoxEx
 {
     // StyleKeyOverride は親 ListBoxEx で typeof(ListBox) を返しており、ここで再宣言する必要はない
-    // (/rere P1#10 で重複削除)
+    // (で重複削除)
 
     /// <summary>
     /// キーが押された際のイベント処理。

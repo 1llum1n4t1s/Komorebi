@@ -35,11 +35,13 @@ public class QueryRevisionFileNames : Command
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+            var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { Length: > 0 } line)
                 outs.Add(line);
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
+            await stderrDrain.ConfigureAwait(false);
         }
         catch
         {

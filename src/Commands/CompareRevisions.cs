@@ -56,6 +56,7 @@ public class CompareRevisions : Command
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+            var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             // 基底クラスの共通パーサーを使用して--name-status出力を解析する
             while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
@@ -71,6 +72,7 @@ public class CompareRevisions : Command
             }
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
+            await stderrDrain.ConfigureAwait(false);
 
             // パスの数値を考慮した自然順ソートを行う
             changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));

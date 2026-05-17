@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Komorebi.Models;
 
@@ -149,7 +148,7 @@ public class SSHKeyInfo
             var content = File.ReadAllText(pubPath).Trim();
             var parts = content.Split(' ');
             // ssh-rsa AAAAB3... user@host → 3番目以降がコメント
-            return parts.Length >= 3 ? string.Join(' ', parts.Skip(2)) : string.Empty;
+            return parts.Length >= 3 ? string.Join(' ', parts[2..]) : string.Empty;
         }
         catch
         {

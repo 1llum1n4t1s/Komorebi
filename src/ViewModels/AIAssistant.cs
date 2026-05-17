@@ -77,7 +77,7 @@ public class AIAssistant : ObservableObject
 
     /// <summary>
     /// 生成処理をキャンセルする。
-    /// /rere 10 人分隊 P0#31 (B2-C3): Cancel と Dispose の間に他経路アクセスがある場合に
+    /// Cancel と Dispose の間に他経路アクセスがある場合に
     /// ObjectDisposedException が出る経路を catch でブロック。Dispose は cancel 完了を待たず即実行する
     /// 仕様だが、子の token.Register コールバックが走行中に Dispose されると例外パスがあるため。
     /// </summary>
@@ -113,7 +113,7 @@ public class AIAssistant : ObservableObject
         Text = string.Empty;
         IsGenerating = true;
 
-        // /rere 10 人分隊 P0#7 (B2-C2): クロージャから `_cancel` フィールドではなく **ローカル変数経由**で
+        // クロージャから `_cancel` フィールドではなく **ローカル変数経由**で
         // CTS の Token を参照する。フィールドだと Regen() 連打で `_cancel` が差し替わった瞬間に旧 Task が
         // 新しい CTS を読む経路があり、さらに旧 CTS が Dispose 済みなら ObjectDisposedException。
         // ローカル変数 (cts) なら Task.Run のクロージャは作成時点で固定される。
@@ -180,9 +180,9 @@ public class AIAssistant : ObservableObject
 
     /// <summary>対象リポジトリへの参照</summary>
     private readonly Repository _repo = null;
-    /// <summary>OpenAIサービス設定 (/rere P2#17: コンストラクタ後変更なし → readonly)</summary>
+    /// <summary>OpenAIサービス設定 (コンストラクタ後変更なし → readonly)</summary>
     private readonly AI.Service _service = null;
-    /// <summary>コミットメッセージ生成対象の変更リスト (/rere P2#17: 同上)</summary>
+    /// <summary>コミットメッセージ生成対象の変更リスト (同上)</summary>
     private readonly List<Models.Change> _changes = null;
     /// <summary>生成処理のキャンセルトークンソース</summary>
     private CancellationTokenSource _cancel = null;

@@ -16,22 +16,15 @@ namespace Komorebi.AI;
 /// Provider 別の <see cref="OpenAIClient"/> 構築だけが分岐し、
 /// 以降のチャット呼び出し / ツール処理は共通フローとなる。
 /// </summary>
-internal sealed class OpenAISdkStrategy : IGenerationStrategy
+internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
 {
-    private readonly Service _service;
-
-    public OpenAISdkStrategy(Service service)
-    {
-        _service = service;
-    }
-
     public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
     {
-        // /rere 10 人分隊 P0#19 (A3-1A): HTTPS 強制で API key の平文流出を防ぐ (OpenAI/Azure/Gemini 共通)
-        _service.ValidateServerScheme();
+        // HTTPS 強制で API key の平文流出を防ぐ (OpenAI/Azure/Gemini 共通)
+        service.ValidateServerScheme();
 
         var client = CreateClient();
-        var chatClient = client.GetChatClient(_service.Model);
+        var chatClient = client.GetChatClient(service.Model);
         var options = new ChatCompletionOptions() { Tools = { ChatTools.GetDetailChangesInFile } };
 
         // upstream 356ab729: Anthropic / Qwen 系の "thinking" モードがコミットメッセージ生成の応答に
@@ -41,7 +34,7 @@ internal sealed class OpenAISdkStrategy : IGenerationStrategy
         options.Patch.Set("$.enable_thinking"u8, false);
 #pragma warning restore SCME0001
 
-        List<ChatMessage> messages = [new UserChatMessage(Agent.BuildUserMessage(_service, repo, changeList))];
+        List<ChatMessage> messages = [new UserChatMessage(Agent.BuildUserMessage(service, repo, changeList))];
 
         do
         {
@@ -88,25 +81,23 @@ internal sealed class OpenAISdkStrategy : IGenerationStrategy
         } while (true);
     }
 
-    private OpenAIClient CreateClient()
+    private OpenAIClient CreateClient() => service.Provider switch
     {
-        switch (_service.Provider)
-        {
-            case Provider.AzureOpenAI:
-                return new AzureOpenAIClient(new Uri(_service.Server), _service.Credential);
-            case Provider.Gemini:
-                var geminiEndpoint = string.IsNullOrEmpty(_service.Server)
+        Provider.AzureOpenAI => new AzureOpenAIClient(new Uri(service.Server), service.Credential),
+        Provider.Gemini => new OpenAIClient(
+            service.Credential,
+            new()
+            {
+                Endpoint = new Uri(string.IsNullOrEmpty(service.Server)
                     ? "https://generativelanguage.googleapis.com/v1beta/openai/"
-                    : _service.Server;
-                return new OpenAIClient(_service.Credential, new() { Endpoint = new Uri(geminiEndpoint) });
-            default:
-                // OpenAI（旧設定ファイルの Azure フォールバックを含む）
-                if (!string.IsNullOrEmpty(_service.Server) &&
-                    _service.Server.Contains("openai.azure.com", StringComparison.Ordinal))
-                    return new AzureOpenAIClient(new Uri(_service.Server), _service.Credential);
-                if (string.IsNullOrEmpty(_service.Server))
-                    return new OpenAIClient(_service.Credential);
-                return new OpenAIClient(_service.Credential, new() { Endpoint = new Uri(_service.Server) });
-        }
-    }
+                    : service.Server),
+            }),
+        // OpenAI（旧設定ファイルの Azure フォールバックを含む）
+        _ when !string.IsNullOrEmpty(service.Server) &&
+               service.Server.Contains("openai.azure.com", StringComparison.Ordinal)
+            => new AzureOpenAIClient(new Uri(service.Server), service.Credential),
+        _ when string.IsNullOrEmpty(service.Server)
+            => new OpenAIClient(service.Credential),
+        _ => new OpenAIClient(service.Credential, new() { Endpoint = new Uri(service.Server) }),
+    };
 }

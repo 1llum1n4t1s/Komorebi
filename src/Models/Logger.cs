@@ -49,7 +49,7 @@ public sealed class LoggerConfig
 /// <summary>
 /// SuperLightLoggerを使用した汎用ログ出力クラス
 /// </summary>
-public static class Logger
+public static partial class Logger
 {
     private static ILog s_logger;
     private static bool s_isConfigured;
@@ -60,14 +60,14 @@ public static class Logger
     /// Info レベルには Fetch/Push/Pull 等の主要操作の開始・終了が含まれる想定。
     /// Debug レベルの詳細トレースはリリースでは引き続き抑制する。
     /// </summary>
-#pragma warning disable CA1802
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1802:Use literals where appropriate",
+        Justification = "Conditional compilation makes const impossible")]
     private static readonly LogLevel s_minLogLevel =
 #if DEBUG
         LogLevel.Debug;
 #else
         LogLevel.Info;
 #endif
-#pragma warning restore CA1802
 
     /// <summary>
     /// ロガーを初期化する
@@ -120,7 +120,7 @@ public static class Logger
         if (s_logger is null)
             return;
 
-        // /rere 10 人分隊 P1#21: PII redaction を全ログ経路に適用
+        // PII redaction を全ログ経路に適用
         message = Redact(message);
 
         switch (level)
@@ -147,12 +147,12 @@ public static class Logger
     /// <param name="exception">例外オブジェクト</param>
     public static void LogException(string message, Exception exception)
     {
-        // /rere 10 人分隊 P1#21: PII redaction を例外メッセージにも適用
+        // PII redaction を例外メッセージにも適用
         s_logger?.Error(Redact(message), exception);
     }
 
     /// <summary>
-    /// /rere 10 人分隊 P1#21: 個人情報・秘密情報のマスキング処理。
+    /// 個人情報・秘密情報のマスキング処理。
     /// ログ・クラッシュレポート・Issue にコピペされる可能性のあるすべての出力に適用する。
     ///
     /// マスキング対象:
@@ -171,48 +171,41 @@ public static class Logger
         if (string.IsNullOrEmpty(message))
             return message;
 
-        // Git URL の credentials: scheme://user:pass@host → scheme://***:***@host
-        message = s_gitCredsRegex.Replace(message, "$1***:***@");
+        message = GitCredsRegex().Replace(message, "$1***:***@");
 
-        // Bearer / Token / api_key: ヘッダ・JSON フィールドで頻出するパターン
-        message = s_bearerRegex.Replace(message, "$1 ***");
-        message = s_apiKeyJsonRegex.Replace(message, "$1***");
+        message = BearerRegex().Replace(message, "$1 ***");
+        message = ApiKeyJsonRegex().Replace(message, "$1***");
 
-        // OpenAI 形式 API キー
-        message = s_openAiKeyRegex.Replace(message, "sk-***");
+        message = OpenAiKeyRegex().Replace(message, "sk-***");
 
-        // ユーザーホームパス (Windows / Linux / macOS)
-        message = s_winHomeRegex.Replace(message, @"C:\Users\***");
-        message = s_unixHomeRegex.Replace(message, "$1/***");
+        message = WinHomeRegex().Replace(message, @"C:\Users\***");
+        message = UnixHomeRegex().Replace(message, "$1/***");
 
-        // Email アドレス（@ より前のみをマスク。コミット作者名でも漏らさない）
-        message = s_emailRegex.Replace(message, "***$1");
+        message = EmailRegex().Replace(message, "***$1");
 
         return message;
     }
 
-    // 正規表現は一度だけコンパイルして再利用する（毎呼び出し new だと CPU を食う）
-    private static readonly Regex s_gitCredsRegex = new(
-        @"(https?://|git\+ssh://|ssh://)[^/\s@:]+:[^/\s@]+@",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static readonly Regex s_bearerRegex = new(
-        @"(Bearer|Token)\s+[A-Za-z0-9\-._~+/]+=*",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static readonly Regex s_apiKeyJsonRegex = new(
-        @"(""(?:api[_\-]?key|password|secret|token|x[_\-]api[_\-]key)""\s*[:=]\s*"")[^""]+",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static readonly Regex s_openAiKeyRegex = new(
-        @"sk-(?:proj-)?[A-Za-z0-9_\-]{16,}",
-        RegexOptions.Compiled);
-    private static readonly Regex s_winHomeRegex = new(
-        @"[A-Za-z]:\\Users\\[^\\\/\s""']+",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static readonly Regex s_unixHomeRegex = new(
-        @"(/home|/Users)/[^/\s""']+",
-        RegexOptions.Compiled);
-    private static readonly Regex s_emailRegex = new(
-        @"[A-Za-z0-9._%+\-]+(@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})",
-        RegexOptions.Compiled);
+    [GeneratedRegex(@"(https?://|git\+ssh://|ssh://)[^/\s@:]+:[^/\s@]+@", RegexOptions.IgnoreCase)]
+    private static partial Regex GitCredsRegex();
+
+    [GeneratedRegex(@"(Bearer|Token)\s+[A-Za-z0-9\-._~+/]+=*", RegexOptions.IgnoreCase)]
+    private static partial Regex BearerRegex();
+
+    [GeneratedRegex(@"(""(?:api[_\-]?key|password|secret|token|x[_\-]api[_\-]key)""\s*[:=]\s*"")[^""]+", RegexOptions.IgnoreCase)]
+    private static partial Regex ApiKeyJsonRegex();
+
+    [GeneratedRegex(@"sk-(?:proj-)?[A-Za-z0-9_\-]{16,}")]
+    private static partial Regex OpenAiKeyRegex();
+
+    [GeneratedRegex(@"[A-Za-z]:\\Users\\[^\\\/\s""']+", RegexOptions.IgnoreCase)]
+    private static partial Regex WinHomeRegex();
+
+    [GeneratedRegex(@"(/home|/Users)/[^/\s""']+")]
+    private static partial Regex UnixHomeRegex();
+
+    [GeneratedRegex(@"[A-Za-z0-9._%+\-]+(@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})")]
+    private static partial Regex EmailRegex();
 
     /// <summary>
     /// 未処理例外の詳細情報をログに記録する（クラッシュレポート用）
@@ -241,7 +234,7 @@ public static class Logger
             メモリ使用量: {process.PrivateMemorySize64 / 1024 / 1024} MB
             """;
 
-        // /rere 10 人分隊 P1#21: クラッシュレポートは Issue にコピペされる可能性が高い経路のため
+        // クラッシュレポートは Issue にコピペされる可能性が高い経路のため
         // PII redaction を必ず適用する。
         s_logger?.Error(Redact(message), exception);
     }
@@ -263,7 +256,7 @@ public static class Logger
             OS: {Environment.OSVersion}
             実行ファイルパス: {Environment.ProcessPath}
             """;
-        // /rere 10 人分隊 P1#21: 実行ファイルパスにユーザー名が含まれるため Redact 必須
+        // 実行ファイルパスにユーザー名が含まれるため Redact 必須
         s_logger?.Debug(Redact(startupMessage));
     }
 

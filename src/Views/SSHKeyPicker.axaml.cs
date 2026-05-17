@@ -83,7 +83,7 @@ public partial class SSHKeyPicker : UserControl
         var path = SSHKeyPath;
 
         // 空文字（または旧バージョンのセンチネル値） → 「指定なし」を選択
-        if (string.IsNullOrEmpty(path) || path == "__NONE__")
+        if (string.IsNullOrEmpty(path) || path == Commands.Command.LegacySSHKeyOptOutSentinel)
         {
             CmbSSHKey.SelectedIndex = 0;
             _previousSelectedIndex = 0;
