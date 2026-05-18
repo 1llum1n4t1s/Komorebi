@@ -675,6 +675,8 @@
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">Проверить обновления при старте</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">Формат даты</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Включить компактные каталоги в дереве изменений</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">Токен доступа GitHub</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">Optional. Lifts the GitHub API rate limit from 60 to 5000 requests/hour for update checks, avoiding occasional 403 errors. Generate at https://github.com/settings/tokens — no scopes required for public repositories.</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Язык</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Максимальная длина истории</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Показывать время автора вместо времени ревизии на графике</x:String>

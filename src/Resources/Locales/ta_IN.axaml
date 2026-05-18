@@ -675,6 +675,8 @@
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">தொடக்கத்தில் புதுப்பிப்புகளைச் சரிபார்</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">தேதி வடிவம்</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">மாற்றங்கள் மரத்தில் சுருக்கமான கோப்புறைகளை இயக்கு</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">GitHub அணுகல் டோக்கன்</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">Optional. Lifts the GitHub API rate limit from 60 to 5000 requests/hour for update checks, avoiding occasional 403 errors. Generate at https://github.com/settings/tokens — no scopes required for public repositories.</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">மொழி</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">வரலாற்று உறுதிமொழிகள்</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">வரைபடத்தில் உறுதிமொழி நேரத்திற்குப் பதிலாக ஆசிரியர் நேரத்தைக் காட்டு</x:String>

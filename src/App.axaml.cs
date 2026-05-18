@@ -1467,8 +1467,9 @@ public partial class App : Application
         {
             try
             {
-                // VelopackのUpdateManagerを初期化する
-                var source = new GithubSource("https://github.com/1llum1n4t1s/Komorebi", string.Empty, false);
+                // VelopackのUpdateManagerを初期化する（GitHub PAT があれば API レート制限を 60→5000 req/h に引き上げる）
+                var accessToken = ViewModels.Preferences.Instance.GithubAccessToken ?? string.Empty;
+                var source = new GithubSource("https://github.com/1llum1n4t1s/Komorebi", accessToken, false);
                 var mgr = new UpdateManager(source);
 
                 // ライブラリへ Komorebi 流のローカライズ・アイコン・無視タグを注入する

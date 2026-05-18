@@ -675,6 +675,8 @@
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">起動時にアップデートを確認</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">日付の書式</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">変更ツリーのフォルダ階層をまとめる</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">GitHub アクセストークン</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">オプション。設定すると更新確認時の GitHub API レート制限が 60 → 5000 req/h に引き上がり、まれに発生する 403 エラーを回避できます。https://github.com/settings/tokens で発行してください（パブリックリポジトリのためスコープ権限は不要）。</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">言語</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">コミット履歴</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">グラフにコミット日時ではなく著者の日時を表示</x:String>

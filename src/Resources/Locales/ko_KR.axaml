@@ -675,6 +675,8 @@
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">시작 시 업데이트 확인</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">날짜 형식</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">변경 사항 트리에서 폴더 압축 활성화</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">GitHub 액세스 토큰</x:String>
+  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">Optional. Lifts the GitHub API rate limit from 60 to 5000 requests/hour for update checks, avoiding occasional 403 errors. Generate at https://github.com/settings/tokens — no scopes required for public repositories.</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">언어</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">히스토리 커밋 수</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">그래프에 커밋 시간 대신 작성자 시간 표시</x:String>
