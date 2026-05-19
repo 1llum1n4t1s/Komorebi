@@ -675,8 +675,6 @@
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">Periksa pembaruan saat startup</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">Format Tanggal</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Aktifkan folder kompak di pohon perubahan</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">Token akses GitHub</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">Optional. Lifts the GitHub API rate limit from 60 to 5000 requests/hour for update checks, avoiding occasional 403 errors. Generate at https://github.com/settings/tokens — no scopes required for public repositories.</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Bahasa</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Commit Riwayat</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Tampilkan waktu author alih-alih waktu commit di grafik</x:String>

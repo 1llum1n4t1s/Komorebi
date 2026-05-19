@@ -130,7 +130,9 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 
 ### Auto-Update (Velopack)
 - Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
-- `App.Check4Update()` uses `UpdateManager` + `GithubSource` to check GitHub releases
+- `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.1llum1n4t1.com`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
+- 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書き不可
+- 移行期間中は CI workflow (`.github/workflows/velopack-release.yml`) が R2 と GitHub Releases の **両方** に同じ nupkg をアップロードする。R2 ジョブ成功後にのみ legacy GitHub Releases ジョブが走る (`needs: [r2-upload]` + `continue-on-error: true`) — 旧 `GithubSource` クライアントの自動更新を維持するための fallback
 - `Models.VelopackUpdate` holds `UpdateManager` + `UpdateInfo`
 - `ViewModels.SelfUpdate` handles download progress and `ApplyUpdatesAndRestart()`
 - `mgr.IsInstalled` guards against running in dev/unpackaged mode

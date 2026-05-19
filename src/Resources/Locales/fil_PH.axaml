@@ -675,8 +675,6 @@
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">Suriin kung may update sa pagsisimula</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">Format ng Petsa</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">I-enable ang compact na mga folder sa changes tree</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">GitHub access token</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">Optional. Lifts the GitHub API rate limit from 60 to 5000 requests/hour for update checks, avoiding occasional 403 errors. Generate at https://github.com/settings/tokens — no scopes required for public repositories.</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Wika</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Mga Commit sa Kasaysayan</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Ipakita ang oras ng may-akda sa halip na oras ng commit sa graph</x:String>

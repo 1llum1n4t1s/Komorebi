@@ -675,8 +675,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">प्रारम्भे अद्यतनं परीक्षतु</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">दिनाङ्कप्रारूपम्</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">परिवर्तनवृक्षे संहतपत्रिकाः सक्षमं कुरुत</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">GitHub access token</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">Optional. Lifts the GitHub API rate limit from 60 to 5000 requests/hour for update checks, avoiding occasional 403 errors. Generate at https://github.com/settings/tokens — no scopes required for public repositories.</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">भाषा</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">इतिहासप्रतिबद्धानि</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">आलेखे प्रतिबद्धकालस्थाने लेखककालं दर्शयतु</x:String>

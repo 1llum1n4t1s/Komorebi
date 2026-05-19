@@ -47,7 +47,7 @@
           <TabItem.Header>
             <TextBlock Classes="tab_header" Text="{DynamicResource Text.Preferences.General}"/>
           </TabItem.Header>
-          <Grid Margin="8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,32,32,Auto" ColumnDefinitions="Auto,*">
+          <Grid Margin="8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,32,Auto" ColumnDefinitions="Auto,*">
             <TextBlock Grid.Row="0" Grid.Column="0"
                        Text="{DynamicResource Text.Preferences.General.Locale}"
                        HorizontalAlignment="Right"
@@ -188,20 +188,6 @@
                       Content="{DynamicResource Text.Preferences.General.Check4UpdatesOnStartup}"
                       IsVisible="{x:Static s:App.IsCheckForUpdateCommandVisible}"
                       IsChecked="{Binding Check4UpdatesOnStartup, Mode=TwoWay}"/>
-
-            <TextBlock Grid.Row="14" Grid.Column="0"
-                       Text="{DynamicResource Text.Preferences.General.GithubAccessToken}"
-                       HorizontalAlignment="Right"
-                       Margin="0,0,16,0"
-                       IsVisible="{x:Static s:App.IsCheckForUpdateCommandVisible}"
-                       ToolTip.Tip="{DynamicResource Text.Preferences.General.GithubAccessToken.Tip}"/>
-            <TextBox Grid.Row="14" Grid.Column="1"
-                     Height="28"
-                     CornerRadius="3"
-                     PasswordChar="*"
-                     Text="{Binding GithubAccessToken, Mode=TwoWay}"
-                     IsVisible="{x:Static s:App.IsCheckForUpdateCommandVisible}"
-                     ToolTip.Tip="{DynamicResource Text.Preferences.General.GithubAccessToken.Tip}"/>
           </Grid>
         </TabItem>
 

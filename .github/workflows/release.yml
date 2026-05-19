@@ -34,10 +34,62 @@ jobs:
     uses: ./.github/workflows/velopack.yml
     with:
       version: ${{ needs.version.outputs.version }}
-  release:
-    needs: [package, velopack, version]
-    name: Release
+  r2-upload:
+    needs: [velopack, version]
+    name: R2 Upload (Primary)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Download Velopack artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          pattern: velopack.*
+          path: packages
+          merge-multiple: true
+      - name: List artifacts
+        run: ls -lh packages/
+      - name: Setup Node.js (wrangler 4.x が Node.js >=20 を要求、推奨 22)
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: '22'
+      - name: Install wrangler CLI
+        # サプライチェーン保護のためバージョン固定。wrangler 本体を更新したら、この --version も合わせて更新すること。
+        run: npm install -g wrangler@4.93.0
+      - name: Upload to R2 bucket (komorebi-updates)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          uploaded=0
+          for f in packages/*; do
+            name=$(basename "$f")
+            echo "::group::Upload $name"
+            wrangler r2 object put "komorebi-updates/$name" --file="$f" --remote
+            echo "::endgroup::"
+            uploaded=$((uploaded + 1))
+          done
+          echo "✅ R2 アップロード完了: $uploaded ファイル"
+      - name: Verify delivery (5 channel すべての releases.<channel>.json の HTTP 200 を検証)
+        run: |
+          set -euo pipefail
+          base="https://komorebi.1llum1n4t1.com"
+          for channel in win-x64 win-arm64 osx-arm64 linux-x64 linux-arm64; do
+            url="${base}/releases.${channel}.json"
+            echo "Checking ${url}"
+            curl --fail --silent --show-error --max-time 30 \
+                 --retry 3 --retry-delay 5 --retry-all-errors \
+                 -o /dev/null -w "  HTTP %{http_code} (%{size_download} bytes)\n" \
+                 "$url"
+          done
+  release:
+    needs: [package, velopack, version, r2-upload]
+    name: GitHub Releases Upload (Legacy fallback)
+    runs-on: ubuntu-latest
+    # 移行期間中の best-effort 扱い。GitHub Releases 側がコケても R2 単独配信は成立しているので workflow を fail させない。
+    # r2-upload は needs に含めているため、R2 が落ちた場合は release job 自体がスキップされ、配信状態の分裂を防ぐ。
+    continue-on-error: true
     permissions:
       contents: write
     steps:

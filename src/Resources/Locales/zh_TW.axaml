@@ -676,8 +676,6 @@
   <x:String x:Key="Text.Preferences.General.Check4UpdatesOnStartup" xml:space="preserve">啟動時檢查軟體更新</x:String>
   <x:String x:Key="Text.Preferences.General.DateFormat" xml:space="preserve">日期時間格式</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">在樹狀變更目錄中啟用密集資料夾模式</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken" xml:space="preserve">GitHub 存取權杖</x:String>
-  <x:String x:Key="Text.Preferences.General.GithubAccessToken.Tip" xml:space="preserve">Optional. Lifts the GitHub API rate limit from 60 to 5000 requests/hour for update checks, avoiding occasional 403 errors. Generate at https://github.com/settings/tokens — no scopes required for public repositories.</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">顯示語言</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">最大歷史提交數</x:String>
   <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">在提交路線圖中顯示修改時間而非提交時間</x:String>

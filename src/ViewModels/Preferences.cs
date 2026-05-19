@@ -263,21 +263,12 @@ public class Preferences : ObservableObject
         set => SetProperty(ref _ignoreUpdateTag, value);
     }
 
-    /// <summary>GitHub Personal Access Token（更新チェック時の API レート制限を 60→5000 req/h に引き上げる用）。空なら未認証アクセス。UI バインド用の生値。</summary>
-    [JsonIgnore]
-    public string GithubAccessToken
-    {
-        get => _githubAccessToken;
-        set => SetProperty(ref _githubAccessToken, value ?? string.Empty);
-    }
+    /// <summary>Velopack 自動更新の配信元 base URL（Cloudflare R2 カスタムドメイン）。コードから書き換えできない単一の真実源として定数化。</summary>
+    internal const string CanonicalUpdateBaseUrl = "https://komorebi.1llum1n4t1.com";
 
-    /// <summary>シリアライズ用: <see cref="AI.ApiKeyProtector"/> で暗号化された GithubAccessToken。Windows は DPAPI、他 OS は AES-GCM + 別鍵ファイルでラップする。</summary>
-    [JsonPropertyName("GithubAccessToken")]
-    public string ProtectedGithubAccessToken
-    {
-        get => AI.ApiKeyProtector.Protect(_githubAccessToken);
-        set => _githubAccessToken = AI.ApiKeyProtector.UnprotectOrPlainText(value);
-    }
+    /// <summary>Velopack 自動更新の配信元 base URL。<see cref="CanonicalUpdateBaseUrl"/> の薄いラッパー。JSON シリアライズ対象外（外部からの上書き不可）。</summary>
+    [JsonIgnore]
+    public string UpdateBaseUrl => CanonicalUpdateBaseUrl;
 
     /// <summary>コミットグラフにタグを表示するかどうか。</summary>
     public bool ShowTagsInGraph
@@ -1047,7 +1038,6 @@ public class Preferences : ObservableObject
 
     private bool _check4UpdatesOnStartup = true;                     // 起動時アップデートチェック
     private string _ignoreUpdateTag = string.Empty;                  // 無視するアップデートタグ
-    private string _githubAccessToken = string.Empty;                // GitHub Personal Access Token (空=未認証)
 
     private bool _showTagsInGraph = true;                            // グラフにタグ表示
     private bool _useTwoColumnsLayoutInHistories = false;            // 履歴2カラムレイアウト
