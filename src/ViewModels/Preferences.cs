@@ -264,7 +264,7 @@ public class Preferences : ObservableObject
     }
 
     /// <summary>Velopack 自動更新の配信元 base URL（Cloudflare R2 カスタムドメイン）。コードから書き換えできない単一の真実源として定数化。</summary>
-    internal const string CanonicalUpdateBaseUrl = "https://komorebi.1llum1n4t1.com";
+    internal const string CanonicalUpdateBaseUrl = "https://komorebi.nephilim.jp";
 
     /// <summary>Velopack 自動更新の配信元 base URL。<see cref="CanonicalUpdateBaseUrl"/> の薄いラッパー。JSON シリアライズ対象外（外部からの上書き不可）。</summary>
     [JsonIgnore]

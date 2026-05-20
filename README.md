@@ -76,14 +76,14 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 
 | OS | アーキテクチャ | ダウンロード |
 |----|----------------|--------------|
-| Windows | x64 | [Komorebi-win-x64-Setup.exe](https://komorebi.1llum1n4t1.com/Komorebi-win-x64-Setup.exe) |
-| Windows | ARM64 | [Komorebi-win-arm64-Setup.exe](https://komorebi.1llum1n4t1.com/Komorebi-win-arm64-Setup.exe) |
-| macOS | Apple Silicon | [Komorebi-osx-arm64-Setup.pkg](https://komorebi.1llum1n4t1.com/Komorebi-osx-arm64-Setup.pkg) |
-| Linux | x64 | [Komorebi-linux-x64.AppImage](https://komorebi.1llum1n4t1.com/Komorebi-linux-x64.AppImage) |
-| Linux | ARM64 | [Komorebi-linux-arm64.AppImage](https://komorebi.1llum1n4t1.com/Komorebi-linux-arm64.AppImage) |
+| Windows | x64 | [Komorebi-win-x64-Setup.exe](https://komorebi.nephilim.jp/Komorebi-win-x64-Setup.exe) |
+| Windows | ARM64 | [Komorebi-win-arm64-Setup.exe](https://komorebi.nephilim.jp/Komorebi-win-arm64-Setup.exe) |
+| macOS | Apple Silicon | [Komorebi-osx-arm64-Setup.pkg](https://komorebi.nephilim.jp/Komorebi-osx-arm64-Setup.pkg) |
+| Linux | x64 | [Komorebi-linux-x64.AppImage](https://komorebi.nephilim.jp/Komorebi-linux-x64.AppImage) |
+| Linux | ARM64 | [Komorebi-linux-arm64.AppImage](https://komorebi.nephilim.jp/Komorebi-linux-arm64.AppImage) |
 
 > [!NOTE]
-> 配信元は Cloudflare R2 (`komorebi.1llum1n4t1.com`) です。Windows ポータブル zip や Linux パッケージ (deb / rpm) も同じ配信元から入手できます。
+> 配信元は Cloudflare R2 (`komorebi.nephilim.jp`) です。Windows ポータブル zip や Linux パッケージ (deb / rpm) も同じ配信元から入手できます。
 
 ### データ保存先
 

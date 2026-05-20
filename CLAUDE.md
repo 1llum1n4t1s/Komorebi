@@ -130,7 +130,7 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 
 ### Auto-Update (Velopack)
 - Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
-- `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.1llum1n4t1.com`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
+- `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.nephilim.jp`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
 - 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書き不可
 - 通常リリースは CI workflow (`.github/workflows/release.yml`) の `r2-upload` ジョブが Velopack 成果物 (nupkg/RELEASES/releases.json/Setup/AppImage/Portable.zip) と standalone パッケージ (deb/rpm/独自zip) を **R2 単独配信** する (`permissions: contents: read`、通常リリースで GitHub Releases は作らない)
 - 旧 `GithubSource` クライアント救済は GitHub Releases に「踏み台 (R2 対応版を含む最初のバージョン)」を **1 つだけ** publish する方式。2 段階更新 (旧 → 踏み台版 → R2 最新) で乗り換えさせる。踏み台 publish は `/transfer-cf` 移行作業時に 1 回だけ実施し、踏み台 Release は **削除せず残す** (継続併用はしない)

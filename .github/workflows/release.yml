@@ -95,7 +95,7 @@ jobs:
       - name: Verify delivery (5 channel すべての releases.<channel>.json の HTTP 200 を検証)
         run: |
           set -euo pipefail
-          base="https://komorebi.1llum1n4t1.com"
+          base="https://komorebi.nephilim.jp"
           for channel in win-x64 win-arm64 osx-arm64 linux-x64 linux-arm64; do
             url="${base}/releases.${channel}.json"
             echo "Checking ${url}"
