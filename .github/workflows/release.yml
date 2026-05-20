@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - 'release/**'
-# 通常リリースは R2 単独配信。ただし v1.0.81 は /transfer-cf の "踏み台" として
-# GitHub Releases にも 1 回だけ publish するため、一時的に contents: write にしている。
-# 踏み台 publish 完了後、release job を削除し permissions: contents: read へ戻すこと。
+# 通常リリースは R2 単独配信で GitHub Releases を作らないため最小権限化する。
+# 旧 GithubSource クライアント救済の "踏み台" は /transfer-cf 移行作業時に
+# GitHub Releases へ 1 バージョン (v1.0.81) だけ publish 済み (継続配信はしない)。
 permissions:
-  contents: write
+  contents: read
 jobs:
   build:
     name: Build
@@ -104,81 +104,3 @@ jobs:
                  -o /dev/null -w "  HTTP %{http_code} (%{size_download} bytes)\n" \
                  "$url"
           done
-  # ─────────────────────────────────────────────────────────────
-  # 踏み台 publish (ワンタイム / v1.0.81 のみ)
-  # 旧 GithubSource クライアント (v1.0.80 以下) が R2 対応版へ乗り換えるための
-  # "踏み台" を GitHub Releases に 1 回だけ publish する。R2 (r2-upload) が成功した
-  # 後にのみ走る (needs に r2-upload を含める) ことで配信状態の分裂を防ぐ。
-  # 踏み台 publish 完了後、この release job は削除して R2 単独配信へ戻すこと。
-  # ─────────────────────────────────────────────────────────────
-  release:
-    needs: [package, velopack, version, r2-upload]
-    name: GitHub Releases Upload (踏み台 / 移行用ワンタイム)
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Delete existing releases
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ needs.version.outputs.tag }}
-        run: |
-          if gh release view "$TAG" > /dev/null 2>&1; then
-            gh release delete "$TAG" --yes --cleanup-tag
-          fi
-          if gh release view "velopack-$TAG" > /dev/null 2>&1; then
-            gh release delete "velopack-$TAG" --yes --cleanup-tag
-          fi
-      - name: Download package artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          pattern: package.*
-          path: packages
-          merge-multiple: true
-      - name: Download Velopack artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          pattern: velopack.*
-          path: velopack-packages
-          merge-multiple: true
-      - name: Create Velopack release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ needs.version.outputs.tag }}
-          VERSION: ${{ needs.version.outputs.version }}
-        run: |
-          gh release create "velopack-$TAG" \
-            -t "Velopack $VERSION" \
-            --latest=false \
-            --notes "Auto-update packages for Velopack (旧 GithubSource クライアント移行用の踏み台)."
-          gh release upload "velopack-$TAG" velopack-packages/*
-      - name: Create release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ needs.version.outputs.tag }}
-          VERSION: ${{ needs.version.outputs.version }}
-        run: |
-          gh release create "$TAG" -t "$VERSION" --generate-notes
-          gh release upload "$TAG" packages/*
-          gh release upload "$TAG" velopack-packages/*-Setup.exe velopack-packages/*-Setup.pkg
-      - name: Cleanup old releases (keep latest 3)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # 通常リリース: タグがx.y.z形式のもの（velopack-を含まない）を作成日降順で取得
-          gh release list --limit 100 --json tagName,createdAt \
-            --jq '[.[] | select(.tagName | test("^[0-9]"))] | sort_by(.createdAt) | reverse | .[3:] | .[].tagName' \
-          | while read -r tag; do
-              echo "Deleting old release: $tag"
-              gh release delete "$tag" --yes --cleanup-tag || true
-            done
-
-          # Velopackリリース: タグがvelopack-x.y.z形式のものを作成日降順で取得
-          gh release list --limit 100 --json tagName,createdAt \
-            --jq '[.[] | select(.tagName | startswith("velopack-"))] | sort_by(.createdAt) | reverse | .[3:] | .[].tagName' \
-          | while read -r tag; do
-              echo "Deleting old velopack release: $tag"
-              gh release delete "$tag" --yes --cleanup-tag || true
-            done
