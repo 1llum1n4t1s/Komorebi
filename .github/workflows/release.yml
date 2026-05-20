@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - 'release/**'
+# 通常リリースは R2 単独配信で GitHub Releases を作らないため最小権限化する。
+# 旧 GithubSource クライアント救済の "踏み台" は /transfer-cf 移行作業時に
+# GitHub Releases へ 1 バージョンだけ別途 publish する (継続配信はしない)。
+permissions:
+  contents: read
 jobs:
   build:
     name: Build
@@ -35,9 +40,12 @@ jobs:
     with:
       version: ${{ needs.version.outputs.version }}
   r2-upload:
-    needs: [velopack, version]
-    name: R2 Upload (Primary)
+    needs: [package, velopack, version]
+    name: R2 Upload
     runs-on: ubuntu-latest
+    # R2 が唯一の配信元 (通常リリースは /vava → R2 単独)。
+    # Velopack 自動更新成果物 (nupkg/RELEASES/releases.json/Setup/AppImage/Portable.zip) と
+    # standalone パッケージ (deb/rpm/独自zip) の両方を R2 にアップロードする。
     permissions:
       contents: read
     steps:
@@ -45,6 +53,12 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           pattern: velopack.*
+          path: packages
+          merge-multiple: true
+      - name: Download package artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          pattern: package.*
           path: packages
           merge-multiple: true
       - name: List artifacts
@@ -56,6 +70,12 @@ jobs:
       - name: Install wrangler CLI
         # サプライチェーン保護のためバージョン固定。wrangler 本体を更新したら、この --version も合わせて更新すること。
         run: npm install -g wrangler@4.93.0
+      # R2 アップロード仕様:
+      # - releases.{channel}.json (manifest) は同 channel の旧版を冪等に上書き
+      #   → 新リリース後、クライアントはここから新 nupkg URL を取得する
+      # - *.nupkg (full/delta) は put のみで既存ファイルは触らない
+      #   → 過去バージョンの nupkg を残すことで delta 連鎖と緊急ロールバックを維持
+      # - Setup/AppImage/Portable.zip と deb/rpm/独自zip は固定名/バージョン名で put
       - name: Upload to R2 bucket (komorebi-updates)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -64,6 +84,7 @@ jobs:
           set -euo pipefail
           uploaded=0
           for f in packages/*; do
+            [ -f "$f" ] || continue
             name=$(basename "$f")
             echo "::group::Upload $name"
             wrangler r2 object put "komorebi-updates/$name" --file="$f" --remote
@@ -83,77 +104,3 @@ jobs:
                  -o /dev/null -w "  HTTP %{http_code} (%{size_download} bytes)\n" \
                  "$url"
           done
-  release:
-    needs: [package, velopack, version, r2-upload]
-    name: GitHub Releases Upload (Legacy fallback)
-    runs-on: ubuntu-latest
-    # 移行期間中の best-effort 扱い。GitHub Releases 側がコケても R2 単独配信は成立しているので workflow を fail させない。
-    # r2-upload は needs に含めているため、R2 が落ちた場合は release job 自体がスキップされ、配信状態の分裂を防ぐ。
-    continue-on-error: true
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Delete existing releases
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ needs.version.outputs.tag }}
-        run: |
-          if gh release view "$TAG" > /dev/null 2>&1; then
-            gh release delete "$TAG" --yes --cleanup-tag
-          fi
-          if gh release view "velopack-$TAG" > /dev/null 2>&1; then
-            gh release delete "velopack-$TAG" --yes --cleanup-tag
-          fi
-      - name: Download package artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          pattern: package.*
-          path: packages
-          merge-multiple: true
-      - name: Download Velopack artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          pattern: velopack.*
-          path: velopack-packages
-          merge-multiple: true
-      - name: Create Velopack release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ needs.version.outputs.tag }}
-          VERSION: ${{ needs.version.outputs.version }}
-        run: |
-          gh release create "velopack-$TAG" \
-            -t "Velopack $VERSION" \
-            --latest=false \
-            --notes "Auto-update packages for Velopack."
-          gh release upload "velopack-$TAG" velopack-packages/*
-      - name: Create release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ needs.version.outputs.tag }}
-          VERSION: ${{ needs.version.outputs.version }}
-        run: |
-          gh release create "$TAG" -t "$VERSION" --generate-notes
-          gh release upload "$TAG" packages/*
-          gh release upload "$TAG" velopack-packages/*-Setup.exe velopack-packages/*-Setup.pkg
-      - name: Cleanup old releases (keep latest 3)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # 通常リリース: タグがx.y.z形式のもの（velopack-を含まない）を作成日降順で取得
-          gh release list --limit 100 --json tagName,createdAt \
-            --jq '[.[] | select(.tagName | test("^[0-9]"))] | sort_by(.createdAt) | reverse | .[3:] | .[].tagName' \
-          | while read -r tag; do
-              echo "Deleting old release: $tag"
-              gh release delete "$tag" --yes --cleanup-tag || true
-            done
-
-          # Velopackリリース: タグがvelopack-x.y.z形式のものを作成日降順で取得
-          gh release list --limit 100 --json tagName,createdAt \
-            --jq '[.[] | select(.tagName | startswith("velopack-"))] | sort_by(.createdAt) | reverse | .[3:] | .[].tagName' \
-          | while read -r tag; do
-              echo "Deleting old velopack release: $tag"
-              gh release delete "$tag" --yes --cleanup-tag || true
-            done

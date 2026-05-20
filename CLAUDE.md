@@ -132,7 +132,8 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 - Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
 - `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.1llum1n4t1.com`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
 - 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書き不可
-- 移行期間中は CI workflow (`.github/workflows/velopack-release.yml`) が R2 と GitHub Releases の **両方** に同じ nupkg をアップロードする。R2 ジョブ成功後にのみ legacy GitHub Releases ジョブが走る (`needs: [r2-upload]` + `continue-on-error: true`) — 旧 `GithubSource` クライアントの自動更新を維持するための fallback
+- 通常リリースは CI workflow (`.github/workflows/release.yml`) の `r2-upload` ジョブが Velopack 成果物 (nupkg/RELEASES/releases.json/Setup/AppImage/Portable.zip) と standalone パッケージ (deb/rpm/独自zip) を **R2 単独配信** する (`permissions: contents: read`、通常リリースで GitHub Releases は作らない)
+- 旧 `GithubSource` クライアント救済は GitHub Releases に「踏み台 (R2 対応版を含む最初のバージョン)」を **1 つだけ** publish する方式。2 段階更新 (旧 → 踏み台版 → R2 最新) で乗り換えさせる。踏み台 publish は `/transfer-cf` 移行作業時に 1 回だけ実施し、踏み台 Release は **削除せず残す** (継続併用はしない)
 - `Models.VelopackUpdate` holds `UpdateManager` + `UpdateInfo`
 - `ViewModels.SelfUpdate` handles download progress and `ApplyUpdatesAndRestart()`
 - `mgr.IsInstalled` guards against running in dev/unpackaged mode
