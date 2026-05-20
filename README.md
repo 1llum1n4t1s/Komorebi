@@ -1,8 +1,6 @@
 # Komorebi
 
 [![license](https://img.shields.io/github/license/1llum1n4t1s/Komorebi.svg)](LICENSE)
-[![latest](https://img.shields.io/github/v/release/1llum1n4t1s/Komorebi.svg)](https://github.com/1llum1n4t1s/Komorebi/releases/latest)
-[![downloads](https://img.shields.io/github/downloads/1llum1n4t1s/Komorebi/total)](https://github.com/1llum1n4t1s/Komorebi/releases)
 
 C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム対応のオープンソース Git GUI クライアントです。Git CLI をラップし、日常の Git 操作をビジュアルに行えます。
 
@@ -50,8 +48,8 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 
 | 項目 | 内容 |
 |------|------|
-| **Avalonia 12 アップグレード** | Avalonia UI 12.0.1 への移行完了。破壊的変更への対応済み |
-| **Velopack 自動アップデート** | Velopack による差分アップデートに対応。起動時にアップデートチェックを行い、ダウンロード進捗を表示 |
+| **Avalonia 12 アップグレード** | Avalonia UI 12.0.2 への移行完了。破壊的変更への対応済み |
+| **Velopack 自動アップデート** | Velopack による差分アップデートに対応。起動時にアップデートチェックを行い、ダウンロード進捗を表示。配信元は Cloudflare R2（`komorebi.nephilim.jp`） |
 | **日本語 README** | README を全面的に日本語化 |
 
 ## スクリーンショット
