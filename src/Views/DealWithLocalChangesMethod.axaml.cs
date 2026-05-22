@@ -27,6 +27,15 @@ public partial class DealWithLocalChangesMethod : UserControl
         InitializeComponent();
     }
 
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+
+        // Method が既定値 (DoNothing) のままバインドされると MethodProperty.Changed が発火せず、
+        // どのラジオボタンも未選択になる。ロード時に一度明示的に同期して初期選択を確定させる。
+        UpdateRadioButtons();
+    }
+
     private void OnRadioButtonClicked(object sender, RoutedEventArgs e)
     {
         if (sender is RadioButton { Tag: Models.DealWithLocalChanges way })

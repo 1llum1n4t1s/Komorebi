@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -963,7 +964,7 @@ public partial class WorkingCopy : UserControl
                 };
 
                 var copyFullPath = new MenuItem();
-                copyFullPath.Header = App.Text("CopyPath");
+                copyFullPath.Header = App.Text("CopyFullPath");
                 copyFullPath.Icon = App.CreateMenuIcon("Icons.Copy");
                 copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
                 copyFullPath.Click += async (_, e) =>
@@ -978,6 +979,42 @@ public partial class WorkingCopy : UserControl
                 menu.Items.Add(history);
                 menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(copy);
+                menu.Items.Add(copyFullPath);
+            }
+
+            if (!hasSelectedFolder)
+            {
+                menu.Items.Add(new MenuItem() { Header = "-" });
+
+                var copyPath = new MenuItem();
+                copyPath.Header = App.Text("CopyPath");
+                copyPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
+                copyPath.Click += async (_, e) =>
+                {
+                    var builder = new StringBuilder();
+                    foreach (var c in selectedUnstaged)
+                        builder.AppendLine(c.Path);
+
+                    await App.CopyTextAsync(builder.ToString());
+                    e.Handled = true;
+                };
+
+                var copyFullPath = new MenuItem();
+                copyFullPath.Header = App.Text("CopyFullPath");
+                copyFullPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
+                copyFullPath.Click += async (_, e) =>
+                {
+                    var builder = new StringBuilder();
+                    foreach (var c in selectedUnstaged)
+                        builder.AppendLine(Native.OS.GetAbsPath(repo.FullPath, c.Path));
+
+                    await App.CopyTextAsync(builder.ToString());
+                    e.Handled = true;
+                };
+
+                menu.Items.Add(copyPath);
                 menu.Items.Add(copyFullPath);
             }
         }
@@ -1370,6 +1407,42 @@ public partial class WorkingCopy : UserControl
                 menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(history);
                 menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(copyPath);
+                menu.Items.Add(copyFullPath);
+            }
+
+            if (!hasSelectedFolder)
+            {
+                menu.Items.Add(new MenuItem() { Header = "-" });
+
+                var copyPath = new MenuItem();
+                copyPath.Header = App.Text("CopyPath");
+                copyPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
+                copyPath.Click += async (_, e) =>
+                {
+                    var builder = new StringBuilder();
+                    foreach (var c in selectedStaged)
+                        builder.AppendLine(c.Path);
+
+                    await App.CopyTextAsync(builder.ToString());
+                    e.Handled = true;
+                };
+
+                var copyFullPath = new MenuItem();
+                copyFullPath.Header = App.Text("CopyFullPath");
+                copyFullPath.Icon = App.CreateMenuIcon("Icons.Copy");
+                copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
+                copyFullPath.Click += async (_, e) =>
+                {
+                    var builder = new StringBuilder();
+                    foreach (var c in selectedStaged)
+                        builder.AppendLine(Native.OS.GetAbsPath(repo.FullPath, c.Path));
+
+                    await App.CopyTextAsync(builder.ToString());
+                    e.Handled = true;
+                };
+
                 menu.Items.Add(copyPath);
                 menu.Items.Add(copyFullPath);
             }
