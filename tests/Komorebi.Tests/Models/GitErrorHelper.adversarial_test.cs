@@ -266,6 +266,9 @@ namespace Komorebi.Tests.Models
         [InlineData("remote: repository not found", "Text.GitError.RemoteNotFound")]
         [InlineData("branch 'main' already exists", "Text.GitError.AlreadyExists")]
         [InlineData("untracked working tree files would be overwritten", "Text.GitError.UntrackedOverwritten")]
+        // v1.0.84: untracked を含む "would be overwritten by checkout" は UntrackedOverwritten に流れる
+        // (UncommittedChanges 側の "would be overwritten by" には !untracked ガードを追加した)
+        [InlineData("error: The following untracked working tree files would be overwritten by checkout:\n\tmerge_log.txt", "Text.GitError.UntrackedOverwritten")]
         [InlineData("Connection timed out during fetch", "Text.GitError.NetworkError")]
         [InlineData("interactive rebase already started", "Text.GitError.RebaseInProgress")]
         [InlineData("nothing to commit, working tree clean", "Text.GitError.NothingToCommit")]
@@ -292,7 +295,6 @@ namespace Komorebi.Tests.Models
         // --- 新規追加カテゴリ ---
         [InlineData("remote: error: GH006: Protected branch update failed for refs/heads/main.", "Text.GitError.ProtectedBranch")]
         [InlineData("remote rejected: protected branch hook declined", "Text.GitError.ProtectedBranch")]
-        [InlineData("refusing to allow a personal access token to create or update workflow", "Text.GitError.ProtectedBranch")]
         [InlineData("error: gpg failed to sign the data\nfatal: failed to write commit object", "Text.GitError.GpgSignFailed")]
         [InlineData("gpg: signing failed: Inappropriate ioctl for device", "Text.GitError.GpgSignFailed")]
         [InlineData("gpg: secret key not available", "Text.GitError.GpgSignFailed")]
@@ -330,8 +332,10 @@ namespace Komorebi.Tests.Models
         [InlineData("fatal: The current branch foo has no upstream branch.", "Text.GitError.NoUpstream")]
         [InlineData("error: cannot fetch shallow updates from a shallow repository", "Text.GitError.ShallowClone")]
         [InlineData("fatal: write error: Disk quota exceeded", "Text.GitError.DiskFull")]
+        // v1.0.84: GpgSignFailed の "failed to write commit object" 単独条件を削除した結果、disk full 系が正しく DiskFull で捕捉される
+        [InlineData("fatal: cannot create temporary file: No space left on device\nfatal: failed to write commit object", "Text.GitError.DiskFull")]
         [InlineData("fatal: ambiguous argument 'HEAD~99': unknown revision or path not in the working tree", "Text.GitError.InvalidRef")]
-        [InlineData("error: refusing to update checked out branch: refs/heads/main", "Text.GitError.InvalidRef")]
+        [InlineData("error: refusing to update checked out branch: refs/heads/main", "Text.GitError.WorktreeError")]
         [InlineData("fatal: Remote branch feature not found in upstream origin", "Text.GitError.RemoteRefNotFound")]
         [InlineData("error: src refspec foo does not match any", "Text.GitError.RemoteRefNotFound")]
         [InlineData("fatal: bad signature 0x00000000", "Text.GitError.CorruptObject")]
@@ -360,8 +364,8 @@ namespace Komorebi.Tests.Models
         [InlineData("REMOTE HOST IDENTIFICATION HAS CHANGED\nPermission denied (publickey)", "Text.GitError.HostKeyChanged")]
         // UncommittedChanges は PermissionDenied より優先される (`overwritten` 検出が広い "Permission denied" を上書きしないこと)
         [InlineData("error: Your local changes to the following files would be overwritten by merge:\n\tfoo.txt\nPermission denied for foo.txt", "Text.GitError.UncommittedChanges")]
-        // InvalidRef は PermissionDenied より優先される (refusing to update checked out branch)
-        [InlineData("error: refusing to update checked out branch: refs/heads/main\nPermission denied (filesystem)", "Text.GitError.InvalidRef")]
+        // WorktreeError は PermissionDenied より優先される (refusing to update checked out branch は worktree 制約系)
+        [InlineData("error: refusing to update checked out branch: refs/heads/main\nPermission denied (filesystem)", "Text.GitError.WorktreeError")]
         public void GetHintKey_CategoryPriority_MoreSpecificWins(string message, string expectedKey)
         {
             Assert.Equal(expectedKey, GitErrorHelper.GetHintKey(message));
@@ -374,6 +378,13 @@ namespace Komorebi.Tests.Models
         [InlineData("Already on 'main'")]
         [InlineData("Switched to branch 'feature'")]
         [InlineData("random text with no git error patterns")]
+        // v1.0.84 で過剰マッチを修正したリグレッション防止ケース:
+        // 旧コードでは GpgSignFailed の OR に "failed to write commit object" 単独があり、無関係なコミット書込失敗を誤分類していた
+        [InlineData("fatal: failed to write commit object")]
+        // 旧コードでは GpgSignFailed の OR に "Inappropriate ioctl for device" 単独があり、editor/askpass の TTY 失敗を誤分類していた
+        [InlineData("error: cannot run editor: Inappropriate ioctl for device")]
+        // 旧コードでは ProtectedBranch の OR に "refusing to allow" 単独があり、PAT workflow scope 不足を誤分類していた
+        [InlineData("! [remote rejected] main -> main (refusing to allow a Personal Access Token to create or update workflow `.github/workflows/ci.yml` without `workflow` scope)")]
         public void GetHintKey_NonMatchingMessages_ReturnsEmpty(string message)
         {
             Assert.Equal(string.Empty, GitErrorHelper.GetHintKey(message));

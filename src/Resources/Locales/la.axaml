@@ -1183,4 +1183,5 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Impulsus reiectus est quia ramus protegitur. Impelle per rogatum tractionis, vel administratorem repositorii contacta.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git cum GPG signare non potuit. Clavem signatoriam tuam (git config user.signingkey) recense, gpg-agent currere certus es, vel signaturam temporaliter cum 'git -c commit.gpgsign=false ...' inactivam redde.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git in hoc repositorio operari recusat quia alius usuarius id possidet. 'git config --global --add safe.directory &lt;semita&gt;' exsequere ut permittas.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Adde ad safe.directory</x:String>
 </ResourceDictionary>

@@ -343,6 +343,33 @@ public partial class App : Application
                     };
                 }
             }
+            // safe.directory 未許可リポジトリの場合、自動修正アクションを提供する (全プラットフォーム対応)
+            else if (hintKey == "Text.GitError.DubiousOwnership")
+            {
+                var repoPath = Models.GitErrorHelper.ExtractPathFromDubiousOwnership(message);
+                if (!string.IsNullOrEmpty(repoPath))
+                {
+                    actionLabel = app.FindLocaleString("Text.GitError.DubiousOwnership.Fix");
+                    actionCallback = () =>
+                    {
+                        try
+                        {
+                            var psi = new System.Diagnostics.ProcessStartInfo("git", $"config --global --add safe.directory \"{repoPath}\"")
+                            {
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            };
+                            System.Diagnostics.Process.Start(psi)?.WaitForExit(5000);
+                            app._launcher.DispatchNotification(context, $"Added '{repoPath}' to safe.directory", false);
+                        }
+                        catch (Exception e)
+                        {
+                            Models.Logger.LogException("safe.directory 追加失敗", e);
+                            app._launcher.DispatchNotification(context, e.Message, true);
+                        }
+                    };
+                }
+            }
 
             app._launcher.DispatchNotification(context, message, true, hint, actionLabel, actionCallback);
         }

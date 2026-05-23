@@ -1183,4 +1183,5 @@
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">保護されたブランチへの直接プッシュが拒否されました。プルリクエスト経由でマージするか、リポジトリ管理者に連絡してください。</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG での署名に失敗しました。署名鍵 (git config user.signingkey) を確認し、gpg-agent が起動しているか確認するか、'git -c commit.gpgsign=false ...' で一時的に署名を無効化してください。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">リポジトリの所有者が異なるため git が操作を拒否しました。'git config --global --add safe.directory &lt;パス&gt;' を実行して許可してください。</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory に追加</x:String>
 </ResourceDictionary>

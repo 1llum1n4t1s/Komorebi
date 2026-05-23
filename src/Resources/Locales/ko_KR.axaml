@@ -1183,4 +1183,5 @@
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">보호된 브랜치이므로 푸시가 거부되었습니다. 풀 리퀘스트를 통해 푸시하거나 저장소 관리자에게 문의하세요.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG로 서명하지 못했습니다. 서명 키(git config user.signingkey)를 확인하고, gpg-agent가 실행 중인지 확인하거나, 'git -c commit.gpgsign=false ...'로 일시적으로 서명을 비활성화하세요.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">다른 사용자가 소유한 저장소이므로 git이 작업을 거부했습니다. 'git config --global --add safe.directory &lt;경로&gt;'를 실행하여 허용하세요.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory에 추가</x:String>
 </ResourceDictionary>

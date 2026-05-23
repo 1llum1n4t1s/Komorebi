@@ -1183,4 +1183,5 @@
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">推送被拒絕，因為分支受保護。請透過 pull request 推送，或聯絡儲存庫管理員。</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git GPG 簽署失敗。請驗證您的簽署金鑰（git config user.signingkey），確保 gpg-agent 正在執行，或使用 'git -c commit.gpgsign=false ...' 暫時停用簽署。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git 拒絕在此儲存庫上操作，因為它屬於其他使用者。執行 'git config --global --add safe.directory &lt;路徑&gt;' 以允許。</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">新增至 safe.directory</x:String>
 </ResourceDictionary>

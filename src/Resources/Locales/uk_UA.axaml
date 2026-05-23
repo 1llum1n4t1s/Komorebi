@@ -1183,4 +1183,5 @@
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Push було відхилено, оскільки гілка захищена. Надсилайте через pull request, або зв'яжіться з адміністратором сховища.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git не вдалося підписати за допомогою GPG. Перевірте свій ключ підпису (git config user.signingkey), переконайтеся, що gpg-agent працює, або тимчасово вимкніть підпис за допомогою 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git відмовляється працювати з цим сховищем, оскільки воно належить іншому користувачеві. Виконайте 'git config --global --add safe.directory &lt;шлях&gt;', щоб дозволити.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Додати до safe.directory</x:String>
 </ResourceDictionary>

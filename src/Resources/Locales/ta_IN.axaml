@@ -1183,4 +1183,5 @@
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">பாதுகாக்கப்பட்ட கிளை என்பதால் push மறுக்கப்பட்டது. pull request மூலம் push செய்யவும், அல்லது களஞ்சிய நிர்வாகியை தொடர்பு கொள்ளவும்.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG உடன் கையொப்பமிட Git தோல்வியடைந்தது. உங்கள் கையொப்ப விசையை (git config user.signingkey) சரிபார்க்கவும், gpg-agent இயங்குகிறதா என்பதை உறுதி செய்யவும், அல்லது 'git -c commit.gpgsign=false ...' மூலம் கையொப்பத்தை தற்காலிகமாக முடக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">வேறு பயனருக்கு சொந்தமான களஞ்சியம் என்பதால் git இதில் செயல்பட மறுக்கிறது. அனுமதிக்க 'git config --global --add safe.directory &lt;பாதை&gt;' ஐ இயக்கவும்.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory இல் சேர்</x:String>
 </ResourceDictionary>

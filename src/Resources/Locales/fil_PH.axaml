@@ -1183,4 +1183,5 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Tinanggihan ang push dahil protected ang branch. Mag-push sa pamamagitan ng pull request o makipag-ugnayan sa administrator ng repository.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Nabigo ang Git na lumagda gamit ang GPG. I-verify ang iyong signing key (git config user.signingkey), tiyaking gumagana ang gpg-agent, o pansamantalang i-disable ang pag-sign gamit ang 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Tumanggi ang Git na gumana sa repository na ito dahil pag-aari ito ng ibang user. Patakbuhin ang 'git config --global --add safe.directory &lt;path&gt;' upang payagan ito.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Idagdag sa safe.directory</x:String>
 </ResourceDictionary>

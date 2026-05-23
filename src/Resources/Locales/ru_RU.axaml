@@ -1183,4 +1183,5 @@
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Push был отклонён, потому что ветка защищена. Выполните push через pull request или свяжитесь с администратором репозитория.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git не удалось подписать с GPG. Проверьте ваш ключ подписи (git config user.signingkey), убедитесь, что gpg-agent работает, или временно отключите подпись с помощью 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git отказывается работать с этим репозиторием, так как он принадлежит другому пользователю. Выполните 'git config --global --add safe.directory &lt;путь&gt;', чтобы разрешить.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Добавить в safe.directory</x:String>
 </ResourceDictionary>

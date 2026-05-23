@@ -1183,4 +1183,5 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Push ditolak karena branch dilindungi. Push melalui pull request, atau hubungi administrator repositori.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git gagal menandatangani dengan GPG. Verifikasi kunci penandatanganan Anda (git config user.signingkey), pastikan gpg-agent berjalan, atau nonaktifkan penandatanganan sementara dengan 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git menolak beroperasi pada repositori ini karena dimiliki oleh pengguna lain. Jalankan 'git config --global --add safe.directory &lt;path&gt;' untuk mengizinkannya.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Tambahkan ke safe.directory</x:String>
 </ResourceDictionary>

@@ -1183,4 +1183,5 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">शाखा रक्षिता अस्ति इति कारणात् धक्केलनम् अस्वीकृतम्। pull request द्वारा धक्केलयतु अथवा कोषाधिकारिणं सम्पर्केण मिलतु।</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG द्वारा हस्ताक्षरेण git असफलं जातम्। हस्ताक्षरकुञ्चिकां (git config user.signingkey) सत्यापयतु, gpg-agent चलति इति निश्चितं कुरुत, अथवा 'git -c commit.gpgsign=false ...' इत्यनेन तत्कालं हस्ताक्षरं निष्क्रियं कुरुत।</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">अन्यः उपयोगकर्ता अस्य कोषस्य स्वामी अस्ति इति कारणात् git अस्मिन् कार्यं कर्तुं अस्वीकरोति। अनुमतिं दातुम् 'git config --global --add safe.directory &lt;पथः&gt;' इत्येतत् चालयतु।</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory मध्ये योजयतु</x:String>
 </ResourceDictionary>

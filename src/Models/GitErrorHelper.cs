@@ -41,10 +41,15 @@ public static partial class GitErrorHelper
             return "Text.GitError.DetachedHead";
 
         // リモートのブランチ保護でpushが拒否された (PushRejected の前に判定: より特異)
+        // 注: "refusing to allow ... workflow ... without `workflow` scope" は PAT scope 不足エラー (GitHub OAuth) で
+        //     protected branch とは無関係なので、workflow / Personal Access Token を含むメッセージは除外する。
+        //     scope 不足はカテゴリ未分類 (空文字) として生メッセージを表示する。
         if (errorMessage.Contains("protected branch", System.StringComparison.OrdinalIgnoreCase) ||
             (errorMessage.Contains("GH006", System.StringComparison.Ordinal) &&
              errorMessage.Contains("Protected branch", System.StringComparison.OrdinalIgnoreCase)) ||
-            errorMessage.Contains("refusing to allow", System.StringComparison.OrdinalIgnoreCase) ||
+            (errorMessage.Contains("refusing to allow", System.StringComparison.OrdinalIgnoreCase) &&
+             !errorMessage.Contains("workflow", System.StringComparison.OrdinalIgnoreCase) &&
+             !errorMessage.Contains("Personal Access Token", System.StringComparison.OrdinalIgnoreCase)) ||
             (errorMessage.Contains("pre-receive hook declined", System.StringComparison.OrdinalIgnoreCase) &&
              errorMessage.Contains("protected", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.ProtectedBranch";
@@ -68,7 +73,8 @@ public static partial class GitErrorHelper
         //   - "cannot pull with rebase: You have unstaged changes."
         //   - "Cannot rebase: Your index contains uncommitted changes."
         //   - "Cannot rebase: You have unstaged changes."
-        //   - "would be overwritten by checkout"
+        //   - "would be overwritten by checkout" (※ untracked 用の "untracked working tree files would be ..." は
+        //     先に UntrackedOverwritten 判定で吸う - そちらの方が修正案内 "stash --include-untracked" が正確)
         if (errorMessage.Contains("uncommitted changes", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("unstaged changes", System.StringComparison.OrdinalIgnoreCase) ||
             (errorMessage.Contains("local changes", System.StringComparison.OrdinalIgnoreCase) &&
@@ -77,7 +83,9 @@ public static partial class GitErrorHelper
             errorMessage.Contains("Please, commit your changes", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("Please commit or stash", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("cannot pull with rebase", System.StringComparison.OrdinalIgnoreCase) ||
+            // untracked を含まない `would be overwritten by ...` のみ拾う (untracked は次の UntrackedOverwritten で先に取られる)
             (errorMessage.Contains("would be overwritten by", System.StringComparison.OrdinalIgnoreCase) &&
+             !errorMessage.Contains("untracked", System.StringComparison.OrdinalIgnoreCase) &&
              (errorMessage.Contains("checkout", System.StringComparison.OrdinalIgnoreCase) ||
               errorMessage.Contains("merge", System.StringComparison.OrdinalIgnoreCase) ||
               errorMessage.Contains("rebase", System.StringComparison.OrdinalIgnoreCase))))
@@ -175,12 +183,15 @@ public static partial class GitErrorHelper
             return "Text.GitError.NothingToCommit";
 
         // GPG署名失敗（commit/tag/rebase 時の "gpg failed to sign the data"）
+        // 注意: "failed to write commit object" 単独は DiskFull / PermissionDenied 起因でも出る汎用メッセージ、
+        //       "Inappropriate ioctl for device" 単独は TTY 不在の POSIX ENOTTY で editor / askpass / pager でも出る。
+        //       どちらも誤分類を避けるため "gpg" / "signing failed" 等の GPG コンテキストとの AND を必須にする。
         if (errorMessage.Contains("gpg failed to sign", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("failed to write commit object", System.StringComparison.OrdinalIgnoreCase) ||
             (errorMessage.Contains("gpg", System.StringComparison.OrdinalIgnoreCase) &&
              errorMessage.Contains("signing failed", System.StringComparison.OrdinalIgnoreCase)) ||
-            errorMessage.Contains("secret key not available", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("Inappropriate ioctl for device", System.StringComparison.OrdinalIgnoreCase))
+            (errorMessage.Contains("gpg", System.StringComparison.OrdinalIgnoreCase) &&
+             errorMessage.Contains("Inappropriate ioctl for device", System.StringComparison.OrdinalIgnoreCase)) ||
+            errorMessage.Contains("secret key not available", System.StringComparison.OrdinalIgnoreCase))
             return "Text.GitError.GpgSignFailed";
 
         // safe.directory 警告 (Windows / 共有ボリュームで頻発)
@@ -249,12 +260,13 @@ public static partial class GitErrorHelper
             return "Text.GitError.DiskFull";
 
         // 不正なリファレンス名 (PermissionDenied の前に判定: より特異)
+        // 注: "refusing to update checked out branch" は別 worktree チェックアウト中の push 制約 (receive.denyCurrentBranch)
+        //     なので、ref 名 typo ではなく WorktreeError 側で分類する。
         if (errorMessage.Contains("not a valid ref name", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("is not a valid branch name", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("bad revision", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("unknown revision", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("ambiguous argument", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("refusing to update checked out branch", System.StringComparison.OrdinalIgnoreCase))
+            errorMessage.Contains("ambiguous argument", System.StringComparison.OrdinalIgnoreCase))
             return "Text.GitError.InvalidRef";
 
         // リモートの参照先が見つからない（ブランチ削除済み等）
@@ -316,7 +328,10 @@ public static partial class GitErrorHelper
 
         // worktree関連のエラー
         // "is not a working tree" は worktree 文脈固有のため単独で判定（"worktree" 単語を含まない場合がある）
+        // "refusing to update checked out branch" は別 worktree でチェックアウト中のブランチに push しようとした時
+        //  (receive.denyCurrentBranch=refuse) のエラー。push 制約系で WorktreeError 寄り。
         if (errorMessage.Contains("is not a working tree", System.StringComparison.OrdinalIgnoreCase) ||
+            errorMessage.Contains("refusing to update checked out branch", System.StringComparison.OrdinalIgnoreCase) ||
             (errorMessage.Contains("worktree", System.StringComparison.OrdinalIgnoreCase) &&
              (errorMessage.Contains("already checked out", System.StringComparison.OrdinalIgnoreCase) ||
               errorMessage.Contains("is already linked", System.StringComparison.OrdinalIgnoreCase) ||
@@ -388,9 +403,30 @@ public static partial class GitErrorHelper
         return null;
     }
 
+    /// <summary>
+    /// dubious ownership エラーのメッセージから対象リポジトリパスを抽出する。
+    /// "fatal: detected dubious ownership in repository at 'C:/path'" パターンに対応。
+    /// </summary>
+    /// <returns>抽出されたリポジトリパス。抽出できない場合はnull。</returns>
+    public static string ExtractPathFromDubiousOwnership(string errorMessage)
+    {
+        if (string.IsNullOrWhiteSpace(errorMessage))
+            return null;
+
+        // "detected dubious ownership in repository at '/path/to/repo'" (single quote)
+        var match = DubiousOwnershipPathRegex().Match(errorMessage);
+        if (match.Success)
+            return match.Groups[1].Value;
+
+        return null;
+    }
+
     [GeneratedRegex(@"Permissions\s+\d+\s+for\s+'([^']+)'")]
     private static partial Regex PermissionKeyPathRegex();
 
     [GeneratedRegex(@"Load key\s+""([^""]+)""")]
     private static partial Regex LoadKeyPathRegex();
+
+    [GeneratedRegex(@"dubious ownership in repository at\s+'([^']+)'", RegexOptions.IgnoreCase)]
+    private static partial Regex DubiousOwnershipPathRegex();
 }

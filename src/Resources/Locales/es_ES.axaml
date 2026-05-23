@@ -1183,4 +1183,5 @@ Razón: {1}</x:String>
   <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">El push fue rechazado porque la rama está protegida. Envíe mediante un pull request o contacte a un administrador del repositorio.</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git no pudo firmar con GPG. Verifique su clave de firma (git config user.signingkey), asegúrese de que gpg-agent esté en ejecución, o desactive temporalmente la firma con 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git rechaza operar en este repositorio porque pertenece a otro usuario. Ejecute 'git config --global --add safe.directory &lt;ruta&gt;' para permitirlo.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Añadir a safe.directory</x:String>
 </ResourceDictionary>
