@@ -259,6 +259,9 @@ namespace Komorebi.Tests.Models
         [InlineData("HEAD detached at abc123", "Text.GitError.DetachedHead")]
         [InlineData("Updates were rejected because", "Text.GitError.PushRejected")]
         [InlineData("Please commit your changes or stash them", "Text.GitError.UncommittedChanges")]
+        [InlineData("error: cannot pull with rebase: You have unstaged changes.\nerror: Please commit or stash them.", "Text.GitError.UncommittedChanges")]
+        [InlineData("You have unstaged changes.", "Text.GitError.UncommittedChanges")]
+        [InlineData("Please commit or stash them.", "Text.GitError.UncommittedChanges")]
         [InlineData("Authentication failed for 'https://github.com'", "Text.GitError.AuthFailed")]
         [InlineData("remote: repository not found", "Text.GitError.RemoteNotFound")]
         [InlineData("branch 'main' already exists", "Text.GitError.AlreadyExists")]
@@ -286,7 +289,80 @@ namespace Komorebi.Tests.Models
         [InlineData("REMOTE HOST IDENTIFICATION HAS CHANGED", "Text.GitError.HostKeyChanged")]
         [InlineData("Host key verification failed.", "Text.GitError.HostKeyVerifyFailed")]
         [InlineData("worktree 'main' is already checked out", "Text.GitError.WorktreeError")]
+        // --- 新規追加カテゴリ ---
+        [InlineData("remote: error: GH006: Protected branch update failed for refs/heads/main.", "Text.GitError.ProtectedBranch")]
+        [InlineData("remote rejected: protected branch hook declined", "Text.GitError.ProtectedBranch")]
+        [InlineData("refusing to allow a personal access token to create or update workflow", "Text.GitError.ProtectedBranch")]
+        [InlineData("error: gpg failed to sign the data\nfatal: failed to write commit object", "Text.GitError.GpgSignFailed")]
+        [InlineData("gpg: signing failed: Inappropriate ioctl for device", "Text.GitError.GpgSignFailed")]
+        [InlineData("gpg: secret key not available", "Text.GitError.GpgSignFailed")]
+        [InlineData("fatal: detected dubious ownership in repository at 'C:/Work/Komorebi'", "Text.GitError.DubiousOwnership")]
+        [InlineData("To add an exception for this directory, call:\n\tgit config --global --add safe.directory C:/foo", "Text.GitError.DubiousOwnership")]
+        // --- 既存カテゴリの拡充パターン検証 ---
+        [InlineData("cannot lock ref 'refs/heads/main': unable to create '.git/refs/heads/main.lock'", "Text.GitError.IndexLock")]
+        [InlineData("Resolve all conflicts manually, mark them as resolved", "Text.GitError.MergeConflict")]
+        [InlineData("Stopping at 'fix: foo' due to merge conflicts", "Text.GitError.MergeConflict")]
+        [InlineData("error: failed to push some refs to 'github.com:foo/bar.git'", "Text.GitError.PushRejected")]
+        [InlineData("hint: Updates were rejected because the tip of your current branch is behind", "Text.GitError.PushRejected")]
+        [InlineData("error: Your local changes to the following files would be overwritten by checkout", "Text.GitError.UncommittedChanges")]
+        [InlineData("Cannot rebase: Your index contains uncommitted changes.", "Text.GitError.UncommittedChanges")]
+        [InlineData("remote: HTTP Basic: Access denied\nfatal: Authentication failed", "Text.GitError.AuthFailed")]
+        [InlineData("remote: Invalid username or password.", "Text.GitError.AuthFailed")]
+        [InlineData("fatal: could not read Username for 'https://github.com': terminal prompts disabled", "Text.GitError.AuthFailed")]
+        [InlineData("remote: Bad credentials", "Text.GitError.AuthFailed")]
+        [InlineData("fatal: unable to access 'https://github.com/foo/bar.git/': The requested URL returned error: 403", "Text.GitError.AuthFailed")]
+        [InlineData("fatal: unable to access 'https://github.com/foo.git/': The requested URL returned error: 401", "Text.GitError.AuthFailed")]
+        [InlineData("fatal: 'foo' does not appear to be a git repository", "Text.GitError.RemoteNotFound")]
+        [InlineData("error: RPC failed; curl 56 OpenSSL SSL_read", "Text.GitError.NetworkError")]
+        [InlineData("fatal: the remote end hung up unexpectedly\nfatal: early EOF", "Text.GitError.NetworkError")]
+        [InlineData("fetch-pack: unexpected disconnect while reading sideband packet\nfatal: protocol error: bad pack header\nfatal: unable to access 'https://github.com/foo.git/': Failed to connect to github.com port 443: Connection timed out", "Text.GitError.NetworkError")]
+        [InlineData("fatal: unable to access 'https://example.com/foo.git/': server certificate verification failed", "Text.GitError.NetworkError")]
+        [InlineData("fatal: unable to access 'https://example.com/foo.git/': SSL certificate problem: unable to get local issuer certificate", "Text.GitError.NetworkError")]
+        [InlineData("error: transfer closed with outstanding read data remaining", "Text.GitError.NetworkError")]
+        [InlineData("fatal: It looks like 'git am' is in progress. Cannot rebase.", "Text.GitError.RebaseInProgress")]
+        [InlineData("error: rebase already in progress, refusing to start a new one", "Text.GitError.RebaseInProgress")]
+        [InlineData("On branch main\nno changes added to commit (use \"git add\" and/or \"git commit -a\")", "Text.GitError.NothingToCommit")]
+        [InlineData("fatal: No url found for submodule path 'libs/foo' in .gitmodules", "Text.GitError.SubmoduleError")]
+        [InlineData("Error downloading object: a.bin (abc123): Smudge error: LFS object does not exist on the server", "Text.GitError.LfsError")]
+        [InlineData("remote: error: File size limit exceeded", "Text.GitError.FileTooLarge")]
+        [InlineData("error: could not apply abc1234... cherry-pick foo", "Text.GitError.CherryPickConflict")]
+        [InlineData("fatal: Exiting because of unfinished merge.", "Text.GitError.MergeNotFinished")]
+        [InlineData("fatal: The current branch foo has no upstream branch.", "Text.GitError.NoUpstream")]
+        [InlineData("error: cannot fetch shallow updates from a shallow repository", "Text.GitError.ShallowClone")]
+        [InlineData("fatal: write error: Disk quota exceeded", "Text.GitError.DiskFull")]
+        [InlineData("fatal: ambiguous argument 'HEAD~99': unknown revision or path not in the working tree", "Text.GitError.InvalidRef")]
+        [InlineData("error: refusing to update checked out branch: refs/heads/main", "Text.GitError.InvalidRef")]
+        [InlineData("fatal: Remote branch feature not found in upstream origin", "Text.GitError.RemoteRefNotFound")]
+        [InlineData("error: src refspec foo does not match any", "Text.GitError.RemoteRefNotFound")]
+        [InlineData("fatal: bad signature 0x00000000", "Text.GitError.CorruptObject")]
+        [InlineData("fatal: loose object 0000000000000000000000000000000000000000 (stored in .git/objects/00/...) is corrupt", "Text.GitError.CorruptObject")]
+        [InlineData("error: corrupt loose object 'abc123'", "Text.GitError.CorruptObject")]
+        [InlineData("fatal: not in a git directory", "Text.GitError.NotARepo")]
+        [InlineData("Stash entry is kept in case you need it again.", "Text.GitError.StashError")]
+        [InlineData("remote: error: pre-receive hook declined", "Text.GitError.HookFailed")]
+        [InlineData("error: corrupt patch at line 5", "Text.GitError.PatchFailed")]
+        [InlineData("fatal: cannot lock ref 'refs/heads/foo/bar': 'refs/heads/foo' exists; cannot create 'refs/heads/foo/bar'", "Text.GitError.AlreadyExists")]
+        [InlineData("fatal: 'foo' is not a working tree", "Text.GitError.WorktreeError")]
+        [InlineData("fatal: worktree '/path/to/wt' already exists", "Text.GitError.WorktreeError")]
         public void GetHintKey_AllPatterns_MatchCorrectly(string message, string expectedKey)
+        {
+            Assert.Equal(expectedKey, GitErrorHelper.GetHintKey(message));
+        }
+
+        /// <adversarial category="state" severity="high" />
+        /// <summary>カテゴリ優先順位の検証: 複数パターンに該当するメッセージで、より特異なカテゴリが優先されること</summary>
+        [Theory]
+        // ProtectedBranch (特異) は PushRejected (汎用) より優先される
+        [InlineData("error: failed to push some refs to 'github.com:foo/bar.git'\nremote: error: GH006: Protected branch update failed", "Text.GitError.ProtectedBranch")]
+        // KeyPermissionTooOpen は AuthFailed より優先される (publickey 拒否は鍵パーミッションが原因のことが多い)
+        [InlineData("Load key \"/home/user/.ssh/id_rsa\": bad permissions\nPermission denied (publickey)", "Text.GitError.KeyPermissionTooOpen")]
+        // HostKeyChanged は AuthFailed より優先される (深刻なセキュリティ警告)
+        [InlineData("REMOTE HOST IDENTIFICATION HAS CHANGED\nPermission denied (publickey)", "Text.GitError.HostKeyChanged")]
+        // UncommittedChanges は PermissionDenied より優先される (`overwritten` 検出が広い "Permission denied" を上書きしないこと)
+        [InlineData("error: Your local changes to the following files would be overwritten by merge:\n\tfoo.txt\nPermission denied for foo.txt", "Text.GitError.UncommittedChanges")]
+        // InvalidRef は PermissionDenied より優先される (refusing to update checked out branch)
+        [InlineData("error: refusing to update checked out branch: refs/heads/main\nPermission denied (filesystem)", "Text.GitError.InvalidRef")]
+        public void GetHintKey_CategoryPriority_MoreSpecificWins(string message, string expectedKey)
         {
             Assert.Equal(expectedKey, GitErrorHelper.GetHintKey(message));
         }

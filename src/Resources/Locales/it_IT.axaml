@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">Informazioni</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Revisione sorgente:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Informazioni su Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Data di Rilascio: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Note di Rilascio</x:String>
@@ -1179,4 +1180,7 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">La chiave SSH dell'host remoto è cambiata dall'ultima connessione. Il server potrebbe essere stato reinstallato o la sua chiave è stata aggiornata. Rimuovi la vecchia chiave da ~/.ssh/known_hosts e riprova.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Verifica della chiave host SSH fallita. L'host potrebbe non essere nel file ~/.ssh/known_hosts. Provare a connettersi prima dal terminale per aggiungere la chiave host, oppure verificare la configurazione SSH.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflitto worktree: il branch potrebbe essere già in checkout altrove. Verificare con 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Il push è stato rifiutato perché il branch è protetto. Esegui il push tramite una pull request, oppure contatta un amministratore del repository.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git non è riuscito a firmare con GPG. Verifica la tua chiave di firma (git config user.signingkey), assicurati che gpg-agent sia in esecuzione, o disabilita temporaneamente la firma con 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git rifiuta di operare su questo repository perché appartiene a un altro utente. Esegui 'git config --global --add safe.directory &lt;percorso&gt;' per consentirlo.</x:String>
 </ResourceDictionary>

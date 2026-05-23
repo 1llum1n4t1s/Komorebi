@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">De Programmate</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Recensio Fontis:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">De Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Dies Editionis: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Notae Editionis</x:String>
@@ -1179,4 +1180,7 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">Clavis SSH hospitis remoti mutata est ab ultima connexione. Minister fortasse reinstallatus est vel clavis eius renovata est. Clavem veterem ex ~/.ssh/known_hosts remove et iterum conare.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Verificatio clavis hospitis SSH defecit. Hospes fortasse in archivo ~/.ssh/known_hosts non registratus est. Per terminale primum conectere conare ut clavem hospitis addas, vel configurationem SSH tuam inspice.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflictus worktree: ramus iam alibi extractus esse potest. Verifica cum 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Impulsus reiectus est quia ramus protegitur. Impelle per rogatum tractionis, vel administratorem repositorii contacta.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git cum GPG signare non potuit. Clavem signatoriam tuam (git config user.signingkey) recense, gpg-agent currere certus es, vel signaturam temporaliter cum 'git -c commit.gpgsign=false ...' inactivam redde.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git in hoc repositorio operari recusat quia alius usuarius id possidet. 'git config --global --add safe.directory &lt;semita&gt;' exsequere ut permittas.</x:String>
 </ResourceDictionary>

@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">情報</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">ソースリビジョン:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Komorebi について</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">リリース日: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">リリースノート</x:String>
@@ -1179,4 +1180,7 @@
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">リモートホストのSSHキーが前回の接続時から変更されています。サーバーの再インストールやキーの更新が行われた可能性があります。~/.ssh/known_hostsから古いキーを削除してから再試行してください。</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSHホスト鍵の検証に失敗しました。ホストが ~/.ssh/known_hosts に登録されていない可能性があります。ターミナルから一度接続してホスト鍵を追加するか、SSH設定を確認してください。</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">ワークツリーの競合: ブランチが別の場所で既にチェックアウトされている可能性があります。'git worktree list' で確認してください。</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">保護されたブランチへの直接プッシュが拒否されました。プルリクエスト経由でマージするか、リポジトリ管理者に連絡してください。</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG での署名に失敗しました。署名鍵 (git config user.signingkey) を確認し、gpg-agent が起動しているか確認するか、'git -c commit.gpgsign=false ...' で一時的に署名を無効化してください。</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">リポジトリの所有者が異なるため git が操作を拒否しました。'git config --global --add safe.directory &lt;パス&gt;' を実行して許可してください。</x:String>
 </ResourceDictionary>

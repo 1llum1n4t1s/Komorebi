@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">Info</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Quellrevision:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Über Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Veröffentlichungsdatum: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Versionshinweise</x:String>
@@ -1179,4 +1180,7 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">Der SSH-Schlüssel des Remote-Hosts hat sich seit der letzten Verbindung geändert. Der Server wurde möglicherweise neu installiert oder sein Schlüssel wurde aktualisiert. Entfernen Sie den alten Schlüssel aus ~/.ssh/known_hosts und versuchen Sie es erneut.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH-Hostschlüssel-Verifizierung fehlgeschlagen. Der Host ist möglicherweise nicht in Ihrer ~/.ssh/known_hosts-Datei registriert. Verbinden Sie sich zuerst über das Terminal, um den Hostschlüssel hinzuzufügen, oder überprüfen Sie Ihre SSH-Konfiguration.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree-Konflikt: Der Branch ist möglicherweise bereits anderswo ausgecheckt. Prüfen Sie mit 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Push wurde abgelehnt, da der Branch geschützt ist. Pushen Sie über einen Pull Request oder kontaktieren Sie einen Repository-Administrator.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git konnte mit GPG nicht signieren. Überprüfen Sie Ihren Signaturschlüssel (git config user.signingkey), stellen Sie sicher, dass der gpg-agent läuft, oder deaktivieren Sie die Signatur vorübergehend mit 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git verweigert die Bearbeitung dieses Repositorys, da es einem anderen Benutzer gehört. Führen Sie 'git config --global --add safe.directory &lt;Pfad&gt;' aus, um es zu erlauben.</x:String>
 </ResourceDictionary>

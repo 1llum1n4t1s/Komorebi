@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">विषये</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">स्रोतसंशोधनम्:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Komorebi विषये</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">प्रकाशनतिथिः: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">प्रकाशनटिप्पण्यः</x:String>
@@ -1179,4 +1180,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">दूरस्थसेवकस्य SSH-कुञ्चिका अन्तिमसंयोजनात् परिवर्तिता अस्ति। सेवकः पुनः स्थापितः स्यात् अथवा तस्य कुञ्चिका नवीकृता स्यात्। ~/.ssh/known_hosts इत्यस्मात् पुरातनां कुञ्चिकां निराकुरुत पुनः प्रयतताम्।</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH-सेवककुञ्चिकायाः सत्यापनं विफलम्। सेवकः ~/.ssh/known_hosts सञ्चिकायां पञ्जीकृतः न स्यात्। टर्मिनल-माध्यमेन प्रथमं संयोजयतु सेवककुञ्चिकां योजयितुम्, अथवा SSH-विन्यासं परीक्षतु।</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">कार्यवृक्षसङ्घर्षः: शाखा अन्यत्र पूर्वमेव निष्कासिता स्यात्। 'git worktree list' इत्यनेन परीक्षयतु।</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">शाखा रक्षिता अस्ति इति कारणात् धक्केलनम् अस्वीकृतम्। pull request द्वारा धक्केलयतु अथवा कोषाधिकारिणं सम्पर्केण मिलतु।</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG द्वारा हस्ताक्षरेण git असफलं जातम्। हस्ताक्षरकुञ्चिकां (git config user.signingkey) सत्यापयतु, gpg-agent चलति इति निश्चितं कुरुत, अथवा 'git -c commit.gpgsign=false ...' इत्यनेन तत्कालं हस्ताक्षरं निष्क्रियं कुरुत।</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">अन्यः उपयोगकर्ता अस्य कोषस्य स्वामी अस्ति इति कारणात् git अस्मिन् कार्यं कर्तुं अस्वीकरोति। अनुमतिं दातुम् 'git config --global --add safe.directory &lt;पथः&gt;' इत्येतत् चालयतु।</x:String>
 </ResourceDictionary>

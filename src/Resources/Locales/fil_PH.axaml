@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">Tungkol</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Rebisyon ng Pinagmulan:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Tungkol sa Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Petsa ng Paglabas: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Mga Tala ng Paglabas</x:String>
@@ -1179,4 +1180,7 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">Nagbago ang SSH key ng remote host mula sa huling koneksyon. Maaaring muling na-install ang server o na-update ang key nito. Alisin ang lumang key mula sa ~/.ssh/known_hosts at subukan ulit.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Nabigo ang SSH host key verification. Maaaring wala ang host sa iyong ~/.ssh/known_hosts file. Subukang kumonekta mula sa terminal upang idagdag ang host key, o suriin ang iyong SSH configuration.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree conflict: maaaring naka-checkout na ang branch sa ibang lugar. Suriin gamit ang 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Tinanggihan ang push dahil protected ang branch. Mag-push sa pamamagitan ng pull request o makipag-ugnayan sa administrator ng repository.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Nabigo ang Git na lumagda gamit ang GPG. I-verify ang iyong signing key (git config user.signingkey), tiyaking gumagana ang gpg-agent, o pansamantalang i-disable ang pag-sign gamit ang 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Tumanggi ang Git na gumana sa repository na ito dahil pag-aari ito ng ibang user. Patakbuhin ang 'git config --global --add safe.directory &lt;path&gt;' upang payagan ito.</x:String>
 </ResourceDictionary>

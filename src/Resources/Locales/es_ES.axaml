@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">Acerca de</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Revisión de origen:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Acerca de Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Fecha de Release: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Notas de la versión (Release)</x:String>
@@ -1179,4 +1180,7 @@ Razón: {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">La clave SSH del host remoto ha cambiado desde la última conexión. El servidor puede haber sido reinstalado o su clave fue actualizada. Elimine la clave antigua de ~/.ssh/known_hosts e intente de nuevo.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">La verificación de la clave del host SSH falló. El host puede no estar en su archivo ~/.ssh/known_hosts. Intente conectarse primero desde la terminal para agregar la clave del host, o verifique su configuración SSH.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflicto de worktree: la rama puede estar ya en uso en otra ubicación. Verifique con 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">El push fue rechazado porque la rama está protegida. Envíe mediante un pull request o contacte a un administrador del repositorio.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git no pudo firmar con GPG. Verifique su clave de firma (git config user.signingkey), asegúrese de que gpg-agent esté en ejecución, o desactive temporalmente la firma con 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git rechaza operar en este repositorio porque pertenece a otro usuario. Ejecute 'git config --global --add safe.directory &lt;ruta&gt;' para permitirlo.</x:String>
 </ResourceDictionary>

@@ -1180,4 +1180,7 @@ Reason: {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">The remote host's SSH key has changed since the last connection. The server may have been reinstalled or its key was rotated. Remove the old key from ~/.ssh/known_hosts and try again.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH host key verification failed. The host may not be in your ~/.ssh/known_hosts file. Try connecting via terminal first to add the host key, or check your SSH configuration.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Worktree conflict: the branch may already be checked out elsewhere. Use 'git worktree list' to check.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Push was rejected because the branch is protected. Push via a pull request, or contact a repository administrator.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git failed to sign with GPG. Verify your signing key (git config user.signingkey), ensure gpg-agent is running, or temporarily disable signing via 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git refuses to operate on this repository because it's owned by a different user. Run 'git config --global --add safe.directory &lt;path&gt;' to allow it.</x:String>
 </ResourceDictionary>

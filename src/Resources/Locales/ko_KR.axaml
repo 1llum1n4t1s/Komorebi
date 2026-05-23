@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">정보</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">소스 리비전:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Komorebi 정보</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">릴리스 날짜: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">릴리스 노트</x:String>
@@ -1179,4 +1180,7 @@
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">원격 호스트의 SSH 키가 마지막 연결 이후 변경되었습니다. 서버가 재설치되었거나 키가 갱신되었을 수 있습니다. ~/.ssh/known_hosts에서 이전 키를 제거한 후 다시 시도하세요.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH 호스트 키 검증에 실패했습니다. 호스트가 ~/.ssh/known_hosts 파일에 등록되어 있지 않을 수 있습니다. 터미널에서 먼저 연결하여 호스트 키를 추가하거나 SSH 설정을 확인하세요.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">워크트리 충돌: 브랜치가 다른 곳에서 이미 체크아웃되어 있을 수 있습니다. 'git worktree list'로 확인하세요.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">보호된 브랜치이므로 푸시가 거부되었습니다. 풀 리퀘스트를 통해 푸시하거나 저장소 관리자에게 문의하세요.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG로 서명하지 못했습니다. 서명 키(git config user.signingkey)를 확인하고, gpg-agent가 실행 중인지 확인하거나, 'git -c commit.gpgsign=false ...'로 일시적으로 서명을 비활성화하세요.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">다른 사용자가 소유한 저장소이므로 git이 작업을 거부했습니다. 'git config --global --add safe.directory &lt;경로&gt;'를 실행하여 허용하세요.</x:String>
 </ResourceDictionary>

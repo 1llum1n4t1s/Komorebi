@@ -1180,4 +1180,7 @@
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">遠端主機的SSH金鑰自上次連接以來已變更。伺服器可能已重新安裝或其金鑰已更新。請從 ~/.ssh/known_hosts 中移除舊金鑰後重試。</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">SSH主機金鑰驗證失敗。該主機可能未註冊在 ~/.ssh/known_hosts 檔案中。請先透過終端連接以新增主機金鑰，或檢查您的SSH設定。</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">工作樹衝突：該分支可能已在其他位置簽出。使用 'git worktree list' 檢查。</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">推送被拒絕，因為分支受保護。請透過 pull request 推送，或聯絡儲存庫管理員。</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git GPG 簽署失敗。請驗證您的簽署金鑰（git config user.signingkey），確保 gpg-agent 正在執行，或使用 'git -c commit.gpgsign=false ...' 暫時停用簽署。</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git 拒絕在此儲存庫上操作，因為它屬於其他使用者。執行 'git config --global --add safe.directory &lt;路徑&gt;' 以允許。</x:String>
 </ResourceDictionary>

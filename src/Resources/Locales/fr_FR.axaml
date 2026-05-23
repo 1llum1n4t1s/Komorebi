@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">À propos</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Révision source :</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">À propos de Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Date de sortie : {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Notes de Version</x:String>
@@ -1179,4 +1180,7 @@ Raison : {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">La clé SSH de l'hôte distant a changé depuis la dernière connexion. Le serveur a peut-être été réinstallé ou sa clé a été mise à jour. Supprimez l'ancienne clé de ~/.ssh/known_hosts et réessayez.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">La vérification de la clé de l'hôte SSH a échoué. L'hôte n'est peut-être pas dans votre fichier ~/.ssh/known_hosts. Essayez de vous connecter d'abord via le terminal pour ajouter la clé de l'hôte, ou vérifiez votre configuration SSH.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflit de worktree : la branche est peut-être déjà extraite ailleurs. Vérifiez avec 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Le push a été rejeté car la branche est protégée. Poussez via une pull request, ou contactez un administrateur du dépôt.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git n'a pas pu signer avec GPG. Vérifiez votre clé de signature (git config user.signingkey), assurez-vous que gpg-agent est en cours d'exécution, ou désactivez temporairement la signature avec 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git refuse d'opérer sur ce dépôt car il appartient à un autre utilisateur. Exécutez 'git config --global --add safe.directory &lt;chemin&gt;' pour l'autoriser.</x:String>
 </ResourceDictionary>

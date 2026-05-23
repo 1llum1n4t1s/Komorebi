@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">Про програму</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Ревізія джерела:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Про Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Дата випуску: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Нотатки до випуску</x:String>
@@ -1179,4 +1180,7 @@
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">SSH-ключ віддаленого хоста змінився з моменту останнього підключення. Сервер міг бути перевстановлений або його ключ було оновлено. Видаліть старий ключ з ~/.ssh/known_hosts і спробуйте знову.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">Перевірка ключа SSH-хоста не вдалася. Хост може бути не зареєстрований у файлі ~/.ssh/known_hosts. Спробуйте спершу підключитися через термінал, щоб додати ключ хоста, або перевірте налаштування SSH.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Конфлікт worktree: гілка може бути вже витягнута в іншому місці. Перевірте за допомогою 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">Push було відхилено, оскільки гілка захищена. Надсилайте через pull request, або зв'яжіться з адміністратором сховища.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git не вдалося підписати за допомогою GPG. Перевірте свій ключ підпису (git config user.signingkey), переконайтеся, що gpg-agent працює, або тимчасово вимкніть підпис за допомогою 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git відмовляється працювати з цим сховищем, оскільки воно належить іншому користувачеві. Виконайте 'git config --global --add safe.directory &lt;шлях&gt;', щоб дозволити.</x:String>
 </ResourceDictionary>

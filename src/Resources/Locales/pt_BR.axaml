@@ -4,6 +4,7 @@
   </ResourceDictionary.MergedDictionaries>
 
   <x:String x:Key="Text.About" xml:space="preserve">Sobre</x:String>
+  <x:String x:Key="Text.About.GitSourceRevision" xml:space="preserve">Revisão do código-fonte:</x:String>
   <x:String x:Key="Text.About.Menu" xml:space="preserve">Sobre o Komorebi</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Data de Lançamento: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Notas de Lançamento</x:String>
@@ -1179,4 +1180,7 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.GitError.HostKeyChanged" xml:space="preserve">A chave SSH do host remoto foi alterada desde a última conexão. O servidor pode ter sido reinstalado ou sua chave foi atualizada. Remova a chave antiga de ~/.ssh/known_hosts e tente novamente.</x:String>
   <x:String x:Key="Text.GitError.HostKeyVerifyFailed" xml:space="preserve">A verificação da chave do host SSH falhou. O host pode não estar no seu arquivo ~/.ssh/known_hosts. Tente conectar pelo terminal primeiro para adicionar a chave do host, ou verifique sua configuração SSH.</x:String>
   <x:String x:Key="Text.GitError.WorktreeError" xml:space="preserve">Conflito de worktree: o branch pode já estar em checkout em outro local. Verifique com 'git worktree list'.</x:String>
+  <x:String x:Key="Text.GitError.ProtectedBranch" xml:space="preserve">O push foi rejeitado porque o branch está protegido. Faça push via pull request, ou contate um administrador do repositório.</x:String>
+  <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git falhou ao assinar com GPG. Verifique sua chave de assinatura (git config user.signingkey), certifique-se de que o gpg-agent está em execução, ou desative a assinatura temporariamente com 'git -c commit.gpgsign=false ...'.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git se recusa a operar neste repositório porque pertence a outro usuário. Execute 'git config --global --add safe.directory &lt;caminho&gt;' para permitir.</x:String>
 </ResourceDictionary>
