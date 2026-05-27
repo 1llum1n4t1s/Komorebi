@@ -134,6 +134,45 @@ namespace Komorebi.Tests.Models
 
         #endregion
 
+        #region IsUnpublished
+
+        [Fact]
+        public void IsUnpublished_LocalBranchWithoutUpstream_ReturnsTrue()
+        {
+            var branch = new Branch { IsLocal = true, Upstream = "" };
+            Assert.True(branch.IsUnpublished);
+        }
+
+        [Fact]
+        public void IsUnpublished_LocalBranchWithNullUpstream_ReturnsTrue()
+        {
+            var branch = new Branch { IsLocal = true, Upstream = null };
+            Assert.True(branch.IsUnpublished);
+        }
+
+        [Fact]
+        public void IsUnpublished_LocalBranchWithUpstream_ReturnsFalse()
+        {
+            var branch = new Branch { IsLocal = true, Upstream = "refs/remotes/origin/feature" };
+            Assert.False(branch.IsUnpublished);
+        }
+
+        [Fact]
+        public void IsUnpublished_RemoteBranch_ReturnsFalse()
+        {
+            var branch = new Branch { IsLocal = false, Upstream = "" };
+            Assert.False(branch.IsUnpublished);
+        }
+
+        [Fact]
+        public void IsUnpublished_DetachedHead_ReturnsFalse()
+        {
+            var branch = new Branch { IsLocal = true, IsDetachedHead = true, Upstream = "" };
+            Assert.False(branch.IsUnpublished);
+        }
+
+        #endregion
+
         #region Default Values
 
         [Fact]

@@ -56,3 +56,6 @@ __pycache__/
 
 # Claude Code セッション固有の MCP サーバー設定（個人/環境依存のため共有しない）
 .mcp.json
+
+# dotnet test 実行ログ（ローカル/別環境で出力される一時ファイル）
+dotnet-test.log

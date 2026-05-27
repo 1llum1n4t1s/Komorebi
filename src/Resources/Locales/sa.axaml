@@ -99,6 +99,7 @@
   <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">दूरस्थम्</x:String>
   <x:String x:Key="Text.BranchTree.Status" xml:space="preserve">स्थितिः</x:String>
   <x:String x:Key="Text.BranchTree.Tracking" xml:space="preserve">अनुसरणम्</x:String>
+  <x:String x:Key="Text.BranchTree.Unpublished" xml:space="preserve">अप्रकाशितम्</x:String>
   <x:String x:Key="Text.BranchTree.URL" xml:space="preserve">URL</x:String>
   <x:String x:Key="Text.BranchTree.Worktree" xml:space="preserve">कार्यवृक्षः</x:String>
   <x:String x:Key="Text.Cancel" xml:space="preserve">निरस्यताम्</x:String>

@@ -104,6 +104,12 @@ public class Branch
     public bool IsTrackStatusVisible => (Ahead?.Count ?? 0) > 0 || (Behind?.Count ?? 0) > 0;
 
     /// <summary>
+    /// 未公開（upstream 未設定）のローカルブランチかどうか。
+    /// 新規ブランチでまだ push していない状態を視覚的に示すために使用する。
+    /// </summary>
+    public bool IsUnpublished => IsLocal && !IsDetachedHead && string.IsNullOrEmpty(Upstream);
+
+    /// <summary>
     /// トラッキングステータスの説明文字列（例: "3↑ 2↓"）を取得する。
     /// </summary>
     public string TrackStatusDescription

@@ -234,7 +234,7 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 - **Avalonia 12.0.2** — cross-platform XAML UI (Note: `Avalonia.Controls.DataGrid` is intentionally pinned to 12.0.0 — bump together with main Avalonia after compatibility check)
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
-- **Velopack 0.0.1298** — auto-update framework
+- **Velopack 1.0.1** — auto-update framework
 - **depends/AvaloniaEdit** — git submodule, text editor for diff/blame
 - **OpenAI / Azure.AI.OpenAI 2.8.0-beta.1** — AI commit message generation
 - **LiveChartsCore 2.0.2** — contribution statistics charts

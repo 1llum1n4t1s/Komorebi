@@ -81,6 +81,14 @@ public class BranchTreeNode : ObservableObject
     }
 
     /// <summary>
+    /// 未公開（upstream 未設定）のローカルブランチであることを示すバッジを表示するかどうか。
+    /// </summary>
+    public bool ShowUnpublishedTip
+    {
+        get => Backend is Models.Branch { IsUnpublished: true };
+    }
+
+    /// <summary>
     /// 配下のブランチ数を括弧付きで表示する文字列。0の場合は空文字。
     /// </summary>
     public string BranchesCount

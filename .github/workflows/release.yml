@@ -8,6 +8,14 @@ on:
 # GitHub Releases へ 1 バージョン (v1.0.81) だけ publish 済み (継続配信はしない)。
 permissions:
   contents: read
+# 複数 release/** push が overlap した場合、古い run の cleanup step が新しい run が
+# upload した object を「keep set 外」として誤削除する race condition が起き得るため、
+# release ジョブを workflow level で直列化する。cancel-in-progress: false にする理由は
+# 削除途中で中断するとオブジェクト整合性が壊れるためで、走っている run を最後まで完走させて
+# 次の run を queue する。
+concurrency:
+  group: release-r2
+  cancel-in-progress: false
 jobs:
   build:
     name: Build
@@ -73,9 +81,11 @@ jobs:
       # R2 アップロード仕様:
       # - releases.{channel}.json (manifest) は同 channel の旧版を冪等に上書き
       #   → 新リリース後、クライアントはここから新 nupkg URL を取得する
-      # - *.nupkg (full/delta) は put のみで既存ファイルは触らない
-      #   → 過去バージョンの nupkg を残すことで delta 連鎖と緊急ロールバックを維持
+      # - *.nupkg (full/delta) は put のみで既存ファイルは触らない (アップロード時点)
       # - Setup/AppImage/Portable.zip と deb/rpm/独自zip は固定名/バージョン名で put
+      # - リリース完了後、後段の Cleanup step が「今 upload したファイル一式」以外を全削除する
+      #   → R2 は常に最新 1 バージョンのみ保持。旧 delta は manifest からも消えているため
+      #     クライアントは最新フル nupkg を取得して追いつく
       - name: Upload to R2 bucket (komorebi-updates)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -104,3 +114,108 @@ jobs:
                  -o /dev/null -w "  HTTP %{http_code} (%{size_download} bytes)\n" \
                  "$url"
           done
+      # 旧バージョン成果物のクリーンアップ:
+      # - 今リリースで packages/ にアップロードしたファイル名群を keep set として、それ以外を削除
+      # - 対象: 旧 Velopack nupkg (full/delta)、旧 Setup.exe / Portable.zip / AppImage、
+      #   旧 standalone パッケージ (komorebi_<old>_*.zip / .deb / .rpm) すべて
+      # - 明示保護: releases.*.json / assets.*.json / RELEASES* (manifest 系。今回も upload
+      #   されるので keep set にも入るが、二重保護で取りこぼし防止)
+      # - R2 は常に「最新リリースで配ったファイル一式」のみ保持する状態に揃う
+      # - keep set は public endpoint ではなくローカル packages/ から構築 (CDN 伝播遅延の race condition を回避)
+      # - 配信確認ステップが先 (manifest 取得不能なら手前で fail し cleanup は走らない)
+      - name: Cleanup old artifacts (keep only files just uploaded)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          api="https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/r2/buckets/komorebi-updates"
+          auth_header="Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
+
+          # 1. keep_map を packages/ (= 今アップロードしたファイル一式) から構築
+          declare -A keep_map
+          shopt -s nullglob
+          for f in packages/*; do
+            [ -f "$f" ] || continue
+            keep_map["$(basename "$f")"]=1
+          done
+          shopt -u nullglob
+
+          if [[ "${#keep_map[@]}" -eq 0 ]]; then
+            echo "::error::packages/ にファイルがありません。Velopack/package 成果物のダウンロードに失敗している可能性があります。"
+            exit 1
+          fi
+
+          echo "::group::keep_map (今リリースで配った成果物 / 削除対象から除外) (${#keep_map[@]} files)"
+          for k in "${!keep_map[@]}"; do echo "  $k"; done | sort
+          echo "::endgroup::"
+
+          # 2. R2 上の全 object を cursor pagination で取得
+          all_keys=()
+          cursor=""
+          while true; do
+            if [[ -n "$cursor" ]]; then
+              resp=$(curl --fail --silent --max-time 30 "${api}/objects?per_page=1000&cursor=${cursor}" -H "$auth_header")
+            else
+              resp=$(curl --fail --silent --max-time 30 "${api}/objects?per_page=1000" -H "$auth_header")
+            fi
+            while IFS= read -r k; do
+              [[ -n "$k" ]] && all_keys+=("$k")
+            done < <(echo "$resp" | jq -r '.result[]?.key')
+            truncated=$(echo "$resp" | jq -r '.result_info.is_truncated // false')
+            [[ "$truncated" != "true" ]] && break
+            cursor=$(echo "$resp" | jq -r '.result_info.cursor // ""')
+            [[ -z "$cursor" || "$cursor" == "null" ]] && break
+          done
+
+          echo "::group::R2 内全オブジェクト (${#all_keys[@]} files)"
+          printf '  %s\n' "${all_keys[@]}"
+          echo "::endgroup::"
+
+          # 3. 削除対象判定:
+          #    - keep_map に含まれる (今リリースで配った) ものは保護
+          #    - 固定 manifest 系 (releases.*.json / assets.*.json / RELEASES*) は明示保護
+          #      → 今回も upload されるので keep_map にも入るが、取りこぼし防止の二重保護
+          to_delete=()
+          for key in "${all_keys[@]}"; do
+            [[ -n "${keep_map[$key]:-}" ]] && continue
+            case "$key" in
+              releases.*.json|assets.*.json|RELEASES*) continue ;;
+            esac
+            to_delete+=("$key")
+          done
+
+          if [[ "${#to_delete[@]}" -eq 0 ]]; then
+            echo "✅ 削除対象なし - R2 上の全オブジェクトが今リリースの成果物か保護対象です"
+            exit 0
+          fi
+
+          echo "::group::削除対象 (${#to_delete[@]} files)"
+          printf '  %s\n' "${to_delete[@]}"
+          echo "::endgroup::"
+
+          # 4. 一個ずつ DELETE (--max-time 30 でハング防止)
+          deleted=0
+          failed=0
+          for key in "${to_delete[@]}"; do
+            encoded=$(jq -nr --arg k "$key" '$k|@uri')
+            resp=$(curl --silent --max-time 30 -X DELETE "${api}/objects/${encoded}" -H "$auth_header")
+            success=$(echo "$resp" | jq -r '.success')
+            if [[ "$success" == "true" ]]; then
+              echo "  🗑️  Deleted: $key"
+              deleted=$((deleted + 1))
+            else
+              echo "  ❌ Failed: $key"
+              echo "$resp" | jq -r '.errors[]?.message' | sed 's/^/      /'
+              failed=$((failed + 1))
+            fi
+          done
+
+          echo ""
+          echo "🧹 R2 クリーンアップ完了: $deleted / ${#to_delete[@]} 削除  (失敗: $failed)"
+          # 削除失敗は次回リリースで再試行されるため、リリース自体は成功扱い。
+          # ただし全件失敗の場合は権限/bucket 名の問題なのでワークフロー失敗にする。
+          if [[ "$failed" -gt 0 && "$deleted" -eq 0 ]]; then
+            echo "::error::すべての削除が失敗しました。API token の権限・bucket 名を確認してください。"
+            exit 1
+          fi

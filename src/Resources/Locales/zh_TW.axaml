@@ -99,6 +99,7 @@
   <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">遠端</x:String>
   <x:String x:Key="Text.BranchTree.Status" xml:space="preserve">狀態</x:String>
   <x:String x:Key="Text.BranchTree.Tracking" xml:space="preserve">上游分支</x:String>
+  <x:String x:Key="Text.BranchTree.Unpublished" xml:space="preserve">未發布</x:String>
   <x:String x:Key="Text.BranchTree.URL" xml:space="preserve">遠端網址</x:String>
   <x:String x:Key="Text.BranchTree.Worktree" xml:space="preserve">工作區</x:String>
   <x:String x:Key="Text.Cancel" xml:space="preserve">取  消</x:String>
