@@ -4,6 +4,12 @@
 
 C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム対応のオープンソース Git GUI クライアントです。Git CLI をラップし、日常の Git 操作をビジュアルに行えます。
 
+> ⚠️ **v1.0.85 をお使いの方へ（既知の不具合・v1.0.86 で修正済み）**
+>
+> v1.0.85 では `···` メニューの **「更新を確認...」を実行すると `更新の確認に失敗しました！ Could not find file 'NuGet.Versioning'`** と表示される不具合があります。**対処は不要です** — バックグラウンドの自動更新は正常に動作しているため、次回のアプリ起動時に自動的に最新版へ更新され、解消されます。
+>
+> すぐに更新したい場合は、最新の Setup.exe を手動インストールしてください（[x64](https://komorebi.nephilim.jp/Komorebi-win-x64-Setup.exe) / [ARM64](https://komorebi.nephilim.jp/Komorebi-win-arm64-Setup.exe)）。
+
 > [!NOTE]
 > 本プロジェクトは [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォークです。オリジナルの開発者および全コントリビューターに感謝いたします。
 
