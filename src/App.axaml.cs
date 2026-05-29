@@ -1499,14 +1499,14 @@ public partial class App : Application
                 var source = new SimpleWebSource(baseUrl);
                 var mgr = new UpdateManager(source);
 
-                // ライブラリへ Komorebi 流のローカライズ・アイコン・無視タグを注入する
+                // ライブラリへ Komorebi 流のローカライズ・無視タグを注入する
+                // （アイコン注入は VelopackUpdateDialog.Avalonia 1.0.4 で廃止されたため、ライブラリ内蔵アイコンを使う）
                 var pref = ViewModels.Preferences.Instance;
                 var owner = (Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
 
                 var options = new VelopackUpdateDialog.UpdateDialogOptions
                 {
                     Strings = Models.UpdateDialogStrings.Instance,
-                    Icons = Models.UpdateDialogIcons.Instance,
                     AccentBrush = Current?.FindResource("Brush.Accent") as IBrush,
                     IgnoredTagName = string.IsNullOrEmpty(pref.IgnoreUpdateTag) ? null : pref.IgnoreUpdateTag,
                     SuppressUpToDateOnAutoCheck = true,
