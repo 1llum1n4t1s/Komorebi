@@ -1,4 +1,4 @@
-// nephilim.jp サブドメインのランディングページ配信 Worker。
+// Komorebi ランディングページ配信 Worker (komorebi.nephilim.jp)。
 //
 // このホスト名は R2 バケットのカスタムドメインでもある（Velopack 自動更新ファイルの配信元）。
 // Cloudflare では「同一ホスト名に張った Worker Route は Custom Domain より優先」される。
