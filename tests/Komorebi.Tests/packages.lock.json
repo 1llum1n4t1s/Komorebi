@@ -182,8 +182,8 @@
       },
       "AvaloniaUI.DiagnosticsSupport": {
         "type": "Transitive",
-        "resolved": "2.2.1",
-        "contentHash": "PXviRj+8t6IT7JdnVhs1EET+VgGB/K1Ju3yL/Q9sXR2YD9NzkIYybyfJG3DPXcTYXpEJZJvxGiCTjH1N8AkLhQ==",
+        "resolved": "2.2.2",
+        "contentHash": "KbGXkGTTYnW6UCipZNnjS3LyGH+PGMPfX+bTJ3uvdgRL3Nxpy/vPeW67ySpcU+qQicTUxRN75p6ciAwIfnqT8A==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.1"
@@ -454,13 +454,13 @@
       },
       "Onigwrap": {
         "type": "Transitive",
-        "resolved": "1.0.10",
-        "contentHash": "eujNEpEhCl4UiqHTG0CeG/sWS8v/iYXGqUpaVkgBmYRZp3Utmz/aw38fuFL2rcnhj1FNfHwHaxGDeLY34a3nEA=="
+        "resolved": "1.0.11",
+        "contentHash": "5/WAxSYWfiiPzp1X13qqdqjFmYLKDD/U7Vh3WCkKxWG9BjqdrXnQE5fCKCFJX+xWvuYLTxwZIVWBwBWObViE8g=="
       },
       "OpenAI": {
         "type": "Transitive",
-        "resolved": "2.10.0",
-        "contentHash": "e5gAhMDcX5bFmmtR+lT6qZxJoaGb0SkIplPUUdKwcC4xerCh471hTIsrvfkou7scfZD9YQk6C06dP3NwBqHw1A==",
+        "resolved": "2.11.0",
+        "contentHash": "f0y5zOZVNhuc/gPQUHGkiljZlDUq2SddGOkGTPLHnjQC5mCiTCXq1BqxZ+xxxHU6bY0mEtFQJj1RlB2BpwD7Lw==",
         "dependencies": {
           "System.ClientModel": "1.10.0"
         }
@@ -546,18 +546,18 @@
       },
       "TextMateSharp": {
         "type": "Transitive",
-        "resolved": "2.0.3",
-        "contentHash": "w0wGeqlBi9SYrzxpS1DBcEfiVCs5NY18Yl5YBIsHzXTXQd0OLOh3mP4LRuFvcktR/1MG8nSBHSMJj0rFvrPk+A==",
+        "resolved": "2.0.4",
+        "contentHash": "5Pvn+A4zb1IF+ACAVhgw1aGf9kTyx6j7v5hdup7nCS89Nzby8KQAlCfQ54VC/GAsEoQwh4zKa5MKlAaql8nkPg==",
         "dependencies": {
-          "Onigwrap": "1.0.10"
+          "Onigwrap": "1.0.11"
         }
       },
       "TextMateSharp.Grammars": {
         "type": "Transitive",
-        "resolved": "2.0.3",
-        "contentHash": "qkI1ogusuyGCGTgeyhljDM+GEfATOexoUTqLIgSb5P0ojmfhRXWfSTRXXJRpZkLDErShJ7RWOb+p10lHfhhO+Q==",
+        "resolved": "2.0.4",
+        "contentHash": "jzOY00q5u5Vs4L9n2m2PnRZDGwWt2uwkOLh7qlVdCx1kkGSn5eaW5XgnYCyTzEbsCwLV2xlEolnNkr/wuIMAbA==",
         "dependencies": {
-          "TextMateSharp": "2.0.3"
+          "TextMateSharp": "2.0.4"
         }
       },
       "Velopack": {
@@ -654,8 +654,8 @@
         "dependencies": {
           "Avalonia": "[12.0.4, )",
           "Avalonia.AvaloniaEdit": "[11.3.0, )",
-          "TextMateSharp": "[2.0.3, )",
-          "TextMateSharp.Grammars": "[2.0.3, )"
+          "TextMateSharp": "[2.0.4, )",
+          "TextMateSharp.Grammars": "[2.0.4, )"
         }
       },
       "komorebi": {
@@ -667,13 +667,13 @@
           "Avalonia.Fonts.Inter": "[12.0.4, )",
           "Avalonia.Themes.Fluent": "[12.0.4, )",
           "AvaloniaEdit.TextMate": "[11.3.0, )",
-          "AvaloniaUI.DiagnosticsSupport": "[2.2.1, )",
+          "AvaloniaUI.DiagnosticsSupport": "[2.2.2, )",
           "Azure.AI.OpenAI": "[2.8.0-beta.1, )",
           "BitMiracle.LibTiff.NET": "[2.4.660, )",
           "CRDebugger.Avalonia": "[1.0.26, )",
           "CommunityToolkit.Mvvm": "[8.4.2, )",
           "LiveChartsCore.SkiaSharpView.Avalonia": "[2.0.4, )",
-          "OpenAI": "[2.10.0, )",
+          "OpenAI": "[2.11.0, )",
           "Pfim": "[0.11.4, )",
           "StbImageSharp": "[2.30.15, )",
           "SuperLightLogger": "[1.0.7, )",

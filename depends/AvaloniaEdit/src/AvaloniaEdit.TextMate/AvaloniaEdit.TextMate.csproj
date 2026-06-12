@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="12.0.4" />
-    <PackageReference Include="TextMateSharp" Version="$(TextMateSharpVersion)" />
-    <PackageReference Include="TextMateSharp.Grammars" Version="$(TextMateSharpVersion)" />
+    <PackageReference Include="TextMateSharp" Version="2.0.4" />
+    <PackageReference Include="TextMateSharp.Grammars" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
