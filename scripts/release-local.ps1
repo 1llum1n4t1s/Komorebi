@@ -128,6 +128,7 @@ foreach ($runtime in $Runtimes) {
 
     Write-Host "== vpk pack + 署名: $runtime ==" -ForegroundColor Cyan
     # CI (velopack.yml) の Windows 系 vpk pack 引数 + --signParams (ローカル署名の追加分)
+    # --icon: Setup.exe のアイコン (旧 CI は未指定でアイコン無し Setup.exe になっていた)
     Invoke-Native "vpk pack ($runtime)" {
         vpk pack `
             --packId Komorebi `
@@ -136,6 +137,7 @@ foreach ($runtime in $Runtimes) {
             --packDir $publishDir `
             --outputDir $ArtifactsDir `
             --channel $config.Channel `
+            --icon (Join-Path $RepoRoot 'src\App.ico') `
             --signParams $SignParams
     }
 }
