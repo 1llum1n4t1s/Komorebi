@@ -21,17 +21,24 @@ jobs:
         with:
           ref: ${{ github.head_ref || github.ref_name }}
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: 11
+
       - name: Set up Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: '24.x'
+          cache: 'pnpm'
+          cache-dependency-path: build/scripts/pnpm-lock.yaml
 
       - name: Install dependencies
-        # npm ci は package-lock.json と厳格に一致するバージョンを取得するため、
+        # pnpm install --frozen-lockfile は pnpm-lock.yaml と厳格に一致するバージョンを取得するため、
         # サプライチェーン攻撃（レジストリ上のバージョン差し替え）に強い。
-        # path@0.12.7 は node 内蔵モジュールの非推奨 npm 版のため削除（package-lock.json にも含まれていない）。
+        # path@0.12.7 は node 内蔵モジュールの非推奨 npm 版のため削除（pnpm-lock.yaml にも含まれていない）。
         working-directory: build/scripts
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run localization check
         run: node build/scripts/localization-check.js
