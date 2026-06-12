@@ -132,7 +132,7 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 - Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
 - `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.nephilim.jp`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
 - 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書き不可
-- 通常リリースは CI workflow (`.github/workflows/release.yml`) の `r2-upload` ジョブが Velopack 成果物 (nupkg/RELEASES/releases.json/Setup/AppImage/Portable.zip) と standalone パッケージ (deb/rpm/独自zip) を **R2 単独配信** する (`permissions: contents: read`、通常リリースで GitHub Releases は作らない)
+- 通常リリースは **R2 単独配信** (GitHub Releases は作らない)。**win-x64 / win-arm64 はローカル署名リリース (`scripts/release-local.ps1`)、osx-arm64 / linux-x64 / linux-arm64 + standalone パッケージは CI (`.github/workflows/release.yml` の `r2-upload` ジョブ)** の役割分担 (詳細は後述「CI/CD」)
 - 旧 `GithubSource` クライアント救済は GitHub Releases に「踏み台 (R2 対応版を含む最初のバージョン)」を **1 つだけ** publish する方式。2 段階更新 (旧 → 踏み台版 → R2 最新) で乗り換えさせる。踏み台 publish は `/transfer-cf` 移行作業時に 1 回だけ実施し、踏み台 Release は **削除せず残す** (継続併用はしない)
 - `Models.VelopackUpdate` holds `UpdateManager` + `UpdateInfo`
 - `ViewModels.SelfUpdate` handles download progress and `ApplyUpdatesAndRestart()`
@@ -221,9 +221,20 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **format-check.yml** — `dotnet format --verify-no-changes` on push/PR to `main`
 - **localization-check.yml** — validates locale files against `en_US`
 - **ci.yml** — lightweight: `dotnet build` + `dotnet test` on ubuntu-latest (single runner, no AOT publish)
-- **release.yml** — triggered by push to `release/**` branches: full AOT publish (5 platforms) → packages (zip/deb/rpm/AppImage) → Velopack → GitHub Release
-- **build.yml** — reusable workflow for 5-platform AOT publish (used by release.yml only)
-- **velopack.yml** — reusable workflow creating Velopack packages for 5 RIDs (win-x64, win-arm64, osx-arm64, linux-x64, linux-arm64)
+- **release.yml** — triggered by push to `release/**` branches: full AOT publish (5 platforms) → packages (zip/deb/rpm/AppImage) → Velopack (osx/linux のみ) → R2 単独配信 (GitHub Releases は作らない)
+- **build.yml** — reusable workflow for 5-platform AOT publish (used by release.yml only。win-* は `package.yml` の standalone zip 用に残置)
+- **velopack.yml** — reusable workflow creating Velopack packages。**win-x64 / win-arm64 は matrix から除外済み** — 未署名 win フィードがローカル署名リリースの成果物を R2 上で上書きしないため
+- **deploy-landing.yml** — `web/` 配下のランディングページを Cloudflare Worker としてデプロイ (リリース配信とは独立)
+
+### Windows リリース (ローカル実行)
+
+`pwsh scripts/release-local.ps1` — Lhamiel / Ferry で確立したローカル署名付きリリースフローの横展開。コード署名 (Authenticode、Certum **Open Source Code Signing in the cloud**、CN=`Open Source Developer Yuichiro Shinozaki`) は SimplySign Desktop のトークンログイン中セッション + スマホ OTP が必要で GitHub Actions からは署名できないため、win-x64 / win-arm64 の 2 チャンネルはローカルスクリプトでリリースする。スクリプトは publish (Native AOT) → `vpk pack` + **Authenticode 署名** (`--signParams`、タイムスタンプ `http://time.certum.pl`) → 署名検証 → `wrangler` (pnpm dlx) で R2 バケット `komorebi-updates` にアップロード (manifest は最後) → 配信確認 (`releases.{channel}.json` HTTP 200) → **manifest 外の旧 `*.nupkg` を Cloudflare API V4 で自動削除** (Aggressive 保持戦略。今回ビルドしないチャンネルの manifest は R2 から取得して keep set に加えるため、macOS / Linux の nupkg は誤削除しない) まで一括実行。Cloudflare トークンは `C:\Users\IMT\dev\Secret\secrets.json` の `cloudflare.api_token` を実行時に読む。動作確認は `-SkipUpload` (ビルド + 署名のみ)、RID 絞り込みは `-Runtimes win-x64`。**実行前提: SimplySign Desktop がトークンログイン済み** (証明書が CurrentUser\My に見えること。スクリプトがプリフライトで検査して落とす)。**`/vava` は `vava.config.json` の `localRelease` キーを読んでこのスクリプトを自動実行する**。
+
+### macOS / Linux + standalone パッケージ (CI)
+
+`release/**` ブランチへの push で `release.yml` が `build.yml` → `package.yml` → `velopack.yml` → `r2-upload` を順に呼ぶ。`r2-upload` の **cleanup は R2 上の `releases.win-*.json` を keep set に取り込む** (CI 成果物に win manifest が無いため、取り込まないと署名済み win nupkg を「keep set 外」と誤判定して削除する。取得失敗時は安全側で cleanup を中止)。ローカル署名リリースが配る固定名 installer (`Komorebi-win-*` = Setup.exe / Portable.zip) も明示保護される。
+
+> ℹ️ `package.yml` の win standalone zip (`komorebi_*.zip`) は引き続き CI で生成される未署名バイナリ。署名対象に含めたい場合はローカルスクリプトへの移植が必要。
 
 Linux builds run directly on `ubuntu-latest` runner (no Docker container). arm64 cross-compilation adds ports.ubuntu.com sources with dynamic codename detection. RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
 

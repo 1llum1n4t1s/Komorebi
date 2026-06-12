@@ -146,6 +146,25 @@ jobs:
             exit 1
           fi
 
+          # win-x64 / win-arm64 はローカル署名リリース (scripts/release-local.ps1) が配信する
+          # ため CI 成果物には存在しない。R2 上の releases.win-*.json を keep set に取り込み、
+          # 署名済み win nupkg を「keep set 外」と誤判定して削除しないようにする。
+          # クエリ付き URL で CDN キャッシュをバイパスし、取得失敗時は誤削除防止のため
+          # cleanup を安全側で中止する (release-local.ps1 側の osx/linux keep 取り込みと対称)。
+          for channel in win-x64 win-arm64; do
+            manifest_url="https://komorebi.nephilim.jp/releases.${channel}.json?cb=$(date +%s)"
+            if ! remote_json=$(curl --fail --silent --max-time 30 \
+                 --retry 3 --retry-delay 5 --retry-all-errors "$manifest_url"); then
+              echo "::error::releases.${channel}.json の取得に失敗しました。署名済み win nupkg の誤削除を防ぐため cleanup を中止します。"
+              exit 1
+            fi
+            while IFS= read -r filename; do
+              if [[ -n "$filename" && "$filename" != "null" ]]; then
+                keep_map["$filename"]=1
+              fi
+            done < <(echo "$remote_json" | jq -r '.Assets[]?.FileName // empty')
+          done
+
           echo "::group::keep_map (今リリースで配った成果物 / 削除対象から除外) (${#keep_map[@]} files)"
           for k in "${!keep_map[@]}"; do echo "  $k"; done | sort
           echo "::endgroup::"
@@ -176,11 +195,14 @@ jobs:
           #    - keep_map に含まれる (今リリースで配った) ものは保護
           #    - 固定 manifest 系 (releases.*.json / assets.*.json / RELEASES*) は明示保護
           #      → 今回も upload されるので keep_map にも入るが、取りこぼし防止の二重保護
+          #    - Komorebi-win-* (Setup.exe / Portable.zip) はローカル署名リリースが配る固定名
+          #      installer で CI 成果物には無い → 明示保護 (win nupkg はバージョン入りファイル名
+          #      なのでこのパターンに当たらず、上の releases.win-*.json 取り込みで保護される)
           to_delete=()
           for key in "${all_keys[@]}"; do
             [[ -n "${keep_map[$key]:-}" ]] && continue
             case "$key" in
-              releases.*.json|assets.*.json|RELEASES*) continue ;;
+              releases.*.json|assets.*.json|RELEASES*|Komorebi-win-*) continue ;;
             esac
             to_delete+=("$key")
           done
