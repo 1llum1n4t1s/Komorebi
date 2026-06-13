@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">I-commit ang lahat ng pagbabago</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Mainline:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Kadalasan hindi mo maaaring i-cherry-pick ang isang merge dahil hindi mo alam kung aling panig ng merge ang dapat ituring na mainline. Ang opsyon na ito ay nagpapahintulot sa cherry-pick na i-replay ang pagbabago kaugnay ng tinukoy na parent.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">Aalisin sa listahan ang {0} na repository na ang mga folder ay wala na sa PC na ito. Walang buburahin sa disk.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Alisin Lahat ng Hindi Wastong Repository</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Burahin Lahat ng Stash</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Susubukan mong burahin lahat ng stash. Sigurado ka bang magpapatuloy?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">I-clone ang Remote Repository</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pahina ng Pagbati</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Lumikha ng Grupo</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Lumikha ng Sub-Grupo</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Alisin Lahat ng Hindi Wastong Repository</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">I-clone ang Repository</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Burahin</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">SINUSUPORTAHAN ANG DRAG &amp; DROP NG FOLDER. SINUSUPORTAHAN ANG CUSTOM NA PAGGRUPO.</x:String>

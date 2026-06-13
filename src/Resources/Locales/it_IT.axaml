@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Conferma tutte le modifiche</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Mainline:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Di solito non è possibile fare cherry-pick sdi una unione perché non si sa quale lato deve essere considerato il mainline. Questa opzione consente di riprodurre la modifica relativa al genitore specificato.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} repository le cui cartelle non esistono più su questo PC verranno rimossi dall’elenco. Nulla viene eliminato dal disco.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Rimuovi tutti i repository non validi</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Cancella Stash</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Stai per cancellare tutti gli stash. Sei sicuro di voler continuare?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">Clona Repository Remoto</x:String>
@@ -977,6 +979,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pagina di Benvenuto</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Crea Gruppo</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Crea Sottogruppo</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Rimuovi tutti i repository non validi</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clona Repository</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Elimina</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">TRASCINA E RILASCIA CARTELLA SUPPORTATO. RAGGRUPPAMENTI PERSONALIZZATI SUPPORTATI.</x:String>

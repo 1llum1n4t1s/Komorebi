@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">提交變更</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">對比的父提交:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">通常您不能對一個合併進行揀選 (cherry-pick)，因為您不知道合併的哪一邊應該被視為主線。這個選項指定了作為主線的父提交，允許揀選相對於該提交的修改。</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} 個在此電腦上資料夾已不存在的儲存庫將從清單中移除。不會刪除磁碟上的任何資料。</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">移除所有無效儲存庫</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">捨棄擱置變更確認</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">您正在捨棄所有的擱置變更，一經操作便無法復原，是否繼續?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">複製 (clone) 遠端存放庫</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">起始頁</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">新增群組</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">新增子群組</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">移除所有無效儲存庫</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">複製 (clone) 遠端存放庫</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">刪除</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">支援拖放以新增目錄與自訂群組。</x:String>

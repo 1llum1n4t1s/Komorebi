@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">सर्वपरिवर्तनानि प्रतिबध्नातु</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">मुख्यरेखा:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">सामान्यतः विलयनस्य चयनोद्धरणं कर्तुं न शक्यते यतः विलयनस्य कः पक्षः मुख्यरेखा इति ज्ञातुं न शक्यते। एषः विकल्पः निर्दिष्टजनकं सापेक्षं परिवर्तनं पुनःप्रदर्शयितुं शक्नोति।</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">अस्मिन् सङ्गणके येषां निर्देशिकाः न सन्ति तानि {0} कोशस्थानानि सूचीतः अपसारयिष्यन्ते। चक्रात् किमपि न लोप्यते।</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">सर्वाणि अमान्यानि कोशस्थानानि अपसारयतु</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">निक्षेपान् मार्जयतु</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">भवान् सर्वान् निक्षेपान् मार्जयितुम् उद्यतः। किं भवान् निश्चितः?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">दूरस्थभण्डारं प्रतिरूपयतु</x:String>
@@ -977,6 +979,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Welcome" xml:space="preserve">स्वागतपृष्ठम्</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">समूहं रचयतु</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">उपसमूहं रचयतु</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">सर्वाणि अमान्यानि कोशस्थानानि अपसारयतु</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">भण्डारं प्रतिरूपयतु</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">विलोपयतु</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">आकर्षणस्थापनं समर्थितम्। अभिरुचिसमूहीकरणं समर्थितम्।</x:String>

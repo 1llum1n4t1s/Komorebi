@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Commit semua perubahan</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Mainline:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Biasanya Anda tidak dapat cherry-pick merge karena tidak tahu sisi mana dari merge yang dianggap mainline. Opsi ini memungkinkan cherry-pick untuk memutar ulang perubahan relatif terhadap parent yang ditentukan.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} repositori yang foldernya tidak ada lagi di PC ini akan dihapus dari daftar. Tidak ada yang dihapus dari disk.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Hapus Semua Repositori Tidak Valid</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Hapus Stash</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Anda akan menghapus semua stash. Lanjutkan?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">Clone Repositori Remote</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Halaman Selamat Datang</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Buat Grup</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Buat Sub-Grup</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Hapus Semua Repositori Tidak Valid</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clone Repositori</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Hapus</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">DRAG &amp; DROP FOLDER DIDUKUNG. PENGELOMPOKAN KUSTOM DIDUKUNG.</x:String>

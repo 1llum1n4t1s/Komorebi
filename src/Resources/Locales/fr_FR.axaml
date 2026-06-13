@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Commit tous les changements</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Ligne principale :</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Habituellement, on ne peut pas cherry-pick un commit car on ne sait pas quel côté devrait être considéré comme principal. Cette option permet de rejouer les changements relatifs au parent spécifié.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} dépôts dont les dossiers n’existent plus sur ce PC seront retirés de la liste. Rien n’est supprimé du disque.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Supprimer tous les dépôts invalides</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Supprimer les stashes</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Vous essayez de supprimer tous les stashes. Êtes-vous sûr de vouloir continuer ?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">Cloner repository distant</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Page d'accueil</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Créer un groupe</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Créer un sous-groupe</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Supprimer tous les dépôts invalides</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Cloner un dépôt</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Supprimer</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">GLISSER / DEPOSER DE DOSSIER SUPPORTÉ. GROUPAGE PERSONNALISÉ SUPPORTÉ.</x:String>

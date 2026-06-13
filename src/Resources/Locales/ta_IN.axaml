@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">அனைத்து மாற்றங்களையும் உறுதிமொழி</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">முதன்மைகோடு:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">பொதுவாக நீங்கள் ஒரு ஒன்றிணையை கனி-பறிக்க முடியாது, ஏனெனில் இணைப்பின் எந்தப் பக்கத்தை முதன்மையாகக் கருத வேண்டும் என்பது உங்களுக்குத் தெரியாது. இந்த விருப்பம் குறிப்பிட்ட பெற்றோருடன் தொடர்புடைய மாற்றத்தை மீண்டும் இயக்க கனி-பறி அனுமதிக்கிறது.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">இந்த கணினியில் கோப்புறைகள் இல்லாத {0} களஞ்சியங்கள் பட்டியலிலிருந்து அகற்றப்படும். வட்டிலிருந்து எதுவும் நீக்கப்படாது.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">செல்லுபடியாகாத அனைத்து களஞ்சியங்களையும் அகற்று</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">பதுக்கிவைத்தையும் அழி</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">நீங்கள் அனைத்து பதுக்கிவைத்தையும் அழிக்க முயற்சிக்கிறீர்கள் தொடர விரும்புகிறீர்களா?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">நகலி தொலை களஞ்சியம்</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">வரவேற்பு பக்கம்</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">குழுவை உருவாக்கு</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">துணைக் குழுவை உருவாக்கு</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">செல்லுபடியாகாத அனைத்து களஞ்சியங்களையும் அகற்று</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">நகலி களஞ்சியம்</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">நீக்கு</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">கோப்புறையை இழுத்து &amp; விடு ஆதரிக்கப்படுகிறது. தனிப்பயன் குழுவாக்க ஆதரவு.</x:String>
