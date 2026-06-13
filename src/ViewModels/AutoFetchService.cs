@@ -154,30 +154,32 @@ public class AutoFetchService
         if (Interlocked.CompareExchange(ref _isRunningInt, 1, 0) != 0)
             return;
 
-        var enabled = Preferences.Instance.EnableAutoFetch;
-        var forced = _pendingTrigger;
-
-        if (!enabled && !forced)
-        {
-            // 自動フェッチ無効 + 手動トリガ無 → 何もしない
-            _lastRun = DateTime.MinValue;
-            return;
-        }
-
-        // インターバル計算（設定値は 1〜60 分、0 以下は 1 分にクランプ）
-        var intervalMinutes = Math.Max(1, Preferences.Instance.AutoFetchInterval);
-        var interval = TimeSpan.FromMinutes(intervalMinutes);
-
-        // 手動トリガが立っていればインターバルチェックを迂回する
-        if (!forced && _lastRun != DateTime.MinValue && DateTime.Now - _lastRun < interval)
-            return;
-
-        // このサイクルが手動トリガ分を消費する
-        _pendingTrigger = false;
-
-        // CompareExchange で既にロック取得済み (上の冒頭ガード参照)
+        // ロック取得後は全パスを try/finally で囲う。早期 return（無効・インターバル未到達・オフライン）でも
+        // 必ず _isRunningInt を解放する。これを怠ると 1 回目以降のティックで「インターバル未到達 → 解放漏れ」が起き、
+        // _isRunningInt が 1 のまま固着して冒頭ガードが常に true を返し、自動フェッチが二度と走らなくなる。
         try
         {
+            var enabled = Preferences.Instance.EnableAutoFetch;
+            var forced = _pendingTrigger;
+
+            if (!enabled && !forced)
+            {
+                // 自動フェッチ無効 + 手動トリガ無 → 何もしない
+                _lastRun = DateTime.MinValue;
+                return;
+            }
+
+            // インターバル計算（設定値は 1〜60 分、0 以下は 1 分にクランプ）
+            var intervalMinutes = Math.Max(1, Preferences.Instance.AutoFetchInterval);
+            var interval = TimeSpan.FromMinutes(intervalMinutes);
+
+            // 手動トリガが立っていればインターバルチェックを迂回する
+            if (!forced && _lastRun != DateTime.MinValue && DateTime.Now - _lastRun < interval)
+                return;
+
+            // このサイクルが手動トリガ分を消費する
+            _pendingTrigger = false;
+
             // オフライン判定: ネットワーク未接続なら前回値を保持したままスキャンをスキップする
             // （全リモートがタイムアウトで赤バッジになる「機内モード誤判定」を防ぐ）
             if (!NetworkInterface.GetIsNetworkAvailable())
