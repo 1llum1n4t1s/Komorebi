@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">すべての変更をコミット</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">メインライン:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">通常、マージコミットを取り込むことはできません。どちらのマージ元をメインラインとして扱うべきかが分からないためです。このオプションを使用すると、指定した親コミットに対して、変更を再適用する形で取り込みを実行できます。</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">このPCにフォルダが存在しないリポジトリ {0} 件を一覧から削除します。ディスク上のデータは削除されません。</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">無効なリポジトリを一括削除</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">スタッシュを消去</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">すべてのスタッシュを消去します。よろしいですか？</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">リモートリポジトリをクローン</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">ようこそページ</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">グループを作成</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">サブグループを作成</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">無効なリポジトリを一括削除</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">リポジトリをクローン</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ドラッグ &amp; ドロップでフォルダを追加できます。また、グループの作成・編集もできます。</x:String>

@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Alle Änderungen committen</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Hauptlinie:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Normalerweise ist es nicht möglich, einen Merge zu cherry-picken, da unklar ist, welche Seite des Merges als Hauptlinie anzusehen ist. Diese Option ermöglicht es, die Änderungen relativ zum ausgewählten Vorgänger zu wiederholen.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} Repositories, deren Ordner auf diesem PC nicht mehr vorhanden sind, werden aus der Liste entfernt. Es wird nichts von der Festplatte gelöscht.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Alle ungültigen Repositories entfernen</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Stashes löschen</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Du versuchst, alle Stashes zu löschen. Möchtest du wirklich fortfahren?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">Remote-Repository klonen</x:String>
@@ -977,6 +979,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Willkommensseite</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Erstelle Gruppe</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Erstelle Untergruppe</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Alle ungültigen Repositories entfernen</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Klone Repository</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Lösche</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">DRAG &amp; DROP VON ORDNER UNTERSTÜTZT. BENUTZERDEFINIERTE GRUPPIERUNG UNTERSTÜTZT.</x:String>

@@ -229,6 +229,25 @@ public partial class Welcome : UserControl
             menu.Items.Add(move);
             menu.Items.Add(new MenuItem() { Header = "-" });
             menu.Items.Add(delete);
+
+            // 無効リポジトリ（ローカルにパスが存在しないエントリ）が 1 件でもあれば一括削除メニューを末尾に追加する。
+            // 空白部の ContextMenu はリストが埋まっていると右クリックできないため、各ノードメニューからも届くようにする。
+            var invalidCount = ViewModels.Welcome.CountInvalidNodes(ViewModels.Preferences.Instance.RepositoryNodes);
+            if (invalidCount > 0)
+            {
+                var clearInvalid = new MenuItem();
+                clearInvalid.Header = App.Text("Welcome.ClearInvalidNodes");
+                clearInvalid.Icon = App.CreateMenuIcon("Icons.Clear");
+                clearInvalid.Click += (_, e) =>
+                {
+                    ViewModels.Welcome.Instance.ClearInvalidNodes();
+                    e.Handled = true;
+                };
+
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(clearInvalid);
+            }
+
             menu.Open(grid);
         }
 

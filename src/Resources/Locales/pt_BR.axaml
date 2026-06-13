@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Commitar todas as alterações</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Mainline:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Geralmente você não pode fazer cherry-pick de um merge commit porque você não sabe qual lado do merge deve ser considerado na mainline. Esta opção permite ao cherry-pick reaplicar a mudança relativa ao parent especificado.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} repositórios cujas pastas não existem mais neste PC serão removidos da lista. Nada é excluído do disco.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Remover todos os repositórios inválidos</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Limpar Stashes</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Você está tentando limpar todas as stashes. Tem certeza que deseja continuar?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">Clonar Repositório Remoto</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Página de Boas-vindas</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Criar Grupo Raíz</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Criar Subgrupo</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Remover todos os repositórios inválidos</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clonar Repositório</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Excluir</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ARRASTAR E SOLTAR PASTAS SUPORTADO. AGRUPAMENTO PERSONALIZADO SUPORTADO.</x:String>

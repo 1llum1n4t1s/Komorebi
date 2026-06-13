@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">提交变化</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">对比的父提交 ：</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">通常你不能对一个合并进行挑选，因为你不知道合并的哪一边应该被视为主线。这个选项指定了作为主线的父提交，允许挑选相对于该提交的修改。</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} 个在此电脑上文件夹已不存在的仓库将从列表中移除。不会删除磁盘上的任何数据。</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">移除所有无效仓库</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">丢弃贮藏确认</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">您正在丢弃所有的贮藏，一经操作，无法回退，是否继续？</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">克隆远程仓库</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">起始页</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">新建分组</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">新建子分组</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">移除所有无效仓库</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">克隆远程仓库</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">删除</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">支持拖放目录添加。支持自定义分组。</x:String>

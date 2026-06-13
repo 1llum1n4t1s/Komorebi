@@ -263,6 +263,40 @@ public class Welcome : ObservableObject
     }
 
     /// <summary>
+    /// ディスク上に存在しない無効なリポジトリノードを一括削除する確認ダイアログを表示する。
+    /// 別 PC と共有した preference.json のように登録パスがローカルに存在しないエントリ（Welcome 画面で
+    /// オレンジの警告アイコンが付くもの）をまとめて掃除する用途。対象が 0 件のときは何もしない。
+    /// </summary>
+    public void ClearInvalidNodes()
+    {
+        var count = CountInvalidNodes(Preferences.Instance.RepositoryNodes);
+        if (count == 0)
+            return;
+
+        var activePage = App.GetLauncher().ActivePage;
+        if (activePage is not null && activePage.CanCreatePopup())
+            activePage.Popup = new ClearInvalidRepositoryNodes(count);
+    }
+
+    /// <summary>
+    /// 無効な（ディスク上に存在しない）リポジトリノードの件数を再帰的に数える。
+    /// グループノードは配下を再帰的にたどる。
+    /// </summary>
+    public static int CountInvalidNodes(List<RepositoryNode> nodes)
+    {
+        var count = 0;
+        foreach (var node in nodes)
+        {
+            if (node.IsInvalid)
+                count++;
+            else if (!node.IsRepository)
+                count += CountInvalidNodes(node.SubNodes);
+        }
+
+        return count;
+    }
+
+    /// <summary>
     /// IDでリポジトリノードを再帰的に検索する。
     /// </summary>
     public RepositoryNode FindNodeById(string id, RepositoryNode root = null)

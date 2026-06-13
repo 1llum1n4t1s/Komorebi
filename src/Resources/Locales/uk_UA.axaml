@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Закомітити всі зміни</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Батьківський коміт:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Зазвичай неможливо cherry-pick злиття, бо невідомо, яку сторону злиття вважати батьківською (mainline). Ця опція дозволяє відтворити зміни відносно вказаного батьківського коміту.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} репозиторіїв, теки яких більше не існують на цьому ПК, буде вилучено зі списку. Нічого не видаляється з диска.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Вилучити всі недійсні репозиторії</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Очистити схованки</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Ви намагаєтеся очистити всі схованки. Ви впевнені?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">Клонувати віддалене сховище</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Вітальна сторінка</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Створити групу</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Створити підгрупу</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Вилучити всі недійсні репозиторії</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Клонувати сховище</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Видалити</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ПІДТРИМУЄТЬСЯ ПЕРЕТЯГУВАННЯ ТЕК. МОЖЛИВЕ ГРУПУВАННЯ.</x:String>

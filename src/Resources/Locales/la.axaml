@@ -135,6 +135,8 @@
   <x:String x:Key="Text.CherryPick.CommitChanges" xml:space="preserve">Committe omnes mutationes</x:String>
   <x:String x:Key="Text.CherryPick.Mainline" xml:space="preserve">Linea Principalis:</x:String>
   <x:String x:Key="Text.CherryPick.Mainline.Tips" xml:space="preserve">Plerumque non potes cherry-pick facere merge quia nescis quae pars merge habenda sit ut linea principalis. Haec optio permittit cherry-pick mutationem referre ad parentem specificatum.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Tip" xml:space="preserve">{0} repositoria quorum directoria in hoc computatro iam non exsistunt ex indice removebuntur. Nihil de disco deletur.</x:String>
+  <x:String x:Key="Text.ClearInvalidRepositoryNodes.Title" xml:space="preserve">Omnia Repositoria Invalida Removere</x:String>
   <x:String x:Key="Text.ClearStashes" xml:space="preserve">Purga Reposita</x:String>
   <x:String x:Key="Text.ClearStashes.Message" xml:space="preserve">Conaris omnia reposita purgare. Certusne es te pergere velle?</x:String>
   <x:String x:Key="Text.Clone" xml:space="preserve">Clona Repositorium Remotum</x:String>
@@ -977,6 +979,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pagina Salutationis</x:String>
   <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Crea Gregem</x:String>
   <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Crea Sub-Gregem</x:String>
+  <x:String x:Key="Text.Welcome.ClearInvalidNodes" xml:space="preserve">Omnia Repositoria Invalida Removere</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clona Repositorium</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Dele</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">TRAHERE &amp; DEPONERE FASCICULUM SUSTINETUR. AGGREGATIO PROPRIA SUSTINETUR.</x:String>

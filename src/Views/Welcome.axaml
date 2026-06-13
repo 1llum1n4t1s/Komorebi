@@ -99,6 +99,12 @@
                 <Path Width="12" Height="12" Data="{DynamicResource Icons.Folder.Add}"/>
               </MenuItem.Icon>
             </MenuItem>
+            <Separator/>
+            <MenuItem Header="{DynamicResource Text.Welcome.ClearInvalidNodes}" Command="{Binding ClearInvalidNodes}">
+              <MenuItem.Icon>
+                <Path Width="12" Height="12" Data="{DynamicResource Icons.Clear}"/>
+              </MenuItem.Icon>
+            </MenuItem>
           </ContextMenu>
         </ListBox.ContextMenu>
 
