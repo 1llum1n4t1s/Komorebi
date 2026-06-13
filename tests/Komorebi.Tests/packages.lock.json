@@ -180,6 +180,15 @@
           "Avalonia.Skia": "12.0.4"
         }
       },
+      "AvaloniaUI.DiagnosticsSupport": {
+        "type": "Transitive",
+        "resolved": "2.2.2",
+        "contentHash": "KbGXkGTTYnW6UCipZNnjS3LyGH+PGMPfX+bTJ3uvdgRL3Nxpy/vPeW67ySpcU+qQicTUxRN75p6ciAwIfnqT8A==",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.IO.RecyclableMemoryStream": "3.0.1"
+        }
+      },
       "Azure.AI.OpenAI": {
         "type": "Transitive",
         "resolved": "2.8.0-beta.1",
@@ -383,6 +392,11 @@
         "type": "Transitive",
         "resolved": "10.0.8",
         "contentHash": "OBPo4nYhMyIbtueoC10CBm6AGAbo/A9IV8QQ/6ryZS7VvmqpGT7hunazeHLxFawRzn3oLOq4jhqhpBX4tfswWQ=="
+      },
+      "Microsoft.IO.RecyclableMemoryStream": {
+        "type": "Transitive",
+        "resolved": "3.0.1",
+        "contentHash": "s/s20YTVY9r9TPfTrN5g8zPF1YhwxyqO6PxUkrYTGI2B+OGPe9AdajWZrLhFqXIvqIW23fnUE4+ztrUWNU1+9g=="
       },
       "Microsoft.Testing.Extensions.Telemetry": {
         "type": "Transitive",
@@ -653,6 +667,7 @@
           "Avalonia.Fonts.Inter": "[12.0.4, )",
           "Avalonia.Themes.Fluent": "[12.0.4, )",
           "AvaloniaEdit.TextMate": "[11.3.0, )",
+          "AvaloniaUI.DiagnosticsSupport": "[2.2.2, )",
           "Azure.AI.OpenAI": "[2.8.0-beta.1, )",
           "BitMiracle.LibTiff.NET": "[2.4.660, )",
           "CRDebugger.Avalonia": "[1.0.26, )",
