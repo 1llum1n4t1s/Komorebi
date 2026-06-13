@@ -271,4 +271,27 @@ if (-not $toDelete) {
     if ($failed -gt 0 -and $deleted -eq 0) { throw '旧 nupkg の削除がすべて失敗しました。API token の権限を確認してください。' }
 }
 
+# ---- 5. packages.lock.json のクリーンアップ (リリース後の working tree clean 化) ----
+# RID 付き AOT publish (dotnet publish -r <rid>) は src/packages.lock.json を汚染する:
+# RID セクション (net10.0/win-arm64 等) が追加され、Microsoft.DotNet.ILCompiler /
+# Microsoft.NET.ILLink.Tasks が混入し、Debug 専用の AvaloniaUI.DiagnosticsSupport が落ちる。
+# この汚染 lock は ContinuousIntegrationBuild=true 時の RestoreLockedMode (Directory.Build.props)
+# で NU1004 になり、lockfile の supply-chain diff 検知も AOT churn で無意味化する。
+# --force-evaluate で RID なし clean 状態に戻し、毎回 working tree が clean な状態でリリースを終える
+# (/vava のリリース後 lock drift 手動 commit/revert が不要になる)。
+# 成果物は既にアップロード済みなので、ここでの失敗はリリースには影響しない → warning に留めて継続する。
+Write-Host '== packages.lock.json クリーンアップ ==' -ForegroundColor Cyan
+try {
+    Invoke-Native 'dotnet restore --force-evaluate' {
+        dotnet restore Komorebi.slnx --force-evaluate
+    }
+    # clean lock の検証: locked-mode 復元が NU1004 ゼロで通れば RID なし clean 状態
+    Invoke-Native 'dotnet restore --locked-mode (clean lock 検証)' {
+        dotnet restore Komorebi.slnx --locked-mode
+    }
+    Write-Host '  ✅ packages.lock.json は RID なし clean 状態 (locked-mode 検証 OK)'
+} catch {
+    Write-Warning "  packages.lock.json のクリーンアップに失敗しました (アップロード済みリリースには影響なし)。手動で 'dotnet restore Komorebi.slnx --force-evaluate' を実行してください — $($_.Exception.Message)"
+}
+
 Write-Host "`n🎉 リリース完了: v$version → $BaseUrl (Windows チャンネルのみ。macOS/Linux は release.yml が配信)" -ForegroundColor Green
