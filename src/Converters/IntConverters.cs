@@ -68,6 +68,13 @@ public static class IntConverters
         new(v => Models.Bookmarks.Get(v) ?? Application.Current?.FindResource("Brush.FG1") as IBrush);
 
     /// <summary>
+    /// ブックマークインデックスをタブ用カラーラインのブラシ色に変換するコンバータ。
+    /// 未設定 (0) の場合は薄いテーマ追従色 (Brush.FG2) を返し「色設定可能だが未設定」を示す。
+    /// </summary>
+    public static readonly FuncValueConverter<int, IBrush> ToBookmarkLineBrush =
+        new(v => Models.Bookmarks.Get(v) ?? Application.Current?.FindResource("Brush.FG2") as IBrush);
+
+    /// <summary>
     /// 未解決のコンフリクト数をローカライズされた説明文字列に変換するコンバータ。
     /// 0の場合は「全て解決済み」、それ以外は残りのコンフリクト数を表示する。
     /// </summary>

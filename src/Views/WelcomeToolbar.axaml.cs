@@ -89,7 +89,7 @@ public partial class WelcomeToolbar : UserControl
         var prefs = new MenuItem
         {
             Header = App.Text("Preferences"),
-            Icon = App.CreateMenuIcon("Icons.Settings"),
+            Icon = App.CreateMenuIcon("Icons.Preferences"),
         };
         prefs.Click += (_, ev) =>
         {

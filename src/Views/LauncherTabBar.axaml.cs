@@ -51,6 +51,7 @@ public class LauncherTabSizeBox : Border
 
         if (change.Property == UseFixedWidthProperty)
         {
+            // 固定モードは200px、動的モードはNaN(コンテンツ幅。MaxWidth=200でキャップ)
             if (UseFixedWidth)
                 Width = 200;
             else

@@ -43,7 +43,10 @@
 
           <ListBox.ItemTemplate>
             <DataTemplate DataType="vm:LauncherPage">
-              <v:LauncherTabSizeBox UseFixedWidth="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseFixedTabWidth}" Height="30"
+              <v:LauncherTabSizeBox UseFixedWidth="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseFixedTabWidth}"
+                                    Height="30"
+                                    MinWidth="80"
+                                    MaxWidth="200"
                                     Padding="0,2,0,0"
                                     Background="Transparent"
                                     PointerPressed="OnPointerPressedTab"
@@ -63,64 +66,79 @@
                   </Grid>
                 </ToolTip.Tip>
 
-                <Grid ColumnDefinitions="Auto,*,Auto">
-                  <Path Grid.Column="0"
-                        Width="12" Height="12" Margin="12,0"
-                        Fill="{Binding Node.Bookmark, Converter={x:Static c:IntConverters.ToBookmarkBrush}}"
-                        Data="{StaticResource Icons.Bookmark}"
-                        IsVisible="{Binding Node.IsRepository}"
-                        IsHitTestVisible="False"/>
-                  <Path Grid.Column="0"
-                        Width="12" Height="12" Margin="12,0"
-                        Fill="{DynamicResource Brush.FG1}"
-                        Data="{StaticResource Icons.Repositories}"
-                        IsVisible="{Binding !Node.IsRepository}"
-                        IsHitTestVisible="False"/>
+                <Grid RowDefinitions="*,2">
+                  <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto"/>
+                      <!-- 固定モードは Star で名前をセンタリング、動的モードは Auto でリポ名幅に縮小 -->
+                      <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseFixedTabWidth, Converter={x:Static c:BoolConverters.UseFixedTabWidthToNameColumn}}"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Welcome タブのみアイコン表示。リポジトリタブはアイコンなし（名前＋下端カラーライン） -->
+                    <Path Grid.Column="0"
+                          Width="12" Height="12" Margin="12,0"
+                          Fill="{DynamicResource Brush.FG1}"
+                          Data="{StaticResource Icons.Repositories}"
+                          IsVisible="{Binding !Node.IsRepository}"
+                          IsHitTestVisible="False"/>
 
-                  <Grid Grid.Column="1"
-                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                        ColumnDefinitions="Auto,*"
-                        IsHitTestVisible="False"
-                        IsVisible="{Binding Node.IsRepository}">
-                    <Ellipse Grid.Column="0"
-                             Width="8" Height="8"
-                             Margin="0,0,6,0"
-                             VerticalAlignment="Center"
-                             IsVisible="{Binding DirtyState, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static m:DirtyState.None}}"
-                             Fill="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToBrush}}"/>
+                    <Grid Grid.Column="1"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Margin="12,0,0,0"
+                          ColumnDefinitions="Auto,*"
+                          IsHitTestVisible="False"
+                          IsVisible="{Binding Node.IsRepository}">
+                      <Ellipse Grid.Column="0"
+                               Width="8" Height="8"
+                               Margin="0,0,6,0"
+                               VerticalAlignment="Center"
+                               IsVisible="{Binding DirtyState, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static m:DirtyState.None}}"
+                               Fill="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToBrush}}"/>
+
+                      <TextBlock Grid.Column="1"
+                                 VerticalAlignment="Center"
+                                 MaxWidth="110"
+                                 FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
+                                 TextAlignment="Center"
+                                 TextTrimming="CharacterEllipsis"
+                                 Text="{Binding Node.Name}"
+                                 IsHitTestVisible="False"/>
+                    </Grid>
 
                     <TextBlock Grid.Column="1"
-                               VerticalAlignment="Center"
+                               HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
                                TextAlignment="Center"
-                               Text="{Binding Node.Name}"
+                               TextTrimming="CharacterEllipsis"
+                               Text="{DynamicResource Text.PageTabBar.Welcome.Title}"
+                               IsVisible="{Binding !Node.IsRepository}"
                                IsHitTestVisible="False"/>
+
+                    <Button Grid.Column="2"
+                            Classes="icon_button"
+                            Width="14" Height="12" Margin="12,0"
+                            Click="OnCloseTab">
+                      <ToolTip.Tip>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                          <TextBlock Text="{DynamicResource Text.PageTabBar.Tab.Close}" VerticalAlignment="Center"/>
+                          <TextBlock Margin="16,0,0,0"
+                                     Text="{OnPlatform Ctrl+W, macOS=⌘+W}"
+                                     FontSize="11"
+                                     VerticalAlignment="Center"
+                                     Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+                        </StackPanel>
+                      </ToolTip.Tip>
+                      <Path Width="9" Height="9" Data="{StaticResource Icons.Close}"/>
+                    </Button>
                   </Grid>
 
-                  <TextBlock Grid.Column="1"
-                             HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                             FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
-                             TextAlignment="Center"
-                             Text="{DynamicResource Text.PageTabBar.Welcome.Title}"
-                             IsVisible="{Binding !Node.IsRepository}"
+                  <Rectangle Grid.Row="1"
+                             Height="2"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Bottom"
+                             Fill="{Binding Node.Bookmark, Converter={x:Static c:IntConverters.ToBookmarkLineBrush}}"
+                             IsVisible="{Binding Node.IsRepository}"
                              IsHitTestVisible="False"/>
-
-                  <Button Grid.Column="2"
-                          Classes="icon_button"
-                          Width="14" Height="12" Margin="12,0"
-                          Click="OnCloseTab">
-                    <ToolTip.Tip>
-                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="{DynamicResource Text.PageTabBar.Tab.Close}" VerticalAlignment="Center"/>
-                        <TextBlock Margin="16,0,0,0"
-                                   Text="{OnPlatform Ctrl+W, macOS=⌘+W}"
-                                   FontSize="11"
-                                   VerticalAlignment="Center"
-                                   Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
-                      </StackPanel>
-                    </ToolTip.Tip>
-                    <Path Width="9" Height="9" Data="{StaticResource Icons.Close}"/>
-                  </Button>
                 </Grid>
               </v:LauncherTabSizeBox>
             </DataTemplate>

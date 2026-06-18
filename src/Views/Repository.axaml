@@ -426,7 +426,7 @@
     <Grid Grid.Column="2" RowDefinitions="Auto,Auto,Auto,Auto,*">
       <!-- Content Toolbar with segmented control + search -->
       <Border Grid.Row="0" Classes="content_toolbar">
-        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto,Auto">
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 
           <!-- Segmented control for view switching -->
           <ListBox Grid.Column="0" Classes="segmented_control small"
@@ -657,8 +657,14 @@
           <!-- セパレーター -->
           <Rectangle Grid.Column="6" Width="1" Height="16" Margin="8,0" VerticalAlignment="Center" Fill="{DynamicResource Brush.Border2}"/>
 
+          <!-- グローバル設定（アプリ設定。リポジトリ設定とは別アイコンのスライダーで差別化） -->
+          <Button Grid.Column="7" Classes="icon_button" Width="32" Click="OpenPreferences"
+                  ToolTip.Tip="{DynamicResource Text.Preferences}">
+            <Path Width="15" Height="15" Data="{StaticResource Icons.Preferences}"/>
+          </Button>
+
           <!-- オーバーフローメニュー (···) -->
-          <Button Grid.Column="7" Classes="icon_button" Width="32" Margin="0,0,6,0" Click="OpenOverflowMenu"
+          <Button Grid.Column="8" Classes="icon_button" Width="32" Margin="0,0,6,0" Click="OpenOverflowMenu"
                   ToolTip.Tip="{DynamicResource Text.Repository.MoreActions}">
             <Path Width="16" Height="16" Data="{StaticResource Icons.More}"/>
           </Button>

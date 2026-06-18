@@ -31,4 +31,12 @@ public static class BoolConverters
     /// </summary>
     public static readonly FuncValueConverter<bool, IBrush> IsWarningToBrush =
         new(x => x ? Brushes.DarkGoldenrod : Application.Current?.FindResource("Brush.FG1") as IBrush);
+
+    /// <summary>
+    /// タブ幅固定フラグをタブ名カラムのグリッド幅に変換するコンバータ。
+    /// 固定モード（true）は Star（残り幅いっぱい）で名前をセンタリングし閉じるボタンを右端に寄せる。
+    /// 動的モード（false）は Auto（コンテンツ幅）でタブ全体をリポジトリ名に合わせて縮小させる。
+    /// </summary>
+    public static readonly FuncValueConverter<bool, GridLength> UseFixedTabWidthToNameColumn =
+        new(x => x ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
 }

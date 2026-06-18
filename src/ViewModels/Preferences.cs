@@ -1030,7 +1030,7 @@ public class Preferences : ObservableObject
 
     private int _maxHistoryCommits = 20000;                          // 最大履歴コミット数
     private int _subjectGuideLength = 50;                            // サブジェクトガイド文字数
-    private bool _useFixedTabWidth = true;                           // 固定タブ幅
+    private bool _useFixedTabWidth = true;                           // 固定タブ幅 (true=200px固定[既定・旧仕様] / false=リポ名フィット・最大200px)
     private bool _useAutoHideScrollBars = true;                      // スクロールバー自動非表示
     private bool _useGitHubStyleAvatar = true;                       // GitHub形式アバター
     private bool _showAuthorTimeInGraph = false;                     // グラフにAuthorDate表示

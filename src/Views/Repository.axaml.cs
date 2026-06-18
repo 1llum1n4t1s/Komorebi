@@ -987,6 +987,15 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
+    /// グローバル設定（アプリ設定）を開く。オーバーフローメニューから独立ボタンに移動した項目。
+    /// </summary>
+    private void OpenPreferences(object sender, RoutedEventArgs e)
+    {
+        App.OpenPreferencesCommand.Execute(null);
+        e.Handled = true;
+    }
+
+    /// <summary>
     /// ワークスペース切替メニューを表示する。
     /// </summary>
     private void OpenWorkspaceMenu(object sender, RoutedEventArgs e)
@@ -1121,17 +1130,6 @@ public partial class Repository : UserControl
             menu.Items.Add(stats);
 
             menu.Items.Add(new MenuItem() { Header = "-" });
-
-            // Preferences
-            var prefs = new MenuItem();
-            prefs.Header = App.Text("Preferences");
-            prefs.Icon = App.CreateMenuIcon("Icons.Settings");
-            prefs.Click += (_, ev) =>
-            {
-                App.OpenPreferencesCommand.Execute(null);
-                ev.Handled = true;
-            };
-            menu.Items.Add(prefs);
 
             // データの保管ディレクトリを開く
             var appData = new MenuItem();
