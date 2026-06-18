@@ -20,7 +20,32 @@ public class CreateBranch : Popup
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value, true);
+        set
+        {
+            if (SetProperty(ref _name, value, true))
+                OnPropertyChanged(nameof(BranchExistsOnRemote));
+        }
+    }
+
+    /// <summary>
+    /// 入力中のブランチ名と同じ名前のリモートブランチが既に存在するかどうか。
+    /// 「リモートにプッシュ」チェックボックスの表示制御に使う（存在する場合はプッシュ不要なので非表示）。
+    /// </summary>
+    public bool BranchExistsOnRemote
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_name))
+                return false;
+
+            foreach (var b in _repo.Branches)
+            {
+                if (!b.IsLocal && b.Name.Equals(_name, StringComparison.Ordinal))
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     /// <summary>

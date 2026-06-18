@@ -102,7 +102,8 @@
 
       <CheckBox Grid.Row="5" Grid.Column="1"
                 Content="{DynamicResource Text.CreateBranch.PushToRemote}"
-                IsChecked="{Binding PushAfterCreated, Mode=TwoWay}"/>
+                IsChecked="{Binding PushAfterCreated, Mode=TwoWay}"
+                IsVisible="{Binding !BranchExistsOnRemote}"/>
     </Grid>
   </StackPanel>
 </UserControl>
