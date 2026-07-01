@@ -569,8 +569,14 @@ public partial class Histories : UserControl
         if (DataContext is ViewModels.Histories histories &&
             CommitListContainer.SelectedItems is { Count: 1 } &&
             sender is DataGrid grid &&
-            !Equals(e.Source, grid))
+            e.Source is Control { DataContext: Models.Commit c })
         {
+            if (histories.Bisect is not null)
+            {
+                histories.CheckoutCommitDetached(c);
+                return;
+            }
+
             if (e.Source is CommitRefsPresenter crp)
             {
                 var decorator = crp.DecoratorAt(e.GetPosition(crp));
@@ -579,8 +585,7 @@ public partial class Histories : UserControl
                     return;
             }
 
-            if (e.Source is Control { DataContext: Models.Commit c })
-                await histories.CheckoutBranchByCommitAsync(c);
+            await histories.CheckoutBranchByCommitAsync(c);
         }
     }
 

@@ -408,6 +408,15 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
+    /// 指定コミットを detached HEAD としてチェックアウトする（bisect 中のダブルクリック用）。
+    /// </summary>
+    public void CheckoutCommitDetached(Models.Commit c)
+    {
+        if (!c.IsCurrentHead && _repo.CanCreatePopup())
+            _repo.ShowPopup(new CheckoutCommit(_repo, c));
+    }
+
+    /// <summary>
     /// デコレータ（ブランチ参照）をクリックしてブランチをチェックアウトする。
     /// ローカル/リモートブランチの状態に応じて適切な操作を実行する。
     /// </summary>
