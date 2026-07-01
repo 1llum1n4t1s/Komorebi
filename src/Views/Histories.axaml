@@ -49,7 +49,6 @@
                 HeadersVisibility="Column"
                 ColumnHeaderHeight="24"
                 ClipboardCopyMode="None"
-                Focusable="False"
                 RowHeight="26"
                 HorizontalScrollBarVisibility="Disabled"
                 VerticalScrollBarVisibility="Auto"
