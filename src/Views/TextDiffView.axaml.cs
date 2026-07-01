@@ -723,8 +723,10 @@ public class ThemedTextDiffPresenter : TextEditor
         {
             if (e.Key == Key.C)
             {
-                await CopyWithoutIndicatorsAsync();
                 e.Handled = true;
+
+                if (CanCopyText())
+                    await CopyWithoutIndicatorsAsync();
             }
         }
 
@@ -745,8 +747,7 @@ public class ThemedTextDiffPresenter : TextEditor
     /// </summary>
     private void OnTextViewContextRequested(object sender, ContextRequestedEventArgs e)
     {
-        var selection = TextArea.Selection;
-        if (selection.IsEmpty)
+        if (!CanCopyText())
             return;
 
         var copy = new MenuItem();
@@ -947,19 +948,38 @@ public class ThemedTextDiffPresenter : TextEditor
     }
 
     /// <summary>
+    /// コピー可能なテキストが選択されているか判定する。
+    /// hunkインジケーター行のみが選択されている場合はコピー不可とする。
+    /// </summary>
+    /// <returns>コピー可能な場合はtrue</returns>
+    private bool CanCopyText()
+    {
+        var selection = TextArea.Selection;
+        if (selection.IsEmpty)
+            return false;
+
+        var startPosition = selection.StartPosition;
+        var endPosition = selection.EndPosition;
+        if (startPosition.Line == endPosition.Line)
+        {
+            var lines = GetLines();
+            var idx = startPosition.Line - 1;
+            if (idx >= lines.Count)
+                return false;
+
+            var line = lines[idx];
+            return line.Type != Models.TextDiffLineType.Indicator && line.Type != Models.TextDiffLineType.None;
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// CopyWithoutIndicatorsAsyncの処理を行う。
     /// </summary>
     private async Task CopyWithoutIndicatorsAsync()
     {
         var selection = TextArea.Selection;
-        if (selection.IsEmpty)
-        {
-            await App.CopyTextAsync(string.Empty);
-            return;
-        }
-
-        var lines = GetLines();
-
         var startPosition = selection.StartPosition;
         var endPosition = selection.EndPosition;
 
@@ -971,13 +991,11 @@ public class ThemedTextDiffPresenter : TextEditor
 
         if (startIdx == endIdx)
         {
-            if (lines[startIdx].Type is Models.TextDiffLineType.Indicator or Models.TextDiffLineType.None)
-                await App.CopyTextAsync(string.Empty);
-            else
-                await App.CopyTextAsync(SelectedText);
+            await App.CopyTextAsync(SelectedText);
             return;
         }
 
+        var lines = GetLines();
         var builder = new StringBuilder();
         for (var i = startIdx; i <= endIdx && i <= lines.Count - 1; i++)
         {
