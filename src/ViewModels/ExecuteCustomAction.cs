@@ -362,15 +362,22 @@ public class ExecuteCustomAction : Popup
         var repoPath = OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
         org = org.Replace("${REPO}", repoPath);
 
+        // ${BRANCH} / ${BRANCH_FRIENDLY_NAME} はターゲットがブランチでない場合も現在ブランチへフォールバックする（upstream dcee40c5）
+        if (Target is Models.Branch { IsDetachedHead: false } targetBranch)
+            org = org.Replace("${BRANCH}", targetBranch.Name).Replace("${BRANCH_FRIENDLY_NAME}", targetBranch.FriendlyName).Replace("${REMOTE}", targetBranch.Remote);
+        else if (_repo.CurrentBranch is { IsDetachedHead: false } currentBranch)
+            org = org.Replace("${BRANCH}", currentBranch.Name).Replace("${BRANCH_FRIENDLY_NAME}", currentBranch.FriendlyName);
+        else
+            org = org.Replace("${BRANCH}", "HEAD").Replace("${BRANCH_FRIENDLY_NAME}", "HEAD");
+
         return Target switch
         {
-            Models.Branch b => org.Replace("${BRANCH_FRIENDLY_NAME}", b.FriendlyName).Replace("${BRANCH}", b.Name).Replace("${REMOTE}", b.Remote),
+            Models.Branch b => org.Replace("${SHA}", b.Head),
             Models.Commit c => org.Replace("${SHA}", c.SHA),
-            Models.Tag t => org.Replace("${TAG}", t.Name),
+            Models.Tag t => org.Replace("${SHA}", t.SHA).Replace("${TAG}", t.Name),
             Models.Remote r => org.Replace("${REMOTE}", r.Name),
-            Models.CustomActionTargetFile f => org.Replace("${FILE}", f.File).Replace("${SHA}", f.Revision?.SHA ?? string.Empty),
-            // Repository scope では ${BRANCH} を現在ブランチ名に展開する（upstream 8395efdd）
-            _ => org.Replace("${BRANCH}", _repo.CurrentBranch?.Name ?? "HEAD")
+            Models.CustomActionTargetFile f => org.Replace("${SHA}", f.Revision?.SHA ?? "HEAD").Replace("${FILE}", f.File),
+            _ => org
         };
     }
 
@@ -382,19 +389,33 @@ public class ExecuteCustomAction : Popup
         var repoPath = OperatingSystem.IsWindows() ? _repo.FullPath.Replace("/", "\\") : _repo.FullPath;
         org = org.Replace("${REPO}", QuoteTemplateValue(repoPath, CustomAction.Executable), StringComparison.Ordinal);
 
+        // ${BRANCH} / ${BRANCH_FRIENDLY_NAME} はターゲットがブランチでない場合も現在ブランチへフォールバックする（upstream dcee40c5）
+        if (Target is Models.Branch { IsDetachedHead: false } targetBranch)
+            org = org
+                .Replace("${BRANCH}", QuoteTemplateValue(targetBranch.Name, CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${BRANCH_FRIENDLY_NAME}", QuoteTemplateValue(targetBranch.FriendlyName, CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${REMOTE}", QuoteTemplateValue(targetBranch.Remote, CustomAction.Executable), StringComparison.Ordinal);
+        else if (_repo.CurrentBranch is { IsDetachedHead: false } currentBranch)
+            org = org
+                .Replace("${BRANCH}", QuoteTemplateValue(currentBranch.Name, CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${BRANCH_FRIENDLY_NAME}", QuoteTemplateValue(currentBranch.FriendlyName, CustomAction.Executable), StringComparison.Ordinal);
+        else
+            org = org
+                .Replace("${BRANCH}", QuoteTemplateValue("HEAD", CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${BRANCH_FRIENDLY_NAME}", QuoteTemplateValue("HEAD", CustomAction.Executable), StringComparison.Ordinal);
+
         return Target switch
         {
-            Models.Branch b => org
-                .Replace("${BRANCH_FRIENDLY_NAME}", QuoteTemplateValue(b.FriendlyName, CustomAction.Executable), StringComparison.Ordinal)
-                .Replace("${BRANCH}", QuoteTemplateValue(b.Name, CustomAction.Executable), StringComparison.Ordinal)
-                .Replace("${REMOTE}", QuoteTemplateValue(b.Remote, CustomAction.Executable), StringComparison.Ordinal),
+            Models.Branch b => org.Replace("${SHA}", QuoteTemplateValue(b.Head, CustomAction.Executable), StringComparison.Ordinal),
             Models.Commit c => org.Replace("${SHA}", QuoteTemplateValue(c.SHA, CustomAction.Executable), StringComparison.Ordinal),
-            Models.Tag t => org.Replace("${TAG}", QuoteTemplateValue(t.Name, CustomAction.Executable), StringComparison.Ordinal),
+            Models.Tag t => org
+                .Replace("${SHA}", QuoteTemplateValue(t.SHA, CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${TAG}", QuoteTemplateValue(t.Name, CustomAction.Executable), StringComparison.Ordinal),
             Models.Remote r => org.Replace("${REMOTE}", QuoteTemplateValue(r.Name, CustomAction.Executable), StringComparison.Ordinal),
             Models.CustomActionTargetFile f => org
-                .Replace("${FILE}", QuoteTemplateValue(f.File, CustomAction.Executable), StringComparison.Ordinal)
-                .Replace("${SHA}", QuoteTemplateValue(f.Revision?.SHA ?? string.Empty, CustomAction.Executable), StringComparison.Ordinal),
-            _ => org.Replace("${BRANCH}", QuoteTemplateValue(_repo.CurrentBranch?.Name ?? "HEAD", CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${SHA}", QuoteTemplateValue(f.Revision?.SHA ?? "HEAD", CustomAction.Executable), StringComparison.Ordinal)
+                .Replace("${FILE}", QuoteTemplateValue(f.File, CustomAction.Executable), StringComparison.Ordinal),
+            _ => org
         };
     }
 
