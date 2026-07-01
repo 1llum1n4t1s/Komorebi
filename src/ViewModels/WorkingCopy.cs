@@ -851,6 +851,7 @@ public class WorkingCopy : ObservableObject, IDisposable
             await _repo.ShowAndStartPopupAsync(new Push(_repo, pushBranch));
 
         _repo.MarkBranchesDirtyManually();
+        _repo.RefreshSubmodules(); // コミットではsubmoduleのHEADは変わらない(stageの時点で変わっている)ため、ここで手動リフレッシュが必要
         IsCommitting = false;
     }
 
