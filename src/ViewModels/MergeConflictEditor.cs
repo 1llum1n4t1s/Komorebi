@@ -258,6 +258,9 @@ public class MergeConflictEditor : ObservableObject
         for (var j = lastLineIdx; j < lines.Length; j++)
             builder.Append(lines[j]).Append('\n');
 
+        if (builder.Length > 1)
+            builder.Length--; // 末尾の余分な '\n' を除去
+
         try
         {
             // マージ結果をファイルに書き込む
