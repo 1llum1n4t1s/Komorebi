@@ -102,6 +102,9 @@ public class UpdateSubmodules : Popup
             IsEnableInitVisible = true;
             HasPreSelectedSubmodule = false;
         }
+
+        // リポジトリ設定の「自動更新時に --recursive を付与」を初期値として尊重する（upstream 57a3d694）
+        EnableRecursive = _repo.Settings.EnableRecursiveWhenAutoUpdatingSubmodules;
     }
 
     /// <summary>
