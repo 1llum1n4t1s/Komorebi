@@ -147,14 +147,37 @@ public class RevisionFileRowsListBox : ListBox
 
         if (SelectedItem is ViewModels.RevisionFileTreeNode node)
         {
-            if (node.IsFolder &&
-                e.KeyModifiers == KeyModifiers.None &&
-                (node.IsExpanded && e.Key == Key.Left) || (!node.IsExpanded && e.Key == Key.Right))
+            if (e is { Key: Key.Left, KeyModifiers: KeyModifiers.None })
             {
-                var tree = this.FindAncestorOfType<RevisionFileTreeView>();
-                if (tree is not null)
-                    await tree.ToggleNodeIsExpandedAsync(node);
-                e.Handled = true;
+                if (node.IsFolder && node.IsExpanded)
+                {
+                    var tree = this.FindAncestorOfType<RevisionFileTreeView>();
+                    if (tree is not null)
+                        await tree.ToggleNodeIsExpandedAsync(node);
+
+                    e.Handled = true;
+                }
+                else if (FindParent(node) is { } parent)
+                {
+                    Select(parent);
+                    e.Handled = true;
+                }
+            }
+            else if (e is { Key: Key.Right, KeyModifiers: KeyModifiers.None })
+            {
+                if (node.IsFolder && !node.IsExpanded)
+                {
+                    var tree = this.FindAncestorOfType<RevisionFileTreeView>();
+                    if (tree is not null)
+                        await tree.ToggleNodeIsExpandedAsync(node);
+
+                    e.Handled = true;
+                }
+                else if (node.Children.Count > 0)
+                {
+                    Select(node.Children[0]);
+                    e.Handled = true;
+                }
             }
             else if (e.Key == Key.C &&
                 e.KeyModifiers.HasFlag(OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
@@ -205,6 +228,37 @@ public class RevisionFileRowsListBox : ListBox
 
         if (!e.Handled)
             base.OnKeyDown(e);
+    }
+
+    /// <summary>
+    /// 指定されたノードを選択し、表示範囲へスクロールしてフォーカスを移す。
+    /// </summary>
+    private void Select(object item)
+    {
+        SelectedItem = item;
+        ScrollIntoView(item);
+        ContainerFromItem(item)?.Focus();
+    }
+
+    /// <summary>
+    /// 指定されたノードの親フォルダノードを探す。ルート階層の場合は null を返す。
+    /// </summary>
+    private ViewModels.RevisionFileTreeNode FindParent(ViewModels.RevisionFileTreeNode item)
+    {
+        if (item.Depth == 0)
+            return null;
+
+        var idx = Items.IndexOf(item);
+        if (idx < 1)
+            return null;
+
+        for (var i = idx - 1; i >= 0; i--)
+        {
+            if (Items[i] is ViewModels.RevisionFileTreeNode node && node.Depth < item.Depth)
+                return node;
+        }
+
+        return null;
     }
 }
 
