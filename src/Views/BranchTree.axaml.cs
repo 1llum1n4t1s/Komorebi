@@ -885,6 +885,20 @@ public partial class BranchTree : UserControl
 
             menu.Items.Add(push);
 
+            menu.Items.Add(new MenuItem() { Header = "-" });
+
+            if (upstream is not null)
+            {
+                var compareWithUpstream = new MenuItem();
+                compareWithUpstream.Header = App.Text("BranchCM.CompareWithUpstream", upstream.FriendlyName);
+                compareWithUpstream.Icon = App.CreateMenuIcon("Icons.Compare");
+                compareWithUpstream.Click += (_, _) =>
+                {
+                    App.ShowWindow(new ViewModels.Compare(repo, upstream, branch));
+                };
+                menu.Items.Add(compareWithUpstream);
+            }
+
             var compareWith = new MenuItem();
             compareWith.Header = App.Text("BranchCM.CompareWith");
             compareWith.Icon = App.CreateMenuIcon("Icons.Compare");
@@ -892,7 +906,6 @@ public partial class BranchTree : UserControl
             {
                 new ViewModels.CompareCommandPalette(repo, branch).Open();
             };
-            menu.Items.Add(new MenuItem() { Header = "-" });
             menu.Items.Add(compareWith);
         }
         else
@@ -1000,6 +1013,8 @@ public partial class BranchTree : UserControl
                 }
             }
 
+            menu.Items.Add(new MenuItem() { Header = "-" });
+
             var compareWithCurrent = new MenuItem();
             compareWithCurrent.Header = App.Text("BranchCM.CompareWithHead");
             compareWithCurrent.Icon = App.CreateMenuIcon("Icons.Compare");
@@ -1007,6 +1022,19 @@ public partial class BranchTree : UserControl
             {
                 App.ShowWindow(new ViewModels.Compare(repo, branch, current));
             };
+            menu.Items.Add(compareWithCurrent);
+
+            if (upstream is not null)
+            {
+                var compareWithUpstream = new MenuItem();
+                compareWithUpstream.Header = App.Text("BranchCM.CompareWithUpstream", upstream.FriendlyName);
+                compareWithUpstream.Icon = App.CreateMenuIcon("Icons.Compare");
+                compareWithUpstream.Click += (_, _) =>
+                {
+                    App.ShowWindow(new ViewModels.Compare(repo, upstream, branch));
+                };
+                menu.Items.Add(compareWithUpstream);
+            }
 
             var compareWith = new MenuItem();
             compareWith.Header = App.Text("BranchCM.CompareWith");
@@ -1015,8 +1043,6 @@ public partial class BranchTree : UserControl
             {
                 new ViewModels.CompareCommandPalette(repo, branch).Open();
             };
-            menu.Items.Add(new MenuItem() { Header = "-" });
-            menu.Items.Add(compareWithCurrent);
             menu.Items.Add(compareWith);
         }
 
