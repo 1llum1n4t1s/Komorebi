@@ -50,7 +50,7 @@ public partial class Diff : Command
         if (Models.DiffOption.IgnoreCRAtEOL)
             builder.Append("--ignore-cr-at-eol ");
         if (ignoreWhitespace)
-            builder.Append("--ignore-space-change ");
+            builder.Append("--ignore-space-change --ignore-blank-lines ");
         builder.Append("--unified=").Append(unified).Append(' ');
         builder.Append(opt.ToString());
 
