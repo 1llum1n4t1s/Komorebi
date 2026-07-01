@@ -422,7 +422,8 @@ public class InteractiveRebase : ObservableObject
     {
         using var lockWatcher = _repo.LockWatcher();
 
-        var saveFile = Path.Combine(_repo.GitDir, "sourcegit.interactive_rebase");
+        // ジョブファイル名は App.axaml.cs の読み取り側（komorebi.interactive_rebase）と一致させること
+        var saveFile = Path.Combine(_repo.GitDir, "komorebi.interactive_rebase");
         var collection = new Models.InteractiveRebaseJobCollection();
         collection.OrigHead = _repo.CurrentBranch.Head;
         collection.Onto = On.SHA;
