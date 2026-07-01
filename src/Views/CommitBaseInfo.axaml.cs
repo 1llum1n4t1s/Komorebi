@@ -77,6 +77,29 @@ public partial class CommitBaseInfo : UserControl
     }
 
     /// <summary>
+    /// 日時表示のコンテキストメニュー要求ハンドラ。表示中の日時文字列をコピーするメニューを開く。
+    /// </summary>
+    private void OnDateTimeContextMenuRequested(object sender, ContextRequestedEventArgs e)
+    {
+        if (sender is DateTimePresenter presenter)
+        {
+            var copy = new MenuItem();
+            copy.Header = App.Text("Copy");
+            copy.Icon = App.CreateMenuIcon("Icons.Copy");
+            copy.Click += async (_, ev) =>
+            {
+                await App.CopyTextAsync(presenter.Text);
+                ev.Handled = true;
+            };
+
+            var menu = new ContextMenu();
+            menu.Items.Add(copy);
+            menu.Open(presenter);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
     /// CopyCommitSHAイベントのハンドラ。
     /// </summary>
     private async void OnCopyCommitSHA(object sender, RoutedEventArgs e)

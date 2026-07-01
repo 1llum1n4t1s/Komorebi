@@ -1220,6 +1220,24 @@ public partial class Histories : UserControl
             e.Handled = true;
         };
 
+        var copyAuthorTime = new MenuItem();
+        copyAuthorTime.Header = App.Text("CommitCM.CopyAuthorTime");
+        copyAuthorTime.Icon = App.CreateMenuIcon("Icons.DateTime");
+        copyAuthorTime.Click += async (_, e) =>
+        {
+            await App.CopyTextAsync(Models.DateTimeFormat.Format(commit.AuthorTime));
+            e.Handled = true;
+        };
+
+        var copyCommitterTime = new MenuItem();
+        copyCommitterTime.Header = App.Text("CommitCM.CopyCommitterTime");
+        copyCommitterTime.Icon = App.CreateMenuIcon("Icons.DateTime");
+        copyCommitterTime.Click += async (_, e) =>
+        {
+            await App.CopyTextAsync(Models.DateTimeFormat.Format(commit.CommitterTime));
+            e.Handled = true;
+        };
+
         var copy = new MenuItem();
         copy.Header = App.Text("Copy");
         copy.Icon = App.CreateMenuIcon("Icons.Copy");
@@ -1230,6 +1248,8 @@ public partial class Histories : UserControl
         copy.Items.Add(copyMessage);
         copy.Items.Add(copyAuthor);
         copy.Items.Add(copyCommitter);
+        copy.Items.Add(copyAuthorTime);
+        copy.Items.Add(copyCommitterTime);
         menu.Items.Add(copy);
 
         return menu;
