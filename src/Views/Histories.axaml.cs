@@ -1417,6 +1417,18 @@ public partial class Histories : UserControl
             }
         }
 
+        var compare = new MenuItem();
+        compare.Header = App.Text("BranchCM.CompareWithSpecial", current.Name);
+        compare.Icon = App.CreateMenuIcon("Icons.Compare");
+        compare.Click += (_, e) =>
+        {
+            App.ShowWindow(new ViewModels.Compare(repo, current, branch));
+            e.Handled = true;
+        };
+
+        submenu.Items.Add(compare);
+        submenu.Items.Add(new MenuItem() { Header = "-" });
+
         var copy = new MenuItem();
         copy.Header = App.Text("BranchCM.CopyName");
         copy.Icon = App.CreateMenuIcon("Icons.Copy");
@@ -1485,6 +1497,18 @@ public partial class Histories : UserControl
         submenu.Items.Add(delete);
         submenu.Items.Add(new MenuItem() { Header = "-" });
 
+        var compare = new MenuItem();
+        compare.Header = App.Text("BranchCM.CompareWithSpecial", current.Name);
+        compare.Icon = App.CreateMenuIcon("Icons.Compare");
+        compare.Click += (_, e) =>
+        {
+            App.ShowWindow(new ViewModels.Compare(repo, current, branch));
+            e.Handled = true;
+        };
+
+        submenu.Items.Add(compare);
+        submenu.Items.Add(new MenuItem() { Header = "-" });
+
         var copy = new MenuItem();
         copy.Header = App.Text("BranchCM.CopyName");
         copy.Icon = App.CreateMenuIcon("Icons.Copy");
@@ -1550,6 +1574,18 @@ public partial class Histories : UserControl
             e.Handled = true;
         };
         submenu.Items.Add(delete);
+        submenu.Items.Add(new MenuItem() { Header = "-" });
+
+        var compare = new MenuItem();
+        compare.Header = App.Text("BranchCM.CompareWithSpecial", current.Name);
+        compare.Icon = App.CreateMenuIcon("Icons.Compare");
+        compare.Click += (_, e) =>
+        {
+            App.ShowWindow(new ViewModels.Compare(repo, current, tag));
+            e.Handled = true;
+        };
+
+        submenu.Items.Add(compare);
         submenu.Items.Add(new MenuItem() { Header = "-" });
 
         var copy = new MenuItem();

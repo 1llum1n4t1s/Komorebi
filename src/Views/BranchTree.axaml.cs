@@ -907,7 +907,7 @@ public partial class BranchTree : UserControl
             if (upstream is not null)
             {
                 var compareWithUpstream = new MenuItem();
-                compareWithUpstream.Header = App.Text("BranchCM.CompareWithUpstream", upstream.FriendlyName);
+                compareWithUpstream.Header = App.Text("BranchCM.CompareWithSpecial", upstream.FriendlyName);
                 compareWithUpstream.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWithUpstream.Click += (_, _) =>
                 {
@@ -1044,7 +1044,7 @@ public partial class BranchTree : UserControl
             if (upstream is not null)
             {
                 var compareWithUpstream = new MenuItem();
-                compareWithUpstream.Header = App.Text("BranchCM.CompareWithUpstream", upstream.FriendlyName);
+                compareWithUpstream.Header = App.Text("BranchCM.CompareWithSpecial", upstream.FriendlyName);
                 compareWithUpstream.Icon = App.CreateMenuIcon("Icons.Compare");
                 compareWithUpstream.Click += (_, _) =>
                 {
