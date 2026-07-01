@@ -11,6 +11,50 @@ using Avalonia.VisualTree;
 namespace Komorebi.Views;
 
 /// <summary>
+/// BranchSelector 内でブランチ名を表示するテキストブロック。
+/// UsePureName に応じて純粋名（Name）とフレンドリー名（FriendlyName）を切り替える。
+/// </summary>
+public class BranchSelectorChoice : TextBlock
+{
+    /// <summary>表示対象のブランチ</summary>
+    public static readonly StyledProperty<Models.Branch> BranchProperty =
+        AvaloniaProperty.Register<BranchSelectorChoice, Models.Branch>(nameof(Branch));
+
+    /// <summary>表示対象のブランチ</summary>
+    public Models.Branch Branch
+    {
+        get => GetValue(BranchProperty);
+        set => SetValue(BranchProperty, value);
+    }
+
+    /// <summary>リモートプレフィックスを除いた純粋名で表示するかどうか</summary>
+    public static readonly StyledProperty<bool> UsePureNameProperty =
+        AvaloniaProperty.Register<BranchSelectorChoice, bool>(nameof(UsePureName));
+
+    /// <summary>リモートプレフィックスを除いた純粋名で表示するかどうか</summary>
+    public bool UsePureName
+    {
+        get => GetValue(UsePureNameProperty);
+        set => SetValue(UsePureNameProperty, value);
+    }
+
+    protected override Type StyleKeyOverride => typeof(TextBlock);
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == BranchProperty || change.Property == UsePureNameProperty)
+        {
+            if (Branch is { } branch)
+                Text = UsePureName ? branch.Name : branch.FriendlyName;
+            else
+                Text = "---";
+        }
+    }
+}
+
+/// <summary>
 /// 検索機能付きのカスタムブランチセレクター。
 /// ComboBox 風 UI でブランチを選択でき、大量のリモートブランチがある場合でも検索で絞り込める。
 /// </summary>
@@ -39,14 +83,17 @@ public partial class BranchSelector : UserControl
     }
 
     /// <summary>現在選択されているブランチ</summary>
-    public static readonly StyledProperty<Models.Branch> SelectedBranchProperty =
-        AvaloniaProperty.Register<BranchSelector, Models.Branch>(nameof(SelectedBranch));
+    public static readonly DirectProperty<BranchSelector, Models.Branch> SelectedBranchProperty =
+        AvaloniaProperty.RegisterDirect<BranchSelector, Models.Branch>(
+            nameof(SelectedBranch),
+            o => o.SelectedBranch,
+            (o, v) => o.SelectedBranch = v);
 
     /// <summary>現在選択されているブランチ</summary>
     public Models.Branch SelectedBranch
     {
-        get => GetValue(SelectedBranchProperty);
-        set => SetValue(SelectedBranchProperty, value);
+        get => _selectedBranch;
+        set => SetAndRaise(SelectedBranchProperty, ref _selectedBranch, value);
     }
 
     /// <summary>ドロップダウンが開いているかどうか</summary>
@@ -69,6 +116,17 @@ public partial class BranchSelector : UserControl
     {
         get => GetValue(SearchFilterProperty);
         set => SetValue(SearchFilterProperty, value);
+    }
+
+    /// <summary>ブランチをリモートプレフィックスを除いた純粋名で表示するかどうか</summary>
+    public static readonly StyledProperty<bool> UsePureNameProperty =
+        AvaloniaProperty.Register<BranchSelector, bool>(nameof(UsePureName));
+
+    /// <summary>ブランチをリモートプレフィックスを除いた純粋名で表示するかどうか</summary>
+    public bool UsePureName
+    {
+        get => GetValue(UsePureNameProperty);
+        set => SetValue(UsePureNameProperty, value);
     }
 
     public BranchSelector()
@@ -111,7 +169,7 @@ public partial class BranchSelector : UserControl
 
                 SetCurrentValue(VisibleBranchesProperty, visible);
                 if (!keepSelection && visible.Count > 0)
-                    SetCurrentValue(SelectedBranchProperty, visible[0]);
+                    SelectedBranch = visible[0];
             }
         }
     }
@@ -224,6 +282,13 @@ public partial class BranchSelector : UserControl
         }
     }
 
+    private void OnDropDownListSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // ドロップダウンリストの選択変更を SelectedBranch に反映する
+        if (e.AddedItems.Count == 1 && e.AddedItems[0] is Models.Branch branch)
+            SelectedBranch = branch;
+    }
+
     private void OnDropDownItemPointerPressed(object sender, PointerPressedEventArgs e)
     {
         if (sender is Control { DataContext: Models.Branch branch })
@@ -234,4 +299,5 @@ public partial class BranchSelector : UserControl
     }
 
     private Popup _popup = null;
+    private Models.Branch _selectedBranch = null;
 }
