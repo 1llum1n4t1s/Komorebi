@@ -94,6 +94,15 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
+    /// 空白無視トグルボタンを表示するかどうか（テキスト差分と「変更なし」表示のみ）。
+    /// </summary>
+    public bool IsIgnoreWhitespaceVisible
+    {
+        get => _isIgnoreWhitespaceVisible;
+        private set => SetProperty(ref _isIgnoreWhitespaceVisible, value);
+    }
+
+    /// <summary>
     /// 差分の表示コンテンツ（TextDiffContext、ImageDiff、BinaryDiff等）。
     /// </summary>
     public object Content
@@ -122,6 +131,7 @@ public class DiffContext : ObservableObject
         if (previous is not null)
         {
             _isTextDiff = previous._isTextDiff;
+            _isIgnoreWhitespaceVisible = previous._isIgnoreWhitespaceVisible;
             _content = previous._content;
             _fileModeChange = previous._fileModeChange;
             _unifiedLines = previous._unifiedLines;
@@ -336,6 +346,7 @@ public class DiffContext : ObservableObject
                 if (rs is Models.TextDiff cur)
                 {
                     IsTextDiff = true;
+                    IsIgnoreWhitespaceVisible = true;
 
                     if (Preferences.Instance.UseSideBySideDiff)
                         Content = new TwoSideTextDiff(_option, cur, _content as TextDiffContext);
@@ -345,6 +356,7 @@ public class DiffContext : ObservableObject
                 else
                 {
                     IsTextDiff = false;
+                    IsIgnoreWhitespaceVisible = rs is Models.NoOrEOLChange;
                     Content = rs;
                 }
             });
@@ -435,6 +447,7 @@ public class DiffContext : ObservableObject
     private string _fileModeChange = string.Empty;
     private int _unifiedLines = 4;
     private bool _isTextDiff = false;
+    private bool _isIgnoreWhitespaceVisible = true;
     private object _content = null;
     private Info _info = null;
 }
