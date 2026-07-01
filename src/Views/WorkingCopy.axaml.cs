@@ -1109,6 +1109,7 @@ public partial class WorkingCopy : UserControl
             var stash = new MenuItem();
             stash.Header = App.Text("FileCM.Stash");
             stash.Icon = App.CreateMenuIcon("Icons.Stashes.Add");
+            stash.IsEnabled = !vm.UseAmend;
             stash.Click += (_, e) =>
             {
                 if (repo.CanCreatePopup())
@@ -1327,6 +1328,7 @@ public partial class WorkingCopy : UserControl
             var stash = new MenuItem();
             stash.Header = App.Text("FileCM.StashMulti", selectedStaged.Count);
             stash.Icon = App.CreateMenuIcon("Icons.Stashes.Add");
+            stash.IsEnabled = !vm.UseAmend;
             stash.Click += (_, e) =>
             {
                 if (repo.CanCreatePopup())
