@@ -319,6 +319,13 @@ public class Preferences : ObservableObject
         }
     }
 
+    /// <summary>チェックアウト・マージ等のダイアログでローカル変更の扱いを既定で「Stash &amp; Reapply」にするかどうか。</summary>
+    public bool UseStashAndReapplyByDefault
+    {
+        get;
+        set;
+    } = false;
+
     /// <summary>自動フェッチを有効にするかどうか（v2026.08 以降はグローバル設定）。</summary>
     public bool EnableAutoFetch
     {

@@ -52,7 +52,10 @@ public class CheckoutAndFastForward : Popup
         _repo = repo;
         LocalBranch = localBranch;
         RemoteBranch = remoteBranch;
-        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        // 設定でデフォルトを Stash & Reapply にできる (upstream d4ce0b97)
+        DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
+            Models.DealWithLocalChanges.StashAndReapply :
+            Models.DealWithLocalChanges.DoNothing;
     }
 
     /// <summary>

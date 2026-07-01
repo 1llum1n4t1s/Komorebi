@@ -72,7 +72,7 @@ public class Pull : Popup
     {
         get;
         set;
-    } = Models.DealWithLocalChanges.DoNothing;
+    }
 
     /// <summary>
     /// マージの代わりにリベースを使用するかどうか。リポジトリのUI状態と連動する。
@@ -92,6 +92,11 @@ public class Pull : Popup
     {
         _repo = repo;
         Current = repo.CurrentBranch;
+
+        // 設定でデフォルトを Stash & Reapply にできる (upstream d4ce0b97)
+        DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
+            Models.DealWithLocalChanges.StashAndReapply :
+            Models.DealWithLocalChanges.DoNothing;
 
         if (specifiedRemoteBranch is not null)
         {

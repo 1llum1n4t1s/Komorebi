@@ -43,7 +43,10 @@ public class Checkout : Popup
     {
         _repo = repo;
         _branch = branch;
-        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        // 設定でデフォルトを Stash & Reapply にできる (upstream d4ce0b97)
+        DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
+            Models.DealWithLocalChanges.StashAndReapply :
+            Models.DealWithLocalChanges.DoNothing;
     }
 
     /// <summary>
