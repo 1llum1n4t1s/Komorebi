@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,14 +12,27 @@ namespace Komorebi.ViewModels;
 public class Apply : Popup
 {
     /// <summary>
-    /// 適用するパッチファイルのパス。必須入力でファイル存在チェック付き。
+    /// 適用するパッチファイルのパス。クリップボード適用時以外はファイル存在チェック付き。
     /// </summary>
-    [Required(ErrorMessage = "Patch file is required!!!")]
     [CustomValidation(typeof(Apply), nameof(ValidatePatchFile))]
     public string PatchFile
     {
         get => _patchFile;
         set => SetProperty(ref _patchFile, value, true);
+    }
+
+    /// <summary>
+    /// クリップボードの内容をパッチとして適用するかどうか。
+    /// 切替時にPatchFileのバリデーションを再評価する。
+    /// </summary>
+    public bool FromClipboard
+    {
+        get => _fromClipboard;
+        set
+        {
+            if (SetProperty(ref _fromClipboard, value))
+                ValidateProperty(_patchFile, nameof(PatchFile));
+        }
     }
 
     /// <summary>
@@ -62,13 +76,17 @@ public class Apply : Popup
 
     /// <summary>
     /// パッチファイルの存在を検証するバリデーションメソッド。
+    /// クリップボードからの適用時はファイル指定を不要とする。
     /// </summary>
     /// <param name="file">検証するファイルパス</param>
-    /// <param name="_">バリデーションコンテキスト（未使用）</param>
+    /// <param name="ctx">バリデーションコンテキスト</param>
     /// <returns>バリデーション結果</returns>
-    public static ValidationResult ValidatePatchFile(string file, ValidationContext _)
+    public static ValidationResult ValidatePatchFile(string file, ValidationContext ctx)
     {
-        if (File.Exists(file))
+        if (ctx.ObjectInstance is not Apply apply)
+            return new ValidationResult("Invalid object instance!!!");
+
+        if (apply.FromClipboard || File.Exists(file))
             return ValidationResult.Success;
 
         return new ValidationResult($"File '{file}' can NOT be found!!!");
@@ -83,17 +101,38 @@ public class Apply : Popup
         using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.ApplyPatch");
 
+        // クリップボードから適用する場合は内容を検証して一時ファイルに書き出す
+        // （upstream は IClipboard を View から注入するが、Komorebi は App ファサードを使用）
+        var finalPatchFile = _patchFile;
+        if (_fromClipboard)
+        {
+            var content = await App.GetClipboardTextAsync();
+            if (string.IsNullOrEmpty(content) || !content.StartsWith("diff --git ", StringComparison.Ordinal))
+            {
+                App.RaiseException(_repo.FullPath, "There's no valid patch content in clipboard!!!");
+                return false;
+            }
+
+            finalPatchFile = Path.GetTempFileName();
+            await File.WriteAllTextAsync(finalPatchFile, content);
+        }
+
         // コマンドログを作成する
         var log = _repo.CreateLog("Apply Patch");
         Use(log);
 
         // git applyコマンドを実行してパッチを適用する
         var extra = ThreeWayMerge ? "--3way" : string.Empty;
-        var succ = await new Commands.Apply(_repo.FullPath, _patchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
+        var succ = await new Commands.Apply(_repo.FullPath, finalPatchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
             .Use(log)
             .ExecAsync();
 
         log.Complete();
+
+        // クリップボード適用用の一時ファイルを削除する
+        if (_fromClipboard)
+            File.Delete(finalPatchFile);
+
         return succ;
     }
 
@@ -101,6 +140,8 @@ public class Apply : Popup
     private readonly Repository _repo = null;
     /// <summary>パッチファイルのパス</summary>
     private string _patchFile = string.Empty;
+    /// <summary>クリップボードから適用するかどうか</summary>
+    private bool _fromClipboard = false;
     /// <summary>空白を無視するかどうか</summary>
     private bool _ignoreWhiteSpace = true;
 }
