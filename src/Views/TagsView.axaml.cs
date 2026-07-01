@@ -311,8 +311,6 @@ public partial class TagsView : UserControl
                 menu.Items.Add(checkoutCommit);
             }
 
-            menu.Items.Add(new MenuItem() { Header = "-" });
-
             var pushTag = new MenuItem();
             pushTag.Header = App.Text("TagCM.Push", tag.Name);
             pushTag.Icon = App.CreateMenuIcon("Icons.Push");
@@ -323,6 +321,22 @@ public partial class TagsView : UserControl
                     repo.ShowPopup(new ViewModels.PushTag(repo, tag));
                 ev.Handled = true;
             };
+            menu.Items.Add(new MenuItem() { Header = "-" });
+            menu.Items.Add(pushTag);
+
+            if (repo.CurrentBranch is { IsDetachedHead: false } current)
+            {
+                var mergeTag = new MenuItem();
+                mergeTag.Header = App.Text("TagCM.Merge", tag.Name, current.Name);
+                mergeTag.Icon = App.CreateMenuIcon("Icons.Merge");
+                mergeTag.Click += (_, ev) =>
+                {
+                    if (repo.CanCreatePopup())
+                        repo.ShowPopup(new ViewModels.Merge(repo, tag, current.Name));
+                    ev.Handled = true;
+                };
+                menu.Items.Add(mergeTag);
+            }
 
             var deleteTag = new MenuItem();
             deleteTag.Header = App.Text("TagCM.Delete", tag.Name);
@@ -333,6 +347,8 @@ public partial class TagsView : UserControl
                     repo.ShowPopup(new ViewModels.DeleteTag(repo, tag));
                 ev.Handled = true;
             };
+            menu.Items.Add(deleteTag);
+            menu.Items.Add(new MenuItem() { Header = "-" });
 
             var compareWithHead = new MenuItem();
             compareWithHead.Header = App.Text("TagCM.CompareWithHead");
@@ -349,6 +365,9 @@ public partial class TagsView : UserControl
             {
                 new ViewModels.CompareCommandPalette(repo, tag).Open();
             };
+            menu.Items.Add(compareWithHead);
+            menu.Items.Add(compareWith);
+            menu.Items.Add(new MenuItem() { Header = "-" });
 
             var archive = new MenuItem();
             archive.Icon = App.CreateMenuIcon("Icons.Archive");
@@ -360,12 +379,6 @@ public partial class TagsView : UserControl
                 ev.Handled = true;
             };
 
-            menu.Items.Add(pushTag);
-            menu.Items.Add(deleteTag);
-            menu.Items.Add(new MenuItem() { Header = "-" });
-            menu.Items.Add(compareWithHead);
-            menu.Items.Add(compareWith);
-            menu.Items.Add(new MenuItem() { Header = "-" });
             menu.Items.Add(archive);
             menu.Items.Add(new MenuItem() { Header = "-" });
 
