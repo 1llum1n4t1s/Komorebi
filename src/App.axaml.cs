@@ -856,12 +856,11 @@ public partial class App : Application
             _ipcChannel = new Models.IpcChannel();
             if (!_ipcChannel.IsFirstInstance)
             {
-                var arg = desktop.Args is { Length: > 0 } ? desktop.Args[0].Trim() : string.Empty;
+                var arg = desktop.Args is { Length: > 0 } ? desktop.Args[0] : string.Empty;
                 if (!string.IsNullOrEmpty(arg))
                 {
-                    if (arg.StartsWith('"') && arg.EndsWith('"'))
-                        arg = arg[1..^1].Trim();
-
+                    // パス区切りをスラッシュに正規化し、末尾スラッシュ・引用符・空白を除去する
+                    arg = arg.Replace('\\', '/').TrimEnd('/').Trim('\"').Trim();
                     if (arg.Length > 0 && !Path.IsPathFullyQualified(arg))
                         arg = Path.GetFullPath(arg);
                 }
@@ -930,7 +929,8 @@ public partial class App : Application
             return false;
 
         // 編集対象がgit-rebase-todoファイルであることを確認する
-        var file = args[1];
+        // パス区切りをスラッシュに正規化し、引用符・空白を除去する
+        var file = args[1].Replace('\\', '/').Trim('\"').Trim();
         var filename = Path.GetFileName(file);
         if (!filename.Equals("git-rebase-todo", StringComparison.OrdinalIgnoreCase))
             return true;
@@ -989,7 +989,8 @@ public partial class App : Application
         exitCode = 0;
 
         // 編集対象がCOMMIT_EDITMSGファイルであることを確認する
-        var file = args[1];
+        // パス区切りをスラッシュに正規化し、引用符・空白を除去する
+        var file = args[1].Replace('\\', '/').Trim('\"').Trim();
         var filename = Path.GetFileName(file);
         if (!filename.Equals("COMMIT_EDITMSG", StringComparison.OrdinalIgnoreCase))
             return true;
@@ -1047,7 +1048,8 @@ public partial class App : Application
         if (args is not { Length: > 1 } || !args[0].Equals("--file-history", StringComparison.Ordinal))
             return false;
 
-        var file = Path.GetFullPath(args[1]);
+        // パス区切りをスラッシュに正規化し、引用符・空白を除去してから絶対パス化する
+        var file = Path.GetFullPath(args[1].Replace('\\', '/').Trim('\"').Trim());
         var dir = Path.GetDirectoryName(file);
 
         var test = new Commands.QueryRepositoryRootPath(dir).GetResult();
@@ -1079,7 +1081,8 @@ public partial class App : Application
         if (args is not { Length: > 1 } || !args[0].Equals("--blame", StringComparison.Ordinal))
             return false;
 
-        var file = Path.GetFullPath(args[1]);
+        // パス区切りをスラッシュに正規化し、引用符・空白を除去してから絶対パス化する
+        var file = Path.GetFullPath(args[1].Replace('\\', '/').Trim('\"').Trim());
         var dir = Path.GetDirectoryName(file);
 
         var test = new Commands.QueryRepositoryRootPath(dir).GetResult();
@@ -1120,7 +1123,8 @@ public partial class App : Application
             return false;
 
         // 編集対象ファイルが存在しない場合はエラー終了する
-        var file = args[1];
+        // パス区切りをスラッシュに正規化し、引用符・空白を除去する
+        var file = args[1].Replace('\\', '/').Trim('\"').Trim();
         if (!File.Exists(file))
         {
             desktop.Shutdown(-1);
@@ -1174,8 +1178,13 @@ public partial class App : Application
 
         // 起動引数にリポジトリパスが指定されていれば初期表示に使用する
         string startupRepo = null;
-        if (desktop.Args is { Length: 1 } && Directory.Exists(desktop.Args[0]))
-            startupRepo = desktop.Args[0];
+        if (desktop.Args is { Length: 1 })
+        {
+            // パス区切りをスラッシュに正規化し、末尾スラッシュ・引用符・空白を除去する
+            var arg = desktop.Args[0].Replace('\\', '/').TrimEnd('/').Trim('\"').Trim();
+            if (Directory.Exists(arg))
+                startupRepo = arg;
+        }
 
         // 設定を読み込み、ランチャーウィンドウを生成・表示する
         var pref = ViewModels.Preferences.Instance;

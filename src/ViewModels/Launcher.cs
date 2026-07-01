@@ -87,6 +87,17 @@ public class Launcher : ObservableObject
 
         if (!string.IsNullOrEmpty(startupRepo))
         {
+            // bareリポジトリは --show-toplevel が失敗するため、先にbare判定して直接開く
+            var isBare = new Commands.IsBareRepository(startupRepo).GetResult();
+            if (isBare)
+            {
+                var node = pref.FindOrAddNodeByRepositoryPath(startupRepo, null, false);
+                Welcome.Instance.Refresh();
+
+                OpenRepositoryInTab(node, null);
+                return;
+            }
+
             var test = new Commands.QueryRepositoryRootPath(startupRepo).GetResult();
             if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
             {
