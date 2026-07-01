@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -25,12 +25,12 @@ public partial class Diff : Command
     [GeneratedRegex(@"^index\s([0-9a-f]{6,64})\.\.([0-9a-f]{6,64})(\s[1-9]{6})?")]
     private static partial Regex REG_HASH_CHANGE();
 
-    /// <summary>LFS新規ファイルのプレフィックス</summary>
-    private const string PREFIX_LFS_NEW = "+version https://git-lfs.github.com/spec/";
-    /// <summary>LFS削除ファイルのプレフィックス</summary>
-    private const string PREFIX_LFS_DEL = "-version https://git-lfs.github.com/spec/";
-    /// <summary>LFS変更ファイルのプレフィックス</summary>
-    private const string PREFIX_LFS_MODIFY = " version https://git-lfs.github.com/spec/";
+    /// <summary>LFSポインタファイルの識別子</summary>
+    private const string LFS_SPECIFIER = "version https://git-lfs.github.com/spec/";
+    /// <summary>LFSのoid行プレフィックス（行頭文字を除く）</summary>
+    private const string LFS_OID_PREFIX = "oid sha256:";
+    /// <summary>LFSのsize行プレフィックス（行頭文字を除く）</summary>
+    private const string LFS_SIZE_PREFIX = "size ";
 
     /// <summary>
     /// Diffコマンドのコンストラクタ。
@@ -104,252 +104,49 @@ public partial class Diff : Command
     }
 
     /// <summary>
-    /// diff出力の1行を解析し、結果モデルに追加する。
+    /// diff出力を1行ずつ受け取って結果モデルを組み立てる状態オブジェクト。
+    /// type-changedファイル（例: 通常ファイル→シンボリックリンク）では「削除+新規」の
+    /// 2セットのdiffヘッダーが同一出力内に現れるため、チャンク内外を _isInChunk で追跡し
+    /// ヘッダー行をどの位置でも解析できるようにしている（upstream a30cf17a 相当）。
     /// </summary>
-    /// <param name="line">diff出力の1行</param>
-    /// <param name="result">解析結果の蓄積先</param>
-    /// <param name="deleted">削除行のバッファ（インラインハイライト用）</param>
-    /// <param name="added">追加行のバッファ（インラインハイライト用）</param>
-    /// <param name="last">直前に処理した差分行</param>
-    /// <param name="oldLine">旧ファイルの現在の行番号</param>
-    /// <param name="newLine">新ファイルの現在の行番号</param>
-    private static void ParseLine(
-        string line,
-        Models.DiffResult result,
-        List<Models.TextDiffLine> deleted,
-        List<Models.TextDiffLine> added,
-        ref Models.TextDiffLine last,
-        ref int oldLine,
-        ref int newLine)
-    {
-        if (result.IsBinary)
-            return;
-
-        // ファイルモードの変更を検出
-        if (line.StartsWith("old mode ", StringComparison.Ordinal))
-        {
-            result.OldMode = line[9..];
-            return;
-        }
-
-        if (line.StartsWith("new mode ", StringComparison.Ordinal))
-        {
-            result.NewMode = line[9..];
-            return;
-        }
-
-        if (line.StartsWith("deleted file mode ", StringComparison.Ordinal))
-        {
-            result.OldMode = line[18..];
-            return;
-        }
-
-        if (line.StartsWith("new file mode ", StringComparison.Ordinal))
-        {
-            result.NewMode = line[14..];
-            return;
-        }
-
-        // LFSファイルの差分を解析
-        if (result.IsLFS)
-        {
-            if (line.Length == 0)
-                return;
-
-            var ch = line[0];
-            if (ch == '-')
-            {
-                if (line.StartsWith("-oid sha256:", StringComparison.Ordinal))
-                {
-                    result.LFSDiff.Old.Oid = line[12..];
-                }
-                else if (line.StartsWith("-size ", StringComparison.Ordinal))
-                {
-                    result.LFSDiff.Old.Size = long.Parse(line.AsSpan(6));
-                }
-            }
-            else if (ch == '+')
-            {
-                if (line.StartsWith("+oid sha256:", StringComparison.Ordinal))
-                {
-                    result.LFSDiff.New.Oid = line[12..];
-                }
-                else if (line.StartsWith("+size ", StringComparison.Ordinal))
-                {
-                    result.LFSDiff.New.Size = long.Parse(line.AsSpan(6));
-                }
-            }
-            else if (line.StartsWith(" size ", StringComparison.Ordinal))
-            {
-                result.LFSDiff.New.Size = result.LFSDiff.Old.Size = long.Parse(line.AsSpan(6));
-            }
-            return;
-        }
-
-        if (result.TextDiff.Lines.Count == 0)
-        {
-            if (line.StartsWith("Binary", StringComparison.Ordinal))
-            {
-                result.IsBinary = true;
-                return;
-            }
-
-            if (string.IsNullOrEmpty(result.OldHash))
-            {
-                var match = REG_HASH_CHANGE().Match(line);
-                if (!match.Success)
-                    return;
-
-                result.OldHash = match.Groups[1].Value;
-                result.NewHash = match.Groups[2].Value;
-            }
-            else
-            {
-                var match = REG_INDICATOR().Match(line);
-                if (!match.Success)
-                    return;
-
-                oldLine = int.Parse(match.Groups[1].Value);
-                newLine = int.Parse(match.Groups[2].Value);
-                last = new Models.TextDiffLine(Models.TextDiffLineType.Indicator, line, 0, 0);
-                result.TextDiff.Lines.Add(last);
-            }
-        }
-        else
-        {
-            if (line.Length == 0)
-            {
-                FlushInlineHighlights(result, deleted, added);
-                last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, "", oldLine, newLine);
-                result.TextDiff.Lines.Add(last);
-                oldLine++;
-                newLine++;
-                return;
-            }
-
-            var ch = line[0];
-            if (ch == '-')
-            {
-                if (oldLine == 1 && newLine == 0 && line.StartsWith(PREFIX_LFS_DEL, StringComparison.Ordinal))
-                {
-                    result.IsLFS = true;
-                    result.LFSDiff = new Models.LFSDiff();
-                    return;
-                }
-
-                last = new Models.TextDiffLine(Models.TextDiffLineType.Deleted, line[1..], oldLine, 0);
-                deleted.Add(last);
-                oldLine++;
-            }
-            else if (ch == '+')
-            {
-                if (oldLine == 0 && newLine == 1 && line.StartsWith(PREFIX_LFS_NEW, StringComparison.Ordinal))
-                {
-                    result.IsLFS = true;
-                    result.LFSDiff = new Models.LFSDiff();
-                    return;
-                }
-
-                last = new Models.TextDiffLine(Models.TextDiffLineType.Added, line[1..], 0, newLine);
-                added.Add(last);
-                newLine++;
-            }
-            else if (ch != '\\')
-            {
-                FlushInlineHighlights(result, deleted, added);
-                var match = REG_INDICATOR().Match(line);
-                if (match.Success)
-                {
-                    oldLine = int.Parse(match.Groups[1].Value);
-                    newLine = int.Parse(match.Groups[2].Value);
-                    last = new Models.TextDiffLine(Models.TextDiffLineType.Indicator, line, 0, 0);
-                    result.TextDiff.Lines.Add(last);
-                }
-                else
-                {
-                    if (oldLine == 1 && newLine == 1 && line.StartsWith(PREFIX_LFS_MODIFY, StringComparison.Ordinal))
-                    {
-                        result.IsLFS = true;
-                        result.LFSDiff = new Models.LFSDiff();
-                        return;
-                    }
-
-                    last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, line[1..], oldLine, newLine);
-                    result.TextDiff.Lines.Add(last);
-                    oldLine++;
-                    newLine++;
-                }
-            }
-            else if (line.Equals("\\ No newline at end of file", StringComparison.Ordinal))
-            {
-                last.NoNewLineEndOfFile = true;
-            }
-        }
-    }
-
-    /// <summary>
-    /// バッファに蓄積された削除行と追加行のインラインハイライトを計算し、結果に追加する。
-    /// 削除行と追加行が同数の場合、対応する行同士でインライン差分を検出する。
-    /// </summary>
-    /// <param name="result">差分結果の蓄積先</param>
-    /// <param name="deleted">蓄積された削除行</param>
-    /// <param name="added">蓄積された追加行</param>
-    private static void FlushInlineHighlights(
-        Models.DiffResult result,
-        List<Models.TextDiffLine> deleted,
-        List<Models.TextDiffLine> added)
-    {
-        if (deleted.Count > 0)
-        {
-            if (added.Count == deleted.Count)
-            {
-                for (int i = added.Count - 1; i >= 0; i--)
-                {
-                    var left = deleted[i];
-                    var right = added[i];
-
-                    if (left.Content.Length > MaxLineLengthForInlineDiff || right.Content.Length > MaxLineLengthForInlineDiff)
-                        continue;
-
-                    var chunks = Models.TextInlineChange.Compare(left.Content, right.Content);
-                    if (chunks.Count > MaxInlineDiffChunks)
-                        continue;
-
-                    foreach (var chunk in chunks)
-                    {
-                        if (chunk.DeletedCount > 0)
-                            left.Highlights.Add(new Models.TextRange(chunk.DeletedStart, chunk.DeletedCount));
-
-                        if (chunk.AddedCount > 0)
-                            right.Highlights.Add(new Models.TextRange(chunk.AddedStart, chunk.AddedCount));
-                    }
-                }
-            }
-
-            result.TextDiff.Lines.AddRange(deleted);
-            deleted.Clear();
-        }
-
-        if (added.Count > 0)
-        {
-            result.TextDiff.Lines.AddRange(added);
-            added.Clear();
-        }
-    }
-
-    private void ProcessInlineHighlights()
-    {
-        FlushInlineHighlights(_result, _deleted, _added);
-    }
-
-    /// <summary>diff出力を1行ずつ受け取って結果モデルを組み立てる状態オブジェクト。</summary>
     private sealed class DiffParser
     {
+        /// <summary>
+        /// diff出力の1行を解析し、結果モデルに追加する。
+        /// </summary>
+        /// <param name="line">diff出力の1行</param>
         public void Parse(string line)
         {
-            ParseLine(line, _result, _deleted, _added, ref _last, ref _oldLine, ref _newLine);
+            if (_result.IsBinary)
+                return;
+
+            if (line.Length == 0)
+            {
+                // チャンク内の空行は空のコンテキスト行として扱う（チャンク外は無視）
+                if (_isInChunk)
+                {
+                    FlushInlineHighlights();
+                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, "", _oldLine, _newLine);
+                    _result.TextDiff.Lines.Add(_last);
+                    _oldLine++;
+                    _newLine++;
+                }
+                return;
+            }
+
+            if (ParseChunkStartLine(line))
+                return;
+
+            if (ParseChunkBodyLine(line[0], line[1..]))
+                return;
+
+            ParseDiffHeaderLine(line);
         }
 
+        /// <summary>
+        /// 解析を完了し、結果モデルを確定して返す。
+        /// </summary>
+        /// <returns>解析された差分結果</returns>
         public Models.DiffResult Complete()
         {
             if (_result.IsBinary || _result.IsLFS || _result.TextDiff.Lines.Count == 0)
@@ -358,25 +155,278 @@ public partial class Diff : Command
             }
             else
             {
-                FlushInlineHighlights(_result, _deleted, _added);
+                if (_isInChunk)
+                {
+                    FlushInlineHighlights();
+                    _isInChunk = false;
+                }
+
                 _result.TextDiff.MaxLineNumber = Math.Max(_newLine, _oldLine);
             }
 
             return _result;
         }
 
+        /// <summary>
+        /// チャンク開始行（@@ -old,count +new,count @@）を解析する。
+        /// </summary>
+        /// <param name="line">diff出力の1行</param>
+        /// <returns>チャンク開始行として処理した場合はtrue</returns>
+        private bool ParseChunkStartLine(string line)
+        {
+            if (line[0] != '@')
+                return false;
+
+            if (_isInChunk)
+            {
+                FlushInlineHighlights();
+                _isInChunk = false;
+            }
+
+            var match = REG_INDICATOR().Match(line);
+            if (!match.Success)
+                return false;
+
+            _oldLine = int.Parse(match.Groups[1].Value);
+            _newLine = int.Parse(match.Groups[2].Value);
+            _last = new Models.TextDiffLine(Models.TextDiffLineType.Indicator, line, 0, 0);
+            _result.TextDiff.Lines.Add(_last);
+
+            _isInChunk = true;
+            return true;
+        }
+
+        /// <summary>
+        /// チャンク本体行（追加/削除/コンテキスト/特殊行）を解析する。
+        /// チャンク本体行でない場合はチャンクを終了してfalseを返す（ヘッダー解析へフォールバック）。
+        /// </summary>
+        /// <param name="ch">行頭の1文字</param>
+        /// <param name="content">行頭を除いた内容</param>
+        /// <returns>チャンク本体行として処理した場合はtrue</returns>
+        private bool ParseChunkBodyLine(char ch, string content)
+        {
+            if (_isInChunk)
+            {
+                if (ParseLFSChange(ch, content))
+                    return true;
+
+                if (ch == '-')
+                {
+                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Deleted, content, _oldLine, 0);
+                    _deleted.Add(_last);
+                    _oldLine++;
+                    return true;
+                }
+
+                if (ch == '+')
+                {
+                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Added, content, 0, _newLine);
+                    _added.Add(_last);
+                    _newLine++;
+                    return true;
+                }
+
+                if (ch == ' ')
+                {
+                    FlushInlineHighlights();
+                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, content, _oldLine, _newLine);
+                    _result.TextDiff.Lines.Add(_last);
+                    _oldLine++;
+                    _newLine++;
+                    return true;
+                }
+
+                if (ch == '\\')
+                {
+                    if (content.Equals(" No newline at end of file", StringComparison.Ordinal))
+                        _last.NoNewLineEndOfFile = true;
+                    return true;
+                }
+            }
+
+            // チャンク本体行でなければチャンクを終了し、ヘッダー解析へフォールバックする
+            FlushInlineHighlights();
+            _isInChunk = false;
+            return false;
+        }
+
+        /// <summary>
+        /// diffヘッダー行（diff/mode/index/Binary）を解析する。
+        /// </summary>
+        /// <param name="line">diff出力の1行</param>
+        private void ParseDiffHeaderLine(string line)
+        {
+            if (line.StartsWith("diff", StringComparison.Ordinal))
+                return;
+
+            if (ParseFileModeChange(line))
+                return;
+
+            if (line.StartsWith("index", StringComparison.Ordinal))
+            {
+                var match = REG_HASH_CHANGE().Match(line);
+                if (match.Success)
+                {
+                    // type-changedファイルでは「削除+新規」の2セットのdiffヘッダーが
+                    // 同一出力内に現れるため、最古の旧ハッシュと最新の新ハッシュを保持する
+                    if (string.IsNullOrEmpty(_result.OldHash))
+                        _result.OldHash = match.Groups[1].Value;
+                    _result.NewHash = match.Groups[2].Value;
+                }
+                return;
+            }
+
+            if (line.StartsWith("Binary", StringComparison.Ordinal))
+                _result.IsBinary = true;
+        }
+
+        /// <summary>
+        /// ファイルモード変更行を解析する。
+        /// </summary>
+        /// <param name="line">diff出力の1行</param>
+        /// <returns>モード変更行として処理した場合はtrue</returns>
+        private bool ParseFileModeChange(string line)
+        {
+            if (line.StartsWith("old mode ", StringComparison.Ordinal))
+            {
+                _result.OldMode = line[9..];
+                return true;
+            }
+
+            if (line.StartsWith("new mode ", StringComparison.Ordinal))
+            {
+                _result.NewMode = line[9..];
+                return true;
+            }
+
+            if (line.StartsWith("deleted file mode ", StringComparison.Ordinal))
+            {
+                _result.OldMode = line[18..];
+                return true;
+            }
+
+            if (line.StartsWith("new file mode ", StringComparison.Ordinal))
+            {
+                _result.NewMode = line[14..];
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// LFSポインタファイルの差分行を解析する。
+        /// </summary>
+        /// <param name="ch">行頭の1文字</param>
+        /// <param name="content">行頭を除いた内容</param>
+        /// <returns>LFS関連行として処理した場合はtrue</returns>
+        private bool ParseLFSChange(char ch, string content)
+        {
+            if (_result.IsLFS)
+            {
+                if (ch == '-')
+                {
+                    if (content.StartsWith(LFS_OID_PREFIX, StringComparison.Ordinal))
+                        _result.LFSDiff.Old.Oid = content[11..];
+                    else if (content.StartsWith(LFS_SIZE_PREFIX, StringComparison.Ordinal))
+                        _result.LFSDiff.Old.Size = long.Parse(content.AsSpan(5));
+                }
+                else if (ch == '+')
+                {
+                    if (content.StartsWith(LFS_OID_PREFIX, StringComparison.Ordinal))
+                        _result.LFSDiff.New.Oid = content[11..];
+                    else if (content.StartsWith(LFS_SIZE_PREFIX, StringComparison.Ordinal))
+                        _result.LFSDiff.New.Size = long.Parse(content.AsSpan(5));
+                }
+                else if (ch == ' ')
+                {
+                    if (content.StartsWith(LFS_SIZE_PREFIX, StringComparison.Ordinal))
+                        _result.LFSDiff.New.Size = _result.LFSDiff.Old.Size = long.Parse(content.AsSpan(5));
+                }
+                return true;
+            }
+
+            // LFSポインタの判定はチャンク先頭行（ハンクヘッダー直後）のみ行う
+            if (_result.TextDiff.Lines.Count != 1)
+                return false;
+
+            if ((_oldLine == 1 && _newLine == 1 && ch == ' ') ||
+                (_oldLine == 1 && _newLine == 0 && ch == '-') ||
+                (_oldLine == 0 && _newLine == 1 && ch == '+'))
+            {
+                if (content.StartsWith(LFS_SPECIFIER, StringComparison.Ordinal))
+                {
+                    _result.IsLFS = true;
+                    _result.LFSDiff = new Models.LFSDiff();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// バッファに蓄積された削除行と追加行のインラインハイライトを計算し、結果に追加する。
+        /// 削除行と追加行が同数の場合、対応する行同士でインライン差分を検出する。
+        /// </summary>
+        private void FlushInlineHighlights()
+        {
+            if (_deleted.Count > 0)
+            {
+                if (_added.Count == _deleted.Count)
+                {
+                    for (int i = _added.Count - 1; i >= 0; i--)
+                    {
+                        var left = _deleted[i];
+                        var right = _added[i];
+
+                        if (left.Content.Length > MaxLineLengthForInlineDiff || right.Content.Length > MaxLineLengthForInlineDiff)
+                            continue;
+
+                        var chunks = Models.TextInlineChange.Compare(left.Content, right.Content);
+                        if (chunks.Count > MaxInlineDiffChunks)
+                            continue;
+
+                        foreach (var chunk in chunks)
+                        {
+                            if (chunk.DeletedCount > 0)
+                                left.Highlights.Add(new Models.TextRange(chunk.DeletedStart, chunk.DeletedCount));
+
+                            if (chunk.AddedCount > 0)
+                                right.Highlights.Add(new Models.TextRange(chunk.AddedStart, chunk.AddedCount));
+                        }
+                    }
+                }
+
+                _result.TextDiff.Lines.AddRange(_deleted);
+                _deleted.Clear();
+            }
+
+            if (_added.Count > 0)
+            {
+                _result.TextDiff.Lines.AddRange(_added);
+                _added.Clear();
+            }
+        }
+
+        /// <summary>解析結果の蓄積先</summary>
         private readonly Models.DiffResult _result = new Models.DiffResult() { TextDiff = new Models.TextDiff() };
+        /// <summary>削除行のバッファ（インラインハイライト用）</summary>
         private readonly List<Models.TextDiffLine> _deleted = [];
+        /// <summary>追加行のバッファ（インラインハイライト用）</summary>
         private readonly List<Models.TextDiffLine> _added = [];
+        /// <summary>直前に処理した差分行</summary>
         private Models.TextDiffLine _last = null;
+        /// <summary>旧ファイルの現在の行番号</summary>
         private int _oldLine = 0;
+        /// <summary>新ファイルの現在の行番号</summary>
         private int _newLine = 0;
+        /// <summary>チャンク（@@〜）内を解析中かどうか</summary>
+        private bool _isInChunk = false;
     }
 
+    /// <summary>インラインハイライト計算対象の最大行長</summary>
     private const int MaxLineLengthForInlineDiff = 1024;
+    /// <summary>インラインハイライトとして扱う最大チャンク数</summary>
     private const int MaxInlineDiffChunks = 4;
-
-    private readonly Models.DiffResult _result = new Models.DiffResult();
-    private readonly List<Models.TextDiffLine> _deleted = [];
-    private readonly List<Models.TextDiffLine> _added = [];
 }
