@@ -47,9 +47,15 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
                     onUpdate?.Invoke(string.Empty);
                     onUpdate?.Invoke("# Assistant");
                     if (completion.Content.Count > 0)
-                        onUpdate?.Invoke(completion.Content[0].Text);
+                    {
+                        // upstream 39fdc1af: 応答全体を囲むコードフェンスを除去してから通知する
+                        var text = Agent.TrimCodeFence(completion.Content[0].Text);
+                        onUpdate?.Invoke(text.Length > 0 ? text : "[No content was generated.]");
+                    }
                     else
+                    {
                         onUpdate?.Invoke("[No content was generated.]");
+                    }
 
                     onUpdate?.Invoke(string.Empty);
                     onUpdate?.Invoke("# Token Usage");

@@ -45,4 +45,27 @@ public class Agent(Service service)
 
         return sb.ToString();
     }
+
+    /// <summary>
+    /// AI 応答全体を囲む Markdown コードフェンス (```) を取り除く（upstream 39fdc1af）。
+    /// 一部のモデルはコミットメッセージ全体をコードブロックとして返すため、
+    /// そのままコミットメッセージ欄へ貼り付けられる形に整形する。
+    /// 除去した結果が空になった場合は空文字列を返す（呼び出し側でフォールバック表示する）。
+    /// </summary>
+    internal static string TrimCodeFence(string rawText)
+    {
+        var text = rawText.ReplaceLineEndings("\n").Trim();
+        var start = 0;
+        var len = text.Length;
+        if (text.StartsWith("```\n", StringComparison.Ordinal))
+        {
+            start += 4;
+            len -= 4;
+        }
+
+        if (text.EndsWith("\n```", StringComparison.Ordinal))
+            len -= 4;
+
+        return len > 0 ? text.Substring(start, len) : string.Empty;
+    }
 }

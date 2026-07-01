@@ -112,8 +112,13 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
                 onUpdate?.Invoke("# Assistant");
                 foreach (var item in content.EnumerateArray())
                 {
-                    if (item.GetProperty("type").GetString() == "text")
-                        onUpdate?.Invoke(item.GetProperty("text").GetString());
+                    if (item.GetProperty("type").GetString() != "text")
+                        continue;
+
+                    // upstream 39fdc1af 相当: Anthropic 経路でも応答を囲むコードフェンスを除去する
+                    var text = Agent.TrimCodeFence(item.GetProperty("text").GetString() ?? string.Empty);
+                    if (text.Length > 0)
+                        onUpdate?.Invoke(text);
                 }
 
                 if (stopReason == "max_tokens")
