@@ -1107,6 +1107,9 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
             return;
 
         var view = TextArea.TextView;
+        if (!view.VisualLinesValid)
+            return;
+
         var selection = TextArea.Selection;
         if (!selection.IsEmpty)
         {
@@ -1320,6 +1323,9 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
             return;
 
         var view = TextArea.TextView;
+        if (!view.VisualLinesValid)
+            return;
+
         var lines = IsOld ? diff.Old : diff.New;
         var selection = TextArea.Selection;
         if (!selection.IsEmpty)

@@ -537,7 +537,7 @@ public class MergeConflictTextPresenter : TextEditor
         if (DataContext is not ViewModels.MergeConflictEditor vm)
             return;
 
-        if (sender is not TextView view)
+        if (sender is not TextView { VisualLinesValid: true } view)
             return;
 
         UpdateSelectedChunkPosition(vm, e.GetPosition(view).Y + view.VerticalOffset);
@@ -551,7 +551,7 @@ public class MergeConflictTextPresenter : TextEditor
         if (DataContext is not ViewModels.MergeConflictEditor vm)
             return;
 
-        if (sender is not TextView view)
+        if (sender is not TextView { VisualLinesValid: true } view)
             return;
 
         var y = e.GetPosition(view).Y + view.VerticalOffset;
