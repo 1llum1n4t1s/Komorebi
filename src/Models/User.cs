@@ -38,12 +38,18 @@ public class User
         }
 
         // 「±」区切りで名前とメールアドレスを分離
+        // 全gitコマンドの出力が「$NAME±$EMAIL」形式（メールに山括弧なし）に統一されたため、
+        // 山括弧の除去は不要（taggeremail は :trim 指定で取得する）
         var parts = data.Split('±', 2);
         if (parts.Length < 2)
-            parts = [string.Empty, data];
-
-        Name = parts[0];
-        Email = parts[1].TrimStart('<').TrimEnd('>');
+        {
+            Email = data;
+        }
+        else
+        {
+            Name = parts[0];
+            Email = parts[1];
+        }
         _hash = data.GetHashCode();
     }
 

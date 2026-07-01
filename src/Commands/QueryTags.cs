@@ -22,7 +22,7 @@ public class QueryTags : Command
 
         Context = repo;
         WorkingDirectory = repo;
-        Args = $"tag -l --format=\"{_boundary}%(refname)%00%(objecttype)%00%(objectname)%00%(*objectname)%00%(taggername)±%(taggeremail)%00%(creatordate:unix)%00%(contents:subject)%0a%0a%(contents:body)\"";
+        Args = $"tag -l --format=\"{_boundary}%(refname)%00%(objecttype)%00%(objectname)%00%(*objectname)%00%(taggername)±%(taggeremail:trim)%00%(creatordate:unix)%00%(contents:subject)%0a%0a%(contents:body)\"";
     }
 
     /// <summary>
