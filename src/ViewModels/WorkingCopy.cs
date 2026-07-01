@@ -940,7 +940,9 @@ public class WorkingCopy : ObservableObject, IDisposable
         {
             // amend時: HEADの親との差分を取得
             var head = new Commands.QuerySingleCommit(_repo.FullPath, "HEAD").GetResult();
-            return new Commands.QueryStagedChangesWithAmend(_repo.FullPath, head.Parents.Count == 0 ? Models.Commit.EmptyTreeSHA1 : $"{head.SHA}^").GetResult();
+            var changes = new Commands.QueryStagedChangesWithAmend(_repo.FullPath, head.Parents.Count == 0 ? Models.Commit.EmptyTreeSHA1 : $"{head.SHA}^").GetResult();
+            changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
+            return changes;
         }
 
         List<Models.Change> rs = [];
