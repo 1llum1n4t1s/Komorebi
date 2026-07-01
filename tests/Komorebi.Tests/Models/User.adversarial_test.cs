@@ -98,14 +98,15 @@ namespace Komorebi.Tests.Models
 
         /// <summary>
         /// @adversarial @category boundary @severity medium
-        /// Emailに山括弧が多重にネストされている場合のトリム動作
+        /// Emailに山括弧が含まれていてもそのまま保持されること
+        /// （全gitコマンドの出力が山括弧なしの $NAME±$EMAIL 形式に統一されたため、
+        /// upstream ff3f81b2 以降 User 側での山括弧除去は行わない）
         /// </summary>
         [Fact]
-        public void Constructor_DoubleAngleBrackets_TrimsOnlyOutermost()
+        public void Constructor_AngleBrackets_KeptVerbatim()
         {
             var user = new User("Alice±<<alice@example.com>>");
-            // TrimStart/TrimEnd は複数文字を削除する
-            Assert.Equal("alice@example.com", user.Email);
+            Assert.Equal("<<alice@example.com>>", user.Email);
         }
 
         // ================================================================
@@ -153,7 +154,7 @@ namespace Komorebi.Tests.Models
 
         /// <summary>
         /// @adversarial @category type @severity medium
-        /// Equals で User 以外のオブジェクトと比較して false を返すこと
+        /// Equals（参照等価）で User 以外のオブジェクトと比較して false を返すこと
         /// </summary>
         [Fact]
         public void Equals_NonUserObject_ReturnsFalse()
@@ -166,13 +167,13 @@ namespace Komorebi.Tests.Models
 
         /// <summary>
         /// @adversarial @category type @severity medium
-        /// GetHashCode がデフォルトコンストラクタ（User.Invalid）で 0 を返すこと
+        /// User.Invalid シングルトンが空の Name/Email を持つこと
         /// </summary>
         [Fact]
-        public void GetHashCode_DefaultConstructor_ReturnsZero()
+        public void Invalid_Singleton_HasEmptyNameAndEmail()
         {
-            var user = new User();
-            Assert.Equal(0, user.GetHashCode());
+            Assert.Equal(string.Empty, User.Invalid.Name);
+            Assert.Equal(string.Empty, User.Invalid.Email);
         }
 
         // ================================================================
@@ -196,23 +197,23 @@ namespace Komorebi.Tests.Models
 
         /// <summary>
         /// @adversarial @category state @severity high
-        /// Equals は Name/Email で判定するが、HashCode は元のdata文字列で計算される。
-        /// プロパティ変更後にEquals=trueだがHashCode不一致が起こりうることを確認。
+        /// upstream 39668075 以降は参照等価: 同一内容でも別インスタンスは等しくない。
+        /// 同一インスタンス保証は FindOrAdd キャッシュが担う。
         /// </summary>
         [Fact]
-        public void EqualsHashCode_PropertyMutation_InconsistencyDetected()
+        public void Equals_ReferenceSemantics_DifferentInstancesNotEqual()
         {
             var user1 = new User("Alice±alice@test.com");
-            var user2 = new User("Bob±bob@test.com");
+            var user2 = new User("Alice±alice@test.com");
 
-            // プロパティを変更してEquals=trueにする
-            user2.Name = "Alice";
-            user2.Email = "alice@test.com";
+            // 内容が同じでも別インスタンスは等しくない（参照等価）
+            Assert.False(user1.Equals(user2));
 
-            // Equals は true だが HashCode は異なる（不整合！）
-            Assert.True(user1.Equals(user2));
-            // この不整合はDictionaryのキーとして使うとバグになる
-            Assert.NotEqual(user1.GetHashCode(), user2.GetHashCode());
+            // 同じキーの FindOrAdd は同一インスタンスを返すため等価
+            var key = $"RefTest±ref_{System.Guid.NewGuid()}@test.com";
+            var cached1 = User.FindOrAdd(key);
+            var cached2 = User.FindOrAdd(key);
+            Assert.Same(cached1, cached2);
         }
     }
 }

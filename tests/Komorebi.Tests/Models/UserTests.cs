@@ -18,12 +18,14 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void Constructor_TrimsAngleBracketsFromEmail()
+        public void Constructor_KeepsAngleBracketsInEmail()
         {
+            // 全gitコマンドの出力が山括弧なしの $NAME±$EMAIL 形式に統一されたため
+            // (upstream ff3f81b2)、User 側での山括弧除去は行わない
             var user = new User("Bob±<bob@example.com>");
 
             Assert.Equal("Bob", user.Name);
-            Assert.Equal("bob@example.com", user.Email);
+            Assert.Equal("<bob@example.com>", user.Email);
         }
 
         [Fact]
@@ -74,16 +76,18 @@ namespace Komorebi.Tests.Models
         }
 
         // -----------------------------------------------------------
-        // Equals / GetHashCode
+        // Equals / GetHashCode（参照等価。upstream 39668075 以降、
+        // 同一インスタンス保証は FindOrAdd キャッシュが担う）
         // -----------------------------------------------------------
 
         [Fact]
-        public void Equals_SameNameAndEmail_ReturnsTrue()
+        public void Equals_SameContentDifferentInstances_ReturnsFalse()
         {
             var user1 = new User("Alice±alice@example.com");
             var user2 = new User("Alice±alice@example.com");
 
-            Assert.True(user1.Equals(user2));
+            // 参照等価のため、内容が同じでも別インスタンスは等しくない
+            Assert.False(user1.Equals(user2));
         }
 
         [Fact]
@@ -119,12 +123,12 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void GetHashCode_SameInput_ReturnsSameHash()
+        public void GetHashCode_SameInstance_IsStable()
         {
-            var user1 = new User("Alice±alice@example.com");
-            var user2 = new User("Alice±alice@example.com");
+            var user = new User("Alice±alice@example.com");
 
-            Assert.Equal(user1.GetHashCode(), user2.GetHashCode());
+            // 同一インスタンスのハッシュコードは安定している
+            Assert.Equal(user.GetHashCode(), user.GetHashCode());
         }
 
         // -----------------------------------------------------------

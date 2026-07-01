@@ -397,7 +397,7 @@ public class CommitAdversarialV2Tests
     [Fact]
     public void IsCommitterVisible_SameAuthorAndCommitter_ReturnsFalse()
     {
-        var user = new User { Name = "Test", Email = "test@test.com" };
+        var user = new User("Test±test@test.com");
         var commit = new Commit
         {
             Author = user,
@@ -416,7 +416,7 @@ public class CommitAdversarialV2Tests
     [Fact]
     public void IsCommitterVisible_SameUserDifferentTime_ReturnsTrue()
     {
-        var user = new User { Name = "Test", Email = "test@test.com" };
+        var user = new User("Test±test@test.com");
         var commit = new Commit
         {
             Author = user,
