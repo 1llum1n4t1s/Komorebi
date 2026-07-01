@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,6 +12,14 @@ namespace Komorebi.ViewModels;
 public class AddToIgnore : Popup
 {
     /// <summary>
+    /// 選択可能な保存先ファイルの一覧。
+    /// </summary>
+    public List<Models.GitIgnoreFile> StorageFiles
+    {
+        get;
+    }
+
+    /// <summary>
     /// 追加する無視パターン。必須入力。
     /// </summary>
     [Required(ErrorMessage = "Ignore pattern is required!")]
@@ -22,12 +31,17 @@ public class AddToIgnore : Popup
 
     /// <summary>
     /// パターンの保存先ファイル（.gitignore等）。必須選択。
+    /// 選択に応じてパターンを保存先基準の相対形式に切り替える。
     /// </summary>
     [Required(ErrorMessage = "Storage file is required!!!")]
-    public Models.GitIgnoreFile StorageFile
+    public Models.GitIgnoreFile SelectedStorageFile
     {
-        get;
-        set;
+        get => _selectedStorageFile;
+        set
+        {
+            if (SetProperty(ref _selectedStorageFile, value, true))
+                Pattern = value.Pattern;
+        }
     }
 
     /// <summary>
@@ -39,8 +53,10 @@ public class AddToIgnore : Popup
     {
         _repo = repo;
         _pattern = pattern;
-        // デフォルトの保存先ファイルを設定する
-        StorageFile = Models.GitIgnoreFile.Supported[0];
+
+        // パターンに応じた保存先候補を構築し、先頭をデフォルト選択にする
+        StorageFiles = Models.GitIgnoreFile.GetSupported(repo.FullPath, repo.GitDir, pattern);
+        SelectedStorageFile = StorageFiles[0];
     }
 
     /// <summary>
@@ -52,7 +68,7 @@ public class AddToIgnore : Popup
         ProgressDescription = App.Text("Progress.AddingIgnoredFiles");
 
         // 保存先ファイルのフルパスを取得する
-        var file = StorageFile.GetFullPath(_repo.FullPath, _repo.GitDir);
+        var file = _selectedStorageFile.FullPath;
 
         // LockWatcher はファイル書き込み中だけ保持する。MarkWorkingCopyDirtyManually を
         // ロック保持中に呼ぶと FSW イベントの重複処理で UI 更新が消失する（Discard.cs パターン準拠）。
@@ -83,4 +99,6 @@ public class AddToIgnore : Popup
     private readonly Repository _repo;
     /// <summary>無視パターン文字列</summary>
     private string _pattern;
+    /// <summary>選択中の保存先ファイル</summary>
+    private Models.GitIgnoreFile _selectedStorageFile;
 }
