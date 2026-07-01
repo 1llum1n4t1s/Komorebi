@@ -169,8 +169,8 @@ public class DiffContext : ObservableObject
     {
         if (Content is TextDiffContext ctx)
         {
-            if ((ShowEntireFile && _info.UnifiedLines != _entireFileLine) ||
-                (!ShowEntireFile && _info.UnifiedLines == _entireFileLine) ||
+            if ((ShowEntireFile && _info.UnifiedLines != _entireFileLines) ||
+                (!ShowEntireFile && _info.UnifiedLines == _entireFileLines) ||
                 (IgnoreWhitespace != _info.IgnoreWhitespace))
             {
                 LoadContent();
@@ -179,6 +179,12 @@ public class DiffContext : ObservableObject
 
             if (ctx.IsSideBySide() != UseSideBySide)
                 Content = ctx.SwitchMode();
+        }
+        else if (Content is Models.NoOrEOLChange)
+        {
+            // 「変更なし」表示中に空白無視設定が切り替わった場合も再読み込みする
+            if (IgnoreWhitespace != _info.IgnoreWhitespace)
+                LoadContent();
         }
     }
 
@@ -198,7 +204,7 @@ public class DiffContext : ObservableObject
 
         Task.Run(async () =>
         {
-            var numLines = Preferences.Instance.UseFullTextDiff ? _entireFileLine : _unifiedLines;
+            var numLines = Preferences.Instance.UseFullTextDiff ? _entireFileLines : _unifiedLines;
             var ignoreWhitespace = Preferences.Instance.IgnoreWhitespaceChangesInDiff;
 
             var latest = await new Commands.Diff(_repo, _option, numLines, ignoreWhitespace)
@@ -400,7 +406,7 @@ public class DiffContext : ObservableObject
         }
     }
 
-    private readonly int _entireFileLine = 999999999;
+    private readonly int _entireFileLines = 999999999;
     private readonly string _repo;
     private readonly Models.DiffOption _option = null;
     private string _fileModeChange = string.Empty;
