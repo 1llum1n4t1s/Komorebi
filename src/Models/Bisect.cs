@@ -14,9 +14,14 @@ public enum BisectState
     None = 0,
 
     /// <summary>
-    /// good/bad範囲の指定待ち状態。
+    /// 最初のbadコミットの指定待ち状態。
     /// </summary>
-    WaitingForRange,
+    WaitingForFirstBad,
+
+    /// <summary>
+    /// 最初のgoodコミットの指定待ち状態。
+    /// </summary>
+    WaitingForFirstGood,
 
     /// <summary>
     /// 二分探索実行中の状態。

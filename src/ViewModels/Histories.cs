@@ -254,10 +254,13 @@ public class Histories : ObservableObject, IDisposable
 
         Bisect = info;
 
-        if (info.Bads.Count == 0 || info.Goods.Count == 0)
-            return Models.BisectState.WaitingForRange;
-        else
-            return Models.BisectState.Detecting;
+        if (info.Bads.Count == 0)
+            return Models.BisectState.WaitingForFirstBad;
+
+        if (info.Goods.Count == 0)
+            return Models.BisectState.WaitingForFirstGood;
+
+        return Models.BisectState.Detecting;
     }
 
     /// <summary>

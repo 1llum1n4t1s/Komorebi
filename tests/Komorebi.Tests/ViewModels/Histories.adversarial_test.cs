@@ -347,10 +347,10 @@ namespace Komorebi.Tests.ViewModels
 
         /// <summary>
         /// BISECT_START ファイルは存在するが refs/bisect ディレクトリがない場合、
-        /// WaitingForRange 状態を返すこと。
+        /// WaitingForFirstBad 状態を返すこと。
         /// </summary>
         [Fact]
-        public void UpdateBisectInfo_BisectStartExistsButNoRefsDir_ReturnsWaitingForRange()
+        public void UpdateBisectInfo_BisectStartExistsButNoRefsDir_ReturnsWaitingForFirstBad()
         {
             // BISECT_START ファイルを作成
             File.WriteAllText(Path.Combine(_gitDir, "BISECT_START"), "abc123\n");
@@ -358,7 +358,7 @@ namespace Komorebi.Tests.ViewModels
             var histories = new Histories(_repo);
             var state = histories.UpdateBisectInfo();
 
-            Assert.Equal(BisectState.WaitingForRange, state);
+            Assert.Equal(BisectState.WaitingForFirstBad, state);
             Assert.NotNull(histories.Bisect);
             Assert.Empty(histories.Bisect.Bads);
             Assert.Empty(histories.Bisect.Goods);
@@ -400,10 +400,10 @@ namespace Komorebi.Tests.ViewModels
         // ================================================================
 
         /// <summary>
-        /// refs/bisect に bad のみ存在する場合、WaitingForRange を返すこと。
+        /// refs/bisect に bad のみ存在する場合、WaitingForFirstGood を返すこと。
         /// </summary>
         [Fact]
-        public void UpdateBisectInfo_OnlyBad_ReturnsWaitingForRange()
+        public void UpdateBisectInfo_OnlyBad_ReturnsWaitingForFirstGood()
         {
             File.WriteAllText(Path.Combine(_gitDir, "BISECT_START"), "abc123\n");
             var bisectDir = Path.Combine(_gitDir, "refs", "bisect");
@@ -413,7 +413,7 @@ namespace Komorebi.Tests.ViewModels
             var histories = new Histories(_repo);
             var state = histories.UpdateBisectInfo();
 
-            Assert.Equal(BisectState.WaitingForRange, state);
+            Assert.Equal(BisectState.WaitingForFirstGood, state);
         }
 
         // ================================================================
