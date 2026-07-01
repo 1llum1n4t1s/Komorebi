@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Komorebi
 Comment=Open-source & Free Git GUI Client
-Exec=komorebi.sh
+Exec=komorebi.sh %u
 Icon=io.github.1llum1n4t1s.komorebi
 Terminal=false
 Type=Application
