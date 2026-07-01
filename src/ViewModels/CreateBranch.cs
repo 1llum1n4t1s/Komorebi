@@ -152,7 +152,10 @@ public class CreateBranch : Popup
             Name = branch.Name;
 
         BasedOn = branch;
-        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        // 設定でデフォルトを Stash & Reapply にできる (upstream f7c61cbb)
+        DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
+            Models.DealWithLocalChanges.StashAndReapply :
+            Models.DealWithLocalChanges.DoNothing;
         UpdateOverrideTip();
     }
 
@@ -165,7 +168,10 @@ public class CreateBranch : Popup
         _baseOnRevision = commit.SHA;
 
         BasedOn = commit;
-        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        // 設定でデフォルトを Stash & Reapply にできる (upstream f7c61cbb)
+        DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
+            Models.DealWithLocalChanges.StashAndReapply :
+            Models.DealWithLocalChanges.DoNothing;
         UpdateOverrideTip();
     }
 
@@ -178,7 +184,10 @@ public class CreateBranch : Popup
         _baseOnRevision = tag.SHA;
 
         BasedOn = tag;
-        DealWithLocalChanges = Models.DealWithLocalChanges.DoNothing;
+        // 設定でデフォルトを Stash & Reapply にできる (upstream f7c61cbb)
+        DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
+            Models.DealWithLocalChanges.StashAndReapply :
+            Models.DealWithLocalChanges.DoNothing;
         UpdateOverrideTip();
     }
 
