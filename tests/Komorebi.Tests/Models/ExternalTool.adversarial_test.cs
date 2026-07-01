@@ -82,7 +82,7 @@ public class ExternalToolAdversarialTests
     {
         // コンストラクタ内の AssetLoader.Open は例外を catch して無視する
         // テスト環境では Avalonia リソースが無いため IconImage は null になる
-        return new ExternalTool("TestTool", "nonexistent_icon", execFile);
+        return new ExternalTool("TestTool", "nonexistent_icon", execFile, null, true);
     }
 
     #endregion

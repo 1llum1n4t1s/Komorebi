@@ -477,7 +477,8 @@ internal class Windows : OS.IBackend
                 {
                     var exec = instance.ProductPath;
                     var icon = instance.IsPrerelease ? "vs-preview" : "vs";
-                    finder.TryAdd(instance.DisplayName, icon, () => exec, GenerateVSProjectLaunchOptions);
+                    // Visual Studio はソリューションファイル経由で開くため「フォルダとして開く」を無効にする（upstream e761ff91）
+                    finder.TryAdd(instance.DisplayName, icon, () => exec, GenerateVSProjectLaunchOptions, false);
                 }
             }
         }

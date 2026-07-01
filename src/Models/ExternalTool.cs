@@ -43,6 +43,8 @@ public class ExternalTool
     public string ExecFile { get; }
     /// <summary>ツールのアイコン画像</summary>
     public Bitmap IconImage { get; }
+    /// <summary>リポジトリをフォルダとして開く操作をサポートするかどうか</summary>
+    public bool SupportOpenAsFolder { get; }
 
     /// <summary>
     /// 外部ツールのコンストラクタ
@@ -50,11 +52,13 @@ public class ExternalTool
     /// <param name="name">表示名</param>
     /// <param name="icon">アイコンリソース名</param>
     /// <param name="execFile">実行ファイルパス</param>
-    /// <param name="optionsGenerator">起動オプション生成関数（省略可）</param>
-    public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator = null)
+    /// <param name="optionsGenerator">起動オプション生成関数</param>
+    /// <param name="supportOpenAsFolder">フォルダとして開く操作をサポートするかどうか</param>
+    public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator, bool supportOpenAsFolder)
     {
         Name = name;
         ExecFile = execFile;
+        SupportOpenAsFolder = supportOpenAsFolder;
 
         _optionsGenerator = optionsGenerator;
 
@@ -218,20 +222,21 @@ public class ExternalToolsFinder
     /// <param name="icon">アイコンリソース名</param>
     /// <param name="finder">実行ファイルパスの検索関数</param>
     /// <param name="optionsGenerator">起動オプション生成関数</param>
-    public void TryAdd(string name, string icon, Func<string> finder, Func<string, List<ExternalTool.LaunchOption>> optionsGenerator = null)
+    /// <param name="supportOpenAsFolder">フォルダとして開く操作をサポートするかどうか</param>
+    public void TryAdd(string name, string icon, Func<string> finder, Func<string, List<ExternalTool.LaunchOption>> optionsGenerator = null, bool supportOpenAsFolder = true)
     {
         if (_customization.Excludes.Contains(name))
             return;
 
         if (_customization.Tools.TryGetValue(name, out var customPath) && File.Exists(customPath))
         {
-            Tools.Add(new ExternalTool(name, icon, customPath, optionsGenerator));
+            Tools.Add(new ExternalTool(name, icon, customPath, optionsGenerator, supportOpenAsFolder));
         }
         else
         {
             var path = finder();
             if (!string.IsNullOrEmpty(path) && File.Exists(path))
-                Tools.Add(new ExternalTool(name, icon, path, optionsGenerator));
+                Tools.Add(new ExternalTool(name, icon, path, optionsGenerator, supportOpenAsFolder));
         }
     }
 
@@ -294,7 +299,9 @@ public class ExternalToolsFinder
                     Tools.Add(new ExternalTool(
                         $"{tool.DisplayName} {tool.DisplayVersion}",
                         supportedIcons.Contains(tool.ProductCode) ? $"JetBrains/{tool.ProductCode}" : "JetBrains/JB",
-                        Path.Combine(tool.InstallLocation, tool.LaunchCommand)));
+                        Path.Combine(tool.InstallLocation, tool.LaunchCommand),
+                        null,
+                        true));
                 }
             }
             catch

@@ -1503,8 +1503,26 @@ public partial class Repository : UserControl
                 item.Header = App.Text("Repository.OpenIn", dupTool.Name);
                 item.Icon = new Image { Width = 16, Height = 16, Source = dupTool.IconImage };
 
+                // 起動候補数（フォルダとして開く + 起動オプション）に応じてメニュー構造を切り替える（upstream e761ff91）
                 var options = dupTool.MakeLaunchOptions(fullpath);
-                if (options is { Count: > 0 })
+                var count = (dupTool.SupportOpenAsFolder ? 1 : 0) + (options?.Count ?? 0);
+                if (count == 0)
+                    continue;
+
+                if (count == 1)
+                {
+                    // 候補が1つだけならサブメニューを作らず直接起動する
+                    var args = fullpath.Quoted();
+                    if (options is { Count: 1 })
+                        args = options[0].Args;
+
+                    item.Click += (_, e) =>
+                    {
+                        dupTool.Launch(args);
+                        e.Handled = true;
+                    };
+                }
+                else
                 {
                     foreach (var opt in options)
                     {
@@ -1518,23 +1536,18 @@ public partial class Repository : UserControl
                         item.Items.Add(subItem);
                     }
 
-                    var openAsFolder = new MenuItem();
-                    openAsFolder.Header = App.Text("Repository.OpenAsFolder");
-                    openAsFolder.Click += (_, e) =>
+                    if (dupTool.SupportOpenAsFolder)
                     {
-                        dupTool.Launch(fullpath.Quoted());
-                        e.Handled = true;
-                    };
-                    item.Items.Add(new MenuItem() { Header = "-" });
-                    item.Items.Add(openAsFolder);
-                }
-                else
-                {
-                    item.Click += (_, e) =>
-                    {
-                        dupTool.Launch(fullpath.Quoted());
-                        e.Handled = true;
-                    };
+                        var openAsFolder = new MenuItem();
+                        openAsFolder.Header = App.Text("Repository.OpenAsFolder");
+                        openAsFolder.Click += (_, e) =>
+                        {
+                            dupTool.Launch(fullpath.Quoted());
+                            e.Handled = true;
+                        };
+                        item.Items.Add(new MenuItem() { Header = "-" });
+                        item.Items.Add(openAsFolder);
+                    }
                 }
 
                 menu.Items.Add(item);
