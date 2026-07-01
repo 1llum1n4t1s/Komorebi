@@ -49,6 +49,7 @@ build/*.deb
 build/*.rpm
 build/*.AppImage
 Komorebi.app/
+*.lscache
 build.command
 src/Properties/launchSettings.json
 __pycache__/
