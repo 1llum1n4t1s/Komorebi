@@ -291,7 +291,7 @@ public class Clone : Popup
             if (submodules.Count > 0)
                 await new Commands.Submodule(path)
                     .Use(log)
-                    .UpdateAsync(submodules, true);
+                    .UpdateAsync(submodules, true, true, false);
         }
 
         log.Complete();

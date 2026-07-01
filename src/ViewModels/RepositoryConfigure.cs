@@ -191,6 +191,13 @@ public class RepositoryConfigure : ObservableObject
         set => _repo.Settings.AskBeforeAutoUpdatingSubmodules = value;
     }
 
+    /// <summary>サブモジュール自動更新時に --recursive を付与するかどうか。</summary>
+    public bool EnableRecursiveWhenAutoUpdatingSubmodules
+    {
+        get => _repo.Settings.EnableRecursiveWhenAutoUpdatingSubmodules;
+        set => _repo.Settings.EnableRecursiveWhenAutoUpdatingSubmodules = value;
+    }
+
     /// <summary>コミットメッセージテンプレートの一覧。</summary>
     public AvaloniaList<Models.CommitTemplate> CommitTemplates
     {

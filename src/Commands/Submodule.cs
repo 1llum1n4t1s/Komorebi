@@ -81,22 +81,26 @@ public class Submodule : Command
 
     /// <summary>
     /// サブモジュールを更新する。
-    /// git submodule update --recursive を実行する。
+    /// git submodule update を実行する。
     /// </summary>
     /// <param name="modules">更新対象のサブモジュールパスのリスト。空の場合は全て更新。</param>
     /// <param name="init">未初期化のサブモジュールも初期化するかどうか。</param>
+    /// <param name="recursive">ネストしたサブモジュールも再帰的に更新するかどうか。</param>
     /// <param name="useRemote">リモートの最新コミットを使用するかどうか。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
-    public async Task<bool> UpdateAsync(List<string> modules, bool init = false, bool useRemote = false)
+    public async Task<bool> UpdateAsync(List<string> modules, bool init, bool recursive, bool useRemote)
     {
         var builder = new StringBuilder();
 
-        // git submodule update --recursive: サブモジュールを再帰的に更新する
-        builder.Append("submodule update --recursive");
+        builder.Append("submodule update");
 
         // --init: 未初期化のサブモジュールも初期化する
         if (init)
             builder.Append(" --init");
+
+        // --recursive: ネストしたサブモジュールも再帰的に更新する
+        if (recursive)
+            builder.Append(" --recursive");
 
         // --remote: リモートの最新コミットにチェックアウトする
         if (useRemote)

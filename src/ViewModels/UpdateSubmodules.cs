@@ -62,6 +62,15 @@ public class UpdateSubmodules : Popup
     } = true;
 
     /// <summary>
+    /// ネストしたサブモジュールも再帰的に更新するかどうか（--recursive）。
+    /// </summary>
+    public bool EnableRecursive
+    {
+        get;
+        set;
+    } = true;
+
+    /// <summary>
     /// リモート追跡を有効にするかどうか（--remote）。
     /// </summary>
     public bool EnableRemote
@@ -121,7 +130,7 @@ public class UpdateSubmodules : Popup
 
         await new Commands.Submodule(_repo.FullPath)
             .Use(log)
-            .UpdateAsync(targets, EnableInit, EnableRemote);
+            .UpdateAsync(targets, EnableInit, EnableRecursive, EnableRemote);
 
         log.Complete();
         _repo.MarkSubmodulesDirtyManually();

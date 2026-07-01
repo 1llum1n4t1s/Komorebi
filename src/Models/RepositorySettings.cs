@@ -37,6 +37,13 @@ public class RepositorySettings
         set;
     } = string.Empty;
 
+    /// <summary>サブモジュール自動更新時に --recursive を付与するかどうか</summary>
+    public bool EnableRecursiveWhenAutoUpdatingSubmodules
+    {
+        get;
+        set;
+    } = true;
+
     /// <summary>サブモジュール自動更新前に確認するかどうか</summary>
     public bool AskBeforeAutoUpdatingSubmodules
     {

@@ -1886,7 +1886,7 @@ public class Repository : ObservableObject, Models.IRepository
 
             await new Commands.Submodule(FullPath)
                 .Use(log)
-                .UpdateAsync(submodules);
+                .UpdateAsync(submodules, false, _settings.EnableRecursiveWhenAutoUpdatingSubmodules, false);
         } while (false);
     }
 
