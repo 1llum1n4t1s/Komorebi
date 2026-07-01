@@ -592,6 +592,21 @@ public partial class WorkingCopy : UserControl
                             };
                             addToIgnore.Items.Add(byExtensionInSameFolder);
                         }
+
+                        // 同一フォルダ内の未追跡ファイルをすべて無視するメニュー（upstream 7e710d7c）
+                        if (!isRooted)
+                        {
+                            var untrackedInSameFolder = new MenuItem();
+                            untrackedInSameFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.UntrackedInSameFolder");
+                            untrackedInSameFolder.Click += (_, e) =>
+                            {
+                                var dir = Path.GetDirectoryName(change.Path)!.Replace('\\', '/').TrimEnd('/');
+                                if (repo.CanCreatePopup())
+                                    repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{dir}/"));
+                                e.Handled = true;
+                            };
+                            addToIgnore.Items.Add(untrackedInSameFolder);
+                        }
                     }
 
                     menu.Items.Add(addToIgnore);
