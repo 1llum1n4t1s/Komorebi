@@ -85,12 +85,16 @@
 
                 <ListBox.ItemTemplate>
                   <DataTemplate DataType="x:String">
-                    <StackPanel Background="Transparent" Orientation="Vertical" Margin="8,4" DoubleTapped="OnSearchSuggestionDoubleTapped">
-                      <StackPanel Orientation="Horizontal">
+                    <StackPanel Background="Transparent" Orientation="Vertical" Margin="8,4" Tapped="OnSearchSuggestionTapped">
+                      <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
                         <Path Width="12" Height="12" Data="{StaticResource Icons.File}"/>
                         <TextBlock Margin="6,0,0,0" Text="{Binding Converter={x:Static c:PathConverters.PureFileName}}"/>
                       </StackPanel>
-                      <TextBlock FontSize="12" Margin="18,2,0,0" Foreground="{DynamicResource Brush.FG2}" Text="{Binding Converter={x:Static c:PathConverters.PureDirectoryName}}"/>
+                      <TextBlock FontSize="12"
+                                 Margin="18,2,0,0"
+                                 Foreground="{DynamicResource Brush.FG2}"
+                                 Text="{Binding Converter={x:Static c:PathConverters.PureDirectoryName}}"
+                                 IsHitTestVisible="False"/>
                     </StackPanel>
                   </DataTemplate>
                 </ListBox.ItemTemplate>

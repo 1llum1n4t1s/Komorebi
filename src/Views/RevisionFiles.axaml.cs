@@ -88,9 +88,9 @@ public partial class RevisionFiles : UserControl
     }
 
     /// <summary>
-    /// SearchSuggestionDoubleTappedイベントのハンドラ。
+    /// SearchSuggestionTappedイベントのハンドラ。
     /// </summary>
-    private async void OnSearchSuggestionDoubleTapped(object sender, TappedEventArgs e)
+    private async void OnSearchSuggestionTapped(object sender, TappedEventArgs e)
     {
         if (DataContext is not ViewModels.CommitDetail vm)
             return;

@@ -199,9 +199,9 @@ public partial class Repository : UserControl
     }
 
     /// <summary>
-    /// SearchSuggestionDoubleTappedイベントのハンドラ。
+    /// SearchSuggestionTappedイベントのハンドラ。
     /// </summary>
-    private void OnSearchSuggestionDoubleTapped(object sender, TappedEventArgs e)
+    private void OnSearchSuggestionTapped(object sender, TappedEventArgs e)
     {
         if (DataContext is not ViewModels.Repository repo)
             return;
