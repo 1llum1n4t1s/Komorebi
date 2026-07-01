@@ -691,6 +691,7 @@ public partial class BranchTree : UserControl
                 var deleteMulti = new MenuItem();
                 deleteMulti.Header = App.Text("BranchCM.DeleteMultiBranches", branches.Count);
                 deleteMulti.Icon = App.CreateMenuIcon("Icons.Clear");
+                deleteMulti.Tag = "Delete/Back";
                 deleteMulti.Click += (_, ev) =>
                 {
                     repo.DeleteMultipleBranches(branches, branches[0].IsLocal);
@@ -716,43 +717,59 @@ public partial class BranchTree : UserControl
         {
             RaiseEvent(new RoutedEventArgs(SearchRequestedEvent));
             e.Handled = true;
-            return;
         }
-
-        if (e.Key is not (Key.Delete or Key.Back))
-            return;
-
-        var repo = DataContext as ViewModels.Repository;
-        if (repo?.Settings is null)
-            return;
-
-        var selected = BranchesPresenter.SelectedItems;
-        if (selected is null || selected.Count == 0)
-            return;
-
-        if (selected.Count == 1 && selected[0] is ViewModels.BranchTreeNode { Backend: Models.Remote remote })
+        else if ((e.Key == Key.Delete || e.Key == Key.Back) && e.KeyModifiers == KeyModifiers.None)
         {
-            repo.DeleteRemote(remote);
+            var repo = DataContext as ViewModels.Repository;
+            if (repo?.Settings is null)
+                return;
+
+            var selected = BranchesPresenter.SelectedItems;
+            if (selected is null || selected.Count == 0)
+                return;
+
+            if (selected.Count == 1 && selected[0] is ViewModels.BranchTreeNode { Backend: Models.Remote remote })
+            {
+                repo.DeleteRemote(remote);
+                e.Handled = true;
+                return;
+            }
+
+            List<Models.Branch> branches = [];
+            foreach (var item in selected)
+            {
+                if (item is ViewModels.BranchTreeNode node)
+                    CollectBranchesInNode(branches, node);
+            }
+
+            if (branches.Find(x => x.IsCurrent) is not null)
+                return;
+
+            if (branches.Count == 1)
+                repo.DeleteBranch(branches[0]);
+            else
+                repo.DeleteMultipleBranches(branches, branches[0].IsLocal);
+
             e.Handled = true;
-            return;
         }
-
-        List<Models.Branch> branches = [];
-        foreach (var item in selected)
+        else if (e.Key == Key.F2 && e.KeyModifiers == KeyModifiers.None)
         {
-            if (item is ViewModels.BranchTreeNode node)
-                CollectBranchesInNode(branches, node);
+            var repo = DataContext as ViewModels.Repository;
+            if (repo?.Settings is null)
+                return;
+
+            var selected = BranchesPresenter.SelectedItems;
+            if (selected is null || selected.Count != 1)
+                return;
+
+            if (selected[0] is ViewModels.BranchTreeNode { Backend: Models.Branch { IsLocal: true } branch })
+            {
+                if (repo.CanCreatePopup())
+                    repo.ShowPopup(new ViewModels.RenameBranch(repo, branch));
+
+                e.Handled = true;
+            }
         }
-
-        if (branches.Find(x => x.IsCurrent) is not null)
-            return;
-
-        if (branches.Count == 1)
-            repo.DeleteBranch(branches[0]);
-        else
-            repo.DeleteMultipleBranches(branches, branches[0].IsLocal);
-
-        e.Handled = true;
     }
 
     /// <summary>
@@ -1068,6 +1085,7 @@ public partial class BranchTree : UserControl
         var rename = new MenuItem();
         rename.Header = App.Text("BranchCM.Rename", branch.Name);
         rename.Icon = App.CreateMenuIcon("Icons.Rename");
+        rename.Tag = "F2";
         rename.Click += (_, e) =>
         {
             if (repo.CanCreatePopup())
@@ -1089,6 +1107,7 @@ public partial class BranchTree : UserControl
         var delete = new MenuItem();
         delete.Header = App.Text("BranchCM.Delete", branch.Name);
         delete.Icon = App.CreateMenuIcon("Icons.Clear");
+        delete.Tag = "Delete/Back";
         delete.IsEnabled = !branch.IsCurrent;
         delete.Click += (_, e) =>
         {
@@ -1358,6 +1377,7 @@ public partial class BranchTree : UserControl
         var delete = new MenuItem();
         delete.Header = App.Text("BranchCM.Delete", name);
         delete.Icon = App.CreateMenuIcon("Icons.Clear");
+        delete.Tag = "Delete/Back";
         delete.Click += (_, e) =>
         {
             if (repo.CanCreatePopup())
