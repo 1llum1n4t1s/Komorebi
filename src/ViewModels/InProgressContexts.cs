@@ -41,6 +41,13 @@ public abstract class InProgressContext
     {
         if (_abortCmd is not null)
             await _abortCmd.Use(log).ExecAsync();
+
+        OnAborted();
+    }
+
+    /// <summary>中断後の後処理。サブクラスでオーバーライド可能。</summary>
+    protected virtual void OnAborted()
+    {
     }
 
     /// <summary>続行コマンド。</summary>
@@ -157,6 +164,7 @@ public class RebaseInProgress : InProgressContext
     /// </summary>
     public RebaseInProgress(Repository repo)
     {
+        _gitDir = repo.GitDir;
         Name = "Rebase";
 
         _continueCmd = new Commands.Command
@@ -179,6 +187,7 @@ public class RebaseInProgress : InProgressContext
             WorkingDirectory = repo.FullPath,
             Context = repo.FullPath,
             Args = "rebase --abort",
+            RaiseError = false,
         };
 
         // rebase-mergeまたはrebase-applyディレクトリから進捗情報を取得
@@ -246,6 +255,20 @@ public class RebaseInProgress : InProgressContext
 
         BaseName = Onto.GetFriendlyName();
     }
+
+    /// <summary>rebase中断時にrebase-merge/rebase-applyディレクトリの残骸を削除する。</summary>
+    protected override void OnAborted()
+    {
+        var rebaseMergeDir = Path.Combine(_gitDir, "rebase-merge");
+        if (Directory.Exists(rebaseMergeDir))
+            Directory.Delete(rebaseMergeDir, true);
+
+        var rebaseApplyDir = Path.Combine(_gitDir, "rebase-apply");
+        if (Directory.Exists(rebaseApplyDir))
+            Directory.Delete(rebaseApplyDir, true);
+    }
+
+    private readonly string _gitDir;
 }
 
 /// <summary>
