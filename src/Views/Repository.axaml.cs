@@ -1469,7 +1469,6 @@ public partial class Repository : UserControl
 
         RenderOptions.SetBitmapInterpolationMode(menu, BitmapInterpolationMode.HighQuality);
         RenderOptions.SetEdgeMode(menu, EdgeMode.Antialias);
-        TextOptions.SetTextRenderingMode(menu, TextRenderingMode.Antialias);
 
         var explore = new MenuItem();
         explore.Header = App.Text("Repository.Explore");
