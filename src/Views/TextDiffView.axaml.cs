@@ -329,6 +329,17 @@ public class ThemedTextDiffPresenter : TextEditor
                     }
                 }
 
+                if (info.NoNewLineEndOfFile)
+                {
+                    var lastTextLine = line.TextLines[^1];
+                    var radius = (lastTextLine.Height - 4) * 0.5;
+                    var pen = new Pen(Brushes.Red, 2);
+                    var indicatorX = lastTextLine.WidthIncludingTrailingWhitespace - textView.HorizontalOffset + radius + 4;
+                    var indicatorY = line.GetTextLineVisualYPosition(lastTextLine, VisualYPosition.TextMiddle) - textView.VerticalOffset + 0.5;
+                    drawingContext.DrawEllipse(null, pen, new Point(indicatorX, indicatorY), radius, radius);
+                    drawingContext.DrawLine(pen, new Point(indicatorX - radius + 3, indicatorY), new Point(indicatorX + radius - 3, indicatorY));
+                }
+
                 if (changeBlock is null)
                     continue;
 
@@ -1083,12 +1094,10 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
                     builder.Append(line.Content);
                 }
 
-                if (line.NoNewLineEndOfFile)
-                    builder.Append("\u26D4");
-
                 builder.Append('\n');
             }
 
+            builder.Length--;
             Text = builder.ToString();
         }
         else
@@ -1300,12 +1309,10 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
                     builder.Append(line.Content);
                 }
 
-                if (line.NoNewLineEndOfFile)
-                    builder.Append("\u26D4");
-
                 builder.Append('\n');
             }
 
+            builder.Length--;
             Text = builder.ToString();
         }
         else

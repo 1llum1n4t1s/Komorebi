@@ -675,11 +675,17 @@ namespace AvaloniaEdit.Rendering
         /// This method does not invalidate visual lines;
         /// use the <see cref="Redraw()"/> method to do that.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "knownLayer",
-                                                         Justification = "This method is meant to invalidate only a specific layer - I just haven't figured out how to do that, yet.")]
         public void InvalidateLayer(KnownLayer knownLayer)
         {
-            InvalidateMeasure();
+            // Selection/Caret are pure overlay layers that never affect text layout,
+            // so a full InvalidateMeasure() on every selection change or caret blink
+            // is unnecessary and can make the editor unresponsive when combined with
+            // syntax highlighting. Only repaint them; other layers keep the safe
+            // (but more expensive) full re-measure.
+            if (knownLayer == KnownLayer.Selection || knownLayer == KnownLayer.Caret)
+                InvalidateVisual();
+            else
+                InvalidateMeasure();
         }
 
         /// <summary>
