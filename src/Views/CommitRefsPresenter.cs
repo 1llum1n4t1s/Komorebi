@@ -9,6 +9,67 @@ using Avalonia.Media;
 namespace Komorebi.Views;
 
 /// <summary>
+/// 全 CommitRefsPresenter インスタンス間で共有するアイコンジオメトリのキャッシュ。
+/// </summary>
+public class CommitRefsIconCache
+{
+    /// <summary>シングルトンインスタンス。</summary>
+    public static CommitRefsIconCache Instance => s_instance ??= new CommitRefsIconCache();
+
+    /// <summary>
+    /// コンストラクタ。各デコレータ種別のアイコンをロードする。
+    /// </summary>
+    public CommitRefsIconCache()
+    {
+        _head = LoadIcon("Icons.Head");
+        _branch = LoadIcon("Icons.Branch");
+        _remote = LoadIcon("Icons.Remote");
+        _tag = LoadIcon("Icons.Tag");
+    }
+
+    /// <summary>
+    /// デコレータ種別に対応するアイコンジオメトリを取得する。
+    /// </summary>
+    public Geometry GetIcon(Models.DecoratorType type)
+    {
+        return type switch
+        {
+            Models.DecoratorType.CurrentBranchHead => _head,
+            Models.DecoratorType.CurrentCommitHead => _head,
+            Models.DecoratorType.LocalBranchHead => _branch,
+            Models.DecoratorType.RemoteBranchHead => _remote,
+            Models.DecoratorType.Tag => _tag,
+            _ => null,
+        };
+    }
+
+    /// <summary>
+    /// リソースキーからアイコンジオメトリをロードし、10x10 に収まるよう変換を適用する。
+    /// </summary>
+    private static Geometry LoadIcon(string resourceKey)
+    {
+        var geo = App.Current.FindResource(resourceKey) as StreamGeometry;
+        var drawGeo = geo!.Clone();
+        var iconBounds = drawGeo.Bounds;
+        var translation = Matrix.CreateTranslation(-(Vector)iconBounds.Position);
+        var scale = Math.Min(10.0 / iconBounds.Width, 10.0 / iconBounds.Height);
+        var transform = translation * Matrix.CreateScale(scale, scale);
+        if (drawGeo.Transform is null || drawGeo.Transform.Value == Matrix.Identity)
+            drawGeo.Transform = new MatrixTransform(transform);
+        else
+            drawGeo.Transform = new MatrixTransform(drawGeo.Transform.Value * transform);
+
+        return drawGeo;
+    }
+
+    private static CommitRefsIconCache s_instance;
+    private readonly Geometry _head;
+    private readonly Geometry _branch;
+    private readonly Geometry _remote;
+    private readonly Geometry _tag;
+}
+
+/// <summary>
 /// コミットの参照（ブランチタグ・リモートブランチ等）ラベルを表示するプレゼンタ。
 /// </summary>
 public class CommitRefsPresenter : Control
@@ -18,12 +79,11 @@ public class CommitRefsPresenter : Control
     /// </summary>
     public class RenderItem
     {
-        public Geometry Icon { get; set; } = null;
+        public Models.Decorator Decorator { get; set; } = null;
         public FormattedText Label { get; set; } = null;
         public IBrush Brush { get; set; } = null;
         public bool IsHead { get; set; } = false;
         public double Width { get; set; } = 0.0;
-        public Models.Decorator Decorator { get; set; } = null;
     }
 
     public static readonly StyledProperty<FontFamily> FontFamilyProperty =
@@ -175,8 +235,12 @@ public class CommitRefsPresenter : Control
 
             context.DrawRectangle(null, new Pen(item.Brush), entireRect);
 
-            using (context.PushTransform(Matrix.CreateTranslation(x + 3, y + 3)))
-                context.DrawGeometry(fg, null, item.Icon);
+            var icon = CommitRefsIconCache.Instance.GetIcon(item.Decorator.Type);
+            if (icon != null)
+            {
+                using (context.PushTransform(Matrix.CreateTranslation(x + 3, y + 3)))
+                    context.DrawGeometry(fg, null, icon);
+            }
 
             x += item.Width + 4;
         }
@@ -232,41 +296,11 @@ public class CommitRefsPresenter : Control
                 var item = new RenderItem()
                 {
                     Label = label,
-                    Brush = normalBG,
+                    Brush = decorator.Type == Models.DecoratorType.Tag ? Brushes.Gray : normalBG,
                     IsHead = isHead,
                     Decorator = decorator,
                 };
 
-                StreamGeometry geo;
-                switch (decorator.Type)
-                {
-                    case Models.DecoratorType.CurrentBranchHead:
-                    case Models.DecoratorType.CurrentCommitHead:
-                        geo = this.FindResource("Icons.Head") as StreamGeometry;
-                        break;
-                    case Models.DecoratorType.RemoteBranchHead:
-                        geo = this.FindResource("Icons.Remote") as StreamGeometry;
-                        break;
-                    case Models.DecoratorType.Tag:
-                        item.Brush = Brushes.Gray;
-                        geo = this.FindResource("Icons.Tag") as StreamGeometry;
-                        break;
-                    default:
-                        geo = this.FindResource("Icons.Branch") as StreamGeometry;
-                        break;
-                }
-
-                var drawGeo = geo!.Clone();
-                var iconBounds = drawGeo.Bounds;
-                var translation = Matrix.CreateTranslation(-(Vector)iconBounds.Position);
-                var scale = Math.Min(10.0 / iconBounds.Width, 10.0 / iconBounds.Height);
-                var transform = translation * Matrix.CreateScale(scale, scale);
-                if (drawGeo.Transform is null || drawGeo.Transform.Value == Matrix.Identity)
-                    drawGeo.Transform = new MatrixTransform(transform);
-                else
-                    drawGeo.Transform = new MatrixTransform(drawGeo.Transform.Value * transform);
-
-                item.Icon = drawGeo;
                 item.Width = 16 + (isHead ? 0 : 4) + label.Width + 4;
                 _items.Add(item);
 
