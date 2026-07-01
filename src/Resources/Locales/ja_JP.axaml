@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">問題の発生源を特定</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">中止</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">問題あり</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">問題の発生源となったコミットを特定しています。現在の HEAD に問題はありませんか？</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">問題なし</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">スキップ</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">問題の発生源となったコミットを特定しています。現在のコミットに問題があるかどうかを調査したあと、別のコミットをチェックアウトしてみてください。</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">著者の履歴</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">前のリビジョンの著者の履歴</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">空白文字の変更を無視</x:String>
@@ -1188,4 +1186,21 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG での署名に失敗しました。署名鍵 (git config user.signingkey) を確認し、gpg-agent が起動しているか確認するか、'git -c commit.gpgsign=false ...' で一時的に署名を無効化してください。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">リポジトリの所有者が異なるため git が操作を拒否しました。'git config --global --add safe.directory &lt;パス&gt;' を実行して許可してください。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory に追加</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">適用元:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">ファイル</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">クリップボード</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">問題の発生源となったコミットを特定しています。別のコミットをチェックアウトし、そのコミットに問題があるかどうかを調査してください。</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">問題の発生源となったコミットを特定しています。問題があるコミットをチェックアウト・選択してください。</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">問題の発生源となったコミットを特定しています。現在のコミットに問題があるかどうかを調査したあと、別のコミットをチェックアウトしてみてください。</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">問題の発生源となったコミットを特定しています。現在の HEAD に問題はありませんか？</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">${0}$ と比較</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">著者の日時</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">コミット日時</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">サブモジュールを自動更新する際は再帰的に実行</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">パッチとしてコピー</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">空のファイル</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">ブランチのチェックアウトやマージ時に、既定で変更をスタッシュして再適用</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">タグをチェックアウト...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">入れ子になったサブモジュールも更新</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">同じフォルダーで未追跡のファイルをすべて無視</x:String>
 </ResourceDictionary>

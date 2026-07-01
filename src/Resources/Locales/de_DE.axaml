@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Abbrechen</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Schlecht</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisecting. Ist der aktuelle HEAD gut oder schlecht?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Gut</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Überspringen</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisecting. Aktuellen Commit als gut oder schlecht markieren und einen anderen auschecken.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame auf vorheriger Revision</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Leerzeichen-Änderungen ignorieren</x:String>
@@ -1188,4 +1186,6 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git konnte mit GPG nicht signieren. Überprüfen Sie Ihren Signaturschlüssel (git config user.signingkey), stellen Sie sicher, dass der gpg-agent läuft, oder deaktivieren Sie die Signatur vorübergehend mit 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git verweigert die Bearbeitung dieses Repositorys, da es einem anderen Benutzer gehört. Führen Sie 'git config --global --add safe.directory &lt;Pfad&gt;' aus, um es zu erlauben.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Zu safe.directory hinzufügen</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisecting. Aktuellen Commit als gut oder schlecht markieren und einen anderen auschecken.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisecting. Ist der aktuelle HEAD gut oder schlecht?</x:String>
 </ResourceDictionary>

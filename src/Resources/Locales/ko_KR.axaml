@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">이진 탐색</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">중단</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">나쁨</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">이진 탐색 중. 현재 HEAD가 '좋음' 상태입니까, '나쁨' 상태입니까?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">좋음</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">건너뛰기</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">이진 탐색 중. 현재 커밋을 '좋음' 또는 '나쁨'으로 표시하고 다른 커밋을 체크아웃하세요.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">블레임</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">이전 리비전에서 블레임</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">공백 변경 사항 무시</x:String>
@@ -1188,4 +1186,14 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG로 서명하지 못했습니다. 서명 키(git config user.signingkey)를 확인하고, gpg-agent가 실행 중인지 확인하거나, 'git -c commit.gpgsign=false ...'로 일시적으로 서명을 비활성화하세요.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">다른 사용자가 소유한 저장소이므로 git이 작업을 거부했습니다. 'git config --global --add safe.directory &lt;경로&gt;'를 실행하여 허용하세요.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory에 추가</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">원본:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">파일</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">클립보드</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">이진 탐색 중. 현재 커밋을 '좋음' 또는 '나쁨'으로 표시하고 다른 커밋을 체크아웃하세요.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">이진 탐색 중. 현재 HEAD가 '좋음' 상태입니까, '나쁨' 상태입니까?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">${0}$와 비교</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">작성 시간</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">커밋 시간</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">패치로 복사</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">브랜치 체크아웃 또는 병합 시 기본적으로 변경 사항을 스태시한 뒤 다시 적용</x:String>
 </ResourceDictionary>

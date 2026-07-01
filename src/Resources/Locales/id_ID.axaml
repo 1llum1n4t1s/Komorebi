@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Batalkan</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Buruk</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisect berjalan. Apakah HEAD saat ini baik atau buruk?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Baik</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Lewati</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisect berjalan. Tandai commit saat ini sebagai baik atau buruk dan checkout yang lain.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame pada Revisi Sebelumnya</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Abaikan perubahan whitespace</x:String>
@@ -1188,4 +1186,6 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git gagal menandatangani dengan GPG. Verifikasi kunci penandatanganan Anda (git config user.signingkey), pastikan gpg-agent berjalan, atau nonaktifkan penandatanganan sementara dengan 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git menolak beroperasi pada repositori ini karena dimiliki oleh pengguna lain. Jalankan 'git config --global --add safe.directory &lt;path&gt;' untuk mengizinkannya.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Tambahkan ke safe.directory</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisect berjalan. Tandai commit saat ini sebagai baik atau buruk dan checkout yang lain.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisect berjalan. Apakah HEAD saat ini baik atau buruk?</x:String>
 </ResourceDictionary>

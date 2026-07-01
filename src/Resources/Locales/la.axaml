@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">Biseca</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Abrumpe</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Malum</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisecans. Estne HEAD praesens bonum an malum?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Bonum</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Omitte</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisecans. Nota committum praesens ut bonum vel malum et elige aliud.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Culpa</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Culpa in Revisione Priore</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Ignora mutationes spatii vacui</x:String>

@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Abortar</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Inválido</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisect. O HEAD atual é válido ou inválido?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Válido</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Pular</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisect. Marcar o commit atual como válido ou inválido e checar outro commit.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame na Revisão Anterior</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Ignorar espaços em branco</x:String>
@@ -1188,4 +1186,6 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git falhou ao assinar com GPG. Verifique sua chave de assinatura (git config user.signingkey), certifique-se de que o gpg-agent está em execução, ou desative a assinatura temporariamente com 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git se recusa a operar neste repositório porque pertence a outro usuário. Execute 'git config --global --add safe.directory &lt;caminho&gt;' para permitir.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Adicionar ao safe.directory</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisect. Marcar o commit atual como válido ou inválido e checar outro commit.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisect. O HEAD atual é válido ou inválido?</x:String>
 </ResourceDictionary>

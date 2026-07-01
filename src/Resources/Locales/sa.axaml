@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">द्विभाजनम्</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">परित्यजतु</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">दुष्टम्</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">द्विभाजनं प्रवर्तते। वर्तमानं HEAD सुष्ठु वा दुष्टं वा?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">सुष्ठु</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">लङ्घयतु</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">द्विभाजनं प्रवर्तते। वर्तमानप्रतिबद्धं सुष्ठु वा दुष्टं वा इति चिह्नयतु अन्यच्च निष्कासयतु।</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">दोषारोपणम्</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">पूर्वसंशोधने दोषारोपणम्</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">रिक्तस्थानपरिवर्तनानि उपेक्षन्ताम्</x:String>

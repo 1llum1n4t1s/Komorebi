@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Itigil</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Masama</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Nagbi-bisect. Ang kasalukuyang HEAD ba ay mabuti o masama?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Mabuti</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Laktawan</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Nagbi-bisect. Markahan ang kasalukuyang commit bilang mabuti o masama at mag-checkout ng isa pa.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Blame</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame sa Nakaraang Rebisyon</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Huwag pansinin ang pagbabago sa whitespace</x:String>

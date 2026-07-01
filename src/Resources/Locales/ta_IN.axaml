@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">நிறுத்து</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">மோசம்</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Bisect நடைபெறுகிறது. தற்போதைய HEAD நல்லதா அல்லது மோசமா?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">நல்லது</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">தவிர்</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Bisect நடைபெறுகிறது. தற்போதைய commit-ஐ நல்லது அல்லது மோசம் எனக் குறித்து மற்றொன்றை checkout செய்யவும்.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">குற்றச்சாட்டு</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">முந்தைய பதிப்பில் Blame</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">வெண்வெளி மாற்றங்களை புறக்கணி</x:String>

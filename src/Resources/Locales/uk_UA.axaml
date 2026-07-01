@@ -59,10 +59,8 @@
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Скасувати</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Поганий</x:String>
-  <x:String x:Key="Text.Bisect.Detecting" xml:space="preserve">Виконується bisect. Поточний HEAD хороший чи поганий?</x:String>
   <x:String x:Key="Text.Bisect.Good" xml:space="preserve">Хороший</x:String>
   <x:String x:Key="Text.Bisect.Skip" xml:space="preserve">Пропустити</x:String>
-  <x:String x:Key="Text.Bisect.WaitingForRange" xml:space="preserve">Виконується bisect. Позначте поточний commit як хороший або поганий та переключіться на інший.</x:String>
   <x:String x:Key="Text.Blame" xml:space="preserve">Автор рядка</x:String>
   <x:String x:Key="Text.Blame.BlameOnPreviousRevision" xml:space="preserve">Blame для попередньої ревізії</x:String>
   <x:String x:Key="Text.Blame.IgnoreWhitespace" xml:space="preserve">Ігнорувати зміни пробілів</x:String>
