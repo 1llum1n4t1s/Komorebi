@@ -714,6 +714,18 @@ public class ImageDiff
 }
 
 /// <summary>
+/// 空ファイル（追加/削除）を表すマーカークラス。
+/// 空blobの既知ハッシュ（SHA-1 / SHA-256）を定数で保持する。
+/// </summary>
+public class EmptyFile
+{
+    /// <summary>空blobのSHA-1ハッシュ</summary>
+    public const string SHA1 = "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391";
+    /// <summary>空blobのSHA-256ハッシュ</summary>
+    public const string SHA256 = "473a0f4c3be8a93681a267e3b1e9a7dcda1185436fe141f7749120a303721813";
+}
+
+/// <summary>
 /// 変更なしまたは改行コードのみの変更を表すマーカークラス
 /// </summary>
 public class NoOrEOLChange;

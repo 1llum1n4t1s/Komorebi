@@ -320,6 +320,10 @@ public class DiffContext : ObservableObject
                 else
                     rs = latest.LFSDiff;
             }
+            else if (IsEmptyFileHash(latest.OldHash) || IsEmptyFileHash(latest.NewHash))
+            {
+                rs = new Models.EmptyFile();
+            }
             else
             {
                 rs = new Models.NoOrEOLChange();
@@ -345,6 +349,25 @@ public class DiffContext : ObservableObject
                 }
             });
         });
+    }
+
+    /// <summary>
+    /// 指定ハッシュが空blobの既知ハッシュ（SHA-1 / SHA-256）と一致するか判定する。
+    /// </summary>
+    /// <param name="hash">判定対象のハッシュ</param>
+    /// <returns>空blobのハッシュならtrue</returns>
+    private static bool IsEmptyFileHash(string hash)
+    {
+        if (string.IsNullOrEmpty(hash))
+            return false;
+
+        if (hash.Length == 40)
+            return hash.Equals(Models.EmptyFile.SHA1, StringComparison.Ordinal);
+
+        if (hash.Length == 64)
+            return hash.Equals(Models.EmptyFile.SHA256, StringComparison.Ordinal);
+
+        return false;
     }
 
     /// <summary>

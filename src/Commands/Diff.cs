@@ -22,7 +22,7 @@ public partial class Diff : Command
     /// <summary>
     /// indexヘッダー（旧ハッシュ..新ハッシュ）を解析する正規表現。
     /// </summary>
-    [GeneratedRegex(@"^index\s([0-9a-f]{6,40})\.\.([0-9a-f]{6,40})(\s[1-9]{6})?")]
+    [GeneratedRegex(@"^index\s([0-9a-f]{6,64})\.\.([0-9a-f]{6,64})(\s[1-9]{6})?")]
     private static partial Regex REG_HASH_CHANGE();
 
     /// <summary>LFS新規ファイルのプレフィックス</summary>
@@ -45,8 +45,8 @@ public partial class Diff : Command
         Context = repo;
 
         var builder = new StringBuilder(256);
-        // 色なし・外部diffツールなし・パッチ形式で出力
-        builder.Append("diff --no-color --no-ext-diff --patch ");
+        // 色なし・外部diffツールなし・完全長ハッシュ・パッチ形式で出力
+        builder.Append("diff --no-color --no-ext-diff --full-index --patch ");
         if (Models.DiffOption.IgnoreCRAtEOL)
             builder.Append("--ignore-cr-at-eol ");
         if (ignoreWhitespace)
