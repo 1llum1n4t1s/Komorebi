@@ -494,19 +494,36 @@ public partial class TagsView : UserControl
             return;
         }
 
-        if (e.Key is not (Key.Delete or Key.Back))
-            return;
+        if (e.Key is (Key.Delete or Key.Back) && e.KeyModifiers == KeyModifiers.None)
+        {
+            if (DataContext is not ViewModels.Repository repo)
+                return;
 
-        if (DataContext is not ViewModels.Repository repo)
-            return;
+            var selected = (sender as ListBox)?.SelectedItems;
+            if (selected is null)
+                return;
 
-        var selected = (sender as ListBox)?.SelectedItem;
-        if (selected is ViewModels.TagTreeNode { Tag: { } tagInNode })
-            repo.DeleteTag(tagInNode);
-        else if (selected is ViewModels.TagListItem { Tag: { } tagInItem })
-            repo.DeleteTag(tagInItem);
+            List<Models.Tag> tags = [];
+            foreach (var item in selected)
+            {
+                if (item is ViewModels.TagListItem { Tag: { } tag })
+                    tags.Add(tag);
+                else if (item is ViewModels.TagTreeNode n)
+                    CollectTagsInNode(n, tags);
+            }
 
-        e.Handled = true;
+            if (tags.Count == 1)
+            {
+                repo.DeleteTag(tags[0]);
+            }
+            else if (tags.Count > 1)
+            {
+                if (repo.CanCreatePopup())
+                    repo.ShowPopup(new ViewModels.DeleteMultipleTags(repo, tags));
+            }
+
+            e.Handled = true;
+        }
     }
 
     /// <summary>
