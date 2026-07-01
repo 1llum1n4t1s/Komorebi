@@ -465,7 +465,8 @@ public partial class AvatarManager
         // 旧: Encoding.Defaultはプラットフォーム依存で非ASCII文字のハッシュが異なる可能性あり
         var lowered = email.Trim().ToLowerInvariant();
         var hash = MD5.HashData(Encoding.UTF8.GetBytes(lowered));
-        return Convert.ToHexString(hash).ToLowerInvariant();
+        // Convert.ToHexStringLower で中間文字列の割り当てなしに小文字16進化する
+        return Convert.ToHexStringLower(hash);
     }
 
     /// <summary>

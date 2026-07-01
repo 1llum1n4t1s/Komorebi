@@ -222,7 +222,8 @@ public class RepositorySettings
         // UTF-8 の JSON 文字列を正しく byte 化できず、非ASCII文字を含む設定で毎回ハッシュ不一致となり
         // komorebi.settings が無駄に上書き保存される不具合を防ぐため、UTF-8 を明示する。
         var hash = MD5.HashData(Encoding.UTF8.GetBytes(source));
-        return Convert.ToHexString(hash).ToLowerInvariant();
+        // Convert.ToHexStringLower で中間文字列の割り当てなしに小文字16進化する
+        return Convert.ToHexStringLower(hash);
     }
 
     /// <summary>設定ファイルのキャッシュ（フルパス→設定インスタンス）</summary>
