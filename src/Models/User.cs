@@ -9,20 +9,12 @@ namespace Komorebi.Models;
 public class User
 {
     /// <summary>無効なユーザーを表すシングルトンインスタンス</summary>
-    public static readonly User Invalid = new User();
+    public static readonly User Invalid = new User(string.Empty);
 
     /// <summary>ユーザー名</summary>
     public string Name { get; set; } = string.Empty;
     /// <summary>メールアドレス</summary>
     public string Email { get; set; } = string.Empty;
-
-    /// <summary>
-    /// デフォルトコンストラクタ（User.Invalid専用）
-    /// </summary>
-    public User()
-    {
-        // User.Invalid専用
-    }
 
     /// <summary>
     /// 「名前±メールアドレス」形式の文字列からユーザーを生成する
@@ -32,10 +24,7 @@ public class User
     {
         // null/空文字列を安全に処理する
         if (string.IsNullOrEmpty(data))
-        {
-            _hash = 0;
             return;
-        }
 
         // 「±」区切りで名前とメールアドレスを分離
         // 全gitコマンドの出力が「$NAME±$EMAIL」形式（メールに山括弧なし）に統一されたため、
@@ -50,19 +39,6 @@ public class User
             Name = parts[0];
             Email = parts[1];
         }
-        _hash = data.GetHashCode();
-    }
-
-    /// <summary>名前とメールアドレスが一致するか判定する</summary>
-    public override bool Equals(object obj)
-    {
-        return obj is User other && Name == other.Name && Email == other.Email;
-    }
-
-    /// <summary>事前計算されたハッシュコードを返す</summary>
-    public override int GetHashCode()
-    {
-        return _hash;
     }
 
     /// <summary>
@@ -83,6 +59,4 @@ public class User
 
     /// <summary>ユーザーインスタンスのスレッドセーフなキャッシュ</summary>
     private static ConcurrentDictionary<string, User> _caches = new ConcurrentDictionary<string, User>();
-    /// <summary>事前計算されたハッシュコード</summary>
-    private readonly int _hash;
 }

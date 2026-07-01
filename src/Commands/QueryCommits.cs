@@ -96,7 +96,9 @@ public class QueryCommits : Command
                     continue;
 
                 commits.Add(commit);
-                findHead |= commit.IsMerged;
+                // 未検出時のみ判定・代入する（毎行の無条件書き込みを避ける）
+                if (!findHead && commit.IsMerged)
+                    findHead = true;
             }
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
