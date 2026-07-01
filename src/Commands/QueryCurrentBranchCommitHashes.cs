@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -18,11 +17,10 @@ public class QueryCurrentBranchCommitHashes : Command
     /// <param name="sinceTimestamp">検索開始のUnixタイムスタンプ</param>
     public QueryCurrentBranchCommitHashes(string repo, ulong sinceTimestamp)
     {
-        // Unixタイムスタンプをローカル日時文字列に変換
-        var since = DateTime.UnixEpoch.AddSeconds(sinceTimestamp).ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss");
         WorkingDirectory = repo;
         Context = repo;
-        Args = $"log --since={since.Quoted()} --format=%H";
+        // Unixタイムスタンプは`@<timestamp>`形式でそのままgitに渡せる（日時文字列への変換不要）
+        Args = $"log --since=@{sinceTimestamp} --format=%H";
     }
 
     /// <summary>
