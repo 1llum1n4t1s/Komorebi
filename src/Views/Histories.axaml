@@ -265,7 +265,8 @@
                      OnlyHighlightCurrentBranch="{Binding $parent[v:Histories].OnlyHighlightCurrentBranch}"
                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                      IsHitTestVisible="False"
-                     ClipToBounds="True"/>
+                     ClipToBounds="True"
+                     Loaded="OnCommitGraphLoaded"/>
 
       <Border Width="32" Height="32"
               Margin="0,0,16,8"

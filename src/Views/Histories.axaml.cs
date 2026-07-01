@@ -345,6 +345,15 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
+    /// CommitGraphのLoadedイベントのハンドラ。ロード時にグラフレイアウトを強制更新して
+    /// 正しくレンダリングされるようにする。
+    /// </summary>
+    private void OnCommitGraphLoaded(object sender, RoutedEventArgs e)
+    {
+        OnCommitListLayoutUpdated(sender, e);
+    }
+
+    /// <summary>
     /// CommitListLayoutUpdatedイベントのハンドラ。
     /// </summary>
     private void OnCommitListLayoutUpdated(object _1, EventArgs _2)
