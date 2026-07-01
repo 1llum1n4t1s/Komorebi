@@ -45,7 +45,10 @@ public abstract class InProgressContext
         OnAborted();
     }
 
-    /// <summary>中断後の後処理。サブクラスでオーバーライド可能。</summary>
+    /// <summary>
+    /// 中断完了後のクリーンアップ処理。サブクラスでオーバーライドして
+    /// 操作固有の残存ファイルを削除する。
+    /// </summary>
     protected virtual void OnAborted()
     {
     }
@@ -256,7 +259,10 @@ public class RebaseInProgress : InProgressContext
         BaseName = Onto.GetFriendlyName();
     }
 
-    /// <summary>rebase中断時にrebase-merge/rebase-applyディレクトリの残骸を削除する。</summary>
+    /// <summary>
+    /// リベース中断後に、rebase-merge/rebase-applyディレクトリの残骸と
+    /// 対話的リベース用のジョブファイルが残っていれば削除する。
+    /// </summary>
     protected override void OnAborted()
     {
         var rebaseMergeDir = Path.Combine(_gitDir, "rebase-merge");
@@ -266,8 +272,13 @@ public class RebaseInProgress : InProgressContext
         var rebaseApplyDir = Path.Combine(_gitDir, "rebase-apply");
         if (Directory.Exists(rebaseApplyDir))
             Directory.Delete(rebaseApplyDir, true);
+
+        var jobFile = Path.Combine(_gitDir, "komorebi.interactive_rebase");
+        if (File.Exists(jobFile))
+            File.Delete(jobFile);
     }
 
+    /// <summary>リポジトリの.gitディレクトリパス。</summary>
     private readonly string _gitDir;
 }
 
