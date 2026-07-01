@@ -346,6 +346,11 @@ public partial class Launcher : ChromelessWindow
                         vm.CommandPalette = new ViewModels.RepositoryCommandPalette(repo);
                         e.Handled = true;
                         return;
+                    case Key.E:
+                        // Ctrl+E → リポジトリをファイルマネージャーで開く
+                        Native.OS.OpenInFileManager(repo.FullPath);
+                        e.Handled = true;
+                        return;
                 }
             }
             else
