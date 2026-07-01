@@ -277,20 +277,24 @@ public class Push : Popup
     /// </summary>
     private void AutoSelectBranchByRemote()
     {
-        // 選択されたリモートに属するブランチを収集
+        // リモート/ローカルブランチが未選択の間は何もしない（upstream 8427859a）
+        if (_selectedRemote == null || _selectedLocalBranch == null)
+            return;
+
+        // 選択されたリモートに属するリモートブランチのみを収集
         List<Models.Branch> branches = [];
         foreach (var branch in _repo.Branches)
         {
-            if (branch.Remote == _selectedRemote.Name)
+            if (!branch.IsLocal && _selectedRemote.Name.Equals(branch.Remote, StringComparison.Ordinal))
                 branches.Add(branch);
         }
 
-        // If selected local branch has upstream. Try to find it in current remote branches.
+        // 選択中のローカルブランチにアップストリームがあれば、収集済みリモートブランチから探す
         if (!string.IsNullOrEmpty(_selectedLocalBranch.Upstream))
         {
             foreach (var branch in branches)
             {
-                if (_selectedLocalBranch.Upstream == branch.FullName)
+                if (_selectedLocalBranch.Upstream.Equals(branch.FullName, StringComparison.Ordinal))
                 {
                     RemoteBranches = branches;
                     SelectedRemoteBranch = branch;
@@ -299,10 +303,10 @@ public class Push : Popup
             }
         }
 
-        // Try to find a remote branch with the same name of selected local branch.
+        // 選択中のローカルブランチと同名のリモートブランチを探す
         foreach (var branch in branches)
         {
-            if (_selectedLocalBranch.Name == branch.Name)
+            if (_selectedLocalBranch.Name.Equals(branch.Name, StringComparison.Ordinal))
             {
                 RemoteBranches = branches;
                 SelectedRemoteBranch = branch;
