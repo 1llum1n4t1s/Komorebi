@@ -370,10 +370,10 @@ namespace Komorebi.Tests.ViewModels
 
         /// <summary>
         /// refs/bisect 内に good と bad の両方のファイルがある場合、
-        /// Detecting 状態を返すこと。
+        /// WaitingForMark 状態を返すこと。
         /// </summary>
         [Fact]
-        public void UpdateBisectInfo_WithGoodAndBad_ReturnsDetecting()
+        public void UpdateBisectInfo_WithGoodAndBad_ReturnsWaitingForMark()
         {
             // BISECT_START ファイルを作成
             File.WriteAllText(Path.Combine(_gitDir, "BISECT_START"), "abc123\n");
@@ -387,7 +387,7 @@ namespace Komorebi.Tests.ViewModels
             var histories = new Histories(_repo);
             var state = histories.UpdateBisectInfo();
 
-            Assert.Equal(BisectState.Detecting, state);
+            Assert.Equal(BisectState.WaitingForMark, state);
             Assert.NotNull(histories.Bisect);
             Assert.Single(histories.Bisect.Bads);
             Assert.Single(histories.Bisect.Goods);
@@ -435,7 +435,7 @@ namespace Komorebi.Tests.ViewModels
             var histories = new Histories(_repo);
             var state = histories.UpdateBisectInfo();
 
-            Assert.Equal(BisectState.Detecting, state);
+            Assert.Equal(BisectState.WaitingForMark, state);
             Assert.Contains("aaa", histories.Bisect.Bads);
             Assert.Contains("bbb", histories.Bisect.Goods);
         }

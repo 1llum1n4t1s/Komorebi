@@ -238,17 +238,25 @@ public class Histories : ObservableObject, IDisposable
             return Models.BisectState.None;
         }
 
+        var head = new Commands.QueryRevisionByRefName(_repo.FullPath, "HEAD").GetResult();
         var info = new Models.Bisect();
+        var markedHead = false;
         var dir = Path.Combine(_repo.GitDir, "refs", "bisect");
         if (Directory.Exists(dir))
         {
             var files = new DirectoryInfo(dir).GetFiles();
             foreach (var file in files)
             {
+                var sha = File.ReadAllText(file.FullName).Trim();
+                if (!markedHead)
+                    markedHead = sha.Equals(head, StringComparison.Ordinal); // upstreamはhead.Equals(sha)だが、HEAD解決失敗時(null)のNPEを避けるため受け手を入れ替えている
+
                 if (file.Name.StartsWith("bad"))
-                    info.Bads.Add(File.ReadAllText(file.FullName).Trim());
+                    info.Bads.Add(sha);
                 else if (file.Name.StartsWith("good"))
-                    info.Goods.Add(File.ReadAllText(file.FullName).Trim());
+                    info.Goods.Add(sha);
+                else if (file.Name.StartsWith("skip"))
+                    info.Skipped.Add(sha);
             }
         }
 
@@ -257,10 +265,13 @@ public class Histories : ObservableObject, IDisposable
         if (info.Bads.Count == 0)
             return Models.BisectState.WaitingForFirstBad;
 
+        if (markedHead)
+            return Models.BisectState.WaitingForCheckoutAnother;
+
         if (info.Goods.Count == 0)
             return Models.BisectState.WaitingForFirstGood;
 
-        return Models.BisectState.Detecting;
+        return Models.BisectState.WaitingForMark;
     }
 
     /// <summary>

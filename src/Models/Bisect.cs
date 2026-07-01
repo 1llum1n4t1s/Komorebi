@@ -19,14 +19,19 @@ public enum BisectState
     WaitingForFirstBad,
 
     /// <summary>
+    /// 現在のHEADはマーク済みで、別のコミットのチェックアウト待ち状態。
+    /// </summary>
+    WaitingForCheckoutAnother,
+
+    /// <summary>
     /// 最初のgoodコミットの指定待ち状態。
     /// </summary>
     WaitingForFirstGood,
 
     /// <summary>
-    /// 二分探索実行中の状態。
+    /// 現在のHEADに対するgood/badマーク待ち状態。
     /// </summary>
-    Detecting,
+    WaitingForMark,
 }
 
 /// <summary>
@@ -43,12 +48,17 @@ public enum BisectCommitFlag
     /// <summary>
     /// goodとしてマークされたコミット。
     /// </summary>
-    Good = 1 << 0,
+    Good,
 
     /// <summary>
     /// badとしてマークされたコミット。
     /// </summary>
-    Bad = 1 << 1,
+    Bad,
+
+    /// <summary>
+    /// skipとしてマークされたコミット。
+    /// </summary>
+    Skipped,
 }
 
 /// <summary>
@@ -70,6 +80,15 @@ public class Bisect
     /// goodとしてマークされたコミットSHAのセット。
     /// </summary>
     public HashSet<string> Goods
+    {
+        get;
+        set;
+    } = [];
+
+    /// <summary>
+    /// skipとしてマークされたコミットSHAのセット。
+    /// </summary>
+    public HashSet<string> Skipped
     {
         get;
         set;
