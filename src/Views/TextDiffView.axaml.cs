@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -759,8 +760,18 @@ public class ThemedTextDiffPresenter : TextEditor
             ev.Handled = true;
         };
 
+        var copyAsPatch = new MenuItem();
+        copyAsPatch.Header = App.Text("CopyAsPatch");
+        copyAsPatch.Icon = App.CreateMenuIcon("Icons.Copy");
+        copyAsPatch.Click += async (_, ev) =>
+        {
+            await CopyAsPatchAsync();
+            ev.Handled = true;
+        };
+
         var menu = new ContextMenu();
         menu.Items.Add(copy);
+        menu.Items.Add(copyAsPatch);
         menu.Open(TextArea.TextView);
 
         e.Handled = true;
@@ -1033,6 +1044,49 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         await App.CopyTextAsync(builder.ToString());
+    }
+
+    /// <summary>
+    /// 選択行をパッチ（unified diff）形式でクリップボードにコピーする。
+    /// </summary>
+    private async Task CopyAsPatchAsync()
+    {
+        if (DataContext is not ViewModels.TextDiffContext { Data: { } diff, Option: { } option } ctx)
+            return;
+
+        var selection = TextArea.Selection;
+        var startPosition = selection.StartPosition;
+        var endPosition = selection.EndPosition;
+
+        if (startPosition.Location > endPosition.Location)
+            (startPosition, endPosition) = (endPosition, startPosition);
+
+        var maxIdx = GetLines().Count - 1;
+        var startIdx = Math.Min(startPosition.Line - 1, maxIdx);
+        var endIdx = Math.Min(endPosition.Line - 1, maxIdx);
+        var isCombined = true;
+        if (ctx is ViewModels.TwoSideTextDiff twoSides)
+        {
+            isCombined = false;
+            twoSides.GetCombinedRangeForSingleSide(ref startIdx, ref endIdx, IsOld);
+        }
+
+        // upstream の PatchGenerator は未移植のため、既存の選択範囲パッチ生成 API で代替する
+        var patchSelection = diff.MakeSelection(startIdx + 1, endIdx + 1, isCombined, IsOld);
+        if (!patchSelection.HasChanges)
+        {
+            App.RaiseException(string.Empty, "You should select at least one changed line!");
+            return;
+        }
+
+        using var temp = new TempFileScope();
+        if (isCombined)
+            diff.GeneratePatchFromSelection(option.Path, string.Empty, patchSelection, false, temp.Path);
+        else
+            diff.GeneratePatchFromSelectionSingleSide(option.Path, string.Empty, patchSelection, false, IsOld, temp.Path);
+
+        var patchText = await File.ReadAllTextAsync(temp.Path);
+        await App.CopyTextAsync(patchText);
     }
 
     /// <summary>サイズ変更イベントの初回実行済みフラグ。</summary>
