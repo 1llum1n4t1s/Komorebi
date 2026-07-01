@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Input;
 
 namespace Komorebi.Views;
@@ -15,6 +16,19 @@ public partial class ViewLogs : ChromelessWindow
     {
         CloseOnESC = true;
         InitializeComponent();
+    }
+
+    /// <summary>
+    /// ウィンドウが開かれた際の処理。マルチディスプレイ環境でレイアウトが
+    /// 未確定なうちに選択を行うと表示が崩れることがあるため、
+    /// ウィンドウ表示後に初期選択を行う。
+    /// </summary>
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+
+        if (DataContext is ViewModels.ViewLogs { Logs.Count: > 0 } vm)
+            vm.SelectedLog = vm.Logs[0];
     }
 
     /// <summary>

@@ -27,13 +27,11 @@ public class ViewLogs : ObservableObject
     }
 
     /// <summary>
-    /// コンストラクタ。リポジトリのログから初期選択を設定する。
+    /// コンストラクタ。
     /// </summary>
     public ViewLogs(Repository repo)
     {
         _repo = repo;
-        // ログが存在する場合は最初のエントリを選択
-        _selectedLog = repo.Logs?.Count > 0 ? repo.Logs[0] : null;
     }
 
     /// <summary>
