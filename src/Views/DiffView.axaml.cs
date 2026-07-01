@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
@@ -18,6 +20,32 @@ public partial class DiffView : UserControl
     }
 
     /// <summary>
+    /// ナビゲーション用ホットキーの有効/無効を切り替える。
+    /// Avalonia の HotKey は静的 XAML 宣言だと最初にロードされたインスタンスにしか
+    /// ルーティングされないため、ロード/アンロードのタイミングで動的に付け外しする。
+    /// </summary>
+    public void ToggleHotkeyBindings(bool enabled)
+    {
+        var isMacOS = OperatingSystem.IsMacOS();
+        if (enabled)
+        {
+            BtnGotoFirstChange.HotKey = KeyGesture.Parse(isMacOS ? "Cmd+Alt+Home" : "Ctrl+Alt+Home");
+            BtnGotoPrevChange.HotKey = KeyGesture.Parse(isMacOS ? "Cmd+Alt+Up" : "Ctrl+Alt+Up");
+            BtnGotoNextChange.HotKey = KeyGesture.Parse(isMacOS ? "Cmd+Alt+Down" : "Ctrl+Alt+Down");
+            BtnGotoLastChange.HotKey = KeyGesture.Parse(isMacOS ? "Cmd+Alt+End" : "Ctrl+Alt+End");
+            BtnOpenExternalMergeTool.HotKey = KeyGesture.Parse(isMacOS ? "Cmd+Shift+D" : "Ctrl+Shift+D");
+        }
+        else
+        {
+            BtnGotoFirstChange.HotKey = null;
+            BtnGotoPrevChange.HotKey = null;
+            BtnGotoNextChange.HotKey = null;
+            BtnGotoLastChange.HotKey = null;
+            BtnOpenExternalMergeTool.HotKey = null;
+        }
+    }
+
+    /// <summary>
     /// コントロールが読み込まれた際の処理。
     /// </summary>
     protected override void OnLoaded(RoutedEventArgs e)
@@ -26,6 +54,20 @@ public partial class DiffView : UserControl
 
         if (DataContext is ViewModels.DiffContext vm)
             vm.CheckSettings();
+
+        ToggleHotkeyBindings(true);
+    }
+
+    /// <summary>
+    /// コントロールがアンロードされた際の処理。
+    /// Komorebi はタブ切替のたびに View インスタンスを作り直すため、
+    /// ここでホットキーを解除しないと切替後の新インスタンスに正しくルーティングされない。
+    /// </summary>
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+
+        ToggleHotkeyBindings(false);
     }
 
     /// <summary>
