@@ -134,6 +134,9 @@ public class CommitRefsPresenter : Control
         var x = 1.5;
         var y = 0.5;
 
+        // ヒットテスト（右クリックでのコンテキストメニュー表示）を成立させるため全域を透明で塗る
+        context.FillRectangle(Brushes.Transparent, Bounds);
+
         foreach (var item in _items)
         {
             if (allowWrap && x > 1.5 && x + item.Width > Bounds.Width)

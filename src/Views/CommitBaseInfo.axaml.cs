@@ -217,4 +217,34 @@ public partial class CommitBaseInfo : UserControl
         menu.Open(control);
         e.Handled = true;
     }
+
+    /// <summary>
+    /// REF ラベル上でポインタが離された際のハンドラ。右クリック時に「コピー」コンテキストメニューを表示する。
+    /// </summary>
+    private void OnCommitRefsPresenterPointerReleased(object sender, PointerReleasedEventArgs e)
+    {
+        e.Handled = true;
+
+        if (DataContext is ViewModels.CommitDetail &&
+            sender is CommitRefsPresenter presenter &&
+            e.GetCurrentPoint(presenter).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonReleased)
+        {
+            var decorator = presenter.DecoratorAt(e.GetPosition(presenter));
+            if (decorator != null)
+            {
+                var copy = new MenuItem();
+                copy.Icon = App.CreateMenuIcon("Icons.Copy");
+                copy.Header = App.Text("Copy");
+                copy.Click += async (_, ev) =>
+                {
+                    await App.CopyTextAsync(decorator.Name);
+                    ev.Handled = true;
+                };
+
+                var menu = new ContextMenu();
+                menu.Items.Add(copy);
+                menu.Open(presenter);
+            }
+        }
+    }
 }
