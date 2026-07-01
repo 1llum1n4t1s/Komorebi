@@ -91,6 +91,8 @@ public class AIResponseView : TextEditor
 
         if (change.Property == ContentProperty)
             Text = Content;
+        else if (change.Property.Name == nameof(ActualThemeVariant) && change.NewValue != null)
+            Models.TextMateHelper.SetThemeByApp(_textMate);
     }
 
     /// <summary>

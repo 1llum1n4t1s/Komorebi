@@ -34,6 +34,9 @@ public static class GrammarUtility
         new ExtraGrammar("source.vue", [".vue"], "vue.json"),
     ];
 
+    /// <summary>読み込み済み文法定義のキャッシュ（スコープ名 → IRawGrammar）</summary>
+    private static readonly Dictionary<string, IRawGrammar> s_cachedRawGrammars = [];
+
     /// <summary>
     /// ファイル名からTextMateのスコープ名を取得する。
     /// 追加文法を優先的にチェックし、見つからない場合は標準のレジストリにフォールバックする。
@@ -73,6 +76,13 @@ public static class GrammarUtility
     /// <returns>文法定義（IRawGrammar）</returns>
     public static IRawGrammar GetGrammar(string scopeName, RegistryOptions reg)
     {
+        if (string.IsNullOrEmpty(scopeName))
+            return null;
+
+        // 読み込み済みならキャッシュから返す
+        if (s_cachedRawGrammars.TryGetValue(scopeName, out var cached))
+            return cached;
+
         foreach (var grammar in s_extraGrammars)
         {
             if (grammar.Scope.Equals(scopeName, StringComparison.OrdinalIgnoreCase))
@@ -83,7 +93,9 @@ public static class GrammarUtility
                 try
                 {
                     using var reader = new StreamReader(asset);
-                    return GrammarReader.ReadGrammarSync(reader);
+                    var raw = GrammarReader.ReadGrammarSync(reader);
+                    s_cachedRawGrammars.Add(scopeName, raw);
+                    return raw;
                 }
                 catch
                 {
@@ -92,7 +104,9 @@ public static class GrammarUtility
             }
         }
 
-        return reg.GetGrammar(scopeName);
+        var fallback = reg.GetGrammar(scopeName);
+        s_cachedRawGrammars.Add(scopeName, fallback);
+        return fallback;
     }
 
     /// <summary>追加文法定義のレコード型（スコープ名、対応拡張子リスト、文法ファイル名）</summary>
@@ -120,8 +134,6 @@ public class RegistryOptionsWrapper(ThemeName defaultTheme) : IRegistryOptions
     public IRawTheme GetTheme(string scopeName) => _backend.GetTheme(scopeName);
     /// <summary>デフォルトテーマを取得する</summary>
     public IRawTheme GetDefaultTheme() => _backend.GetDefaultTheme();
-    /// <summary>指定テーマ名のテーマを読み込む</summary>
-    public IRawTheme LoadTheme(ThemeName name) => _backend.LoadTheme(name);
     /// <summary>スコープ名に対するインジェクション一覧を取得する</summary>
     public ICollection<string> GetInjections(string scopeName) => _backend.GetInjections(scopeName);
     /// <summary>スコープ名から文法定義を取得する（追加文法対応）</summary>
@@ -129,6 +141,24 @@ public class RegistryOptionsWrapper(ThemeName defaultTheme) : IRegistryOptions
     /// <summary>ファイル名からスコープ名を取得する（追加文法対応）</summary>
     public string GetScope(string filename) => GrammarUtility.GetScope(filename, _backend);
 
+    /// <summary>
+    /// 指定テーマ名のテーマを読み込む。
+    /// 読み込み済みのテーマはキャッシュから返す。
+    /// </summary>
+    /// <param name="name">テーマ名</param>
+    /// <returns>テーマ定義（IRawTheme）</returns>
+    public IRawTheme LoadTheme(ThemeName name)
+    {
+        if (s_cachedTheme.TryGetValue(name, out var cached))
+            return cached;
+
+        var loaded = _backend.LoadTheme(name);
+        s_cachedTheme.Add(name, loaded);
+        return loaded;
+    }
+
+    /// <summary>読み込み済みテーマのキャッシュ（テーマ名 → IRawTheme）</summary>
+    private static readonly Dictionary<ThemeName, IRawTheme> s_cachedTheme = [];
     /// <summary>標準のTextMateSharpレジストリオプション</summary>
     private readonly RegistryOptions _backend = new(defaultTheme);
 }
@@ -179,7 +209,7 @@ public static class TextMateHelper
             if (reg.LastScope != scope)
             {
                 reg.LastScope = scope;
-                installation.SetGrammar(reg.GetScope(filePath));
+                installation.SetGrammar(scope);
             }
         }
     }

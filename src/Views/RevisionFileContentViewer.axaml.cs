@@ -117,6 +117,8 @@ public class RevisionTextFileView : TextEditor
             Options.IndentationSize = TabWidth;
         else if (change.Property == UseSyntaxHighlightingProperty)
             UpdateTextMate();
+        else if (change.Property.Name == nameof(ActualThemeVariant) && change.NewValue != null)
+            Models.TextMateHelper.SetThemeByApp(_textMate);
     }
 
     /// <summary>
