@@ -5,6 +5,8 @@
     <ApplicationManifest>App.manifest</ApplicationManifest>
     <ApplicationIcon>App.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <!-- ユーザー環境で DOTNET_SYSTEM_GLOBALIZATION_INVARIANT が有効でもクラッシュしないよう明示的に無効化する -->
+    <InvariantGlobalization>false</InvariantGlobalization>
     <!--
       Trim 解析警告は意図的に抑制する。理由:
       下の <TrimmerRootAssembly Include="Komorebi" /> でアセンブリ全体を root 化しており、
