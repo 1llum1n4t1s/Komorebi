@@ -86,6 +86,17 @@ public partial class CommitSubjectPresenter : Control
         set => SetValue(LinkForegroundProperty, value);
     }
 
+    // インラインコード（`code`）部分の文字色。未バインド時は Foreground と同じ既定値（Brushes.White）にして
+    // 既存の見た目（本文色と同じ）を後方互換のまま維持する。
+    public static readonly StyledProperty<IBrush> InlineCodeForegroundProperty =
+        AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(InlineCodeForeground), Brushes.White);
+
+    public IBrush InlineCodeForeground
+    {
+        get => GetValue(InlineCodeForegroundProperty);
+        set => SetValue(InlineCodeForegroundProperty, value);
+    }
+
     public static readonly StyledProperty<bool> ShowStrikethroughProperty =
         AvaloniaProperty.Register<CommitSubjectPresenter, bool>(nameof(ShowStrikethrough), false);
 
@@ -188,7 +199,8 @@ public partial class CommitSubjectPresenter : Control
             change.Property == FontSizeProperty ||
             change.Property == FontWeightProperty ||
             change.Property == ForegroundProperty ||
-            change.Property == LinkForegroundProperty)
+            change.Property == LinkForegroundProperty ||
+            change.Property == InlineCodeForegroundProperty)
         {
             _needRebuildInlines = true;
             InvalidateVisual();
@@ -336,6 +348,7 @@ public partial class CommitSubjectPresenter : Control
         var codeFontFamily = CodeFontFamily;
         var fontSize = FontSize;
         var foreground = Foreground;
+        var inlineCodeForeground = InlineCodeForeground;
         var linkForeground = LinkForeground;
         var typeface = new Typeface(fontFamily, FontStyle.Normal, FontWeight);
         var codeTypeface = new Typeface(codeFontFamily, FontStyle.Normal, FontWeight);
@@ -390,7 +403,7 @@ public partial class CommitSubjectPresenter : Control
                     FlowDirection.LeftToRight,
                     codeTypeface,
                     fontSize - 0.5,
-                    foreground);
+                    inlineCodeForeground);
                 _inlines.Add(new Inline(x, link, elem));
                 x += link.WidthIncludingTrailingWhitespace + 8;
             }
