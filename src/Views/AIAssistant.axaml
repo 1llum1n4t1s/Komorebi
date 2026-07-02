@@ -51,7 +51,8 @@
                        Margin="0,0,8,0"
                        IsVisible="{Binding IsGenerating}"/>
         <!-- upstream cace869b: 生成済みテキストをコミットメッセージに適用する Use ボタン -->
-        <Button Classes="flat"
+        <!-- upstream 0b09bc5c: primaryスタイルで強調表示 -->
+        <Button Classes="flat primary"
                 Height="28"
                 Margin="0,0,8,0" Padding="12,0"
                 Content="{DynamicResource Text.AIAssistant.Use}"
