@@ -68,15 +68,6 @@ public partial class CommitSubjectPresenter : Control
         set => SetValue(InlineCodeBackgroundProperty, value);
     }
 
-    public static readonly StyledProperty<IBrush> InlineCodeForegroundProperty =
-        AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(InlineCodeForeground), Brushes.White);
-
-    public IBrush InlineCodeForeground
-    {
-        get => GetValue(InlineCodeForegroundProperty);
-        set => SetValue(InlineCodeForegroundProperty, value);
-    }
-
     public static readonly StyledProperty<IBrush> ForegroundProperty =
         AvaloniaProperty.Register<CommitSubjectPresenter, IBrush>(nameof(Foreground), Brushes.White);
 
