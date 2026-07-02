@@ -62,21 +62,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.0.4" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.0.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.0.4" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4" />
-    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.2" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Avalonia" Version="12.0.5" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.0.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.5" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.5" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Azure.AI.OpenAI" Version="2.8.0-beta.1" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="CRDebugger.Avalonia" Version="1.0.26" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.4" />
-    <PackageReference Include="OpenAI" Version="2.11.0" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.5" />
+    <PackageReference Include="OpenAI" Version="2.12.0" />
     <PackageReference Include="Pfim" Version="0.11.4" />
     <PackageReference Include="StbImageSharp" Version="2.30.15" />
-    <PackageReference Include="SuperLightLogger" Version="1.0.8" />
+    <PackageReference Include="SuperLightLogger" Version="1.0.9" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
     <PackageReference Include="VelopackUpdateDialog.Avalonia" Version="1.0.10" />
 
