@@ -28,12 +28,17 @@ public record GitIgnoreFile(string DisplayName, string FullPath, string Pattern,
 
         // パターンがサブディレクトリ内のファイル/ディレクトリを指す場合は、
         // そのサブディレクトリの .gitignore も候補に加える
-        var normalizedPattern = pattern.Replace('\\', '/').TrimEnd('/');
-        var lastDirIdx = normalizedPattern.LastIndexOf('/');
+        var normalizedPattern = pattern.Replace('\\', '/');
+        var isDirPattern = normalizedPattern.EndsWith('/');
+        var trimmedPattern = normalizedPattern.TrimEnd('/');
+        var lastDirIdx = trimmedPattern.LastIndexOf('/');
         if (lastDirIdx > 0)
         {
-            var parentDir = normalizedPattern.Substring(0, lastDirIdx);
-            var overridedPattern = normalizedPattern.Substring(lastDirIdx + 1);
+            var parentDir = trimmedPattern.Substring(0, lastDirIdx);
+            // upstream 6909f220 は末尾セグメントを素のまま Pattern にするため、"src/sub/" が
+            // 非アンカーの "sub" になり任意階層の同名にマッチしてしまう。先頭 '/' で保存先
+            // .gitignore のディレクトリ直下にアンカーし、ディレクトリ限定の末尾 '/' も保持する
+            var overridedPattern = string.Concat("/", trimmedPattern.AsSpan(lastDirIdx + 1), isDirPattern ? "/" : string.Empty);
             supported.Add(new($"{parentDir}/.gitignore", $"{repo}/{parentDir}/.gitignore", overridedPattern, false));
         }
 
