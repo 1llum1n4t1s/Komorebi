@@ -63,7 +63,9 @@ public partial class Diff : Command
     /// <returns>差分解析結果</returns>
     public async Task<Models.DiffResult> ReadAsync()
     {
-        var result = new Models.DiffResult() { TextDiff = new Models.TextDiff() };
+        // 例外時フォールバックは正常系の空 diff (Complete() が TextDiff=null を返す) と同じ形にする。
+        // TextDiff 非 null かつ 0 行のまま返すと、DiffContext 側の判定が偽のサブモジュール diff 表示に化ける。
+        var result = new Models.DiffResult();
 
         try
         {
