@@ -63,7 +63,7 @@
           <!-- SHA -->
           <TextBlock Grid.Row="0" Grid.Column="0" Classes="info_label" VerticalAlignment="Top" Margin="0,4,0,0" Text="{DynamicResource Text.CommitDetail.Info.SHA}" />
           <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Height="24">
-            <TextBlock Text="{Binding SHA}" Margin="12,0,4,0" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding SHA}" FontFamily="{DynamicResource Fonts.Monospace}" Margin="12,0,4,0" VerticalAlignment="Center"/>
 
             <Button Classes="icon_button" Width="24" Cursor="Hand" Click="OnCopyCommitSHA" ToolTip.Tip="{DynamicResource Text.Copy}">
               <Path Width="12" Height="12" Data="{StaticResource Icons.Copy}"/>
@@ -112,6 +112,7 @@
               <DataTemplate>
                 <TextBlock Text="{Binding Converter={x:Static c:StringConverters.ToShortSHA}}"
                            Foreground="DarkOrange"
+                           FontFamily="{DynamicResource Fonts.Monospace}"
                            TextDecorations="Underline"
                            Cursor="Hand"
                            Margin="0,0,16,0"
@@ -159,6 +160,7 @@
               <DataTemplate>
                 <TextBlock Text="{Binding Converter={x:Static c:StringConverters.ToShortSHA}}"
                            Foreground="DarkOrange"
+                           FontFamily="{DynamicResource Fonts.Monospace}"
                            TextDecorations="Underline"
                            Cursor="Hand"
                            Margin="0,0,16,0"

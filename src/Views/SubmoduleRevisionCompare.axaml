@@ -50,6 +50,7 @@
               <TextBlock Grid.Column="1" Text="{Binding Base.Author.Name}" Margin="8,0,0,0"/>
               <TextBlock Grid.Column="2"
                          Text="{Binding Base.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
                          Foreground="DarkOrange" Margin="8,0,0,0"
                          TextDecorations="Underline"
                          Cursor="Hand"/>
@@ -79,6 +80,7 @@
               <TextBlock Grid.Column="1" Text="{Binding To.Author.Name}" Margin="8,0,0,0"/>
               <TextBlock Grid.Column="2"
                          Text="{Binding To.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                         FontFamily="{DynamicResource Fonts.Monospace}"
                          Foreground="DarkOrange"
                          Margin="8,0,0,0"
                          TextDecorations="Underline"

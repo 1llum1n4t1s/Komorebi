@@ -114,6 +114,7 @@
         <Grid ColumnDefinitions="Auto,*">
           <TextBlock Grid.Column="0"
                      FontWeight="Bold"
+                     FontFamily="{DynamicResource Fonts.Monospace}"
                      Margin="0,0,6,0"
                      Text="{Binding Revision.SHA, Converter={x:Static c:StringConverters.ToShortSHA}, Mode=OneWay}"/>
 

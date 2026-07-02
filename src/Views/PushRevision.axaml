@@ -28,6 +28,7 @@
         <TextBlock Grid.Column="1"
                    VerticalAlignment="Center"
                    Text="{Binding Revision.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
+                   FontFamily="{DynamicResource Fonts.Monospace}"
                    Foreground="DarkOrange"
                    Margin="8,0,0,0"/>
         <TextBlock Grid.Column="2"
