@@ -1080,7 +1080,11 @@ public class ThemedTextDiffPresenter : TextEditor
         }
 
         using var temp = new TempFileScope();
-        if (isCombined)
+        if (option.WorkingCopyChange is { WorkTree: Models.ChangeState.Untracked })
+            // 未追跡ファイルは new file mode + /dev/null ヘッダー付きの新規パッチとして生成する
+            // (既存ファイル形式だと適用先にファイルが無く git apply が失敗する)
+            diff.GenerateNewPatchFromSelection(option.Path, null, patchSelection, false, temp.Path);
+        else if (isCombined)
             diff.GeneratePatchFromSelection(option.Path, string.Empty, patchSelection, false, temp.Path);
         else
             diff.GeneratePatchFromSelectionSingleSide(option.Path, string.Empty, patchSelection, false, IsOld, temp.Path);
