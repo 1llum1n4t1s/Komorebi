@@ -110,6 +110,7 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
             {
                 onUpdate?.Invoke(string.Empty);
                 onUpdate?.Invoke("# Assistant");
+                var hasContent = false;
                 foreach (var item in content.EnumerateArray())
                 {
                     if (item.GetProperty("type").GetString() != "text")
@@ -118,8 +119,16 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
                     // upstream 39fdc1af 相当: Anthropic 経路でも応答を囲むコードフェンスを除去する
                     var text = Agent.TrimCodeFence(item.GetProperty("text").GetString() ?? string.Empty);
                     if (text.Length > 0)
+                    {
                         onUpdate?.Invoke(text);
+                        hasContent = true;
+                    }
                 }
+
+                // TrimCodeFence の契約 (空になったら呼び出し側でフォールバック表示する) に従い、
+                // OpenAISdkStrategy と同じメッセージで無言終了を防ぐ
+                if (!hasContent)
+                    onUpdate?.Invoke("[No content was generated.]");
 
                 if (stopReason == "max_tokens")
                     onUpdate?.Invoke("\n(note: output was truncated because it reached the maximum token limit)");
