@@ -849,7 +849,7 @@ public partial class MergeConflictEditor : ChromelessWindow
         e.Cancel = true;
 
         var confirm = new Confirm();
-        confirm.SetData(App.Text("MergeConflictEditor.UnsavedChanges"), Models.ConfirmButtonType.OkCancel);
+        confirm.SetData(App.Text("MergeConflictEditor.UnsavedChanges"), Models.ConfirmButtonType.YesNo);
 
         var result = await confirm.ShowDialog<bool>(this);
         if (result)
@@ -982,6 +982,14 @@ public partial class MergeConflictEditor : ChromelessWindow
                 Close();
             }
         }
+    }
+
+    /// <summary>
+    /// フッターのCancelボタンからウィンドウを閉じる。
+    /// </summary>
+    private void CloseWindow(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 
     /// <summary>
