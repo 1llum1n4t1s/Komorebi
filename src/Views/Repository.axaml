@@ -488,7 +488,6 @@
                     <ComboBox.Items>
                       <TextBlock Text="{DynamicResource Text.Repository.Search.BySHA}" FontSize="10"/>
                       <TextBlock Text="{DynamicResource Text.Repository.Search.ByAuthor}" FontSize="10"/>
-                      <TextBlock Text="{DynamicResource Text.Repository.Search.ByCommitter}" FontSize="10"/>
                       <TextBlock Text="{DynamicResource Text.Repository.Search.ByMessage}" FontSize="10"/>
                       <TextBlock Text="{DynamicResource Text.Repository.Search.ByPath}" FontSize="10"/>
                       <TextBlock Text="{DynamicResource Text.Repository.Search.ByContent}" FontSize="10"/>

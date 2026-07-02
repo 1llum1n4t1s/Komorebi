@@ -12,8 +12,6 @@ public enum CommitSearchMethod
     BySHA = 0,
     /// <summary>著者名で検索。</summary>
     ByAuthor,
-    /// <summary>コミッター名で検索。</summary>
-    ByCommitter,
     /// <summary>コミットメッセージで検索。</summary>
     ByMessage,
     /// <summary>ファイルパスで検索。</summary>
