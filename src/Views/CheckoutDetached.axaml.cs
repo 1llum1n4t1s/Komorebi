@@ -3,14 +3,14 @@
 namespace Komorebi.Views;
 
 /// <summary>
-/// コミットチェックアウトダイアログのコードビハインド。
+/// コミット/タグチェックアウトダイアログのコードビハインド。
 /// </summary>
-public partial class CheckoutCommit : UserControl
+public partial class CheckoutDetached : UserControl
 {
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
-    public CheckoutCommit()
+    public CheckoutDetached()
     {
         InitializeComponent();
     }

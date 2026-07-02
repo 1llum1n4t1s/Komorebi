@@ -995,12 +995,28 @@ public partial class Histories : UserControl
                 checkoutCommit.Click += (_, e) =>
                 {
                     if (repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.CheckoutCommit(repo, commit));
+                        repo.ShowPopup(new ViewModels.CheckoutDetached(repo, commit));
                     e.Handled = true;
                 };
                 menu.Items.Add(checkoutCommit);
+            }
 
-                if (commit.IsMerged && commit.Parents.Count > 0)
+            // Komorebi: upstream (1fd88761) は isHead 時の reword/squash/fixup/drop 専用ポップアップを
+            // interactive rebase に統合し廃止したが、Komorebi の Reword/SquashOrFixupHead/DropHead は
+            // 自動スタッシュ・ForcePushAfterDone・reword後の自動ナビゲーション等の独自強化を持つ軽量パスのため温存する。
+            // 代わりに、この「重量パス」(git rebase -i ベース) の interactive rebase サブメニューを
+            // isHead でも選択可能にし、両方の手段を併存させる（部分適用）。
+            if (commit.IsMerged && commit.Parents.Count > 0)
+            {
+                var interactiveRebase = new MenuItem();
+                interactiveRebase.Header = App.Text("CommitCM.InteractiveRebase");
+                interactiveRebase.Icon = App.CreateMenuIcon("Icons.InteractiveRebase");
+
+                // Komorebi: 「Manually...」は選択コミット自身を on（exclusive base）として
+                // InteractiveRebase(repo, commit) を開く実装だが、isHead の場合は on == HEAD となり
+                // `on...HEAD` の範囲が常に空になってしまう（upstream 側にも同様の潜在問題がある）。
+                // 実害のある空リストダイアログを避けるため、isHead では Manually を出さない。
+                if (!isHead)
                 {
                     var manually = new MenuItem();
                     manually.Header = App.Text("CommitCM.InteractiveRebase.Manually", current.Name, target);
@@ -1011,79 +1027,77 @@ public partial class Histories : UserControl
                         e.Handled = true;
                     };
 
-                    var reword = new MenuItem();
-                    reword.Header = App.Text("CommitCM.InteractiveRebase.Reword");
-                    reword.Icon = App.CreateMenuIcon("Icons.Rename");
-                    reword.Click += async (_, e) =>
-                    {
-                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Reword);
-                        e.Handled = true;
-                    };
-
-                    var edit = new MenuItem();
-                    edit.Header = App.Text("CommitCM.InteractiveRebase.Edit");
-                    edit.Icon = App.CreateMenuIcon("Icons.Edit");
-                    edit.Click += async (_, e) =>
-                    {
-                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Edit);
-                        e.Handled = true;
-                    };
-
-                    var squash = new MenuItem();
-                    squash.Header = App.Text("CommitCM.InteractiveRebase.Squash");
-                    squash.Icon = App.CreateMenuIcon("Icons.SquashIntoParent");
-                    squash.Click += async (_, e) =>
-                    {
-                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Squash);
-                        e.Handled = true;
-                    };
-
-                    var fixup = new MenuItem();
-                    fixup.Header = App.Text("CommitCM.InteractiveRebase.Fixup");
-                    fixup.Icon = App.CreateMenuIcon("Icons.Fix");
-                    fixup.Click += async (_, e) =>
-                    {
-                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Fixup);
-                        e.Handled = true;
-                    };
-
-                    var drop = new MenuItem();
-                    drop.Header = App.Text("CommitCM.InteractiveRebase.Drop");
-                    drop.Icon = App.CreateMenuIcon("Icons.Clear");
-                    drop.Click += async (_, e) =>
-                    {
-                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Drop);
-                        e.Handled = true;
-                    };
-
-                    var interactiveRebase = new MenuItem();
-                    interactiveRebase.Header = App.Text("CommitCM.InteractiveRebase");
-                    interactiveRebase.Icon = App.CreateMenuIcon("Icons.InteractiveRebase");
                     interactiveRebase.Items.Add(manually);
                     interactiveRebase.Items.Add(new MenuItem() { Header = "-" });
-                    interactiveRebase.Items.Add(reword);
-                    interactiveRebase.Items.Add(edit);
-                    interactiveRebase.Items.Add(squash);
-                    interactiveRebase.Items.Add(fixup);
-                    interactiveRebase.Items.Add(drop);
-
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(interactiveRebase);
                 }
-                else
+
+                var reword = new MenuItem();
+                reword.Header = App.Text("CommitCM.InteractiveRebase.Reword");
+                reword.Icon = App.CreateMenuIcon("Icons.Rename");
+                reword.Click += async (_, e) =>
                 {
-                    var interactiveRebase = new MenuItem();
-                    interactiveRebase.Header = App.Text("CommitCM.InteractiveRebase.Manually", current.Name, target);
-                    interactiveRebase.Icon = App.CreateMenuIcon("Icons.InteractiveRebase");
-                    interactiveRebase.Click += async (_, e) =>
-                    {
-                        await App.ShowDialog(new ViewModels.InteractiveRebase(repo, commit));
-                        e.Handled = true;
-                    };
+                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Reword);
+                    e.Handled = true;
+                };
 
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(interactiveRebase);
-                }
+                var edit = new MenuItem();
+                edit.Header = App.Text("CommitCM.InteractiveRebase.Edit");
+                edit.Icon = App.CreateMenuIcon("Icons.Edit");
+                edit.Click += async (_, e) =>
+                {
+                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Edit);
+                    e.Handled = true;
+                };
+
+                var squash = new MenuItem();
+                squash.Header = App.Text("CommitCM.InteractiveRebase.Squash");
+                squash.Icon = App.CreateMenuIcon("Icons.SquashIntoParent");
+                squash.Click += async (_, e) =>
+                {
+                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Squash);
+                    e.Handled = true;
+                };
+
+                var fixup = new MenuItem();
+                fixup.Header = App.Text("CommitCM.InteractiveRebase.Fixup");
+                fixup.Icon = App.CreateMenuIcon("Icons.Fix");
+                fixup.Click += async (_, e) =>
+                {
+                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Fixup);
+                    e.Handled = true;
+                };
+
+                var drop = new MenuItem();
+                drop.Header = App.Text("CommitCM.InteractiveRebase.Drop");
+                drop.Icon = App.CreateMenuIcon("Icons.Clear");
+                drop.Click += async (_, e) =>
+                {
+                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Drop);
+                    e.Handled = true;
+                };
+
+                interactiveRebase.Items.Add(reword);
+                interactiveRebase.Items.Add(edit);
+                interactiveRebase.Items.Add(squash);
+                interactiveRebase.Items.Add(fixup);
+                interactiveRebase.Items.Add(drop);
+
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(interactiveRebase);
+            }
+            else if (!isHead)
+            {
+                var interactiveRebase = new MenuItem();
+                interactiveRebase.Header = App.Text("CommitCM.InteractiveRebase.Manually", current.Name, target);
+                interactiveRebase.Icon = App.CreateMenuIcon("Icons.InteractiveRebase");
+                interactiveRebase.Click += async (_, e) =>
+                {
+                    await App.ShowDialog(new ViewModels.InteractiveRebase(repo, commit));
+                    e.Handled = true;
+                };
+
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(interactiveRebase);
             }
 
             menu.Items.Add(new MenuItem() { Header = "-" });

@@ -3,15 +3,15 @@ using System.Threading.Tasks;
 namespace Komorebi.ViewModels;
 
 /// <summary>
-/// コミットチェックアウトダイアログのViewModel。
-/// git checkoutコマンドで特定のコミットに切り替える（DetachedHEAD状態になる）。
+/// コミット/タグチェックアウトダイアログのViewModel。
+/// git checkoutコマンドで特定のコミットまたはタグに切り替える（DetachedHEAD状態になる）。
 /// </summary>
-public class CheckoutCommit : Popup
+public class CheckoutDetached : Popup
 {
     /// <summary>
-    /// チェックアウト対象のコミット。
+    /// チェックアウト対象（Models.CommitまたはModels.Tag）。
     /// </summary>
-    public Models.Commit Commit
+    public object Target
     {
         get;
     }
@@ -38,10 +38,12 @@ public class CheckoutCommit : Popup
     /// </summary>
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="commit">チェックアウト対象のコミット</param>
-    public CheckoutCommit(Repository repo, Models.Commit commit)
+    public CheckoutDetached(Repository repo, Models.Commit commit)
     {
         _repo = repo;
-        Commit = commit;
+        _revision = commit.SHA;
+
+        Target = commit;
         // 設定でデフォルトを Stash & Reapply にできる (upstream d4ce0b97)
         DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
             Models.DealWithLocalChanges.StashAndReapply :
@@ -49,13 +51,29 @@ public class CheckoutCommit : Popup
     }
 
     /// <summary>
-    /// 確定処理。指定コミットへのチェックアウトを実行する。
+    /// コンストラクタ。リポジトリとタグを受け取って初期化する。
+    /// </summary>
+    /// <param name="repo">対象のリポジトリViewModel</param>
+    /// <param name="tag">チェックアウト対象のタグ</param>
+    public CheckoutDetached(Repository repo, Models.Tag tag)
+    {
+        _repo = repo;
+        _revision = tag.SHA;
+
+        Target = tag;
+        DealWithLocalChanges = Preferences.Instance.UseStashAndReapplyByDefault ?
+            Models.DealWithLocalChanges.StashAndReapply :
+            Models.DealWithLocalChanges.DoNothing;
+    }
+
+    /// <summary>
+    /// 確定処理。指定コミット/タグへのチェックアウトを実行する。
     /// 必要に応じてスタッシュの保存・復元、サブモジュール更新を行う。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()
     {
-        ProgressDescription = App.Text("Progress.CheckoutCommit", Commit.SHA);
+        ProgressDescription = App.Text("Progress.CheckoutCommit", _revision);
 
         var log = _repo.CreateLog("Checkout Commit");
         Use(log);
@@ -76,7 +94,7 @@ public class CheckoutCommit : Popup
             {
                 succ = await new Commands.Checkout(_repo.FullPath)
                     .Use(log)
-                    .CommitAsync(Commit.SHA, false);
+                    .CommitAsync(_revision, false);
             }
             else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
             {
@@ -96,14 +114,14 @@ public class CheckoutCommit : Popup
                 {
                     succ = await new Commands.Checkout(_repo.FullPath)
                         .Use(log)
-                        .CommitAsync(Commit.SHA, false);
+                        .CommitAsync(_revision, false);
                 }
             }
             else
             {
                 succ = await new Commands.Checkout(_repo.FullPath)
                     .Use(log)
-                    .CommitAsync(Commit.SHA, true);
+                    .CommitAsync(_revision, true);
             }
 
             if (succ && !stashFailed)
@@ -132,4 +150,7 @@ public class CheckoutCommit : Popup
 
     /// <summary>対象リポジトリへの参照</summary>
     private readonly Repository _repo = null;
+
+    /// <summary>チェックアウト対象のSHA（コミットまたはタグのSHA）</summary>
+    private readonly string _revision = string.Empty;
 }

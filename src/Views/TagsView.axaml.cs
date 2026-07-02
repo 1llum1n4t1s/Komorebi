@@ -298,13 +298,10 @@ public partial class TagsView : UserControl
                 var checkoutCommit = new MenuItem();
                 checkoutCommit.Header = App.Text("TagCM.Checkout");
                 checkoutCommit.Icon = App.CreateMenuIcon("Icons.Detached");
-                checkoutCommit.Click += async (_, ev) =>
+                checkoutCommit.Click += (_, ev) =>
                 {
-                    var commit = await new Commands.QuerySingleCommit(repo.FullPath, tag.SHA)
-                        .GetResultAsync();
-
-                    if (commit != null && repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.CheckoutCommit(repo, commit));
+                    if (repo.CanCreatePopup())
+                        repo.ShowPopup(new ViewModels.CheckoutDetached(repo, tag));
 
                     ev.Handled = true;
                 };

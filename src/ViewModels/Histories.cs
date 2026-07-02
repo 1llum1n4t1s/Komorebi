@@ -428,7 +428,7 @@ public class Histories : ObservableObject, IDisposable
     public void CheckoutCommitDetached(Models.Commit c)
     {
         if (!c.IsCurrentHead && _repo.CanCreatePopup())
-            _repo.ShowPopup(new CheckoutCommit(_repo, c));
+            _repo.ShowPopup(new CheckoutDetached(_repo, c));
     }
 
     /// <summary>
@@ -527,7 +527,7 @@ public class Histories : ObservableObject, IDisposable
             if (firstRemoteBranch is not null)
                 _repo.ShowPopup(new CreateBranch(_repo, firstRemoteBranch));
             else if (!_repo.IsBare)
-                _repo.ShowPopup(new CheckoutCommit(_repo, commit));
+                _repo.ShowPopup(new CheckoutDetached(_repo, commit));
         }
     }
 
