@@ -86,8 +86,8 @@ public partial class BranchSelector : UserControl
     public static readonly DirectProperty<BranchSelector, Models.Branch> SelectedBranchProperty =
         AvaloniaProperty.RegisterDirect<BranchSelector, Models.Branch>(
             nameof(SelectedBranch),
-            o => o.SelectedBranch,
-            (o, v) => o.SelectedBranch = v);
+            static o => o.SelectedBranch,
+            static (o, v) => o.SelectedBranch = v);
 
     /// <summary>現在選択されているブランチ</summary>
     public Models.Branch SelectedBranch
