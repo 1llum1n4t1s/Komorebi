@@ -39,10 +39,16 @@ public abstract class InProgressContext
     /// <summary>操作を中断する（git xxx --abort）。</summary>
     public async Task AbortAsync(CommandLog log)
     {
+        // upstream 8e17ff08 は成否を見ずに常にクリーンアップするが、abort 失敗時
+        // (index.lock 残存等、RaiseError=false で黙殺される) に rebase-merge を
+        // 削除すると orig-head/head-name を失い detached HEAD に取り残されるため、
+        // 成功時のみ OnAborted を実行する (意図的な upstream からの逸脱)
+        var succ = true;
         if (_abortCmd is not null)
-            await _abortCmd.Use(log).ExecAsync();
+            succ = await _abortCmd.Use(log).ExecAsync();
 
-        OnAborted();
+        if (succ)
+            OnAborted();
     }
 
     /// <summary>
