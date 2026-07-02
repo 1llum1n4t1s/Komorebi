@@ -420,7 +420,7 @@ public partial class WorkingCopy : UserControl
                     mergeBuiltin.Click += async (_, e) =>
                     {
                         var head = await new Commands.QuerySingleCommit(repo.FullPath, "HEAD").GetResultAsync();
-                        await App.ShowDialog(new ViewModels.MergeConflictEditor(repo, head, change.Path));
+                        App.ShowWindow(new ViewModels.MergeConflictEditor(repo, head, change.Path));
                         e.Handled = true;
                     };
 

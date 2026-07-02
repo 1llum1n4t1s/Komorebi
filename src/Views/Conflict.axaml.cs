@@ -55,10 +55,10 @@ public partial class Conflict : UserControl
     /// <summary>
     /// Mergeイベントのハンドラ。
     /// </summary>
-    private async void OnMerge(object _, RoutedEventArgs e)
+    private void OnMerge(object _, RoutedEventArgs e)
     {
         if (DataContext is ViewModels.Conflict vm)
-            await vm.MergeAsync();
+            vm.Merge();
 
         e.Handled = true;
     }

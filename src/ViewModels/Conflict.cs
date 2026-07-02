@@ -118,11 +118,12 @@ public class Conflict
 
     /// <summary>
     /// 内蔵マージエディタでコンフリクトを解決する。
+    /// 非モーダルウィンドウとして開き、他の操作をブロックしない (upstream 7779b91e)。
     /// </summary>
-    public async Task MergeAsync()
+    public void Merge()
     {
         if (CanMerge)
-            await App.ShowDialog(new MergeConflictEditor(_repo, _head, _change.Path));
+            App.ShowWindow(new MergeConflictEditor(_repo, _head, _change.Path));
     }
 
     /// <summary>
