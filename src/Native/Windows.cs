@@ -102,7 +102,7 @@ internal class Windows : OS.IBackend
     public string GetDataDir()
     {
         // ポータブルモード: 実行ファイルと同じディレクトリのdataフォルダを確認する
-        var execFile = Process.GetCurrentProcess().MainModule!.FileName;
+        var execFile = Environment.ProcessPath;
         var portableDir = Path.Combine(Path.GetDirectoryName(execFile)!, "data");
         if (Directory.Exists(portableDir))
             return portableDir;

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 using Avalonia.Interactivity;
 
@@ -22,7 +23,7 @@ public partial class ConfirmRestart : ChromelessWindow
     /// </summary>
     private void Restart(object _1, RoutedEventArgs _2)
     {
-        var selfExecFile = Process.GetCurrentProcess().MainModule!.FileName;
+        var selfExecFile = Environment.ProcessPath;
         Process.Start(selfExecFile);
         App.Quit(-1);
     }

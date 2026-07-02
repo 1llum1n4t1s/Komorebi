@@ -713,7 +713,7 @@ public partial class Command
     /// <summary>
     /// 自身の実行ファイルパスのキャッシュ（アプリ実行中は不変）。
     /// </summary>
-    private static readonly string s_selfExecFile = Process.GetCurrentProcess().MainModule!.FileName;
+    private static readonly string s_selfExecFile = Environment.ProcessPath;
 
     /// <summary>
     /// 進捗表示のパーセンテージパターンにマッチする正規表現。
