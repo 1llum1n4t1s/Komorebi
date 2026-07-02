@@ -267,7 +267,15 @@ public class ThemedTextDiffPresenter : TextEditor
                 return;
 
             var changeBlock = _presenter.BlockNavigation.GetCurrentBlock();
-            var changeBlockBorder = new Pen(_presenter.BlockBorderHighlightBrush);
+
+            // Draw はスクロール・キャレット点滅・選択変更のたびに呼ばれるホットパスのため、
+            // Pen の毎フレーム生成を避けてブラシが変わったときのみ再構築する (GC 圧削減、upstream 未対応)
+            if (!ReferenceEquals(_changeBlockBorderBrush, _presenter.BlockBorderHighlightBrush))
+            {
+                _changeBlockBorderBrush = _presenter.BlockBorderHighlightBrush;
+                _changeBlockBorder = new Pen(_changeBlockBorderBrush);
+            }
+            var changeBlockBorder = _changeBlockBorder;
 
             var lines = _presenter.GetLines();
             var width = textView.Bounds.Width;
@@ -334,7 +342,7 @@ public class ThemedTextDiffPresenter : TextEditor
                 {
                     var lastTextLine = line.TextLines[^1];
                     var radius = (lastTextLine.Height - 4) * 0.5;
-                    var pen = new Pen(Brushes.Red, 2);
+                    var pen = s_noNewLineIndicatorPen;
                     var indicatorX = lastTextLine.WidthIncludingTrailingWhitespace - textView.HorizontalOffset + radius + 4;
                     var indicatorY = line.GetTextLineVisualYPosition(lastTextLine, VisualYPosition.TextMiddle) - textView.VerticalOffset + 0.5;
                     drawingContext.DrawEllipse(null, pen, new Point(indicatorX, indicatorY), radius, radius);
@@ -374,6 +382,12 @@ public class ThemedTextDiffPresenter : TextEditor
 
         /// <summary>描画対象のテキストDiffプレゼンター。</summary>
         private readonly ThemedTextDiffPresenter _presenter;
+        /// <summary>変更ブロック境界線ペンのキャッシュ (Draw ごとの再生成を避ける)。</summary>
+        private Pen _changeBlockBorder;
+        /// <summary>キャッシュ済みペンが参照しているブラシ (テーマ変更検知用)。</summary>
+        private IBrush _changeBlockBorderBrush;
+        /// <summary>「ファイル末尾に改行なし」インジケーター用の共有ペン (不変ブラシのため static)。</summary>
+        private static readonly Pen s_noNewLineIndicatorPen = new(Brushes.Red, 2);
     }
 
     /// <summary>
