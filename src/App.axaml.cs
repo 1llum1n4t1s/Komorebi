@@ -841,7 +841,7 @@ public partial class App : Application
                     e.Cancel = true;
             });
 
-            if (TryLaunchAsFileHistoryViewer(desktop))
+            if (TryLaunchAsHistoryViewer(desktop))
                 return;
 
             if (TryLaunchAsBlameViewer(desktop))
@@ -1038,19 +1038,20 @@ public partial class App : Application
     }
 
     /// <summary>
-    /// ファイル履歴ビューアモードとして起動を試みる。
-    /// --file-historyオプション付きで起動された場合に、指定ファイルのgit履歴画面を表示する。
+    /// 履歴ビューアモードとして起動を試みる。
+    /// --historyオプション付きで起動された場合、指定パスがファイルならファイル履歴画面、
+    /// ディレクトリならディレクトリ履歴画面を表示する（upstream 51d4f7aa: 旧--file-historyを置き換え）。
     /// </summary>
-    /// <returns>ファイル履歴ビューアとして起動された場合はtrue</returns>
-    private static bool TryLaunchAsFileHistoryViewer(IClassicDesktopStyleApplicationLifetime desktop)
+    /// <returns>履歴ビューアとして起動された場合はtrue</returns>
+    private static bool TryLaunchAsHistoryViewer(IClassicDesktopStyleApplicationLifetime desktop)
     {
         var args = desktop.Args;
-        if (args is not { Length: > 1 } || !args[0].Equals("--file-history", StringComparison.Ordinal))
+        if (args is not { Length: > 1 } || !args[0].Equals("--history", StringComparison.Ordinal))
             return false;
 
         // パス区切りをスラッシュに正規化し、引用符・空白を除去してから絶対パス化する
-        var file = Path.GetFullPath(args[1].Replace('\\', '/').Trim('\"').Trim());
-        var dir = Path.GetDirectoryName(file);
+        var fullPath = Path.GetFullPath(args[1].Replace('\\', '/').Trim('\"').Trim());
+        var dir = Path.GetDirectoryName(fullPath);
 
         var test = new Commands.QueryRepositoryRootPath(dir).GetResult();
         if (!test.IsSuccess || string.IsNullOrEmpty(test.StdOut))
@@ -1061,12 +1062,28 @@ public partial class App : Application
         }
 
         var repo = test.StdOut.Trim();
-        var relFile = Path.GetRelativePath(repo, file);
-        var viewer = new Views.FileHistories()
+        var relativePath = Path.GetRelativePath(repo, fullPath);
+
+        if (File.Exists(fullPath))
         {
-            DataContext = new ViewModels.FileHistories(repo, relFile)
-        };
-        desktop.MainWindow = viewer;
+            desktop.MainWindow = new Views.FileHistories()
+            {
+                DataContext = new ViewModels.FileHistories(repo, relativePath)
+            };
+        }
+        else if (Directory.Exists(fullPath))
+        {
+            desktop.MainWindow = new Views.DirHistories()
+            {
+                DataContext = new ViewModels.DirHistories(repo, relativePath)
+            };
+        }
+        else
+        {
+            Console.Out.WriteLine($"'{args[1]}' does not exist in repository: '{repo}'");
+            desktop.Shutdown(-1);
+        }
+
         return true;
     }
 

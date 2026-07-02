@@ -259,7 +259,7 @@ Deutsch · English · Español · Filipino (Tagalog) · Français · Bahasa Indo
 
 ```
 komorebi <DIR>                       # リポジトリを開く
-komorebi --file-history <FILE_PATH>  # ファイル履歴を表示
+komorebi --history <FILE_OR_DIR>     # ファイル/ディレクトリの履歴を表示
 komorebi --blame <FILE_PATH>         # Blame を表示（HEAD）
 ```
 

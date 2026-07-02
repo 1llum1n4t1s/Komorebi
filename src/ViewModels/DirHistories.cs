@@ -98,6 +98,45 @@ public class DirHistories : ObservableObject
     }
 
     /// <summary>
+    /// コンストラクタ（コマンドライン単独起動用）。リポジトリパス文字列から軽量な
+    /// <see cref="Repository"/> インスタンスを内部構築し、ディレクトリの履歴を表示する
+    /// （upstream 51d4f7aa: `--history &lt;FILE_OR_DIR&gt;` からの起動経路）。
+    /// リビジョン指定は行わず、HEADから遡って全コミットを対象とする。
+    /// </summary>
+    public DirHistories(string repoPath, string dir)
+    {
+        Title = dir;
+
+        var gitDir = new Commands.QueryGitDir(repoPath).GetResult();
+        _repo = new Repository(true, repoPath, gitDir);
+        _repo.RefreshBranches();
+
+        _detail = new CommitDetail(_repo, null);
+        _detail.SearchChangeFilter = dir;
+
+        Task.Run(async () =>
+        {
+            var argsBuilder = new StringBuilder();
+            argsBuilder
+                .Append("--date-order -n 10000 -- ")
+                .Append(dir.Quoted());
+
+            var commits = await new Commands.QueryCommits(_repo.FullPath, argsBuilder.ToString(), false)
+                .GetResultAsync()
+                .ConfigureAwait(false);
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                Commits = commits;
+                IsLoading = false;
+
+                if (commits.Count > 0)
+                    SelectedCommit = commits[0];
+            });
+        });
+    }
+
+    /// <summary>
     /// メインのリポジトリビューで指定コミットへナビゲートする。
     /// </summary>
     public void NavigateToCommit(Models.Commit commit)
