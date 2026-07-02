@@ -249,13 +249,12 @@ public class SearchCommitContext : ObservableObject, IDisposable
 
     /// <summary>
     /// 検索方法に応じてサジェスト候補を更新する。
-    /// 作者/コミッター検索時はリポジトリの全ユーザー一覧を遅延取得して名前・メールに部分一致するものを提示し、
+    /// 作者検索時はリポジトリの全ユーザー一覧を遅延取得して名前・メールに部分一致するものを提示し、
     /// ファイルパス検索時はワークツリーのファイル一覧を遅延取得してフィルタにマッチするファイルを提示する。
     /// </summary>
     private void UpdateSuggestions()
     {
-        if (_method == (int)Models.CommitSearchMethod.ByAuthor ||
-            _method == (int)Models.CommitSearchMethod.ByCommitter)
+        if (_method == (int)Models.CommitSearchMethod.ByAuthor)
         {
             if (_users is null)
             {
