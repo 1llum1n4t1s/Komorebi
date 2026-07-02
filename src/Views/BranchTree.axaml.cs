@@ -742,6 +742,11 @@ public partial class BranchTree : UserControl
                     CollectBranchesInNode(branches, node);
             }
 
+            // upstream には無いガード: ブランチを1本も持たないリモートノードのみを
+            // 複数選択して Delete を押すと branches が空になり、branches[0] で範囲外例外になる
+            if (branches.Count == 0)
+                return;
+
             if (branches.Find(x => x.IsCurrent) is not null)
                 return;
 
