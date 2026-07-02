@@ -1042,7 +1042,6 @@ public partial class Histories : UserControl
                 {
                     var manually = new MenuItem();
                     manually.Header = App.Text("CommitCM.InteractiveRebase.Manually", current.Name, target);
-                    manually.Icon = App.CreateMenuIcon("Icons.InteractiveRebase");
                     manually.Click += async (_, e) =>
                     {
                         await App.ShowDialog(new ViewModels.InteractiveRebase(repo, commit));
