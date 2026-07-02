@@ -70,54 +70,65 @@ public class Launcher : ObservableObject
 
         var repos = ActiveWorkspace.Repositories.ToArray();
         foreach (var repo in repos)
-        {
-            var node = pref.FindNode(repo) ??
-                new RepositoryNode
-                {
-                    Id = repo,
-                    Name = Path.GetFileName(repo),
-                    Bookmark = 0,
-                    IsRepository = true,
-                };
-
-            OpenRepositoryInTab(node, null);
-        }
+            OpenRepositoryInTab(repo, null);
 
         _ignoreIndexChange = false;
 
-        if (!string.IsNullOrEmpty(startupRepo))
+        if (!TryOpenRepositoryFromPath(startupRepo))
         {
-            // bareリポジトリは --show-toplevel が失敗するため、先にbare判定して直接開く
-            var isBare = new Commands.IsBareRepository(startupRepo).GetResult();
-            if (isBare)
-            {
-                var node = pref.FindOrAddNodeByRepositoryPath(startupRepo, null, false);
-                Welcome.Instance.Refresh();
-
-                OpenRepositoryInTab(node, null);
-                return;
-            }
-
-            var test = new Commands.QueryRepositoryRootPath(startupRepo).GetResult();
-            if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
-            {
-                var node = pref.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), null, false);
-                Welcome.Instance.Refresh();
-
-                OpenRepositoryInTab(node, null);
-                return;
-            }
+            var activeIdx = ActiveWorkspace.ActiveIdx;
+            if (activeIdx > 0 && activeIdx < Pages.Count)
+                ActivePage = Pages[activeIdx];
+            else
+                ActivePage = Pages[0];
         }
 
-        var activeIdx = ActiveWorkspace.ActiveIdx;
-        if (activeIdx > 0 && activeIdx < Pages.Count)
-        {
-            ActivePage = Pages[activeIdx];
-            return;
-        }
-
-        ActivePage = Pages[0];
         PostActivePageChanged();
+    }
+
+    /// <summary>
+    /// 起動引数（コマンドラインで渡されたパス）からリポジトリを開く。
+    /// bareリポジトリ判定を優先し、次にワークツリールートを問い合わせる。
+    /// パスがgitリポジトリでない場合は、アクティブタブがWelcomeかつポップアップなしでなければ
+    /// 新規タブを追加した上で「Initialize Repository」ポップアップを表示する。
+    /// </summary>
+    /// <param name="startupRepo">起動引数で指定されたパス。空文字列/nullの場合は何もしない。</param>
+    /// <returns>リポジトリを開けた場合はtrue。パス未指定の場合はfalse。パスはあるがリポジトリでない場合はポップアップを出してtrueを返す。</returns>
+    private bool TryOpenRepositoryFromPath(string startupRepo)
+    {
+        if (string.IsNullOrEmpty(startupRepo))
+            return false;
+
+        var pref = Preferences.Instance;
+
+        // bareリポジトリは --show-toplevel が失敗するため、先にbare判定して直接開く
+        var isBare = new Commands.IsBareRepository(startupRepo).GetResult();
+        if (isBare)
+        {
+            var node = pref.FindOrAddNodeByRepositoryPath(startupRepo, null, false);
+            Welcome.Instance.Refresh();
+
+            OpenRepositoryInTab(node, null);
+            return true;
+        }
+
+        var test = new Commands.QueryRepositoryRootPath(startupRepo).GetResult();
+        if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
+        {
+            var node = pref.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), null, false);
+            Welcome.Instance.Refresh();
+
+            OpenRepositoryInTab(node, null);
+            return true;
+        }
+
+        // gitリポジトリではないパスがコマンドラインから渡された場合、
+        // Initialize Repositoryポップアップを表示してユーザーに初期化するか選ばせる
+        if (ActivePage is not { Data: Welcome { }, Popup: null })
+            AddNewTab();
+
+        ActivePage.Popup = new Init(ActivePage.Node.Id, startupRepo, null, 0, test.StdErr ?? "Unknown error occurred while opening the repository.");
+        return true;
     }
 
     /// <summary>アプリケーション終了時に全タブのリポジトリを閉じる。</summary>
@@ -166,18 +177,7 @@ public class Launcher : ObservableObject
 
         var repos = to.Repositories.ToArray();
         foreach (var repo in repos)
-        {
-            var node = pref.FindNode(repo) ??
-                new RepositoryNode
-                {
-                    Id = repo,
-                    Name = Path.GetFileName(repo),
-                    Bookmark = 0,
-                    IsRepository = true,
-                };
-
-            OpenRepositoryInTab(node, null);
-        }
+            OpenRepositoryInTab(repo, null);
 
         var activeIdx = to.ActiveIdx;
         if (activeIdx >= 0 && activeIdx < Pages.Count)
@@ -260,6 +260,9 @@ public class Launcher : ObservableObject
                 _activeWorkspace.Repositories.Clear();
                 _activeWorkspace.ActiveIdx = 0;
 
+                if (last.Node.IsUnmanaged)
+                    last.Node.SaveMinimalInfo(repo.GitDir);
+
                 repo.Close();
 
                 Welcome.Instance.ClearSearchFilter();
@@ -327,6 +330,28 @@ public class Launcher : ObservableObject
     }
 
     /// <summary>
+    /// パス文字列からリポジトリをタブで開く。ワークスペースの管理対象ノードが見つからない場合、
+    /// ワークスペースに登録しない「管理外（unmanaged）」ノードとして開く
+    /// （worktree/submodule をコマンドラインや UI から直接開いたケースなど）。
+    /// </summary>
+    /// <param name="repo">開くリポジトリのフルパス。</param>
+    /// <param name="page">再利用する既存タブ。nullなら新規タブまたはアクティブタブを使う。</param>
+    public void OpenRepositoryInTab(string repo, LauncherPage page)
+    {
+        var normalizedPath = repo.Replace('\\', '/').TrimEnd('/');
+        var node = Preferences.Instance.FindNode(normalizedPath) ?? new RepositoryNode
+        {
+            Id = normalizedPath,
+            Name = Path.GetFileName(normalizedPath),
+            Bookmark = 0,
+            IsRepository = true,
+            IsUnmanaged = true
+        };
+
+        OpenRepositoryInTab(node, page);
+    }
+
+    /// <summary>
     /// リポジトリをタブで開く。既に開いているタブがあればそちらに切り替える。
     /// pageがnullの場合は新規タブまたはアクティブタブを再利用する。
     /// </summary>
@@ -357,6 +382,9 @@ public class Launcher : ObservableObject
             App.RaiseException(node.Id, App.Text("Error.InvalidGitRepository"));
             return;
         }
+
+        if (node.IsUnmanaged)
+            node.LoadMinimalInfo(gitDir);
 
         var repo = new Repository(isBare, node.Id, gitDir);
         repo.Open();
@@ -484,6 +512,9 @@ public class Launcher : ObservableObject
         {
             if (removeFromWorkspace)
                 _activeWorkspace.Repositories.Remove(repo.FullPath);
+
+            if (page.Node.IsUnmanaged)
+                page.Node.SaveMinimalInfo(repo.GitDir);
 
             repo.Close();
         }

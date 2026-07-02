@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,20 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels;
+
+/// <summary>
+/// 管理外（unmanaged）リポジトリの最小限の情報を <c>$GIT_DIR/sourcegit.node</c> に永続化するための入れ物。
+/// worktree/submodule のようにワークスペースに登録されないリポジトリでも、
+/// ブックマークとフレンドリー名だけは gitディレクトリ側に保存して次回オープン時に復元する。
+/// </summary>
+public class RepositoryNodeMinimalInfo
+{
+    /// <summary>ユーザーが設定した表示名。</summary>
+    public string FriendlyName { get; set; } = string.Empty;
+
+    /// <summary>ブックマークのインデックス。</summary>
+    public int Bookmark { get; set; } = 0;
+}
 
 /// <summary>
 /// リポジトリツリー内のノード（リポジトリまたはグループフォルダ）を表すViewModel。
@@ -62,6 +77,18 @@ public class RepositoryNode : ObservableObject
         get => _isRepository;
         set => SetProperty(ref _isRepository, value);
     }
+
+    /// <summary>
+    /// このノードがワークスペースに登録されない「管理外」リポジトリ（worktree/submoduleを
+    /// コマンドライン等から直接開いた場合など）かどうか。true の場合、ブックマークとフレンドリー名は
+    /// <c>preference.json</c> ではなく <c>$GIT_DIR/sourcegit.node</c> に保存する。JSON保存対象外。
+    /// </summary>
+    [JsonIgnore]
+    public bool IsUnmanaged
+    {
+        get;
+        set;
+    } = false;
 
     /// <summary>
     /// ツリー上でこのノードが展開されているかどうか。
@@ -205,6 +232,58 @@ public class RepositoryNode : ObservableObject
         if (!IsRepository || IsInvalid)
             return;
         Native.OS.OpenTerminal(_id);
+    }
+
+    /// <summary>
+    /// 管理外リポジトリのブックマーク・フレンドリー名を <c>$GIT_DIR/sourcegit.node</c> から読み込む。
+    /// ファイルが存在しない、または壊れている場合は既定値のまま何もしない。
+    /// </summary>
+    /// <param name="gitDir">対象リポジトリの <c>.git</c> ディレクトリパス。</param>
+    public void LoadMinimalInfo(string gitDir)
+    {
+        var savedTo = Path.Combine(gitDir, "sourcegit.node");
+        if (!File.Exists(savedTo))
+            return;
+
+        try
+        {
+            var minimalInfo = JsonSerializer.Deserialize(File.ReadAllText(savedTo), JsonCodeGen.Default.RepositoryNodeMinimalInfo);
+            if (!string.IsNullOrEmpty(minimalInfo.FriendlyName))
+                Name = minimalInfo.FriendlyName;
+            Bookmark = minimalInfo.Bookmark;
+        }
+        catch
+        {
+            // 読み込みエラーは無視して既定値のまま使用する。
+        }
+    }
+
+    /// <summary>
+    /// 管理外リポジトリのブックマーク・フレンドリー名を <c>$GIT_DIR/sourcegit.node</c> に保存する。
+    /// タブを閉じるタイミングで呼ばれるため、リポジトリのディレクトリが既に削除されているケースを
+    /// 想定してガードする（upstream #2480: worktree/submodule削除後のタブクローズでクラッシュしていた）。
+    /// </summary>
+    /// <param name="gitDir">対象リポジトリの <c>.git</c> ディレクトリパス。</param>
+    public void SaveMinimalInfo(string gitDir)
+    {
+        if (!Directory.Exists(gitDir))
+            return;
+
+        var savedTo = Path.Combine(gitDir, "sourcegit.node");
+        var minimalInfo = new RepositoryNodeMinimalInfo
+        {
+            FriendlyName = Name,
+            Bookmark = Bookmark
+        };
+
+        try
+        {
+            File.WriteAllText(savedTo, JsonSerializer.Serialize(minimalInfo, JsonCodeGen.Default.RepositoryNodeMinimalInfo));
+        }
+        catch
+        {
+            // 書き込みエラー（リポジトリディレクトリがタブを開いたまま削除された等）は無視する。
+        }
     }
 
     /// <summary>
