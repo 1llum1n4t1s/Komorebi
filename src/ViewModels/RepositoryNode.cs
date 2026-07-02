@@ -192,7 +192,7 @@ public class RepositoryNode : ObservableObject
     /// </summary>
     public void OpenInFileManager()
     {
-        if (!IsRepository)
+        if (!IsRepository || IsInvalid)
             return;
         Native.OS.OpenInFileManager(_id);
     }
@@ -202,7 +202,7 @@ public class RepositoryNode : ObservableObject
     /// </summary>
     public void OpenTerminal()
     {
-        if (!IsRepository)
+        if (!IsRepository || IsInvalid)
             return;
         Native.OS.OpenTerminal(_id);
     }

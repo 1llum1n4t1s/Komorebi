@@ -21,9 +21,6 @@ public class Merge : Command
         WorkingDirectory = repo;
         Context = repo;
 
-        // マージメッセージ編集が有効な場合はコアエディタを使用する
-        Editor = EditorType.CoreEditor;
-
         var builder = new StringBuilder();
 
         // git merge --progress: 進捗表示付きでマージを実行する

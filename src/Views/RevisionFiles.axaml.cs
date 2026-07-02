@@ -41,7 +41,7 @@ public partial class RevisionFiles : UserControl
         }
         else if (e.Key == Key.Down || e.Key == Key.Up)
         {
-            if (vm.RevisionFileSearchSuggestion.Count > 0)
+            if (vm.RevisionFileSearchSuggestion?.Count > 0)
             {
                 SearchSuggestionBox.Focus(NavigationMethod.Tab);
                 SearchSuggestionBox.SelectedIndex = 0;

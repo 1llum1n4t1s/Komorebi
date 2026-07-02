@@ -21,8 +21,9 @@ public class Rebase : Command
 
         var builder = new StringBuilder(512);
 
+        // core.commentChar=±: コミットメッセージ中の `#` 始まり行がコメント扱いで消えないようにする
         // git rebase: 現在のブランチのコミットを指定ブランチの先端に再適用する
-        builder.Append("rebase ");
+        builder.Append("-c core.commentChar=± rebase ");
 
         // --autostash: リベース前に未コミットの変更を自動スタッシュし、完了後に復元する
         if (autoStash)

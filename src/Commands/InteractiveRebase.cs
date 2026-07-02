@@ -24,9 +24,11 @@ public class InteractiveRebase : Command
 
         var builder = new StringBuilder(512);
 
+        // core.commentChar=±: コミットメッセージ中の `#` 始まり行がコメント扱いで
+        // 消えないようにする（デフォルトのコメント文字を `#` から `±` に変更）
         // git rebase -i --autosquash: 対話的リベースを実行する
         // --autosquash: fixup!/squash!プレフィックスのコミットを自動的に並べ替える
-        builder.Append("rebase -i --autosquash ");
+        builder.Append("-c core.commentChar=± rebase -i --autosquash ");
 
         // --autostash: リベース前に未コミットの変更を自動スタッシュする
         if (autoStash)
