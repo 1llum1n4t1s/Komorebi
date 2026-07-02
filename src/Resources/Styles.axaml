@@ -1076,7 +1076,6 @@
     <Style Selector="^ /template/ Popup#PART_Popup">
       <Setter Property="Placement" Value="BottomEdgeAlignedLeft"/>
       <Setter Property="VerticalOffset" Value="2"/>
-      <Setter Property="Background" Value="{DynamicResource Brush.Contents}"/>
     </Style>
     <Style Selector="^:pointerover /template/ Border#Background">
       <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
