@@ -242,13 +242,6 @@ public class Preferences : ObservableObject
         set => SetProperty(ref _check4UpdatesOnStartup, value);
     }
 
-    /// <summary>コミットグラフにAuthorDate（作成日時）を表示するかどうか。</summary>
-    public bool ShowAuthorTimeInGraph
-    {
-        get => _showAuthorTimeInGraph;
-        set => SetProperty(ref _showAuthorTimeInGraph, value);
-    }
-
     /// <summary>コミットの子コミットを表示するかどうか。</summary>
     public bool ShowChildren
     {
@@ -275,6 +268,13 @@ public class Preferences : ObservableObject
     {
         get => _showTagsInGraph;
         set => SetProperty(ref _showTagsInGraph, value);
+    }
+
+    /// <summary>コミットグラフでブランチ名をコンパクト表示する（同名ローカル/リモートブランチを1バッジに集約）かどうか。</summary>
+    public bool UseCompactBranchNamesInGraph
+    {
+        get => _useCompactBranchNamesInGraph;
+        set => SetProperty(ref _useCompactBranchNamesInGraph, value);
     }
 
     /// <summary>履歴画面で2カラムレイアウトを使用するかどうか。</summary>
@@ -308,15 +308,8 @@ public class Preferences : ObservableObject
     /// <summary>差分表示で行末のCR（キャリッジリターン）を無視するかどうか。</summary>
     public bool IgnoreCRAtEOLInDiff
     {
-        get => Models.DiffOption.IgnoreCRAtEOL;
-        set
-        {
-            if (Models.DiffOption.IgnoreCRAtEOL != value)
-            {
-                Models.DiffOption.IgnoreCRAtEOL = value;
-                OnPropertyChanged();
-            }
-        }
+        get => _ignoreCRAtEOLInDiff;
+        set => SetProperty(ref _ignoreCRAtEOLInDiff, value);
     }
 
     /// <summary>チェックアウト・マージ等のダイアログでローカル変更の扱いを既定で「Stash &amp; Reapply」にするかどうか。</summary>
@@ -1040,17 +1033,18 @@ public class Preferences : ObservableObject
     private bool _useFixedTabWidth = true;                           // 固定タブ幅 (true=200px固定[既定・旧仕様] / false=リポ名フィット・最大200px)
     private bool _useAutoHideScrollBars = true;                      // スクロールバー自動非表示
     private bool _useGitHubStyleAvatar = true;                       // GitHub形式アバター
-    private bool _showAuthorTimeInGraph = false;                     // グラフにAuthorDate表示
     private bool _showChildren = false;                              // 子コミット表示
 
     private bool _check4UpdatesOnStartup = true;                     // 起動時アップデートチェック
     private string _ignoreUpdateTag = string.Empty;                  // 無視するアップデートタグ
 
     private bool _showTagsInGraph = true;                            // グラフにタグ表示
+    private bool _useCompactBranchNamesInGraph = true;                // グラフでブランチ名コンパクト表示
     private bool _useTwoColumnsLayoutInHistories = false;            // 履歴2カラムレイアウト
     private bool _displayTimeAsPeriodInHistories = false;            // 経過期間表示
     private bool _useSideBySideDiff = false;                         // サイドバイサイド差分
     private bool _ignoreWhitespaceChangesInDiff = false;             // ホワイトスペース無視
+    private bool _ignoreCRAtEOLInDiff = true;                        // 行末CR無視
     private bool _useSyntaxHighlighting = false;                     // シンタックスハイライト
     private bool _enableDiffViewWordWrap = false;                    // 差分ワードラップ
     private bool _showHiddenSymbolsInDiffView = false;               // 非表示文字表示

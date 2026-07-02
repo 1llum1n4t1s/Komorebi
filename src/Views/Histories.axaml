@@ -145,6 +145,7 @@
                                            Background="{DynamicResource Brush.Contents}"
                                            Foreground="{DynamicResource Brush.FG1}"
                                            ShowTags="{Binding Source={x:Static vm:Preferences.Instance}, Path=ShowTagsInGraph}"
+                                           UseCompactBranchNames="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseCompactBranchNamesInGraph}"
                                            FontSize="12"
                                            VerticalAlignment="Center">
                       <v:CommitRefsPresenter.UseGraphColor>
@@ -172,18 +173,12 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
-          <!-- 著者列は CommitListContainer.Columns[1]。コードビハインドで WidthProperty を観測して永続化する。 -->
+          <!--
+            著者列は CommitListContainer.Columns[1]。DataGrid 内蔵の Gripper リサイズは SetCurrentValue
+            経由で内部更新するため TwoWay バインディングのソース書き戻しが発生しない。コードビハインドで
+            WidthProperty を観測し、リポジトリの UIStates.AuthorColumnWidth に永続化する (upstream aa9290be)。
+          -->
           <DataGridTemplateColumn MinWidth="80" MaxWidth="400" CanUserResize="True" IsReadOnly="True" IsVisible="{Binding IsAuthorColumnVisible, Mode=OneWay}">
-            <!--
-              Width はコードビハインドで初期復元 + リサイズ書き戻しを行う。
-              理由: Avalonia DataGrid の Gripper リサイズは SetCurrentValue 経由で内部更新するため、
-              TwoWay バインディングのソース書き戻しが発生せず、永続化が機能しない。
-            -->
-            <DataGridTemplateColumn.Width>
-              <Binding Source="{x:Static vm:Preferences.Instance}"
-                       Path="Layout.AuthorColumnWidth"
-                       Mode="OneWay"/>
-            </DataGridTemplateColumn.Width>
             <DataGridTemplateColumn.Header>
               <TextBlock Classes="table_header" Text="{DynamicResource Text.Histories.Header.Author}" HorizontalAlignment="Center"/>
             </DataGridTemplateColumn.Header>
@@ -227,18 +222,9 @@
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
 
-          <DataGridTemplateColumn Width="Auto" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsDateTimeColumnVisible, Mode=OneWay}">
+          <DataGridTemplateColumn Width="Auto" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsAuthorTimeColumnVisible, Mode=OneWay}">
             <DataGridTemplateColumn.Header>
-              <Grid HorizontalAlignment="Center">
-                <TextBlock Classes="table_header"
-                           Margin="6,0,0,0"
-                           Text="{DynamicResource Text.Histories.Header.CommitTime}"
-                           IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=ShowAuthorTimeInGraph, Converter={x:Static BoolConverters.Not}, Mode=OneWay}"/>
-                <TextBlock Classes="table_header"
-                           Margin="6,0,0,0"
-                           Text="{DynamicResource Text.Histories.Header.AuthorTime}"
-                           IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=ShowAuthorTimeInGraph, Mode=OneWay}"/>
-              </Grid>
+              <TextBlock Classes="table_header" Text="{DynamicResource Text.Histories.Header.AuthorTime}" HorizontalAlignment="Center"/>
             </DataGridTemplateColumn.Header>
 
             <DataGridTemplateColumn.CellTemplate>
@@ -246,7 +232,26 @@
                 <Border Padding="8,0" Background="Transparent" ClipToBounds="True">
                   <v:CommitTimeTextBlock FontWeight="{Binding IsCurrentHead, Converter={x:Static c:BoolConverters.IsBoldToFontWeight}}"
                                          Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
-                                         UseAuthorTime="{Binding Source={x:Static vm:Preferences.Instance}, Path=ShowAuthorTimeInGraph, Mode=OneWay}"
+                                         Timestamp="{Binding AuthorTime, Mode=OneWay}"
+                                         ShowAsDateTime="{Binding Source={x:Static vm:Preferences.Instance}, Path=!DisplayTimeAsPeriodInHistories, Mode=OneWay}"
+                                         DateTimeFormat="{Binding Source={x:Static vm:Preferences.Instance}, Path=DateTimeFormat, Mode=OneWay}"
+                                         Use24Hours="{Binding Source={x:Static vm:Preferences.Instance}, Path=Use24Hours, Mode=OneWay}"/>
+                </Border>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Width="Auto" CanUserResize="False" IsReadOnly="True" IsVisible="{Binding IsCommitTimeColumnVisible, Mode=OneWay}">
+            <DataGridTemplateColumn.Header>
+              <TextBlock Classes="table_header" Text="{DynamicResource Text.Histories.Header.CommitTime}" HorizontalAlignment="Center"/>
+            </DataGridTemplateColumn.Header>
+
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate DataType="m:Commit">
+                <Border Padding="8,0" Background="Transparent" ClipToBounds="True">
+                  <v:CommitTimeTextBlock FontWeight="{Binding IsCurrentHead, Converter={x:Static c:BoolConverters.IsBoldToFontWeight}}"
+                                         Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
+                                         Timestamp="{Binding CommitterTime, Mode=OneWay}"
                                          ShowAsDateTime="{Binding Source={x:Static vm:Preferences.Instance}, Path=!DisplayTimeAsPeriodInHistories, Mode=OneWay}"
                                          DateTimeFormat="{Binding Source={x:Static vm:Preferences.Instance}, Path=DateTimeFormat, Mode=OneWay}"
                                          Use24Hours="{Binding Source={x:Static vm:Preferences.Instance}, Path=Use24Hours, Mode=OneWay}"/>
