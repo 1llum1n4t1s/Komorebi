@@ -230,6 +230,18 @@ public partial class Launcher : ChromelessWindow
             }
         }
 
+        // Ctrl+` → ターミナルを開く（macOSではCmd+`はウィンドウ切り替えに使われるため、Ctrl固定）
+        if (e is { Key: Key.OemTilde, KeyModifiers: KeyModifiers.Control })
+        {
+            if (vm.ActivePage.Data is ViewModels.Repository repo)
+                Native.OS.OpenTerminal(repo.FullPath);
+            else
+                ViewModels.Welcome.Instance.OpenTerminal();
+
+            e.Handled = true;
+            return;
+        }
+
         var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
 
         // コマンドパレット表示中はホットキーをブロックする
