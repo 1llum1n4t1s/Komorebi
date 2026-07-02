@@ -23,16 +23,11 @@ public class Apply : Popup
 
     /// <summary>
     /// クリップボードの内容をパッチとして適用するかどうか。
-    /// 切替時にPatchFileのバリデーションを再評価する。
     /// </summary>
     public bool FromClipboard
     {
         get => _fromClipboard;
-        set
-        {
-            if (SetProperty(ref _fromClipboard, value))
-                ValidateProperty(_patchFile, nameof(PatchFile));
-        }
+        set => SetProperty(ref _fromClipboard, value);
     }
 
     /// <summary>
@@ -86,10 +81,16 @@ public class Apply : Popup
         if (ctx.ObjectInstance is not Apply apply)
             return new ValidationResult("Invalid object instance!!!");
 
-        if (apply.FromClipboard || File.Exists(file))
+        if (apply.FromClipboard)
             return ValidationResult.Success;
 
-        return new ValidationResult($"File '{file}' can NOT be found!!!");
+        if (string.IsNullOrEmpty(file))
+            return new ValidationResult("Please select a patch file!!!");
+
+        if (!File.Exists(file))
+            return new ValidationResult($"File '{file}' can NOT be found!!!");
+
+        return ValidationResult.Success;
     }
 
     /// <summary>
