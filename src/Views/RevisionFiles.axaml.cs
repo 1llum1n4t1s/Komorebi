@@ -111,6 +111,12 @@ public partial class RevisionFiles : UserControl
     /// </summary>
     private async void OnOpenFileWithDefaultEditor(object sender, RoutedEventArgs e)
     {
+        // CommitDetail は Info/Changes/Files タブを IsVisible 切替 (attach 維持) で共存させるため、
+        // 非表示タブ上の静的 HotKey (Ctrl+O) も TopLevel に登録されたまま生きている。
+        // 別タブ表示中の発火で意図しないファイルオープンが起きないようガードする
+        if (!IsEffectivelyVisible)
+            return;
+
         if (DataContext is ViewModels.CommitDetail { CanOpenRevisionFileWithDefaultEditor: true } vm)
             await vm.OpenRevisionFileAsync(vm.ViewRevisionFilePath, null);
 
