@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,13 +25,6 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
         var client = CreateClient();
         var chatClient = client.GetChatClient(service.Model);
         var options = new ChatCompletionOptions() { Tools = { ChatTools.GetDetailChangesInFile } };
-
-        // upstream 356ab729: Anthropic / Qwen 系の "thinking" モードがコミットメッセージ生成の応答に
-        // 思考プロセス本文を混入させるのを抑制する (Patch API は実験的なので SCME0001 抑止)。
-#pragma warning disable SCME0001
-        options.Patch.Set("$.thinking"u8, Encoding.UTF8.GetBytes("""{"type": "disabled"}"""));
-        options.Patch.Set("$.enable_thinking"u8, false);
-#pragma warning restore SCME0001
 
         List<ChatMessage> messages = [new UserChatMessage(Agent.BuildUserMessage(service, repo, changeList))];
 
@@ -65,7 +57,19 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
                     throw new InvalidOperationException("The response was cut off because it reached the maximum length. Consider increasing the max tokens limit.");
                 case ChatFinishReason.ToolCalls:
                     {
-                        messages.Add(new AssistantChatMessage(completion));
+                        var message = new AssistantChatMessage(completion);
+
+                        // upstream d3acc780/838c5d1c: thinking モードを無効化する代わりに、
+                        // 応答に含まれる reasoning_content をそのまま次のリクエストへ送り返す。
+                        // これにより Anthropic / Qwen 系プロバイダの思考プロセスをモデルに保持させたまま
+                        // ツール呼び出しの往復を継続できる (Patch API は実験的なので SCME0001 抑止)。
+#pragma warning disable SCME0001
+                        var hasReasoningContent = completion.Patch.TryGetValue("$.choices[0].message.reasoning_content"u8, out string reasoning);
+                        if (hasReasoningContent)
+                            message.Patch.Set("$.reasoning_content"u8, reasoning);
+#pragma warning restore SCME0001
+
+                        messages.Add(message);
 
                         foreach (var call in completion.ToolCalls)
                         {
