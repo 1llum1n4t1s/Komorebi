@@ -1,5 +1,7 @@
 ﻿using System;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -104,6 +106,17 @@ public partial class DiffView : UserControl
     {
         this.FindDescendantOfType<ThemedTextDiffPresenter>()?.GotoChange(ViewModels.BlockNavigationDirection.Last);
         e.Handled = true;
+    }
+
+    /// <summary>
+    /// Show All Lines / Ignore Whitespace Changes / Side-by-Side トグルボタンの状態変更を検知し、
+    /// DiffContext.CheckSettings() を呼び出す。これらのトグルは Preferences.Instance に直接
+    /// バインドされているため、複数の DiffView が開いている場合でも全ビューに変更が反映される。
+    /// </summary>
+    private void OnToggleButtonPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ToggleButton.IsCheckedProperty && DataContext is ViewModels.DiffContext vm)
+            vm.CheckSettings();
     }
 
     /// <summary>

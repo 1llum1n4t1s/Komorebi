@@ -19,4 +19,9 @@ public static class GitVersions
     /// `stash push`コマンドで`--staged`オプションをサポートする最低バージョン
     /// </summary>
     public static readonly System.Version STASH_PUSH_ONLY_STAGED = new(2, 35, 0);
+
+    /// <summary>
+    /// `git replay`コマンドをサポートする最低バージョン
+    /// </summary>
+    public static readonly System.Version REPLAY = new(2, 44, 0);
 }

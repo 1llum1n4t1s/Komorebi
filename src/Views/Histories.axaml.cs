@@ -835,7 +835,7 @@ public partial class Histories : UserControl
         if (!repo.IsBare)
         {
             var target = commit.GetFriendlyName();
-            if (target.Length > 32)
+            if (target.Length > 40)
                 target = commit.SHA[..10];
 
             if (isHead)
@@ -899,20 +899,59 @@ public partial class Histories : UserControl
                 };
                 menu.Items.Add(rebase);
 
-                if (!commit.HasDecorators)
+                // マージ操作をサブメニューからメインコンテキストメニューへ移動。
+                // コミットがブランチ/タグのデコレータを持つ場合はそのブランチ/タグを
+                // マージ元として使う（デコレータがあれば、コミットSHAより名前の方が分かりやすい）。
+                var merge = new MenuItem();
+                merge.Header = App.Text("BranchCM.Merge", target, current.Name);
+                merge.Icon = App.CreateMenuIcon("Icons.Merge");
+                merge.Click += (_, e) =>
                 {
-                    var merge = new MenuItem();
-                    merge.Header = App.Text("CommitCM.Merge", current.Name);
-                    merge.Icon = App.CreateMenuIcon("Icons.Merge");
-                    merge.Click += (_, e) =>
+                    if (repo.CanCreatePopup())
                     {
-                        if (repo.CanCreatePopup())
-                            repo.ShowPopup(new ViewModels.Merge(repo, commit, current.Name));
+                        var found = false;
+                        foreach (var d in commit.Decorators)
+                        {
+                            if (d.Type == Models.DecoratorType.LocalBranchHead)
+                            {
+                                var b = repo.FindLocalBranchByName(d.Name);
+                                if (b != null)
+                                {
+                                    found = true;
+                                    repo.ShowPopup(new ViewModels.Merge(repo, b, current.Name, false));
+                                    break;
+                                }
+                            }
+                            else if (d.Type == Models.DecoratorType.RemoteBranchHead)
+                            {
+                                var rbCandidate = repo.FindBranchByFriendlyName(d.Name);
+                                var rb = rbCandidate is { IsLocal: false } ? rbCandidate : null;
+                                if (rb != null)
+                                {
+                                    found = true;
+                                    repo.ShowPopup(new ViewModels.Merge(repo, rb, current.Name, false));
+                                    break;
+                                }
+                            }
+                            else if (d.Type == Models.DecoratorType.Tag)
+                            {
+                                var t = repo.Tags.Find(x => x.Name == d.Name);
+                                if (t != null)
+                                {
+                                    found = true;
+                                    repo.ShowPopup(new ViewModels.Merge(repo, t, current.Name));
+                                    break;
+                                }
+                            }
+                        }
 
-                        e.Handled = true;
-                    };
-                    menu.Items.Add(merge);
-                }
+                        if (!found)
+                            repo.ShowPopup(new ViewModels.Merge(repo, commit, current.Name));
+                    }
+
+                    e.Handled = true;
+                };
+                menu.Items.Add(merge);
 
                 var cherryPick = new MenuItem();
                 cherryPick.Header = App.Text("CommitCM.CherryPick");
@@ -1386,18 +1425,6 @@ public partial class Histories : UserControl
                 e.Handled = true;
             };
             submenu.Items.Add(checkout);
-
-            var merge = new MenuItem();
-            merge.Header = App.Text("BranchCM.Merge", branch.Name, current.Name);
-            merge.Icon = App.CreateMenuIcon("Icons.Merge");
-            merge.IsEnabled = !merged;
-            merge.Click += (_, e) =>
-            {
-                if (repo.CanCreatePopup())
-                    repo.ShowPopup(new ViewModels.Merge(repo, branch, current.Name, false));
-                e.Handled = true;
-            };
-            submenu.Items.Add(merge);
         }
 
         var push = new MenuItem();
@@ -1509,19 +1536,6 @@ public partial class Histories : UserControl
         };
         submenu.Items.Add(checkout);
 
-        var merge = new MenuItem();
-        merge.Header = App.Text("BranchCM.Merge", name, current.Name);
-        merge.Icon = App.CreateMenuIcon("Icons.Merge");
-        merge.IsEnabled = !merged;
-        merge.Click += (_, e) =>
-        {
-            if (repo.CanCreatePopup())
-                repo.ShowPopup(new ViewModels.Merge(repo, branch, current.Name, false));
-            e.Handled = true;
-        };
-
-        submenu.Items.Add(merge);
-
         var delete = new MenuItem();
         delete.Header = App.Text("BranchCM.Delete", name);
         delete.Icon = App.CreateMenuIcon("Icons.Clear");
@@ -1586,20 +1600,6 @@ public partial class Histories : UserControl
             e.Handled = true;
         };
         submenu.Items.Add(push);
-
-        if (!repo.IsBare && !merged)
-        {
-            var merge = new MenuItem();
-            merge.Header = App.Text("TagCM.Merge", tag.Name, current.Name);
-            merge.Icon = App.CreateMenuIcon("Icons.Merge");
-            merge.Click += (_, e) =>
-            {
-                if (repo.CanCreatePopup())
-                    repo.ShowPopup(new ViewModels.Merge(repo, tag, current.Name));
-                e.Handled = true;
-            };
-            submenu.Items.Add(merge);
-        }
 
         var delete = new MenuItem();
         delete.Header = App.Text("TagCM.Delete", tag.Name);

@@ -1,7 +1,26 @@
 using System.IO;
 using System.Threading.Tasks;
 
+using Avalonia.Threading;
+
 namespace Komorebi.ViewModels;
+
+/// <summary>
+/// マージ事前チェック（`git merge-tree --write-tree`）の進行状態。
+/// </summary>
+public enum MergeTestingState
+{
+    /// <summary>チェック無効（Fast-Forward強制時など）。</summary>
+    Disabled,
+    /// <summary>チェック実行中。</summary>
+    Testing,
+    /// <summary>マージするとコンフリクトが発生する。</summary>
+    WillCauseConflicts,
+    /// <summary>チェック中に不明なエラーが発生した。</summary>
+    UnknownError,
+    /// <summary>コンフリクトなしでマージ可能。</summary>
+    NoConflicts,
+}
 
 /// <summary>
 /// ブランチ・コミット・タグを現在のブランチにマージするダイアログのViewModel。
@@ -61,6 +80,16 @@ public class Merge : Popup
     } = false;
 
     /// <summary>
+    /// マージ事前チェックの進行状態。ポップアップ表示直後にバックグラウンドで
+    /// `git merge-tree --write-tree` を実行し、コンフリクトの有無を判定する。
+    /// </summary>
+    public MergeTestingState TestingState
+    {
+        get => _testingState;
+        private set => SetProperty(ref _testingState, value);
+    }
+
+    /// <summary>
     /// ブランチをマージ元として初期化するコンストラクタ。
     /// </summary>
     /// <param name="repo">対象リポジトリ</param>
@@ -76,6 +105,10 @@ public class Merge : Popup
         Into = into;
         // Fast-Forward強制の場合はFastForwardモード、それ以外は自動選択
         Mode = forceFastForward ? Models.MergeMode.FastForward : AutoSelectMergeMode();
+
+        // Fast-Forward強制時はコンフリクトが起こり得ないため事前チェック不要
+        if (!forceFastForward)
+            Test();
     }
 
     /// <summary>
@@ -92,6 +125,8 @@ public class Merge : Popup
         Source = source;
         Into = into;
         Mode = AutoSelectMergeMode();
+
+        Test();
     }
 
     /// <summary>
@@ -108,6 +143,8 @@ public class Merge : Popup
         Source = source;
         Into = into;
         Mode = AutoSelectMergeMode();
+
+        Test();
     }
 
     /// <summary>
@@ -182,6 +219,40 @@ public class Merge : Popup
         return Models.MergeMode.Supported[preferredMergeModeIdx];
     }
 
+    /// <summary>
+    /// バックグラウンドでマージ事前チェックを実行する。
+    /// マージベースを求めた上で `git merge-tree --write-tree` を実行し、
+    /// 終了コードからコンフリクトの有無を判定してTestingStateへ反映する。
+    /// </summary>
+    private void Test()
+    {
+        TestingState = MergeTestingState.Testing;
+
+        Task.Run(async () =>
+        {
+            var mergeBase = await new Commands.MergeBase(_repo.FullPath, _sourceName, Into)
+                .GetResultAsync()
+                .ConfigureAwait(false);
+
+            if (string.IsNullOrEmpty(mergeBase))
+            {
+                Dispatcher.UIThread.Post(() => TestingState = MergeTestingState.Disabled);
+                return;
+            }
+
+            var exitCode = await new Commands.MergeTree(_repo.FullPath, _sourceName, Into)
+                .GetExitCodeAsync()
+                .ConfigureAwait(false);
+
+            Dispatcher.UIThread.Post(() => TestingState = exitCode switch
+            {
+                0 => MergeTestingState.NoConflicts,
+                1 => MergeTestingState.WillCauseConflicts,
+                _ => MergeTestingState.UnknownError,
+            });
+        });
+    }
+
     /// <summary>対象リポジトリ</summary>
     private readonly Repository _repo = null;
     /// <summary>マージ元の名前（ブランチ名、SHA、タグ名のいずれか）</summary>
@@ -190,4 +261,6 @@ public class Merge : Popup
     private Models.MergeMode _mode = Models.MergeMode.Default;
     /// <summary>メッセージ編集可否フラグ</summary>
     private bool _canEditMessage = true;
+    /// <summary>マージ事前チェックの進行状態</summary>
+    private MergeTestingState _testingState = MergeTestingState.Disabled;
 }

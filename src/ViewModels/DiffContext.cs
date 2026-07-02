@@ -21,61 +21,6 @@ public class DiffContext : ObservableObject
     }
 
     /// <summary>
-    /// 空白文字の変更を無視するかどうか。変更時に差分を再読み込みする。
-    /// </summary>
-    public bool IgnoreWhitespace
-    {
-        get => Preferences.Instance.IgnoreWhitespaceChangesInDiff;
-        set
-        {
-            if (value != Preferences.Instance.IgnoreWhitespaceChangesInDiff)
-            {
-                Preferences.Instance.IgnoreWhitespaceChangesInDiff = value;
-                OnPropertyChanged();
-                LoadContent();
-            }
-        }
-    }
-
-    /// <summary>
-    /// ファイル全体を表示するかどうか。
-    /// </summary>
-    public bool ShowEntireFile
-    {
-        get => Preferences.Instance.UseFullTextDiff;
-        set
-        {
-            if (value != Preferences.Instance.UseFullTextDiff)
-            {
-                Preferences.Instance.UseFullTextDiff = value;
-                OnPropertyChanged();
-
-                if (Content is TextDiffContext ctx)
-                    LoadContent();
-            }
-        }
-    }
-
-    /// <summary>
-    /// サイドバイサイド（左右分割）表示を使用するかどうか。
-    /// </summary>
-    public bool UseSideBySide
-    {
-        get => Preferences.Instance.UseSideBySideDiff;
-        set
-        {
-            if (value != Preferences.Instance.UseSideBySideDiff)
-            {
-                Preferences.Instance.UseSideBySideDiff = value;
-                OnPropertyChanged();
-
-                if (Content is TextDiffContext ctx && ctx.IsSideBySide() != value)
-                    Content = ctx.SwitchMode();
-            }
-        }
-    }
-
-    /// <summary>
     /// ファイルモード（パーミッション）の変更情報。
     /// </summary>
     public string FileModeChange
@@ -174,26 +119,31 @@ public class DiffContext : ObservableObject
 
     /// <summary>
     /// 設定変更を検出し、必要に応じて差分コンテンツを再読み込みまたはモード切替する。
+    /// `Preferences.Instance`を直接参照することで、複数のDiffビューアが開いている場合でも
+    /// 各ビューの`ToggleButton`（Show All Lines / Ignore Whitespace / Side-by-Side）操作を
+    /// 全ビューアに同期させる。
     /// </summary>
     public void CheckSettings()
     {
         if (Content is TextDiffContext ctx)
         {
-            if ((ShowEntireFile && _info.UnifiedLines != _entireFileLines) ||
-                (!ShowEntireFile && _info.UnifiedLines == _entireFileLines) ||
-                (IgnoreWhitespace != _info.IgnoreWhitespace))
+            var pref = Preferences.Instance;
+
+            if ((pref.UseFullTextDiff && _info.UnifiedLines != _entireFileLines) ||
+                (!pref.UseFullTextDiff && _info.UnifiedLines == _entireFileLines) ||
+                (pref.IgnoreWhitespaceChangesInDiff != _info.IgnoreWhitespace))
             {
                 LoadContent();
                 return;
             }
 
-            if (ctx.IsSideBySide() != UseSideBySide)
+            if (ctx.IsSideBySide() != pref.UseSideBySideDiff)
                 Content = ctx.SwitchMode();
         }
         else if (Content is Models.NoOrEOLChange)
         {
             // 「変更なし」表示中に空白無視設定が切り替わった場合も再読み込みする
-            if (IgnoreWhitespace != _info.IgnoreWhitespace)
+            if (Preferences.Instance.IgnoreWhitespaceChangesInDiff != _info.IgnoreWhitespace)
                 LoadContent();
         }
     }
