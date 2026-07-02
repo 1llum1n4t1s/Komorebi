@@ -1510,6 +1510,9 @@ public class Repository : ObservableObject, Models.IRepository
 
                 var graph = Models.CommitGraph.Parse(commits, _uiStates.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly));
 
+                // bisect情報の収集はgitプロセス起動+ファイルI/Oを伴うため、UIスレッドに入る前に済ませる
+                var bisectSnapshot = _histories?.QueryBisectInfo() ?? (null, Models.BisectState.None);
+
                 Dispatcher.UIThread.Invoke(() =>
                 {
                     if (token.IsCancellationRequested)
@@ -1521,7 +1524,7 @@ public class Repository : ObservableObject, Models.IRepository
                         _histories.Commits = commits;
                         _histories.Graph = graph;
 
-                        BisectState = _histories.UpdateBisectInfo();
+                        BisectState = _histories.ApplyBisectInfo(bisectSnapshot);
 
                         if (!string.IsNullOrEmpty(_navigateToCommitDelayed))
                             NavigateToCommit(_navigateToCommitDelayed);

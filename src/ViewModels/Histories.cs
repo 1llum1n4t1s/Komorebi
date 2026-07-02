@@ -227,16 +227,24 @@ public class Histories : ObservableObject, IDisposable
 
     /// <summary>
     /// bisect操作の状態を更新し、現在のbisect状態を返す。
-    /// BISECT_STARTファイルの存在とrefs/bisect内の情報を確認する。
+    /// 収集 (QueryBisectInfo) と反映 (ApplyBisectInfo) をまとめて行う同期版。
     /// </summary>
     public Models.BisectState UpdateBisectInfo()
     {
+        return ApplyBisectInfo(QueryBisectInfo());
+    }
+
+    /// <summary>
+    /// bisect操作の状態を収集する。BISECT_STARTファイルの存在とrefs/bisect内の情報を確認する。
+    /// gitプロセスの同期起動とファイルI/Oを伴うため、バックグラウンドスレッドで呼ぶこと
+    /// (upstream 9d89012e はUIスレッド上で実行するが、bisect中のリフレッシュごとに
+    /// UIがブロックするため収集と反映を分離している)。プロパティは変更しない。
+    /// </summary>
+    public (Models.Bisect Info, Models.BisectState State) QueryBisectInfo()
+    {
         var test = Path.Combine(_repo.GitDir, "BISECT_START");
         if (!File.Exists(test))
-        {
-            Bisect = null;
-            return Models.BisectState.None;
-        }
+            return (null, Models.BisectState.None);
 
         var head = new Commands.QueryRevisionByRefName(_repo.FullPath, "HEAD").GetResult();
         var info = new Models.Bisect();
@@ -260,18 +268,25 @@ public class Histories : ObservableObject, IDisposable
             }
         }
 
-        Bisect = info;
-
         if (info.Bads.Count == 0)
-            return Models.BisectState.WaitingForFirstBad;
+            return (info, Models.BisectState.WaitingForFirstBad);
 
         if (markedHead)
-            return Models.BisectState.WaitingForCheckoutAnother;
+            return (info, Models.BisectState.WaitingForCheckoutAnother);
 
         if (info.Goods.Count == 0)
-            return Models.BisectState.WaitingForFirstGood;
+            return (info, Models.BisectState.WaitingForFirstGood);
 
-        return Models.BisectState.WaitingForMark;
+        return (info, Models.BisectState.WaitingForMark);
+    }
+
+    /// <summary>
+    /// QueryBisectInfo の収集結果をプロパティへ反映し、bisect状態を返す。UIスレッドで呼ぶこと。
+    /// </summary>
+    public Models.BisectState ApplyBisectInfo((Models.Bisect Info, Models.BisectState State) snapshot)
+    {
+        Bisect = snapshot.Info;
+        return snapshot.State;
     }
 
     /// <summary>
