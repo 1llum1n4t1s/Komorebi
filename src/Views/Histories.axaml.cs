@@ -215,6 +215,18 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
+    /// データコンテキストが変更された際の処理。
+    /// リポジトリ切り替え時、著者列の幅を UIStates から復元する (upstream aa9290be)。
+    /// </summary>
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        if (DataContext is ViewModels.Histories vm && CommitListContainer.Columns.Count > 1)
+            CommitListContainer.Columns[1].Width = new DataGridLength(vm.AuthorColumnWidth, DataGridLengthUnitType.Pixel);
+    }
+
+    /// <summary>
     /// CommitListLoadedイベントのハンドラ。
     /// </summary>
     private void OnCommitListLoaded(object sender, RoutedEventArgs e)
@@ -229,7 +241,7 @@ public partial class Histories : UserControl
 
         // 著者列の Gripper リサイズは Avalonia DataGrid 内部で SetCurrentValue を使うため、
         // TwoWay バインディングのソース書き戻しが発生しない。WidthProperty を直接観測して
-        // Preferences.Layout.AuthorColumnWidth に書き戻すことで永続化を機能させる。
+        // リポジトリの UIStates.AuthorColumnWidth に書き戻すことで永続化を機能させる (upstream aa9290be)。
         if (!_authorColumnWidthSubscribed && dataGrid.Columns.Count > 1)
         {
             dataGrid.Columns[1].PropertyChanged += OnAuthorColumnPropertyChanged;
@@ -238,7 +250,7 @@ public partial class Histories : UserControl
     }
 
     /// <summary>
-    /// 著者列の WidthProperty 変更を Preferences へ書き戻すハンドラ。
+    /// 著者列の WidthProperty 変更をリポジトリの UIStates へ書き戻すハンドラ。
     /// </summary>
     private void OnAuthorColumnPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
     {
@@ -246,14 +258,13 @@ public partial class Histories : UserControl
             return;
 
         var width = column.Width;
-        // Pixel 単位以外（Auto/Star 等）は永続化対象外。LayoutInfo setter 側で clamp されるが、
+        // Pixel 単位以外（Auto/Star 等）は永続化対象外。UIStates 側では単純な double のため、
         // ここで UnitType ガードを掛けることで Auto→Pixel 変換等の意図しない書き込みを防ぐ。
         if (width.UnitType != DataGridLengthUnitType.Pixel)
             return;
 
-        var layout = ViewModels.Preferences.Instance.Layout;
-        if (!layout.AuthorColumnWidth.Equals(width))
-            layout.AuthorColumnWidth = width;
+        if (DataContext is ViewModels.Histories vm && !vm.AuthorColumnWidth.Equals(width.DisplayValue))
+            vm.AuthorColumnWidth = width.DisplayValue;
     }
 
     /// <summary>
@@ -484,13 +495,23 @@ public partial class Histories : UserControl
                 ev.Handled = true;
             };
 
-            var timeColumn = new MenuItem();
-            timeColumn.Header = App.Text("Histories.Header.DateTime");
-            if (vm.IsDateTimeColumnVisible)
-                timeColumn.Icon = App.CreateMenuIcon("Icons.Check");
-            timeColumn.Click += (_, ev) =>
+            var authorTimeColumn = new MenuItem();
+            authorTimeColumn.Header = App.Text("Histories.Header.AuthorTime");
+            if (vm.IsAuthorTimeColumnVisible)
+                authorTimeColumn.Icon = App.CreateMenuIcon("Icons.Check");
+            authorTimeColumn.Click += (_, ev) =>
             {
-                vm.IsDateTimeColumnVisible = !vm.IsDateTimeColumnVisible;
+                vm.IsAuthorTimeColumnVisible = !vm.IsAuthorTimeColumnVisible;
+                ev.Handled = true;
+            };
+
+            var commitTimeColumn = new MenuItem();
+            commitTimeColumn.Header = App.Text("Histories.Header.CommitTime");
+            if (vm.IsCommitTimeColumnVisible)
+                commitTimeColumn.Icon = App.CreateMenuIcon("Icons.Check");
+            commitTimeColumn.Click += (_, ev) =>
+            {
+                vm.IsCommitTimeColumnVisible = !vm.IsCommitTimeColumnVisible;
                 ev.Handled = true;
             };
 
@@ -498,7 +519,8 @@ public partial class Histories : UserControl
             menu.Items.Add(columnsHeader);
             menu.Items.Add(authorColumn);
             menu.Items.Add(shaColumn);
-            menu.Items.Add(timeColumn);
+            menu.Items.Add(authorTimeColumn);
+            menu.Items.Add(commitTimeColumn);
             menu.Open(CommitListContainer);
         }
 

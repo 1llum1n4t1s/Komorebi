@@ -27,6 +27,16 @@ public class RepositoryUIStates
         set;
     } = true;
 
+    /// <summary>
+    /// 履歴の作者列の幅（ピクセル）。DataGrid内蔵リサイズではなくカスタムリサイザーで制御し、
+    /// リポジトリ単位のUI状態として永続化する (upstream aa9290be)。
+    /// </summary>
+    public double AuthorColumnWidth
+    {
+        get;
+        set;
+    } = 120;
+
     /// <summary>履歴のSHA列を表示するかどうか</summary>
     public bool IsSHAColumnVisibleInHistory
     {
@@ -34,8 +44,15 @@ public class RepositoryUIStates
         set;
     } = true;
 
-    /// <summary>履歴の日時列を表示するかどうか</summary>
-    public bool IsDateTimeColumnVisibleInHistory
+    /// <summary>履歴の作者日時列を表示するかどうか (upstream 87766dd6)</summary>
+    public bool IsAuthorTimeColumnVisibleInHistory
+    {
+        get;
+        set;
+    } = false;
+
+    /// <summary>履歴のコミット日時列を表示するかどうか (upstream 87766dd6)</summary>
+    public bool IsCommitTimeColumnVisibleInHistory
     {
         get;
         set;
@@ -459,52 +476,10 @@ public class RepositoryUIStates
     /// <summary>
     /// 現在のフィルター設定からgit logコマンドのパラメータ文字列を構築する
     /// </summary>
+    /// <param name="gitDir">.gitディレクトリのパス（除外フィルタのみの場合、進行中操作の判定に使用する）</param>
     /// <returns>git logのパラメータ文字列</returns>
-    public string BuildHistoryParams()
+    public string BuildHistoryParams(string gitDir)
     {
-        List<string> includedRefs = [];
-        List<string> excludedBranches = [];
-        List<string> excludedRemotes = [];
-        List<string> excludedTags = [];
-        foreach (var filter in HistoryFilters)
-        {
-            if (filter.Type == FilterType.LocalBranch)
-            {
-                if (filter.Mode == FilterMode.Included)
-                    includedRefs.Add(filter.Pattern);
-                else if (filter.Mode == FilterMode.Excluded)
-                    excludedBranches.Add($"--exclude=\"{filter.Pattern.Substring(11).Escaped()}\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}\"");
-            }
-            else if (filter.Type == FilterType.LocalBranchFolder)
-            {
-                if (filter.Mode == FilterMode.Included)
-                    includedRefs.Add($"--branches={filter.Pattern.AsSpan(11)}/*");
-                else if (filter.Mode == FilterMode.Excluded)
-                    excludedBranches.Add($"--exclude=\"{filter.Pattern.Substring(11).Escaped()}/*\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}/*\"");
-            }
-            else if (filter.Type == FilterType.RemoteBranch)
-            {
-                if (filter.Mode == FilterMode.Included)
-                    includedRefs.Add(filter.Pattern);
-                else if (filter.Mode == FilterMode.Excluded)
-                    excludedRemotes.Add($"--exclude=\"{filter.Pattern.Substring(13).Escaped()}\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}\"");
-            }
-            else if (filter.Type == FilterType.RemoteBranchFolder)
-            {
-                if (filter.Mode == FilterMode.Included)
-                    includedRefs.Add($"--remotes={filter.Pattern.AsSpan(13)}/*");
-                else if (filter.Mode == FilterMode.Excluded)
-                    excludedRemotes.Add($"--exclude=\"{filter.Pattern.Substring(13).Escaped()}/*\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}/*\"");
-            }
-            else if (filter.Type == FilterType.Tag)
-            {
-                if (filter.Mode == FilterMode.Included)
-                    includedRefs.Add($"refs/tags/{filter.Pattern}");
-                else if (filter.Mode == FilterMode.Excluded)
-                    excludedTags.Add($"--exclude=\"{filter.Pattern.Escaped()}\" --decorate-refs-exclude=\"refs/tags/{filter.Pattern.Escaped()}\"");
-            }
-        }
-
         var builder = new StringBuilder();
 
         if (EnableTopoOrderInHistory)
@@ -521,46 +496,83 @@ public class RepositoryUIStates
         if (HistoryShowFlags.HasFlag(HistoryShowFlags.SimplifyByDecoration))
             builder.Append("--simplify-by-decoration ");
 
-        if (includedRefs.Count > 0)
-        {
-            foreach (var r in includedRefs)
-            {
-                builder.Append(r);
-                builder.Append(' ');
-            }
-        }
-        else if (excludedBranches.Count + excludedRemotes.Count + excludedTags.Count > 0)
-        {
-            foreach (var b in excludedBranches)
-            {
-                builder.Append(b);
-                builder.Append(' ');
-            }
-
-            builder.Append("--exclude=HEAD --branches ");
-
-            foreach (var r in excludedRemotes)
-            {
-                builder.Append(r);
-                builder.Append(' ');
-            }
-
-            builder.Append("--exclude=origin/HEAD --remotes ");
-
-            foreach (var t in excludedTags)
-            {
-                builder.Append(t);
-                builder.Append(' ');
-            }
-
-            builder.Append("--tags ");
-        }
-        else
-        {
+        var mode = GetHistoryFilterMode();
+        if (mode == FilterMode.None)
             builder.Append("--branches --remotes --tags HEAD");
-        }
+        else if (mode == FilterMode.Included)
+            BuildHistoryParamsForIncluded(builder);
+        else
+            BuildHistoryParamsForExcluded(builder, gitDir);
 
         return builder.ToString();
+    }
+
+    /// <summary>
+    /// 「含める」モードのフィルターから対象refの列挙パラメータを構築する
+    /// </summary>
+    private void BuildHistoryParamsForIncluded(StringBuilder builder)
+    {
+        foreach (var filter in HistoryFilters)
+        {
+            if (filter.Type == FilterType.LocalBranch)
+                builder.Append(filter.Pattern).Append(' ');
+            else if (filter.Type == FilterType.LocalBranchFolder)
+                builder.Append($"--branches={filter.Pattern.AsSpan(11)}/* ");
+            else if (filter.Type == FilterType.RemoteBranch)
+                builder.Append(filter.Pattern).Append(' ');
+            else if (filter.Type == FilterType.RemoteBranchFolder)
+                builder.Append($"--remotes={filter.Pattern.AsSpan(13)}/* ");
+            else if (filter.Type == FilterType.Tag)
+                builder.Append($"refs/tags/{filter.Pattern} ");
+        }
+    }
+
+    /// <summary>
+    /// 「除外する」モードのフィルターから除外パラメータを構築する。
+    /// チェリーピック/リベース/マージ/リバートの進行中は、除外フィルタのみだとHEADが
+    /// グラフから消えてしまうため、明示的にHEADを含める (upstream d5824534)。
+    /// </summary>
+    private void BuildHistoryParamsForExcluded(StringBuilder builder, string gitDir)
+    {
+        List<string> excludedBranches = [];
+        List<string> excludedRemotes = [];
+        List<string> excludedTags = [];
+        foreach (var filter in HistoryFilters)
+        {
+            if (filter.Type == FilterType.LocalBranch)
+                excludedBranches.Add($"--exclude=\"{filter.Pattern.Substring(11).Escaped()}\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}\" ");
+            else if (filter.Type == FilterType.LocalBranchFolder)
+                excludedBranches.Add($"--exclude=\"{filter.Pattern.Substring(11).Escaped()}/*\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}/*\" ");
+            else if (filter.Type == FilterType.RemoteBranch)
+                excludedRemotes.Add($"--exclude=\"{filter.Pattern.Substring(13).Escaped()}\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}\" ");
+            else if (filter.Type == FilterType.RemoteBranchFolder)
+                excludedRemotes.Add($"--exclude=\"{filter.Pattern.Substring(13).Escaped()}/*\" --decorate-refs-exclude=\"{filter.Pattern.Escaped()}/*\" ");
+            else if (filter.Type == FilterType.Tag)
+                excludedTags.Add($"--exclude=\"{filter.Pattern.Escaped()}\" --decorate-refs-exclude=\"refs/tags/{filter.Pattern.Escaped()}\" ");
+        }
+
+        foreach (var b in excludedBranches)
+            builder.Append(b);
+
+        builder.Append("--branches ");
+
+        var isInProgress = File.Exists(Path.Combine(gitDir, "CHERRY_PICK_HEAD")) ||
+            Directory.Exists(Path.Combine(gitDir, "rebase-merge")) ||
+            Directory.Exists(Path.Combine(gitDir, "rebase-apply")) ||
+            File.Exists(Path.Combine(gitDir, "REVERT_HEAD")) ||
+            File.Exists(Path.Combine(gitDir, "MERGE_HEAD"));
+        if (isInProgress)
+            builder.Append("HEAD ");
+
+        foreach (var r in excludedRemotes)
+            builder.Append(r);
+
+        builder.Append("--exclude=origin/HEAD --remotes ");
+
+        foreach (var t in excludedTags)
+            builder.Append(t);
+
+        builder.Append("--tags ");
     }
 
     /// <summary>UI状態ファイルのフルパス</summary>

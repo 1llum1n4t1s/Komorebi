@@ -40,13 +40,16 @@ public class CommitTimeTextBlock : TextBlock
         set => SetValue(DateTimeFormatProperty, value);
     }
 
-    public static readonly StyledProperty<bool> UseAuthorTimeProperty =
-        AvaloniaProperty.Register<CommitTimeTextBlock, bool>(nameof(UseAuthorTime), true);
+    /// <summary>
+    /// 表示するUnixタイムスタンプ。作者日時／コミット日時のどちらを渡すかは呼び出し側（バインディング）が決める (upstream 87766dd6)。
+    /// </summary>
+    public static readonly StyledProperty<ulong> TimestampProperty =
+        AvaloniaProperty.Register<CommitTimeTextBlock, ulong>(nameof(Timestamp));
 
-    public bool UseAuthorTime
+    public ulong Timestamp
     {
-        get => GetValue(UseAuthorTimeProperty);
-        set => SetValue(UseAuthorTimeProperty, value);
+        get => GetValue(TimestampProperty);
+        set => SetValue(TimestampProperty, value);
     }
 
     protected override Type StyleKeyOverride => typeof(TextBlock);
@@ -58,7 +61,7 @@ public class CommitTimeTextBlock : TextBlock
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == UseAuthorTimeProperty)
+        if (change.Property == TimestampProperty)
         {
             SetCurrentValue(TextProperty, GetDisplayText());
         }
@@ -151,10 +154,10 @@ public class CommitTimeTextBlock : TextBlock
     /// </summary>
     private string GetDisplayText()
     {
-        if (DataContext is not Models.Commit commit)
+        if (DataContext is not Models.Commit)
             return string.Empty;
 
-        var timestamp = UseAuthorTime ? commit.AuthorTime : commit.CommitterTime;
+        var timestamp = Timestamp;
         if (ShowAsDateTime)
             return Models.DateTimeFormat.Format(timestamp);
 

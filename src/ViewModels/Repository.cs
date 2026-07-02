@@ -1499,7 +1499,7 @@ public class Repository : ObservableObject, Models.IRepository
                 var builder = new StringBuilder();
                 builder
                     .Append('-').Append(Preferences.Instance.MaxHistoryCommits).Append(' ')
-                    .Append(_uiStates.BuildHistoryParams());
+                    .Append(_uiStates.BuildHistoryParams(GitDir));
 
                 Models.Logger.Log($"RefreshCommits開始: {FullPath}", Models.LogLevel.Debug);
                 var commits = await new Commands.QueryCommits(FullPath, builder.ToString()).GetResultAsync().ConfigureAwait(false);

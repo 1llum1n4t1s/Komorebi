@@ -42,6 +42,16 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
+    /// 履歴グリッドの作者列の幅（ピクセル）。カスタムリサイザーで手動制御し、
+    /// リポジトリのUI状態として永続化する (upstream aa9290be)。
+    /// </summary>
+    public double AuthorColumnWidth
+    {
+        get => _repo.UIStates.AuthorColumnWidth;
+        set => _repo.UIStates.AuthorColumnWidth = value;
+    }
+
+    /// <summary>
     /// 履歴グリッドでSHA列を表示するかどうか。
     /// </summary>
     public bool IsSHAColumnVisible
@@ -58,16 +68,32 @@ public class Histories : ObservableObject, IDisposable
     }
 
     /// <summary>
-    /// 履歴グリッドで日時列を表示するかどうか。
+    /// 履歴グリッドで作者日時列を表示するかどうか (upstream 87766dd6)。
     /// </summary>
-    public bool IsDateTimeColumnVisible
+    public bool IsAuthorTimeColumnVisible
     {
-        get => _repo.UIStates.IsDateTimeColumnVisibleInHistory;
+        get => _repo.UIStates.IsAuthorTimeColumnVisibleInHistory;
         set
         {
-            if (_repo.UIStates.IsDateTimeColumnVisibleInHistory != value)
+            if (_repo.UIStates.IsAuthorTimeColumnVisibleInHistory != value)
             {
-                _repo.UIStates.IsDateTimeColumnVisibleInHistory = value;
+                _repo.UIStates.IsAuthorTimeColumnVisibleInHistory = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 履歴グリッドでコミット日時列を表示するかどうか (upstream 87766dd6)。
+    /// </summary>
+    public bool IsCommitTimeColumnVisible
+    {
+        get => _repo.UIStates.IsCommitTimeColumnVisibleInHistory;
+        set
+        {
+            if (_repo.UIStates.IsCommitTimeColumnVisibleInHistory != value)
+            {
+                _repo.UIStates.IsCommitTimeColumnVisibleInHistory = value;
                 OnPropertyChanged();
             }
         }

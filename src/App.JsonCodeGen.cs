@@ -88,33 +88,6 @@ public class GridLengthConverter : JsonConverter<GridLength>
 }
 
 /// <summary>
-/// Avalonia DataGridLengthのJSON変換コンバーター。
-/// DataGridの列幅をピクセル値で保存・復元する。
-/// </summary>
-public class DataGridLengthConverter : JsonConverter<DataGridLength>
-{
-    /// <summary>
-    /// JSON数値からPixel単位のDataGridLengthを生成する。
-    /// DesiredValueを0、DisplayValueをsizeに設定し、固定幅として復元する。
-    /// </summary>
-    public override DataGridLength Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        var size = reader.GetDouble();
-        // 第3引数(desiredValue)=0, 第4引数(displayValue)=sizeで固定ピクセル幅として復元
-        return new DataGridLength(size, DataGridLengthUnitType.Pixel, 0, size);
-    }
-
-    /// <summary>
-    /// DataGridLengthの実際の表示幅をJSON数値として出力する。
-    /// </summary>
-    public override void Write(Utf8JsonWriter writer, DataGridLength value, JsonSerializerOptions options)
-    {
-        // Valueではなく実際の表示サイズ(DisplayValue)を保存する
-        writer.WriteNumberValue(value.DisplayValue);
-    }
-}
-
-/// <summary>
 /// System.Text.Jsonのソース生成を使用したJSONシリアライズコンテキスト。
 /// AOTコンパイル時にリフレクションを使わずにシリアライズを行うため、
 /// アプリ内で永続化が必要な全モデル型をここに登録する。
@@ -127,7 +100,6 @@ public class DataGridLengthConverter : JsonConverter<DataGridLength>
         typeof(DateTimeConverter),
         typeof(ColorConverter),
         typeof(GridLengthConverter),
-        typeof(DataGridLengthConverter),
     ]
 )]
 [JsonSerializable(typeof(Models.ExternalToolCustomization))]
