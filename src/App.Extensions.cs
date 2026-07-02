@@ -35,6 +35,26 @@ public static class StringExtensions
     }
 
     /// <summary>
+    /// BRE（Basic Regular Expression、git logの--author/--committerが使用する正規表現）の特殊文字をエスケープする。
+    /// コミット検索のサジェストからユーザー名/メールアドレスをそのままフィルタに適用する際、
+    /// 名前やメールに含まれる正規表現特殊文字（例: メールの "." や "+" 相当の文字）が
+    /// 意図しないパターンマッチとして解釈されるのを防ぐ。
+    /// </summary>
+    /// <param name="value">エスケープ対象の文字列（ユーザー名やメールアドレス）</param>
+    /// <returns>BRE特殊文字がバックスラッシュエスケープされた文字列</returns>
+    public static string EscapeForBRE(this string value)
+    {
+        return value
+            .Replace("\\", "\\\\", StringComparison.Ordinal)
+            .Replace(".", "\\.", StringComparison.Ordinal)
+            .Replace("[", "\\[", StringComparison.Ordinal)
+            .Replace("*", "\\*", StringComparison.Ordinal)
+            .Replace("^", "\\^", StringComparison.Ordinal)
+            .Replace("$", "\\$", StringComparison.Ordinal)
+            .Replace("{", "\\{", StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// ユーザー入力のフォントファミリー名を正規化・検証する。
     /// カンマ区切りの各フォント名について以下の処理を行う:
     /// 1. 前後の空白をトリムし、連続する空白を1つに圧縮する

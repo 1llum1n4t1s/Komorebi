@@ -188,10 +188,25 @@ public partial class Repository : UserControl
             repo.SearchCommitContext.ClearSuggestions();
             e.Handled = true;
         }
-        else if (e.Key == Key.Enter && SearchSuggestionBox.SelectedItem is string content)
+        else if (e.Key == Key.Enter)
         {
-            repo.SearchCommitContext.Filter = content;
-            TxtSearchCommitsBox.CaretIndex = content.Length;
+            var selected = SearchSuggestionBox.SelectedItem;
+            if (selected is string content)
+            {
+                repo.SearchCommitContext.Filter = content;
+                TxtSearchCommitsBox.CaretIndex = content.Length;
+            }
+            else if (selected is Models.User user)
+            {
+                var apply = user.ToString().EscapeForBRE();
+                repo.SearchCommitContext.Filter = apply;
+                TxtSearchCommitsBox.CaretIndex = apply.Length;
+            }
+            else
+            {
+                return;
+            }
+
             repo.IsSearchingCommits = true;
             repo.SearchCommitContext.StartSearch();
             e.Handled = true;
@@ -206,15 +221,26 @@ public partial class Repository : UserControl
         if (DataContext is not ViewModels.Repository repo)
             return;
 
-        var content = (sender as StackPanel)?.DataContext as string;
-        if (!string.IsNullOrEmpty(content))
+        var ctx = (sender as Control)?.DataContext;
+        if (ctx is string content)
         {
             repo.SearchCommitContext.Filter = content;
             TxtSearchCommitsBox.CaretIndex = content.Length;
-            repo.IsSearchingCommits = true;
-            repo.SearchCommitContext.StartSearch();
+        }
+        else if (ctx is Models.User user)
+        {
+            var apply = user.ToString().EscapeForBRE();
+            repo.SearchCommitContext.Filter = apply;
+            TxtSearchCommitsBox.CaretIndex = apply.Length;
+        }
+        else
+        {
+            e.Handled = true;
+            return;
         }
 
+        repo.IsSearchingCommits = true;
+        repo.SearchCommitContext.StartSearch();
         e.Handled = true;
     }
 

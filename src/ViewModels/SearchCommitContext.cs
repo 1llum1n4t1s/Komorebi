@@ -57,9 +57,10 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    /// ファイルパス検索時のオートコンプリート候補リスト。
+    /// 検索方法に応じたオートコンプリート候補リスト。
+    /// ファイルパス検索時は <see cref="string"/>、作者/コミッター検索時は <see cref="Models.User"/> を格納する。
     /// </summary>
-    public List<string> Suggestions
+    public List<object> Suggestions
     {
         get => _suggestions;
         private set => SetProperty(ref _suggestions, value);
@@ -134,6 +135,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
         _results?.Clear();
         _resultsBySha.Clear();
         _worktreeFiles?.Clear();
+        _users = null;
     }
 
     /// <summary>
@@ -246,67 +248,125 @@ public class SearchCommitContext : ObservableObject, IDisposable
     }
 
     /// <summary>
-    /// ファイルパス検索時のサジェスト候補を更新する。
-    /// ワークツリーのファイル一覧を遅延取得し、フィルタにマッチするファイルを提示する。
+    /// 検索方法に応じてサジェスト候補を更新する。
+    /// 作者/コミッター検索時はリポジトリの全ユーザー一覧を遅延取得して名前・メールに部分一致するものを提示し、
+    /// ファイルパス検索時はワークツリーのファイル一覧を遅延取得してフィルタにマッチするファイルを提示する。
     /// </summary>
     private void UpdateSuggestions()
     {
-        if (_method != (int)Models.CommitSearchMethod.ByPath || _requestingWorktreeFiles)
+        if (_method == (int)Models.CommitSearchMethod.ByAuthor ||
+            _method == (int)Models.CommitSearchMethod.ByCommitter)
         {
-            Suggestions = null;
-            return;
-        }
-
-        if (_worktreeFiles is null)
-        {
-            _requestingWorktreeFiles = true;
-
-            Task.Run(async () =>
+            if (_users is null)
             {
-                var files = await new Commands.QueryRevisionFileNames(_repo.FullPath, "HEAD")
-                    .GetResultAsync()
-                    .ConfigureAwait(false);
+                if (_requestingUsers)
+                    return;
 
-                Dispatcher.UIThread.Post(() =>
+                _requestingUsers = true;
+
+                Task.Run(async () =>
                 {
-                    _requestingWorktreeFiles = false;
-                    _worktreeFiles = files;
-                    UpdateSuggestions();
+                    var users = await new Commands.QueryUsers(_repo.FullPath)
+                        .GetResultAsync()
+                        .ConfigureAwait(false);
+
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        _requestingUsers = false;
+
+                        if (_repo.IsSearchingCommits)
+                        {
+                            _users = users;
+                            UpdateSuggestions();
+                        }
+                    });
                 });
-            });
 
-            return;
+                return;
+            }
+
+            if (_users.Count == 0 || _filter.Length < 2)
+            {
+                Suggestions = null;
+                return;
+            }
+
+            List<object> matchedUsers = [];
+            foreach (var user in _users)
+            {
+                if (user.Name.Contains(_filter, StringComparison.OrdinalIgnoreCase) ||
+                    user.Email.Contains(_filter, StringComparison.OrdinalIgnoreCase))
+                    matchedUsers.Add(user);
+            }
+
+            Suggestions = matchedUsers;
         }
+        else if (_method == (int)Models.CommitSearchMethod.ByPath)
+        {
+            if (_worktreeFiles is null)
+            {
+                if (_requestingWorktreeFiles)
+                    return;
 
-        if (_worktreeFiles.Count == 0 || _filter.Length < 3)
+                _requestingWorktreeFiles = true;
+
+                Task.Run(async () =>
+                {
+                    var files = await new Commands.QueryRevisionFileNames(_repo.FullPath, "HEAD")
+                        .GetResultAsync()
+                        .ConfigureAwait(false);
+
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        _requestingWorktreeFiles = false;
+
+                        if (_repo.IsSearchingCommits)
+                        {
+                            _worktreeFiles = files;
+                            UpdateSuggestions();
+                        }
+                    });
+                });
+
+                return;
+            }
+
+            if (_worktreeFiles.Count == 0 || _filter.Length < 3)
+            {
+                Suggestions = null;
+                return;
+            }
+
+            List<object> matchedFiles = [];
+            foreach (var file in _worktreeFiles)
+            {
+                if (file.Contains(_filter, StringComparison.OrdinalIgnoreCase) && file.Length != _filter.Length)
+                {
+                    matchedFiles.Add(file);
+                    if (matchedFiles.Count > 100)
+                        break;
+                }
+            }
+
+            Suggestions = matchedFiles;
+        }
+        else
         {
             Suggestions = null;
-            return;
         }
-
-        List<string> matched = [];
-        foreach (var file in _worktreeFiles)
-        {
-            if (file.Contains(_filter, StringComparison.OrdinalIgnoreCase) && file.Length != _filter.Length)
-            {
-                matched.Add(file);
-                if (matched.Count > 100)
-                    break;
-            }
-        }
-
-        Suggestions = matched;
     }
 
     private Repository _repo = null;
     private int _method = (int)Models.CommitSearchMethod.ByMessage;
     private string _filter = string.Empty;
     private bool _onlySearchCurrentBranch = false;
-    private List<string> _suggestions = null;
+    private List<object> _suggestions = null;
     private bool _isQuerying = false;
     private List<Models.Commit> _results = null;
     private readonly Dictionary<string, Models.Commit> _resultsBySha = new(StringComparer.Ordinal);
     private Models.Commit _selected = null;
     private bool _requestingWorktreeFiles = false;
     private List<string> _worktreeFiles = null;
+    private bool _requestingUsers = false;
+    private List<Models.User> _users = null;
 }
