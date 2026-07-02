@@ -164,16 +164,28 @@ public class CommitRefsPresenter : Control
     }
 
     /// <summary>
-    /// DecoratorAtの処理を行う。
+    /// 指定座標にあるデコレータを返す。座標がどのバッジにも該当しない場合は null。
+    /// Render と同じレイアウト計算（開始x=1.5・バッジ間4px・AllowWrap時の折返しy）で
+    /// 走査しないと、クリック位置とバッジの対応が後方ほど累積してずれる。
     /// </summary>
     public Models.Decorator DecoratorAt(Point point)
     {
-        var x = 0.0;
+        var allowWrap = AllowWrap;
+        var x = 1.5;
+        var y = 0.5;
+
         foreach (var item in _items)
         {
-            x += item.Width;
-            if (point.X < x)
+            if (allowWrap && x > 1.5 && x + item.Width > Bounds.Width)
+            {
+                x = 1.5;
+                y += 20.0;
+            }
+
+            if (new Rect(x, y, item.Width, 16).Contains(point))
                 return item.Decorator;
+
+            x += item.Width + 4;
         }
 
         return null;
@@ -194,8 +206,10 @@ public class CommitRefsPresenter : Control
         var x = 1.5;
         var y = 0.5;
 
-        // ヒットテスト（右クリックでのコンテキストメニュー表示）を成立させるため全域を透明で塗る
-        context.FillRectangle(Brushes.Transparent, Bounds);
+        // ヒットテスト（右クリックでのコンテキストメニュー表示）を成立させるため全域を透明で塗る。
+        // DrawingContext はローカル座標系なので、親相対オフセットを含む Bounds をそのまま渡すと
+        // Margin 付き配置でヒット領域がずれる。サイズのみの Rect を使う。
+        context.FillRectangle(Brushes.Transparent, new Rect(Bounds.Size));
 
         foreach (var item in _items)
         {
