@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build & Run
 
 ```bash
-# Restore (includes git submodule for depends/AvaloniaEdit)
+# Restore (depends/AvaloniaEdit is vendored, no submodule init needed)
 dotnet restore
 
 # Build
@@ -60,7 +60,7 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 `Komorebi.slnx` (XML-based solution file):
 - `src/Komorebi.csproj` — main application
 - `tests/Komorebi.Tests/` — xUnit v3 test project
-- `depends/AvaloniaEdit/` — git submodule (text editor for diff/blame views)
+- `depends/AvaloniaEdit/` — vendored (directly tracked, not a git submodule; text editor for diff/blame views)
 - `.github/workflows/` — CI/CD workflows
 - `build/` — packaging scripts and resources
 
@@ -242,11 +242,11 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 
 ## Key Dependencies
 
-- **Avalonia 12.0.2** — cross-platform XAML UI (Note: `Avalonia.Controls.DataGrid` is intentionally pinned to 12.0.0 — bump together with main Avalonia after compatibility check)
+- **Avalonia 12.0.5** — cross-platform XAML UI (Note: `Avalonia.Controls.DataGrid` is intentionally pinned to 12.0.1 — bump together with main Avalonia after compatibility check)
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 1.0.1** — auto-update framework
-- **depends/AvaloniaEdit** — git submodule, text editor for diff/blame
+- **depends/AvaloniaEdit** — vendored (directly tracked, not a git submodule), text editor for diff/blame
 - **OpenAI / Azure.AI.OpenAI 2.8.0-beta.1** — AI commit message generation
 - **LiveChartsCore 2.0.2** — contribution statistics charts
 - **BitMiracle.LibTiff.NET / Pfim** — TIFF / DDS image format support in ImageDiffView
