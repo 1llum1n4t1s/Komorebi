@@ -152,6 +152,97 @@ main に直接コミット済み。
 - **CLAUDE.md の Avalonia バージョン記載が古い**: 「Avalonia 12.0.2」と記載されているが `src/Komorebi.csproj` の実体は **12.0.5**
 - **CLAUDE.md の `depends/AvaloniaEdit` 記載が不正確**: 「git submodule」と記載されているが `.gitmodules` が存在せず実態は **vendored（直接トラッキング）**
 
+### 2026-07-03 バッチ（Tier1-4: 前回バッチの残り約70件を全取り込み）
+
+前回（2026-07-02バッチ）で個別記録を省略していた ux/refactor/code_style 系124件と、Defer再分類していた項目を再評価し、
+Tier1（バグ修正6件）→ Tier2（Deferから昇格13コミット）→ Tier3（構造追従・cherry-pick衝突予防25件）→ Tier4（UX改善30件）
+の順で「妥当なものは全て」取り込み。Tier1は直接対応、Tier2-4（約65コミット）は6グループに分割し並列worktreeエージェントで
+移植後、mainへ順次統合。統合時に3件の意味的衝突（別グループが同一シンボル/リソースを独立追加）を検出・解消。
+
+最終的に**40コミット**をmainに追加（うち3件は統合時の後始末コミット）。ビルド0エラー、テスト1637件全パス、
+`dotnet format --verify-no-changes` 差分なし、17言語ローカライズ100%を確認済み。**push・PR作成は未実施**（main上に未push、次の明示指示待ち）。
+
+#### Tier1: バグ修正（`f15108e2`）
+
+| 上流 SHA | サマリ | 結果 |
+|---|---|---|
+| `b4201ed9` | `RevisionFileSearchSuggestion` の null 参照ガード | ✅ 適用 |
+| `dd163e55` + `cb1664f1` | 無効リポジトリ（パス消失）で Explore/Terminal を非表示化 | ✅ 適用（Komorebi既存の`IsInvalid`プロパティに統合、upstream最終形の大掛かりなメニュー再編は見送り） |
+| `e92810e7` | rebase/cherry-pick/revert/merge `--continue` で `core.commentChar=±` を指定し `#` 始まりのコミットメッセージ行を保護 | ✅ 適用 |
+| `2e373121` | `AvatarManager` の HttpClient をループ外で使い回す | ⏭️ AlreadyPresent — Komorebi は既に `static readonly HttpClient`+`MaxResponseContentBufferSize`（OOM対策）まで実装済みで upstream 以上 |
+| `9635b83a` | 画像デコード時の `GCHandle` pin 漏れ対策 | ⏭️ AlreadyPresent — Komorebi は既に `GCHandle.Alloc(Pinned)` + 整数オーバーフロー対策済みで upstream 以上 |
+
+#### Tier2: Defer から昇格した機能（`d91aa160`..`18b51995`）
+
+| 上流 SHA | サマリ | 結果 |
+|---|---|---|
+| `1faa3b1c` + `03248307` + `1661d325` | merge/rebase 実行前の事前コンフリクトチェックUI（`git merge-tree`/`git replay --onto`） | ✅ 適用 `d91aa160`（新規`MergeBase.cs`/`MergeTree.cs`/`Replay.cs`） |
+| `e167f8e9` | 複数 Diff ビューア間でのトグル設定同期（`DiffContext`） | ✅ 適用（`d91aa160`に統合） |
+| `d3acc780` + `838c5d1c` | OpenAI系AIプロバイダで thinking mode を無効化せず `reasoning_content` を送り返す | ✅ 適用 `953088aa`（`OpenAISdkStrategy.cs`のみ、Anthropic経路は無傷） |
+| `51d4f7aa` | `--file-history <FILE>` を `--history <FILE_OR_DIR>` に統合 | ✅ 適用 `18b51995` |
+| `fa1e19bc` + `fe57dd75` | ターミナルを開くグローバルホットキー（Ctrl+\`） | ✅ 適用 `29f52e1d` |
+| `27468682` + `8272da4b` | 管理外（unmanaged）リポジトリのブックマーク・名前を `$GIT_DIR/sourcegit.node` に永続化 | ✅ 適用 `54e896c3` |
+| `381b44a4` + `1e255299` + `70dec954` | コミット作者検索へのサジェスト機能 + BRE エスケープ | ✅ 適用 `1a25f3ad`（新規`QueryUsers.cs`、`EscapeForBRE`拡張） |
+| `4052b68b` | CLI から非 Git フォルダを開いた際の Init ポップアップ | ✅ 適用（`54e896c3`に混入コミット、内容は正しく反映） |
+| `aa8d4a2e` | diff の改行コード表示 | ❌ Skip — upstream はバイト単位パーサー前提だが Komorebi の `Diff.cs` は `StreamReader.ReadLineAsync()` ベースで `\r` を保持できず、再現には大規模改修が必要 |
+
+#### Tier3: 構造追従（cherry-pick衝突予防、`a59cf71a`..`c3952b8a` 他）
+
+| 上流 SHA | サマリ | 結果 |
+|---|---|---|
+| `92255720` | ブランチ削除の force/safe 切替、リモート追跡ブランチの事後確認化 | ✅ 適用 `a59cf71a` |
+| `90c3220f` | `CheckoutCommit`→`CheckoutDetached` リネーム + タグ直接 detached checkout | ✅ 適用 `0b0a5bd7` |
+| `0bc2945f` | `SupportOpenAsFolder`→`SupportOpenFolder` リネーム | ✅ 適用 `12f04e8a` |
+| `3331766d` | コミットメッセージ入力欄を AvaloniaEdit 依存から TextBox ベースへ全面移行 | ✅ 適用 `0342522f`（IME対応改善） |
+| `1fd88761` | HEAD コミットの reword/squash/fixup/drop を専用popupから interactive rebase 再利用に統合（upstream -580行） | 🔶 部分適用（`0b0a5bd7`混在）— Komorebi 独自の `Reword`/`SquashOrFixupHead`/`DropHead`（自動スタッシュ・ForcePushAfterDone等の独自機能付き）は価値が高いため**削除せず併存**、Interactive Rebase サブメニューへの露出のみ追加 |
+| `32320e20` + `18a6412e` | `HistoriesDetailsStandalone` を2ウィンドウに分割 | ❌ Skip — 前提の「コミット詳細を別ウィンドウで開く」機能一式（upstream 5コミット分）が Komorebi 未導入で単独適用不可 |
+| `ec74c6d4` + `2aaf6978` | commit refs presenter 刷新 + コミットグラフでのブランチ名コンパクト表示 | ✅ 適用 `46bdfef2` |
+| `aa9290be` + `d5824534` + `87766dd6` | HISTORY画面列表示刷新（AUTHOR列幅永続化、作者時刻/コミット時刻分離） | ✅ 適用 `7f2469f1` |
+| `f30fd59a` | `RegisterDirect` ラムダへの `static` 修飾子付与 | ✅ 適用 `c3952b8a`（Komorebiは既に`StyledProperty`へ大半移行済みのため対象は`BranchSelector`1箇所のみ） |
+| `ce29b44c` | 静的 `DiffOption.IgnoreCRAtEOL`→`Preferences.IgnoreCRAtEOLInDiff` | ✅ 適用 `a6d682b4` |
+| `59459546` | コミッター名によるコミット検索サポート削除 | ✅ 適用 `1baee502`（全17言語のローカライズキーも削除） |
+| `99d973f0` | `Process.GetCurrentProcess().MainModule!.FileName`→`Environment.ProcessPath` | ✅ 適用 `8019e113` |
+| `7779b91e` | 内蔵マージエディタをモーダル→非モーダルダイアログに変更 | ✅ 適用 `ac42f06c` |
+| `b5fd290a` | 非推奨 `UseMicaOnWindows11` 削除 | ⏭️ AlreadyPresent — Komorebi に該当コードが既に存在しない |
+| `10448441` | testing merge 機能の改修（`MergeBase`+`MergeTree`→`merge-tree --write-tree`） | ❌ Skip — 前提の testing merge 機能自体（`TestingState`等）が Komorebi 未実装。新規機能実装は今回のスコープ外 |
+
+#### Tier4: UX改善（`9babf445`..`0abdc78a`）
+
+| 上流 SHA | サマリ | 結果 |
+|---|---|---|
+| `d915d317` + `c358527e` | Dark テーマの前景色（FG1/FG2/BadgeFG）を明るく調整 | ✅ 適用 `9babf445` |
+| `09a380e1` + `3708c56c` + `ce7bc045` + `3918ff2b` | コミット時刻に等幅数字、SHA表示にmonospaceフォント（30ファイル） | ✅ 適用 `20ee7603` |
+| `dc236b3e` + `5ee6084e` + `967176e3` | プリミティブコントロール/ポップアップ/メニューのテーマ一貫性改善（`Brush.PopupBorder`新設） | ✅ 適用 `99d7948e`（CommitMessageToolBoxサジェストポップアップ分はKomorebi未実装機能のためSkip） |
+| `e45f3dab` | コミットサブジェクトのインラインコードに `Brush.InlineCodeFG` テーマ適用 | ✅ 適用 `86de843e` |
+| `9e304d47` | ハイライトhunkの矩形幅調整（縦スクロールバーと非重複） | ✅ 適用 `5100a518` |
+| `77f24c49` | マージコンフリクトエディタのUI再設計 | ✅ 適用 `b75d4074` |
+| `e9e2be18` | WorkingCopy/StashesPageの表示崩れ統一 | ✅ 適用 `16c11690` |
+| `f1b4378b` | Push画面のローカルブランチ選択に `BranchSelector` を使用 | ✅ 適用 `9fae1881` |
+| `163e4d80` | Applyポップアップのパッチファイル未選択時の専用検証メッセージ | ✅ 適用 `3cbe277c` |
+| `b973572a` | `Clear stashes` ボタンを `Discard all changes` と同様に常時有効化 | ✅ 適用 `64f333a9` |
+| `29c32c42` | fast-forward マージで `Customize merge message` を非表示化 | ✅ 適用 `0213203d` |
+| `0b09bc5c` | AI Assistant ダイアログの USE ボタンを primary スタイルに変更 | ✅ 適用 `1ed395ea` |
+| `4a68bb02` | Interactive rebase サブメニュー内の重複アイコン削除 | ✅ 適用 `e07421ed` |
+| `e7472e80` | Git Ignore コンテキストメニューアイコンをシンプルな禁止マークに変更 | ✅ 適用 `2ff67ee7` |
+| `1e10bfdf` | 履歴グラフのスクロールトップボタンをフラットなスタイルに変更 | ✅ 適用 `a6dc02f2` |
+| `3b8af026` | Linux では Welcome画面の drag&drop ヒントを非表示化 | ✅ 適用 `0abdc78a` |
+| `3cd24b37` | Dark テーマの secondary 前景色変更 | ✅ 適用（`d915d317`統合時に最終値へ統一、独立コミットとしては統合時に空になったためskip） |
+| `0721743e` | launcher タブの縦スクロール→横スクロール変換 | ⏭️ AlreadyPresent — Komorebi 独自の `ScrollTabs`/`ScrollTabsByAmount` が既に同等以上の実装（矢印ボタンUX付き） |
+| `b248be52` | 未使用hotkeyバインディング削除 | ⏭️ AlreadyPresent — 対象の `HotKey=` 属性が既にゼロ件 |
+| `c91cd780` + `7cdae3b1` | ボタンtooltip追加 / `IsVisible`→`IsEnabled` | ❌ Skip — 対象の「コミット詳細パネル折りたたみ」機能自体が Komorebi 未実装 |
+| `6da1d158` | macOSで `^`（Ctrlの代わり）表記 | ❌ Skip — 対象の「ターミナルを開く」ホットキー項目が Hotkeys.axaml に存在しない |
+| `8409c46c` | `Show relative time in graph` を Preferences ダイアログへ移設 | ❌ Skip — Komorebi は RepositoryToolbar 廃止済みで該当トグルは既に Content Toolbar に統合済み、upstream と異なるアーキテクチャのため移設は構造衝突 |
+| `02411b27` | floating buttons のマージン調整 | ❌ Skip — 対象のスタンドアロン表示ボタン/折りたたみボタンが Komorebi 未実装 |
+
+#### 統合時に検出・解消した意味的衝突（3件）
+
+並列グループはそれぞれ独立した worktree で作業するため、同一シンボル/リソースを複数グループが別々に追加すると
+`git cherry-pick` の自動マージでは検出できない意味的な衝突が発生した。以下は mainへの統合時に発見・修正:
+
+- **`ByCommitter` 参照切れ**（`6d84b742`）: 検索サジェスト機能追加（Tier2）がコミッター検索削除（Tier3）で消えた列挙値を参照しビルドエラー
+- **`InlineCodeForegroundProperty` 二重定義**（`baaa956c`）: 1fd88761移植中のビルド修正（Tier3）とInlineCodeFGテーマ適用（Tier4）が同一プロパティを独立追加しCS0102
+- **Dark テーマ `Color.FG1` 値の不一致**（`4f228c90`統合時）: 一方は upstream 最終値 `#FFDFDFDF`、他方は中間値 `#FFDDDDDD` を採用しており、正しい方（最終値）に統一
+
 ### 2026-04-XX バッチ（template）
 
 | 上流 SHA | サマリ | ステータス | Komorebi SHA | 理由 |
