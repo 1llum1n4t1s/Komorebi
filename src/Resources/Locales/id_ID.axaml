@@ -507,7 +507,6 @@
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">AUTHOR</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">WAKTU AUTHOR</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">WAKTU COMMIT</x:String>
-  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">TANGGAL WAKTU</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">GRAFIK &amp; SUBJEK</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.Histories.Selected" xml:space="preserve">DIPILIH {0} COMMIT</x:String>
@@ -679,7 +678,6 @@
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Aktifkan folder kompak di pohon perubahan</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Bahasa</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Commit Riwayat</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Tampilkan waktu author alih-alih waktu commit di grafik</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Tampilkan halaman `LOCAL CHANGES` secara default</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Tampilkan tab `CHANGES` di detail commit secara default</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Tampilkan children di detail commit</x:String>
@@ -817,7 +815,6 @@
   <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filter File</x:String>
   <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Cari Stash</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Author</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Konten</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">Pesan</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">Jalur</x:String>

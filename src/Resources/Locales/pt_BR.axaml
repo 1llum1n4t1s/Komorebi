@@ -507,7 +507,6 @@
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">AUTOR</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">DATA DO AUTOR</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">HORA DO COMMIT</x:String>
-  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">DATA HORA</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">GRÁFICO &amp; ASSUNTO</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.Histories.Selected" xml:space="preserve">SELECIONADO {0} COMMITS</x:String>
@@ -679,7 +678,6 @@
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Habilitar pastas compactas na árvore de alterações</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Idioma</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Commits do Histórico</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Exibir data do autor em vez da data do commit no gráfico</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Mostrar página `ALTERAÇÕES LOCAIS` por padrão</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Mostrar aba `ALTERAÇÕES` nos detalhes do commit por padrão</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Mostrar filhos nos detalhes do commit</x:String>
@@ -817,7 +815,6 @@
   <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filtrar Arquivos</x:String>
   <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Pesquisar Stashes</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Autor</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Conteúdo</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">Mensagem</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">Caminho</x:String>

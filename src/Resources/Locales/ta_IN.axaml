@@ -507,7 +507,6 @@
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">ஆசிரியர்</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">ஆசிரியர் நேரம்</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">உறுதிமொழி நேரம்</x:String>
-  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">DATE TIME</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">வரைபடம் &amp; பொருள்</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">பாகொவ</x:String>
   <x:String x:Key="Text.Histories.Selected" xml:space="preserve">தேர்ந்தெடுக்கப்பட்ட {0} உறுதிமொழிகள்</x:String>
@@ -679,7 +678,6 @@
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">மாற்றங்கள் மரத்தில் சுருக்கமான கோப்புறைகளை இயக்கு</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">மொழி</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">வரலாற்று உறுதிமொழிகள்</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">வரைபடத்தில் உறுதிமொழி நேரத்திற்குப் பதிலாக ஆசிரியர் நேரத்தைக் காட்டு</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">இயல்புநிலையாக `உள்ளூர் மாற்றங்கள்` பக்கத்தைக் காட்டு</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Commit விவரத்தில் இயல்புநிலையாக `மாற்றங்கள்` தாவலைக் காட்டு</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">உறுதிமொழி விவரங்களில் குழந்தைகளைக் காட்டு</x:String>
@@ -817,7 +815,6 @@
   <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">கோப்புகளை வடிகட்டு</x:String>
   <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">ஒதுக்கல்களைத் தேடு</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">ஆசிரியர்</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">உறுதிமொழியாளர்</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">உள்ளடக்கம்</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">செய்தி</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">பாதை</x:String>

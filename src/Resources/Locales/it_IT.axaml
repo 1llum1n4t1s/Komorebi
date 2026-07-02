@@ -507,7 +507,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">AUTORE</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">ORA AUTORE</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">ORA COMMIT</x:String>
-  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">DATA E ORA</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">GRAFICO E OGGETTO</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.Histories.Selected" xml:space="preserve">{0} COMMIT SELEZIONATI</x:String>
@@ -679,7 +678,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Abilita cartelle compatte nell'albero delle modifiche</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Lingua</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Numero massimo di commit nella cronologia</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Mostra nel grafico l'orario dell'autore anziché quello del commit</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Mostra pagina `MODIFICHE LOCALI` per impostazione predefinita</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Mostra scheda `MODIFICHE` nei dettagli del commit per impostazione predefinita</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Mostra i figli nei dettagli del commit</x:String>
@@ -817,7 +815,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filtra file</x:String>
   <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Cerca stash</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Autore</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Committer</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Contenuto</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">Messaggio</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">Percorso</x:String>

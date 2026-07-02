@@ -507,7 +507,6 @@
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">MAY-AKDA</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">ORAS NG MAY-AKDA</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">ORAS NG COMMIT</x:String>
-  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">PETSA AT ORAS</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">GRAPH &amp; PAKSA</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.Histories.Selected" xml:space="preserve">NAPILI ANG {0} NA COMMIT</x:String>
@@ -679,7 +678,6 @@
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">I-enable ang compact na mga folder sa changes tree</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Wika</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Mga Commit sa Kasaysayan</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Ipakita ang oras ng may-akda sa halip na oras ng commit sa graph</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Ipakita ang pahina ng `MGA LOKAL NA PAGBABAGO` bilang default</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Ipakita ang tab na `MGA PAGBABAGO` sa detalye ng commit bilang default</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Ipakita ang mga anak sa mga detalye ng commit</x:String>
@@ -817,7 +815,6 @@
   <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">I-filter ang mga File</x:String>
   <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Maghanap ng mga Stash</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">May-akda</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Nag-commit</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Nilalaman</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">Mensahe</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">Path</x:String>

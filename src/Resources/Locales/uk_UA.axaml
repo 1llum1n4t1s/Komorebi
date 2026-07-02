@@ -507,7 +507,6 @@
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">АВТОР</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">ЧАС АВТОРА</x:String>
   <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">ЧАС КОМІТУ</x:String>
-  <x:String x:Key="Text.Histories.Header.DateTime" xml:space="preserve">ДАТА ЧАС</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">ГРАФ ТА ТЕМА</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.Histories.Selected" xml:space="preserve">ВИБРАНО {0} КОМІТІВ</x:String>
@@ -679,7 +678,6 @@
   <x:String x:Key="Text.Preferences.General.EnableCompactFolders" xml:space="preserve">Увімкнути компактні теки в дереві змін</x:String>
   <x:String x:Key="Text.Preferences.General.Locale" xml:space="preserve">Мова</x:String>
   <x:String x:Key="Text.Preferences.General.MaxHistoryCommits" xml:space="preserve">Кількість комітів в історії</x:String>
-  <x:String x:Key="Text.Preferences.General.ShowAuthorTime" xml:space="preserve">Показувати час автора замість часу коміту в графі</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesPageByDefault" xml:space="preserve">Показувати сторінку `ЛОКАЛЬНІ ЗМІНИ` за замовчуванням</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChangesTabInCommitDetailByDefault" xml:space="preserve">Показувати вкладку `ЗМІНИ` в деталях commit за замовчуванням</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Показувати дочірні коміти в деталях</x:String>
@@ -817,7 +815,6 @@
   <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Фільтр файлів</x:String>
   <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Пошук схованок</x:String>
   <x:String x:Key="Text.Repository.Search.ByAuthor" xml:space="preserve">Автор</x:String>
-  <x:String x:Key="Text.Repository.Search.ByCommitter" xml:space="preserve">Комітер</x:String>
   <x:String x:Key="Text.Repository.Search.ByContent" xml:space="preserve">Вміст</x:String>
   <x:String x:Key="Text.Repository.Search.ByMessage" xml:space="preserve">Повідомлення</x:String>
   <x:String x:Key="Text.Repository.Search.ByPath" xml:space="preserve">Шлях</x:String>
