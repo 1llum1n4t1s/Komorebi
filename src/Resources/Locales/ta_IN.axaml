@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">கிளை சரிபார்</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">உறுதிமொழி சரிபார்</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">உறுதிமொழி:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">முன்னறிவிப்பு: ஒரு உறுதிமொழி சரிபார்பதன் மூலம், உங்கள் தலை பிரிக்கப்படும்</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">உள்ளக மாற்றங்கள்:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">கிளை:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">உங்கள் தற்போதைய HEAD கிளைகள்/குறிச்சொற்களுடன் இணைக்கப்படாத commit(களை) கொண்டுள்ளது! தொடர விரும்புகிறீர்களா?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">பதுக்கிவைத்ததிலிருந்து கிளையை சரிபார்</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">புதிய கிளை:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">பதுக்கிவைத்தது:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Commit அல்லது Tag-ஐ Checkout செய்</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">இலக்கு:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">எச்சரிக்கை: இதைச் செய்த பிறகு, HEAD detached ஆகிவிடும்</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">கனி பறி</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">உறுதிமொழி செய்திக்கு மூலத்தைச் சேர்</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">உறுதிமொழி(கள்):</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">${0}$-ஐ ${1}$-இல் ஊடாடும் Rebase செய்</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Reword...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">பெற்றோருக்குள் Squash செய்...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">${0}$ இதற்கு ஒன்றிணை</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">ஒன்றிணை ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">${0}$-ஐ ${1}$-க்கு Push செய்</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">${0}$-ஐ ${1}$-இல் Rebase செய்</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">உள்ளூர் மாற்றங்கள் இருந்தாலும் வலுக்கட்டாயமாக நிறுத்து.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">கிளையை நீக்கு</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">பின்வரும் தொலை கிளையையும் நீக்க விரும்புகிறீர்களா?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">கிளை:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">merge செய்யப்படாத commit(s) இருந்தாலும் கட்டாயமாக நீக்கு</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">நீங்கள் ஒரு தொலை கிளையை நீக்கப் போகிறீர்கள்!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">தொலை ${0}$ கிளையையும் நீக்கு</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">பல கிளைகளை நீக்கு</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">நீங்கள் ஒரே நேரத்தில் பல கிளைகளை நீக்க முயற்சிக்கிறீர்கள் நடவடிக்கை எடுப்பதற்கு முன் மீண்டும் சரிபார்!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">பல குறிச்சொற்களை நீக்கு</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Into:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">இணைப்பு விருப்பம்:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">இதனுள்:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Merge சோதிக்கப்படுகிறது...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">மோதல்கள் இல்லாமல் merge செய்யலாம்</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">Merge சோதனையின் போது தெரியாத பிழை ஏற்பட்டது</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">Merge மோதல்களை ஏற்படுத்தும்</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">முதலில் என்னுடையது, பிறகு அவர்களுடையது</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">முதலில் அவர்களுடையது, பிறகு என்னுடையது</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">இரண்டையும் பயன்படுத்து</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">உறுதிமொழி வரைபடத்தில் குறிச்சொற்களைக் காட்டு</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">பொருள் வழிகாட்டி நீளம்</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Commit வரைபடத்தில் சுருக்கமான branch பெயர்களைப் பயன்படுத்து</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Github பாணி இயல்புநிலை அவதாரத்தை உருவாக்கு</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">அறிவிலி</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">தானியங்கி  வரிமுடிவை இயக்கு</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">தற்போதைய கிளையை மறுதளம் செய்</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">உள்ளக மாற்றங்களை பதுக்கிவை &amp; மீண்டும் இடு</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">மேல்:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Rebase சோதிக்கப்படுகிறது ...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">மோதல்கள் இல்லாமல் rebase செய்யலாம்</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Rebase சோதனையின் போது தெரியாத பிழை ஏற்பட்டது</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase மோதல்களை ஏற்படுத்தும்</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">தொலையைச் சேர்</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">தொலையைத் திருத்து</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">பெயர்:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">தனிப்பயன் செயல்</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">நீக்கு ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">தேர்ந்தெடுத்த {0} குறிச்சொற்களை நீக்கு...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">${0}$ இதை ${1}$ இல் இணை...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">தள்ளு ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">துணைத்தொகுதிகளைப் புதுப்பி</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">அனைத்து துணைத்தொகுதிகள்</x:String>
@@ -1183,4 +1191,21 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG உடன் கையொப்பமிட Git தோல்வியடைந்தது. உங்கள் கையொப்ப விசையை (git config user.signingkey) சரிபார்க்கவும், gpg-agent இயங்குகிறதா என்பதை உறுதி செய்யவும், அல்லது 'git -c commit.gpgsign=false ...' மூலம் கையொப்பத்தை தற்காலிகமாக முடக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">வேறு பயனருக்கு சொந்தமான களஞ்சியம் என்பதால் git இதில் செயல்பட மறுக்கிறது. அனுமதிக்க 'git config --global --add safe.directory &lt;பாதை&gt;' ஐ இயக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory இல் சேர்</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">மூலம்:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">கோப்பு</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Clipboard</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Bisect நடந்து கொண்டிருக்கிறது. வேறு ஒரு commit-ஐ checkout செய்து அதை நல்லது அல்லது மோசம் என குறிக்கவும்.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Bisect நடந்து கொண்டிருக்கிறது. தற்போதைய commit-ஐ மோசம் என குறிக்கவும் அல்லது வேறொன்றை checkout செய்து மோசம் என குறிக்கவும்.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisect நடந்து கொண்டிருக்கிறது. தற்போதைய commit-ஐ நல்லது அல்லது மோசம் என குறித்து, பின் வேறொன்றை checkout செய்யவும்.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisect நடந்து கொண்டிருக்கிறது. தற்போதைய HEAD நல்லதா அல்லது மோசமானதா?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">${0}$ உடன் ஒப்பிடு</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">ஆசிரியர் நேரம்</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">Committer நேரம்</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">Submodule-களை தானியங்கியாக புதுப்பிக்கும்போது `--recursive`-ஐ இயக்கு</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">Patch ஆக நகலெடு</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">காலியான கோப்பு</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Branch-களை checkout அல்லது merge செய்யும்போது இயல்பாகவே மாற்றங்களை stash செய்து மீண்டும் பயன்படுத்து</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Tag-ஐ Checkout செய்...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">உள்ளமைக்கப்பட்ட submodule-களை புதுப்பி</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">அதே கோப்புறையில் உள்ள கண்காணிக்கப்படாத அனைத்து கோப்புகளையும் புறக்கணி</x:String>
 </ResourceDictionary>

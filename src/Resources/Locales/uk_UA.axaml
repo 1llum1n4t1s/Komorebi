@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Підмодуль:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Перейти на гілку</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Перейти на коміт</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Коміт:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Попередження: Перехід на коміт призведе до стану "від'єднаний HEAD"</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Локальні зміни:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Гілка:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ваш поточний HEAD містить commit(и), що не пов'язані з жодною гілкою/тегом! Бажаєте продовжити?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Перейти на гілку зі схованки</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Нова гілка:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Схованка:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Переключитися на коміт або тег</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Ціль:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Попередження: після цього HEAD буде відокремлено</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Додати джерело до повідомлення коміту</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Коміт(и):</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Інтерактивний rebase ${0}$ на ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Переформулювати...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Squash до батьківського...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">Злиття в ${0}$</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Злити ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">Push ${0}$ до ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">Rebase ${0}$ на ${1}$</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Примусова деініціалізація навіть за наявності локальних змін.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Підмодуль:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Видалити гілку</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Бажаєте також видалити наступну віддалену гілку?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Гілка:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Примусово видалити, навіть якщо є незлиті коміти</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Ви збираєтеся видалити віддалену гілку!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Також видалити віддалену гілку ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Видалити кілька гілок</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Ви намагаєтеся видалити кілька гілок одночасно. Перевірте ще раз перед виконанням!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Видалити декілька тегів</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Опція злиття:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Джерело:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Перевірка злиття...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">Злиття можна виконати без конфліктів</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">Під час перевірки злиття сталася невідома помилка</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">Злиття спричинить конфлікти</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">Спочатку моє, потім їхнє</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">Спочатку їхнє, потім моє</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">ОБИДВА</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Показувати теги в графі комітів</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Довжина лінії-орієнтира для теми</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Використовувати компактні назви гілок у графі комітів</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Створювати аватар у стилі Github за замовчуванням</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Увімкнути авто-CRLF</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">Перебазувати поточну гілку</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">Сховати та застосувати локальні зміни</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">На:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Перевірка перебазування...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">Перебазування можна виконати без конфліктів</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Під час перевірки перебазування сталася невідома помилка</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Перебазування спричинить конфлікти</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Додати віддалене сховище</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Редагувати віддалене сховище</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Назва:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">Довільна дія</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Видалити ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Видалити обрані {0} теги...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Злиття ${0}$ в ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Надіслати ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">Оновити підмодулі</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Усі підмодулі</x:String>
@@ -1183,4 +1191,21 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git не вдалося підписати за допомогою GPG. Перевірте свій ключ підпису (git config user.signingkey), переконайтеся, що gpg-agent працює, або тимчасово вимкніть підпис за допомогою 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git відмовляється працювати з цим сховищем, оскільки воно належить іншому користувачеві. Виконайте 'git config --global --add safe.directory &lt;шлях&gt;', щоб дозволити.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Додати до safe.directory</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">Джерело:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Файл</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Буфер обміну</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Виконується bisect. Перейдіть на інший коміт і позначте його як хороший або поганий.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Виконується bisect. Позначте поточний коміт як поганий або перейдіть на інший і позначте його як поганий.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Виконується bisect. Позначте поточний коміт як хороший або поганий, а потім перейдіть на інший.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Виконується bisect. Поточний HEAD хороший чи поганий?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">Порівняти з ${0}$</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">Час автора</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">Час коміту</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">Увімкнути `--recursive` під час автоматичного оновлення підмодулів</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">Копіювати як патч</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">ПОРОЖНІЙ ФАЙЛ</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Ховати та повторно застосовувати зміни за замовчуванням під час checkout або злиття гілок</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Переключити тег...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Оновити вкладені підмодулі</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Ігнорувати всі невідстежувані файли в цій же теці</x:String>
 </ResourceDictionary>

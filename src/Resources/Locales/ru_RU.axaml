@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Подмодуль:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL-адрес:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Переключить ветку</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Переключиться на эту ревизию</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Ревизия:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Предупреждение: После переключения ревизии ваша Голова (HEAD) будет отсоединена</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Локальные изменения:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Ветка:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ваша текущая ГОЛОВА содержит ревизию(и), не связанные ни с к какими ветками или метками! Вы хотите продолжить?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Переключить на ветку из отложенных изменений</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Новая ветка:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Отложенные изменения:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Переключиться на коммит или метку</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Цель:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Внимание: после этого HEAD окажется в отсоединённом состоянии</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve"> Частичный выбор</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Добавить источник для ревизии сообщения</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Ревизия(и):</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Интерактивное перемещение ${0}$ в ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Изменить комментарий...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Втиснуть в родительский...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">Влить в ${0}$</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Влить ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">Выложить ${0}$ в ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">Переместить ${0}$ в ${1}$</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Принудительно удалить даже если содержит локальные изменения.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Подмодуль:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Удалить ветку</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Вы также хотите удалить следующую внешнюю ветку?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Ветка:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Принудительно удалить, даже если есть неслитые коммиты</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Вы собираетесь удалить внешнюю ветку!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Также удалите внешнюю ветку ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Удаление нескольких веток</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Вы пытаетесь удалить несколько веток одновременно. Обязательно перепроверьте, прежде чем предпринимать какие-либо действия!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Удалить несколько меток</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Опции слияния:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Источник:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Проверка слияния...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">Слияние можно выполнить без конфликтов</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">При проверке слияния произошла неизвестная ошибка</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">Слияние вызовет конфликты</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">Сначала мои, а потом их</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">Сначала их, а потом мои</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">ИСПОЛЬЗОВАТЬ ОБА</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Показывать метки на графике</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Длина темы ревизии</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-часовой формат</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Использовать компактные имена веток в графе коммитов</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Создать Github-подобный аватар по умолчанию</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Включить автозавершение CRLF</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">Перемещение текущей ветки</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">Отложить и применить повторно локальные изменения</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">На:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Проверка перебазирования...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">Перебазирование можно выполнить без конфликтов</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">При проверке перебазирования произошла неизвестная ошибка</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Перебазирование вызовет конфликты</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Добавить внешний репозиторий</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Редактировать внешний репозиторий</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Имя:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">Пользовательское действие</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Удалить ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Удалить выбранные метки ({0})...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Влить ${0}$ в ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Выложить ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">Обновление подмодулей</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Все подмодули</x:String>
@@ -1199,4 +1207,5 @@
   <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Отложить и повторно применить изменения по умолчанию при извлечении или объединении веток</x:String>
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Переключить метку...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Обновить вложенные подмодули</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Игнорировать все неотслеживаемые файлы в той же папке</x:String>
 </ResourceDictionary>

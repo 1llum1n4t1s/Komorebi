@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">उपमॉड्यूलम्:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">शाखां निष्कासयतु</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">प्रतिबद्धं निष्कासयतु</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">प्रतिबद्धम्:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">चेतावनी: प्रतिबद्धनिष्कासनेन भवतः शीर्षं विच्छिन्नं भविष्यति</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">स्थानीयपरिवर्तनानि:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">शाखा:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">भवतः वर्तमानशीर्षे कस्यापि शाखायाः/चिह्नस्य अयुक्तानि प्रतिबद्धानि सन्ति! किं भवान् अग्रे गन्तुम् इच्छति?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">निक्षेपात् शाखां निष्कासयतु</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">नवीना शाखा:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">निक्षेपः:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">प्रतिबद्धं वा चिह्नं वा चिनोतु</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">लक्ष्यम्:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">चेतावनी: एतत् कृत्वा HEAD वियुक्तं (detached) भविष्यति</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">चयनोद्धरणम्</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">स्रोतं प्रतिबद्धसन्देशे योजयतु</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">प्रतिबद्धम्(प्रतिबद्धानि):</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">${0}$ इत्यस्य ${1}$ उपरि सम्वादात्मकं पुनःस्थापनम्</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">पुनर्वचनम्...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">जनके संपीडयतु...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">${0}$ मध्ये विलयतु</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">विलयनम् ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">${0}$ प्रति ${1}$ प्रेषयतु</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">${0}$ इत्यस्य ${1}$ उपरि पुनःस्थापनम्</x:String>
@@ -348,9 +347,10 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">स्थानीयपरिवर्तनसत्त्वेऽपि बलात् अनारम्भयतु।</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">उपमॉड्यूलम्:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">शाखां विलोपयतु</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">भवान् निम्नलिखितां दूरस्थशाखाम् अपि विलोपयितुम् इच्छति किम्?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">शाखा:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">असंयोजितप्रतिबद्धानि अपि सन्ति चेदपि बलात् विलोपयतु</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">भवान् दूरस्थशाखां विलोपयितुम् उद्यतः!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">दूरस्थशाखां ${0}$ अपि विलोपयतु</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">बहुशाखाः विलोपयतु</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">भवान् एकदा बहुशाखाः विलोपयितुम् उद्यतः। कृपया कर्तुं पूर्वं द्विवारं परीक्षतु!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">बहुचिह्नानि विलोपयतु</x:String>
@@ -585,6 +585,10 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">मध्ये:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">विलयनविकल्पः:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">स्रोतः:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">विलयनं परीक्ष्यते...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">विलयनं विरोधं विना कर्तुं शक्यते</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">विलयनपरीक्षणकाले अज्ञातदोषः अभवत्</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">विलयनं विरोधान् जनयिष्यति</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">प्रथमं मदीयं, ततः तदीयम्</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">प्रथमं तदीयं, ततः मदीयम्</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">द्वयम् उपयुज्यताम्</x:String>
@@ -684,6 +688,7 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">प्रतिबद्धालेखे चिह्नानि दर्शयतु</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">विषयमार्गदर्शिदीर्घता</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">२४-होराः</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">प्रतिबद्धरेखाचित्रे संक्षिप्तशाखानामानि उपयुज्यताम्</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub शैल्याः पूर्वनिर्धारितप्रतिमां रचयतु</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">स्वयं CRLF सक्षमं कुरुत</x:String>
@@ -749,6 +754,10 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Rebase" xml:space="preserve">वर्तमानशाखायाः पुनःस्थापनम्</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">स्थानीयपरिवर्तनानि निक्षिप्य पुनःप्रयोजयतु</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">उपरि:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">पुनःस्थापनं परीक्ष्यते...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">पुनःस्थापनं विरोधं विना कर्तुं शक्यते</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">पुनःस्थापनपरीक्षणकाले अज्ञातदोषः अभवत्</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">पुनःस्थापनं विरोधान् जनयिष्यति</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">दूरस्थं योजयतु</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">दूरस्थं सम्पादयतु</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">नाम:</x:String>
@@ -958,7 +967,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">${0}$ विलोपयतु...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">चयनितानि {0} चिह्नानि विलोपयतु...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">${0}$ ${1}$ मध्ये विलयतु...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">${0}$ प्रेषयतु...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">उपमॉड्यूलानि अद्यतनयतु</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">सर्वोपमॉड्यूलानि</x:String>
@@ -1183,4 +1191,21 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG द्वारा हस्ताक्षरेण git असफलं जातम्। हस्ताक्षरकुञ्चिकां (git config user.signingkey) सत्यापयतु, gpg-agent चलति इति निश्चितं कुरुत, अथवा 'git -c commit.gpgsign=false ...' इत्यनेन तत्कालं हस्ताक्षरं निष्क्रियं कुरुत।</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">अन्यः उपयोगकर्ता अस्य कोषस्य स्वामी अस्ति इति कारणात् git अस्मिन् कार्यं कर्तुं अस्वीकरोति। अनुमतिं दातुम् 'git config --global --add safe.directory &lt;पथः&gt;' इत्येतत् चालयतु।</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory मध्ये योजयतु</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">स्रोतः:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">सञ्चिका</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">क्लिपबोर्ड</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Bisect प्रचलति। कृपया अन्यं प्रतिबद्धं चित्वा तत् सुष्ठु वा दुष्टं वा चिह्नयतु।</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Bisect प्रचलति। वर्तमानं प्रतिबद्धं दुष्टं चिह्नयतु अथवा अन्यं चित्वा दुष्टं चिह्नयतु।</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisect प्रचलति। वर्तमानं प्रतिबद्धं सुष्ठु वा दुष्टं वा चिह्नयतु ततः अन्यं चिनोतु।</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisect प्रचलति। वर्तमानं HEAD सुष्ठु उत दुष्टम्?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">${0}$ इत्यनेन सह तुलयतु</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">लेखकसमयः</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">प्रतिबद्धकर्तृसमयः</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">उपमॉड्यूलानां स्वयमद्यतनकाले `--recursive` सक्षमीकुरुत</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">पैच्रूपेण प्रतिलिखतु</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">रिक्तसञ्चिका</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">शाखानां checkout अथवा विलयनकाले परिवर्तनानि पूर्वनिर्धारितरूपेण निक्षिप्य पुनःप्रयोजयतु</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">चिह्नं चिनोतु...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">नीडितोपमॉड्यूलान् अद्यतनं कुरुत</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">समानपत्रिकायां सर्वाणि अनुगमनरहितानि सञ्चिकाः उपेक्षन्ताम्</x:String>
 </ResourceDictionary>

@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submodul:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Branch auschecken</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Commit auschecken</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Warnung: Durch Auschecken eines Commits wird dein HEAD losgelöst (detached)!</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Lokale Änderungen:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Dein aktueller HEAD enthält Commit(s) ohne Verbindung zu einem Branch / Tag. Möchtest du trotzdem fortfahren?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Branch aus Stash auschecken</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Neuer Branch:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Commit oder Tag auschecken</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Ziel:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Warnung: Danach befindet sich HEAD im Detached-Zustand</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Quelle an Commit-Nachricht anhängen</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit(s):</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Interaktives Rebase von ${0}$ auf ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Umformulieren…</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Squash in den Vorgänger…</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">Merge in ${0}$ hinein</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Merge…</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">Push ${0}$ zu ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">Rebase ${0}$ auf ${1}$</x:String>
@@ -348,9 +347,10 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Erzwinge Deinitialisierung, selbst wenn lokale Änderungen enthalten sind.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submodul:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Branch löschen</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Möchtest du auch den folgenden Remote-Branch löschen?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Branch:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Löschen erzwingen, auch wenn nicht zusammengeführte Commits enthalten sind</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Du bist dabei, einen Remote-Branch zu löschen!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Auch Remote-Branch ${0}$ löschen</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Mehrere Branches löschen</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Du versuchst, mehrere Branches auf einmal zu löschen. Kontrolliere dies sorgfältig, bevor du fortfährst!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Mehrere Tags löschen</x:String>
@@ -585,6 +585,10 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Ziel-Branch:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Merge-Option:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Quelle:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Merge wird getestet...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">Merge kann ohne Konflikte durchgeführt werden</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">Beim Testen des Merges ist ein unbekannter Fehler aufgetreten</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">Merge wird Konflikte verursachen</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">Zuerst meine, dann deren</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">Zuerst deren, dann meine</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">BEIDE VERWENDEN</x:String>
@@ -684,6 +688,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Zeige Tags im Commit-Verlauf</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Längenvorgabe für Commit-Nachrichten</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Kompakte Branch-Namen im Commit-Graphen verwenden</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Standard-Avatar im GitHub-Stil generieren</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Aktiviere Auto-CRLF</x:String>
@@ -749,6 +754,10 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Rebase" xml:space="preserve">Aktuellen Branch rebasen</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">Lokale Änderungen stashen &amp; wieder anwenden</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">Auf:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Rebase wird getestet ...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">Rebase kann ohne Konflikte durchgeführt werden</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Beim Testen des Rebases ist ein unbekannter Fehler aufgetreten</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase wird Konflikte verursachen</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Remote hinzufügen</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Remote bearbeiten</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Name:</x:String>
@@ -958,7 +967,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">Benutzerdefinierte Aktion</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Lösche ${0}$…</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Lösche ausgewählte {0} Tags…</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Merge ${0}$ in ${1}$ hinein…</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Pushe ${0}$…</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">Submodule aktualisieren</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Alle Submodule</x:String>
@@ -1183,6 +1191,21 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git konnte mit GPG nicht signieren. Überprüfen Sie Ihren Signaturschlüssel (git config user.signingkey), stellen Sie sicher, dass der gpg-agent läuft, oder deaktivieren Sie die Signatur vorübergehend mit 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git verweigert die Bearbeitung dieses Repositorys, da es einem anderen Benutzer gehört. Führen Sie 'git config --global --add safe.directory &lt;Pfad&gt;' aus, um es zu erlauben.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Zu safe.directory hinzufügen</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">Quelle:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Datei</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Zwischenablage</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Bisect läuft. Bitte checke einen anderen Commit aus und markiere ihn dann als gut oder schlecht.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Bisect läuft. Markiere den aktuellen Commit als schlecht oder checke einen anderen aus und markiere ihn als schlecht.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisecting. Aktuellen Commit als gut oder schlecht markieren und einen anderen auschecken.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisecting. Ist der aktuelle HEAD gut oder schlecht?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">Vergleichen mit ${0}$</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">Autor-Zeitpunkt</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">Committer-Zeitpunkt</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">`--recursive` beim automatischen Aktualisieren von Submodulen aktivieren</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">Als Patch kopieren</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">LEERE DATEI</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Standardmäßig Änderungen stashen &amp; erneut anwenden beim Auschecken oder Zusammenführen von Branches</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Tag auschecken...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Verschachtelte Submodule aktualisieren</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Alle nicht verfolgten Dateien im selben Ordner ignorieren</x:String>
 </ResourceDictionary>

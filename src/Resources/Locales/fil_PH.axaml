@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">I-checkout ang Branch</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">I-checkout ang Commit</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Babala: Sa pag-checkout ng commit, ang iyong Head ay made-detach</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Mga Lokal na Pagbabago:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Ang kasalukuyang HEAD mo ay may mga commit na hindi konektado sa anumang branch/tag! Gusto mo bang magpatuloy?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">I-checkout ang Branch mula sa Stash</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Bagong Branch:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">I-checkout ang Commit o Tag</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Target:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Babala: Pagkatapos nito, ang HEAD ay magiging detached</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Idagdag ang source sa commit message</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Mga Commit:</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Interactive na I-rebase ang ${0}$ sa ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Reword...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Squash sa Parent...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">I-merge sa ${0}$</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Merge ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">I-push ang ${0}$ sa ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">I-rebase ang ${0}$ sa ${1}$</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Pilitin ang pag-de-init kahit may mga lokal na pagbabago.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Burahin ang Branch</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Nais mo bang burahin din ang sumusunod na remote branch?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Branch:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Pilitin ang pagbura kahit may unmerged commit(s)</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Malapit ka nang magbura ng remote branch!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Burahin din ang remote branch na ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Burahin ang Maramihang Branch</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Susubukan mong magbura ng maramihang branch nang sabay-sabay. Siguraduhing i-double-check bago kumilos!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Burahin ang Maramihang Tag</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Sa:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Opsyon ng Merge:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Pinagmulan:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Sinusubukan ang merge...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">Magagawa ang merge nang walang conflict</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">May hindi kilalang error na naganap habang sinusubukan ang merge</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">Magdudulot ng conflict ang merge</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">Una ang Akin, saka ang Kanila</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">Una ang Kanila, saka ang Akin</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">GAMITIN PAREHO</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Ipakita ang mga tag sa commit graph</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Haba ng Gabay sa Paksa</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Gumamit ng compact na pangalan ng branch sa commit graph</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Gumawa ng Github style na default avatar</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">I-enable ang Auto CRLF</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">I-rebase ang Kasalukuyang Branch</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">I-stash &amp; ilapat muli ang mga lokal na pagbabago</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">Sa:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Sinusubukan ang rebase ...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">Magagawa ang rebase nang walang conflict</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">May hindi kilalang error na naganap habang sinusubukan ang rebase</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Magdudulot ng conflict ang rebase</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Magdagdag ng Remote</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">I-edit ang Remote</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Pangalan:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">Custom na Aksyon</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Burahin ang ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Burahin ang {0} napiling tag...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">I-merge ang ${0}$ sa ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">I-push ang ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">I-update ang mga Submodule</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Lahat ng submodule</x:String>
@@ -1183,4 +1191,21 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Nabigo ang Git na lumagda gamit ang GPG. I-verify ang iyong signing key (git config user.signingkey), tiyaking gumagana ang gpg-agent, o pansamantalang i-disable ang pag-sign gamit ang 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Tumanggi ang Git na gumana sa repository na ito dahil pag-aari ito ng ibang user. Patakbuhin ang 'git config --global --add safe.directory &lt;path&gt;' upang payagan ito.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Idagdag sa safe.directory</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">Pinagmulan:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">File</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Clipboard</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Nagsasagawa ng bisect. Mag-checkout ng iba pang commit at markahan ito bilang mabuti o masama.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Nagsasagawa ng bisect. Markahan ang kasalukuyang commit bilang masama o mag-checkout ng iba pa at markahan itong masama.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Nagsasagawa ng bisect. Markahan ang kasalukuyang commit bilang mabuti o masama at mag-checkout ng iba pa.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Nagsasagawa ng bisect. Mabuti ba o masama ang kasalukuyang HEAD?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">Ikumpara sa ${0}$</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">Oras ng May-akda</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">Oras ng Nag-commit</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">Paganahin ang `--recursive` kapag awtomatikong ina-update ang mga submodule</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">Kopyahin bilang Patch</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">WALANG LAMAN NA FILE</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">I-stash at ilapat muli ang mga pagbabago bilang default kapag nagche-checkout o nagme-merge ng mga branch</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">I-checkout ang Tag...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">I-update ang mga nested na submodule</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Huwag pansinin ang lahat ng untracked na file sa parehong folder</x:String>
 </ResourceDictionary>

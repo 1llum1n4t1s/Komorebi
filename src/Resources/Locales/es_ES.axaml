@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submódulo:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Checkout Rama</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Cambiar a Commit</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Advertencia: Al hacer un checkout de commit, tu Head se separará</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Cambios Locales:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Rama:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">¡Tu HEAD actual contiene commit(s) que no están conectados a ningunas ramas/etiquetas! ¿Quieres continuar?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Cambiar a rama desde el stash</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Nueva rama:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Verificar Commit o Etiqueta</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Destino:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Advertencia: Después de hacer esto, HEAD quedará separado (detached)</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Añadir fuente al mensaje de commit</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit(s):</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Hacer Rebase interactivamente ${0}$ en ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Reescribir...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Squash en el Padre...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">Merge a ${0}$</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Merge ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">Push ${0}$ a ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">Rebase ${0}$ en ${1}$</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Forzar desinicialización incluso si contiene cambios locales.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submódulo:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Eliminar Rama</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">¿Deseas también eliminar la siguiente rama remota?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Rama:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Forzar eliminación aunque contenga commit(s) no fusionados</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">¡Estás a punto de eliminar una rama remota!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">También eliminar la rama remota ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Eliminar Múltiples Ramas</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Estás intentando eliminar múltiples ramas a la vez. ¡Asegúrate de comprobar dos veces antes de realizar esta acción!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Eliminar Múltiples Etiquetas</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">En:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Opción de Merge:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Rama Fuente:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Probando el merge...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">El merge se puede realizar sin conflictos</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">Se produjo un error desconocido al probar el merge</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">El merge causará conflictos</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">Primero Míos, después Suyos</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">Primero Suyos, después Míos</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">USAR AMBOS</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Mostrar etiquetas en el gráfico de commit</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Longitud de la guía del asunto</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Usar nombres de rama compactos en el gráfico de commits</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Generar avatar con estilo por defecto de Github</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Habilitar Auto CRLF</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">Rebase Rama Actual</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">Stash &amp; reaplicar cambios locales</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">En:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Probando el rebase...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">El rebase se puede realizar sin conflictos</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Se produjo un error desconocido al probar el rebase</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">El rebase causará conflictos</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Añadir Remoto</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Editar Remoto</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nombre:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">Acción Personalizada</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Eliminar ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Eliminar {0} etiquetas seleccionadas...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Merge ${0}$ en ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Enviar ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">Actualizar Submódulos</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Todos los submódulos</x:String>
@@ -1199,4 +1207,5 @@ Razón: {1}</x:String>
   <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Hacer Stash y volver a aplicar cambios por defecto cuando se haga checkout o fusionen las ramas</x:String>
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Hacer checkout a Etiqueta...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Actualizar submódulos anidados</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Ignorar todos los archivos sin seguimiento en la misma carpeta</x:String>
 </ResourceDictionary>

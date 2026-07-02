@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">サブモジュール:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">ブランチをチェックアウト</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">コミットをチェックアウト</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">コミット:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">警告: コミットをチェックアウトすると、HEAD が切断されます</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">ローカルの変更:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">ブランチ:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">現在の HEAD には、どのブランチやタグにも繋がっていないコミットが含まれています！それでも続行しますか？</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">スタッシュからブランチをチェックアウト</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">新しいブランチ:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">スタッシュ:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">コミットまたはタグをチェックアウト</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">対象:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">警告: この操作を行うと HEAD はデタッチされた状態になります</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">コミットを取り込む</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">取り込み元をコミットメッセージに明記</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">コミット:</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">${0}$ を ${1}$ で対話式リベース</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">書き直す...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">親コミットにコメント結合して統合(Squash)...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">${0}$ にマージ</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">マージ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">${0}$ を ${1}$ にプッシュ</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">${0}$ を ${1}$ でリベース</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">ローカルの変更の有無に関わらず、強制的に解除</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">サブモジュール:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">ブランチを削除</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">以下のリモートブランチも削除しますか？</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">ブランチ:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">マージされていないコミットが含まれていても強制的に削除する</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">リモートブランチを削除しようとしています！！！</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">リモートブランチの ${0}$ も削除</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">複数のブランチを削除</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">複数のブランチをまとめて削除しようとしています。操作を行う前によく確認してください！</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">複数のタグを削除</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">マージ先:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">マージオプション:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">マージ元:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">マージをテスト中...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">マージはコンフリクトなしで完了できます</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">マージのテスト中に不明なエラーが発生しました</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">マージするとコンフリクトが発生します</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">自分の変更 → 相手の変更の順で適用</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">相手の変更 → 自分の変更の順で適用</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">両方を使用</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">コミットグラフにタグを表示</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">適切とするコミットタイトルの長さ</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24時間表示</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">コミットグラフでブランチ名をコンパクト表示</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub のような既定のアバターを生成</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">Git</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">自動 CRLF 変換を有効化</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">現在のブランチをリベース</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">ローカルの変更をスタッシュして再適用</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">リベース地点:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">リベースをテスト中...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">リベースはコンフリクトなしで完了できます</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">リベースのテスト中に不明なエラーが発生しました</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">リベースするとコンフリクトが発生します</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">リモートを追加</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">リモートを編集</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">名前:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">カスタムアクション</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">${0}$ を削除...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">選択した {0} 個のタグを削除...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">${0}$ を ${1}$ にマージ...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">${0}$ をプッシュ...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">サブモジュールを更新</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">すべてのサブモジュール</x:String>

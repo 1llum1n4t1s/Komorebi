@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submodulus:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Elige Ramum</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Elige Committum</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Committum:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Monitum: Eligendo committum, caput tuum separabitur</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Mutationes Locales:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Ramus:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">HEAD praesens continet committum(-a) non connexum(-a) ullis ramis/signis! Visne pergere?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Elige Ramum ex Reposito</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Ramus Novus:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Repositum:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Committum vel Signum Excipe</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Propositum:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Monitum: Post hoc, HEAD seiunctum erit</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Excerpe</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Adde fontem ad nuntium committendi</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Committum(-a):</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Rebasa ${0}$ super ${1}$ Interactive</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Rescribe...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Squash in Parentem...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">Merge ad ${0}$</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Merge ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">Push ${0}$ ad ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">Rebasa ${0}$ super ${1}$</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Vim adhibe ad deinitiandum etiam si mutationes locales continet.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submodulus:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Dele Ramum</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Visne etiam ramum remotum sequentem delere?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Ramus:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Cogere deletionem etiam si committa non coniuncta continet</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Ramum remotum deleturus es!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Dele quoque ramum remotum ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Dele Plures Ramos</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Conaris plures ramos simul delere. Certus esto ante actionem!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Dele Plura Signa</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Optio Merge:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Fons:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Merge probatur...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">Merge sine conflictibus fieri potest</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">Error ignotus accidit dum merge probatur</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">Merge conflictus causabit</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">Primum Meum, deinde Eorum</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">Primum Eorum, deinde Meum</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">UTERE UTROQUE</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Ostende signa in graphico committorum</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Longitudo Ducis Subiecti</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Horae</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Utere nominibus rami compactis in commit graph</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Genera imaginem praefinitam stilo GitHub</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Activa Auto CRLF</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">Rebasa Ramum Praesentem</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">Repone &amp; reapplica mutationes locales</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">Super:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Rebase probatur ...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">Rebase sine conflictibus fieri potest</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Error ignotus accidit dum rebase probatur</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase conflictus causabit</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Adde Remotum</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Recense Remotum</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nomen:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">Actio Propria</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Dele ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Dele {0} signa selecta...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Merge ${0}$ in ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Mitte ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">Renova Submodulos</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Omnes submodulos</x:String>
@@ -1183,4 +1191,21 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git cum GPG signare non potuit. Clavem signatoriam tuam (git config user.signingkey) recense, gpg-agent currere certus es, vel signaturam temporaliter cum 'git -c commit.gpgsign=false ...' inactivam redde.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git in hoc repositorio operari recusat quia alius usuarius id possidet. 'git config --global --add safe.directory &lt;semita&gt;' exsequere ut permittas.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Adde ad safe.directory</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">Fons:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Documentum</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Charta Volatilis</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Bisect fit. Quaeso aliud committum excipe deinde bonum vel malum signa.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Bisect fit. Committum praesens malum signa vel aliud excipe deinde malum signa.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisect fit. Committum praesens bonum vel malum signa deinde aliud excipe.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisect fit. Estne HEAD praesens bonum an malum?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">Compara cum ${0}$</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">Tempus Auctoris</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">Tempus Committentis</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">Activa `--recursive` dum submoduli automatice renovantur</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">Copia ut Emplastra</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">DOCUMENTUM VACUUM</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Repone &amp; reapplica mutationes ex more dum rami excipiuntur vel merguntur</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Excipe Signum...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Renova submodulos nidificatos</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Ignora omnia documenta non tracta in eodem fasciculo</x:String>
 </ResourceDictionary>

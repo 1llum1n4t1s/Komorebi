@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">서브모듈:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">브랜치 체크아웃</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">커밋 체크아웃</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">커밋:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">경고: 커밋 체크아웃을 하면, HEAD가 분리됩니다(detached)</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">로컬 변경 사항:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">브랜치:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">현재 HEAD에 브랜치/태그에 연결되지 않은 커밋이 있습니다! 계속하시겠습니까?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">스태시에서 브랜치 체크아웃</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">새 브랜치:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">스태시:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">커밋 또는 태그 체크아웃</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">대상:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">경고: 이 작업 후 HEAD는 분리(detached) 상태가 됩니다</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">체리픽</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">커밋 메시지에 원본 추가</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">커밋:</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">${1}$을(를) 기반으로 ${0}$ 대화형 리베이스</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">메시지 수정(Reword)...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">부모에 합치기(Squash)...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">${0}$(으)로 병합</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">병합...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">${0}$을(를) ${1}$(으)로 푸시</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">${1}$을(를) 기반으로 ${0}$ 리베이스</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">로컬 변경 사항이 있어도 강제로 초기화 해제합니다.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">서브모듈:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">브랜치 삭제</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">다음 원격 브랜치도 삭제하시겠습니까?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">브랜치:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">병합되지 않은 커밋이 있어도 강제 삭제</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">원격 브랜치를 삭제하려고 합니다!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">원격 브랜치 ${0}$도 함께 삭제</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">여러 브랜치 삭제</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">한 번에 여러 브랜치를 삭제하려고 합니다. 실행하기 전에 다시 한번 확인하세요!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">여러 태그 삭제</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">대상:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">병합 옵션:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">소스:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">병합 테스트 중...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">충돌 없이 병합할 수 있습니다</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">병합 테스트 중 알 수 없는 오류가 발생했습니다</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">병합 시 충돌이 발생합니다</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">내 것 먼저, 그 다음 상대방 것</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">상대방 것 먼저, 그 다음 내 것</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">양쪽 모두 사용</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">커밋 그래프에 태그 표시</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">제목 가이드 길이</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">커밋 그래프에 간략한 브랜치 이름 사용</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub 스타일 기본 아바타 생성</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">자동 CRLF 활성화</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">현재 브랜치 리베이스</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">로컬 변경 사항 스태시 &amp; 재적용</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">기준:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">리베이스 테스트 중...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">충돌 없이 리베이스할 수 있습니다</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">리베이스 테스트 중 알 수 없는 오류가 발생했습니다</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">리베이스 시 충돌이 발생합니다</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">원격 추가</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">원격 편집</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">이름:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">사용자 지정 작업</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">${0}$ 삭제...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">선택한 {0}개의 태그 삭제...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">${0}$을(를) ${1}$(으)로 병합...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">${0}$ 푸시...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">서브모듈 업데이트</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">모든 서브모듈</x:String>
@@ -1186,11 +1194,18 @@
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">원본:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">파일</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">클립보드</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Bisect 진행 중입니다. 다른 커밋을 체크아웃한 뒤 좋음 또는 나쁨으로 표시하세요.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Bisect 진행 중입니다. 현재 커밋을 나쁨으로 표시하거나 다른 커밋을 체크아웃한 뒤 나쁨으로 표시하세요.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">이진 탐색 중. 현재 커밋을 '좋음' 또는 '나쁨'으로 표시하고 다른 커밋을 체크아웃하세요.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">이진 탐색 중. 현재 HEAD가 '좋음' 상태입니까, '나쁨' 상태입니까?</x:String>
   <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">${0}$와 비교</x:String>
   <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">작성 시간</x:String>
   <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">커밋 시간</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">서브모듈 자동 업데이트 시 `--recursive` 사용</x:String>
   <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">패치로 복사</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">빈 파일</x:String>
   <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">브랜치 체크아웃 또는 병합 시 기본적으로 변경 사항을 스태시한 뒤 다시 적용</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">태그 체크아웃...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">중첩된 서브모듈 업데이트</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">같은 폴더의 추적되지 않는 모든 파일 무시</x:String>
 </ResourceDictionary>

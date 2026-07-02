@@ -115,9 +115,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Beralih Cabang</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Beralih ke Commit</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Peringatan: Dengan melakukan checkout commit, Head akan terlepas</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Perubahan Lokal:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">HEAD saat ini mengandung commit yang tidak terhubung ke branch/tag manapun! Lanjutkan?</x:String>
@@ -127,6 +124,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Beralih ke Branch dari Stash</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">Branch Baru:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Checkout Commit atau Tag</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Target:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Peringatan: Setelah melakukan ini, HEAD akan menjadi detached</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry-Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Tambahkan sumber ke pesan commit</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit:</x:String>
@@ -172,7 +172,6 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Rebase ${0}$ pada ${1}$ secara Interaktif</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Reword...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Squash ke Parent...</x:String>
-  <x:String x:Key="Text.CommitCM.Merge" xml:space="preserve">Merge ke ${0}$</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Merge ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">Push ${0}$ ke ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">Rebase ${0}$ pada ${1}$</x:String>
@@ -348,9 +347,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Paksa de-init meski mengandung perubahan lokal.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Hapus Branch</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Apakah Anda juga ingin menghapus remote branch berikut?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Branch:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Paksa hapus meskipun berisi commit yang belum di-merge</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">Anda akan menghapus remote branch!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Juga hapus remote branch ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Hapus Beberapa Branch</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">Anda akan menghapus beberapa branch sekaligus. Pastikan untuk memeriksa ulang sebelum bertindak!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Hapus Beberapa Tag</x:String>
@@ -585,6 +585,10 @@
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Ke:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Opsi Merge:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">Sumber:</x:String>
+  <x:String x:Key="Text.Merge.Test" xml:space="preserve">Menguji merge...</x:String>
+  <x:String x:Key="Text.Merge.Test.NoConflicts" xml:space="preserve">Merge dapat dilakukan tanpa konflik</x:String>
+  <x:String x:Key="Text.Merge.Test.UnknownError" xml:space="preserve">Terjadi kesalahan tidak dikenal saat menguji merge</x:String>
+  <x:String x:Key="Text.Merge.Test.WillCauseConflicts" xml:space="preserve">Merge akan menyebabkan konflik</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.MineFirst" xml:space="preserve">Milik Saya Dulu, lalu Milik Mereka</x:String>
   <x:String x:Key="Text.MergeConflictEditor.AcceptBoth.TheirsFirst" xml:space="preserve">Milik Mereka Dulu, lalu Milik Saya</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UseBoth" xml:space="preserve">GUNAKAN KEDUANYA</x:String>
@@ -684,6 +688,7 @@
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Tampilkan tag di grafik commit</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Panjang Panduan Subjek</x:String>
   <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Gunakan nama branch ringkas pada grafik commit</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Generate avatar default bergaya GitHub</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
   <x:String x:Key="Text.Preferences.Git.CRLF" xml:space="preserve">Aktifkan Auto CRLF</x:String>
@@ -749,6 +754,10 @@
   <x:String x:Key="Text.Rebase" xml:space="preserve">Rebase Branch Saat Ini</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">Stash &amp; terapkan ulang perubahan lokal</x:String>
   <x:String x:Key="Text.Rebase.On" xml:space="preserve">Pada:</x:String>
+  <x:String x:Key="Text.Rebase.Test" xml:space="preserve">Menguji rebase ...</x:String>
+  <x:String x:Key="Text.Rebase.Test.NoConflicts" xml:space="preserve">Rebase dapat dilakukan tanpa konflik</x:String>
+  <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Terjadi kesalahan tidak dikenal saat menguji rebase</x:String>
+  <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase akan menyebabkan konflik</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Tambah Remote</x:String>
   <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Sunting Remote</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nama:</x:String>
@@ -958,7 +967,6 @@
   <x:String x:Key="Text.TagCM.CustomAction" xml:space="preserve">Aksi Kustom</x:String>
   <x:String x:Key="Text.TagCM.Delete" xml:space="preserve">Hapus ${0}$...</x:String>
   <x:String x:Key="Text.TagCM.DeleteMultiple" xml:space="preserve">Hapus {0} tag yang dipilih...</x:String>
-  <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Merge ${0}$ ke ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Dorong ${0}$...</x:String>
   <x:String x:Key="Text.UpdateSubmodules" xml:space="preserve">Perbarui Submodule</x:String>
   <x:String x:Key="Text.UpdateSubmodules.All" xml:space="preserve">Semua submodule</x:String>
@@ -1183,6 +1191,21 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git gagal menandatangani dengan GPG. Verifikasi kunci penandatanganan Anda (git config user.signingkey), pastikan gpg-agent berjalan, atau nonaktifkan penandatanganan sementara dengan 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git menolak beroperasi pada repositori ini karena dimiliki oleh pengguna lain. Jalankan 'git config --global --add safe.directory &lt;path&gt;' untuk mengizinkannya.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Tambahkan ke safe.directory</x:String>
+  <x:String x:Key="Text.Apply.Source" xml:space="preserve">Sumber:</x:String>
+  <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Berkas</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Clipboard</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Sedang bisect. Silakan checkout commit lain lalu tandai sebagai baik atau buruk.</x:String>
+  <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Sedang bisect. Tandai commit saat ini sebagai buruk atau checkout commit lain lalu tandai sebagai buruk.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisect berjalan. Tandai commit saat ini sebagai baik atau buruk dan checkout yang lain.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForMark" xml:space="preserve">Bisect berjalan. Apakah HEAD saat ini baik atau buruk?</x:String>
+  <x:String x:Key="Text.BranchCM.CompareWithSpecial" xml:space="preserve">Bandingkan dengan ${0}$</x:String>
+  <x:String x:Key="Text.CommitCM.CopyAuthorTime" xml:space="preserve">Waktu Author</x:String>
+  <x:String x:Key="Text.CommitCM.CopyCommitterTime" xml:space="preserve">Waktu Committer</x:String>
+  <x:String x:Key="Text.Configure.Git.EnableRecursiveWhenAutoUpdatingSubmodules" xml:space="preserve">Aktifkan `--recursive` saat memperbarui submodul secara otomatis</x:String>
+  <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">Salin sebagai Patch</x:String>
+  <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">BERKAS KOSONG</x:String>
+  <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Stash &amp; terapkan ulang perubahan secara default saat checkout atau merge branch</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Checkout Tag...</x:String>
+  <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Perbarui submodul bertingkat</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Abaikan semua berkas yang belum dilacak di folder yang sama</x:String>
 </ResourceDictionary>
