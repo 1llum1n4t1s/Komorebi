@@ -48,7 +48,7 @@ public class DeleteMultipleBranches : Popup
                 foreach (var target in Targets)
                     tasks.Add(new Commands.Branch(_repo.FullPath, target.Name)
                         .Use(log)
-                        .DeleteLocalAsync());
+                        .DeleteLocalAsync(false));
                 await Task.WhenAll(tasks);
             }
             else

@@ -111,9 +111,6 @@
   <x:String x:Key="Text.ChangeSubmoduleUrl.Submodule" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.ChangeSubmoduleUrl.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Checkout" xml:space="preserve">Checkout Branch</x:String>
-  <x:String x:Key="Text.Checkout.Commit" xml:space="preserve">Checkout Commit</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Target" xml:space="preserve">Commit:</x:String>
-  <x:String x:Key="Text.Checkout.Commit.Warning" xml:space="preserve">Warning: By doing a commit checkout, HEAD will be detached</x:String>
   <x:String x:Key="Text.Checkout.LocalChanges" xml:space="preserve">Local Changes:</x:String>
   <x:String x:Key="Text.Checkout.Target" xml:space="preserve">Branch:</x:String>
   <x:String x:Key="Text.Checkout.WarnLostCommits" xml:space="preserve">Your current HEAD contains commit(s) not connected to any branches/tags! Do you want to continue?</x:String>
@@ -123,6 +120,9 @@
   <x:String x:Key="Text.CheckoutBranchFromStash" xml:space="preserve">Checkout Branch From Stash</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Branch" xml:space="preserve">New Branch:</x:String>
   <x:String x:Key="Text.CheckoutBranchFromStash.Stash" xml:space="preserve">Stash:</x:String>
+  <x:String x:Key="Text.CheckoutDetached" xml:space="preserve">Checkout Commit or Tag</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Target" xml:space="preserve">Target:</x:String>
+  <x:String x:Key="Text.CheckoutDetached.Warning" xml:space="preserve">Warning: After doing this, HEAD will be detached</x:String>
   <x:String x:Key="Text.CherryPick" xml:space="preserve">Cherry Pick</x:String>
   <x:String x:Key="Text.CherryPick.AppendSourceToMessage" xml:space="preserve">Append source to commit message</x:String>
   <x:String x:Key="Text.CherryPick.Commit" xml:space="preserve">Commit(s):</x:String>
@@ -343,9 +343,10 @@
   <x:String x:Key="Text.DeinitSubmodule.Force" xml:space="preserve">Force de-init even if it contains local changes.</x:String>
   <x:String x:Key="Text.DeinitSubmodule.Path" xml:space="preserve">Submodule:</x:String>
   <x:String x:Key="Text.DeleteBranch" xml:space="preserve">Delete Branch</x:String>
+  <x:String x:Key="Text.DeleteBranch.AskForRemote" xml:space="preserve">Do you want to also delete the following remote branch?</x:String>
   <x:String x:Key="Text.DeleteBranch.Branch" xml:space="preserve">Branch:</x:String>
+  <x:String x:Key="Text.DeleteBranch.Force" xml:space="preserve">Force delete even if it contains unmerged commit(s)</x:String>
   <x:String x:Key="Text.DeleteBranch.IsRemoteTip" xml:space="preserve">You are about to delete a remote branch!!!</x:String>
-  <x:String x:Key="Text.DeleteBranch.WithTrackingRemote" xml:space="preserve">Also delete remote branch ${0}$</x:String>
   <x:String x:Key="Text.DeleteMultiBranch" xml:space="preserve">Delete Multiple Branches</x:String>
   <x:String x:Key="Text.DeleteMultiBranch.Tip" xml:space="preserve">You are trying to delete multiple branches at one time. Be sure to double-check before taking action!</x:String>
   <x:String x:Key="Text.DeleteMultiTags" xml:space="preserve">Delete Multiple Tags</x:String>

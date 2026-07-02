@@ -78,14 +78,16 @@ public class Branch : Command
     }
 
     /// <summary>
-    /// ローカルブランチを強制削除する。
-    /// git branch -D &lt;name&gt; を実行する。
+    /// ローカルブランチを削除する。
+    /// git branch -d/-D &lt;name&gt; を実行する。
     /// </summary>
+    /// <param name="force">trueの場合はマージ状態に関わらず強制削除（-D）、falseの場合は未マージなら失敗するsafe delete（-d）。</param>
     /// <returns>コマンドが成功した場合はtrue。</returns>
-    public async Task<bool> DeleteLocalAsync()
+    public async Task<bool> DeleteLocalAsync(bool force)
     {
+        // git branch -d: マージ済みでなければ失敗するsafe delete
         // git branch -D: マージ状態に関わらずブランチを強制削除する
-        Args = $"branch -D {_name.Quoted()}";
+        Args = $"branch {(force ? "-D" : "-d")} {_name.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 
