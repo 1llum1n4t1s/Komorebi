@@ -10,15 +10,6 @@ namespace Komorebi.Models;
 /// </summary>
 public class DiffOption
 {
-    /// <summary>
-    /// 行末のCR（キャリッジリターン）を無視するかどうか（デフォルトで有効）
-    /// </summary>
-    public static bool IgnoreCRAtEOL
-    {
-        get;
-        set;
-    } = true;
-
     /// <summary>ワーキングコピーの変更情報（ワーキングコピーdiff時のみ使用）</summary>
     public Change WorkingCopyChange => _workingCopyChange;
     /// <summary>ステージング前の変更かどうか</summary>

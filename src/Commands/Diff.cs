@@ -39,7 +39,8 @@ public partial class Diff : Command
     /// <param name="opt">差分オプション（比較対象の指定）</param>
     /// <param name="unified">コンテキスト行数</param>
     /// <param name="ignoreWhitespace">空白の変更を無視するかどうか</param>
-    public Diff(string repo, Models.DiffOption opt, int unified, bool ignoreWhitespace)
+    /// <param name="ignoreCRAtEOL">行末のCR（キャリッジリターン）を無視するかどうか</param>
+    public Diff(string repo, Models.DiffOption opt, int unified, bool ignoreWhitespace, bool ignoreCRAtEOL)
     {
         WorkingDirectory = repo;
         Context = repo;
@@ -47,10 +48,10 @@ public partial class Diff : Command
         var builder = new StringBuilder(256);
         // 色なし・外部diffツールなし・完全長ハッシュ・パッチ形式で出力
         builder.Append("diff --no-color --no-ext-diff --full-index --patch ");
-        if (Models.DiffOption.IgnoreCRAtEOL)
-            builder.Append("--ignore-cr-at-eol ");
         if (ignoreWhitespace)
             builder.Append("--ignore-space-change --ignore-blank-lines ");
+        if (ignoreCRAtEOL)
+            builder.Append("--ignore-cr-at-eol ");
         builder.Append("--unified=").Append(unified).Append(' ');
         builder.Append(opt.ToString());
 

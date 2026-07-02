@@ -166,8 +166,9 @@ public class DiffContext : ObservableObject
         {
             var numLines = Preferences.Instance.UseFullTextDiff ? _entireFileLines : _unifiedLines;
             var ignoreWhitespace = Preferences.Instance.IgnoreWhitespaceChangesInDiff;
+            var ignoreCRAtEOL = Preferences.Instance.IgnoreCRAtEOLInDiff;
 
-            var latest = await new Commands.Diff(_repo, _option, numLines, ignoreWhitespace)
+            var latest = await new Commands.Diff(_repo, _option, numLines, ignoreWhitespace, ignoreCRAtEOL)
                 .ReadAsync()
                 .ConfigureAwait(false);
 
