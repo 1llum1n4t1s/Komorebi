@@ -54,10 +54,8 @@ public class Merge : Popup
         set
         {
             if (SetProperty(ref _mode, value))
-                // メッセージ編集はDefault、FastForward、NoFastForwardモードでのみ可能
-                CanEditMessage = _mode == Models.MergeMode.Default ||
-                    _mode == Models.MergeMode.FastForward ||
-                    _mode == Models.MergeMode.NoFastForward;
+                // メッセージ編集はDefault、NoFastForwardモードでのみ可能（FastForwardはマージメッセージ自体を作らないため対象外）
+                CanEditMessage = _mode == Models.MergeMode.Default || _mode == Models.MergeMode.NoFastForward;
         }
     }
 
