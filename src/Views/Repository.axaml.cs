@@ -1531,7 +1531,7 @@ public partial class Repository : UserControl
 
                 // 起動候補数（フォルダとして開く + 起動オプション）に応じてメニュー構造を切り替える（upstream e761ff91）
                 var options = dupTool.MakeLaunchOptions(fullpath);
-                var count = (dupTool.SupportOpenAsFolder ? 1 : 0) + (options?.Count ?? 0);
+                var count = (dupTool.SupportOpenFolder ? 1 : 0) + (options?.Count ?? 0);
                 if (count == 0)
                     continue;
 
@@ -1562,17 +1562,17 @@ public partial class Repository : UserControl
                         item.Items.Add(subItem);
                     }
 
-                    if (dupTool.SupportOpenAsFolder)
+                    if (dupTool.SupportOpenFolder)
                     {
-                        var openAsFolder = new MenuItem();
-                        openAsFolder.Header = App.Text("Repository.OpenAsFolder");
-                        openAsFolder.Click += (_, e) =>
+                        var open = new MenuItem();
+                        open.Header = App.Text("Repository.OpenAsFolder");
+                        open.Click += (_, e) =>
                         {
                             dupTool.Launch(fullpath.Quoted());
                             e.Handled = true;
                         };
                         item.Items.Add(new MenuItem() { Header = "-" });
-                        item.Items.Add(openAsFolder);
+                        item.Items.Add(open);
                     }
                 }
 

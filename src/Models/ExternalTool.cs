@@ -44,7 +44,7 @@ public class ExternalTool
     /// <summary>ツールのアイコン画像</summary>
     public Bitmap IconImage { get; }
     /// <summary>リポジトリをフォルダとして開く操作をサポートするかどうか</summary>
-    public bool SupportOpenAsFolder { get; }
+    public bool SupportOpenFolder { get; }
 
     /// <summary>
     /// 外部ツールのコンストラクタ
@@ -53,12 +53,12 @@ public class ExternalTool
     /// <param name="icon">アイコンリソース名</param>
     /// <param name="execFile">実行ファイルパス</param>
     /// <param name="optionsGenerator">起動オプション生成関数</param>
-    /// <param name="supportOpenAsFolder">フォルダとして開く操作をサポートするかどうか</param>
-    public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator, bool supportOpenAsFolder)
+    /// <param name="supportOpenFolder">フォルダとして開く操作をサポートするかどうか</param>
+    public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator, bool supportOpenFolder)
     {
         Name = name;
         ExecFile = execFile;
-        SupportOpenAsFolder = supportOpenAsFolder;
+        SupportOpenFolder = supportOpenFolder;
 
         _optionsGenerator = optionsGenerator;
 
@@ -222,21 +222,21 @@ public class ExternalToolsFinder
     /// <param name="icon">アイコンリソース名</param>
     /// <param name="finder">実行ファイルパスの検索関数</param>
     /// <param name="optionsGenerator">起動オプション生成関数</param>
-    /// <param name="supportOpenAsFolder">フォルダとして開く操作をサポートするかどうか</param>
-    public void TryAdd(string name, string icon, Func<string> finder, Func<string, List<ExternalTool.LaunchOption>> optionsGenerator = null, bool supportOpenAsFolder = true)
+    /// <param name="supportOpenFolder">フォルダとして開く操作をサポートするかどうか</param>
+    public void TryAdd(string name, string icon, Func<string> finder, Func<string, List<ExternalTool.LaunchOption>> optionsGenerator = null, bool supportOpenFolder = true)
     {
         if (_customization.Excludes.Contains(name))
             return;
 
         if (_customization.Tools.TryGetValue(name, out var customPath) && File.Exists(customPath))
         {
-            Tools.Add(new ExternalTool(name, icon, customPath, optionsGenerator, supportOpenAsFolder));
+            Tools.Add(new ExternalTool(name, icon, customPath, optionsGenerator, supportOpenFolder));
         }
         else
         {
             var path = finder();
             if (!string.IsNullOrEmpty(path) && File.Exists(path))
-                Tools.Add(new ExternalTool(name, icon, path, optionsGenerator, supportOpenAsFolder));
+                Tools.Add(new ExternalTool(name, icon, path, optionsGenerator, supportOpenFolder));
         }
     }
 
