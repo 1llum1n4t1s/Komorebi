@@ -1026,8 +1026,9 @@ public partial class Histories : UserControl
             // Komorebi: upstream (1fd88761) は isHead 時の reword/squash/fixup/drop 専用ポップアップを
             // interactive rebase に統合し廃止したが、Komorebi の Reword/SquashOrFixupHead/DropHead は
             // 自動スタッシュ・ForcePushAfterDone・reword後の自動ナビゲーション等の独自強化を持つ軽量パスのため温存する。
-            // 代わりに、この「重量パス」(git rebase -i ベース) の interactive rebase サブメニューを
-            // isHead でも選択可能にし、両方の手段を併存させる（部分適用）。
+            // 代わりにこの「重量パス」(git rebase -i ベース) の interactive rebase サブメニューも表示するが、
+            // isHead では Reword/Squash/Fixup/Drop が上部の軽量パスと機能重複するためサブメニューからは除外し、
+            // 軽量パスに存在しない Edit だけをサブメニューに残す（同名操作の入口を二重に見せない）。
             if (commit.IsMerged && commit.Parents.Count > 0)
             {
                 var interactiveRebase = new MenuItem();
@@ -1052,15 +1053,7 @@ public partial class Histories : UserControl
                     interactiveRebase.Items.Add(new MenuItem() { Header = "-" });
                 }
 
-                var reword = new MenuItem();
-                reword.Header = App.Text("CommitCM.InteractiveRebase.Reword");
-                reword.Icon = App.CreateMenuIcon("Icons.Rename");
-                reword.Click += async (_, e) =>
-                {
-                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Reword);
-                    e.Handled = true;
-                };
-
+                // Edit は軽量パス(上部)に相当操作が無いため isHead でもサブメニューに残す。
                 var edit = new MenuItem();
                 edit.Header = App.Text("CommitCM.InteractiveRebase.Edit");
                 edit.Icon = App.CreateMenuIcon("Icons.Edit");
@@ -1070,38 +1063,58 @@ public partial class Histories : UserControl
                     e.Handled = true;
                 };
 
-                var squash = new MenuItem();
-                squash.Header = App.Text("CommitCM.InteractiveRebase.Squash");
-                squash.Icon = App.CreateMenuIcon("Icons.SquashIntoParent");
-                squash.Click += async (_, e) =>
+                if (!isHead)
                 {
-                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Squash);
-                    e.Handled = true;
-                };
+                    var reword = new MenuItem();
+                    reword.Header = App.Text("CommitCM.InteractiveRebase.Reword");
+                    reword.Icon = App.CreateMenuIcon("Icons.Rename");
+                    reword.Click += async (_, e) =>
+                    {
+                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Reword);
+                        e.Handled = true;
+                    };
 
-                var fixup = new MenuItem();
-                fixup.Header = App.Text("CommitCM.InteractiveRebase.Fixup");
-                fixup.Icon = App.CreateMenuIcon("Icons.Fix");
-                fixup.Click += async (_, e) =>
+                    // Squash/Fixup は親を 1 つだけ持つコミットにしか意味を持たないため、
+                    // 2 親のマージコミットでは無効化する（上部の軽量パスと同じガード）。
+                    var squash = new MenuItem();
+                    squash.Header = App.Text("CommitCM.InteractiveRebase.Squash");
+                    squash.Icon = App.CreateMenuIcon("Icons.SquashIntoParent");
+                    squash.IsEnabled = commit.Parents.Count == 1;
+                    squash.Click += async (_, e) =>
+                    {
+                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Squash);
+                        e.Handled = true;
+                    };
+
+                    var fixup = new MenuItem();
+                    fixup.Header = App.Text("CommitCM.InteractiveRebase.Fixup");
+                    fixup.Icon = App.CreateMenuIcon("Icons.Fix");
+                    fixup.IsEnabled = commit.Parents.Count == 1;
+                    fixup.Click += async (_, e) =>
+                    {
+                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Fixup);
+                        e.Handled = true;
+                    };
+
+                    var drop = new MenuItem();
+                    drop.Header = App.Text("CommitCM.InteractiveRebase.Drop");
+                    drop.Icon = App.CreateMenuIcon("Icons.Clear");
+                    drop.Click += async (_, e) =>
+                    {
+                        await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Drop);
+                        e.Handled = true;
+                    };
+
+                    interactiveRebase.Items.Add(reword);
+                    interactiveRebase.Items.Add(edit);
+                    interactiveRebase.Items.Add(squash);
+                    interactiveRebase.Items.Add(fixup);
+                    interactiveRebase.Items.Add(drop);
+                }
+                else
                 {
-                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Fixup);
-                    e.Handled = true;
-                };
-
-                var drop = new MenuItem();
-                drop.Header = App.Text("CommitCM.InteractiveRebase.Drop");
-                drop.Icon = App.CreateMenuIcon("Icons.Clear");
-                drop.Click += async (_, e) =>
-                {
-                    await vm.InteractiveRebaseAsync(commit, Models.InteractiveRebaseAction.Drop);
-                    e.Handled = true;
-                };
-
-                interactiveRebase.Items.Add(reword);
-                interactiveRebase.Items.Add(edit);
-                interactiveRebase.Items.Add(squash);
-                interactiveRebase.Items.Add(fixup);
-                interactiveRebase.Items.Add(drop);
+                    interactiveRebase.Items.Add(edit);
+                }
 
                 menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(interactiveRebase);
