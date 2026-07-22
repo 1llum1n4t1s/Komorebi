@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code and other coding agents working in this repository.
 
 ## Project Overview
 
@@ -32,7 +32,7 @@ dotnet build -p:DisableUpdateDetection=true
 ```
 
 `Directory.Build.props` enforces strict build-time analysis:
-- `EnforceCodeStyleInBuild=true` — IDE diagnostics (e.g. `IDE0005` unused usings) are promoted to build errors. A failing `dotnet build` may simply be an unused `using` — fix instead of suppressing.
+- `EnforceCodeStyleInBuild=true` — IDE diagnostics (e.g. `IDE0005` unused usings) are promoted to build errors. A failing `dotnet build` may simply be an unused `using` — fix it rather than suppressing.
 - `GenerateDocumentationFile=true` — required for `IDE0005` to detect unused usings; produces an XML doc next to the assembly.
 - `NoWarn=CS1591` — silences "missing XML doc comment" warnings so IDE-style analysis stays the only signal.
 - `<Version>` here is the source of truth for both packaging and Velopack.
@@ -91,9 +91,9 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 2. Global SSH key (`Preferences.Instance.GlobalSSHKey`)
 3. ssh-agent / `~/.ssh/config` (when both are empty)
 
-**Legacy `__NONE__` sentinel**: 旧バージョンで書き込まれた `__NONE__` は「グローバルフォールバックを明示的にスキップ」として読み取り時に尊重する。新 UI からは書き込まれない（凍結レガシー）。`LegacySSHKeyOptOutSentinel` 定数で管理。
+**Legacy `__NONE__` sentinel**: 旧バージョンで書き込まれた `__NONE__` は「グローバルフォールバックを明示的にスキップ」として読み取り時に尊重する。新 UI からは書き込まず、読み取り専用の凍結レガシーとして `LegacySSHKeyOptOutSentinel` 定数で管理する。
 
-`GIT_SSH_COMMAND` is built in `Command.CreateGitStartInfo` with platform-aware quoting — POSIX single-quote escaping (`SSHKey.Replace("'", "'\\''")`) and `-F '/dev/null'` on Unix, Windows uses double-quote escaping and `-F "NUL"`. The `.Quoted()` helper in `App.Extensions.cs` is separately used for git CLI argument paths (double-quote only) and is **not** reused here.
+`GIT_SSH_COMMAND` is built in `Command.CreateGitStartInfo` with platform-aware quoting — POSIX single-quote escaping (`SSHKey.Replace("'", "'\\''")`) and `-F '/dev/null'` on Unix, Windows uses double-quote escaping and `-F "NUL"`. The `.Quoted()` helper in `App.Extensions.cs` is used separately for git CLI argument paths (double-quote only) and is kept distinct here rather than reused.
 
 ### AWS CodeCommit Support
 Three URL formats are supported:
@@ -131,9 +131,9 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 ### Auto-Update (Velopack)
 - Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
 - `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.nephilim.jp`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
-- 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書き不可
-- 通常リリースは **R2 単独配信** (GitHub Releases は作らない)。**win-x64 / win-arm64 はローカル署名リリース (`scripts/release-local.ps1`)、osx-arm64 / linux-x64 / linux-arm64 + standalone パッケージは CI (`.github/workflows/release.yml` の `r2-upload` ジョブ)** の役割分担 (詳細は後述「CI/CD」)
-- 旧 `GithubSource` クライアント救済は GitHub Releases に「踏み台 (R2 対応版を含む最初のバージョン)」を **1 つだけ** publish する方式。2 段階更新 (旧 → 踏み台版 → R2 最新) で乗り換えさせる。踏み台 publish は `/transfer-cf` 移行作業時に 1 回だけ実施し、踏み台 Release は **削除せず残す** (継続併用はしない)
+- 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理する。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書きを不可にする
+- 通常リリースは **R2 単独配信**（GitHub Releases は作らない）。**win-x64 / win-arm64 はローカル署名リリース (`scripts/release-local.ps1`)、osx-arm64 / linux-x64 / linux-arm64 + standalone パッケージは CI (`.github/workflows/release.yml` の `r2-upload` ジョブ)** の役割分担（詳細は後述「CI/CD」）
+- 旧 `GithubSource` クライアント救済は GitHub Releases に「踏み台 (R2 対応版を含む最初のバージョン)」を **1 つだけ** publish する方式。2 段階更新（旧 → 踏み台版 → R2 最新）で乗り換えさせる。踏み台 publish は `/transfer-cf` 移行作業時に 1 回だけ実施し、踏み台 Release は **削除せず残す**（継続併用はしない）
 - `Models.VelopackUpdate` holds `UpdateManager` + `UpdateInfo`
 - `ViewModels.SelfUpdate` handles download progress and `ApplyUpdatesAndRestart()`
 - `mgr.IsInstalled` guards against running in dev/unpackaged mode
@@ -151,7 +151,7 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 - First-launch: `InitSetup` popup lets user choose language + clone directory (bypasses OS auto-detection)
 
 ### Theme System
-`src/Resources/Themes.axaml` defines 5 built-in themes (Default/Light/Dark/White/OneDark) as `ResourceDictionary` entries with `ThemeVariant` keys. Each theme defines `Color.*` resources that `Brush.*` `SolidColorBrush` resources reference via `DynamicResource`. User-customizable color overrides are applied via `Models/ThemeOverrides.cs` which loads a JSON file and merges overrides into the active resource dictionary at runtime. When adding new themed colors, define both the `Color` and `Brush` in `Themes.axaml`, and use `{DynamicResource Brush.MyName}` in AXAML — never hardcode colors.
+`src/Resources/Themes.axaml` defines 5 built-in themes (Default/Light/Dark/White/OneDark) as `ResourceDictionary` entries with `ThemeVariant` keys. Each theme defines `Color.*` resources that `Brush.*` `SolidColorBrush` resources reference via `DynamicResource`. User-customizable color overrides are applied via `Models/ThemeOverrides.cs` which loads a JSON file and merges overrides into the active resource dictionary at runtime. When adding new themed colors, define both the `Color` and `Brush` in `Themes.axaml` and reference them with `{DynamicResource Brush.MyName}` in AXAML — use resources rather than hardcoding color literals.
 
 ### Alert Dialog for Modal-Context Errors
 `src/Views/Alert.axaml` is a small child modal dialog for displaying errors that occur **inside** an already-open modal dialog (e.g., file picker failures in the Preferences dialog). Use this instead of `App.RaiseException(...)` in modal-dialog code-behind, because the standard inline notification banner is rendered on the parent Launcher window and gets hidden behind the modal.
@@ -161,7 +161,7 @@ Usage: `await new Alert().ShowAsync(this, message, isError: true);` — titles a
 ### Window State Persistence Pattern
 Stand-alone windows (FileHistories, Blame, Launcher) persist width/height/position/state across sessions via `ViewModels.LayoutInfo` properties. The pattern:
 
-1. **Constructor**: set `Width` / `Height` from `LayoutInfo` (safe — no `Screens` dependency) and subscribe `PositionChanged`. **Do not** set `Position` in the constructor: `App.ShowWindow(...)` will overwrite it with an active-screen-centered value before calling `Show()`, which serves as a deterministic first-launch fallback.
+1. **Constructor**: set `Width` / `Height` from `LayoutInfo` (safe — no `Screens` dependency) and subscribe `PositionChanged`. Leave `Position` unset in the constructor: `App.ShowWindow(...)` will overwrite it with an active-screen-centered value before calling `Show()`, which serves as a deterministic first-launch fallback.
 2. **OnOpened**: call `TryRestoreWindowPosition(x, y, w, h)` (protected helper on `ChromelessWindow`) — returns true if the saved `PixelRect` fits entirely within a connected screen's working area, and sets `Position` accordingly, overriding the centering from step 1. Also restore `WindowState = Maximized` if previously maximized. If `TryRestoreWindowPosition` returns false (first launch, or saved coords on a disconnected monitor), no action is needed — the step-1 centering remains as fallback.
 3. **OnSizeChanged** / **OnPositionChanged**: save to `LayoutInfo` only when `WindowState == Normal` (avoid saving maximized/snapped sizes).
 4. **OnPropertyChanged(WindowStateProperty)**: save state only when `!= Minimized` (otherwise a taskbar-minimize would cause the next launch to start minimized).
@@ -223,7 +223,7 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **ci.yml** — lightweight: `dotnet build` + `dotnet test` on ubuntu-latest (single runner, no AOT publish)
 - **release.yml** — triggered by push to `release/**` branches: full AOT publish (5 platforms) → packages (zip/deb/rpm/AppImage) → Velopack (osx/linux のみ) → R2 単独配信 (GitHub Releases は作らない)
 - **build.yml** — reusable workflow for 5-platform AOT publish (used by release.yml only。win-* は `package.yml` の standalone zip 用に残置)
-- **velopack.yml** — reusable workflow creating Velopack packages。**win-x64 / win-arm64 は matrix から除外済み** — 未署名 win フィードがローカル署名リリースの成果物を R2 上で上書きしないため
+- **velopack.yml** — reusable workflow creating Velopack packages。**win-x64 / win-arm64 は matrix から除外済み** — 未署名 win フィードがローカル署名リリースの成果物を R2 上で上書きしないようにするため
 - **deploy-landing.yml** — `web/` 配下のランディングページを Cloudflare Worker としてデプロイ (リリース配信とは独立)
 
 ### Windows リリース (ローカル実行)
@@ -260,7 +260,7 @@ Fonts are **not bundled** — the app uses system fonts with per-locale fallback
 Komorebi tracks `sourcegit-scm/sourcegit` via periodic cherry-pick batches. To keep future merges tractable, follow these rules when reviewing AI bot suggestions or writing changes that touch files upstream also maintains:
 
 1. **Accept real bugs / regressions** even when they diverge from upstream — e.g., NPE guards (PR #14 `GetActiveWorkspace()?.DefaultCloneDir`), missed `.ToLocalTime()` in `About` (PR #16), latent conditional logic breakage. Add an inline comment noting the deviation from upstream so future sync can either import an equivalent fix or revert intentionally.
-2. **Decline byte-for-byte stylistic suggestions** that only improve the local file — e.g., "Localize this hardcoded error message", "Extract this duplicated helper", "Rename this method for consistency". These turn every cherry-pick into a 3-way merge conflict without net benefit. The appropriate channel is a PR to upstream.
+2. **Decline byte-for-byte stylistic suggestions** that only improve the local file — e.g., "Localize this hardcoded error message", "Extract this duplicated helper", "Rename this method for consistency". These turn every cherry-pick into a 3-way merge conflict without net benefit; route them as a PR to upstream instead.
 3. **Komorebi-only architectural decisions** are preserved regardless of upstream churn: `App.RaiseException` (vs upstream's `Models.Notification.Send`), unified `WelcomeToolbar` (vs removed `RepositoryToolbar`), SSH key picker (`SSHKeyPicker` + `LegacySSHKeyOptOutSentinel`), CodeCommit URL handling, Anthropic AI provider, SuperLightLogger, file-scoped namespaces + Japanese XML doc comments, collection expressions `[]`.
 4. **Cherry-pick batches are tracked in** `plan` documents (e.g., `~/.claude/plans/goofy-finding-ullman.md`) with SHA-level status (applied / declined / deferred). When skipping an upstream commit, record the rationale in the plan so the next sync session doesn't re-evaluate it from scratch.
-5. **When bot reviews repeat the same Decline across rounds**, post one consolidated decline comment and rely on CI-green merges. Bots regularly re-raise closed items; do not mistake recurrence for severity escalation.
+5. **When bot reviews repeat the same Decline across rounds**, post one consolidated decline comment and rely on CI-green merges. Bots regularly re-raise closed items; treat recurrence as noise rather than severity escalation.
