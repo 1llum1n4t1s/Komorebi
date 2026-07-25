@@ -8,7 +8,7 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 >
 > v1.0.85 では `···` メニューの **「更新を確認...」を実行すると `更新の確認に失敗しました！ Could not find file 'NuGet.Versioning'`** と表示される不具合があります。**対処は不要です** — バックグラウンドの自動更新は正常に動作しているため、次回のアプリ起動時に自動的に最新版へ更新され、解消されます。
 >
-> すぐに更新したい場合は、最新の Setup.exe を手動インストールしてください（[x64](https://komorebi.nephilim.jp/Komorebi-win-x64-Setup.exe) / [ARM64](https://komorebi.nephilim.jp/Komorebi-win-arm64-Setup.exe)）。
+> すぐに更新したい場合は、最新の Setup.exe を手動インストールしてください（[x64](https://komorebi.kagayoi.com/Komorebi-win-x64-Setup.exe) / [ARM64](https://komorebi.kagayoi.com/Komorebi-win-arm64-Setup.exe)）。
 
 > [!NOTE]
 > 本プロジェクトは [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォークです。オリジナルの開発者および全コントリビューターに感謝いたします。
@@ -56,7 +56,7 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 | 項目 | 内容 |
 |------|------|
 | **Avalonia 12 アップグレード** | Avalonia UI 12.0.2 への移行完了。破壊的変更への対応済み |
-| **Velopack 自動アップデート** | Velopack による差分アップデートに対応。起動時にアップデートチェックを行い、ダウンロード進捗を表示。配信元は Cloudflare R2（`komorebi.nephilim.jp`） |
+| **Velopack 自動アップデート** | Velopack による差分アップデートに対応。起動時にアップデートチェックを行い、ダウンロード進捗を表示。配信元は Cloudflare R2（`komorebi.kagayoi.com`） |
 | **日本語 README** | README を全面的に日本語化 |
 
 ## スクリーンショット
@@ -81,14 +81,14 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 
 | OS | アーキテクチャ | ダウンロード |
 |----|----------------|--------------|
-| Windows | x64 | [Komorebi-win-x64-Setup.exe](https://komorebi.nephilim.jp/Komorebi-win-x64-Setup.exe) |
-| Windows | ARM64 | [Komorebi-win-arm64-Setup.exe](https://komorebi.nephilim.jp/Komorebi-win-arm64-Setup.exe) |
-| macOS | Apple Silicon | [Komorebi-osx-arm64-Setup.pkg](https://komorebi.nephilim.jp/Komorebi-osx-arm64-Setup.pkg) |
-| Linux | x64 | [Komorebi-linux-x64.AppImage](https://komorebi.nephilim.jp/Komorebi-linux-x64.AppImage) |
-| Linux | ARM64 | [Komorebi-linux-arm64.AppImage](https://komorebi.nephilim.jp/Komorebi-linux-arm64.AppImage) |
+| Windows | x64 | [Komorebi-win-x64-Setup.exe](https://komorebi.kagayoi.com/Komorebi-win-x64-Setup.exe) |
+| Windows | ARM64 | [Komorebi-win-arm64-Setup.exe](https://komorebi.kagayoi.com/Komorebi-win-arm64-Setup.exe) |
+| macOS | Apple Silicon | [Komorebi-osx-arm64-Setup.pkg](https://komorebi.kagayoi.com/Komorebi-osx-arm64-Setup.pkg) |
+| Linux | x64 | [Komorebi-linux-x64.AppImage](https://komorebi.kagayoi.com/Komorebi-linux-x64.AppImage) |
+| Linux | ARM64 | [Komorebi-linux-arm64.AppImage](https://komorebi.kagayoi.com/Komorebi-linux-arm64.AppImage) |
 
 > [!NOTE]
-> 配信元は Cloudflare R2 (`komorebi.nephilim.jp`) です。Windows ポータブル zip や Linux パッケージ (deb / rpm) も同じ配信元から入手できます。
+> 配信元は Cloudflare R2 (`komorebi.kagayoi.com`) です。Windows ポータブル zip や Linux パッケージ (deb / rpm) も同じ配信元から入手できます。
 
 ### データ保存先
 
