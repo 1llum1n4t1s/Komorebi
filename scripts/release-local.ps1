@@ -37,7 +37,7 @@ if (-not $VpkVersion) { throw 'vpk の最新安定版バージョンの取得に
 Write-Host "vpk 最新安定版: $VpkVersion"
 $WranglerVersion = '4.92.0'         # サプライチェーン対策でバージョン固定
 $Bucket = 'komorebi-updates'
-$BaseUrl = 'https://komorebi.nephilim.jp'
+$BaseUrl = 'https://komorebi.kagayoi.com'
 $AccountId = '10901bfadbf1005164774a7350082985'
 $SecretsPath = 'C:\Users\IMT\dev\Secret\secrets.json'
 $CertSubjectName = 'Open Source Developer Yuichiro Shinozaki'
@@ -49,9 +49,6 @@ $RuntimeMatrix = @{
     'win-x64'   = @{ Channel = 'win-x64' }
     'win-arm64' = @{ Channel = 'win-arm64' }
 }
-# R2 上に存在する全チャンネル (cleanup で Windows 以外の manifest を保護するために使う)
-$AllChannels = @('win-x64', 'win-arm64', 'osx-arm64', 'linux-x64', 'linux-arm64')
-
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 $WorkDir = Join-Path $RepoRoot 'local-release'
@@ -184,7 +181,7 @@ Write-Host "✅ R2 アップロード完了: $uploaded ファイル"
 # 伝播を確定する。バージョン付き nupkg は URL が一意 (旧キャッシュなし) のためパージ不要。
 Write-Host '== Cloudflare キャッシュパージ ==' -ForegroundColor Cyan
 $cfHeaders = @{ Authorization = "Bearer $($env:CLOUDFLARE_API_TOKEN)" }
-$zoneName = ([uri]$BaseUrl).Host -replace '^[^.]+\.', ''   # <sub>.nephilim.jp → nephilim.jp (apex)
+$zoneName = ([uri]$BaseUrl).Host -replace '^[^.]+\.', ''   # <sub>.kagayoi.com → kagayoi.com (apex)
 $zoneResp = Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/zones?name=$zoneName" -Headers $cfHeaders -TimeoutSec 30
 if (-not $zoneResp.success -or @($zoneResp.result).Count -eq 0) { throw "Cloudflare zone '$zoneName' の取得に失敗しました" }
 $zoneId = $zoneResp.result[0].id
@@ -211,8 +208,11 @@ foreach ($runtime in $Runtimes) {
 
 # ---- 4. 旧バージョン nupkg のクリーンアップ (Aggressive 戦略) ----
 # keep set = ローカル artifacts の manifest (今アップロードしたもの) +
-#            今回ビルドしていないチャンネル (osx / linux 等) の manifest を R2 から取得。
-# R2 上の「.nupkg かつ keep set 外」だけを削除する。固定ファイル名 (Setup.exe /
+#            今回ビルドしていない Windows チャンネルの manifest を R2 から取得。
+# ローカルリリースが所有する Windows チャンネルの「.nupkg かつ keep set 外」だけを削除する。
+# macOS / Linux は CI 側だけが cleanup する。双方が全チャンネルを cleanup すると並行実行時に、
+# 相手が nupkg を upload して manifest を更新するまでの間に新 nupkg を誤削除しうるため。
+# 固定ファイル名 (Setup.exe /
 # Portable.zip / AppImage / deb / rpm / komorebi_*.zip / RELEASES* / assets.*.json /
 # releases.*.json) は .nupkg ではないので対象外 = 安全。
 Write-Host '== 旧 nupkg クリーンアップ ==' -ForegroundColor Cyan
@@ -225,11 +225,12 @@ foreach ($m in $manifests) {
     }
 }
 
-# 今回リリースしていないチャンネルの manifest を取得して keep set に追加。
+# 今回リリースしていない Windows チャンネルの manifest を取得して keep set に追加。
 # 取得できないチャンネルがあると keep set が不完全 = 配信中 nupkg を誤削除しうるので
 # 安全側に倒して cleanup ごと中止する (アップロード済みのリリース自体は有効)
 $releasedChannels = @($Runtimes | ForEach-Object { $RuntimeMatrix[$_].Channel })
-foreach ($channel in ($AllChannels | Where-Object { $releasedChannels -notcontains $_ })) {
+$windowsChannels = @($RuntimeMatrix.Values | ForEach-Object { $_.Channel })
+foreach ($channel in ($windowsChannels | Where-Object { $releasedChannels -notcontains $_ })) {
     $url = "$BaseUrl/releases.$channel.json"
     try {
         # クエリで CDN キャッシュをバイパス。R2 は text 系でない Content-Type で返すことが
@@ -252,7 +253,7 @@ foreach ($channel in ($AllChannels | Where-Object { $releasedChannels -notcontai
         }
     }
 }
-Write-Host "  保持対象 nupkg: $($keep.Count) 件 (全 $($AllChannels.Count) チャンネル)"
+Write-Host "  保持対象 Windows nupkg: $($keep.Count) 件"
 
 $api = "https://api.cloudflare.com/client/v4/accounts/$AccountId/r2/buckets/$Bucket"
 $headers = @{ Authorization = "Bearer $($env:CLOUDFLARE_API_TOKEN)" }
@@ -273,7 +274,12 @@ while ($true) {
     if (-not $cursor) { break }
 }
 
-$toDelete = $allKeys | Where-Object { $_ -like '*.nupkg' -and -not $keep.ContainsKey($_) }
+$releasedChannelPattern = ($releasedChannels | ForEach-Object { [regex]::Escape($_) }) -join '|'
+$toDelete = $allKeys | Where-Object {
+    $_ -like '*.nupkg' -and
+    $_ -match "-(?:$releasedChannelPattern)-" -and
+    -not $keep.ContainsKey($_)
+}
 if (-not $toDelete) {
     Write-Host '  ✅ 削除対象なし'
 } else {
