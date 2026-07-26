@@ -315,12 +315,15 @@ public class Avatar : Control, Models.IAvatarHost
             if (storageFile is not null)
             {
                 var saveTo = storageFile.Path.LocalPath;
+                // Avalonia 12.1.0 で Save(Stream, int?) が廃止予定になったため、
+                // 同等の PNG 出力を BitmapEncoderOptions 経由で指定する。
+                var encoderOptions = new PngBitmapEncoderOptions();
                 await using (var writer = File.Create(saveTo))
                 {
                     if (_img is not null)
                     {
                         // 取得済み画像がある場合はそのまま保存する
-                        _img.Save(writer);
+                        _img.Save(writer, encoderOptions);
                     }
                     else
                     {
@@ -332,7 +335,7 @@ public class Avatar : Control, Models.IAvatarHost
                         using (var ctx = rt.CreateDrawingContext())
                         {
                             Render(ctx);
-                            rt.Save(writer);
+                            rt.Save(writer, encoderOptions);
                         }
                     }
                 }
