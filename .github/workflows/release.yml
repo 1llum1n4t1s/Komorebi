@@ -105,7 +105,7 @@ jobs:
       - name: Verify delivery (5 channel すべての manifest と参照先 nupkg を検証)
         run: |
           set -euo pipefail
-          base="https://komorebi.nephilim.jp"
+          base="https://komorebi.kagayoi.com"
           for channel in win-x64 win-arm64 osx-arm64 linux-x64 linux-arm64; do
             manifest_url="${base}/releases.${channel}.json?cb=$(date +%s%N)"
             echo "Checking ${manifest_url}"
@@ -190,12 +190,33 @@ jobs:
           #    - Windows 成果物はローカル署名リリース側だけが cleanup する。
           #      CI とローカルリリースが並行した際、更新途中の remote manifest を基準にすると
           #      相手が直前に upload した新 nupkg を誤削除するため、CI では全世代を保護する。
+          #    - バージョン付きファイルは直近 KEEP_VERSIONS 世代を保護する (全プロジェクト共通
+          #      ポリシー)。旧実装は keep_map = 今リリース分のみ = 実質 1 世代しか残さなかった。
+          #      現行版 + 1 つ前を残すと、配信直後の伝播中クライアントが 1 つ前を引ける。
+          #    - Windows のバージョン付き zip (komorebi_x.y.z.windows-*.zip) も保護対象に追加。
+          #      旧 case は Komorebi-win-* (大文字) しか挙げておらず、ローカル署名リリースが
+          #      上げた Windows zip を CI が消しうる非対称があった。
+          #    - grep が無一致で終わると pipefail で job が落ちるため || true で吸収する。
+          KEEP_VERSIONS=2
+          declare -A keep_version_map
+          mapfile -t all_versions < <(printf '%s\n' "${all_keys[@]}" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | sort -V -u || true)
+          if [[ "${#all_versions[@]}" -gt 0 ]]; then
+            start=$(( ${#all_versions[@]} - KEEP_VERSIONS ))
+            (( start < 0 )) && start=0
+            for v in "${all_versions[@]:$start}"; do keep_version_map["$v"]=1; done
+          fi
+          echo "保持バージョン: ${!keep_version_map[*]} (R2 上の全 ${#all_versions[@]} 世代のうち直近 ${KEEP_VERSIONS} 世代)"
+
           to_delete=()
           for key in "${all_keys[@]}"; do
             [[ -n "${keep_map[$key]:-}" ]] && continue
             case "$key" in
-              releases.*.json|assets.*.json|RELEASES*|Komorebi-win-*|Komorebi-*-win-x64-*.nupkg|Komorebi-*-win-arm64-*.nupkg) continue ;;
+              releases.*.json|assets.*.json|RELEASES*|Komorebi-win-*|komorebi_*.windows-*|Komorebi-*-win-x64-*.nupkg|Komorebi-*-win-arm64-*.nupkg) continue ;;
             esac
+            # 固定ファイル名 (バージョン文字列なし) は毎リリース上書きされるので保持
+            ver=$(printf '%s' "$key" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
+            [[ -z "$ver" ]] && continue
+            [[ -n "${keep_version_map[$ver]:-}" ]] && continue
             to_delete+=("$key")
           done
 

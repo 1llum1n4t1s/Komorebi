@@ -25,6 +25,12 @@ public static class InstalledFont
     private static readonly Lazy<List<string>> s_all = new(LoadAll);
     private static readonly Lazy<List<string>> s_mono = new(LoadMono);
 
+    /// <summary>
+    /// <see cref="All"/> の名前引き用インデックス。候補の存在確認を O(1) にする。
+    /// </summary>
+    private static readonly Lazy<HashSet<string>> s_allSet =
+        new(() => new HashSet<string>(All, StringComparer.OrdinalIgnoreCase));
+
     private static List<string> LoadAll()
     {
         var names = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -94,30 +100,58 @@ public static class InstalledFont
     /// 初期値もカンマ区切り文字列ではなく単一名でなければ未選択表示になる。
     /// </summary>
     public static string ResolveDefaultFont(string locale)
-        => PickFirstInstalled(GetLocaleDefaults(locale).Default, All);
+        => PickFirstMatching(GetLocaleDefaults(locale).Default, IsInstalled);
 
     /// <summary>
     /// ロケールに応じた等幅フォントを「単一の」フォント名として解決する。
-    /// 仕様は <see cref="ResolveDefaultFont"/> と同様で、Monospace 候補と
-    /// <see cref="Monospace"/> 一覧を突き合わせる。
+    /// 仕様は <see cref="ResolveDefaultFont"/> と同様だが、判定対象は候補名だけに限定する。
+    ///
+    /// 以前は <see cref="Monospace"/>（= 全インストールフォントの GlyphTypeface を生成して
+    /// IsFixedPitch を調べたリスト）と突き合わせていた。この解決処理は Preferences の
+    /// フィールド初期化子から起動のたびに走るため、毎回システム内の全フォントファイルを
+    /// DirectWrite 経由で開いて読み込むことになり、起動コストが大きいうえに
+    /// Skia のフォントストリーム読み取り（SkDWriteFontFileStream::read）を数百回叩いていた。
+    /// 判定を候補フォントだけに絞ることで、結果を変えずに読み取り回数を数件まで落とす。
     /// </summary>
     public static string ResolveMonospaceFont(string locale)
-        => PickFirstInstalled(GetLocaleDefaults(locale).Monospace, Monospace);
+        => PickFirstMatching(GetLocaleDefaults(locale).Monospace, IsInstalledMonospace);
 
-    private static string PickFirstInstalled(string candidates, List<string> installed)
+    /// <summary>指定名がシステムにインストールされているかを判定する。</summary>
+    private static bool IsInstalled(string name)
+        => s_allSet.Value.Contains(name);
+
+    /// <summary>指定名がインストール済みで、かつ等幅フォントかを判定する。</summary>
+    private static bool IsInstalledMonospace(string name)
+    {
+        if (!IsInstalled(name))
+            return false;
+
+        try
+        {
+            return FontManager.Current.TryGetGlyphTypeface(new Typeface(name), out var glyph) &&
+                   glyph.Metrics.IsFixedPitch;
+        }
+        catch
+        {
+            // FontManager が初期化されていない環境（テスト等）では未一致として扱う
+            return false;
+        }
+    }
+
+    private static string PickFirstMatching(string candidates, Func<string, bool> isMatch)
     {
         if (string.IsNullOrEmpty(candidates))
             return string.Empty;
 
         var parts = candidates.Split(',');
 
-        if (installed.Count > 0)
+        // インストール済みフォント一覧が空 = FontManager 未初期化とみなし、判定自体を行わない。
+        if (s_allSet.Value.Count > 0)
         {
-            var set = new HashSet<string>(installed, StringComparer.OrdinalIgnoreCase);
             foreach (var part in parts)
             {
                 var name = part.Trim();
-                if (name.Length > 0 && set.Contains(name))
+                if (name.Length > 0 && isMatch(name))
                     return name;
             }
         }

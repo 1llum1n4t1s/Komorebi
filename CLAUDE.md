@@ -242,7 +242,7 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 
 ## Key Dependencies
 
-- **Avalonia 12.0.5** — cross-platform XAML UI (Note: `Avalonia.Controls.DataGrid` is intentionally pinned to 12.0.1 — bump together with main Avalonia after compatibility check)
+- **Avalonia 12.1.0** — cross-platform XAML UI (`Avalonia.Controls.DataGrid` は 12.0.x の間だけ 12.0.1 に固定していたが、12.1.0 で本体とバージョンが揃ったため固定を解除済み。今後も本体と同じバージョンで上げる)
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 1.0.1** — auto-update framework
@@ -264,3 +264,12 @@ Komorebi tracks `sourcegit-scm/sourcegit` via periodic cherry-pick batches. To k
 3. **Komorebi-only architectural decisions** are preserved regardless of upstream churn: `App.RaiseException` (vs upstream's `Models.Notification.Send`), unified `WelcomeToolbar` (vs removed `RepositoryToolbar`), SSH key picker (`SSHKeyPicker` + `LegacySSHKeyOptOutSentinel`), CodeCommit URL handling, Anthropic AI provider, SuperLightLogger, file-scoped namespaces + Japanese XML doc comments, collection expressions `[]`.
 4. **Cherry-pick batches are tracked in** `plan` documents (e.g., `~/.claude/plans/goofy-finding-ullman.md`) with SHA-level status (applied / declined / deferred). When skipping an upstream commit, record the rationale in the plan so the next sync session doesn't re-evaluate it from scratch.
 5. **When bot reviews repeat the same Decline across rounds**, post one consolidated decline comment and rely on CI-green merges. Bots regularly re-raise closed items; treat recurrence as noise rather than severity escalation.
+
+## ドメイン移行（2026-07 開始・期限 2027/05/31）
+
+屋号を **Kagayoi** に統一したため、配信ドメインを `nephilim.jp` から `kagayoi.com` へ移行中。方針の全体像はユーザーグローバルの `CLAUDE.md` §屋号とドメイン を参照する。
+
+- **旧ドメイン `nephilim.jp` はレジストラで廃止申請済みで 2027/05/31 に失効する**（延長しない）。それまでに出荷済みバイナリを新ドメインへ移行しきる。
+- 旧ホストの Worker route / custom domain は**期限まで消さない**。消すと出荷済みアプリの自動更新が止まる。
+- `nephilim.jp` の Redirect Rules は `/` だけを 301 する。`releases.*.json` / `*.nupkg` / `*-Setup.exe` は転送せず R2 が配信を続ける。
+- 配信は `komorebi.kagayoi.com`（R2 `komorebi-updates`）。旧 `komorebi.nephilim.jp` は route に併記して残してある。

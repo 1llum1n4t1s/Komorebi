@@ -225,12 +225,16 @@ foreach ($m in $manifests) {
     }
 }
 
-# 今回リリースしていない Windows チャンネルの manifest を取得して keep set に追加。
-# 取得できないチャンネルがあると keep set が不完全 = 配信中 nupkg を誤削除しうるので
-# 安全側に倒して cleanup ごと中止する (アップロード済みのリリース自体は有効)
+# 今回リリースしていない全チャンネル (macOS / Linux 含む) の manifest を取得して keep set に追加。
+# 取得できないチャンネルがあると keep set が不完全 = 配信中の成果物を誤削除しうるので
+# 安全側に倒して cleanup ごと中止する (アップロード済みのリリース自体は有効)。
+# ⚠️ 旧実装は Windows チャンネルだけを keep set に入れ、削除対象を「Windows チャンネル名を
+#    含む *.nupkg」に限定していた。そのためチャンネル名を持たないバージョン付き配布物
+#    (komorebi_x.y.z.macos-apple-silicon.zip / .deb / .rpm / .AppImage) が一切 cleanup されず、
+#    リリースを重ねるほど R2 に溜まる構造だった (Ferry では同原因で 351 個 7.2GB 滞留)。
 $releasedChannels = @($Runtimes | ForEach-Object { $RuntimeMatrix[$_].Channel })
-$windowsChannels = @($RuntimeMatrix.Values | ForEach-Object { $_.Channel })
-foreach ($channel in ($windowsChannels | Where-Object { $releasedChannels -notcontains $_ })) {
+$AllChannels = @('win-x64', 'win-arm64', 'osx-arm64', 'linux-x64', 'linux-arm64')
+foreach ($channel in ($AllChannels | Where-Object { $releasedChannels -notcontains $_ })) {
     $url = "$BaseUrl/releases.$channel.json"
     try {
         # クエリで CDN キャッシュをバイパス。R2 は text 系でない Content-Type で返すことが
@@ -253,7 +257,7 @@ foreach ($channel in ($windowsChannels | Where-Object { $releasedChannels -notco
         }
     }
 }
-Write-Host "  保持対象 Windows nupkg: $($keep.Count) 件"
+Write-Host "  保持対象 (manifest 参照): $($keep.Count) 件 (全 $($AllChannels.Count) チャンネル)"
 
 $api = "https://api.cloudflare.com/client/v4/accounts/$AccountId/r2/buckets/$Bucket"
 $headers = @{ Authorization = "Bearer $($env:CLOUDFLARE_API_TOKEN)" }
@@ -274,11 +278,28 @@ while ($true) {
     if (-not $cursor) { break }
 }
 
-$releasedChannelPattern = ($releasedChannels | ForEach-Object { [regex]::Escape($_) }) -join '|'
+# 全プロジェクト共通の保持ポリシー: 直近 2 バージョン。keep set が全チャンネルを
+# 網羅した (上記) ので、チャンネル名による絞り込みは不要になった。
+# 固定ファイル名 (Setup.exe / Portable.zip / *.AppImage / *.pkg / RELEASES* /
+# assets.*.json / releases.*.json) はバージョン文字列を含まないので対象外 = 安全。
+$KeepVersionCount = 2
+$versionPattern = '(\d+\.\d+\.\d+)'
+$allVersions = @(
+    $allKeys | ForEach-Object {
+        $m = [regex]::Match($_, $versionPattern)
+        if ($m.Success) { $m.Groups[1].Value }
+    } | Sort-Object -Property { [version]$_ } -Unique
+)
+$keepVersions = @($allVersions | Select-Object -Last $KeepVersionCount)
+Write-Host "  保持バージョン: $($keepVersions -join ', ') (全 $($allVersions.Count) 世代)"
+
 $toDelete = $allKeys | Where-Object {
-    $_ -like '*.nupkg' -and
-    $_ -match "-(?:$releasedChannelPattern)-" -and
-    -not $keep.ContainsKey($_)
+    # manifest が参照するファイルは絶対保持 (消すと自動更新が壊れる)
+    if ($keep.ContainsKey($_)) { return $false }
+    # 固定ファイル名はバージョン文字列を含まない = 毎リリース上書きなので保持
+    $m = [regex]::Match($_, $versionPattern)
+    if (-not $m.Success) { return $false }
+    return $keepVersions -notcontains $m.Groups[1].Value
 }
 if (-not $toDelete) {
     Write-Host '  ✅ 削除対象なし'

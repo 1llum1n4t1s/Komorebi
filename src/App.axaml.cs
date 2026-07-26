@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -22,6 +23,8 @@ namespace Komorebi;
 
 public partial class App : Application
 {
+    private const string AppUserModelId = "velopack.Komorebi";
+
     #region App Entry Point
     /// <summary>
     /// アプリケーションのエントリーポイント。
@@ -31,6 +34,11 @@ public partial class App : Application
     [STAThread]
     public static void Main(string[] args)
     {
+        if (OperatingSystem.IsWindows())
+        {
+            TrySetCurrentProcessAppUserModelId();
+        }
+
         // Velopackの自動更新フックを最初に実行する（更新適用後の再起動処理等）
         VelopackApp.Build().Run();
 
@@ -114,6 +122,16 @@ public partial class App : Application
         Native.OS.SetupApp(builder);
         return builder;
     }
+
+    private static void TrySetCurrentProcessAppUserModelId()
+    {
+        try
+        { _ = SetCurrentProcessExplicitAppUserModelID(AppUserModelId); }
+        catch { /* シェル連携の失敗だけで起動を止めない */ }
+    }
+
+    [LibraryImport("shell32.dll", StringMarshalling = StringMarshalling.Utf16)]
+    private static partial int SetCurrentProcessExplicitAppUserModelID(string appId);
 
     /// <summary>
     /// 後方互換性のための例外ログ出力（内部でSuperLightLoggerロガーに委譲する）
