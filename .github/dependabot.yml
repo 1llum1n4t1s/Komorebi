@@ -9,23 +9,41 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
     labels:
       - "dependencies"
       - "github-actions"
     commit-message:
       prefix: "ci"
+    # patch/minor はまとめて 1 PR にし、破壊的変更を含む major は個別 PR で
+    # 互換性を確認できるようにする
+    groups:
+      actions-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
 
   # NuGet 依存の自動更新
+  # src (アプリ本体) と tests (xunit / Moq 等のテスト依存) の両方を対象にする。
+  # depends/AvaloniaEdit は upstream から取り込んだ vendored ソースであり、
+  # 自動更新すると upstream 追従（cherry-pick）と衝突するため対象外にしている。
   - package-ecosystem: "nuget"
-    directory: "/src"
+    directories:
+      - "/src"
+      - "/tests/Komorebi.Tests"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    open-pull-requests-limit: 5
     labels:
       - "dependencies"
       - "nuget"
     commit-message:
       prefix: "deps"
-    # ベータ版 (Azure.AI.OpenAI 2.8.0-beta.1 等) は明示的に許可しないと更新されない
+    # ベータ版 (Azure.AI.OpenAI 2.9.0-beta.1 等) は明示的に許可しないと更新されない
     allow:
       - dependency-type: "all"
     # 破壊的変更を含む major バージョンアップは手動確認を要するため、
@@ -33,14 +51,25 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+    groups:
+      nuget-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
 
   # npm 依存 (build/scripts/ の localization-check.js 用)
   - package-ecosystem: "npm"
     directory: "/build/scripts"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
     labels:
       - "dependencies"
       - "npm"
     commit-message:
       prefix: "deps"
+    groups:
+      npm-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
