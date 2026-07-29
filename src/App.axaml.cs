@@ -34,31 +34,15 @@ public partial class App : Application
     [STAThread]
     public static void Main(string[] args)
     {
-        if (OperatingSystem.IsWindows())
-        {
-            TrySetCurrentProcessAppUserModelId();
-        }
-
-        // Velopackの自動更新フックを最初に実行する（更新適用後の再起動処理等）
-        VelopackApp.Build().Run();
-
-        // アプリケーションデータディレクトリ（設定・ログ保存先）を初期化する
-        Native.OS.SetupDataDir();
-
-        // ログシステムを初期化し、起動ログを記録する
-        Models.Logger.Initialize(new Models.LoggerConfig
-        {
-            LogDirectory = Path.Combine(Native.OS.DataDir, "logs"),
-            FilePrefix = "Komorebi",
-        });
-        Models.Logger.LogStartup();
-
-        // AppDomain全体の未処理例外をクラッシュログに記録するハンドラを登録する。
+        // AppDomain全体の未処理例外をクラッシュログに記録するハンドラを最初に登録する。
+        // ロガー初期化より前に例外が起きても StartupDiagnostics 側には残るよう、登録を先頭に置く。
         // CLRはこのハンドラ復帰直後にプロセスを強制終了するため、非同期ログバッファが
         // ディスクにフラッシュされる保証がない。Logger.Dispose() で同期フラッシュを強制する。
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
-            Models.Logger.LogCrash(e.ExceptionObject as Exception, "AppDomain.UnhandledException");
+            var ex = e.ExceptionObject as Exception;
+            Models.StartupDiagnostics.WriteFatal("AppDomain.UnhandledException", ex);
+            Models.Logger.LogCrash(ex, "AppDomain.UnhandledException");
             Models.Logger.Dispose();
         };
 
@@ -74,16 +58,60 @@ public partial class App : Application
 
         try
         {
+            if (OperatingSystem.IsWindows())
+            {
+                TrySetCurrentProcessAppUserModelId();
+            }
+
+            // Velopackの自動更新フックを最初に実行する（更新適用後の再起動処理等）
+            Models.StartupDiagnostics.MarkStage(Models.StartupStage.VelopackHook);
+            VelopackApp.Build().Run();
+
+            // アプリケーションデータディレクトリ（設定・ログ保存先）を初期化する
+            Models.StartupDiagnostics.MarkStage(Models.StartupStage.DataDir);
+            Native.OS.SetupDataDir();
+
+            // DataDir が確定したので、診断出力先を logs 配下へ切り替えて起動マーカーを作る。
+            // ここで前回起動の残留マーカー（= 前回はサイレントに落ちた）も検出される。
+            Models.StartupDiagnostics.Bind(Native.OS.DataDir);
+
+            // ログシステムを初期化し、起動ログを記録する
+            Models.StartupDiagnostics.MarkStage(Models.StartupStage.LoggerInit);
+            Models.Logger.Initialize(new Models.LoggerConfig
+            {
+                LogDirectory = Path.Combine(Native.OS.DataDir, "logs"),
+                FilePrefix = "Komorebi",
+            });
+            Models.Logger.LogStartup();
+
+            // 前回起動が完了しなかった痕跡を通常ログにも転記する（利用者に見える形で残す）
+            foreach (var detail in Models.StartupDiagnostics.PreviousIncompleteStartups)
+                Models.Logger.Log(detail, Models.LogLevel.Warning);
+
             // 起動モードを判定する: リベースTodoエディタ → リベースメッセージエディタ → 通常GUI
+            Models.StartupDiagnostics.MarkStage(Models.StartupStage.LaunchModeCheck);
             if (TryLaunchAsRebaseTodoEditor(args, out int exitTodo))
+            {
+                Models.StartupDiagnostics.MarkCompleted();
+                Models.Logger.Dispose();
                 Environment.Exit(exitTodo);
+            }
             else if (TryLaunchAsRebaseMessageEditor(args, out int exitMessage))
+            {
+                Models.StartupDiagnostics.MarkCompleted();
+                Models.Logger.Dispose();
                 Environment.Exit(exitMessage);
+            }
             else
+            {
+                Models.StartupDiagnostics.MarkStage(Models.StartupStage.AvaloniaStart);
                 BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            }
         }
         catch (Exception ex)
         {
+            // Logger が生きていない可能性がある区間も含むため、両経路へ記録する
+            Models.StartupDiagnostics.WriteFatal("Main", ex);
             Models.Logger.LogCrash(ex, "Main");
         }
         finally
@@ -817,6 +845,7 @@ public partial class App : Application
     /// </summary>
     public override void Initialize()
     {
+        Models.StartupDiagnostics.MarkStage(Models.StartupStage.AppInitialize);
         AvaloniaXamlLoader.Load(this);
 
         // 設定変更時に自動保存するハンドラを登録する。
@@ -842,14 +871,29 @@ public partial class App : Application
     /// </summary>
     public override void OnFrameworkInitializationCompleted()
     {
+        Models.StartupDiagnostics.MarkStage(Models.StartupStage.FrameworkInitialized);
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // UIスレッドの未処理例外をクラッシュログに記録する
+            // UIスレッドの未処理例外をクラッシュログに記録する。
+            // 起動完了前（初回アイドル到達前）の例外は起動失敗に直結するため、
+            // 非同期バッファに依存しないブートストラップログにも残す。
             Dispatcher.UIThread.UnhandledException += (_, e) =>
             {
+                if (Models.StartupDiagnostics.CurrentStage != Models.StartupStage.Completed)
+                    Models.StartupDiagnostics.WriteFatal("Dispatcher.UIThread.UnhandledException", e.Exception);
+
                 Models.Logger.LogCrash(e.Exception, "Dispatcher.UIThread.UnhandledException");
                 e.Handled = true;
             };
+
+            // 起動完了の判定: UI スレッドが最初のアイドルに到達したら「ウィンドウの生成・
+            // 初回レイアウト・初回レンダーまで通った」とみなし、起動マーカーを削除する。
+            // ここに到達せずプロセスが消えた場合、次回起動時に残留マーカーから
+            // 「前回の起動は完了しなかった（到達ステージ付き）」が記録される。
+            Dispatcher.UIThread.Post(
+                Models.StartupDiagnostics.MarkCompleted,
+                DispatcherPriority.ApplicationIdle);
 
             // Disable tooltip if window is not active.
             ToolTip.ToolTipOpeningEvent.AddClassHandler<Control>((c, e) =>
@@ -1255,6 +1299,10 @@ public partial class App : Application
         // 画面の四隅（40x40px領域）をダブルクリックでデバッガー画面をトグル表示する。
         InitCRDebugger(desktop.MainWindow);
 #endif
+
+        // ウィンドウ生成まで完了。以降は初回レイアウト・レンダー待ち。
+        // ここで止まったままプロセスが消えた場合はレンダラー側の問題を疑える。
+        Models.StartupDiagnostics.MarkStage(Models.StartupStage.WaitingFirstIdle);
     }
 
 #if DEBUG

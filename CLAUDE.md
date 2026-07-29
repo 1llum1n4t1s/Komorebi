@@ -128,6 +128,17 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 - `OS.cs` — static facade with `IBackend` interface
 - `Windows.cs`, `MacOS.cs`, `Linux.cs` — platform implementations
 
+### 起動時クラッシュの記録 (StartupDiagnostics)
+
+`Models.Logger` (SuperLightLogger) は「初期化後」かつ「非同期バッファ経由」でしか書けないため、起動時クラッシュを 2 種類取りこぼす。`src/Models/StartupDiagnostics.cs` がその穴を埋める。出力先はどちらも `<DataDir>/logs`。
+
+1. **ロガー初期化前の失敗** (Velopack フック / `SetupDataDir` / `Logger.Initialize` 自体) → `StartupDiagnostics.WriteFatal()` が Logger 非依存の同期書き込みで `Komorebi_startup_crash.log` に残す (DataDir 確定前は `%TEMP%/Komorebi`)。
+2. **プロセス内で何も書けない死に方** (Native AOT のアクセス違反、ランタイム abort、強制終了、電源断) → 起動中は `logs/startup-<pid>.marker` を置き、`MarkStage()` で到達ステージを同期更新する。UI スレッドが最初のアイドル (`DispatcherPriority.ApplicationIdle`) に到達したら `MarkCompleted()` でマーカーを削除する。次回起動時に残留マーカーを見つけたら「前回の起動が完了しませんでした（到達ステージ付き）」を通常ログ (Warning) とブートストラップログの両方へ記録する。PID 再利用の誤検出は `startedTicks` (プロセス開始時刻) の一致判定で防ぐ。
+
+ステージは `StartupStage` enum (ProcessStart → VelopackHook → DataDir → LoggerInit → LaunchModeCheck → AvaloniaStart → AppInitialize → FrameworkInitialized → WaitingFirstIdle → Completed)。`Logger.LogCrash` のレポートにも現在ステージが入る。起動シーケンスに新しい重い処理を挟むときは対応する `MarkStage()` を追加する。
+
+`Environment.Exit` は `finally` を走らせないため、リベースエディタモードの終了前には `MarkCompleted()` + `Logger.Dispose()` を明示的に呼ぶ。
+
 ### Auto-Update (Velopack)
 - Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
 - `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.kagayoi.com`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
@@ -245,10 +256,10 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 - **Avalonia 12.1.0** — cross-platform XAML UI (`Avalonia.Controls.DataGrid` は 12.0.x の間だけ 12.0.1 に固定していたが、12.1.0 で本体とバージョンが揃ったため固定を解除済み。今後も本体と同じバージョンで上げる)
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
-- **Velopack 1.0.1** — auto-update framework
+- **Velopack 1.2.0** — auto-update framework (`VelopackUpdateDialog.Avalonia` 経由の推移的依存)
 - **depends/AvaloniaEdit** — vendored (directly tracked, not a git submodule), text editor for diff/blame
-- **OpenAI / Azure.AI.OpenAI 2.8.0-beta.1** — AI commit message generation
-- **LiveChartsCore 2.0.2** — contribution statistics charts
+- **OpenAI 2.12.0 / Azure.AI.OpenAI 2.9.0-beta.1** — AI commit message generation
+- **LiveChartsCore 2.0.5** — contribution statistics charts
 - **BitMiracle.LibTiff.NET / Pfim** — TIFF / DDS image format support in ImageDiffView
 - **Tmds.DBus.Protocol** — Linux desktop DBus integration (notifications, etc.)
 - **CRDebugger.Avalonia** (Debug builds only) — Avalonia diagnostics helper

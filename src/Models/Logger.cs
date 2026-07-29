@@ -225,6 +225,7 @@ public static partial class Logger
             === クラッシュレポート ===
             例外: {exception.GetType().FullName}: {exception.Message}
             コンテキスト: {context ?? "不明"}
+            起動ステージ: {StartupDiagnostics.CurrentStage}
             バージョン: {version}
             OS: {Environment.OSVersion}
             Framework: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}
@@ -242,11 +243,12 @@ public static partial class Logger
     /// <summary>
     /// アプリケーション起動時のログを出力する
     /// </summary>
+    /// <remarks>
+    /// 起動時クラッシュ調査の起点になる情報なので、リリースビルドでも残るよう Info で出力する
+    /// （1 起動あたり 1 レコードのみでログ量への影響は無視できる）。
+    /// </remarks>
     public static void LogStartup()
     {
-        if (LogLevel.Debug < s_minLogLevel)
-            return;
-
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         var startupMessage =
             $"""
@@ -257,7 +259,7 @@ public static partial class Logger
             実行ファイルパス: {Environment.ProcessPath}
             """;
         // 実行ファイルパスにユーザー名が含まれるため Redact 必須
-        s_logger?.Debug(Redact(startupMessage));
+        s_logger?.Info(Redact(startupMessage));
     }
 
     /// <summary>
