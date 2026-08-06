@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -68,6 +70,9 @@ public class ImageSource
     public static async Task<ImageSource> FromRevisionAsync(string repo, string revision, string file, Models.ImageDecoder decoder)
     {
         await using var stream = await Commands.QueryFileContent.RunAsync(repo, revision, file).ConfigureAwait(false);
+        if (stream is null)
+            return new ImageSource(null, 0);
+
         return await Task.Run(() => LoadFromStream(stream, decoder)).ConfigureAwait(false);
     }
 
@@ -86,6 +91,9 @@ public class ImageSource
             return await FromFileAsync(localFile, decoder).ConfigureAwait(false);
 
         await using var stream = await Commands.QueryFileContent.FromLFSAsync(repo, lfs.Oid, lfs.Size).ConfigureAwait(false);
+        if (stream is null)
+            return new ImageSource(null, 0);
+
         return await Task.Run(() => LoadFromStream(stream, decoder)).ConfigureAwait(false);
     }
 

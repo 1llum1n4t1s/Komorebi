@@ -1,4 +1,6 @@
-﻿using System;
+﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -113,6 +115,18 @@ public partial class App : Application
             // Logger が生きていない可能性がある区間も含むため、両経路へ記録する
             Models.StartupDiagnostics.WriteFatal("Main", ex);
             Models.Logger.LogCrash(ex, "Main");
+
+            // リベースエディタとして起動された経路で例外が出た場合、ここから通常 return すると
+            // プロセスの終了コードが 0 になり、git は「エディタが正常終了した」と解釈して
+            // 書きかけ・未更新の git-rebase-todo / COMMIT_EDITMSG のままリベースを続行してしまう。
+            // 失敗は必ず非 0 で git へ伝える。
+            // 注意: Environment.Exit は finally を実行しないため、Logger.Dispose を明示的に呼ぶ
+            // （StartupDiagnostics のマーカーは「完了しなかった」証跡として意図的に残す）。
+            if (IsRebaseEditorMode(args))
+            {
+                Models.Logger.Dispose();
+                Environment.Exit(-1);
+            }
         }
         finally
         {
@@ -975,6 +989,22 @@ public partial class App : Application
     #endregion
 
     /// <summary>
+    /// 引数がリベースエディタモード（Todo / メッセージ）での起動を示しているかを判定する。
+    /// </summary>
+    /// <remarks>
+    /// このモードでは終了コードが git への成否通知そのものになるため、
+    /// 例外経路で 0 を返さないための判定に使う。
+    /// </remarks>
+    /// <param name="args">コマンドライン引数</param>
+    /// <returns>リベースエディタモードで起動された場合はtrue</returns>
+    private static bool IsRebaseEditorMode(string[] args)
+    {
+        return args.Length > 1 &&
+            (args[0].Equals("--rebase-todo-editor", StringComparison.Ordinal) ||
+             args[0].Equals("--rebase-message-editor", StringComparison.Ordinal));
+    }
+
+    /// <summary>
     /// 対話的リベースのTodoエディタモードとして起動を試みる。
     /// gitが--rebase-todo-editorオプション付きで呼び出した場合に、
     /// komorebi.interactive_rebaseファイルのジョブリストをgit-rebase-todoに書き出す。
@@ -1007,26 +1037,43 @@ public partial class App : Application
         if (!File.Exists(jobsFile))
             return true;
 
-        // ジョブファイルをデシリアライズし、各アクションをgit rebase-todoフォーマットで書き出す
-        using var stream = File.OpenRead(jobsFile);
-        var collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
-        using var writer = new StreamWriter(file);
-        foreach (var job in collection.Jobs)
+        // ジョブファイルをデシリアライズする。
+        // 注意: 検証が終わるまで git-rebase-todo を開かない。StreamWriter は生成時点で
+        // 対象ファイルを切り詰めるため、先に開いてしまうと以降の失敗（Jobs が null 等）で
+        // 「空の git-rebase-todo」を git へ渡すことになり、ユーザーが組んだ
+        // pick/squash/reword/drop の計画が丸ごと失われる。
+        Models.InteractiveRebaseJobCollection collection;
+        using (var stream = File.OpenRead(jobsFile))
+            collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
+
+        // 内容が取れなければ exitCode は -1 のままにして git へ失敗を伝える
+        // （ジョブファイル未検出時の既存挙動と同じ扱い）。
+        if (collection?.Jobs is not { Count: > 0 })
+            return true;
+
+        // 書き切ってから差し替える。途中で失敗しても既存の git-rebase-todo を壊さない。
+        var tmpFile = file + ".komorebi.tmp";
+        using (var writer = new StreamWriter(tmpFile))
         {
-            // アクション種別をgitの1文字コード（p=pick, e=edit, r=reword, s=squash, f=fixup, d=drop）に変換する
-            var code = job.Action switch
+            foreach (var job in collection.Jobs)
             {
-                Models.InteractiveRebaseAction.Pick => 'p',
-                Models.InteractiveRebaseAction.Edit => 'e',
-                Models.InteractiveRebaseAction.Reword => 'r',
-                Models.InteractiveRebaseAction.Squash => 's',
-                Models.InteractiveRebaseAction.Fixup => 'f',
-                _ => 'd'
-            };
-            writer.WriteLine($"{code} {job.SHA}");
+                // アクション種別をgitの1文字コード（p=pick, e=edit, r=reword, s=squash, f=fixup, d=drop）に変換する
+                var code = job.Action switch
+                {
+                    Models.InteractiveRebaseAction.Pick => 'p',
+                    Models.InteractiveRebaseAction.Edit => 'e',
+                    Models.InteractiveRebaseAction.Reword => 'r',
+                    Models.InteractiveRebaseAction.Squash => 's',
+                    Models.InteractiveRebaseAction.Fixup => 'f',
+                    _ => 'd'
+                };
+                writer.WriteLine($"{code} {job.SHA}");
+            }
+
+            writer.Flush();
         }
 
-        writer.Flush();
+        File.Move(tmpFile, file, overwrite: true);
 
         exitCode = 0;
         return true;
@@ -1071,7 +1118,12 @@ public partial class App : Application
         var onto = File.ReadAllText(ontoFile).Trim();
         using var stream = File.OpenRead(jobsFile);
         var collection = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.InteractiveRebaseJobCollection);
-        if (!collection.Onto.Equals(onto) || !collection.OrigHead.Equals(origHead))
+
+        // ジョブファイルが壊れている場合は書き換えず、git が用意した既定メッセージを使わせる
+        // （該当ジョブが無いときと同じ挙動。squash/fixup の統合メッセージもこの経路で通る）。
+        if (collection?.Jobs is null ||
+            !string.Equals(collection.Onto, onto, StringComparison.Ordinal) ||
+            !string.Equals(collection.OrigHead, origHead, StringComparison.Ordinal))
             return true;
 
         // doneファイルから最後に処理されたコミットのSHAを取得する

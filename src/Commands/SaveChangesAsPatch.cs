@@ -22,16 +22,16 @@ public static class SaveChangesAsPatch
     /// <returns>成功時true</returns>
     public static async Task<bool> ProcessLocalChangesAsync(string repo, List<Models.Change> changes, bool isUnstaged, string saveTo)
     {
-        await using (var sw = File.Create(saveTo))
+        return await WriteAtomicAsync(saveTo, async sw =>
         {
             foreach (var change in changes)
             {
                 if (!await ProcessSingleChangeAsync(repo, new Models.DiffOption(change, isUnstaged), sw))
                     return false;
             }
-        }
 
-        return true;
+            return true;
+        }).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -45,16 +45,16 @@ public static class SaveChangesAsPatch
     /// <returns>成功時true</returns>
     public static async Task<bool> ProcessRevisionCompareChangesAsync(string repo, List<Models.Change> changes, string baseRevision, string targetRevision, string saveTo)
     {
-        await using (var sw = File.Create(saveTo))
+        return await WriteAtomicAsync(saveTo, async sw =>
         {
             foreach (var change in changes)
             {
                 if (!await ProcessSingleChangeAsync(repo, new Models.DiffOption(baseRevision, targetRevision, change), sw))
                     return false;
             }
-        }
 
-        return true;
+            return true;
+        }).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -66,15 +66,53 @@ public static class SaveChangesAsPatch
     /// <returns>成功時true</returns>
     public static async Task<bool> ProcessStashChangesAsync(string repo, List<Models.DiffOption> opts, string saveTo)
     {
-        await using (var sw = File.Create(saveTo))
+        return await WriteAtomicAsync(saveTo, async sw =>
         {
             foreach (var opt in opts)
             {
                 if (!await ProcessSingleChangeAsync(repo, opt, sw))
                     return false;
             }
+
+            return true;
+        }).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// 一時ファイルへ書き切り、全件成功したときだけ保存先へ差し替える。
+    /// </summary>
+    /// <remarks>
+    /// 保存先を直接 File.Create すると、途中の change で失敗したときに
+    /// 「失敗通知は出たのに、手元には壊れた .patch が残る」状態になる。
+    /// 既存ファイルへ上書き保存した場合は元のパッチも失われる。
+    /// </remarks>
+    private static async Task<bool> WriteAtomicAsync(string saveTo, Func<FileStream, Task<bool>> write)
+    {
+        var tmpFile = saveTo + ".komorebi.tmp";
+        try
+        {
+            bool ok;
+            await using (var sw = File.Create(tmpFile))
+                ok = await write(sw).ConfigureAwait(false);
+
+            if (!ok)
+                return false;
+
+            File.Move(tmpFile, saveTo, overwrite: true);
+            return true;
         }
-        return true;
+        finally
+        {
+            try
+            {
+                if (File.Exists(tmpFile))
+                    File.Delete(tmpFile);
+            }
+            catch
+            {
+                // 後始末の失敗は本処理の成否に影響させない
+            }
+        }
     }
 
     /// <summary>

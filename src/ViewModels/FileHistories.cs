@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -82,9 +84,12 @@ public class FileHistoriesSingleRevision : ObservableObject
         var fileExt = Path.GetExtension(fullPath) ?? "";
         var tmpFile = Path.Combine(Path.GetTempPath(), $"{fileName}~{_revision.SHA.AsSpan(0, 10)}{fileExt}");
 
-        await Commands.SaveRevisionFile
+        // 失敗した場合は空・破損したファイルを開かせないよう、ここで中断する
+        var saved = await Commands.SaveRevisionFile
             .RunAsync(_repo, _revision.SHA, _file, tmpFile)
             .ConfigureAwait(false);
+        if (!saved)
+            return;
 
         Native.OS.OpenWithDefaultEditor(tmpFile);
     }
@@ -143,6 +148,9 @@ public class FileHistoriesSingleRevision : ObservableObject
             }
 
             var contentStream = await Commands.QueryFileContent.RunAsync(_repo, _revision.SHA, _file).ConfigureAwait(false);
+            if (contentStream is null)
+                return new FileHistoriesRevisionFile(_file, null, true);
+
             string content;
             using (var reader = new StreamReader(contentStream))
                 content = await reader.ReadToEndAsync();

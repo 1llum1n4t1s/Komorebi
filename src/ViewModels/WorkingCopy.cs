@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -431,8 +433,12 @@ public class WorkingCopy : ObservableObject, IDisposable
         // 何も選択されていないがコンフリクトがある場合、最初のコンフリクトを自動選択
         if (selectedUnstaged.Count == 0 && selectedStaged.Count == 0 && hasConflict)
         {
+            // hasConflict は全 unstaged から立てるが、探索対象はフィルタ適用後なので
+            // 「コンフリクトはあるが今の絞り込みでは見えない」場合に null が返る。
+            // null を選択リストへ入れると ChangeCollectionView 側の走査で NRE になるため弾く。
             var firstConflict = visibleUnstaged.Find(x => x.IsConflicted);
-            selectedUnstaged.Add(firstConflict);
+            if (firstConflict is not null)
+                selectedUnstaged.Add(firstConflict);
         }
 
         // UIスレッドでプロパティを一括更新

@@ -35,8 +35,10 @@ public class Fetch : Command
         if (force)
             builder.Append("--force ");
 
-        // フェッチ元のリモート名を指定する
-        builder.Append(remote);
+        // フェッチ元のリモート名を指定する。
+        // ref 名は空白こそ git が拒否するが `"` は許容される（check-ref-format）。
+        // 生連結だと引用符が引数解析で食われて別の名前になるため、Push と同じく必ずクォートする。
+        builder.Append(remote.Quoted());
 
         Args = builder.ToString();
     }
@@ -57,7 +59,7 @@ public class Fetch : Command
         RaiseError = false;
 
         // git fetch --progress --verbose <remote>: 指定リモートからフェッチする
-        Args = $"fetch --progress --verbose {remote}";
+        Args = $"fetch --progress --verbose {remote.Quoted()}";
     }
 
     /// <summary>
@@ -74,7 +76,7 @@ public class Fetch : Command
         Context = repo;
 
         // git fetch <remote> <remoteBranch>:<localBranch>: リモートブランチをローカルブランチに直接フェッチする
-        Args = $"fetch --progress --verbose {remote.Remote} {remote.Name}:{local.Name}";
+        Args = $"fetch --progress --verbose {remote.Remote.Quoted()} {$"{remote.Name}:{local.Name}".Quoted()}";
     }
 
     /// <summary>

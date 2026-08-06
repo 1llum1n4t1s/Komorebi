@@ -22,8 +22,9 @@ public class CompareRevisions : Command
         Context = repo;
 
         // startが空の場合は-R（逆方向diff）を使用し、作業ツリーとendの差分を取る
-        var based = string.IsNullOrEmpty(start) ? "-R" : start;
-        Args = $"diff --name-status {based} {end}";
+        // （-R はフラグなのでクォートしない。リビジョン側は ref 名に `"` が入り得るためクォートする）
+        var based = string.IsNullOrEmpty(start) ? "-R" : start.Quoted();
+        Args = $"diff --name-status {based} {end.Quoted()}";
     }
 
     /// <summary>
@@ -39,8 +40,9 @@ public class CompareRevisions : Command
         Context = repo;
 
         // startが空の場合は-R（逆方向diff）を使用し、作業ツリーとendの差分を取る
-        var based = string.IsNullOrEmpty(start) ? "-R" : start;
-        Args = $"diff --name-status {based} {end} -- {path.Quoted()}";
+        // （-R はフラグなのでクォートしない。リビジョン側は ref 名に `"` が入り得るためクォートする）
+        var based = string.IsNullOrEmpty(start) ? "-R" : start.Quoted();
+        Args = $"diff --name-status {based} {end.Quoted()} -- {path.Quoted()}";
     }
 
     /// <summary>
@@ -56,10 +58,29 @@ public class CompareRevisions : Command
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+
+            // CommitDetail はコミット切替のたびに CancellationToken を渡してくる。
+            // ここで尊重しないと、切替を連打した分だけ巨大 diff の git プロセスが
+            // 走り続けて積み上がる。基底の ReadToEndAsync と同じくプロセスツリーごと落とす。
+            using var cancelRegistration = CancellationToken.CanBeCanceled
+                ? CancellationToken.Register(() =>
+                {
+                    try
+                    {
+                        if (!proc.HasExited)
+                            proc.Kill(entireProcessTree: true);
+                    }
+                    catch
+                    {
+                        // 既に終了しているプロセスへの Kill は無視する
+                    }
+                })
+                : default;
+
             var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             // 基底クラスの共通パーサーを使用して--name-status出力を解析する
-            while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
+            while (await proc.StandardOutput.ReadLineAsync(CancellationToken).ConfigureAwait(false) is { } line)
             {
                 var parsed = ParseNameStatusLine(line);
                 if (parsed is null)

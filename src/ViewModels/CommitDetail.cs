@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -635,10 +637,13 @@ public partial class CommitDetail : ObservableObject, IDisposable
         var fileExt = Path.GetExtension(fullPath) ?? "";
         var tmpFile = Path.Combine(Path.GetTempPath(), $"{fileName}~{_commit.SHA.AsSpan(0, 10)}{fileExt}");
 
-        // リビジョンファイルを一時ファイルに保存する
-        await Commands.SaveRevisionFile
+        // リビジョンファイルを一時ファイルに保存する。
+        // 失敗した場合は空・破損したファイルを開かせないよう、ここで中断する。
+        var saved = await Commands.SaveRevisionFile
             .RunAsync(_repo.FullPath, _commit.SHA, file, tmpFile)
             .ConfigureAwait(false);
+        if (!saved)
+            return;
 
         // 外部ツールまたはデフォルトエディタで開く
         if (tool is null)
@@ -995,6 +1000,9 @@ public partial class CommitDetail : ObservableObject, IDisposable
 
         // テキストファイルの内容を読み込む
         var contentStream = await Commands.QueryFileContent.RunAsync(_repo.FullPath, _commit.SHA, file.Path);
+        if (contentStream is null)
+            return;
+
         string content;
         using (var reader = new StreamReader(contentStream))
             content = await reader.ReadToEndAsync();
