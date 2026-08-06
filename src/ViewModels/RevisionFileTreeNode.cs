@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
+using System.Collections.Generic;
 using System.IO;
 
 using CommunityToolkit.Mvvm.ComponentModel;

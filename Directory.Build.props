@@ -21,5 +21,8 @@
          lockfile 生成 (RestorePackagesWithLockFile) は維持されるためリパッケージ攻撃の
          基本検知 (lockfile diff) は機能する。 -->
     <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true' And !$(MSBuildProjectDirectory.Contains('depends'))">true</RestoreLockedMode>
+    <Nullable>enable</Nullable>
+    <!-- 警告をエラー扱いにして品質ゲートを他リポジトリと揃える。 -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>

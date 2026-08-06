@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +10,6 @@ using System.Threading.Tasks;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
@@ -1148,7 +1149,9 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
         _scrollViewer = this.FindDescendantOfType<ScrollViewer>();
         if (_scrollViewer is not null)
         {
-            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new ReflectionBinding("ScrollOffset") { Mode = BindingMode.TwoWay });
+            // upstream は ReflectionBinding("ScrollOffset") の TwoWay バインドだが、Native AOT で IL3050 になる。
+            // VM → View は PropertySync、View → VM は OnTextViewScrollChanged で明示的に行う。
+            RebindScrollOffset();
             _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
         }
     }
@@ -1161,7 +1164,29 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
         if (_scrollViewer is not null)
             _scrollViewer.ScrollChanged -= OnTextViewScrollChanged;
 
+        _scrollOffsetSync?.Dispose();
+        _scrollOffsetSync = null;
+
         base.OnUnloaded(e);
+    }
+
+    /// <summary>
+    /// VM の ScrollOffset → ScrollViewer.Offset の同期を張り直す。
+    /// DataContext が差し替わる (ContentControl による View 再利用) ケースに対応するため、
+    /// Loaded と DataContext 変更の両方から呼ぶ。
+    /// </summary>
+    private void RebindScrollOffset()
+    {
+        _scrollOffsetSync?.Dispose();
+        _scrollOffsetSync = null;
+
+        if (_scrollViewer is not null && DataContext is ViewModels.CombinedTextDiff ctx)
+        {
+            _scrollOffsetSync = PropertySync.OneWay(
+                _scrollViewer, ScrollViewer.OffsetProperty,
+                ctx, nameof(ViewModels.TextDiffContext.ScrollOffset),
+                static c => c.ScrollOffset);
+        }
     }
 
     /// <summary>
@@ -1170,6 +1195,9 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
+
+        // View 再利用で DataContext が差し替わったら ScrollOffset 同期も張り直す。
+        RebindScrollOffset();
 
         if (DataContext is ViewModels.CombinedTextDiff { Data: { } diff })
         {
@@ -1309,13 +1337,24 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     /// </summary>
     private void OnTextViewScrollChanged(object sender, ScrollChangedEventArgs e)
     {
+        // upstream の TwoWay バインド相当の View → VM 方向。同値のときは書き戻さず、
+        // VM → View 同期との往復ループを防ぐ。
+        if (_scrollViewer is not null &&
+            DataContext is ViewModels.CombinedTextDiff ctx &&
+            !ctx.ScrollOffset.NearlyEquals(_scrollViewer.Offset))
+        {
+            ctx.ScrollOffset = _scrollViewer.Offset;
+        }
+
         if (!TextArea.TextView.IsPointerOver)
             TrySetChunk(null);
     }
 
-    /// <summary>テキストビューのスクロールビューア参照。</summary>
     /// <summary>テキストビューのスクロールビューア参照（Combined用）。</summary>
     private ScrollViewer _scrollViewer;
+
+    /// <summary>ScrollOffset 同期の購読ハンドル。</summary>
+    private IDisposable _scrollOffsetSync;
 }
 
 /// <summary>
@@ -1360,7 +1399,9 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
         if (_scrollViewer is not null)
         {
             _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
-            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new ReflectionBinding("ScrollOffset") { Mode = BindingMode.OneWay });
+            // upstream は ReflectionBinding("ScrollOffset") の OneWay バインドだが、Native AOT で IL3050 になる。
+            // View → VM 方向は OnTextViewScrollChanged が担当しているので、ここは VM → View のみ同期する。
+            RebindScrollOffset();
         }
     }
 
@@ -1375,7 +1416,28 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
             _scrollViewer = null;
         }
 
+        _scrollOffsetSync?.Dispose();
+        _scrollOffsetSync = null;
+
         base.OnUnloaded(e);
+    }
+
+    /// <summary>
+    /// VM の ScrollOffset → ScrollViewer.Offset の同期を張り直す。
+    /// View 再利用で DataContext が差し替わるケースに対応するため Loaded と DataContext 変更の両方から呼ぶ。
+    /// </summary>
+    private void RebindScrollOffset()
+    {
+        _scrollOffsetSync?.Dispose();
+        _scrollOffsetSync = null;
+
+        if (_scrollViewer is not null && DataContext is ViewModels.TwoSideTextDiff diff)
+        {
+            _scrollOffsetSync = PropertySync.OneWay(
+                _scrollViewer, ScrollViewer.OffsetProperty,
+                diff, nameof(ViewModels.TextDiffContext.ScrollOffset),
+                static d => d.ScrollOffset);
+        }
     }
 
     /// <summary>
@@ -1384,6 +1446,9 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
+
+        // View 再利用で DataContext が差し替わったら ScrollOffset 同期も張り直す。
+        RebindScrollOffset();
 
         if (DataContext is ViewModels.TwoSideTextDiff diff)
         {
@@ -1552,6 +1617,9 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
 
     /// <summary>テキストビューのスクロールビューア参照（SingleSide用）。</summary>
     private ScrollViewer _scrollViewer;
+
+    /// <summary>ScrollOffset 同期の購読ハンドル。</summary>
+    private IDisposable _scrollOffsetSync;
 }
 
 /// <summary>

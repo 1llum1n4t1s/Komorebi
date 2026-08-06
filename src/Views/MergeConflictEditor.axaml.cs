@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +9,6 @@ using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -411,7 +412,36 @@ public class MergeConflictTextPresenter : TextEditor
         if (_scrollViewer is not null)
         {
             _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
-            _scrollViewer.Bind(ScrollViewer.OffsetProperty, new ReflectionBinding("ScrollOffset") { Mode = BindingMode.OneWay });
+            // upstream は ReflectionBinding("ScrollOffset") の OneWay バインドだが、Native AOT で IL3050 になる。
+            // View → VM 方向は OnTextViewScrollChanged が担当しているので、ここは VM → View のみ同期する。
+            RebindScrollOffset();
+        }
+    }
+
+    /// <summary>
+    /// データコンテキストが変更された際の処理。ScrollOffset 同期を張り直す。
+    /// </summary>
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+        RebindScrollOffset();
+    }
+
+    /// <summary>
+    /// VM の ScrollOffset → ScrollViewer.Offset の同期を張り直す。
+    /// テンプレート適用と DataContext 変更のどちらが先でも成立するよう、両方から呼ぶ。
+    /// </summary>
+    private void RebindScrollOffset()
+    {
+        _scrollOffsetSync?.Dispose();
+        _scrollOffsetSync = null;
+
+        if (_scrollViewer is not null && DataContext is ViewModels.MergeConflictEditor vm)
+        {
+            _scrollOffsetSync = PropertySync.OneWay(
+                _scrollViewer, ScrollViewer.OffsetProperty,
+                vm, nameof(ViewModels.MergeConflictEditor.ScrollOffset),
+                static v => v.ScrollOffset);
         }
     }
 
@@ -452,6 +482,9 @@ public class MergeConflictTextPresenter : TextEditor
             _textMate.Dispose();
             _textMate = null;
         }
+
+        _scrollOffsetSync?.Dispose();
+        _scrollOffsetSync = null;
 
         base.OnUnloaded(e);
     }
@@ -689,6 +722,9 @@ public class MergeConflictTextPresenter : TextEditor
     /// テキストエディタ内部のScrollViewerキャッシュ。
     /// </summary>
     private ScrollViewer _scrollViewer;
+
+    /// <summary>ScrollOffset 同期の購読ハンドル。</summary>
+    private IDisposable _scrollOffsetSync;
 }
 
 /// <summary>

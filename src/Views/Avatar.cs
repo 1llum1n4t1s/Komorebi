@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,7 +9,6 @@ using System.Text;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -46,14 +47,6 @@ public class Avatar : Control, Models.IAvatarHost
     {
         // 高品質なビットマップ補間モードを設定する
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
-
-        // 設定のGitHubスタイルアバター使用フラグにバインドする
-        this.Bind(UseGitHubStyleAvatarProperty, new Binding()
-        {
-            Mode = BindingMode.OneWay,
-            Source = ViewModels.Preferences.Instance,
-            Path = "UseGitHubStyleAvatar"
-        });
     }
 
     /// <summary>
@@ -171,6 +164,15 @@ public class Avatar : Control, Models.IAvatarHost
         // アバターマネージャーに購読登録し、コンテキストメニューのハンドラを設定する
         Models.AvatarManager.Instance.Subscribe(this);
         ContextRequested += OnContextRequested;
+
+        // 設定の GitHub スタイルアバター使用フラグを同期する。
+        // upstream は ctor で Binding(Path="UseGitHubStyleAvatar") を張るが、Native AOT で IL3050 になるため
+        // 文字列パス解決を使わない購読に置き換えている (PropertySync 参照)。
+        _useGitHubStyleSync = PropertySync.OneWay(
+            this, UseGitHubStyleAvatarProperty,
+            ViewModels.Preferences.Instance,
+            nameof(ViewModels.Preferences.UseGitHubStyleAvatar),
+            static p => p.UseGitHubStyleAvatar);
     }
 
     /// <summary>
@@ -182,7 +184,13 @@ public class Avatar : Control, Models.IAvatarHost
         // コンテキストメニューのハンドラを解除し、アバターマネージャーから購読解除する
         ContextRequested -= OnContextRequested;
         Models.AvatarManager.Instance.Unsubscribe(this);
+
+        _useGitHubStyleSync?.Dispose();
+        _useGitHubStyleSync = null;
     }
+
+    /// <summary>設定値同期の購読ハンドル (Loaded で確立し Unloaded で解除する)。</summary>
+    private IDisposable _useGitHubStyleSync;
 
     /// <summary>
     /// プロパティが変更された際の処理。

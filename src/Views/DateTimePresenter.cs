@@ -2,7 +2,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
+using Avalonia.Interactivity;
 
 namespace Komorebi.Views;
 
@@ -46,21 +46,42 @@ public class DateTimePresenter : TextBlock
 
     protected override Type StyleKeyOverride => typeof(TextBlock);
 
-    public DateTimePresenter()
+    /// <summary>
+    /// コントロールが読み込まれた際の処理。設定値の同期を開始する。
+    /// </summary>
+    /// <remarks>
+    /// upstream は ctor で Binding(Path="...") を張るが、Native AOT で IL3050 になるため
+    /// 文字列パス解決を使わない購読へ置き換えている (PropertySync 参照)。
+    /// 購読解除点を持つため確立は Loaded、解除は Unloaded で行う。
+    /// </remarks>
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        Bind(Use24HoursProperty, new Binding()
-        {
-            Mode = BindingMode.OneWay,
-            Source = ViewModels.Preferences.Instance,
-            Path = "Use24Hours"
-        });
+        base.OnLoaded(e);
 
-        Bind(DateTimeFormatProperty, new Binding()
-        {
-            Mode = BindingMode.OneWay,
-            Source = ViewModels.Preferences.Instance,
-            Path = "DateTimeFormat"
-        });
+        _use24HoursSync = PropertySync.OneWay(
+            this, Use24HoursProperty,
+            ViewModels.Preferences.Instance,
+            nameof(ViewModels.Preferences.Use24Hours),
+            static p => p.Use24Hours);
+
+        _dateTimeFormatSync = PropertySync.OneWay(
+            this, DateTimeFormatProperty,
+            ViewModels.Preferences.Instance,
+            nameof(ViewModels.Preferences.DateTimeFormat),
+            static p => p.DateTimeFormat);
+    }
+
+    /// <summary>
+    /// コントロールがアンロードされた際の処理。設定値の同期を解除する。
+    /// </summary>
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+
+        _use24HoursSync?.Dispose();
+        _use24HoursSync = null;
+        _dateTimeFormatSync?.Dispose();
+        _dateTimeFormatSync = null;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -76,4 +97,10 @@ public class DateTimePresenter : TextBlock
             SetCurrentValue(TextProperty, text);
         }
     }
+
+    /// <summary>24 時間表記設定の同期ハンドル。</summary>
+    private IDisposable? _use24HoursSync;
+
+    /// <summary>日時フォーマット設定の同期ハンドル。</summary>
+    private IDisposable? _dateTimeFormatSync;
 }

@@ -1,4 +1,6 @@
-﻿namespace Komorebi.Models;
+﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
+namespace Komorebi.Models;
 
 /// <summary>
 /// 変更ファイル一覧の表示モードを表す列挙型。

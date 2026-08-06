@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,8 +41,10 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
 
         var baseUrl = string.IsNullOrEmpty(service.Server) ? "https://api.anthropic.com" : service.Server.TrimEnd('/');
 
-        var tools = new JsonArray
-        {
+        // コレクション初期化子は JsonArray.Add<T>(T) を呼ぶが、これは RequiresDynamicCode 属性付きで
+        // Native AOT 警告 (IL3050) になる。JsonNode を直接受けるコンストラクタ / Add(JsonNode?) を使えば
+        // JsonValue の動的生成を経由しないので AOT 安全。以下同様。
+        var tools = new JsonArray(
             new JsonObject
             {
                 ["name"] = "GetDetailChangesInFile",
@@ -56,13 +60,10 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
                     "required": ["repo", "file"]
                 }
                 """)
-            }
-        };
+            });
 
-        var messages = new JsonArray
-        {
-            new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(service, repo, changeList) }
-        };
+        var messages = new JsonArray(
+            new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(service, repo, changeList) });
 
         var iterations = 0;
         do
@@ -144,7 +145,7 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
             else if (stopReason == "tool_use")
             {
                 // アシスタントの tool_use メッセージを履歴に追加
-                messages.Add(new JsonObject
+                messages.Add((JsonNode)new JsonObject
                 {
                     ["role"] = "assistant",
                     ["content"] = JsonNode.Parse(content.GetRawText())
@@ -171,9 +172,9 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
 
                 var toolResults = new JsonArray();
                 foreach (var r in toolResultObjects)
-                    toolResults.Add(r);
+                    toolResults.Add((JsonNode)r);
 
-                messages.Add(new JsonObject { ["role"] = "user", ["content"] = toolResults });
+                messages.Add((JsonNode)new JsonObject { ["role"] = "user", ["content"] = toolResults });
             }
             else
             {
