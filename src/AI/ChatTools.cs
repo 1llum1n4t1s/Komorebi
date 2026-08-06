@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.IO;
 using System.Text.Json;
@@ -91,7 +93,23 @@ public static class ChatTools
 
         output?.Invoke($"Read changes in file: {check.File}");
 
-        var orgFilePath = hasOriginalFile ? originalFilePath.GetString() : string.Empty;
+        // originalFile も AI 由来の入力なので file と同じ検証を通す。未検証のまま pathspec へ
+        // 渡すと、repo 外パスで git が --no-index 解釈に切り替わり --cached と衝突して
+        // diff 取得そのものが失敗する（file 側だけ硬化されている非対称も解消する）。
+        var orgFilePath = string.Empty;
+        if (hasOriginalFile)
+        {
+            var claimedOrgFile = originalFilePath.GetString();
+            if (!string.IsNullOrEmpty(claimedOrgFile))
+            {
+                var orgCheck = ValidatePaths(expectedRepoFullPath, repoPath.GetString(), claimedOrgFile);
+                if (!orgCheck.Ok)
+                    return $"refused: {orgCheck.File}";
+
+                orgFilePath = orgCheck.File;
+            }
+        }
+
         var rs = await new Commands.GetFileChangeForAI(check.Repo, check.File, orgFilePath).ReadAsync();
         return rs.IsSuccess ? rs.StdOut : $"Failed to get diff for '{check.File}'. Error: {rs.StdErr}";
     }

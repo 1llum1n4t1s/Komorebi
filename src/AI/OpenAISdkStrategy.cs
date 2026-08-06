@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -17,6 +19,13 @@ namespace Komorebi.AI;
 /// </summary>
 internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
 {
+    /// <summary>
+    /// tool 呼び出しループの最大反復回数。AI が延々と ToolCalls を返し続ける（プロンプトインジェクション
+    /// や API バグ等）場合の無限ループ防止。通常のコミットメッセージ生成では 1〜3 回で収束する。
+    /// <see cref="AnthropicHttpStrategy"/> と同じ契約にそろえている。
+    /// </summary>
+    private const int MaxToolCallIterations = 20;
+
     public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
     {
         // HTTPS 強制で API key の平文流出を防ぐ (OpenAI/Azure/Gemini 共通)
@@ -28,8 +37,14 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
 
         List<ChatMessage> messages = [new UserChatMessage(Agent.BuildUserMessage(service, repo, changeList))];
 
+        var iterations = 0;
         do
         {
+            if (++iterations > MaxToolCallIterations)
+                throw new InvalidOperationException(
+                    $"Tool call loop exceeded {MaxToolCallIterations} iterations. " +
+                    "This may indicate a prompt injection or model malfunction.");
+
             ChatCompletion completion = await chatClient.CompleteChatAsync(messages, options, cancellation);
             var inProgress = false;
 

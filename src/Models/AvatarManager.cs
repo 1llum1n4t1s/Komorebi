@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -220,18 +222,45 @@ public partial class AvatarManager
                     {
                         // パフォーマンス: MemoryStreamで一度だけ読み込み、ファイル保存とデコードを効率化
                         using var ms = new MemoryStream();
-                        await rsp.Content.CopyToAsync(ms, token).ConfigureAwait(false);
+                        var oversized = false;
 
-                        // ファイルキャッシュに非同期で書き込み
-                        ms.Position = 0;
-                        await using (var writer = File.Create(localFile))
+                        await using (var body = await rsp.Content.ReadAsStreamAsync(token).ConfigureAwait(false))
                         {
-                            await ms.CopyToAsync(writer, token).ConfigureAwait(false);
+                            // Content-Length が無い応答（chunked 転送など）でも上限を効かせるため、
+                            // 実際に読んだバイト数を数えながら読み進める。
+                            // HttpClient.MaxResponseContentBufferSize は本文を一括読みする経路向けで、
+                            // ResponseHeadersRead + 手動読み取りのこの経路では上限として働かない。
+                            var buffer = new byte[16 * 1024];
+                            int read;
+                            while ((read = await body.ReadAsync(buffer, token).ConfigureAwait(false)) > 0)
+                            {
+                                if (ms.Length + read > MaxAvatarBytes)
+                                {
+                                    oversized = true;
+                                    break;
+                                }
+
+                                await ms.WriteAsync(buffer.AsMemory(0, read), token).ConfigureAwait(false);
+                            }
                         }
 
-                        // MemoryStreamから直接デコード（ディスク再読み込み不要）
-                        ms.Position = 0;
-                        img = Bitmap.DecodeToWidth(ms, 128);
+                        if (oversized)
+                        {
+                            Logger.Log($"アバターサイズ超過によりスキップ: {email} ({MaxAvatarBytes} bytes 超)", LogLevel.Warning);
+                        }
+                        else
+                        {
+                            // ファイルキャッシュに非同期で書き込み
+                            ms.Position = 0;
+                            await using (var writer = File.Create(localFile))
+                            {
+                                await ms.CopyToAsync(writer, token).ConfigureAwait(false);
+                            }
+
+                            // MemoryStreamから直接デコード（ディスク再読み込み不要）
+                            ms.Position = 0;
+                            img = Bitmap.DecodeToWidth(ms, 128);
+                        }
                     }
                 }
             }

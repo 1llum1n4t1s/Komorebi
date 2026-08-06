@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -802,7 +804,15 @@ public class Preferences : ObservableObject
         try
         {
             using var stream = File.OpenRead(path);
-            return JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences);
+            var loaded = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences);
+
+            // 内容が JSON リテラルの null だと例外にならずに null が返る。そのまま返すと
+            // Instance 側の `loaded._isLoading = false` で NRE になり起動できなくなるため、
+            // 下の .bak フォールバックへ合流させる（バックアップ経路と契約をそろえる）。
+            if (loaded is null)
+                throw new JsonException("preference.json の内容が null です");
+
+            return loaded;
         }
         catch (Exception ex)
         {

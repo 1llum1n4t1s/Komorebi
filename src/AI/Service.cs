@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.ClientModel;
 using System.Collections.Generic;
@@ -23,14 +25,45 @@ public class Service
     public string ApiKey
     {
         get => _apiKey;
-        set => _apiKey = value ?? string.Empty;
+        set
+        {
+            // キーを差し替えたら、読み込み時の暗号文は再利用できなくなる
+            if (!string.Equals(_apiKey, value, StringComparison.Ordinal))
+                _storedCipher = string.Empty;
+
+            _apiKey = value ?? string.Empty;
+        }
     }
 
+    /// <summary>
+    /// preference.json へ保存される暗号化済み API キー。
+    /// </summary>
+    /// <remarks>
+    /// <see cref="ApiKeyProtector.Protect"/> は鍵ファイル破損や DPAPI 障害などで失敗すると
+    /// 空文字を返す。その値をそのまま保存すると、メモリ上には平文キーがあるのに
+    /// ディスク上のキーだけが消える（次回起動時にユーザーは再入力を強いられる）。
+    /// 暗号化に失敗した場合は、読み込み時に得た暗号文をそのまま書き戻して消失を防ぐ。
+    /// </remarks>
     [JsonPropertyName("ApiKey")]
     public string ProtectedApiKey
     {
-        get => ApiKeyProtector.Protect(_apiKey);
-        set => _apiKey = ApiKeyProtector.UnprotectOrPlainText(value);
+        get
+        {
+            if (string.IsNullOrEmpty(_apiKey))
+                return string.Empty;
+
+            var cipher = ApiKeyProtector.Protect(_apiKey);
+            if (!string.IsNullOrEmpty(cipher))
+                return cipher;
+
+            // 暗号化失敗。平文は絶対に書かず、直前の暗号文があればそれを維持する
+            return _storedCipher;
+        }
+        set
+        {
+            _storedCipher = value ?? string.Empty;
+            _apiKey = ApiKeyProtector.UnprotectOrPlainText(value);
+        }
     }
 
     public bool ReadApiKeyFromEnv { get; set; } = false;
@@ -86,6 +119,8 @@ public class Service
     }
 
     private string _apiKey = string.Empty;
+    /// <summary>読み込み時に得た暗号文。再暗号化に失敗したときの書き戻し用。</summary>
+    private string _storedCipher = string.Empty;
 }
 
 /// <summary>

@@ -1,3 +1,5 @@
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+#nullable disable warnings
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -148,7 +150,30 @@ public static partial class Logger
     public static void LogException(string message, Exception exception)
     {
         // PII redaction を例外メッセージにも適用
-        s_logger?.Error(Redact(message), exception);
+        s_logger?.Error(Redact(message), RedactException(exception));
+    }
+
+    /// <summary>
+    /// 例外を、ToString() が redaction 済みになるラッパーへ包み替える。
+    /// </summary>
+    /// <remarks>
+    /// ログ layout が <c>${exception:format=tostring}</c> を含むため、例外オブジェクトを
+    /// そのまま渡すと <see cref="Exception.ToString"/> の結果（メッセージ＋スタックトレース）が
+    /// <see cref="Redact"/> を経由せずファイルへ出る。スタックトレースにはソースパス由来の
+    /// ユーザー名が、メッセージには <c>https://user:token@host</c> や API キー断片が入り得るため、
+    /// 文字列化した時点で必ずマスキングする。
+    /// </remarks>
+    private static Exception RedactException(Exception exception)
+    {
+        return exception is null ? null : new RedactedException(Redact(exception.ToString()));
+    }
+
+    /// <summary>
+    /// マスキング済みの文字列だけを保持する例外。元の例外の代わりにロガーへ渡す。
+    /// </summary>
+    private sealed class RedactedException(string redacted) : Exception(redacted)
+    {
+        public override string ToString() => Message;
     }
 
     /// <summary>
@@ -236,8 +261,8 @@ public static partial class Logger
             """;
 
         // クラッシュレポートは Issue にコピペされる可能性が高い経路のため
-        // PII redaction を必ず適用する。
-        s_logger?.Error(Redact(message), exception);
+        // PII redaction を必ず適用する（例外の ToString も layout に載るのでまとめて包む）。
+        s_logger?.Error(Redact(message), RedactException(exception));
     }
 
     /// <summary>
