@@ -17,13 +17,21 @@
       [UnconditionalSuppressMessage] / [DynamicDependency] 属性を付けて意図を明示する。
     -->
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+    <!--
+      IL3053 は「このアセンブリが AOT 解析警告を出した」という第三者アセンブリ単位の集約通知で、
+      対象 (Avalonia.Controls.DataGrid / Velopack 等) は自前で直せない。TreatWarningsAsErrors=true と
+      併用すると ILC 実行時にエラー化して AOT publish が失敗するため抑制する (Lhamiel / Kiriha と同じ対処)。
+      自コード側の個別指摘である IL3050 は抑制しない — こちらは実際に書き換えて解消済み。
+    -->
+    <NoWarn>$(NoWarn);IL3053</NoWarn>
     <!-- LibraryImport source generator が marshalling stub に unsafe コードを生成するため必要 (ユーザーコードに unsafe を許可するわけではない) -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <Product>Komorebi</Product>
     <Description>OpenSource GIT client</Description>
-    <Company>1llum1n4t1s</Company>
-    <Copyright>Copyright © $([System.DateTime]::Now.Year) 1llum1n4t1s.</Copyright>
+    <Authors>Kagayoi</Authors>
+    <Company>Kagayoi</Company>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) Kagayoi.</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/1llum1n4t1s/Komorebi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/1llum1n4t1s/Komorebi.git</RepositoryUrl>
@@ -33,7 +41,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release' and '$(DisableAOT)' != 'true'">
     <PublishAot>true</PublishAot>
     <PublishTrimmed>true</PublishTrimmed>
-    <TrimMode>link</TrimMode>
+    <!-- TrimMode は指定しない。Native AOT が常に full トリムを行うため (公式に AOT 併用時は設定しない指針)。
+         旧値 'link' は .NET 6 以前の名称で、現在の有効値は full / partial のみ。 -->
   </PropertyGroup>
 
   <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
