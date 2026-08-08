@@ -107,36 +107,44 @@ public class Apply : Popup
         // クリップボードから適用する場合は内容を検証して一時ファイルに書き出す
         // （upstream は IClipboard を View から注入するが、Komorebi は App ファサードを使用）
         var finalPatchFile = _patchFile;
-        if (_fromClipboard)
+
+        // 一時ファイルは TempFileScope で RAII 削除する。書き込みや適用が例外で抜けても
+        // %TEMP% にパッチが残らないようにする（docs/PITFALLS.md「一時ファイルは try/finally」）。
+        TempFileScope clipboardPatch = null;
+        try
         {
-            var content = await App.GetClipboardTextAsync();
-            if (string.IsNullOrEmpty(content) || !content.StartsWith("diff --git ", StringComparison.Ordinal))
+            if (_fromClipboard)
             {
-                App.RaiseException(_repo.FullPath, "There's no valid patch content in clipboard!!!");
-                return false;
+                var content = await App.GetClipboardTextAsync();
+                if (string.IsNullOrEmpty(content) || !content.StartsWith("diff --git ", StringComparison.Ordinal))
+                {
+                    App.RaiseException(_repo.FullPath, "There's no valid patch content in clipboard!!!");
+                    return false;
+                }
+
+                clipboardPatch = new TempFileScope();
+                finalPatchFile = clipboardPatch.Path;
+                await File.WriteAllTextAsync(finalPatchFile, content);
             }
 
-            finalPatchFile = Path.GetTempFileName();
-            await File.WriteAllTextAsync(finalPatchFile, content);
+            // コマンドログを作成する
+            var log = _repo.CreateLog("Apply Patch");
+            Use(log);
+
+            // git applyコマンドを実行してパッチを適用する
+            var extra = ThreeWayMerge ? "--3way" : string.Empty;
+            var succ = await new Commands.Apply(_repo.FullPath, finalPatchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
+                .Use(log)
+                .ExecAsync();
+
+            log.Complete();
+
+            return succ;
         }
-
-        // コマンドログを作成する
-        var log = _repo.CreateLog("Apply Patch");
-        Use(log);
-
-        // git applyコマンドを実行してパッチを適用する
-        var extra = ThreeWayMerge ? "--3way" : string.Empty;
-        var succ = await new Commands.Apply(_repo.FullPath, finalPatchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
-            .Use(log)
-            .ExecAsync();
-
-        log.Complete();
-
-        // クリップボード適用用の一時ファイルを削除する
-        if (_fromClipboard)
-            File.Delete(finalPatchFile);
-
-        return succ;
+        finally
+        {
+            clipboardPatch?.Dispose();
+        }
     }
 
     /// <summary>対象リポジトリへの参照</summary>

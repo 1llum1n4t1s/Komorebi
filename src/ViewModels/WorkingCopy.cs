@@ -466,7 +466,7 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// <summary>
     /// 変更をステージングする。コンフリクトが未解決の変更はスキップされる。
     /// </summary>
-    public async Task StageChangesAsync(List<Models.Change> changes, Models.Change next)
+    public async Task StageChangesAsync(List<Models.Change> changes, Models.Change next, bool markDirty = true)
     {
         var canStaged = await GetCanStageChangesAsync(changes);
         var count = canStaged.Count;
@@ -492,7 +492,12 @@ public class WorkingCopy : ObservableObject, IDisposable
 
         log.Complete();
 
-        _repo.MarkWorkingCopyDirtyManually();
+        // markDirty=false は、呼び出し元が外側で Watcher ロックを保持している場合に使う。
+        // ロック保持中に Mark すると FSW バッファイベントが解除後に Refresh をキャンセルするため、
+        // 呼び出し元がロック解除後にまとめて Mark する責任を持つ。
+        if (markDirty)
+            _repo.MarkWorkingCopyDirtyManually();
+
         IsStaging = false;
     }
 
@@ -823,9 +828,11 @@ public class WorkingCopy : ObservableObject, IDisposable
         {
             _repo.Settings.PushCommitMessage(_commitMessage);
 
-            // 自動ステージが有効な場合は全アンステージド変更をステージ
+            // 自動ステージが有効な場合は全アンステージド変更をステージ。
+            // ここは外側の LockWatcher 保持中なので markDirty:false とし、
+            // 更新はロック解除後の MarkBranchesDirtyManually に一本化する。
             if (autoStage && _unstaged.Count > 0)
-                await StageChangesAsync(_unstaged, null);
+                await StageChangesAsync(_unstaged, null, markDirty: false);
 
             var log = _repo.CreateLog("Commit");
             succ = await new Commands.Commit(_repo.FullPath, _commitMessage, EnableSignOff, NoVerifyOnCommit, _useAmend, _resetAuthor)
@@ -945,8 +952,17 @@ public class WorkingCopy : ObservableObject, IDisposable
     {
         if (_useAmend)
         {
-            // amend時: HEADの親との差分を取得
+            // amend時: HEADの親との差分を取得。
+            // QuerySingleCommit は失敗時 null を返す契約なので、参照前に必ずガードする。
+            // （HEAD 未生成のリポジトリや一時的な git 失敗でここが NRE になると、
+            //   呼び出し元の Task.Run 内で例外が握り潰されステージド一覧が黙って更新されなくなる）
             var head = new Commands.QuerySingleCommit(_repo.FullPath, "HEAD").GetResult();
+            if (head is null)
+            {
+                Models.Logger.Log($"amend用のHEAD取得に失敗したため、ステージド一覧を空として扱います: {_repo.FullPath}", Models.LogLevel.Warning);
+                return [];
+            }
+
             var changes = new Commands.QueryStagedChangesWithAmend(_repo.FullPath, head.Parents.Count == 0 ? Models.Commit.EmptyTreeSHA1 : $"{head.SHA}^").GetResult();
             changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
             return changes;

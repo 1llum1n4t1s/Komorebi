@@ -23,43 +23,55 @@ public class UpdateIndexInfo
 
         foreach (var c in changes)
         {
-            if (c.Index == Models.ChangeState.Renamed)
+            if (c.Index == Models.ChangeState.Added)
             {
-                // リネーム: 新パスを削除（ゼロハッシュ）し、元パスを復元
+                // 追加: ゼロハッシュでインデックスから削除（追加を取り消す）。親側のデータは不要。
                 _patchBuilder.Append("0 0000000000000000000000000000000000000000\t");
                 _patchBuilder.Append(c.Path);
-                _patchBuilder.Append("\n100644 ");
-                _patchBuilder.Append(c.DataForAmend.ObjectHash);
-                _patchBuilder.Append("\t");
-                _patchBuilder.Append(c.OriginalPath);
-            }
-            else if (c.Index == Models.ChangeState.Added)
-            {
-                // 追加: ゼロハッシュでインデックスから削除（追加を取り消す）
-                _patchBuilder.Append("0 0000000000000000000000000000000000000000\t");
-                _patchBuilder.Append(c.Path);
-            }
-            else if (c.Index == Models.ChangeState.Deleted)
-            {
-                // 削除: 元のオブジェクトハッシュでインデックスに復元
-                _patchBuilder.Append("100644 ");
-                _patchBuilder.Append(c.DataForAmend.ObjectHash);
-                _patchBuilder.Append("\t");
-                _patchBuilder.Append(c.Path);
-            }
-            else
-            {
-                // 変更・タイプ変更等: 元のファイルモードとオブジェクトハッシュで復元
-                _patchBuilder.Append(c.DataForAmend.FileMode);
-                _patchBuilder.Append(" ");
-                _patchBuilder.Append(c.DataForAmend.ObjectHash);
-                _patchBuilder.Append("\t");
-                _patchBuilder.Append(c.Path);
+                _patchBuilder.Append('\n');
+                continue;
             }
 
+            // 追加の取り消し以外は親コミットの mode / hash が必須。amend 切替直後などで
+            // ステージド一覧がまだ非 amend のもの（DataForAmend が null）だと復元できないため、
+            // index を半端に書き換えず操作全体を中止する。
+            var amend = c.DataForAmend;
+            if (amend is null)
+            {
+                _hasUnrestorableEntry = true;
+                _patchBuilder.Clear();
+                return;
+            }
+
+            // リネームのときだけ、先に新パスのエントリを削除してから元パスを復元する。
+            if (c.Index == Models.ChangeState.Renamed)
+            {
+                _patchBuilder.Append("0 0000000000000000000000000000000000000000\t");
+                _patchBuilder.Append(c.Path);
+                _patchBuilder.Append('\n');
+            }
+
+            // 親コミット時点の mode と hash で index エントリを書き戻す。
+            // upstream からの意図的な逸脱: upstream は削除・リネームの復元で mode を "100644" に
+            // 決め打ちしており、実行可能ファイルを amend 中にアンステージすると実行ビットが落ちる。
+            _patchBuilder.Append(amend.FileMode);
+            _patchBuilder.Append(' ');
+            _patchBuilder.Append(amend.ObjectHash);
+            _patchBuilder.Append('\t');
+            _patchBuilder.Append(c.Index == Models.ChangeState.Renamed ? c.OriginalPath : c.Path);
             _patchBuilder.Append('\n');
         }
     }
+
+    /// <summary>
+    /// git update-index へ渡すパッチ本文。復元される mode / hash を単体テストで検証するために公開する。
+    /// </summary>
+    internal string PatchContent => _patchBuilder.ToString();
+
+    /// <summary>
+    /// 復元元データを欠く変更が含まれていたかどうか。単体テスト用。
+    /// </summary>
+    internal bool HasUnrestorableEntry => _hasUnrestorableEntry;
 
     /// <summary>
     /// パッチデータを標準入力経由で git update-index に渡して実行する。
@@ -67,6 +79,14 @@ public class UpdateIndexInfo
     /// <returns>成功時true</returns>
     public async Task<bool> ExecAsync()
     {
+        // 復元元データを欠く変更が含まれていた場合は git を起動せずに失敗させる
+        // （部分的に書き換えて index を壊すより、何もせず利用者に再試行させる方が安全）。
+        if (_hasUnrestorableEntry)
+        {
+            App.RaiseException(_repo, App.Text("Error.FailedToUpdateIndex", "amend target metadata is not ready yet"));
+            return false;
+        }
+
         var starter = new ProcessStartInfo();
         starter.WorkingDirectory = _repo;
         starter.FileName = Native.OS.GitExecutable;
@@ -106,4 +126,6 @@ public class UpdateIndexInfo
     private readonly string _repo;
     /// <summary>update-index に渡すパッチデータのビルダー</summary>
     private readonly StringBuilder _patchBuilder = new();
+    /// <summary>親コミットの mode / hash を持たない変更が含まれていたかどうか</summary>
+    private readonly bool _hasUnrestorableEntry;
 }
