@@ -56,3 +56,8 @@ When running batch edits on locale files via `.ps1` scripts: **use `pwsh` (Power
 
 ### Debug logging in WinExe builds needs Debug.WriteLine
 `Komorebi.csproj` is `<OutputType>WinExe</OutputType>` so there is no attached console — `Console.WriteLine` output goes nowhere. Use `System.Diagnostics.Debug.WriteLine(...)` instead; it routes to the debugger trace listener (Visual Studio "Output" pane, `dotnet trace`, etc.). Always strip temporary `Debug.WriteLine` instrumentation before committing.
+
+### SkiaSharp 3.x — DirectWrite フォント読み取りと GC ファイナライザの競合クラッシュ
+libSkiaSharp (SkiaSharp 3.x) では、GlyphTypeface 生成中の DirectWrite フォントストリーム読み取り (`SkDWriteFontFileStream::read`) と GC ファイナライザが競合すると、native 側の use-after-free で **managed ハンドラを一切通らないサイレントクラッシュ** (0xc0000005、イベントログでは `libSkiaSharp.DLL+0x2a0934`) が起きる。実際に v1.0.96〜1.0.97 で「起動 1〜6 秒後にたまに落ちる」形で 7 回発生した（2026-08 に minidump 解析で特定。`ReadFileFragment` 成功直後の `ReleaseFileFragment` で `fFontFileStream` が null 化する）。SkiaSharp 4 のライフサイクル再設計で修正済みだが、Avalonia 12.x は 3.x 系依存のため差し替えできない。
+
+対策として `Models.FontWarmup` が `TryLaunchAsNormal` 冒頭（リポジトリ復元前・可能なら `GC.TryStartNoGCRegion` 区間内）で主要フォント＋代表フォールバック先を一括 GlyphTypeface 化し、危険経路の実行回数と GC 競合の確率を抑えている。**GlyphTypeface を大量生成する新規コードは追加しない**こと（過去に `ResolveMonospaceFont` が全システムフォントを開いて数百回読み取っていた前科がある — 判定対象を候補フォントだけに絞って解消済み）。Avalonia が SkiaSharp 4 系へ移行したら NoGC 区間は不要になる（ウォームアップ自体は初回描画の高速化として残してよい）。

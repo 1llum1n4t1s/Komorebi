@@ -34,7 +34,9 @@ public enum StartupStage
     FrameworkInitialized,
     /// <summary>メインウィンドウ生成後、初回アイドル待ち</summary>
     WaitingFirstIdle,
-    /// <summary>起動完了（UI スレッドが最初のアイドルに到達した）</summary>
+    /// <summary>初回アイドル到達後の安定化観察期間（起動直後のサイレントクラッシュ検出窓）</summary>
+    Stabilizing,
+    /// <summary>起動完了（安定化観察期間を終えたか、正規の終了経路に入った）</summary>
     Completed,
 }
 
@@ -52,8 +54,11 @@ public enum StartupStage
 /// <item>
 /// <b>プロセス内で何も書けない死に方</b>（Native AOT のアクセス違反、ランタイム abort、
 /// 外部からの強制終了、電源断など）。
-/// → 起動中は PID 単位のマーカーファイルを置き、UI が最初のアイドルに到達した時点で削除する。
+/// → 起動中は PID 単位のマーカーファイルを置き、初回アイドル到達後の安定化観察期間（60 秒）を
+/// 終えるか、正規の終了経路（Quit / desktop.Exit / リベースエディタ終了等）に入った時点で削除する。
 /// 次回起動時に残留マーカーを見つけたら「前回の起動は完了しなかった」として到達ステージ付きで記録する。
+/// 起動数秒後に native 層でサイレントクラッシュするケース（例: libSkiaSharp の DirectWrite
+/// 読み取り競合）も、この観察期間によって検出対象に含まれる。
 /// </item>
 /// </list>
 ///

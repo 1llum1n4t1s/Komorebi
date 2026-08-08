@@ -839,6 +839,10 @@ public partial class App : Application
             return;
         s_isQuitting = true;
 
+        // 正規終了は安定化観察期間（起動後 60 秒）の途中でも「起動失敗」ではない。
+        // desktop.Exit を経ない Environment.Exit フォールバック経路もあるためここでも削除する。
+        Models.StartupDiagnostics.MarkCompleted();
+
         // バックグラウンドのアバターダウンロードを停止して、IOException を防止
         Models.AvatarManager.Instance.Stop();
 
@@ -894,19 +898,36 @@ public partial class App : Application
             // 非同期バッファに依存しないブートストラップログにも残す。
             Dispatcher.UIThread.UnhandledException += (_, e) =>
             {
-                if (Models.StartupDiagnostics.CurrentStage != Models.StartupStage.Completed)
+                // 初回アイドル到達前（Stabilizing 遷移前）の例外だけをブートストラップログに残す。
+                // 安定化観察期間中の例外は Logger 側の記録で十分（ここに含めると handled な
+                // UI 例外まで起動時クラッシュログに混ざりノイズになる）。
+                if (Models.StartupDiagnostics.CurrentStage < Models.StartupStage.Stabilizing)
                     Models.StartupDiagnostics.WriteFatal("Dispatcher.UIThread.UnhandledException", e.Exception);
 
                 Models.Logger.LogCrash(e.Exception, "Dispatcher.UIThread.UnhandledException");
                 e.Handled = true;
             };
 
+            // どの起動モードでも、正規のシャットダウン経路を通った終了は「起動失敗」ではない。
+            // 安定化観察期間（下記 60 秒）の途中でユーザーがすぐ終了した場合の誤検出を防ぐため、
+            // Exit イベントで起動マーカーを確実に削除する（MarkCompleted は idempotent）。
+            // 注意: macOS 用の強制 Kill を含む Exit ハンドラより先に登録し、先に実行させること。
+            desktop.Exit += (_, _) => Models.StartupDiagnostics.MarkCompleted();
+
             // 起動完了の判定: UI スレッドが最初のアイドルに到達したら「ウィンドウの生成・
-            // 初回レイアウト・初回レンダーまで通った」とみなし、起動マーカーを削除する。
-            // ここに到達せずプロセスが消えた場合、次回起動時に残留マーカーから
+            // 初回レイアウト・初回レンダーまで通った」とみなし Stabilizing へ遷移する。
+            // マーカーはここでは消さず、60 秒の安定化観察期間を置いてから削除する。
+            // 起動数秒後に native 層でサイレントクラッシュした場合（例: libSkiaSharp の
+            // DirectWrite 読み取り競合）も、次回起動時に残留マーカーから
             // 「前回の起動は完了しなかった（到達ステージ付き）」が記録される。
             Dispatcher.UIThread.Post(
-                Models.StartupDiagnostics.MarkCompleted,
+                () =>
+                {
+                    Models.StartupDiagnostics.MarkStage(Models.StartupStage.Stabilizing);
+                    DispatcherTimer.RunOnce(
+                        Models.StartupDiagnostics.MarkCompleted,
+                        TimeSpan.FromSeconds(60));
+                },
                 DispatcherPriority.ApplicationIdle);
 
             // Disable tooltip if window is not active.
@@ -942,6 +963,12 @@ public partial class App : Application
                 }
 
                 _ipcChannel.SendToFirstInstance(arg);
+
+                // 二重起動の転送経路は意図した正常終了。マーカーを残すと次回起動時に
+                // 「前回の起動が完了しなかった」と誤検出されるため、明示的に完了扱いにする。
+                // Environment.Exit は finally を実行しないため Logger も同期フラッシュする。
+                Models.StartupDiagnostics.MarkCompleted();
+                Models.Logger.Dispose();
                 Environment.Exit(0);
             }
             else
@@ -1300,6 +1327,13 @@ public partial class App : Application
     /// </summary>
     private void TryLaunchAsNormal(IClassicDesktopStyleApplicationLifetime desktop)
     {
+        // SkiaSharp 3.x の DirectWrite ストリーム読み取りと GC ファイナライザの競合
+        // （起動数秒後のサイレントクラッシュの原因）を軽減するため、バックグラウンド
+        // サービス起動やリポジトリ復元でアロケーションが増える前の静かなうちに、
+        // フォールバックフォントの GlyphTypeface を一括生成しておく（docs/PITFALLS.md 参照）。
+        var pref = ViewModels.Preferences.Instance;
+        Models.FontWarmup.Run(pref.Locale, pref.DefaultFontFamily, pref.MonospaceFontFamily);
+
         // 外部ツール（diffツール等）の検出とアバター取得を開始する
         Native.OS.SetupExternalTools();
         Models.AvatarManager.Instance.Start();
@@ -1318,7 +1352,6 @@ public partial class App : Application
         }
 
         // 設定を読み込み、ランチャーウィンドウを生成・表示する
-        var pref = ViewModels.Preferences.Instance;
         pref.SetCanModify();
 
         // Commands 層が ViewModels 層に直接依存しないよう、GlobalSSHKey をデリゲート経由で注入する。

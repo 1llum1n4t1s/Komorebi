@@ -133,11 +133,13 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 `Models.Logger` (SuperLightLogger) は「初期化後」かつ「非同期バッファ経由」でしか書けないため、起動時クラッシュを 2 種類取りこぼす。`src/Models/StartupDiagnostics.cs` がその穴を埋める。出力先はどちらも `<DataDir>/logs`。
 
 1. **ロガー初期化前の失敗** (Velopack フック / `SetupDataDir` / `Logger.Initialize` 自体) → `StartupDiagnostics.WriteFatal()` が Logger 非依存の同期書き込みで `Komorebi_startup_crash.log` に残す (DataDir 確定前は `%TEMP%/Komorebi`)。
-2. **プロセス内で何も書けない死に方** (Native AOT のアクセス違反、ランタイム abort、強制終了、電源断) → 起動中は `logs/startup-<pid>.marker` を置き、`MarkStage()` で到達ステージを同期更新する。UI スレッドが最初のアイドル (`DispatcherPriority.ApplicationIdle`) に到達したら `MarkCompleted()` でマーカーを削除する。次回起動時に残留マーカーを見つけたら「前回の起動が完了しませんでした（到達ステージ付き）」を通常ログ (Warning) とブートストラップログの両方へ記録する。PID 再利用の誤検出は `startedTicks` (プロセス開始時刻) の一致判定で防ぐ。
+2. **プロセス内で何も書けない死に方** (Native AOT のアクセス違反、ランタイム abort、強制終了、電源断) → 起動中は `logs/startup-<pid>.marker` を置き、`MarkStage()` で到達ステージを同期更新する。UI スレッドが最初のアイドル (`DispatcherPriority.ApplicationIdle`) に到達したら `Stabilizing` へ遷移し、**60 秒の安定化観察期間**を経てから `MarkCompleted()` でマーカーを削除する（起動数秒後のサイレントクラッシュも検出するため）。正規終了経路 (`App.Quit` / `desktop.Exit` / IPC 二重起動の即終了 / リベースエディタ終了) では観察期間中でも即座に `MarkCompleted()` して誤検出を防ぐ。次回起動時に残留マーカーを見つけたら「前回の起動が完了しませんでした（到達ステージ付き）」を通常ログ (Warning) とブートストラップログの両方へ記録する。PID 再利用の誤検出は `startedTicks` (プロセス開始時刻) の一致判定で防ぐ。
 
-ステージは `StartupStage` enum (ProcessStart → VelopackHook → DataDir → LoggerInit → LaunchModeCheck → AvaloniaStart → AppInitialize → FrameworkInitialized → WaitingFirstIdle → Completed)。`Logger.LogCrash` のレポートにも現在ステージが入る。起動シーケンスに新しい重い処理を挟むときは対応する `MarkStage()` を追加する。
+ステージは `StartupStage` enum (ProcessStart → VelopackHook → DataDir → LoggerInit → LaunchModeCheck → AvaloniaStart → AppInitialize → FrameworkInitialized → WaitingFirstIdle → Stabilizing → Completed)。`Logger.LogCrash` のレポートにも現在ステージが入る。起動シーケンスに新しい重い処理を挟むときは対応する `MarkStage()` を追加する。
 
 `Environment.Exit` は `finally` を走らせないため、リベースエディタモードの終了前には `MarkCompleted()` + `Logger.Dispose()` を明示的に呼ぶ。
+
+通常 GUI 起動では `TryLaunchAsNormal` 冒頭で `Models.FontWarmup.Run()` がフォールバックフォントの GlyphTypeface を一括生成する（SkiaSharp 3.x の DirectWrite 読み取り × GC ファイナライザ競合クラッシュの軽減。詳細は [docs/PITFALLS.md](docs/PITFALLS.md)）。
 
 ### Auto-Update (Velopack)
 - Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
