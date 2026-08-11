@@ -34,12 +34,10 @@
                 ClipToBounds="True">
           <Border Margin="{TemplateBinding Padding}">
             <VisualLayerManager>
-              <LayoutTransformControl>
-                <LayoutTransformControl.LayoutTransform>
-                  <ScaleTransform ScaleX="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
-                                  ScaleY="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"/>
-                </LayoutTransformControl.LayoutTransform>
-                
+              <!-- upstream は LayoutTransformControl を使うが、DPI 125% 等のフラクショナル
+                   スケールで内容が DesiredSize まで潰れて垂直中央寄せされる不具合があるため
+                   等倍率専用の v:ZoomHost に差し替えている（src/Views/ZoomHost.cs 参照）。 -->
+              <v:ZoomHost Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}">
                 <Border>
                   <ContentPresenter Name="PART_ContentPresenter"
                                     ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -47,7 +45,7 @@
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                 </Border>
-              </LayoutTransformControl>
+              </v:ZoomHost>
             </VisualLayerManager>
           </Border>
         </Border>
@@ -136,12 +134,8 @@
                     BorderThickness="1"
                     CornerRadius="{TemplateBinding CornerRadius}">
               <VisualLayerManager>
-                <LayoutTransformControl>
-                  <LayoutTransformControl.LayoutTransform>
-                    <ScaleTransform ScaleX="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
-                                    ScaleY="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"/>
-                  </LayoutTransformControl.LayoutTransform>
-                  
+                <!-- LayoutTransformControl から差し替え（上記 Selector="Window" と同じ理由） -->
+                <v:ZoomHost Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}">
                   <Border CornerRadius="{TemplateBinding CornerRadius}" ClipToBounds="True">
                     <ContentPresenter Name="PART_ContentPresenter"
                                       ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -149,7 +143,7 @@
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                   </Border>
-                </LayoutTransformControl>
+                </v:ZoomHost>
               </VisualLayerManager>
             </Border>
           </Grid>

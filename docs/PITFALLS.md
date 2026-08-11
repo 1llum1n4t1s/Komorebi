@@ -67,5 +67,22 @@ libSkiaSharp (SkiaSharp 3.x) では、GlyphTypeface 生成中の DirectWrite フ
 
 同様に `UpdateIndexInfo` の復元行は削除・リネームでも `DataForAmend.FileMode` を使う。ここを `"100644"` 決め打ちにすると実行可能ファイルの復元で実行ビットが落ちる。`Deleted` の dst-mode は `000000` なので、**正規表現の修正と決め打ちの除去は必ずセットで行う**（片方だけ直すと mode `000000` = 削除指示を書き込んでしまう）。回帰テストは `tests/Komorebi.Tests/Commands/QueryStagedChangesWithAmendTests.cs`（入力行は実 git から採取）。
 
+### Window テンプレートのズームは `LayoutTransformControl` ではなく `v:ZoomHost` を使う
+Avalonia の `LayoutTransformControl.ArrangeOverride` は子を**常に中央寄せ**で配置し、その配置サイズを次の判定で決める。
+
+```csharp
+if (IsSizeSmaller(finalSizeTransformed, TransformRoot.DesiredSize))
+    finalSizeTransformed = TransformRoot.DesiredSize;   // ← サイズ「全体」を差し替える
+
+private static bool IsSizeSmaller(Size a, Size b)
+    => (a.Width + AcceptableDelta < b.Width) || (a.Height + AcceptableDelta < b.Height);
+```
+
+判定は**幅 OR 高さ**の論理和なのに、置き換えは**幅と高さの両方**。そのため「子の DesiredSize.Width が利用可能幅をほんの少し超える」だけで、**高さまでコンテンツの自然高さに潰され、ウィンドウ内で垂直中央寄せされる**。DPI 125% の実測では利用可能幅 1332.8 に対し DesiredSize.Width が 1333.6（ちょうど 1 物理px 超過）で発火し、高さが 822.4 → 377.6 に潰れてウィンドウの上下に約 220 DIP ずつの空白が出た。`_childActualSize` による再測定リカバリ経路は Avalonia 側でコメントアウトされていて機能しない。
+
+これは Avalonia 12.1 の回帰ではない（`LayoutTransformControl.cs` は 12.0.5 と 12.1.1 でバイト単位同一、11.3.0 との差も購読管理のみ）。`UseLayoutRounding="False"` でも回避できない（実機で確認済み）。本家 sourcegit-scm/sourcegit も同一テンプレートのため同じ潜在バグを抱えている。
+
+対策として `src/Views/ZoomHost.cs`（等倍率スケール専用の `Decorator`。Measure/Arrange で倍率の逆数を掛け、子に `RenderTransform` を適用するだけ）へ差し替えている。**upstream 追従で `LayoutTransformControl` を戻さないこと。** 回転・せん断が必要になった場合のみ再検討する。
+
 ### `StageChangesAsync` を Watcher ロック内から呼ぶときは `markDirty: false`
 `StageChangesAsync` は既定で末尾に `MarkWorkingCopyDirtyManually()` を呼ぶ。呼び出し元が外側で `LockWatcher()` を保持したまま呼ぶと、上記「Watcher lock scope」の禁止パターンに落ちる（内側の `using` を抜けてもロックカウントは 0 にならない）。`CommitAsync` の auto-stage のように外側ロック内から呼ぶ場合は `markDirty: false` を渡し、ロック解除後に呼び出し元がまとめて `MarkBranchesDirtyManually()` する。
