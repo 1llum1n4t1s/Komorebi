@@ -5,6 +5,7 @@ using Komorebi.Models;
 
 namespace Komorebi.Tests.Models
 {
+    [Collection("CommitGraph")]
     public class CommitGraphTests
     {
         // ----------------------------------------------------------------

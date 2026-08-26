@@ -41,13 +41,13 @@ dotnet build -p:DisableUpdateDetection=true
 
 ```bash
 # Run all tests
-dotnet test tests/Komorebi.Tests/Komorebi.Tests.csproj
+dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj
 
 # Run specific test class
-dotnet test tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ChangeTests"
+dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ChangeTests"
 
 # Run specific test method
-dotnet test tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ParseLine_Untracked"
+dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ParseLine_Untracked"
 
 # Localization validation (CI enforced)
 node build/scripts/localization-check.js

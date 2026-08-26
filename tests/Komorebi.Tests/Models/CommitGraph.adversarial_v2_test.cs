@@ -10,6 +10,7 @@ namespace Komorebi.Tests.Models
     /// CommitGraph の敵対的テスト v2。
     /// 既存テストでカバーされていない境界値、パフォーマンス、異常状態を検証する。
     /// </summary>
+    [Collection("CommitGraph")]
     public class CommitGraphAdversarialV2Tests
     {
         // ----------------------------------------------------------------
