@@ -20,7 +20,7 @@ public class Restore : Command
         // --progress: 進捗状況を表示
         // --worktree: 作業ツリーを対象にする
         // --recurse-submodules: サブモジュール内も再帰的に復元
-        // --pathspec-from-file: ファイルから復元対象パスを読み込む
-        Args = $"restore --progress --worktree --recurse-submodules --pathspec-from-file={pathspecFile.Quoted()}";
+        // --pathspec-file-nul: 改行や引用符を含むパスもそのまま扱う
+        Args = $"restore --progress --worktree --recurse-submodules --pathspec-from-file={pathspecFile.Quoted()} --pathspec-file-nul";
     }
 }

@@ -18,7 +18,7 @@ public class Add : Command
 
         // git add --force: .gitignoreに含まれるファイルも強制追加
         // --verbose: 追加されたファイル名を出力
-        // --pathspec-from-file: ファイルから追加対象のパスを読み込む
-        Args = $"add --force --verbose --pathspec-from-file={pathspecFromFile.Quoted()}";
+        // --pathspec-file-nul: 改行や引用符を含むパスもそのまま扱う
+        Args = $"add --force --verbose --pathspec-from-file={pathspecFromFile.Quoted()} --pathspec-file-nul";
     }
 }

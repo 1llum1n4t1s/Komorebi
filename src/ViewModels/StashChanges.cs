@@ -2,7 +2,6 @@
 #nullable disable warnings
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels;
@@ -154,7 +153,7 @@ public class StashChanges : Popup
                 paths.Add(c.Path);
 
             using var temp = new TempFileScope();
-            await File.WriteAllLinesAsync(temp.Path, paths);
+            await temp.WriteNullTerminatedPathsAsync(paths);
             succ = await new Commands.Stash(_repo.FullPath)
                 .Use(log)
                 .PushAsync(Message, temp.Path, keepIndex)

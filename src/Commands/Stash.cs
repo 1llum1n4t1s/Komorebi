@@ -96,7 +96,7 @@ public class Stash : Command
         var builder = new StringBuilder();
 
         // git stash push --pathspec-from-file: ファイルからパスリストを読んで退避する
-        builder.Append("stash push --include-untracked --pathspec-from-file=").Append(pathspecFromFile.Quoted()).Append(" ");
+        builder.Append("stash push --include-untracked --pathspec-from-file=").Append(pathspecFromFile.Quoted()).Append(" --pathspec-file-nul ");
 
         // --keep-index: ステージ済みの内容をワーキングツリーに残す
         if (keepIndex)

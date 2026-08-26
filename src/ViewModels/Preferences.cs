@@ -742,6 +742,14 @@ public class Preferences : ObservableObject
     /// </summary>
     public void Save()
     {
+        // UI と AutoFetchService の同時保存で古いスナップショットが後から上書きしないよう、
+        // シリアライズから置換までを 1 つのクリティカルセクションにする。
+        lock (_saveLock)
+            SaveCore();
+    }
+
+    private void SaveCore()
+    {
         if (_isLoading || _isReadonly)
             return;
 
@@ -1016,6 +1024,7 @@ public class Preferences : ObservableObject
     // Instance 取得時の二重初期化防止ロック。
     private static readonly Lock s_instanceLock = new();
     private static readonly string s_detectedLocale = DetectDefaultLocale(); // 自動検出されたロケール
+    private readonly Lock _saveLock = new();
 
     /// <summary>システムから自動検出されたデフォルトロケール。</summary>
     internal static string DetectedLocale => s_detectedLocale;

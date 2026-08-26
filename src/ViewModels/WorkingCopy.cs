@@ -466,12 +466,13 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// <summary>
     /// 変更をステージングする。コンフリクトが未解決の変更はスキップされる。
     /// </summary>
-    public async Task StageChangesAsync(List<Models.Change> changes, Models.Change next, bool markDirty = true)
+    /// <returns>対象の <c>git add</c> が成功した場合はtrue。</returns>
+    public async Task<bool> StageChangesAsync(List<Models.Change> changes, Models.Change next, bool markDirty = true)
     {
         var canStaged = await GetCanStageChangesAsync(changes);
         var count = canStaged.Count;
         if (count == 0)
-            return;
+            return false;
 
         IsStaging = true;
         _selectedUnstaged = next is not null ? [next] : [];
@@ -480,25 +481,27 @@ public class WorkingCopy : ObservableObject, IDisposable
         // LockWatcher はコマンド実行中だけ保持する（ブロック構文）。MarkWorkingCopyDirtyManually を
         // ロック保持中に呼ぶと FSW イベントの重複処理で UI 更新が消失することがある（Discard.cs 同パターン）。
         var log = _repo.CreateLog("Stage");
-        using var temp = new TempFileScope();
-        await using (var writer = new StreamWriter(temp.Path))
+        try
         {
-            foreach (var c in canStaged)
-                await writer.WriteLineAsync(c.Path);
+            using var temp = new TempFileScope();
+            await temp.WriteNullTerminatedPathsAsync(canStaged.Select(c => c.Path));
+
+            bool succ;
+            using (_repo.LockWatcher())
+                succ = await new Commands.Add(_repo.FullPath, temp.Path).Use(log).ExecAsync();
+
+            // Komorebi 独自修正: 失敗を呼び出し元へ返す。失敗時も一部だけステージされている
+            // 可能性があるため、表示は再取得する。
+            if (markDirty)
+                _repo.MarkWorkingCopyDirtyManually();
+
+            return succ;
         }
-
-        using (_repo.LockWatcher())
-            await new Commands.Add(_repo.FullPath, temp.Path).Use(log).ExecAsync();
-
-        log.Complete();
-
-        // markDirty=false は、呼び出し元が外側で Watcher ロックを保持している場合に使う。
-        // ロック保持中に Mark すると FSW バッファイベントが解除後に Refresh をキャンセルするため、
-        // 呼び出し元がロック解除後にまとめて Mark する責任を持つ。
-        if (markDirty)
-            _repo.MarkWorkingCopyDirtyManually();
-
-        IsStaging = false;
+        finally
+        {
+            log.Complete();
+            IsStaging = false;
+        }
     }
 
     /// <summary>
@@ -527,15 +530,14 @@ public class WorkingCopy : ObservableObject, IDisposable
         {
             // リネームされたファイルは元のパスも含める
             using var temp = new TempFileScope();
-            await using (var writer = new StreamWriter(temp.Path))
+            List<string> paths = [];
+            foreach (var c in changes)
             {
-                foreach (var c in changes)
-                {
-                    await writer.WriteLineAsync(c.Path);
-                    if (c.Index == Models.ChangeState.Renamed)
-                        await writer.WriteLineAsync(c.OriginalPath);
-                }
+                paths.Add(c.Path);
+                if (c.Index == Models.ChangeState.Renamed)
+                    paths.Add(c.OriginalPath);
             }
+            await temp.WriteNullTerminatedPathsAsync(paths);
 
             using (_repo.LockWatcher())
                 await new Commands.Reset(_repo.FullPath, temp.Path).Use(log).ExecAsync();
@@ -641,7 +643,7 @@ public class WorkingCopy : ObservableObject, IDisposable
             if (needStage.Count > 0)
             {
                 using var temp = new TempFileScope();
-                await File.WriteAllLinesAsync(temp.Path, needStage);
+                await temp.WriteNullTerminatedPathsAsync(needStage);
                 await new Commands.Add(_repo.FullPath, temp.Path).Use(log).ExecAsync();
             }
 
@@ -799,6 +801,8 @@ public class WorkingCopy : ObservableObject, IDisposable
                 return;
         }
 
+        var allowEmpty = false;
+
         // 空コミットの確認
         if (!_useAmend)
         {
@@ -811,7 +815,12 @@ public class WorkingCopy : ObservableObject, IDisposable
                 if (rs == Models.ConfirmEmptyCommitResult.StageAllAndCommit)
                     autoStage = true;
                 else if (rs == Models.ConfirmEmptyCommitResult.StageSelectedAndCommit)
-                    await StageChangesAsync(_selectedUnstaged, null);
+                {
+                    if (!await StageChangesAsync(_selectedUnstaged, null))
+                        return;
+                }
+                else if (rs == Models.ConfirmEmptyCommitResult.CreateEmptyCommit)
+                    allowEmpty = true;
             }
         }
 
@@ -832,10 +841,16 @@ public class WorkingCopy : ObservableObject, IDisposable
             // ここは外側の LockWatcher 保持中なので markDirty:false とし、
             // 更新はロック解除後の MarkBranchesDirtyManually に一本化する。
             if (autoStage && _unstaged.Count > 0)
-                await StageChangesAsync(_unstaged, null, markDirty: false);
+            {
+                if (!await StageChangesAsync(_unstaged, null, markDirty: false))
+                {
+                    IsCommitting = false;
+                    return;
+                }
+            }
 
             var log = _repo.CreateLog("Commit");
-            succ = await new Commands.Commit(_repo.FullPath, _commitMessage, EnableSignOff, NoVerifyOnCommit, _useAmend, _resetAuthor)
+            succ = await new Commands.Commit(_repo.FullPath, _commitMessage, EnableSignOff, NoVerifyOnCommit, _useAmend, _resetAuthor, allowEmpty)
                     .Use(log)
                     .RunAsync();
 

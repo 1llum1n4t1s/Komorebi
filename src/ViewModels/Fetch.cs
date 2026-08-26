@@ -108,16 +108,21 @@ public class Fetch : Popup
         var log = _repo.CreateLog("Fetch");
         Use(log);
 
+        // Komorebi 独自修正: fetch 失敗時は成功扱いで閉じず、履歴も移動しない。
+        var succ = true;
         if (FetchAllRemotes)
         {
             foreach (var remote in _repo.Remotes)
-                await new Commands.Fetch(_repo.FullPath, remote.Name, notags, force)
+            {
+                var fetched = await new Commands.Fetch(_repo.FullPath, remote.Name, notags, force)
                     .Use(log)
                     .RunAsync();
+                succ &= fetched;
+            }
         }
         else
         {
-            await new Commands.Fetch(_repo.FullPath, SelectedRemote.Name, notags, force)
+            succ = await new Commands.Fetch(_repo.FullPath, SelectedRemote.Name, notags, force)
                 .Use(log)
                 .RunAsync();
         }
@@ -125,17 +130,18 @@ public class Fetch : Popup
         log.Complete();
 
         // フェッチ後、アップストリームHEADへ自動ナビゲート
-        if (navigateToUpstreamHEAD)
+        if (succ && navigateToUpstreamHEAD)
         {
             var upstream = _repo.CurrentBranch?.Upstream;
             if (!string.IsNullOrEmpty(upstream))
             {
-                var upstreamHead = await new Commands.QueryRevisionByRefName(_repo.FullPath, upstream[13..]).GetResultAsync();
-                _repo.NavigateToCommit(upstreamHead, true);
+                var upstreamHead = await new Commands.QueryRevisionByRefName(_repo.FullPath, upstream).GetResultAsync();
+                if (!string.IsNullOrEmpty(upstreamHead))
+                    _repo.NavigateToCommit(upstreamHead, true);
             }
         }
 
-        return true;
+        return succ;
     }
 
     private readonly Repository _repo = null; // 対象リポジトリ

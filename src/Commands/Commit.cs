@@ -19,7 +19,8 @@ public class Commit : Command
     /// <param name="noVerify">pre-commitフックをスキップするかどうか。</param>
     /// <param name="amend">直前のコミットを修正するかどうか。</param>
     /// <param name="resetAuthor">amend時に作成者情報をリセットするかどうか。</param>
-    public Commit(string repo, string message, bool signOff, bool noVerify, bool amend, bool resetAuthor)
+    /// <param name="allowEmpty">変更がない通常コミットを明示的に許可するかどうか。</param>
+    public Commit(string repo, string message, bool signOff, bool noVerify, bool amend, bool resetAuthor, bool allowEmpty = false)
     {
         // コミットメッセージを一時ファイルに書き込むためのパスを取得する
         _tmpFile = Path.GetTempFileName();
@@ -30,9 +31,12 @@ public class Commit : Command
 
         var builder = new StringBuilder();
 
-        // git commit --allow-empty: 変更がなくてもコミットを許可する
+        builder.Append("commit ");
+        if (allowEmpty)
+            builder.Append("--allow-empty ");
+
         // --file: コミットメッセージを一時ファイルから読み込む
-        builder.Append("commit --allow-empty --file=");
+        builder.Append("--file=");
         builder.Append(_tmpFile.Quoted());
         builder.Append(' ');
 

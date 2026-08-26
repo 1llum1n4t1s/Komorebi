@@ -494,5 +494,26 @@ namespace Komorebi.Tests.Commands
             Assert.Equal(expectedReason, change.ConflictReason);
             Assert.True(change.IsConflicted);
         }
+
+        [Fact]
+        public void ParseOutput_PreservesSpecialCharacters()
+        {
+            var changes = QueryLocalChanges.ParseOutput(" M line\nbreak\tfile.txt\0?? quote\"file.txt\0");
+
+            Assert.Collection(
+                changes,
+                change => Assert.Equal("line\nbreak\tfile.txt", change.Path),
+                change => Assert.Equal("quote\"file.txt", change.Path));
+        }
+
+        [Fact]
+        public void ParseOutput_RenameUsesDestinationThenOriginal()
+        {
+            var change = Assert.Single(QueryLocalChanges.ParseOutput("R  new\nname.txt\0old\tname.txt\0"));
+
+            Assert.Equal(ChangeState.Renamed, change.Index);
+            Assert.Equal("new\nname.txt", change.Path);
+            Assert.Equal("old\tname.txt", change.OriginalPath);
+        }
     }
 }

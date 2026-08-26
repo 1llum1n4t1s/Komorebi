@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 using Avalonia.Media;
 
@@ -133,6 +134,18 @@ public sealed class TempFileScope : IDisposable
     public TempFileScope()
     {
         Path = System.IO.Path.GetTempFileName();
+    }
+
+    /// <summary>Git の <c>--pathspec-file-nul</c> 用にパスを NUL 区切り UTF-8 で書き込む。</summary>
+    public async Task WriteNullTerminatedPathsAsync(IEnumerable<string> paths)
+    {
+        await using var stream = new FileStream(Path, FileMode.Truncate, FileAccess.Write, FileShare.None);
+        await using var writer = new StreamWriter(stream, new UTF8Encoding(false));
+        foreach (var path in paths)
+        {
+            await writer.WriteAsync(path);
+            await writer.WriteAsync('\0');
+        }
     }
 
     /// <summary>一時ファイルを削除する。多重 Dispose は安全に無視される。</summary>

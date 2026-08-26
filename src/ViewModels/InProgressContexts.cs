@@ -234,10 +234,23 @@ public class RebaseInProgress : InProgressContext
         else if (HeadName.StartsWith("refs/tags/"))
             HeadName = HeadName["refs/tags/".Length..];
 
-        var stoppedSHAPath = Path.Combine(repo.GitDir, "rebase-merge", "stopped-sha");
-        var stoppedSHA = File.Exists(stoppedSHAPath)
-            ? File.ReadAllText(stoppedSHAPath).Trim()
-            : new Commands.QueryRevisionByRefName(repo.FullPath, HeadName).GetResult();
+        var stoppedSHAPath = Path.Combine(rebaseMergeDir, "stopped-sha");
+        var originalHeadPath = Path.Combine(rebaseMergeDir, "orig-head");
+        string stoppedSHA;
+        if (File.Exists(stoppedSHAPath))
+        {
+            stoppedSHA = File.ReadAllText(stoppedSHAPath).Trim();
+        }
+        else if (File.Exists(originalHeadPath))
+        {
+            // Komorebi 独自修正: detached rebase の head-name は "detached HEAD" なので、
+            // ブランチ ref の代わりに Git が記録した元の HEAD を使う。
+            stoppedSHA = File.ReadAllText(originalHeadPath).Trim();
+        }
+        else
+        {
+            stoppedSHA = new Commands.QueryRevisionByRefName(repo.FullPath, HeadName).GetResult();
+        }
 
         var ontoSHA = File.ReadAllText(Path.Combine(repo.GitDir, "rebase-merge", "onto")).Trim();
 

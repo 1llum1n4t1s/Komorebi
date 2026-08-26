@@ -29,7 +29,7 @@ public class Reset : Command
     {
         WorkingDirectory = repo;
         Context = repo;
-        // git reset --pathspec-from-file: ファイルからパスリストを読んでアンステージする
-        Args = $"reset --pathspec-from-file={pathspec.Quoted()}";
+        // NUL 区切りにして改行や引用符を含むパスもそのまま扱う
+        Args = $"reset --pathspec-from-file={pathspec.Quoted()} --pathspec-file-nul";
     }
 }

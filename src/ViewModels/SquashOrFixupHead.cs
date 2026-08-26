@@ -123,15 +123,15 @@ public class SquashOrFixupHead : Popup
         if (succ && ForcePushAfterDone)
         {
             var branch = _repo.CurrentBranch;
-            if (branch is not null && !string.IsNullOrEmpty(branch.Upstream))
+            if (branch?.Upstream is { } upstreamRef && upstreamRef.StartsWith("refs/remotes/", System.StringComparison.Ordinal))
             {
-                var upstream = branch.Upstream.Substring(13); // "refs/remotes/" を除去
+                var upstream = upstreamRef["refs/remotes/".Length..];
                 var separatorIdx = upstream.IndexOf('/');
                 if (separatorIdx > 0)
                 {
                     var remote = upstream.Substring(0, separatorIdx);
                     var remoteBranch = upstream.Substring(separatorIdx + 1);
-                    await new Commands.Push(_repo.FullPath, branch.Name, remote, remoteBranch, false, false, false, true)
+                    succ = await new Commands.Push(_repo.FullPath, branch.Name, remote, remoteBranch, false, false, false, true)
                         .Use(log)
                         .ExecAsync();
                 }

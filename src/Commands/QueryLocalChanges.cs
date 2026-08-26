@@ -34,10 +34,11 @@ public partial class QueryLocalChanges : Command
         var builder = new StringBuilder();
         if (noOptionalLocks)
             builder.Append("--no-optional-locks ");
+        // Komorebi 独自修正: C 形式の quoted path を再解釈せず、Git 推奨の NUL 形式で取得する。
         if (includeUntracked)
-            builder.Append("-c core.untrackedCache=true -c status.showUntrackedFiles=all status -uall --ignore-submodules=dirty --porcelain");
+            builder.Append("-c core.untrackedCache=true -c status.showUntrackedFiles=all status -uall --ignore-submodules=dirty --porcelain -z");
         else
-            builder.Append("status -uno --ignore-submodules=dirty --porcelain");
+            builder.Append("status -uno --ignore-submodules=dirty --porcelain -z");
 
         Args = builder.ToString();
     }
@@ -48,31 +49,53 @@ public partial class QueryLocalChanges : Command
     /// <returns>変更モデルのリスト</returns>
     public async Task<List<Models.Change>> GetResultAsync()
     {
-        List<Models.Change> outs = [];
-
         try
         {
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
             var stderrDrain = DrainReaderAsync(proc.StandardError);
-
-            while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
-            {
-                var change = ParseLine(line);
-                if (change is not null)
-                    outs.Add(change);
-            }
+            var stdout = proc.StandardOutput.ReadToEndAsync();
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
-            await stderrDrain.ConfigureAwait(false);
+            await Task.WhenAll(stdout, stderrDrain).ConfigureAwait(false);
+            return ParseOutput(stdout.Result);
         }
         catch
         {
             // Ignore exceptions.
         }
 
-        return outs;
+        return [];
+    }
+
+    /// <summary>NUL 区切りの porcelain v1 出力を解析する。</summary>
+    internal static List<Models.Change> ParseOutput(string output)
+    {
+        List<Models.Change> changes = [];
+        if (string.IsNullOrEmpty(output))
+            return changes;
+
+        var records = output.Split('\0');
+        for (var i = 0; i < records.Length; i++)
+        {
+            var record = records[i];
+            if (string.IsNullOrEmpty(record))
+                continue;
+
+            var change = ParseRecord(record);
+            if (change is null)
+                continue;
+
+            // porcelain v1 -z の rename/copy は「新パス NUL 元パス NUL」の順になる。
+            var status = record.Length >= 2 ? record[..2] : string.Empty;
+            if ((status.Contains('R') || status.Contains('C')) && i + 1 < records.Length)
+                change.OriginalPath = records[++i];
+
+            changes.Add(change);
+        }
+
+        return changes;
     }
 
     /// <summary>
@@ -87,8 +110,21 @@ public partial class QueryLocalChanges : Command
         if (!match.Success)
             return null;
 
-        var change = new Models.Change() { Path = match.Groups[2].Value };
-        var status = match.Groups[1].Value;
+        return ParseStatus(match.Groups[1].Value, match.Groups[2].Value);
+    }
+
+    private static Models.Change ParseRecord(string record)
+    {
+        if (record.Length < 4 || record[2] != ' ')
+            return null;
+
+        return ParseStatus(record[..2], record[3..]);
+    }
+
+    private static Models.Change ParseStatus(string status, string path)
+    {
+        status = status.TrimEnd();
+        var change = new Models.Change() { Path = path };
 
         switch (status)
         {
