@@ -4,7 +4,7 @@ This file provides guidance to Codex and other coding agents working in this rep
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.0.2**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.1.1**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
 
 ## Build & Run
 
@@ -255,12 +255,12 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 
 ## Key Dependencies
 
-- **Avalonia 12.1.0** — cross-platform XAML UI (`Avalonia.Controls.DataGrid` は 12.0.x の間だけ 12.0.1 に固定していたが、12.1.0 で本体とバージョンが揃ったため固定を解除済み。今後も本体と同じバージョンで上げる)
+- **Avalonia 12.1.1** — cross-platform XAML UI (`Avalonia.Controls.DataGrid` は 12.0.x の間だけ 12.0.1 に固定していたが、12.1.0 で本体とバージョンが揃ったため固定を解除済み。今後も本体と同じバージョンで上げる)
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 1.2.0** — auto-update framework (`VelopackUpdateDialog.Avalonia` 経由の推移的依存)
 - **depends/AvaloniaEdit** — vendored (directly tracked, not a git submodule), text editor for diff/blame
-- **OpenAI 2.12.0 / Azure.AI.OpenAI 2.9.0-beta.1** — AI commit message generation
+- **OpenAI 2.13.0 / Azure.AI.OpenAI 2.9.0-beta.1** — AI commit message generation
 - **LiveChartsCore 2.0.5** — contribution statistics charts
 - **BitMiracle.LibTiff.NET / Pfim** — TIFF / DDS image format support in ImageDiffView
 - **Tmds.DBus.Protocol** — Linux desktop DBus integration (notifications, etc.)
