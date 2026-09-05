@@ -9,7 +9,7 @@
 内部リファクタリング、テスト、CI 設定、利用者に見える変化のない依存更新は記載しません。
 
 Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォークです。
-このファイルはフォーク以降（v1.0.4 以降）の変更を対象とします。
+このファイルはフォーク以降（v1.0.0 以降）の変更を対象とします。
 
 ## [Unreleased]
 
@@ -313,11 +313,42 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 
 - 利用ライブラリを更新しました
 
+## [1.0.64] — Git 記録日: 2026-04-14
+
+- 配布用のバージョン情報と利用案内を更新。
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/6ff36fa4bc02fd9142085b4b66e0a08999e286fb) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/b4322d0bd8bdb15358fae0471341e62af12dc409...6ff36fa4bc02fd9142085b4b66e0a08999e286fb)。
+
 ## [1.0.62] - 2026-04-12
 
 ### 追加
 
 - AWS CodeCommit に全面対応しました（HTTPS / SSH / git-remote-codecommit の 3 形式）
+
+## [1.0.60] — Git 記録日: 2026-04-12
+
+- 設定保存時の UI スレッドの扱い、アバター取得の終了処理、重複キー・一時ファイルの処理を改善。
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/b801be4fe43ef2f87f6b4dde1d8cfec80d40cb6e) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/8c81b9610154e2cc0105f9cefc310def5f3dc0f5...b801be4fe43ef2f87f6b4dde1d8cfec80d40cb6e)。
+
+## [1.0.58] — Git 記録日: 2026-04-07
+
+- 配布用のバージョン情報を更新。
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/8c81b9610154e2cc0105f9cefc310def5f3dc0f5) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/2d7133dea20e9592c151be2992c6e94b27cfab45...8c81b9610154e2cc0105f9cefc310def5f3dc0f5)。
+
+## [1.0.56] — Git 記録日: 2026-04-05
+
+- ShowLocalChangesByDefault設定がListBox初期化でリセットされるバグを修正
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/2d7133dea20e9592c151be2992c6e94b27cfab45) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/b58f4015f2abfab011b62e4c07df517008d555b3...2d7133dea20e9592c151be2992c6e94b27cfab45)。
+
+## [1.0.54] — Git 記録日: 2026-04-04
+
+- AI コミットメッセージ生成に Anthropic を追加。
+- リポジトリのツールバーをコンテンツ側とサイドバーへ統合し、ブランチ選択の表示を簡素化。
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/b58f4015f2abfab011b62e4c07df517008d555b3) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/f815283950856549e3bebcf2e576e82c989555ad...b58f4015f2abfab011b62e4c07df517008d555b3)。
 
 ## [1.0.52] - 2026-03-31
 
@@ -392,6 +423,12 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 - 未ステージの変更を破棄した際に画面が更新されない問題を修正しました
 - 引用符を含むパスでクラッシュする問題を修正しました
 
+## [1.0.30] — Git 記録日: 2026-03-20
+
+- メインリリースからreleases.*.jsonを除外（Velopackアセット参照エラー修正）
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/3c0e3372dc804472d6dbab52e9a7991744978954) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/d91e3a7887f3c8c3c014702244a5fb9f0fdb69e6...3c0e3372dc804472d6dbab52e9a7991744978954)。
+
 ## [1.0.28] - 2026-03-20
 
 ### 追加
@@ -421,6 +458,42 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 - ステージ済み／未ステージ領域の配置を復元しました
 - 更新チェックの制限を撤廃しました
 
+## [1.0.20] — Git 記録日: 2026-03-18
+
+- Squash/Fixupダイアログに「実行後に強制プッシュ」オプションを追加
+- フィルタデバウンスタイマーをTimer.Change()パターンに改善
+- ブランチツリー展開状態の保持改善、展開/折りたたみボタン追加、パフォーマンス最適化
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/5b14c19e7518dd0a9d92aea36912f72bdb2aa0f1) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/1a4e394c78d25ed782a662485a1d0bf2d3d7fffb...5b14c19e7518dd0a9d92aea36912f72bdb2aa0f1)。
+
+## [1.0.16] — Git 記録日: 2026-03-16
+
+- ブランチ作成ダイアログに「リモートへプッシュ」オプションを追加、バージョン1.0.16に更新
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/1a4e394c78d25ed782a662485a1d0bf2d3d7fffb) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/5fc9f2970e8948acd3069f611110f6c72e039d6a...1a4e394c78d25ed782a662485a1d0bf2d3d7fffb)。
+
+## [1.0.14] — Git 記録日: 2026-03-12
+
+- 外部Diff/Mergeツールのexeパス自動検出を追加、バージョン1.0.14に更新
+- CRLFモード設定の改善、クリーンアップのアグレッシブモード追加、エラーメッセージのローカライズ
+- xunit v3のxUnit1051警告を修正
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/5fc9f2970e8948acd3069f611110f6c72e039d6a) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/a9e6b12d5c730f0af9b2d296ad8fb2c1f2d2f025...5fc9f2970e8948acd3069f611110f6c72e039d6a)。
+
+## [1.0.12] — Git 記録日: 2026-03-11
+
+- Velopackチャンネル名の互換性復元、OneDarkテーマFG2色改善、起動時更新チェック修正
+- remove --bundleId flag conflicting with --plist in vpk pack
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/a9e6b12d5c730f0af9b2d296ad8fb2c1f2d2f025) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/001dc9c522087cb4580a14e4ed6d87db6cc2d94b...a9e6b12d5c730f0af9b2d296ad8fb2c1f2d2f025)。
+
+## [1.0.10] — Git 記録日: 2026-03-10
+
+- pass custom icon to Velopack Linux packaging as well
+- pass custom icon and plist to Velopack macOS packaging
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/001dc9c522087cb4580a14e4ed6d87db6cc2d94b) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/f94b00e0eddd85cc3f2b4f9e62017c3962f10373...001dc9c522087cb4580a14e4ed6d87db6cc2d94b)。
+
 ## [1.0.8] - 2026-03-09
 
 ### 追加
@@ -430,6 +503,13 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 ### 修正
 
 - アイコン・バージョン表記・更新チェックの問題を修正しました
+
+## [1.0.6] — Git 記録日: 2026-03-09
+
+- White テーマを追加し、日本語フォントの既定値・テーマ選択・ツールバーの表示を改善。
+- リベース画面とリポジトリの自動検出、終了時の資源解放を修正。
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/a7a2374efcdb2072a716d82f8f275f63941c56ea) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/d3921596a7a3a05cb44193f3dddceef9fefa5633...a7a2374efcdb2072a716d82f8f275f63941c56ea)。
 
 ## [1.0.4] - 2026-03-08
 
@@ -441,3 +521,15 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 ### 変更
 
 - アイコンを更新しました
+
+## [1.0.2] — Git 記録日: 2026-03-08
+
+- リリースブランチからの配布処理を整理し、Velopack の成果物削除の競合を修正。
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/15437a5b63030b91a16f3a1e8b1f55070447ab77) / [変更差分](https://github.com/1llum1n4t1s/Komorebi/compare/87c91afef1bea69d375ab6a0bb48f032be4d2778...15437a5b63030b91a16f3a1e8b1f55070447ab77)。
+
+## [1.0.0] — Git 記録日: 2026-03-08
+
+- SourceGit から Komorebi への名称変更を完了し、フォントの選択欄を追加。
+
+出典: [版の記録](https://github.com/1llum1n4t1s/Komorebi/commit/87c91afef1bea69d375ab6a0bb48f032be4d2778)。
