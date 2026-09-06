@@ -4,7 +4,9 @@ This file provides guidance to Codex and other coding agents working in this rep
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.1.1**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.1.2**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+
+設計の概要・責務とデータフローは [DESIGN.md](DESIGN.md) を参照する。本ファイルは作業規約・実装時の制約・検証手順を扱う。
 
 ## Build & Run
 
@@ -54,6 +56,8 @@ node build/scripts/localization-check.js
 ```
 
 Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komorebi.csproj`.
+
+`global.json` は Microsoft.Testing.Platform を選択しているため、テスト実行では上記の `--project` 形式を使う。CI と同じ検証は `dotnet build -c Release` の後に `dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj -c Release --no-build` を実行する。
 
 ## Solution Structure
 
@@ -142,7 +146,7 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 通常 GUI 起動では `TryLaunchAsNormal` 冒頭で `Models.FontWarmup.Run()` がフォールバックフォントの GlyphTypeface を一括生成する（SkiaSharp 3.x の DirectWrite 読み取り × GC ファイナライザ競合クラッシュの軽減。詳細は [docs/PITFALLS.md](docs/PITFALLS.md)）。
 
 ### Auto-Update (Velopack)
-- Entry point: `VelopackApp.Build().Run()` must be first line in `Main()` (`App.axaml.cs`)
+- Entry point: `Main()` (`App.axaml.cs`) では起動診断の開始・ステージ記録に続けて `VelopackApp.Build().Run()` を呼び、DataDir・Logger・Avalonia の初期化より前に更新フックを処理する。
 - `App.Check4Update()` uses `UpdateManager` + `SimpleWebSource` pointed at `Preferences.UpdateBaseUrl` (= `https://komorebi.kagayoi.com`, Cloudflare R2 カスタムドメイン) as the **primary** update feed
 - 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理する。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書きを不可にする
 - 通常リリースは **R2 単独配信**（GitHub Releases は作らない）。**win-x64 / win-arm64 はローカル署名リリース (`scripts/release-local.ps1`)、osx-arm64 / linux-x64 / linux-arm64 + standalone パッケージは CI (`.github/workflows/release.yml` の `r2-upload` ジョブ)** の役割分担（詳細は後述「CI/CD」）
@@ -215,6 +219,8 @@ The app uses a unified toolbar design (RepositoryToolbar was removed):
 5. For SSH-authenticated remotes: use `ExecWithSSHKeyAsync(remote)` instead of direct `ExecAsync()`
 6. For `--name-status` output: use `ParseNameStatusLine(line)` instead of writing custom regex
 
+中断可能な Popup の処理では `BeginCancellableOperation()` を `using` で保持し、その `Token` をコマンドの `CancellationToken` へ渡す。中断後は成功時の後続処理へ進めず、プロセス終了は共通の `Native.CommandCancellation` 経路に委ねる。変更時は `CommandCancellationTests` と `ReadToEndCancellationTests` を検証する。
+
 ## Common Pitfalls
 
 プロジェクト固有の落とし穴の詳細は [docs/PITFALLS.md](docs/PITFALLS.md) を参照。
@@ -255,7 +261,7 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 
 ## Key Dependencies
 
-- **Avalonia 12.1.1** — cross-platform XAML UI (`Avalonia.Controls.DataGrid` は 12.0.x の間だけ 12.0.1 に固定していたが、12.1.0 で本体とバージョンが揃ったため固定を解除済み。今後も本体と同じバージョンで上げる)
+- **Avalonia 12.1.2** — cross-platform XAML UI (`Avalonia.Controls.DataGrid` は 12.0.x の間だけ 12.0.1 に固定していたが、12.1.0 で本体とバージョンが揃ったため固定を解除済み。今後も本体と同じバージョンで上げる)
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 1.2.0** — auto-update framework (`VelopackUpdateDialog.Avalonia` 経由の推移的依存)
