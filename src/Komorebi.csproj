@@ -81,7 +81,8 @@
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="CRDebugger.Avalonia" Version="1.0.30" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.5" />
+    <!-- Avalonia 12 対応は 2.1 系から。2.0 系は削除済みの Gestures.PinchEvent を参照する。 -->
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.1.0-dev-798" />
     <PackageReference Include="OpenAI" Version="2.13.0" />
     <PackageReference Include="Pfim" Version="0.11.4" />
     <PackageReference Include="StbImageSharp" Version="2.30.16" />
@@ -95,6 +96,6 @@
   <ItemGroup>
     <TrimmerRootAssembly Include="Komorebi" />
     <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
-    <TrimmerRootAssembly Include="Velopack" />
+    <!-- Velopack は参照される更新処理だけを保持する。全体保持は未使用の旧 COM API まで AOT 対象にする。 -->
   </ItemGroup>
 </Project>
