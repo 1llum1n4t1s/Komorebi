@@ -3,6 +3,8 @@
 using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Komorebi.Models;
@@ -20,8 +22,18 @@ public class IpcChannel : IDisposable
     public event Action<string> MessageReceived;
 
     public IpcChannel()
-        : this("KomorebiIPCChannel" + Environment.UserName, Path.Combine(Native.OS.DataDir, "process.lock"))
+        : this(CreatePipeName(Native.OS.DataDir), Path.Combine(Native.OS.DataDir, "process.lock"))
     {
+    }
+
+    internal static string CreatePipeName(string dataDir)
+    {
+        var path = Path.TrimEndingDirectorySeparator(Path.GetFullPath(dataDir));
+        if (OperatingSystem.IsWindows())
+            path = path.ToUpperInvariant();
+
+        var identity = Encoding.UTF8.GetBytes(Environment.UserName + "\n" + path);
+        return "KomorebiIPC_" + Convert.ToHexString(SHA256.HashData(identity))[..32];
     }
 
     internal IpcChannel(string pipeName, string lockFilePath)

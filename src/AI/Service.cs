@@ -20,6 +20,8 @@ public class Service
     public Provider Provider { get; set; } = Provider.OpenAI;
     public string Server { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
+    public string ReasoningEffortLevel { get; set; } = "unspecified";
+    public static IReadOnlyList<string> ReasoningEffortLevels => ["unspecified", "none", "minimal", "low", "medium", "high", "xhigh", "max"];
 
     [JsonIgnore]
     public string ApiKey

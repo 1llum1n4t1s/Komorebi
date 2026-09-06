@@ -26,7 +26,7 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
     /// </summary>
     private const int MaxToolCallIterations = 20;
 
-    public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
+    public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation, string? amendParent = null, string? currentBranch = null)
     {
         // HTTPS 強制で API key の平文流出を防ぐ (OpenAI/Azure/Gemini 共通)
         service.ValidateServerScheme();
@@ -34,8 +34,13 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
         var client = CreateClient();
         var chatClient = client.GetChatClient(service.Model);
         var options = new ChatCompletionOptions() { Tools = { ChatTools.GetDetailChangesInFile } };
+        // SDK 2.13 の推論量プロパティは試験的 API として公開されている。
+#pragma warning disable OPENAI001
+        if (!string.IsNullOrEmpty(service.ReasoningEffortLevel) && service.ReasoningEffortLevel != "unspecified")
+            options.ReasoningEffortLevel = new ChatReasoningEffortLevel(service.ReasoningEffortLevel);
+#pragma warning restore OPENAI001
 
-        List<ChatMessage> messages = [new UserChatMessage(Agent.BuildUserMessage(service, repo, changeList))];
+        List<ChatMessage> messages = [new UserChatMessage(Agent.BuildUserMessage(service, repo, changeList, currentBranch))];
 
         var iterations = 0;
         do
@@ -88,7 +93,7 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
 
                         foreach (var call in completion.ToolCalls)
                         {
-                            var result = await ChatTools.ProcessAsync(call, repo, onUpdate);
+                            var result = await ChatTools.ProcessAsync(call, repo, onUpdate, amendParent);
                             messages.Add(result);
                         }
 

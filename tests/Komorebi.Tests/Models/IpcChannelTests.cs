@@ -8,6 +8,15 @@ namespace Komorebi.Tests.Models
 {
     public class IpcChannelTests : IDisposable
     {
+        [Fact]
+        public void PipeName_IsShortStableAndIsolatesDataDirectories()
+        {
+            var first = IpcChannel.CreatePipeName(Path.GetTempPath());
+            Assert.Equal(first, IpcChannel.CreatePipeName(Path.Combine(Path.GetTempPath(), ".")));
+            Assert.NotEqual(first, IpcChannel.CreatePipeName(Path.Combine(Path.GetTempPath(), "other-profile")));
+            Assert.True(first.Length < 60);
+        }
+
         private readonly string _tempDir;
 
         public IpcChannelTests()

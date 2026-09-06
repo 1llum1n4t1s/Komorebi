@@ -38,6 +38,8 @@ public partial class QueryRemotes : Command
         if (!rs.IsSuccess)
             return outs;
 
+        var config = await new Config(WorkingDirectory).ReadAllAsync(StringComparer.Ordinal).ConfigureAwait(false);
+
         var lines = rs.StdOut.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         foreach (var line in lines)
         {
@@ -49,6 +51,8 @@ public partial class QueryRemotes : Command
             {
                 Name = match.Groups[1].Value,
                 URL = match.Groups[2].Value,
+                DisableAutoFetch = config.TryGetValue($"remote.{match.Groups[1].Value}.disableautofetch", out var disabled) &&
+                    disabled.Equals("true", StringComparison.OrdinalIgnoreCase),
             };
 
             // 同名のリモートは重複して追加しない（fetch/push両方の行があるため）

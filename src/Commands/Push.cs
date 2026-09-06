@@ -20,7 +20,8 @@ public class Push : Command
     /// <param name="checkSubmodules">サブモジュールのプッシュ状態をチェックするかどうか。</param>
     /// <param name="track">上流ブランチとして追跡設定するかどうか。</param>
     /// <param name="force">強制プッシュ（force-with-lease）するかどうか。</param>
-    public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force)
+    /// <param name="noVerify">pre-push フックを実行しないかどうか。</param>
+    public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool noVerify = false)
     {
         _remote = remote;
 
@@ -47,6 +48,9 @@ public class Push : Command
         // --force-with-lease: リモートが変更されていなければ強制プッシュする
         if (force)
             builder.Append("--force-with-lease ");
+
+        if (noVerify)
+            builder.Append("--no-verify ");
 
         // <remote> <local>:<remoteBranch> 形式でプッシュ先を指定する。
         // refspec の "local:remoteBranch" は 1 つの引数として Quoted し、引数境界を守る。

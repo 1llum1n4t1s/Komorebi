@@ -277,9 +277,9 @@ public partial class Launcher : ChromelessWindow
                 return;
             }
 
-            if (e.Key == Key.N)
+            if (e.Key == Key.R && e.KeyModifiers == cmdKey)
             {
-                // Ctrl+N → 新しいタブでクローンダイアログを開く
+                // Ctrl+R → 新しいタブでクローンダイアログを開く
                 if (vm.ActivePage.Data is not ViewModels.Welcome)
                     vm.AddNewTab();
 
@@ -288,9 +288,9 @@ public partial class Launcher : ChromelessWindow
                 return;
             }
 
-            if (e.Key == Key.O && e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+            if (e.Key == Key.L && e.KeyModifiers == cmdKey)
             {
-                // Ctrl+Shift+O → 新しいタブでローカルリポジトリを開くダイアログを表示する
+                // Ctrl+L → 新しいタブでローカルリポジトリを開くダイアログを表示する
                 if (vm.ActivePage.Data is not ViewModels.Welcome)
                     vm.AddNewTab();
 
@@ -299,7 +299,7 @@ public partial class Launcher : ChromelessWindow
                 return;
             }
 
-            if (e.Key == Key.T)
+            if (e.Key == Key.T && e.KeyModifiers == cmdKey)
             {
                 // Ctrl+T → 新しいタブを追加する
                 vm.AddNewTab();
@@ -330,6 +330,16 @@ public partial class Launcher : ChromelessWindow
                 // リポジトリビュー内のホットキー
                 switch (e.Key)
                 {
+                    case Key.B when e.KeyModifiers == (cmdKey | KeyModifiers.Shift):
+                        if (repo.CanCreatePopup() && repo.GetSelectedCommitInHistory() is { } branchCommit)
+                            repo.ShowPopup(new ViewModels.CreateBranch(repo, branchCommit));
+                        e.Handled = true;
+                        return;
+                    case Key.T when e.KeyModifiers == (cmdKey | KeyModifiers.Shift):
+                        if (repo.CanCreatePopup() && repo.GetSelectedCommitInHistory() is { } tagCommit)
+                            repo.ShowPopup(new ViewModels.CreateTag(repo, tagCommit));
+                        e.Handled = true;
+                        return;
                     case Key.D1 or Key.NumPad1:
                         // Ctrl+1 → 履歴ビューに切り替える
                         repo.SelectedViewIndex = 0;
@@ -417,6 +427,24 @@ public partial class Launcher : ChromelessWindow
     /// <summary>
     /// ウィンドウが閉じられる直前の処理。全タブのリポジトリを閉じる。
     /// </summary>
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+        if (e.Handled || DataContext is not ViewModels.Launcher launcher)
+            return;
+        var kind = e.GetCurrentPoint(this).Properties.PointerUpdateKind;
+        if (kind == PointerUpdateKind.XButton1Pressed)
+        {
+            launcher.GotoPrevTab();
+            e.Handled = true;
+        }
+        else if (kind == PointerUpdateKind.XButton2Pressed)
+        {
+            launcher.GotoNextTab();
+            e.Handled = true;
+        }
+    }
+
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);

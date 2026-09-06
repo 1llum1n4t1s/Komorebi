@@ -358,7 +358,8 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// </summary>
     public void SetData(List<Models.Change> changes, CancellationToken cancellationToken)
     {
-        if (!IsChanged(_cached, changes))
+        // upstream f7a4e66c: amend の比較元が変わる場合は既存の完全更新経路で再取得する。
+        if (!_useAmend && !IsChanged(_cached, changes))
         {
             // 変更なし: 選択の差分詳細のみリフレッシュ
             Dispatcher.UIThread.Invoke(() =>
@@ -938,10 +939,10 @@ public class WorkingCopy : ObservableObject, IDisposable
                 await throttler.WaitAsync().ConfigureAwait(false);
                 try
                 {
-                    var resolved = await new Commands.IsConflictResolved(_repo.FullPath, change)
+                    var state = await new Commands.QueryConflictFileState(_repo.FullPath, change)
                         .GetResultAsync()
                         .ConfigureAwait(false);
-                    return (change, resolved);
+                    return (change, resolved: state == Models.ConflictFileState.Resolved);
                 }
                 finally
                 {

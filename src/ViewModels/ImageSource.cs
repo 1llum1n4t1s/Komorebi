@@ -69,6 +69,9 @@ public class ImageSource
     /// </summary>
     public static async Task<ImageSource> FromRevisionAsync(string repo, string revision, string file, Models.ImageDecoder decoder)
     {
+        if (file == "/dev/null" || (!string.IsNullOrEmpty(revision) && Models.EmptyTreeHash.Guess(revision).Equals(revision, StringComparison.Ordinal)))
+            return new ImageSource(null, 0);
+
         await using var stream = await Commands.QueryFileContent.RunAsync(repo, revision, file).ConfigureAwait(false);
         if (stream is null)
             return new ImageSource(null, 0);

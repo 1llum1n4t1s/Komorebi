@@ -22,7 +22,14 @@ public class RevisionCompare : ObservableObject, IDisposable
     public bool IsLoading
     {
         get => _isLoading;
-        private set => SetProperty(ref _isLoading, value);
+        private set
+        {
+            if (SetProperty(ref _isLoading, value))
+            {
+                OnPropertyChanged(nameof(CanResetToLeft));
+                OnPropertyChanged(nameof(CanResetToRight));
+            }
+        }
     }
 
     /// <summary>
@@ -64,7 +71,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     public bool CanResetToLeft
     {
-        get => !_repo.IsBare && _startPoint is not null;
+        get => !_disposed && !IsLoading && !_repo.IsBare && _startPoint is Models.Commit;
     }
 
     /// <summary>
@@ -72,7 +79,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     public bool CanResetToRight
     {
-        get => !_repo.IsBare && _endPoint is not null;
+        get => !_disposed && !IsLoading && !_repo.IsBare && _endPoint is Models.Commit;
     }
 
     /// <summary>
@@ -163,8 +170,14 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// <summary>
     /// リソースを解放する。全てのリストとコンテキストをクリアする。
     /// </summary>
+    public RevisionCompare Clone()
+    {
+        return new RevisionCompare(_repo, _startPoint as Models.Commit, _endPoint as Models.Commit);
+    }
+
     public void Dispose()
     {
+        _disposed = true;
         _repo = null;
         _startPoint = null;
         _endPoint = null;
@@ -197,10 +210,14 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     public void Swap()
     {
+        // upstreamとの差分: 読み込み完了前の再入で比較対象と変更一覧を食い違わせない。
+        if (_disposed || IsLoading)
+            return;
+        IsLoading = true;
+        _changes = [];
         (StartPoint, EndPoint) = (_endPoint, _startPoint);
         VisibleChanges = [];
         SelectedChanges = [];
-        IsLoading = true;
         Refresh();
     }
 
@@ -218,6 +235,9 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     public async Task ResetToLeftAsync(Models.Change change)
     {
+        if (!CanResetToLeft || change is null || _changes?.Contains(change) != true)
+            return;
+
         var sha = GetSHA(_startPoint);
         var log = _repo.CreateLog($"Reset File to '{GetDesc(_startPoint)}'");
 
@@ -256,6 +276,9 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     public async Task ResetToRightAsync(Models.Change change)
     {
+        if (!CanResetToRight || change is null || _changes?.Contains(change) != true)
+            return;
+
         var sha = GetSHA(_endPoint);
         var log = _repo.CreateLog($"Reset File to '{GetDesc(_endPoint)}'");
 
@@ -294,6 +317,9 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     public async Task ResetMultipleToLeftAsync(List<Models.Change> changes)
     {
+        if (!CanResetToLeft || changes is not { Count: > 0 } || changes.Exists(c => _changes?.Contains(c) != true))
+            return;
+
         var sha = GetSHA(_startPoint);
         List<string> checkouts = [];
         List<string> removes = [];
@@ -340,6 +366,9 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     public async Task ResetMultipleToRightAsync(List<Models.Change> changes)
     {
+        if (!CanResetToRight || changes is not { Count: > 0 } || changes.Exists(c => _changes?.Contains(c) != true))
+            return;
+
         var sha = GetSHA(_endPoint);
         List<string> checkouts = [];
         List<string> removes = [];
@@ -404,7 +433,7 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     private void RefreshVisible()
     {
-        if (_changes is null)
+        if (IsLoading || _changes is null)
             return;
 
         if (string.IsNullOrEmpty(_searchFilter))
@@ -429,35 +458,28 @@ public class RevisionCompare : ObservableObject, IDisposable
     /// </summary>
     private void Refresh()
     {
+        var repoPath = _repo.FullPath;
+        var start = GetSHA(_startPoint);
+        var end = GetSHA(_endPoint);
         Task.Run(async () =>
         {
-            _changes = await new Commands.CompareRevisions(_repo.FullPath, GetSHA(_startPoint), GetSHA(_endPoint))
+            var changes = await new Commands.CompareRevisions(repoPath, start, end)
                 .ReadAsync()
                 .ConfigureAwait(false);
 
-            var visible = _changes;
-            if (!string.IsNullOrWhiteSpace(_searchFilter))
-            {
-                visible = [];
-                foreach (var c in _changes)
-                {
-                    if (c.Path.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
-                        visible.Add(c);
-                }
-            }
-
-            Dispatcher.UIThread.Post(() =>
-            {
-                TotalChanges = _changes.Count;
-                VisibleChanges = visible;
-                IsLoading = false;
-
-                if (VisibleChanges.Count > 0)
-                    SelectedChanges = [VisibleChanges[0]];
-                else
-                    SelectedChanges = [];
-            });
+            Dispatcher.UIThread.Post(() => ApplyLoadedChanges(changes));
         });
+    }
+
+    internal void ApplyLoadedChanges(List<Models.Change> changes)
+    {
+        if (_disposed)
+            return;
+        _changes = changes;
+        TotalChanges = changes.Count;
+        IsLoading = false;
+        RefreshVisible();
+        SelectedChanges = VisibleChanges.Count > 0 ? [VisibleChanges[0]] : [];
     }
 
     /// <summary>
@@ -486,4 +508,6 @@ public class RevisionCompare : ObservableObject, IDisposable
     private List<Models.Change> _selectedChanges = null;
     private string _searchFilter = string.Empty;
     private DiffContext _diffContext = null;
+    private bool _disposed;
+
 }

@@ -112,6 +112,13 @@ public partial class WelcomeToolbar : UserControl
         };
         menu.Items.Add(appData);
 
+        menu.Items.Add(new MenuItem
+        {
+            Header = App.Text("SSHKeyHelper"),
+            Icon = App.CreateMenuIcon("Icons.Password"),
+            Command = App.OpenSSHKeyHelperCommand,
+        });
+
         var hotkeys = new MenuItem
         {
             Header = App.Text("Hotkeys"),

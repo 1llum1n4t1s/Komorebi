@@ -50,12 +50,13 @@ public class Config : Command
     /// キーは大文字小文字を区別しない辞書で返される。
     /// </summary>
     /// <returns>設定キーと値の辞書（キーは大文字小文字を区別しない）。</returns>
-    public async Task<Dictionary<string, string>> ReadAllAsync()
+    /// <param name="comparer">キー比較規則。大小文字を区別するリモート名には Ordinal を指定する。</param>
+    public async Task<Dictionary<string, string>> ReadAllAsync(IEqualityComparer<string> comparer = null)
     {
         Args = "config -l";
         var output = await ReadToEndAsync().ConfigureAwait(false);
         // パフォーマンス: ToLower()による文字列割り当てを排除し、OrdinalIgnoreCase辞書で大文字小文字を吸収
-        return output.IsSuccess ? ParseConfigOutput(output.StdOut, StringComparer.OrdinalIgnoreCase) : [];
+        return output.IsSuccess ? ParseConfigOutput(output.StdOut, comparer ?? StringComparer.OrdinalIgnoreCase) : [];
     }
 
     /// <summary>

@@ -345,7 +345,7 @@ public partial class RevisionFileTreeView : UserControl
 
                     last.Add(folder);
                     last = folder.Children;
-                    prefix = folder.Backend + "/";
+                    prefix = folder.Backend.Path + "/";
                 }
 
                 last.Add(new ViewModels.RevisionFileTreeNode
@@ -358,6 +358,12 @@ public partial class RevisionFileTreeView : UserControl
         }
 
         Rows.AddRange(rows);
+        if (_searchResult.Count > 0 && Rows.Count > 0)
+        {
+            var lastNode = Rows[^1];
+            RowsList.SelectedItem = lastNode;
+            RowsList.ScrollIntoView(lastNode);
+        }
     }
 
     /// <summary>

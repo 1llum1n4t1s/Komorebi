@@ -2,6 +2,7 @@
 #nullable disable warnings
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 using Avalonia;
@@ -68,6 +69,8 @@ public class HistoriesLayout : Grid
     {
         if (UseHorizontal)
         {
+            if (DataContext is ViewModels.Histories histories)
+                histories.IsDetailsPanelExpanded = true;
             var rowSpan = RowDefinitions.Count;
             for (int i = 0; i < Children.Count; i++)
             {
@@ -104,6 +107,15 @@ public class HistoriesLayout : Grid
 /// </summary>
 public partial class Histories : UserControl
 {
+    private void OnOpenDetailsStandalone(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.Histories { DetailContext: ViewModels.CommitDetail detail })
+            App.ShowWindow(new CommitDetailStandalone { DataContext = detail.Clone() });
+        else if (DataContext is ViewModels.Histories { DetailContext: ViewModels.RevisionCompare compare })
+            App.ShowWindow(new RevisionCompareStandalone { DataContext = compare.Clone() });
+        e.Handled = true;
+    }
+
     /// <summary>
     /// 現在のブランチを保持するスタイルプロパティ。
     /// </summary>
@@ -224,6 +236,8 @@ public partial class Histories : UserControl
     {
         base.OnDataContextChanged(e);
 
+        ObserveSelectionOwner();
+
         if (DataContext is ViewModels.Histories vm && CommitListContainer.Columns.Count > 1)
             CommitListContainer.Columns[1].Width = new DataGridLength(vm.AuthorColumnWidth, DataGridLengthUnitType.Pixel);
     }
@@ -233,6 +247,9 @@ public partial class Histories : UserControl
     /// </summary>
     private void OnCommitListLoaded(object sender, RoutedEventArgs e)
     {
+        _isApplyingSelection = false;
+        ObserveSelectionOwner();
+        ApplyCommitSelection();
         var dataGrid = CommitListContainer;
         var rowsPresenter = dataGrid.FindDescendantOfType<DataGridRowsPresenter>();
         if (rowsPresenter is { Children: { Count: > 0 } rows })
@@ -425,11 +442,87 @@ public partial class Histories : UserControl
     /// </summary>
     private void OnCommitListSelectionChanged(object _, SelectionChangedEventArgs e)
     {
-        if (DataContext is ViewModels.Histories histories)
-            histories.Select(CommitListContainer.SelectedItems);
+        if (!_isApplyingSelection && CommitListContainer.IsLoaded &&
+            DataContext is ViewModels.Histories { IsUpdatingSelection: false } histories &&
+            ReferenceEquals(CommitListContainer.ItemsSource, histories.Commits))
+        {
+            _isApplyingSelection = true;
+            try
+            {
+                histories.Select(CommitListContainer.SelectedItems);
+            }
+            finally
+            {
+                _isApplyingSelection = false;
+            }
+        }
 
         e.Handled = true;
     }
+
+    protected override void OnDataContextBeginUpdate()
+    {
+        _isApplyingSelection = true;
+        base.OnDataContextBeginUpdate();
+    }
+
+    protected override void OnDataContextEndUpdate()
+    {
+        base.OnDataContextEndUpdate();
+        _isApplyingSelection = false;
+        ApplyCommitSelection();
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        _isApplyingSelection = true;
+        if (_selectionOwner != null)
+            _selectionOwner.PropertyChanged -= OnHistorySelectionChanged;
+        _selectionOwner = null;
+        base.OnUnloaded(e);
+    }
+
+    private void ObserveSelectionOwner()
+    {
+        if (_selectionOwner != null)
+            _selectionOwner.PropertyChanged -= OnHistorySelectionChanged;
+        _selectionOwner = DataContext as ViewModels.Histories;
+        if (_selectionOwner != null)
+            _selectionOwner.PropertyChanged += OnHistorySelectionChanged;
+    }
+
+    private void OnHistorySelectionChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ViewModels.Histories.SelectedCommits))
+            ApplyCommitSelection();
+    }
+
+    private void ApplyCommitSelection()
+    {
+        if (_isApplyingSelection || CommitListContainer is not { IsLoaded: true } grid ||
+            DataContext is not ViewModels.Histories { IsUpdatingSelection: false } histories ||
+            !ReferenceEquals(grid.ItemsSource, histories.Commits))
+            return;
+
+        _isApplyingSelection = true;
+        try
+        {
+            var selection = new List<Models.Commit>(histories.SelectedCommits);
+            grid.SelectedItems.Clear();
+            foreach (var commit in selection)
+                grid.SelectedItems.Add(commit);
+            histories.Select(selection);
+            if (selection.Count > 0)
+                grid.ScrollIntoView(selection[0], null);
+        }
+        finally
+        {
+            _isApplyingSelection = false;
+        }
+    }
+
+    private bool _isApplyingSelection;
+    private ViewModels.Histories _selectionOwner;
 
     /// <summary>
     /// CommitListContextRequestedイベントのハンドラ。
@@ -553,33 +646,7 @@ public partial class Histories : UserControl
                 return;
             }
 
-            if (e.Key == Key.B && e.KeyModifiers.HasFlag(KeyModifiers.Shift))
-            {
-                var repoView = this.FindAncestorOfType<Repository>();
-                if (repoView?.DataContext is not ViewModels.Repository repo || !repo.CanCreatePopup())
-                    return;
 
-                if (selected.Count == 1 && selected[0] is Models.Commit commit)
-                {
-                    repo.ShowPopup(new ViewModels.CreateBranch(repo, commit));
-                    e.Handled = true;
-                }
-
-                return;
-            }
-
-            if (e.Key == Key.T && e.KeyModifiers.HasFlag(KeyModifiers.Shift))
-            {
-                var repoView = this.FindAncestorOfType<Repository>();
-                if (repoView?.DataContext is not ViewModels.Repository repo || !repo.CanCreatePopup())
-                    return;
-
-                if (selected.Count == 1 && selected[0] is Models.Commit commit)
-                {
-                    repo.ShowPopup(new ViewModels.CreateTag(repo, commit));
-                    e.Handled = true;
-                }
-            }
         }
     }
 

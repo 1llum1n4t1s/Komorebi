@@ -262,10 +262,19 @@ public partial class CommitDetail : ObservableObject, IDisposable
     /// <summary>
     /// リソースを解放する。全フィールドをnullに設定してGCを促進する。
     /// </summary>
+    public CommitDetail Clone()
+    {
+        var cloned = new CommitDetail(_repo, null);
+        cloned.ActiveTabIndex = ActiveTabIndex;
+        cloned.Commit = _commit;
+        return cloned;
+    }
+
     public void Dispose()
     {
-        _repo = null;
-        _commit = null;
+        _disposed = true;
+        _cancellationSource?.Cancel();
+        // 上流との差分: 実行中の読み取りが参照するリポジトリとコミットは完了まで保持する。
         _changes = null;
         _visibleChanges = null;
         _selectedChanges = null;
@@ -670,6 +679,9 @@ public partial class CommitDetail : ObservableObject, IDisposable
     /// </summary>
     private void Refresh()
     {
+        if (_disposed)
+            return;
+
         // リビジョンファイル関連の状態をリセットする
         _requestingRevisionFiles = false;
         _revisionFiles = null;
@@ -701,11 +713,12 @@ public partial class CommitDetail : ObservableObject, IDisposable
 
         _cancellationSource = new CancellationTokenSource();
         var token = _cancellationSource.Token;
+        var commit = _commit;
 
         // コミットのフルメッセージを非同期で取得する
         Task.Run(async () =>
         {
-            var message = await new Commands.QueryCommitFullMessage(_repo.FullPath, _commit.SHA)
+            var message = await new Commands.QueryCommitFullMessage(_repo.FullPath, commit.SHA)
                 .GetResultAsync()
                 .ConfigureAwait(false);
             // メッセージ内のインライン要素（URL、SHA、コード）を解析する
@@ -714,6 +727,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
             if (!token.IsCancellationRequested)
                 Dispatcher.UIThread.Post(() =>
                 {
+                    if (token.IsCancellationRequested)
+                        return;
                     FullMessage = new Models.CommitFullMessage
                     {
                         Message = message,
@@ -725,12 +740,12 @@ public partial class CommitDetail : ObservableObject, IDisposable
         // コミットの署名情報を非同期で取得する
         Task.Run(async () =>
         {
-            var signInfo = await new Commands.QueryCommitSignInfo(_repo.FullPath, _commit.SHA, !_repo.HasAllowedSignersFile)
+            var signInfo = await new Commands.QueryCommitSignInfo(_repo.FullPath, commit.SHA, !_repo.HasAllowedSignersFile)
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
             if (!token.IsCancellationRequested)
-                Dispatcher.UIThread.Post(() => SignInfo = signInfo);
+                Dispatcher.UIThread.Post(() => { if (!token.IsCancellationRequested) SignInfo = signInfo; });
         }, token);
 
         // 子コミットの表示が有効な場合は子コミットを非同期で取得する
@@ -739,10 +754,10 @@ public partial class CommitDetail : ObservableObject, IDisposable
             Task.Run(async () =>
             {
                 var max = Preferences.Instance.MaxHistoryCommits;
-                var cmd = new Commands.QueryCommitChildren(_repo.FullPath, _commit.SHA, max) { CancellationToken = token };
+                var cmd = new Commands.QueryCommitChildren(_repo.FullPath, commit.SHA, max) { CancellationToken = token };
                 var children = await cmd.GetResultAsync().ConfigureAwait(false);
                 if (!token.IsCancellationRequested)
-                    Dispatcher.UIThread.Post(() => Children = children);
+                    Dispatcher.UIThread.Post(() => { if (!token.IsCancellationRequested) Children = children; });
             }, token);
         }
 
@@ -750,8 +765,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
         Task.Run(async () =>
         {
             // 親コミットとの差分を取得する（親がない場合は空ツリーと比較）
-            var parent = _commit.Parents.Count == 0 ? Models.Commit.EmptyTreeSHA1 : $"{_commit.SHA}^";
-            var cmd = new Commands.CompareRevisions(_repo.FullPath, parent, _commit.SHA) { CancellationToken = token };
+            var parent = commit.Parents.Count == 0 ? Models.Commit.EmptyTreeSHA1 : $"{commit.SHA}^";
+            var cmd = new Commands.CompareRevisions(_repo.FullPath, parent, commit.SHA) { CancellationToken = token };
             var changes = await cmd.ReadAsync().ConfigureAwait(false);
 
             // フィルタが設定されている場合はフィルタを適用する
@@ -771,6 +786,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
                 // UIスレッドで結果を反映し、先頭の変更を自動選択する
                 Dispatcher.UIThread.Post(() =>
                 {
+                    if (token.IsCancellationRequested)
+                        return;
                     Changes = changes;
                     VisibleChanges = visible;
 
@@ -923,7 +940,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
                     Dispatcher.UIThread.Post(() =>
                     {
                         // 取得結果が現在のコミットに対応しているか確認する
-                        if (sha == Commit.SHA && _requestingRevisionFiles)
+                        if (!_disposed && sha == Commit?.SHA && _requestingRevisionFiles)
                         {
                             _revisionFiles = files;
                             _requestingRevisionFiles = false;
@@ -992,7 +1009,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
             {
                 // 画像以外のバイナリファイルはサイズ情報のみ表示する
                 var size = await new Commands.QueryFileSize(_repo.FullPath, file.Path, _commit.SHA).GetResultAsync();
-                ViewRevisionFileContent = new Models.RevisionBinaryFile() { Size = size };
+                ViewRevisionFileContent = new Models.RevisionBinaryFile { Repository = _repo.FullPath, File = file.Path, Revision = _commit.SHA, Size = size };
             }
 
             return;
@@ -1033,27 +1050,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     private async Task SetViewingCommitAsync(Models.Object file)
     {
         // サブモジュールのルートパスを構築する
-        var submoduleRoot = Path.Combine(_repo.FullPath, file.Path).Replace('\\', '/').Trim('/');
-        var commit = await new Commands.QuerySingleCommit(submoduleRoot, file.SHA).GetResultAsync();
-        if (commit is null)
-        {
-            // コミット情報が取得できない場合はSHAのみ表示する
-            ViewRevisionFileContent = new Models.RevisionSubmodule()
-            {
-                Commit = new Models.Commit() { SHA = file.SHA },
-                FullMessage = new Models.CommitFullMessage()
-            };
-        }
-        else
-        {
-            // コミット情報とフルメッセージを取得して表示する
-            var message = await new Commands.QueryCommitFullMessage(submoduleRoot, file.SHA).GetResultAsync();
-            ViewRevisionFileContent = new Models.RevisionSubmodule()
-            {
-                Commit = commit,
-                FullMessage = new Models.CommitFullMessage { Message = message }
-            };
-        }
+        var submoduleRoot = Path.Combine(_repo.FullPath, file.Path);
+        ViewRevisionFileContent = await new Commands.QuerySubmoduleRevision(submoduleRoot, file.SHA).GetResultAsync();
     }
 
     /// <summary>URLパターンの正規表現（http/https/ftp）</summary>
@@ -1095,6 +1093,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     /// <summary>リビジョンファイルビューアの表示内容</summary>
     private object _viewRevisionFileContent = null;
     /// <summary>非同期処理キャンセル用トークンソース</summary>
+    private bool _disposed;
     private CancellationTokenSource _cancellationSource = null;
     /// <summary>リビジョンファイル名一覧取得中フラグ</summary>
     private bool _requestingRevisionFiles = false;

@@ -26,7 +26,6 @@ public class CheckoutBranchFromStash : Popup
     /// （参考: CreateTag.cs の tag 名バリデーションと同等の lookahead を採用）
     /// </summary>
     [Required(ErrorMessage = "Branch name is required!")]
-    [RegularExpression(@"^(?!\.)(?!/)(?!.*\.$)(?!.*/$)(?!.*\.\.)[\w\-/\.#\+]+$", ErrorMessage = "Bad branch name format!")]
     [CustomValidation(typeof(CheckoutBranchFromStash), nameof(ValidateBranchName))]
     public string BranchName
     {
@@ -53,6 +52,9 @@ public class CheckoutBranchFromStash : Popup
     {
         if (ctx.ObjectInstance is CheckoutBranchFromStash caller)
         {
+            if (!Models.RefName.IsValidBranchName(name))
+                return new ValidationResult("Bad branch name format!");
+
             var comparison = OperatingSystem.IsLinux()
                 ? StringComparison.Ordinal
                 : StringComparison.OrdinalIgnoreCase;

@@ -15,6 +15,8 @@ namespace Komorebi.Models;
 /// </summary>
 public class RepositoryUIStates
 {
+    public bool IsHistoryFiltersCollapsed { get; set; }
+
     /// <summary>履歴表示フラグ</summary>
     public HistoryShowFlags HistoryShowFlags
     {
@@ -67,7 +69,9 @@ public class RepositoryUIStates
         set;
     } = false;
 
-    /// <summary>履歴で現在のブランチのみをハイライトするかどうか</summary>
+    public CommitGraphHighlighting? GraphHighlighting { get; set; }
+
+    /// <summary>出荷済み設定の読み込み互換。GraphHighlighting 未保存時だけ移行元として参照する。</summary>
     public bool OnlyHighlightCurrentBranchInHistory
     {
         get;

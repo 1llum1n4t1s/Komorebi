@@ -1,7 +1,6 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -51,15 +50,9 @@ public partial class QueryLocalChanges : Command
     {
         try
         {
-            using var proc = new Process();
-            proc.StartInfo = CreateGitStartInfo(true);
-            proc.Start();
-            var stderrDrain = DrainReaderAsync(proc.StandardError);
-            var stdout = proc.StandardOutput.ReadToEndAsync();
-
-            await proc.WaitForExitAsync().ConfigureAwait(false);
-            await Task.WhenAll(stdout, stderrDrain).ConfigureAwait(false);
-            return ParseOutput(stdout.Result);
+            // upstream 8190a8ff: 中断処理は基底クラスを使い、独自の NUL パーサーを維持する。
+            var result = await ReadToEndAsync().ConfigureAwait(false);
+            return result.IsSuccess ? ParseOutput(result.StdOut) : [];
         }
         catch
         {

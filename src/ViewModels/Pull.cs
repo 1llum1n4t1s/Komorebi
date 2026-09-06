@@ -151,7 +151,7 @@ public class Pull : Popup
     /// <summary>
     /// プルを実行する。
     /// ローカル変更がある場合は自動スタッシュまたは破棄を行い、
-    /// プル成功後はサブモジュール更新とスタッシュの復元を行う。
+    /// プル成功後はサブモジュールを更新し、成否にかかわらず安全な状態ならスタッシュを復元する。
     /// </summary>
     public override async Task<bool> Sure()
     {
@@ -159,6 +159,7 @@ public class Pull : Popup
 
         var log = _repo.CreateLog("Pull");
         Use(log);
+        var autoStash = new Commands.Stash(_repo.FullPath).Use(log);
 
         // ローカルの変更数を確認
         var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
@@ -172,7 +173,7 @@ public class Pull : Popup
             else if (DealWithLocalChanges == Models.DealWithLocalChanges.StashAndReapply)
             {
                 // 自動スタッシュでローカル変更を一時保存
-                var succ = await new Commands.Stash(_repo.FullPath).Use(log).PushAsync("PULL_AUTO_STASH", false);
+                var succ = await autoStash.PushAutoAsync("PULL_AUTO_STASH");
                 if (!succ)
                 {
                     log.Complete();
@@ -189,25 +190,30 @@ public class Pull : Popup
         }
 
         // git pullコマンドを実行（アップストリームと同じ場合はブランチ名省略）
-        bool rs = await new Commands.Pull(
-            _repo.FullPath,
-            _selectedRemote.Name,
-            !string.IsNullOrEmpty(Current.Upstream) && Current.Upstream.Equals(_selectedBranch.FullName) ? string.Empty : _selectedBranch.Name,
-            UseRebase).Use(log).RunAsync();
+        bool rs;
+        using (var cancellation = BeginCancellableOperation())
+        {
+            rs = await new Commands.Pull(
+                _repo.FullPath,
+                _selectedRemote.Name,
+                !string.IsNullOrEmpty(Current.Upstream) && Current.Upstream.Equals(_selectedBranch.FullName) ? string.Empty : _selectedBranch.Name,
+                UseRebase)
+            { CancellationToken = cancellation.Token }.Use(log).RunAsync();
+        }
         if (rs)
         {
             // プル成功時はサブモジュールの自動更新
             await _repo.AutoUpdateSubmodulesAsync(log);
-
-            // 自動スタッシュを復元
-            if (needPopStash)
-                await new Commands.Stash(_repo.FullPath).Use(log).PopAsync("stash@{0}");
         }
+
+        // 失敗・キャンセル後も、安全な状態なら自動スタッシュを復元する。
+        if (needPopStash)
+            await autoStash.RestoreAutoAsync(_repo.GitDir);
 
         log.Complete();
 
         // 履歴ビュー表示中の場合、HEADに移動
-        if (_repo.SelectedViewIndex == 0)
+        if (rs && _repo.SelectedViewIndex == 0)
         {
             var head = await new Commands.QueryRevisionByRefName(_repo.FullPath, "HEAD").GetResultAsync();
             _repo.NavigateToCommit(head, true);

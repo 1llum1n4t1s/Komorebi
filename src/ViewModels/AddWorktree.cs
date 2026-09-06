@@ -40,7 +40,10 @@ public class AddWorktree : Popup
                 if (value)
                     SelectedBranch = string.Empty;
                 else
-                    SelectedBranch = LocalBranches.Count > 0 ? LocalBranches[0] : string.Empty;
+                {
+                    SelectedLocalBranch = LocalBranches.Count > 0 ? LocalBranches[0] : null;
+                    SelectedBranch = SelectedLocalBranch?.Name ?? string.Empty;
+                }
             }
         }
     }
@@ -48,7 +51,7 @@ public class AddWorktree : Popup
     /// <summary>
     /// ローカルブランチ名のリスト。
     /// </summary>
-    public List<string> LocalBranches
+    public List<Models.Branch> LocalBranches
     {
         get;
         private set;
@@ -57,16 +60,31 @@ public class AddWorktree : Popup
     /// <summary>
     /// 選択されたブランチ名。
     /// </summary>
+    [CustomValidation(typeof(AddWorktree), nameof(ValidateBranchName))]
     public string SelectedBranch
     {
         get => _selectedBranch;
-        set => SetProperty(ref _selectedBranch, value);
+        set
+        {
+            if (SetProperty(ref _selectedBranch, value, true))
+                AutoSelectTrackingBranch();
+        }
     }
 
     /// <summary>
     /// トラッキングブランチを設定するかどうかのフラグ。
     /// 有効にするとトラッキングブランチを自動選択する。
     /// </summary>
+    public Models.Branch SelectedLocalBranch
+    {
+        get => _selectedLocalBranch;
+        set
+        {
+            if (SetProperty(ref _selectedLocalBranch, value))
+                SelectedBranch = value?.Name ?? string.Empty;
+        }
+    }
+
     public bool SetTrackingBranch
     {
         get => _setTrackingBranch;
@@ -110,7 +128,10 @@ public class AddWorktree : Popup
         foreach (var branch in repo.Branches)
         {
             if (branch.IsLocal)
-                LocalBranches.Add(branch.Name);
+            {
+                if (!branch.IsCurrent && !branch.HasWorktree)
+                    LocalBranches.Add(branch);
+            }
             else
                 RemoteBranches.Add(branch);
         }
@@ -149,7 +170,19 @@ public class AddWorktree : Popup
     }
 
     /// <summary>
-    /// 確定処理。git worktree addコマンドを実行してワークツリーを追加する。
+    /// 新規ブランチ名を検証する。空なら Git にパス由来の名前を選択させる。
+    /// </summary>
+    public static ValidationResult ValidateBranchName(string name, ValidationContext ctx)
+    {
+        if (ctx.ObjectInstance is AddWorktree { CreateNewBranch: true } &&
+            !string.IsNullOrEmpty(name) && !Models.RefName.IsValidBranchName(name))
+            return new ValidationResult("Bad branch name format!");
+
+        return ValidationResult.Success;
+    }
+
+    /// <summary>
+    /// 確定処理。git worktree addコマンドでワークツリーを追加する。
     /// </summary>
     /// <returns>成功した場合はtrue</returns>
     public override async Task<bool> Sure()
@@ -184,7 +217,8 @@ public class AddWorktree : Popup
 
         // ブランチ名またはパスのファイル名部分で一致するリモートブランチを探す
         var name = string.IsNullOrEmpty(_selectedBranch) ? System.IO.Path.GetFileName(_path.TrimEnd('/', '\\')) : _selectedBranch;
-        var remoteBranch = RemoteBranches.Find(b => b.Name.EndsWith(name, StringComparison.Ordinal));
+        var remoteBranch = RemoteBranches.Find(b => b.Name.Equals(name, StringComparison.Ordinal));
+        remoteBranch ??= RemoteBranches.Find(b => b.Name.EndsWith("/" + name, StringComparison.Ordinal));
         if (remoteBranch == null)
             remoteBranch = RemoteBranches[0];
 
@@ -198,6 +232,7 @@ public class AddWorktree : Popup
     /// <summary>新規ブランチを作成するかどうか</summary>
     private bool _createNewBranch = true;
     /// <summary>選択されたブランチ名</summary>
+    private Models.Branch _selectedLocalBranch;
     private string _selectedBranch = string.Empty;
     /// <summary>トラッキングブランチを設定するかどうか</summary>
     private bool _setTrackingBranch = false;

@@ -55,6 +55,9 @@ public class Rebase : Popup
         set;
     }
 
+    /// <summary>この rebase で pre-rebase フックを省略する。</summary>
+    public bool NoVerify { get; set; }
+
     /// <summary>
     /// リベース事前チェックの進行状態。ポップアップ表示直後にバックグラウンドで
     /// `git replay --onto` を実行し、コンフリクトの有無を判定する（git 2.44.0以上のみ）。
@@ -110,7 +113,7 @@ public class Rebase : Popup
         Use(log);
 
         // git rebase コマンドを実行
-        await new Commands.Rebase(_repo.FullPath, _revision, AutoStash)
+        await new Commands.Rebase(_repo.FullPath, _revision, AutoStash, NoVerify)
             .Use(log)
             .ExecAsync();
 

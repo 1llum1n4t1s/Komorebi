@@ -75,5 +75,7 @@
                TextWrapping="Wrap"
                Foreground="{DynamicResource Brush.FG2}"
                FontStyle="Italic" />
+    <CheckBox Margin="4,8,0,0" Content="{DynamicResource Text.DeleteBranch.Force}"
+              IsChecked="{Binding Force, Mode=TwoWay}" IsVisible="{Binding IsLocal}" ToolTip.Tip="--force"/>
   </StackPanel>
 </UserControl>

@@ -82,7 +82,9 @@ public partial class Blame : Command
                 continue;
 
             // 行の内容部分を蓄積
-            content.AppendLine(match.Groups[5].Value);
+            if (result.LineInfos.Count > 0)
+                content.Append('\n');
+            content.Append(match.Groups[5].Value);
 
             // 正規表現グループからblame情報を抽出
             var commit = match.Groups[1].Value;

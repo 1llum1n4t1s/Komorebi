@@ -78,8 +78,7 @@ public partial class Diff : Command
 
             var parser = new DiffParser();
             var stderrDrain = DrainReaderAsync(proc.StandardError);
-            while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
-                parser.Parse(line);
+            await ParseStreamAsync(proc.StandardOutput.BaseStream, parser).ConfigureAwait(false);
 
             result = parser.Complete();
 
@@ -101,11 +100,52 @@ public partial class Diff : Command
     /// <returns>解析された差分結果</returns>
     internal static Models.DiffResult ParseDiffOutput(string text)
     {
+        return ParseDiffOutput(Encoding.UTF8.GetBytes(text));
+    }
+
+    /// <summary>差分の生バイトを保持して解析する。</summary>
+    internal static Models.DiffResult ParseDiffOutput(byte[] bytes)
+    {
         var parser = new DiffParser();
-        using var reader = new StringReader(text);
-        while (reader.ReadLine() is { } line)
-            parser.Parse(line);
+        var start = 0;
+        while (start < bytes.Length)
+        {
+            var end = Array.IndexOf(bytes, (byte)'\n', start);
+            if (end < 0)
+                end = bytes.Length;
+            parser.Parse(bytes[start..end]);
+            start = end + 1;
+        }
         return parser.Complete();
+    }
+
+    /// <summary>全出力を複製せず、LF 単位で生バイトを解析する。</summary>
+    private static async Task ParseStreamAsync(Stream stream, DiffParser parser)
+    {
+        var buffer = new byte[8192];
+        using var pending = new MemoryStream();
+        int count;
+        while ((count = await stream.ReadAsync(buffer).ConfigureAwait(false)) > 0)
+        {
+            var start = 0;
+            while (start < count)
+            {
+                var end = Array.IndexOf(buffer, (byte)'\n', start, count - start);
+                if (end < 0)
+                {
+                    pending.Write(buffer, start, count - start);
+                    break;
+                }
+
+                pending.Write(buffer, start, end - start);
+                parser.Parse(pending.ToArray());
+                pending.SetLength(0);
+                start = end + 1;
+            }
+        }
+
+        if (pending.Length > 0)
+            parser.Parse(pending.ToArray());
     }
 
     /// <summary>
@@ -119,11 +159,13 @@ public partial class Diff : Command
         /// <summary>
         /// diff出力の1行を解析し、結果モデルに追加する。
         /// </summary>
-        /// <param name="line">diff出力の1行</param>
-        public void Parse(string line)
+        /// <param name="rawLine">LF を除いた diff 出力の生バイト。</param>
+        public void Parse(byte[] rawLine)
         {
             if (_result.IsBinary)
                 return;
+
+            var line = Encoding.UTF8.GetString(rawLine);
 
             if (line.Length == 0)
             {
@@ -142,7 +184,7 @@ public partial class Diff : Command
             if (ParseChunkStartLine(line))
                 return;
 
-            if (ParseChunkBodyLine(line[0], line[1..]))
+            if (ParseChunkBodyLine(line[0], line[1..], rawLine[1..]))
                 return;
 
             ParseDiffHeaderLine(line);
@@ -207,8 +249,9 @@ public partial class Diff : Command
         /// </summary>
         /// <param name="ch">行頭の1文字</param>
         /// <param name="content">行頭を除いた内容</param>
+        /// <param name="rawContent">行頭を除いた元のバイト列</param>
         /// <returns>チャンク本体行として処理した場合はtrue</returns>
-        private bool ParseChunkBodyLine(char ch, string content)
+        private bool ParseChunkBodyLine(char ch, string content, byte[] rawContent)
         {
             if (_isInChunk)
             {
@@ -217,7 +260,7 @@ public partial class Diff : Command
 
                 if (ch == '-')
                 {
-                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Deleted, content, _oldLine, 0);
+                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Deleted, rawContent, _oldLine, 0);
                     _deleted.Add(_last);
                     _oldLine++;
                     return true;
@@ -225,7 +268,7 @@ public partial class Diff : Command
 
                 if (ch == '+')
                 {
-                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Added, content, 0, _newLine);
+                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Added, rawContent, 0, _newLine);
                     _added.Add(_last);
                     _newLine++;
                     return true;
@@ -234,7 +277,7 @@ public partial class Diff : Command
                 if (ch == ' ')
                 {
                     FlushInlineHighlights();
-                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, content, _oldLine, _newLine);
+                    _last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, rawContent, _oldLine, _newLine);
                     _result.TextDiff.Lines.Add(_last);
                     _oldLine++;
                     _newLine++;
@@ -433,5 +476,5 @@ public partial class Diff : Command
     /// <summary>インラインハイライト計算対象の最大行長</summary>
     private const int MaxLineLengthForInlineDiff = 1024;
     /// <summary>インラインハイライトとして扱う最大チャンク数</summary>
-    private const int MaxInlineDiffChunks = 4;
+    private const int MaxInlineDiffChunks = 16;
 }

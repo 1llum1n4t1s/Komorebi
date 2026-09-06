@@ -27,20 +27,12 @@ public partial class PushToNewBranch : ChromelessWindow
     }
 
     /// <summary>
-    /// プッシュ先のリモート名をプレフィックス表示に設定する。
-    /// </summary>
-    /// <param name="remote">リモート名（例: origin）</param>
-    public void SetRemote(string remote)
-    {
-        TxtPrefix.Text = remote;
-    }
-
-    /// <summary>
     /// 確定ボタン押下時に入力されたブランチ名を結果として返してダイアログを閉じる。
     /// </summary>
     private void OnSure(object _1, RoutedEventArgs _2)
     {
-        Close(TxtName.Text);
+        if (DataContext is ViewModels.PushToNewBranch vm && vm.Check())
+            Close(vm.BranchName);
     }
 
     /// <summary>

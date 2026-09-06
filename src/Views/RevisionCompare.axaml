@@ -45,7 +45,7 @@
       </Border>
 
       <!-- Swap Buttons -->
-      <Button Grid.Column="1" Classes="icon_button" Command="{Binding Swap}" HorizontalAlignment="Center" ToolTip.Tip="{DynamicResource Text.Diff.SwapCommits}">
+      <Button Grid.Column="1" Classes="icon_button" Command="{Binding Swap}" IsEnabled="{Binding !IsLoading}" HorizontalAlignment="Center" ToolTip.Tip="{DynamicResource Text.Diff.SwapCommits}">
         <Path Width="16" Height="16" Data="{DynamicResource Icons.Compare}"/>
       </Button>
 

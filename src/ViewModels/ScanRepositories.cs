@@ -151,7 +151,7 @@ public class ScanRepositories : Popup
         await minDelay;
 
         if (found.Count > 0)
-            await AddFoundRepositories(rootDir, found);
+            await AddFoundRepositories(rootDir, found, description => ProgressDescription = description);
 
         return true;
     }
@@ -233,15 +233,17 @@ public class ScanRepositories : Popup
     /// 発見されたリポジトリをツリーに追加する。ディレクトリ構造に基づいてグループを自動作成する。
     /// パス比較はファイルシステムの流儀に合わせる（Linux: 大小文字区別、Windows/macOS: 区別しない）。
     /// </summary>
-    private static async Task AddFoundRepositories(DirectoryInfo rootDir, List<string> found)
+    private static async Task AddFoundRepositories(DirectoryInfo rootDir, List<string> found, Action<string> onProgress = null)
     {
         var comparison = OperatingSystem.IsLinux()
             ? StringComparison.Ordinal
             : StringComparison.OrdinalIgnoreCase;
 
         var normalizedRoot = rootDir.FullName.Replace('\\', '/').TrimEnd('/');
-        foreach (var f in found)
+        for (var i = 0; i < found.Count; i++)
         {
+            var f = found[i];
+            onProgress?.Invoke($"Registering ({i + 1}/{found.Count}) {f}...");
             var parent = new DirectoryInfo(f).Parent!.FullName.Replace('\\', '/').TrimEnd('/');
             if (parent.Equals(normalizedRoot, comparison))
             {

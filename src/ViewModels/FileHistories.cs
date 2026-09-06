@@ -100,6 +100,7 @@ public class FileHistoriesSingleRevision : ObservableObject
     /// </summary>
     private void RefreshViewContent()
     {
+        var request = BeginContentRequest();
         if (_isDiffMode)
         {
             ViewContent = new DiffContext(_repo, new(_revision), _viewContent as DiffContext);
@@ -114,13 +115,27 @@ public class FileHistoriesSingleRevision : ObservableObject
 
             if (objs.Count == 0)
             {
-                Dispatcher.UIThread.Post(() => ViewContent = new FileHistoriesRevisionFile(_file));
+                Dispatcher.UIThread.Post(() => ApplyRevisionContent(request, new FileHistoriesRevisionFile(_file)));
                 return;
             }
 
             var revisionContent = await GetRevisionFileContentAsync(objs[0]).ConfigureAwait(false);
-            Dispatcher.UIThread.Post(() => ViewContent = revisionContent);
+            Dispatcher.UIThread.Post(() => ApplyRevisionContent(request, revisionContent));
         });
+    }
+
+    internal long BeginContentRequest() => ++_contentRequest;
+
+    internal void ApplyRevisionContent(long request, object content)
+    {
+        // 上流との差分: ファイル取得中に表示モードを切り替えても古い結果で戻さない。
+        if (request != _contentRequest || IsDiffMode)
+        {
+            if (content is FileHistoriesRevisionFile { Content: Models.RevisionImageFile image })
+                image.Image?.Dispose();
+            return;
+        }
+        ViewContent = content;
     }
 
     /// <summary>
@@ -143,7 +158,7 @@ public class FileHistoriesSingleRevision : ObservableObject
                 }
 
                 var size = await new Commands.QueryFileSize(_repo, _file, _revision.SHA).GetResultAsync().ConfigureAwait(false);
-                var binaryFile = new Models.RevisionBinaryFile() { Size = size };
+                var binaryFile = new Models.RevisionBinaryFile { Repository = _repo, File = _file, Revision = _revision.SHA, Size = size };
                 return new FileHistoriesRevisionFile(_file, binaryFile, true);
             }
 
@@ -175,13 +190,7 @@ public class FileHistoriesSingleRevision : ObservableObject
         if (obj.Type == Models.ObjectType.Commit)
         {
             var submoduleRoot = Path.Combine(_repo, _file);
-            var commit = await new Commands.QuerySingleCommit(submoduleRoot, obj.SHA).GetResultAsync().ConfigureAwait(false);
-            var message = commit is not null ? await new Commands.QueryCommitFullMessage(submoduleRoot, obj.SHA).GetResultAsync().ConfigureAwait(false) : null;
-            var module = new Models.RevisionSubmodule()
-            {
-                Commit = commit ?? new Models.Commit() { SHA = obj.SHA },
-                FullMessage = new Models.CommitFullMessage { Message = message }
-            };
+            var module = await new Commands.QuerySubmoduleRevision(submoduleRoot, obj.SHA).GetResultAsync().ConfigureAwait(false);
 
             return new FileHistoriesRevisionFile(_file, module);
         }
@@ -194,6 +203,7 @@ public class FileHistoriesSingleRevision : ObservableObject
     private Models.FileVersion _revision = null; // 対象リビジョン
     private bool _isDiffMode = false; // diff表示モードフラグ
     private object _viewContent = null; // 現在の表示コンテンツ
+    private long _contentRequest;
 }
 
 /// <summary>

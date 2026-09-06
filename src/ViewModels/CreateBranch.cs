@@ -17,7 +17,6 @@ public class CreateBranch : Popup
     /// 必須入力で、正規表現による書式チェックと既存ブランチとの重複チェックを行う。
     /// </summary>
     [Required(ErrorMessage = "Branch name is required!")]
-    [RegularExpression(@"^[\w\-/\.#\+]+$", ErrorMessage = "Bad branch name format!")]
     [CustomValidation(typeof(CreateBranch), nameof(ValidateBranchName))]
     public string Name
     {
@@ -201,6 +200,9 @@ public class CreateBranch : Popup
     {
         if (ctx.ObjectInstance is CreateBranch creator)
         {
+            if (!Models.RefName.IsValidBranchName(name))
+                return new ValidationResult("Bad branch name format!");
+
             if (!creator._allowOverwrite)
             {
                 foreach (var b in creator._repo.Branches)
@@ -224,6 +226,7 @@ public class CreateBranch : Popup
     {
         var log = _repo.CreateLog($"Create Branch '{_name}'");
         Use(log);
+        var autoStash = new Commands.Stash(_repo.FullPath).Use(log);
 
         // チェックアウト予定の場合、デタッチHEAD状態でコミットが失われないか確認
         if (CheckoutAfterCreated
@@ -249,9 +252,7 @@ public class CreateBranch : Popup
                     var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
                     if (changes > 0)
                     {
-                        succ = await new Commands.Stash(_repo.FullPath)
-                            .Use(log)
-                            .PushAsync("CREATE_BRANCH_AUTO_STASH", false);
+                        succ = await autoStash.PushAutoAsync("CREATE_BRANCH_AUTO_STASH");
                         if (!succ)
                         {
                             log.Complete();
@@ -270,12 +271,10 @@ public class CreateBranch : Popup
                 if (succ)
                 {
                     await _repo.AutoUpdateSubmodulesAsync(log);
-
-                    if (needPopStash)
-                        await new Commands.Stash(_repo.FullPath)
-                            .Use(log)
-                            .PopAsync("stash@{0}");
                 }
+
+                if (needPopStash)
+                    await autoStash.RestoreAutoAsync(_repo.GitDir);
             }
             else
             {

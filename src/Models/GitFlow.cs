@@ -1,4 +1,7 @@
-﻿namespace Komorebi.Models;
+using System;
+using System.Collections.Generic;
+
+namespace Komorebi.Models;
 
 /// <summary>
 /// Git Flowのブランチ種別を表すenum
@@ -35,6 +38,63 @@ public class GitFlow
     /// <summary>
     /// Git Flow設定が有効かどうか（全フィールドが入力済み）
     /// </summary>
+    public void Parse(Dictionary<string, string> config, bool isNext)
+    {
+        // 設定の再読み込みで古い値を残さない。
+        Master = string.Empty;
+        Develop = string.Empty;
+        FeaturePrefix = string.Empty;
+        ReleasePrefix = string.Empty;
+        HotfixPrefix = string.Empty;
+
+        // git-flow-next が利用可能な場合は新形式を優先する。
+        if (isNext &&
+            config.TryGetValue("gitflow.initialized", out var initialized) &&
+            initialized.Equals("true", StringComparison.OrdinalIgnoreCase))
+        {
+            foreach (var kv in config)
+            {
+                if (!kv.Key.StartsWith("gitflow.branch.", StringComparison.Ordinal))
+                    continue;
+
+                if (kv.Key.EndsWith(".type", StringComparison.Ordinal) && kv.Value.Equals("base", StringComparison.Ordinal))
+                {
+                    var b = kv.Key.Substring("gitflow.branch.".Length, kv.Key.Length - "gitflow.branch.".Length - ".type".Length);
+                    if (config.ContainsKey($"gitflow.branch.{b}.parent"))
+                        Develop = b;
+                    else
+                        Master = b;
+                }
+                else if (kv.Key.EndsWith(".prefix", StringComparison.Ordinal))
+                {
+                    var t = kv.Key.Substring("gitflow.branch.".Length, kv.Key.Length - "gitflow.branch.".Length - ".prefix".Length);
+                    if (t.Equals("feature", StringComparison.Ordinal))
+                        FeaturePrefix = kv.Value;
+                    else if (t.Equals("release", StringComparison.Ordinal))
+                        ReleasePrefix = kv.Value;
+                    else if (t.Equals("hotfix", StringComparison.Ordinal))
+                        HotfixPrefix = kv.Value;
+                }
+            }
+        }
+
+        // 不完全な新形式は破棄して従来形式を読み込む。
+        if (!IsValid)
+        {
+            Master = Develop = FeaturePrefix = ReleasePrefix = HotfixPrefix = string.Empty;
+            if (config.TryGetValue("gitflow.branch.master", out var masterName))
+                Master = masterName;
+            if (config.TryGetValue("gitflow.branch.develop", out var developName))
+                Develop = developName;
+            if (config.TryGetValue("gitflow.prefix.feature", out var featurePrefix))
+                FeaturePrefix = featurePrefix;
+            if (config.TryGetValue("gitflow.prefix.release", out var releasePrefix))
+                ReleasePrefix = releasePrefix;
+            if (config.TryGetValue("gitflow.prefix.hotfix", out var hotfixPrefix))
+                HotfixPrefix = hotfixPrefix;
+        }
+    }
+
     public bool IsValid
     {
         get

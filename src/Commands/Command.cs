@@ -1,4 +1,4 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
 using System.Collections.Concurrent;
@@ -128,58 +128,25 @@ public partial class Command
         proc.OutputDataReceived += (_, e) => HandleOutput(e.Data, errs);
         proc.ErrorDataReceived += (_, e) => HandleOutput(e.Data, errs);
 
-        // キャンセル時にプロセスを強制終了するためのラッパー
-        var captured = new CapturedProcess() { Process = proc };
-        var capturedLock = new object();
+        if (CancellationToken.IsCancellationRequested)
+            return false;
+        var ownsProcessGroup = CancellationToken.CanBeCanceled && Native.CommandCancellation.PrepareProcessGroup(proc.StartInfo);
         try
         {
-            // プロセスを起動する
             proc.Start();
-
-            // Not safe, please only use `CancellationToken` in readonly commands.
-            // キャンセルトークンが設定されている場合、キャンセル時にプロセスを終了する
-            if (CancellationToken.CanBeCanceled)
-            {
-                CancellationToken.Register(() =>
-                {
-                    lock (capturedLock)
-                    {
-                        if (captured is { Process: { HasExited: false } })
-                            captured.Process.Kill();
-                    }
-                });
-            }
         }
         catch (Exception e)
         {
-            // プロセス起動に失敗した場合、エラーを通知する
             if (RaiseError)
                 App.RaiseException(Context, e.Message);
-
-            Log?.AppendLine(string.Empty);
             return false;
         }
 
-        // 標準出力と標準エラーの非同期読み取りを開始する
+        using var registration = CancellationToken.Register(() => Native.CommandCancellation.Terminate(proc, ownsProcessGroup));
         proc.BeginOutputReadLine();
         proc.BeginErrorReadLine();
-
-        try
-        {
-            // プロセスの終了を待機する
-            await proc.WaitForExitAsync(CancellationToken).ConfigureAwait(false);
-        }
-        catch (Exception e)
-        {
-            // 待機中の例外（キャンセルなど）を処理する
-            HandleOutput(e.Message, errs);
-        }
-
-        // プロセス参照をクリアしてキャンセルハンドラでの二重終了を防ぐ
-        lock (capturedLock)
-        {
-            captured.Process = null;
-        }
+        // 上流との差分: 中止通知だけで待機を抜けず、実プロセスと出力読み取りの終了を待つ。
+        await proc.WaitForExitAsync().ConfigureAwait(false);
 
         Log?.AppendLine(string.Empty);
 
@@ -198,7 +165,7 @@ public partial class Command
             return false;
         }
 
-        return true;
+        return !CancellationToken.IsCancellationRequested;
     }
 
     /// <summary>
@@ -240,12 +207,15 @@ public partial class Command
     /// 強制終了してゾンビ化を防ぐ（ネットワーク I/O やSSH handshakeでハングした ls-remote 等）。
     /// </summary>
     /// <returns>実行結果を含むResultオブジェクト。</returns>
-    protected async Task<Result> ReadToEndAsync()
-    {
-        // gitプロセスを作成して起動する
-        using var proc = new Process();
-        proc.StartInfo = CreateGitStartInfo(true);
+    protected Task<Result> ReadToEndAsync() => ReadToEndAsync(CreateGitStartInfo(true), CancellationToken);
 
+    /// <summary>指定したプロセスを所有し、両出力の取得とキャンセル時の終了を管理する。</summary>
+    internal static async Task<Result> ReadToEndAsync(ProcessStartInfo start, CancellationToken cancellationToken)
+    {
+        if (cancellationToken.IsCancellationRequested)
+            return new Result();
+
+        using var proc = new Process() { StartInfo = start };
         try
         {
             proc.Start();
@@ -255,62 +225,19 @@ public partial class Command
             return Result.Failed(e.Message);
         }
 
-        // キャンセルトークンが設定されている場合、キャンセル時にプロセスを強制終了する。
-        // これをしないと、タイムアウト発火後も git プロセスが残り続けてソケット・CPU を食う。
-        var captured = new CapturedProcess() { Process = proc };
-        var capturedLock = new object();
-        CancellationTokenRegistration killRegistration = default;
-        if (CancellationToken.CanBeCanceled)
+        // 上流との差分: 読み取りだけが中止されるとKill登録を外す競合が生じるため、
+        // プロセスの実終了と両出力の読み取り完了まで登録とProcessを保持する。
+        using var registration = cancellationToken.Register(() => Native.CommandCancellation.Terminate(proc, false));
+        var stdoutTask = proc.StandardOutput.ReadToEndAsync();
+        var stderrTask = proc.StandardError.ReadToEndAsync();
+        await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
+        await proc.WaitForExitAsync().ConfigureAwait(false);
+        return new Result()
         {
-            killRegistration = CancellationToken.Register(() =>
-            {
-                lock (capturedLock)
-                {
-                    if (captured is { Process: { HasExited: false } })
-                    {
-                        try
-                        {
-                            captured.Process.Kill(entireProcessTree: true);
-                        }
-                        catch
-                        {
-                            // プロセスが既に終了している等の競合は無視する
-                        }
-                    }
-                }
-            });
-        }
-
-        var rs = new Result() { IsSuccess = true };
-        try
-        {
-            // stdout/stderrを並列で読み取る（逐次読み取りはバッファ満杯時にデッドロックする）
-            var stdoutTask = proc.StandardOutput.ReadToEndAsync(CancellationToken);
-            var stderrTask = proc.StandardError.ReadToEndAsync(CancellationToken);
-            await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
-            rs.StdOut = await stdoutTask.ConfigureAwait(false);
-            rs.StdErr = await stderrTask.ConfigureAwait(false);
-            await proc.WaitForExitAsync(CancellationToken).ConfigureAwait(false);
-        }
-        catch (OperationCanceledException)
-        {
-            // キャンセル時はプロセスは kill 済み（上の Register コールバック経由）。失敗として Result を返す。
-            rs.IsSuccess = false;
-            return rs;
-        }
-        finally
-        {
-            // プロセス参照をクリアしてキャンセルハンドラでの二重終了を防ぐ
-            lock (capturedLock)
-            {
-                captured.Process = null;
-            }
-            killRegistration.Dispose();
-        }
-
-        // 終了コードで成功/失敗を判定する
-        rs.IsSuccess = proc.ExitCode == 0;
-        return rs;
+            IsSuccess = !cancellationToken.IsCancellationRequested && proc.ExitCode == 0,
+            StdOut = await stdoutTask.ConfigureAwait(false),
+            StdErr = await stderrTask.ConfigureAwait(false),
+        };
     }
 
     /// <summary>
@@ -392,7 +319,8 @@ public partial class Command
                 var escapedKey = SSHKey.Replace("'", "'\\''");
                 sshCmd = $"ssh -i '{escapedKey}' -o StrictHostKeyChecking=ask -F '/dev/null'";
             }
-            start.Environment["GIT_SSH_COMMAND"] = sshCmd;
+            // upstream 1d0ac637: 明示キーを agent に追加し、既存の設定隔離は維持する。
+            start.Environment["GIT_SSH_COMMAND"] = sshCmd + " -o AddKeysToAgent=yes";
         }
         else if (!string.IsNullOrEmpty(SSHKey))
         {
@@ -699,17 +627,6 @@ public partial class Command
             var replacement = colon > 0 ? $"{userInfo[..colon]}:***@" : "***@";
             return $"{match.Groups["scheme"].Value}{replacement}";
         });
-    }
-
-    /// <summary>
-    /// キャンセル時の安全なプロセス終了のためにプロセス参照を保持するクラス。
-    /// </summary>
-    private class CapturedProcess
-    {
-        /// <summary>
-        /// キャプチャされたプロセスの参照。
-        /// </summary>
-        public Process Process { get; set; } = null;
     }
 
     /// <summary>

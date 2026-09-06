@@ -22,7 +22,14 @@
                                 PlaceholderText="{DynamicResource Text.CommitMessageTextBox.Placeholder}"
                                 SubjectGuideLength="{Binding Source={x:Static vm:Preferences.Instance}, Path=SubjectGuideLength, Mode=OneWay}"
                                 FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=EditorFontSize, Mode=OneWay}"
-                                Tag="{Binding Source={x:Static v:StealHotKey.Enter}}"/>
+                                GuideLineBrush="{DynamicResource Brush.Border2}"
+                                Tag="{Binding Source={x:Static v:StealHotKey.Enter}}">
+          <v:CommitMessageTextBox.Styles>
+            <Style Selector="ContentPresenter">
+              <Setter Property="FontFamily" Value="{DynamicResource Fonts.Monospace}"/>
+            </Style>
+          </v:CommitMessageTextBox.Styles>
+        </v:CommitMessageTextBox>
 
         <v:CommitMessageSubjectEndIndicator LineBrush="{DynamicResource Brush.Border2}"
                                             FontFamily="{DynamicResource Fonts.Default}"

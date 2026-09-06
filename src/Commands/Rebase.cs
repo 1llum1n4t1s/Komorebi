@@ -14,22 +14,26 @@ public class Rebase : Command
     /// <param name="repo">リポジトリの作業ディレクトリパス。</param>
     /// <param name="basedOn">リベースの基準となるブランチ名またはコミットSHA。</param>
     /// <param name="autoStash">リベース前に変更を自動的にスタッシュするかどうか。</param>
-    public Rebase(string repo, string basedOn, bool autoStash)
+    /// <param name="noVerify">pre-rebase フックを実行しないかどうか。</param>
+    public Rebase(string repo, string basedOn, bool autoStash, bool noVerify = false)
     {
         WorkingDirectory = repo;
         Context = repo;
 
         var builder = new StringBuilder(512);
 
-        // core.commentChar=±: コミットメッセージ中の `#` 始まり行がコメント扱いで消えないようにする
+        // core.commentString=±（旧 Git は commentChar=^）: コミットメッセージ中の `#` 始まり行がコメント扱いで消えないようにする
         // git rebase: 現在のブランチのコミットを指定ブランチの先端に再適用する
-        builder.Append("-c core.commentChar=± rebase ");
+        builder.Append("-c core.commentChar=\"^\" -c core.commentString=\"±\" rebase ");
 
         // --autostash: リベース前に未コミットの変更を自動スタッシュし、完了後に復元する
         if (autoStash)
             builder.Append("--autostash ");
 
         // リベースの基準ブランチを指定する
-        Args = builder.Append(basedOn).ToString();
+        if (noVerify)
+            builder.Append("--no-verify ");
+
+        Args = builder.Append(basedOn.Quoted()).ToString();
     }
 }

@@ -28,6 +28,8 @@ public class GitFlowFinish : Popup
     /// <summary>
     /// マージ時にスカッシュ（コミットを1つにまとめる）するかどうか。
     /// </summary>
+    public bool RebaseBeforeMerging { get; set; }
+
     public bool Squash
     {
         get;
@@ -67,7 +69,7 @@ public class GitFlowFinish : Popup
         // ブランチ名からプレフィックスを除去して短縮名を取得
         var prefix = _repo.GitFlow.GetPrefix(Type);
         var name = Branch.Name.StartsWith(prefix) ? Branch.Name[prefix.Length..] : Branch.Name;
-        var succ = await Commands.GitFlow.FinishAsync(_repo.FullPath, Type, name, Squash, KeepBranch, log);
+        var succ = await Commands.GitFlow.FinishAsync(_repo.FullPath, Type, name, Squash, KeepBranch, log, RebaseBeforeMerging);
 
         log.Complete();
         return succ;

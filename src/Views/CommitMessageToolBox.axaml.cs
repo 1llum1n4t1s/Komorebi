@@ -106,7 +106,34 @@ public class CommitMessageTextBox : TextBox
     public double SubjectEndY
     {
         get => _subjectEndY;
-        set => SetAndRaise(SubjectEndYProperty, ref _subjectEndY, value);
+        set
+        {
+            if (SetAndRaise(SubjectEndYProperty, ref _subjectEndY, value))
+                InvalidateVisual();
+        }
+    }
+
+    public static readonly StyledProperty<IBrush> GuideLineBrushProperty =
+        AvaloniaProperty.Register<CommitMessageTextBox, IBrush>(nameof(GuideLineBrush));
+
+    public IBrush GuideLineBrush
+    {
+        get => GetValue(GuideLineBrushProperty);
+        set => SetValue(GuideLineBrushProperty, value);
+    }
+
+    public override void Render(DrawingContext context)
+    {
+        base.Render(context);
+        if (_textPresenter == null || string.IsNullOrEmpty(Text) || SubjectEndY >= Bounds.Height)
+            return;
+
+        // 上流との差分: 実際の入力フォントサイズで本文の 80 桁ガイドを測る。
+        var character = new FormattedText("W", CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+            new Typeface(_textPresenter.FontFamily), _textPresenter.FontSize, GuideLineBrush);
+        var x = Padding.Left + character.WidthIncludingTrailingWhitespace * 80;
+        var pen = new Pen(GuideLineBrush) { DashStyle = DashStyle.Dash };
+        context.DrawLine(pen, new Point(x, Math.Max(0, SubjectEndY)), new Point(x, Bounds.Height));
     }
 
     /// <summary>件名長警告状態を保持するダイレクトプロパティ。</summary>
@@ -259,7 +286,7 @@ public class CommitMessageTextBox : TextBox
                 }
             }
 
-            if (lastLineStart < lastNonLineBreakCharIdx)
+            if (lastLineStart <= lastNonLineBreakCharIdx)
             {
                 var validCharLen = text.Substring(lastLineStart).TrimEnd().Length;
                 if (subjectLen > 0)
@@ -358,6 +385,13 @@ public class CommitMessageTextBox : TextBox
     /// </summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
+        if (e.Key == Key.Insert && e.KeyModifiers == KeyModifiers.Control)
+        {
+            Copy();
+            e.Handled = true;
+            return;
+        }
+
         if (_suggestions != null)
         {
             if (e.Key == Key.Up)
@@ -400,6 +434,22 @@ public class CommitMessageTextBox : TextBox
     /// </summary>
     private void OnLayoutUpdated(object sender, EventArgs e)
     {
+        if (_textPresenter == null)
+        {
+            SubjectEndY = 0;
+            SuggestionPopupY = 0;
+            Suggestions = null;
+            return;
+        }
+
+        // 上流の修正を適用し、固定余白の代わりに実際の Padding を使う。
+        var requiredWidth = Math.Max(0, _scrollViewer?.Viewport.Width ?? (Bounds.Width - Padding.Left - Padding.Right));
+        if (double.IsFinite(requiredWidth) && Math.Abs(_textPresenter.Bounds.Width - requiredWidth) >= 0.01)
+        {
+            _textPresenter.Width = requiredWidth;
+            return;
+        }
+
         if (_subjectEndCharIdx < 0)
         {
             SubjectEndY = 0;

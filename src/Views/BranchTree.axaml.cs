@@ -1273,6 +1273,22 @@ public partial class BranchTree : UserControl
 
         menu.Items.Add(fetch);
         menu.Items.Add(new MenuItem() { Header = "-" });
+        if (ViewModels.Preferences.Instance.EnableAutoFetch)
+        {
+            var autoFetch = new MenuItem
+            {
+                Header = App.Text("RemoteCM.EnableAutoFetch"),
+                Icon = App.CreateMenuIcon("Icons.Fetch"),
+                Tag = remote.DisableAutoFetch ? "OFF" : "ON",
+            };
+            autoFetch.Click += async (_, e) =>
+            {
+                await repo.ToggleAutoFetchOnRemoteAsync(remote);
+                e.Handled = true;
+            };
+            menu.Items.Add(autoFetch);
+            menu.Items.Add(new MenuItem() { Header = "-" });
+        }
         menu.Items.Add(delete);
         menu.Items.Add(new MenuItem() { Header = "-" });
         TryToAddCustomActionsToRemoteContextMenu(repo, menu, remote);

@@ -67,7 +67,7 @@
                 CornerRadius="0,0,8,8"
                 ClipToBounds="True"
                 IsVisible="{Binding Popup, Converter={x:Static ObjectConverters.IsNotNull}}">
-          <ContentControl x:Name="PopupPanel" Content="{Binding Popup}">
+          <ContentControl x:Name="PopupPanel" Content="{Binding Popup}" KeyboardNavigation.TabNavigation="Cycle">
             <ContentControl.DataTemplates>
               <DataTemplate DataType="vm:Popup">
                 <StackPanel Orientation="Vertical">
@@ -113,6 +113,10 @@
                   <v:PopupRunningStatus Margin="12,8"
                                         Description="{Binding ProgressDescription}"
                                         IsVisible="{Binding InProgress}"/>
+                  <Button Classes="flat" Margin="8,0,16,12" Height="28" MinWidth="100"
+                          HorizontalAlignment="Right" Content="{DynamicResource Text.Terminate}"
+                          IsVisible="{Binding CanTerminate}" IsEnabled="{Binding !IsTerminating}"
+                          Command="{Binding Terminate}"/>
                 </StackPanel>
               </DataTemplate>
             </ContentControl.DataTemplates>

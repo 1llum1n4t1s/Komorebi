@@ -105,16 +105,16 @@ public class Worktree : Command
 
         // -b: 新しいブランチを作成する / -B: 既存ブランチをリセットして使用する
         if (!string.IsNullOrEmpty(name))
-            builder.Append(createNew ? "-b " : "-B ").Append(name).Append(' ');
+            builder.Append(createNew ? "-b " : "-B ").Append(name.Quoted()).Append(' ');
 
         // ワークツリーの作成先パスを指定する
         builder.Append(fullpath.Quoted()).Append(' ');
 
-        // チェックアウトする開始点を指定する
+        // 上流との差分: 開始点の参照名も引用符を含めて1引数として渡す。
         if (!string.IsNullOrEmpty(tracking))
-            builder.Append(tracking);
+            builder.Append(tracking.Quoted());
         else if (!string.IsNullOrEmpty(name) && !createNew)
-            builder.Append(name);
+            builder.Append(name.Quoted());
 
         Args = builder.ToString();
         return await ExecAsync().ConfigureAwait(false);

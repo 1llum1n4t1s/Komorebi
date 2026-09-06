@@ -144,6 +144,9 @@ public class Push : Popup
         set;
     }
 
+    /// <summary>この push で pre-push フックを省略する。</summary>
+    public bool NoVerify { get; set; }
+
     /// <summary>
     /// リポジトリとオプションのローカルブランチを指定してダイアログを初期化する。
     /// ローカルブランチ一覧を構築し、アップストリームに基づいてリモートとブランチを自動選択する。
@@ -259,15 +262,21 @@ public class Push : Popup
         var log = _repo.CreateLog("Push");
         Use(log);
 
-        var succ = await new Commands.Push(
-            _repo.FullPath,
-            _selectedLocalBranch.Name,
-            _selectedRemote.Name,
-            remoteBranchName,
-            PushAllTags,
-            _repo.Submodules.Count > 0 && CheckSubmodules,
-            _isSetTrackOptionVisible && _tracking,
-            ForcePush).Use(log).RunAsync();
+        bool succ;
+        using (var cancellation = BeginCancellableOperation())
+        {
+            succ = await new Commands.Push(
+                _repo.FullPath,
+                _selectedLocalBranch.Name,
+                _selectedRemote.Name,
+                remoteBranchName,
+                PushAllTags,
+                _repo.Submodules.Count > 0 && CheckSubmodules,
+                _isSetTrackOptionVisible && _tracking,
+                ForcePush,
+                NoVerify)
+            { CancellationToken = cancellation.Token }.Use(log).RunAsync();
+        }
 
         log.Complete();
         return succ;

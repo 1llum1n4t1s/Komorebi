@@ -110,21 +110,26 @@ public class Fetch : Popup
 
         // Komorebi 独自修正: fetch 失敗時は成功扱いで閉じず、履歴も移動しない。
         var succ = true;
-        if (FetchAllRemotes)
+        using (var cancellation = BeginCancellableOperation())
         {
-            foreach (var remote in _repo.Remotes)
+            if (FetchAllRemotes)
             {
-                var fetched = await new Commands.Fetch(_repo.FullPath, remote.Name, notags, force)
+                foreach (var remote in _repo.Remotes)
+                {
+                    var fetched = await new Commands.Fetch(_repo.FullPath, remote.Name, notags, force) { CancellationToken = cancellation.Token }
+                        .Use(log)
+                        .RunAsync();
+                    succ &= fetched;
+                    if (cancellation.Token.IsCancellationRequested)
+                        break;
+                }
+            }
+            else
+            {
+                succ = await new Commands.Fetch(_repo.FullPath, SelectedRemote.Name, notags, force) { CancellationToken = cancellation.Token }
                     .Use(log)
                     .RunAsync();
-                succ &= fetched;
             }
-        }
-        else
-        {
-            succ = await new Commands.Fetch(_repo.FullPath, SelectedRemote.Name, notags, force)
-                .Use(log)
-                .RunAsync();
         }
 
         log.Complete();

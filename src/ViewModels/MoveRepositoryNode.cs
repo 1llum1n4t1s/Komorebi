@@ -53,6 +53,7 @@ public class MoveRepositoryNode : Popup
         });
         // 既存のグループノードをフラットリストに展開
         MakeRows(Preferences.Instance.RepositoryNodes, 1);
+        Selected = Rows[0];
     }
 
     /// <summary>

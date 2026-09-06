@@ -13,8 +13,8 @@
   <v:HistoriesLayout UseHorizontal="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseTwoColumnsLayoutInHistories}">
     <v:HistoriesLayout.RowDefinitions>
       <RowDefinition Height="{Binding TopArea, Mode=TwoWay}" MinHeight="100"/>
-      <RowDefinition Height="3"/>
-      <RowDefinition Height="{Binding BottomArea, Mode=TwoWay}" MinHeight="200"/>
+      <RowDefinition Height="{Binding DetailSplitterHeight}"/>
+      <RowDefinition Height="{Binding BottomArea, Mode=TwoWay}" MinHeight="{Binding DetailMinimumHeight}"/>
     </v:HistoriesLayout.RowDefinitions>
 
     <v:HistoriesLayout.ColumnDefinitions>
@@ -40,7 +40,6 @@
                 Background="{DynamicResource Brush.DataGridHeaderBG}"
                 SelectionMode="Extended"
                 ItemsSource="{Binding Commits, Mode=OneWay}"
-                SelectedItem="{Binding SelectedCommit, Mode=OneWay}"
                 CanUserReorderColumns="False"
                 CanUserResizeColumns="True"
                 CanUserSortColumns="False"
@@ -146,11 +145,12 @@
                                            Foreground="{DynamicResource Brush.FG1}"
                                            ShowTags="{Binding Source={x:Static vm:Preferences.Instance}, Path=ShowTagsInGraph}"
                                            UseCompactBranchNames="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseCompactBranchNamesInGraph}"
+                                           HasSingleRemote="{Binding $parent[v:Repository].((vm:Repository)DataContext).Remotes.Count, Converter={x:Static c:IntConverters.IsOne}}"
                                            FontSize="12"
                                            VerticalAlignment="Center">
                       <v:CommitRefsPresenter.UseGraphColor>
                         <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                          <Binding Path="IsMerged"/>
+                          <Binding Path="IsHighlightedInGraph"/>
                           <Binding Path="$parent[v:Histories].OnlyHighlightCurrentBranch" Converter="{x:Static BoolConverters.Not}"/>
                         </MultiBinding>
                       </v:CommitRefsPresenter.UseGraphColor>
@@ -167,7 +167,7 @@
                                               Subject="{Binding Subject}"
                                               IssueTrackers="{Binding $parent[v:Histories].IssueTrackers}"
                                               FontWeight="{Binding IsCurrentHead, Converter={x:Static c:BoolConverters.IsBoldToFontWeight}}"
-                                              Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
+                                              Opacity="{Binding IsHighlightedInGraph, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
                   </Grid>
                 </Border>
               </DataTemplate>
@@ -193,13 +193,13 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             User="{Binding Author}"
-                            Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
+                            Opacity="{Binding IsHighlightedInGraph, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
                             IsHitTestVisible="False"/>
 
                   <Border Grid.Column="1" Padding="8,0" ClipToBounds="True">
                     <TextBlock Text="{Binding Author.Name}"
                                FontWeight="{Binding IsCurrentHead, Converter={x:Static c:BoolConverters.IsBoldToFontWeight}}"
-                               Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
+                               Opacity="{Binding IsHighlightedInGraph, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
                                HorizontalAlignment="Left"/>
                   </Border>
                 </Grid>
@@ -218,7 +218,7 @@
                   <TextBlock Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                              FontFamily="{DynamicResource Fonts.Monospace}"
                              FontWeight="{Binding IsCurrentHead, Converter={x:Static c:BoolConverters.IsBoldToFontWeight}}"
-                             Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
+                             Opacity="{Binding IsHighlightedInGraph, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"/>
                 </Border>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
@@ -234,7 +234,7 @@
                 <Border Padding="8,0" Background="Transparent" ClipToBounds="True">
                   <v:CommitTimeTextBlock FontFeatures="+tnum"
                                          FontWeight="{Binding IsCurrentHead, Converter={x:Static c:BoolConverters.IsBoldToFontWeight}}"
-                                         Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
+                                         Opacity="{Binding IsHighlightedInGraph, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
                                          Timestamp="{Binding AuthorTime, Mode=OneWay}"
                                          ShowAsDateTime="{Binding Source={x:Static vm:Preferences.Instance}, Path=!DisplayTimeAsPeriodInHistories, Mode=OneWay}"
                                          DateTimeFormat="{Binding Source={x:Static vm:Preferences.Instance}, Path=DateTimeFormat, Mode=OneWay}"
@@ -253,7 +253,7 @@
               <DataTemplate DataType="m:Commit">
                 <Border Padding="8,0" Background="Transparent" ClipToBounds="True">
                   <v:CommitTimeTextBlock FontWeight="{Binding IsCurrentHead, Converter={x:Static c:BoolConverters.IsBoldToFontWeight}}"
-                                         Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
+                                         Opacity="{Binding IsHighlightedInGraph, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
                                          Timestamp="{Binding CommitterTime, Mode=OneWay}"
                                          ShowAsDateTime="{Binding Source={x:Static vm:Preferences.Instance}, Path=!DisplayTimeAsPeriodInHistories, Mode=OneWay}"
                                          DateTimeFormat="{Binding Source={x:Static vm:Preferences.Instance}, Path=DateTimeFormat, Mode=OneWay}"
@@ -289,6 +289,21 @@
               Opacity=".8"/>
       </Border>
 
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8" Spacing="4">
+        <Button Classes="icon_button" Width="28" Height="28" Background="{DynamicResource Brush.Popup}"
+                Command="{Binding ToggleDetailsPanel}" HotKey="{OnPlatform Ctrl+J, macOS=Meta+J}"
+                IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=!UseTwoColumnsLayoutInHistories}"
+                ToolTip.Tip="{DynamicResource Text.CommitDetail.CollapseToBottom}">
+          <Path Width="12" Height="12" Data="{StaticResource Icons.Detail}"/>
+        </Button>
+        <Button Classes="icon_button" Width="28" Height="28" Background="{DynamicResource Brush.Popup}"
+                Click="OnOpenDetailsStandalone" HotKey="{OnPlatform Ctrl+N, macOS=Meta+N}"
+                IsEnabled="{Binding CanOpenDetailsStandalone}"
+                ToolTip.Tip="{DynamicResource Text.HistoriesDetailsStandalone}">
+          <Path Width="12" Height="12" Data="{StaticResource Icons.Detached}"/>
+        </Button>
+      </StackPanel>
+
       <v:LoadingIcon Width="48" Height="48" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsLoading}"/>
     </Grid>
 
@@ -299,7 +314,7 @@
                   BorderBrush="{DynamicResource Brush.Border0}"
                   Focusable="False"/>
 
-    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" IsVisible="{Binding IsDetailsPanelExpanded}">
       <Grid IsVisible="{Binding DetailContext, Converter={x:Static ObjectConverters.IsNull}}">
         <Path Width="128" Height="128"
               Data="{StaticResource Icons.Detail}"

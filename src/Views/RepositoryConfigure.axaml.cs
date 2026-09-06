@@ -74,7 +74,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     {
         var options = new FilePickerOpenOptions()
         {
-            FileTypeFilter = [new FilePickerFileType("Executable file(script)") { Patterns = ["*.*"] }],
+            FileTypeFilter = [new FilePickerFileType("Executable file(script)") { Patterns = ["*"] }],
             AllowMultiple = false,
         };
 

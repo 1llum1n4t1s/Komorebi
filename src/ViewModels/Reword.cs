@@ -55,6 +55,7 @@ public class Reword : Popup
 
         var log = _repo.CreateLog("Reword HEAD");
         Use(log);
+        var autoStash = new Commands.Stash(_repo.FullPath).Use(log);
 
         var changes = await new Commands.QueryLocalChanges(_repo.FullPath, false).GetResultAsync();
         var signOff = _repo.UIStates.EnableSignOffForCommit;
@@ -75,9 +76,7 @@ public class Reword : Popup
         // 自動スタッシュでステージされた変更を退避
         if (needAutoStash)
         {
-            succ = await new Commands.Stash(_repo.FullPath)
-                .Use(log)
-                .PushAsync("REWORD_AUTO_STASH", false);
+            succ = await autoStash.PushAutoAsync("REWORD_AUTO_STASH");
             if (!succ)
             {
                 log.Complete();
@@ -89,13 +88,11 @@ public class Reword : Popup
             .Use(log)
             .RunAsync();
 
+        if (needAutoStash)
+            await autoStash.RestoreAutoAsync(_repo.GitDir);
+
         if (succ)
         {
-            if (needAutoStash)
-                await new Commands.Stash(_repo.FullPath)
-                    .Use(log)
-                    .PopAsync("stash@{0}");
-
             // Reword 後の新 HEAD を履歴ビューで自動選択する。
             // QueryRevisionByRefName は HEAD 解決に失敗すると null/空を返すため、
             // 念のため空判定してから NavigateToCommit() に渡す（null 伝播で NRE/誤マッチを防ぐ）。

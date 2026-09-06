@@ -28,6 +28,30 @@ public class Compare : ObservableObject
     /// <summary>
     /// ファイルリセット操作が可能かどうか（ベアリポジトリでは不可）。
     /// </summary>
+    public bool IsLoadingPickableCommits
+    {
+        get => _isLoadingPickableCommits;
+        private set => SetProperty(ref _isLoadingPickableCommits, value);
+    }
+
+    public bool IsViewChanges
+    {
+        get => _isViewChanges;
+        set => SetProperty(ref _isViewChanges, value);
+    }
+
+    public List<Models.Commit> LeftOnlyCommits
+    {
+        get => _leftOnlyCommits;
+        private set => SetProperty(ref _leftOnlyCommits, value);
+    }
+
+    public List<Models.Commit> RightOnlyCommits
+    {
+        get => _rightOnlyCommits;
+        private set => SetProperty(ref _rightOnlyCommits, value);
+    }
+
     public bool CanResetFiles
     {
         get => _canResetFiles;
@@ -137,6 +161,7 @@ public class Compare : ObservableObject
     /// <param name="to">比較対象のオブジェクト（ブランチ、タグ、コミット）</param>
     public Compare(Repository repo, object based, object to)
     {
+        _repository = repo;
         _repo = repo.FullPath;
         _canResetFiles = !repo.IsBare;
         // オブジェクトからSHA値を抽出する
@@ -176,6 +201,10 @@ public class Compare : ObservableObject
     /// </summary>
     public void Swap()
     {
+        if (IsLoading || IsLoadingPickableCommits)
+            return;
+
+        (LeftOnlyCommits, RightOnlyCommits) = (_rightOnlyCommits, _leftOnlyCommits);
         // SHA値と表示名を入れ替える
         (_based, _to) = (_to, _based);
         (BaseName, ToName) = (_toName, _baseName);
@@ -384,6 +413,12 @@ public class Compare : ObservableObject
     /// 差分データを非同期で再取得する。
     /// 初回はコミット情報も取得し、変更ファイル一覧を読み込む。
     /// </summary>
+    public void CherryPick(List<Models.Commit> commits)
+    {
+        if (_repository.CanCreatePopup())
+            _repository.ShowPopup(new CherryPick(_repository, commits));
+    }
+
     private void Refresh()
     {
         IsLoading = true;
@@ -401,8 +436,16 @@ public class Compare : ObservableObject
                     .GetResultAsync();
                 await Task.WhenAll(baseHeadTask, toHeadTask).ConfigureAwait(false);
 
+                // 上流との差分: 既存の非同期ログパーサーを共用し、UI スレッドをブロックしない。
+                var rightTask = new Commands.QueryCommits(_repo, $"--topo-order --cherry-pick --right-only --no-merges {_based}...{_to}", false).GetResultAsync();
+                var leftTask = new Commands.QueryCommits(_repo, $"--topo-order --cherry-pick --right-only --no-merges {_to}...{_based}", false).GetResultAsync();
+                await Task.WhenAll(rightTask, leftTask).ConfigureAwait(false);
+
                 Dispatcher.UIThread.Post(() =>
                 {
+                    LeftOnlyCommits = leftTask.Result;
+                    RightOnlyCommits = rightTask.Result;
+                    IsLoadingPickableCommits = false;
                     BaseHead = baseHeadTask.Result;
                     ToHead = toHeadTask.Result;
                 });
@@ -504,6 +547,11 @@ public class Compare : ObservableObject
 
     /// <summary>リポジトリのフルパス</summary>
     private string _repo;
+    private readonly Repository _repository;
+    private bool _isLoadingPickableCommits = true;
+    private bool _isViewChanges = true;
+    private List<Models.Commit> _leftOnlyCommits = [];
+    private List<Models.Commit> _rightOnlyCommits = [];
     /// <summary>読み込み中フラグ</summary>
     private bool _isLoading = true;
     /// <summary>ファイルリセット可能フラグ</summary>

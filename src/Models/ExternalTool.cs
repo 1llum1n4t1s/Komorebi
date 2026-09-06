@@ -284,8 +284,7 @@ public class ExternalToolsFinder
     /// <param name="platformFinder">Toolboxのデータディレクトリを返す関数</param>
     public void FindJetBrainsFromToolbox(Func<string> platformFinder)
     {
-        List<string> exclude = ["fleet", "dotmemory", "dottrace", "resharper-u", "androidstudio"];
-        List<string> supportedIcons = ["CL", "DB", "DL", "DS", "GO", "JB", "PC", "PS", "PY", "QA", "QD", "RD", "RM", "RR", "WRS", "WS"];
+        List<string> supported = ["AI", "CL", "DB", "DL", "DS", "GO", "IC", "IU", "JB", "PC", "PS", "PY", "QA", "QD", "RD", "RM", "RR", "WRS", "WS"];
         var state = Path.Combine(platformFinder(), "state.json");
         if (File.Exists(state))
         {
@@ -295,12 +294,12 @@ public class ExternalToolsFinder
                 var stateData = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.JetBrainsState);
                 foreach (var tool in stateData.Tools)
                 {
-                    if (exclude.Contains(tool.ToolId.ToLowerInvariant()))
+                    if (!supported.Contains(tool.ProductCode))
                         continue;
 
                     Tools.Add(new ExternalTool(
                         $"{tool.DisplayName} {tool.DisplayVersion}",
-                        supportedIcons.Contains(tool.ProductCode) ? $"JetBrains/{tool.ProductCode}" : "JetBrains/JB",
+                        $"JetBrains/{tool.ProductCode}",
                         Path.Combine(tool.InstallLocation, tool.LaunchCommand),
                         null,
                         true));

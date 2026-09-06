@@ -37,6 +37,10 @@
                         IsVisible="{OnPlatform True, macOS=False}"/>
     </Grid>
 
+    <v:BranchSelector Grid.Row="1" Width="200" Height="28" Margin="8,0,0,0"
+                      HorizontalAlignment="Left" VerticalAlignment="Center"
+                      Branches="{Binding Branches}" SelectedBranch="{Binding SelectedBranch, Mode=TwoWay}"/>
+
     <!-- View mode switcher -->
     <ListBox Grid.Row="1"
              Margin="0,8"

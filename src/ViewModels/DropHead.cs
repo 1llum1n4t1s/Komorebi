@@ -45,6 +45,7 @@ public class DropHead : Popup
 
         var log = _repo.CreateLog($"Drop '{Target.SHA}'");
         Use(log);
+        var autoStash = new Commands.Stash(_repo.FullPath).Use(log);
 
         // ローカル変更の有無を確認
         var changes = await new Commands.QueryLocalChanges(_repo.FullPath, true).GetResultAsync();
@@ -54,9 +55,7 @@ public class DropHead : Popup
         // ローカル変更がある場合は自動スタッシュ
         if (needAutoStash)
         {
-            succ = await new Commands.Stash(_repo.FullPath)
-                .Use(log)
-                .PushAsync("DROP_HEAD_AUTO_STASH", false);
+            succ = await autoStash.PushAutoAsync("DROP_HEAD_AUTO_STASH");
             if (!succ)
             {
                 log.Complete();
@@ -69,11 +68,9 @@ public class DropHead : Popup
             .Use(log)
             .ExecAsync();
 
-        // リセット成功後、自動スタッシュを復元
-        if (succ && needAutoStash)
-            await new Commands.Stash(_repo.FullPath)
-                .Use(log)
-                .PopAsync("stash@{0}");
+        // 失敗後も、安全な状態なら自動スタッシュを復元
+        if (needAutoStash)
+            await autoStash.RestoreAutoAsync(_repo.GitDir);
 
         log.Complete();
         return succ;

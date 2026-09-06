@@ -288,7 +288,7 @@ public class ChromelessWindow : Window
             return;
         }
 
-        // Ctrl/Cmd + +/- でズームイン/アウトする
+        // Ctrl/Cmd + +/- でズーム、W でサブウィンドウを閉じる。
         if (e.KeyModifiers == (OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
         {
             if (e.Key == Key.OemPlus)
@@ -305,6 +305,11 @@ public class ChromelessWindow : Window
                 var zoom = Math.Max(ViewModels.Preferences.Instance.Zoom - 0.05, 1);
                 ViewModels.Preferences.Instance.Zoom = zoom;
                 LeftCaptionButtonWidth = 72.0 / zoom;
+                e.Handled = true;
+            }
+            else if (e.Key == Key.W && this is not Komorebi.Views.Launcher)
+            {
+                Close();
                 e.Handled = true;
             }
         }

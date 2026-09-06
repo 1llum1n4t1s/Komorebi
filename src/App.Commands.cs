@@ -67,6 +67,18 @@ public partial class App
     /// </summary>
     public static readonly Command OpenHotkeysCommand = new(async _ => await ShowDialog(new Views.Hotkeys()));
 
+    public static readonly Command OpenSSHKeyHelperCommand = new(async _ =>
+    {
+        try
+        {
+            await ShowDialog(new Views.SSHKeyHelper { DataContext = new ViewModels.SSHKeyHelper() });
+        }
+        catch (Exception ex)
+        {
+            RaiseException(string.Empty, ex.Message);
+        }
+    });
+
     /// <summary>
     /// アプリケーションデータディレクトリをOSのファイルマネージャーで開くコマンド。
     /// </summary>

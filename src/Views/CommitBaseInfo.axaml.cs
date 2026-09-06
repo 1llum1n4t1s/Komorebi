@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace Komorebi.Views;
 
@@ -15,6 +16,38 @@ namespace Komorebi.Views;
 /// </summary>
 public partial class CommitBaseInfo : UserControl
 {
+    public static readonly StyledProperty<bool> IsSHACopiedProperty =
+        AvaloniaProperty.Register<CommitBaseInfo, bool>(nameof(IsSHACopied));
+
+    public bool IsSHACopied
+    {
+        get => GetValue(IsSHACopiedProperty);
+        set => SetValue(IsSHACopiedProperty, value);
+    }
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        ResetCopyFeedback();
+        base.OnDataContextChanged(e);
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        ResetCopyFeedback();
+        base.OnUnloaded(e);
+    }
+
+    private void ResetCopyFeedback()
+    {
+        ++_copyGeneration;
+        _iconResetTimer?.Dispose();
+        _iconResetTimer = null;
+        IsSHACopied = false;
+    }
+
+    private IDisposable _iconResetTimer;
+    private int _copyGeneration;
+
     /// <summary>コミットの完全なメッセージ（件名+本文）を保持するスタイルプロパティ。</summary>
     public static readonly StyledProperty<Models.CommitFullMessage> FullMessageProperty =
         AvaloniaProperty.Register<CommitBaseInfo, Models.CommitFullMessage>(nameof(FullMessage));
@@ -107,7 +140,16 @@ public partial class CommitBaseInfo : UserControl
     private async void OnCopyCommitSHA(object sender, RoutedEventArgs e)
     {
         if (sender is Button { DataContext: Models.Commit commit })
+        {
+            ResetCopyFeedback();
+            var generation = _copyGeneration;
             await App.CopyTextAsync(commit.SHA);
+            if (generation == _copyGeneration && IsLoaded)
+            {
+                IsSHACopied = true;
+                _iconResetTimer = DispatcherTimer.RunOnce(ResetCopyFeedback, TimeSpan.FromSeconds(2));
+            }
+        }
 
         e.Handled = true;
     }
@@ -197,6 +239,30 @@ public partial class CommitBaseInfo : UserControl
             sender is Control { DataContext: string sha })
             detail.NavigateTo(sha);
 
+        e.Handled = true;
+    }
+
+    /// <summary>
+    /// 親コミット SHA のコピーメニューを開く。
+    /// </summary>
+    private void OnSHAContextRequested(object sender, ContextRequestedEventArgs e)
+    {
+        if (sender is not Control { DataContext: string sha } control)
+            return;
+
+        var copy = new MenuItem
+        {
+            Header = App.Text("Copy"),
+            Icon = App.CreateMenuIcon("Icons.Copy"),
+        };
+        copy.Click += async (_, ev) =>
+        {
+            await App.CopyTextAsync(sha);
+            ev.Handled = true;
+        };
+        var menu = new ContextMenu();
+        menu.Items.Add(copy);
+        menu.Open(control);
         e.Handled = true;
     }
 

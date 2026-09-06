@@ -30,6 +30,10 @@ public class ChangeTreeNodeToggleButton : ToggleButton
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
             DataContext is ViewModels.ChangeTreeNode { IsFolder: true } node)
         {
+            var container = this.FindAncestorOfType<ChangeCollectionContainer>();
+            if (container is not null)
+                container.SelectedItem = node;
+
             var tree = this.FindAncestorOfType<ChangeCollectionView>();
             tree?.ToggleNodeIsExpanded(node);
         }

@@ -158,6 +158,37 @@ public partial class FileHistories : ChromelessWindow
     }
 
     /// <summary>
+    /// 選択したファイル履歴の SHA をまとめてコピーするメニューを開く。
+    /// </summary>
+    private void OnRevisionsContextRequested(object sender, ContextRequestedEventArgs e)
+    {
+        if (sender is not ListBox { SelectedItems: { Count: > 0 } selected } listBox)
+            return;
+
+        List<string> shas = [];
+        foreach (var item in selected)
+        {
+            if (item is Models.FileVersion version)
+                shas.Add(version.SHA);
+        }
+
+        var copy = new MenuItem
+        {
+            Header = App.Text("SHALinkCM.CopySHA"),
+            Icon = App.CreateMenuIcon("Icons.Copy"),
+        };
+        copy.Click += async (_, ev) =>
+        {
+            await App.CopyTextAsync(string.Join("\n", shas));
+            ev.Handled = true;
+        };
+        var menu = new ContextMenu();
+        menu.Items.Add(copy);
+        menu.Open(listBox);
+        e.Handled = true;
+    }
+
+    /// <summary>
     /// PressCommitSHAイベントのハンドラ。
     /// </summary>
     private void OnPressCommitSHA(object sender, PointerPressedEventArgs e)

@@ -109,7 +109,8 @@ public class Histories : ObservableObject, IDisposable
         get => _commits;
         set
         {
-            var lastSelected = SelectedCommit;
+            var selection = _selectedCommits.Count <= 20 ? new List<Models.Commit>(_selectedCommits) : [];
+            IsUpdatingSelection = true;
             if (SetProperty(ref _commits, value))
             {
                 // 大規模リポジトリでは数万コミットを扱うため、繰り返しのFind()が深刻なボトルネックになる
@@ -136,11 +137,25 @@ public class Histories : ObservableObject, IDisposable
                     }
                 }
 
-                if (value.Count > 0 && lastSelected is not null && _commitBySha.TryGetValue(lastSelected.SHA, out var restored))
-                    SelectedCommit = restored;
+                _selectedCommits = [];
+                var previous = new HashSet<string>(StringComparer.Ordinal);
+                foreach (var selected in selection)
+                    previous.Add(selected.SHA);
+                foreach (var commit in value)
+                {
+                    if (previous.Contains(commit.SHA))
+                        _selectedCommits.Add(commit);
+                }
+                _selectedCommit = _selectedCommits.Count == 1 ? _selectedCommits[0] : null;
             }
+            IsUpdatingSelection = false;
+            OnPropertyChanged(nameof(SelectedCommits));
         }
     }
+
+    public bool IsUpdatingSelection { get; private set; }
+    public IReadOnlyList<Models.Commit> SelectedCommits => _selectedCommits;
+    private List<Models.Commit> _selectedCommits = [];
 
     /// <summary>
     /// 指定された親コミットSHAから、その子コミットのリストを O(1) で取得する。
@@ -168,7 +183,16 @@ public class Histories : ObservableObject, IDisposable
     public Models.Commit SelectedCommit
     {
         get => _selectedCommit;
-        set => SetProperty(ref _selectedCommit, value);
+        set
+        {
+            if (!_ignoreSelectionChange && !IsUpdatingSelection)
+                BeginNavigationRequest();
+            if (SetProperty(ref _selectedCommit, value))
+            {
+                _selectedCommits = value == null ? [] : [value];
+                OnPropertyChanged(nameof(SelectedCommits));
+            }
+        }
     }
 
     /// <summary>
@@ -186,12 +210,50 @@ public class Histories : ObservableObject, IDisposable
     public IDisposable DetailContext
     {
         get => _detailContext;
-        set => SetProperty(ref _detailContext, value);
+        set
+        {
+            if (_disposed)
+            {
+                value?.Dispose();
+                return;
+            }
+            var previous = _detailContext;
+            if (SetProperty(ref _detailContext, value))
+            {
+                previous?.Dispose();
+                OnPropertyChanged(nameof(CanOpenDetailsStandalone));
+            }
+        }
     }
 
     /// <summary>
     /// bisect操作の状態情報。bisect中でなければnull。
     /// </summary>
+    public bool CanOpenDetailsStandalone => DetailContext is CommitDetail or RevisionCompare;
+
+    public bool IsDetailsPanelExpanded
+    {
+        get => _isDetailsPanelExpanded;
+        set
+        {
+            if (SetProperty(ref _isDetailsPanelExpanded, value))
+            {
+                OnPropertyChanged(nameof(BottomArea));
+                OnPropertyChanged(nameof(DetailMinimumHeight));
+                OnPropertyChanged(nameof(DetailSplitterHeight));
+            }
+        }
+    }
+
+    public double DetailMinimumHeight => IsDetailsPanelExpanded ? 200 : 0;
+    public double DetailSplitterHeight => IsDetailsPanelExpanded ? 3 : 0;
+
+    public void ToggleDetailsPanel()
+    {
+        if (!Preferences.Instance.UseTwoColumnsLayoutInHistories)
+            IsDetailsPanelExpanded = !IsDetailsPanelExpanded;
+    }
+
     public Models.Bisect Bisect
     {
         get => _bisect;
@@ -222,8 +284,8 @@ public class Histories : ObservableObject, IDisposable
     /// <summary>下パネルの高さ。</summary>
     public GridLength BottomArea
     {
-        get => _bottomArea;
-        set => SetProperty(ref _bottomArea, value);
+        get => IsDetailsPanelExpanded ? _bottomArea : new GridLength(0);
+        set { if (IsDetailsPanelExpanded) SetProperty(ref _bottomArea, value); }
     }
 
     /// <summary>
@@ -240,6 +302,9 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public void Dispose()
     {
+        if (_disposed)
+            return;
+        _disposed = true;
         // Repository.Close は `_histories = null` を行わない方針なので、
         // ここで `_repo = null` を行うと「Repository は _histories への参照を保持しているのに
         // _histories.Repo が null」という非対称が race の温床になる。両方とも参照を維持し GC に任せる。
@@ -323,6 +388,9 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public void NavigateTo(string commitSHA)
     {
+        if (_disposed || string.IsNullOrEmpty(commitSHA))
+            return;
+        var request = BeginNavigationRequest();
         _commitBySha.TryGetValue(commitSHA, out var commit);
         commit ??= _commits.Find(x => x.SHA.StartsWith(commitSHA, StringComparison.Ordinal));
         if (commit is not null)
@@ -332,9 +400,7 @@ public class Histories : ObservableObject, IDisposable
             return;
         }
 
-        // Dispose 後に非同期コールバックが走ると _repo / DetailContext が破棄済みで NRE になる。
-        // タスク開始時と UI スレッド再入時の両方で _repo の null チェックを入れ、
-        // 閉じたタブへのアクセスを無効化する。
+        // Repository参照はDispose後も保持するため、寿命は反映時にも専用フラグで確認する。
         var repo = _repo;
         if (repo is null)
             return;
@@ -345,29 +411,34 @@ public class Histories : ObservableObject, IDisposable
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
-            Dispatcher.UIThread.Post(() =>
-            {
-                // 非同期待ち中に Dispose された場合は何もしない（_repo が null 化されている）
-                if (_repo is null)
-                    return;
-
-                _ignoreSelectionChange = true;
-                SelectedCommit = null;
-
-                if (_detailContext is CommitDetail detail)
-                {
-                    detail.Commit = c;
-                }
-                else
-                {
-                    var commitDetail = new CommitDetail(_repo, _commitDetailSharedData);
-                    commitDetail.Commit = c;
-                    DetailContext = commitDetail;
-                }
-
-                _ignoreSelectionChange = false;
-            });
+            Dispatcher.UIThread.Post(() => ApplyNavigationResult(request, c));
         });
+    }
+
+    /// <summary>非同期照会が完了したコミットをUIスレッドで反映する。</summary>
+    internal long BeginNavigationRequest() => ++_navigationRequest;
+
+    internal void ApplyNavigationResult(long request, Models.Commit c)
+    {
+        // upstreamとの差分: 失敗した照会や古い照会で現在の選択を消さない。
+        if (_disposed || c is null || request != _navigationRequest)
+            return;
+
+        _ignoreSelectionChange = true;
+        SelectedCommit = null;
+
+        if (_detailContext is CommitDetail detail)
+        {
+            detail.Commit = c;
+        }
+        else
+        {
+            var commitDetail = new CommitDetail(_repo, _commitDetailSharedData);
+            commitDetail.Commit = c;
+            DetailContext = commitDetail;
+        }
+
+        _ignoreSelectionChange = false;
     }
 
     /// <summary>
@@ -376,8 +447,29 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public void Select(IList commits)
     {
-        if (_ignoreSelectionChange)
+        if (_disposed || _ignoreSelectionChange || IsUpdatingSelection)
             return;
+
+        BeginNavigationRequest();
+
+        var selectedCommits = new List<Models.Commit>();
+        foreach (var item in commits)
+        {
+            if (item is Models.Commit selected)
+                selectedCommits.Add(selected);
+        }
+        // 比較順序はクリック順ではなく履歴一覧の新旧順に揃える。
+        if (selectedCommits.Count == 2 && _commits.IndexOf(selectedCommits[0]) > _commits.IndexOf(selectedCommits[1]))
+            (selectedCommits[0], selectedCommits[1]) = (selectedCommits[1], selectedCommits[0]);
+        commits = selectedCommits;
+        _selectedCommits = selectedCommits;
+        _selectedCommit = selectedCommits.Count == 1 ? selectedCommits[0] : null;
+        _selectedGraphHeads.Clear();
+        foreach (var item in commits)
+        {
+            if (item is Models.Commit selected)
+                _selectedGraphHeads.Add(selected.SHA);
+        }
 
         // SearchCommitContext は Repository.Open() 後に初期化される。
         // テストや遷移直後など Open 前の経路でも落とさず動くよう null ガードする。
@@ -438,7 +530,22 @@ public class Histories : ObservableObject, IDisposable
                 searchContext.Selected = null;
             DetailContext = new Models.Count(commits.Count);
         }
+
+        OnPropertyChanged(nameof(SelectedCommits));
+        if (_repo.UIStates != null && _repo.GraphHighlighting >= Models.CommitGraphHighlighting.SelectedCommitsOnly)
+            RefreshGraph();
     }
+
+    public void RefreshGraph()
+    {
+        if (_repo?.UIStates == null)
+            return;
+        Graph = Models.CommitGraph.Parse(_commits,
+            _repo.UIStates.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly),
+            _repo.GraphHighlighting, _selectedGraphHeads);
+    }
+
+    private readonly HashSet<string> _selectedGraphHeads = new(StringComparer.Ordinal);
 
     /// <summary>
     /// 指定SHAのコミットを非同期で取得する。
@@ -578,6 +685,9 @@ public class Histories : ObservableObject, IDisposable
                     if (!_commitBySha.TryGetValue(sha, out var parent))
                         parent = await new Commands.QuerySingleCommit(_repo.FullPath, sha).GetResultAsync();
 
+                    if (_disposed)
+                        return;
+
                     if (parent is not null)
                         parents.Add(parent);
                 }
@@ -595,6 +705,8 @@ public class Histories : ObservableObject, IDisposable
         if (_repo.CanCreatePopup())
         {
             var message = await new Commands.QueryCommitFullMessage(_repo.FullPath, head.SHA).GetResultAsync();
+            if (_disposed)
+                return;
             _repo.ShowPopup(new Reword(_repo, head, message));
         }
     }
@@ -645,6 +757,8 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public async Task InteractiveRebaseAsync(Models.Commit commit, Models.InteractiveRebaseAction act)
     {
+        if (_disposed)
+            return;
         var prefill = new InteractiveRebasePrefill(commit.SHA, act);
         var start = act switch
         {
@@ -653,6 +767,8 @@ public class Histories : ObservableObject, IDisposable
         };
 
         var on = await new Commands.QuerySingleCommit(_repo.FullPath, start).GetResultAsync();
+        if (_disposed)
+            return;
         if (on is null)
             App.RaiseException(_repo.FullPath, App.Text("Error.CanNotSquash"));
         else
@@ -674,6 +790,9 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public async Task<Models.Commit> CompareWithHeadAsync(Models.Commit commit)
     {
+        if (_disposed)
+            return null;
+        var request = BeginNavigationRequest();
         var head = _commits.Find(x => x.IsCurrentHead);
         if (head is null)
         {
@@ -682,7 +801,7 @@ public class Histories : ObservableObject, IDisposable
                 _repo.SearchCommitContext.Selected = null;
 
             head = await new Commands.QuerySingleCommit(_repo.FullPath, "HEAD").GetResultAsync();
-            if (head is not null)
+            if (!_disposed && request == _navigationRequest && head is not null)
                 DetailContext = new RevisionCompare(_repo, commit, head);
 
             return null;
@@ -696,9 +815,14 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public void CompareWithWorktree(Models.Commit commit)
     {
+        if (_disposed)
+            return;
+        BeginNavigationRequest();
         DetailContext = new RevisionCompare(_repo, commit, null);
     }
 
+    private bool _disposed;
+    private long _navigationRequest;
     private Repository _repo = null; // 対象リポジトリ
     private CommitDetailSharedData _commitDetailSharedData = null; // コミット詳細の共有データ
     private bool _isLoading = true; // 読み込み中フラグ
@@ -716,4 +840,6 @@ public class Histories : ObservableObject, IDisposable
     private GridLength _rightArea = new GridLength(1, GridUnitType.Star); // 右パネル幅
     private GridLength _topArea = new GridLength(1, GridUnitType.Star); // 上パネル高さ
     private GridLength _bottomArea = new GridLength(1, GridUnitType.Star); // 下パネル高さ
+    private bool _isDetailsPanelExpanded = true;
+
 }

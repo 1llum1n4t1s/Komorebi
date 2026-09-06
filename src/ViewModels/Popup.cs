@@ -1,6 +1,8 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -14,6 +16,55 @@ namespace Komorebi.ViewModels;
 /// </summary>
 public class Popup : ObservableValidator, Models.ICommandLogReceiver
 {
+    public bool CanTerminate
+    {
+        get => _canTerminate;
+        private set => SetProperty(ref _canTerminate, value);
+    }
+
+    public bool IsTerminating
+    {
+        get => _isTerminating;
+        private set => SetProperty(ref _isTerminating, value);
+    }
+
+    public void Terminate()
+    {
+        if (_cancellation == null || IsTerminating)
+            return;
+        IsTerminating = true;
+        _ = _cancellation.CancelAsync();
+    }
+
+    protected CancellableOperation BeginCancellableOperation() => new(this);
+
+    protected sealed class CancellableOperation : IDisposable
+    {
+        public CancellationToken Token => _source.Token;
+
+        public CancellableOperation(Popup owner)
+        {
+            _owner = owner;
+            owner._cancellation = _source;
+            owner.IsTerminating = false;
+            owner.CanTerminate = true;
+        }
+
+        public void Dispose()
+        {
+            _owner.CanTerminate = false;
+            _owner._cancellation = null;
+            _owner.IsTerminating = false;
+            _source.Dispose();
+        }
+
+        private readonly Popup _owner;
+        private readonly CancellationTokenSource _source = new();
+    }
+
+    private bool _canTerminate;
+    private bool _isTerminating;
+    private CancellationTokenSource _cancellation;
     /// <summary>
     /// 処理が進行中かどうか。trueの間はUIにプログレス表示される。
     /// </summary>

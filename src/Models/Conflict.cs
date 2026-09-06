@@ -2,6 +2,14 @@
 
 namespace Komorebi.Models;
 
+public enum ConflictFileState
+{
+    Unknown,
+    Resolved,
+    UnmergedText,
+    UnmergedBinary,
+}
+
 /// <summary>
 /// コンフリクト解決画面のパネルタイプを表す列挙型。
 /// </summary>

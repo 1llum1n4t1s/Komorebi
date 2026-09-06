@@ -2,6 +2,8 @@
 #nullable disable warnings
 using System.IO;
 using System.Threading.Tasks;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Komorebi.ViewModels;
 
@@ -10,7 +12,7 @@ namespace Komorebi.ViewModels;
 /// コンフリクトが発生したファイルの解決操作（自分の変更を使用、相手の変更を使用、マージ）を提供する。
 /// チェリーピック、リベース、リバート、マージなど各種操作中のコンフリクトに対応する。
 /// </summary>
-public class Conflict
+public class Conflict : ObservableObject
 {
     /// <summary>
     /// コンフリクトマーカー（ファイル内のコンフリクト箇所を示す文字列）。
@@ -51,9 +53,8 @@ public class Conflict
     /// </summary>
     public bool IsResolved
     {
-        get;
-        private set;
-    } = false;
+        get => _state == Models.ConflictFileState.Resolved;
+    }
 
     /// <summary>
     /// マージツールで解決可能かどうかのフラグ。
@@ -61,9 +62,8 @@ public class Conflict
     /// </summary>
     public bool CanMerge
     {
-        get;
-        private set;
-    } = false;
+        get => _state == Models.ConflictFileState.UnmergedText;
+    }
 
     /// <summary>
     /// コンストラクタ。リポジトリ、ワーキングコピー、コンフリクトファイルを受け取って初期化する。
@@ -78,28 +78,33 @@ public class Conflict
         _wc = wc;
         _change = change;
 
-        // 両方で追加または両方で変更されたファイルのみマージ可能とする
-        CanMerge = _change.ConflictReason is Models.ConflictReason.BothAdded or Models.ConflictReason.BothModified;
-        if (CanMerge)
-            // ディレクトリ（サブモジュール）はマージ不可
-            CanMerge = !Directory.Exists(Path.Combine(repo.FullPath, change.Path));
-
-        // マージ可能な場合はコンフリクトが既に解決済みかチェックする
-        if (CanMerge)
-            IsResolved = new Commands.IsConflictResolved(repo.FullPath, change).GetResult();
-
-        // HEADコミットを取得する
-        _head = new Commands.QuerySingleCommit(repo.FullPath, "HEAD").GetResult();
-
-        // 進行中の操作種別に応じてMine/Theirsを設定する
-        (Mine, Theirs) = wc.InProgressContext switch
+        var canMerge = change.ConflictReason is Models.ConflictReason.BothAdded or Models.ConflictReason.BothModified &&
+            !Directory.Exists(Path.Combine(repo.FullPath, change.Path));
+        var progress = wc.InProgressContext;
+        Task.Run(async () =>
         {
-            CherryPickInProgress cherryPick => (_head, cherryPick.Head),
-            RebaseInProgress rebase => (rebase.Onto, rebase.StoppedAt),
-            RevertInProgress revert => (_head, revert.Head),
-            MergeInProgress merge => (_head, merge.Source),
-            _ => (_head, (object)"Stash or Patch"),
-        };
+            var head = await new Commands.QuerySingleCommit(repo.FullPath, "HEAD").GetResultAsync().ConfigureAwait(false);
+            var state = canMerge
+                ? await new Commands.QueryConflictFileState(repo.FullPath, change).GetResultAsync().ConfigureAwait(false)
+                : Models.ConflictFileState.Unknown;
+            Dispatcher.UIThread.Post(() =>
+            {
+                _head = head;
+                _state = state;
+                (Mine, Theirs) = progress switch
+                {
+                    CherryPickInProgress cherryPick => (head, cherryPick.Head),
+                    RebaseInProgress rebase => (rebase.Onto, rebase.StoppedAt),
+                    RevertInProgress revert => (head, revert.Head),
+                    MergeInProgress merge => (head, merge.Source),
+                    _ => (head, (object)"Stash or Patch"),
+                };
+                OnPropertyChanged(nameof(Mine));
+                OnPropertyChanged(nameof(Theirs));
+                OnPropertyChanged(nameof(IsResolved));
+                OnPropertyChanged(nameof(CanMerge));
+            });
+        });
     }
 
     /// <summary>
@@ -138,6 +143,7 @@ public class Conflict
     }
 
     /// <summary>対象リポジトリへの参照</summary>
+    private Models.ConflictFileState _state;
     private Repository _repo = null;
     /// <summary>ワーキングコピーViewModelへの参照</summary>
     private WorkingCopy _wc = null;

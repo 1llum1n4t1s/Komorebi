@@ -64,8 +64,9 @@ public class LFS : Command
     /// <param name="remote">フェッチ元のリモート名。</param>
     public async Task FetchAsync(string remote)
     {
+        // 上流との差分: 全LFS操作でリモート名を1引数として引用する。
         // git lfs fetch: リモートからLFSオブジェクトをダウンロードする
-        Args = $"lfs fetch {remote}";
+        Args = $"lfs fetch {remote.Quoted()}";
         await ExecAsync().ConfigureAwait(false);
     }
 
@@ -77,7 +78,7 @@ public class LFS : Command
     public async Task PullAsync(string remote)
     {
         // git lfs pull: リモートからLFSオブジェクトをダウンロードしてチェックアウトする
-        Args = $"lfs pull {remote}";
+        Args = $"lfs pull {remote.Quoted()}";
         await ExecAsync().ConfigureAwait(false);
     }
 
@@ -89,7 +90,7 @@ public class LFS : Command
     public async Task PushAsync(string remote)
     {
         // git lfs push: LFSオブジェクトをリモートにアップロードする
-        Args = $"lfs push {remote}";
+        Args = $"lfs push {remote.Quoted()}";
         await ExecAsync().ConfigureAwait(false);
     }
 
@@ -113,7 +114,7 @@ public class LFS : Command
     public async Task<List<Models.LFSLock>> GetLocksAsync(string remote)
     {
         // git lfs locks --json: ロック一覧をJSON形式で取得する
-        Args = $"lfs locks --json --remote={remote}";
+        Args = $"lfs locks --json --remote={remote.Quoted()}";
 
         var rs = await ReadToEndAsync().ConfigureAwait(false);
         if (rs.IsSuccess)
@@ -143,7 +144,7 @@ public class LFS : Command
     public async Task<bool> LockAsync(string remote, string file)
     {
         // git lfs lock: 指定ファイルをロックする
-        Args = $"lfs lock --remote={remote} {file.Quoted()}";
+        Args = $"lfs lock --remote={remote.Quoted()} {file.Quoted()}";
         return await ExecAsync().ConfigureAwait(false);
     }
 
@@ -162,7 +163,7 @@ public class LFS : Command
         // git lfs unlock: 指定ファイルのロックを解除する
         builder
             .Append("lfs unlock --remote=")
-            .Append(remote)
+            .Append(remote.Quoted())
             .Append(force ? " -f " : " ")
             .Append(file.Quoted());
 
@@ -185,7 +186,7 @@ public class LFS : Command
         // git lfs unlock: 複数ファイルのロックを一括解除する
         builder
             .Append("lfs unlock --remote=")
-            .Append(remote)
+            .Append(remote.Quoted())
             .Append(force ? " -f" : " ");
 
         // 各ファイルパスを引数に追加する

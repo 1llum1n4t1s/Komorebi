@@ -13,10 +13,10 @@ namespace Komorebi.AI;
 /// </summary>
 public class Agent(Service service)
 {
-    public Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
+    public Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation, string? amendParent = null, string? currentBranch = null)
     {
         var strategy = CreateStrategy();
-        return strategy.GenerateCommitMessageAsync(repo, changeList, onUpdate, cancellation);
+        return strategy.GenerateCommitMessageAsync(repo, changeList, onUpdate, cancellation, amendParent, currentBranch);
     }
 
     private IGenerationStrategy CreateStrategy() => service.Provider switch
@@ -29,7 +29,7 @@ public class Agent(Service service)
     /// すべての Strategy で共通利用するユーザーメッセージのプロンプト構築。
     /// プロンプト変更時はここ 1 箇所を直せば全プロバイダに反映される。
     /// </summary>
-    internal static string BuildUserMessage(Service service, string repo, string changeList)
+    internal static string BuildUserMessage(Service service, string repo, string changeList, string? currentBranch = null)
     {
         var sb = new StringBuilder();
         sb.AppendLine("Generate a commit message (follow the rule of conventional commit message) for given git repository.")
@@ -38,6 +38,9 @@ public class Agent(Service service)
 
         if (!string.IsNullOrEmpty(service.AdditionalPrompt))
             sb.AppendLine(service.AdditionalPrompt);
+
+        if (!string.IsNullOrEmpty(currentBranch))
+            sb.Append("Current branch: ").AppendLine(currentBranch.Quoted());
 
         sb.Append("Repository path: ").AppendLine(repo.Quoted())
           .AppendLine("Changed files ('A' means added, 'M' means modified, 'D' means deleted, 'T' means type changed, 'R' means renamed, 'C' means copied): ")

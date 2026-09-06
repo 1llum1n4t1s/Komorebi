@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 
 namespace Komorebi.Views;
@@ -36,10 +37,23 @@ public partial class DealWithLocalChangesMethod : UserControl
         UpdateRadioButtons();
     }
 
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (e.KeyModifiers == KeyModifiers.None && e.Key is Key.Up or Key.Down)
+        {
+            var value = (int)Method + (e.Key == Key.Down ? 1 : -1);
+            Method = (Models.DealWithLocalChanges)((value + 3) % 3);
+            e.Handled = true;
+        }
+        else
+            base.OnKeyDown(e);
+    }
+
     private void OnRadioButtonClicked(object sender, RoutedEventArgs e)
     {
         if (sender is RadioButton { Tag: Models.DealWithLocalChanges way })
         {
+            Focus();
             Method = way;
             e.Handled = true;
         }

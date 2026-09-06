@@ -141,8 +141,8 @@ namespace Komorebi.Tests.Commands
 
             var result = Blame.ParseBlameOutput(output);
 
-            // Content should contain both lines with line endings
-            Assert.Contains("first line", result.Content);
+            // 最後に存在しない空行を追加しない。
+            Assert.Equal("first line\nsecond line", result.Content);
             Assert.Contains("second line", result.Content);
         }
 

@@ -221,25 +221,18 @@ public class Merge : Popup
 
     /// <summary>
     /// バックグラウンドでマージ事前チェックを実行する。
-    /// マージベースを求めた上で `git merge-tree --write-tree` を実行し、
+    /// 対応する Git で `git merge-tree --write-tree` を実行し、
     /// 終了コードからコンフリクトの有無を判定してTestingStateへ反映する。
     /// </summary>
     private void Test()
     {
+        if (Native.OS.GitVersion < Models.GitVersions.TESTING_MERGE)
+            return;
+
         TestingState = MergeTestingState.Testing;
 
         Task.Run(async () =>
         {
-            var mergeBase = await new Commands.MergeBase(_repo.FullPath, _sourceName, Into)
-                .GetResultAsync()
-                .ConfigureAwait(false);
-
-            if (string.IsNullOrEmpty(mergeBase))
-            {
-                Dispatcher.UIThread.Post(() => TestingState = MergeTestingState.Disabled);
-                return;
-            }
-
             var exitCode = await new Commands.MergeTree(_repo.FullPath, _sourceName, Into)
                 .GetExitCodeAsync()
                 .ConfigureAwait(false);

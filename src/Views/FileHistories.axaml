@@ -63,6 +63,7 @@
                SelectionMode="Multiple"
                SelectionChanged="OnRevisionsSelectionChanged"
                PropertyChanged="OnRevisionsPropertyChanged"
+               ContextRequested="OnRevisionsContextRequested"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ListBox.Styles>
@@ -151,28 +152,14 @@
                         <Border Grid.Row="0"
                                 BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border2}"
                                 Background="{DynamicResource Brush.Window}">
-                          <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                          <Grid ColumnDefinitions="Auto,*,Auto">
                             <Path Grid.Column="0" Width="12" Height="12" Data="{StaticResource Icons.File}" Margin="8,0,0,0"/>
                             <TextBlock Grid.Column="1"
                                        Margin="4,0,0,0"
                                        Text="{Binding Path}"
                                        FontSize="11"
                                        TextTrimming="CharacterEllipsis"/>
-                            <ToggleButton Grid.Column="2"
-                                          Classes="line_path"
-                                          Width="28"
-                                          Background="Transparent"
-                                          IsChecked="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseSyntaxHighlighting, Mode=TwoWay}"
-                                          ToolTip.Tip="{DynamicResource Text.Diff.SyntaxHighlight}">
-                              <ToggleButton.IsVisible>
-                                <Binding Path="Content"
-                                         Mode="OneWay"
-                                         Converter="{x:Static c:ObjectConverters.IsTypeOf}"
-                                         ConverterParameter="{x:Type m:RevisionTextFile}"/>
-                              </ToggleButton.IsVisible>
-                              <Path Width="13" Height="13" Data="{StaticResource Icons.SyntaxHighlight}" Margin="0,3,0,0"/>
-                            </ToggleButton>
-                            <Button Grid.Column="3"
+                            <Button Grid.Column="2"
                                     Classes="icon_button"
                                     Width="28"
                                     Background="Transparent"
@@ -206,7 +193,7 @@
                 <Grid.DataTemplates>
                   <DataTemplate DataType="m:FileVersion">
                     <Grid RowDefinitions="Auto,*">
-                      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto">
+                      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
                         <v:Avatar Grid.Column="0" Width="16" Height="16" VerticalAlignment="Center" IsHitTestVisible="False" User="{Binding Author}"/>
                         <TextBlock Grid.Column="1" Text="{Binding Author.Name}" Margin="8,0,0,0"/>
                         <TextBlock Grid.Column="2" Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}" FontFamily="{DynamicResource Fonts.Monospace}" Foreground="DarkOrange" Margin="8,0,0,0" TextDecorations="Underline" Cursor="Hand" PointerPressed="OnPressCommitSHA" />
@@ -234,7 +221,7 @@
                   <ContentControl Content="{Binding EndPoint}"/>
                 </Border>
 
-                <Button Grid.Column="3" Classes="icon_button" Width="32" Click="OnSaveAsPatch" ToolTip.Tip="{DynamicResource Text.Diff.SaveAsPatch}">
+                <Button Grid.Column="2" Classes="icon_button" Width="32" Click="OnSaveAsPatch" ToolTip.Tip="{DynamicResource Text.Diff.SaveAsPatch}">
                   <Path Width="16" Height="16" Data="{DynamicResource Icons.Save}"/>
                 </Button>
               </Grid>

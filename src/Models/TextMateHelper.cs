@@ -34,6 +34,11 @@ public static class GrammarUtility
         new ExtraGrammar("source.hxml", [".hxml"], "hxml.json"),
         new ExtraGrammar("text.html.jsp", [".jsp", ".jspf", ".tag"], "jsp.json"),
         new ExtraGrammar("source.vue", [".vue"], "vue.json"),
+        new ExtraGrammar("source.erlang", [".erl", ".escript", ".hrl"], "erlang.json"),
+        new ExtraGrammar("source.ocaml", [".ml", ".mli"], "ocaml.json"),
+        new ExtraGrammar("source.ocamllex", [".mll"], "ocamllex.json"),
+        new ExtraGrammar("source.ocamlyacc", [".mly"], "ocamlyacc.json"),
+        new ExtraGrammar("source.swift", [".swift"], "swift.json"),
     ];
 
     /// <summary>読み込み済み文法定義のキャッシュ（スコープ名 → IRawGrammar）</summary>
@@ -52,7 +57,7 @@ public static class GrammarUtility
         // 特定の拡張子を既知の言語にマッピング
         if (extension == ".h")
             extension = ".cpp";
-        else if (extension is ".resx" or ".plist" or ".manifest")
+        else if (extension is ".resx" or ".plist" or ".manifest" or ".slnx")
             extension = ".xml";
         else if (extension == ".command")
             extension = ".sh";

@@ -212,27 +212,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">與目前 HEAD 比較</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">存放庫設定</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">提交訊息範本</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:
-
-  ${branch_name} 目前分支名稱
-  ${files_num} 已變更檔案數
-  ${files} 已變更檔案路徑清單
-  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)
-  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${branch_name} 目前分支名稱&#xD;&#xD;&#xD;
+  ${files_num} 已變更檔案數&#xD;&#xD;&#xD;
+  ${files} 已變更檔案路徑清單&#xD;&#xD;&#xD;
+  ${files:N} 已變更檔案路徑清單 (僅列出前 N 個)&#xD;&#xD;&#xD;
+  ${pure_files} 類似 ${files}，不含資料夾的純檔案名稱&#xD;&#xD;&#xD;
   ${pure_files:N} 類似 ${files:N}，不含資料夾的純檔案名稱</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">範本內容:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">範本名稱:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">自訂動作</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">指令參數:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:
-
-  ${REPO} 存放庫路徑
-  ${REMOTE} 所選的遠端存放庫或所選分支的遠端
-  ${BRANCH} 所選的分支。對於遠端分支，不包含 ${REMOTE} 部分
-  ${BRANCH_FRIENDLY_NAME} 所選分支的易讀名稱。對於遠端分支，包含 ${REMOTE} 部分
-  ${SHA} 所選的提交編號
-  ${TAG} 所選的標籤
-  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">內建參數:&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;
+  ${REPO} 存放庫路徑&#xD;&#xD;&#xD;
+  ${REMOTE} 所選的遠端存放庫或所選分支的遠端&#xD;&#xD;&#xD;
+  ${BRANCH} 所選的分支。對於遠端分支，不包含 ${REMOTE} 部分&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} 所選分支的易讀名稱。對於遠端分支，包含 ${REMOTE} 部分&#xD;&#xD;&#xD;
+  ${SHA} 所選的提交編號&#xD;&#xD;&#xD;
+  ${TAG} 所選的標籤&#xD;&#xD;&#xD;
+  ${FILE} 所選的檔案，相對於存放庫根目錄的路徑&#xD;&#xD;&#xD;
   $1, $2 ... 輸入控制項中的值</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">可執行檔案路徑:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">輸入控制項:</x:String>
@@ -1074,7 +1074,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">儲存檔案失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">儲存修補檔變更失敗：{0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">掃描儲存庫失敗：{0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">啟動儲存庫 '{0}' 的監視器失敗。您可能需要按 'F5' 手動重新整理儲存庫！&#xD;&#xD;&#xD;
 原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">啟動 '{0}' 失敗。原因：{1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">開啟失敗：{0}</x:String>
@@ -1208,4 +1208,59 @@
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">簽出標籤...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">遞迴更新多層級子模組</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">忽略同路徑下所有新增檔案</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
 </ResourceDictionary>

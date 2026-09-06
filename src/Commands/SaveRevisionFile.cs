@@ -38,7 +38,7 @@ public static class SaveRevisionFile
         if (isLFSFiltered)
         {
             // LFSファイル: ポインタを取得し、lfs smudge で実ファイルに展開
-            var pointerStream = await QueryFileContent.RunAsync(repo, revision, file).ConfigureAwait(false);
+            await using var pointerStream = await QueryFileContent.RunAsync(repo, revision, file).ConfigureAwait(false);
             if (pointerStream is null)
             {
                 App.RaiseException(repo, App.Text("Error.FailedToSaveRevisionFile", file));

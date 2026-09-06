@@ -237,11 +237,18 @@ public class Clone : Popup
         }
 
         // git cloneコマンドを実行する
-        var succ = await new Commands.Clone(_pageId, _parentFolder, _remote, _local, resolvedSSHKey, _extraArgs)
-            .Use(log)
-            .ExecAsync();
+        bool succ;
+        using (var cancellation = BeginCancellableOperation())
+        {
+            succ = await new Commands.Clone(_pageId, _parentFolder, _remote, _local, resolvedSSHKey, _extraArgs) { CancellationToken = cancellation.Token }
+                .Use(log)
+                .ExecAsync();
+        }
         if (!succ)
+        {
+            log.Complete();
             return false;
+        }
 
         // クローン先のフルパスを決定する
         var path = _parentFolder;

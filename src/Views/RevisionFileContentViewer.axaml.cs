@@ -30,15 +30,6 @@ public class RevisionTextFileView : TextEditor
         set => SetValue(TabWidthProperty, value);
     }
 
-    public static readonly StyledProperty<bool> UseSyntaxHighlightingProperty =
-        AvaloniaProperty.Register<RevisionTextFileView, bool>(nameof(UseSyntaxHighlighting));
-
-    public bool UseSyntaxHighlighting
-    {
-        get => GetValue(UseSyntaxHighlightingProperty);
-        set => SetValue(UseSyntaxHighlightingProperty, value);
-    }
-
     protected override Type StyleKeyOverride => typeof(TextEditor);
 
     /// <summary>
@@ -69,7 +60,9 @@ public class RevisionTextFileView : TextEditor
         base.OnLoaded(e);
 
         TextArea.TextView.ContextRequested += OnTextViewContextRequested;
-        UpdateTextMate();
+        _textMate ??= Models.TextMateHelper.CreateForEditor(this);
+        if (DataContext is Models.RevisionTextFile file)
+            Models.TextMateHelper.SetGrammarByFileName(_textMate, file.FileName);
     }
 
     /// <summary>
@@ -117,8 +110,6 @@ public class RevisionTextFileView : TextEditor
 
         if (change.Property == TabWidthProperty)
             Options.IndentationSize = TabWidth;
-        else if (change.Property == UseSyntaxHighlightingProperty)
-            UpdateTextMate();
         else if (change.Property.Name == nameof(ActualThemeVariant) && change.NewValue != null)
             Models.TextMateHelper.SetThemeByApp(_textMate);
     }
@@ -157,27 +148,6 @@ public class RevisionTextFileView : TextEditor
         e.Handled = true;
     }
 
-    /// <summary>
-    /// UpdateTextMateの処理を行う。
-    /// </summary>
-    private void UpdateTextMate()
-    {
-        if (UseSyntaxHighlighting)
-        {
-            _textMate ??= Models.TextMateHelper.CreateForEditor(this);
-
-            if (DataContext is Models.RevisionTextFile file)
-                Models.TextMateHelper.SetGrammarByFileName(_textMate, file.FileName);
-        }
-        else if (_textMate is not null)
-        {
-            _textMate.Dispose();
-            _textMate = null;
-
-            TextArea.TextView.Redraw();
-        }
-    }
-
     private TextMate.Installation _textMate = null;
 }
 
@@ -193,4 +163,13 @@ public partial class RevisionFileContentViewer : UserControl
     {
         InitializeComponent();
     }
+    private async void OnOpenBinaryFileViewer(object sender, RoutedEventArgs e)
+    {
+        if (sender is Control { DataContext: Models.RevisionBinaryFile file })
+        {
+            await App.ShowDialog(new ViewModels.BinaryFileViewer(file.Repository, file.File, file.Revision), TopLevel.GetTopLevel(this) as Window);
+            e.Handled = true;
+        }
+    }
+
 }

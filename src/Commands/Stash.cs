@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,55 @@ public class Stash : Command
         WorkingDirectory = repo;
         Context = repo;
     }
+
+    /// <summary>この操作が作成した自動スタッシュを記録する。</summary>
+    public async Task<bool> PushAutoAsync(string message)
+    {
+        var previous = await new QueryRevisionByRefName(WorkingDirectory, "refs/stash").GetResultAsync().ConfigureAwait(false);
+        if (!await PushAsync(message, false).ConfigureAwait(false))
+            return false;
+
+        var current = await new QueryRevisionByRefName(WorkingDirectory, "refs/stash").GetResultAsync().ConfigureAwait(false);
+        _autoStashSHA = current != previous ? current : null;
+        return true;
+    }
+
+    /// <summary>成功・失敗を問わず、安全な状態なら自動スタッシュを復元する。</summary>
+    public async Task RestoreAutoAsync(string gitDir)
+    {
+        if (string.IsNullOrEmpty(_autoStashSHA))
+            return;
+
+        // upstreamとの差分: 中断中のマージ等には変更を混ぜず、別操作のスタッシュも触らない。
+        var current = await new QueryRevisionByRefName(WorkingDirectory, "refs/stash").GetResultAsync().ConfigureAwait(false);
+        if (current != _autoStashSHA ||
+            File.Exists(Path.Combine(gitDir, "MERGE_HEAD")) ||
+            File.Exists(Path.Combine(gitDir, "CHERRY_PICK_HEAD")) ||
+            File.Exists(Path.Combine(gitDir, "REVERT_HEAD")) ||
+            Directory.Exists(Path.Combine(gitDir, "rebase-merge")) ||
+            Directory.Exists(Path.Combine(gitDir, "rebase-apply")) ||
+            Directory.Exists(Path.Combine(gitDir, "sequencer")))
+        {
+            ReportRetainedAutoStash();
+            return;
+        }
+
+        if (!await PopAsync("stash@{0}").ConfigureAwait(false))
+            ReportRetainedAutoStash();
+        _autoStashSHA = null;
+    }
+
+    private void ReportRetainedAutoStash()
+    {
+        if (string.IsNullOrEmpty(_autoStashSHA) || (Log is null && !RaiseError))
+            return;
+        var message = App.Text("Stash.AutoRetained", _autoStashSHA);
+        Log?.AppendLine(message);
+        if (RaiseError)
+            App.RaiseException(Context, message);
+    }
+
+    private string? _autoStashSHA;
 
     /// <summary>
     /// 全ての変更をスタッシュにプッシュする。

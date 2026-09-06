@@ -34,7 +34,7 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
     /// </summary>
     private const int MaxToolCallIterations = 20;
 
-    public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation)
+    public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation, string? amendParent = null, string? currentBranch = null)
     {
         // HTTPS 強制で API key の平文流出を防ぐ
         service.ValidateServerScheme();
@@ -63,7 +63,7 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
             });
 
         var messages = new JsonArray(
-            new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(service, repo, changeList) });
+            new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(service, repo, changeList, currentBranch) });
 
         var iterations = 0;
         do
@@ -168,7 +168,7 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
                 }
 
                 var toolResultObjects = await Task.WhenAll(toolCalls.Select(c =>
-                    ChatTools.ProcessAnthropicCall(c.Id, c.Name, c.Input, repo, onUpdate))).ConfigureAwait(false);
+                    ChatTools.ProcessAnthropicCall(c.Id, c.Name, c.Input, repo, onUpdate, amendParent))).ConfigureAwait(false);
 
                 var toolResults = new JsonArray();
                 foreach (var r in toolResultObjects)

@@ -37,7 +37,7 @@
     </Grid>
 
     <!-- Body -->
-    <Border Grid.Row="1">
+    <ScrollViewer Grid.Row="1" MaxHeight="760" HorizontalScrollBarVisibility="Disabled">
       <StackPanel Orientation="Vertical" Margin="16,8,16,16">
         <TextBlock Text="{DynamicResource Text.Hotkeys.Global}"
                    Foreground="{DynamicResource Brush.FG2}"
@@ -61,10 +61,10 @@
           <TextBlock Grid.Row="4" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+Tab, macOS=⌘+⌥+→}"/>
           <TextBlock Grid.Row="4" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Hotkeys.Global.GotoNextTab}" />
 
-          <TextBlock Grid.Row="5" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+N, macOS=⌘+N}"/>
+          <TextBlock Grid.Row="5" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+R, macOS=⌘+R}"/>
           <TextBlock Grid.Row="5" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Hotkeys.Global.Clone}" />
 
-          <TextBlock Grid.Row="6" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+Shift+O, macOS=⌘+⇧+O}"/>
+          <TextBlock Grid.Row="6" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+L, macOS=⌘+L}"/>
           <TextBlock Grid.Row="6" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Hotkeys.Global.OpenLocalRepository}" />
 
           <TextBlock Grid.Row="7" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+Alt+P, macOS=⌘+⌥+P}"/>
@@ -76,7 +76,7 @@
           <TextBlock Grid.Row="9" Grid.Column="0" Classes="bold" Text="{OnPlatform 'Ctrl+-/=', macOS='⌘+-/='}"/>
           <TextBlock Grid.Row="9" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Hotkeys.Global.Zoom}" />
 
-          <TextBlock Grid.Row="10" Grid.Column="0" Classes="bold" Text="Ctrl+`"/>
+          <TextBlock Grid.Row="10" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+`, macOS=^+`}"/>
           <TextBlock Grid.Row="10" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Welcome.OpenTerminal}" />
 
           <TextBlock Grid.Row="11" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+Q, macOS=⌘+Q}"/>
@@ -89,7 +89,7 @@
                    FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Increase}}"
                    Margin="0,8"/>
 
-        <Grid RowDefinitions="20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20" ColumnDefinitions="150,*">
+        <Grid RowDefinitions="20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20" ColumnDefinitions="150,*">
           <TextBlock Grid.Row="0" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+Shift+H, macOS=⌘+⇧+H}"/>
           <TextBlock Grid.Row="0" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Hotkeys.Repo.GoHome}" />
 
@@ -140,6 +140,18 @@
 
           <TextBlock Grid.Row="16" Grid.Column="0" Classes="bold" Text="F5"/>
           <TextBlock Grid.Row="16" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Hotkeys.Repo.Refresh}" />
+
+          <TextBlock Grid.Row="17" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+J, macOS=⌘+J}"/>
+          <TextBlock Grid.Row="17" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.CommitDetail.CollapseToBottom}"/>
+
+          <TextBlock Grid.Row="18" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+N, macOS=⌘+N}"/>
+          <TextBlock Grid.Row="18" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.HistoriesDetailsStandalone}"/>
+
+          <TextBlock Grid.Row="19" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+Shift+B, macOS=⌘+⇧+B}"/>
+          <TextBlock Grid.Row="19" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.CreateBranch}"/>
+
+          <TextBlock Grid.Row="20" Grid.Column="0" Classes="bold" Text="{OnPlatform Ctrl+Shift+T, macOS=⌘+⇧+T}"/>
+          <TextBlock Grid.Row="20" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.CreateTag}"/>
         </Grid>
 
         <TextBlock Text="{DynamicResource Text.Hotkeys.TextEditor}"
@@ -165,6 +177,6 @@
           <TextBlock Grid.Row="4" Grid.Column="1" Margin="16,0,0,0" Text="{DynamicResource Text.Hotkeys.TextEditor.OpenExternalMergeTool}" />
         </Grid>
       </StackPanel>
-    </Border>
+    </ScrollViewer>
   </Grid>
 </v:ChromelessWindow>

@@ -417,7 +417,7 @@ public partial class Preferences : ChromelessWindow
         {
             options = new FilePickerOpenOptions()
             {
-                FileTypeFilter = [new FilePickerFileType(shell.Name) { Patterns = [shell.Exec] }],
+                FileTypeFilter = [new FilePickerFileType(shell.Name) { Patterns = shell.Exec.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) }],
                 AllowMultiple = false,
             };
         }
@@ -553,7 +553,7 @@ public partial class Preferences : ChromelessWindow
     {
         var options = new FilePickerOpenOptions()
         {
-            FileTypeFilter = [new FilePickerFileType("Executable file(script)") { Patterns = ["*.*"] }],
+            FileTypeFilter = [new FilePickerFileType("Executable file(script)") { Patterns = ["*"] }],
             AllowMultiple = false,
         };
 

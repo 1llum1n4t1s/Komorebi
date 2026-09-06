@@ -212,27 +212,27 @@
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD உடன் ஒப்பிடு</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">களஞ்சியம் உள்ளமை</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate" xml:space="preserve">உறுதிமொழி வளர்புரு</x:String>
-  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: 
-  
-  ${branch_name} Current local branch name.
-  ${files_num} Number of changed files
-  ${files} Paths of changed files
-  ${files:N} Max N number of paths of changed files
-  ${pure_files} Likes ${files}, but only pure file names
+  <x:String x:Key="Text.Configure.CommitMessageTemplate.BuiltinVars" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${branch_name} Current local branch name.&#xD;&#xD;&#xD;
+  ${files_num} Number of changed files&#xD;&#xD;&#xD;
+  ${files} Paths of changed files&#xD;&#xD;&#xD;
+  ${files:N} Max N number of paths of changed files&#xD;&#xD;&#xD;
+  ${pure_files} Likes ${files}, but only pure file names&#xD;&#xD;&#xD;
   ${pure_files:N} Likes ${files:N}, but without folders</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Content" xml:space="preserve">வார்ப்புரு உள்ளடக்கம்:</x:String>
   <x:String x:Key="Text.Configure.CommitMessageTemplate.Name" xml:space="preserve">வார்ப்புரு பெயர்:</x:String>
   <x:String x:Key="Text.Configure.CustomAction" xml:space="preserve">தனிப்பயன் செயல்</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Arguments" xml:space="preserve">வாதங்கள்:</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: 
-  
-  ${REPO} Repository's path
-  ${REMOTE} Selected remote or selected branch's remote
-  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches
-  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches
-  ${SHA} Selected commit's hash
-  ${TAG} Selected tag
-  ${FILE} Selected file, relative to repository root
+  <x:String x:Key="Text.Configure.CustomAction.Arguments.Tip" xml:space="preserve">Built-in parameters: &#xD;&#xD;&#xD;
+  &#xD;&#xD;&#xD;
+  ${REPO} Repository's path&#xD;&#xD;&#xD;
+  ${REMOTE} Selected remote or selected branch's remote&#xD;&#xD;&#xD;
+  ${BRANCH} Selected branch, without ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${BRANCH_FRIENDLY_NAME} Friendly name of selected branch, contains ${REMOTE} part for remote branches&#xD;&#xD;&#xD;
+  ${SHA} Selected commit's hash&#xD;&#xD;&#xD;
+  ${TAG} Selected tag&#xD;&#xD;&#xD;
+  ${FILE} Selected file, relative to repository root&#xD;&#xD;&#xD;
   $1, $2 ... Input control values</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Executable" xml:space="preserve">இயக்கக்கூடிய கோப்பு:</x:String>
   <x:String x:Key="Text.Configure.CustomAction.InputControls" xml:space="preserve">உள்ளீட்டு கட்டுப்பாடுகள்:</x:String>
@@ -1074,7 +1074,7 @@
   <x:String x:Key="Text.Error.FailedToSaveRevisionFile" xml:space="preserve">கோப்பைச் சேமிக்க இயலவில்லை: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToSavePatch" xml:space="preserve">Patch மாற்றத்தைச் சேமிக்க இயலவில்லை: {0}</x:String>
   <x:String x:Key="Text.Error.FailedToScanRepositories" xml:space="preserve">களஞ்சியங்களை ஸ்கேன் செய்ய இயலவில்லை: {0}</x:String>
-  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">களஞ்சியம் '{0}' க்கான கண்காணியை தொடங்க இயலவில்லை. கைமுறையாகப் புதுப்பிக்க 'F5' அழுத்தவும்!
+  <x:String x:Key="Text.Error.FailedToStartWatcher" xml:space="preserve">களஞ்சியம் '{0}' க்கான கண்காணியை தொடங்க இயலவில்லை. கைமுறையாகப் புதுப்பிக்க 'F5' அழுத்தவும்!&#xD;&#xD;&#xD;
 காரணம்: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToStartTerminal" xml:space="preserve">'{0}' ஐத் தொடங்க இயலவில்லை. காரணம்: {1}</x:String>
   <x:String x:Key="Text.Error.FailedToOpenFile" xml:space="preserve">திறக்க இயலவில்லை: {0}</x:String>
@@ -1208,4 +1208,59 @@
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Tag-ஐ Checkout செய்...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">உள்ளமைக்கப்பட்ட submodule-களை புதுப்பி</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">அதே கோப்புறையில் உள்ள கண்காணிக்கப்படாத அனைத்து கோப்புகளையும் புறக்கணி</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
 </ResourceDictionary>

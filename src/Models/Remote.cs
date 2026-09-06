@@ -57,6 +57,8 @@ public partial class Remote
     public string Name { get; set; }
     /// <summary>リモートURL</summary>
     public string URL { get; set; }
+    /// <summary>このリモートを定期的な自動 fetch から除外する。</summary>
+    public bool DisableAutoFetch { get; set; }
 
     /// <summary>
     /// 指定URLがSSH形式かどうかを判定する

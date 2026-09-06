@@ -149,7 +149,7 @@ public class AIAssistant : ObservableObject
                     _repo.FullPath,
                     changeListBuilder.ToString(),
                     message => Dispatcher.UIThread.Post(() => Text += message + "\n"),
-                    cts.Token).ConfigureAwait(false);
+                    cts.Token, _changes.Count > 0 ? _changes[0].DataForAmend?.ParentSHA : null, _repo.CurrentBranch?.Name).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {

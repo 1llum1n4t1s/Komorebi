@@ -78,6 +78,7 @@ public class SquashOrFixupHead : Popup
 
         var log = _repo.CreateLog(IsFixupMode ? "Fixup" : "Squash");
         Use(log);
+        var autoStash = new Commands.Stash(_repo.FullPath).Use(log);
 
         var changes = await new Commands.QueryLocalChanges(_repo.FullPath, false).GetResultAsync();
         var signOff = _repo.UIStates.EnableSignOffForCommit;
@@ -96,9 +97,7 @@ public class SquashOrFixupHead : Popup
 
         if (needAutoStash)
         {
-            succ = await new Commands.Stash(_repo.FullPath)
-                .Use(log)
-                .PushAsync(IsFixupMode ? "FIXUP_AUTO_STASH" : "SQUASH_AUTO_STASH", false);
+            succ = await autoStash.PushAutoAsync(IsFixupMode ? "FIXUP_AUTO_STASH" : "SQUASH_AUTO_STASH");
             if (!succ)
             {
                 log.Complete();
@@ -115,10 +114,8 @@ public class SquashOrFixupHead : Popup
                 .Use(log)
                 .RunAsync();
 
-        if (succ && needAutoStash)
-            await new Commands.Stash(_repo.FullPath)
-                .Use(log)
-                .PopAsync("stash@{0}");
+        if (needAutoStash)
+            await autoStash.RestoreAutoAsync(_repo.GitDir);
 
         if (succ && ForcePushAfterDone)
         {

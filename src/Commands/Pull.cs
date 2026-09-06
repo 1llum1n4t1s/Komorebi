@@ -28,12 +28,14 @@ public class Pull : Command
         // git pull --verbose --progress: 詳細情報と進捗を表示してプルする
         builder.Append("pull --verbose --progress ");
 
-        // --rebase=true: マージの代わりにリベースを使用する
-        if (useRebase)
-            builder.Append("--rebase=true ");
+        // UI の選択を pull.rebase 設定より優先する（upstream d907a7a1）。
+        builder.Append(useRebase ? "--rebase=true " : "--rebase=false ");
 
         // プル元のリモートとブランチを指定する
-        builder.Append(remote).Append(' ').Append(branch);
+        // 上流との差分: 有効な参照名に含まれる引用符で引数境界を壊さない。
+        builder.Append(remote.Quoted());
+        if (!string.IsNullOrEmpty(branch))
+            builder.Append(' ').Append(branch.Quoted());
 
         Args = builder.ToString();
     }

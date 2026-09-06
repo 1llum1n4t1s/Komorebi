@@ -64,6 +64,9 @@ public class AddRemote : Popup
         set => SetProperty(ref _sshkey, value, true);
     }
 
+    /// <summary>追加直後の fetch でタグを取得しない。</summary>
+    public bool FetchWithoutTags { get; set; }
+
     /// <summary>
     /// コンストラクタ。対象リポジトリを受け取って初期化する。
     /// </summary>
@@ -165,7 +168,7 @@ public class AddRemote : Popup
                     .SetAsync($"remote.{_name}.sshkey", _useSSH ? SSHKey : null);
 
                 // 追加したリモートからフェッチを実行する
-                await new Commands.Fetch(_repo.FullPath, _name, false, false)
+                await new Commands.Fetch(_repo.FullPath, _name, FetchWithoutTags, false)
                     .Use(log)
                     .RunAsync();
             }

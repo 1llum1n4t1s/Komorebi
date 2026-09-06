@@ -14,11 +14,13 @@ public class Statistics : Command
     /// </summary>
     /// <param name="repo">リポジトリのパス</param>
     /// <param name="max">取得する最大コミット数</param>
-    public Statistics(string repo, int max)
+    /// <param name="branch">対象ブランチ。未指定なら全ブランチ</param>
+    public Statistics(string repo, int max, Models.Branch? branch = null)
     {
         WorkingDirectory = repo;
         Context = repo;
-        Args = $"log --date-order --branches --remotes -{max} --format=%ct$%aN±%aE";
+        var scope = string.IsNullOrEmpty(branch?.FullName) ? "--branches --remotes" : branch.FullName.Quoted();
+        Args = $"log --date-order {scope} -{max} --format=%ct$%aN±%aE --";
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -31,6 +32,10 @@ public partial class Clone : UserControl
 
         try
         {
+            var prefilled = TxtParentFolder.Text;
+            if (!string.IsNullOrWhiteSpace(prefilled) && Directory.Exists(prefilled))
+                options.SuggestedStartLocation = await toplevel.StorageProvider.TryGetFolderFromPathAsync(prefilled);
+
             var selected = await toplevel.StorageProvider.OpenFolderPickerAsync(options);
             if (selected.Count == 1)
             {

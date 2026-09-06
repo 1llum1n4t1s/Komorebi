@@ -96,7 +96,7 @@ public class Launcher : ObservableObject
     /// </summary>
     /// <param name="startupRepo">起動引数で指定されたパス。空文字列/nullの場合は何もしない。</param>
     /// <returns>リポジトリを開けた場合はtrue。パス未指定の場合はfalse。パスはあるがリポジトリでない場合はポップアップを出してtrueを返す。</returns>
-    private bool TryOpenRepositoryFromPath(string startupRepo)
+    public bool TryOpenRepositoryFromPath(string startupRepo)
     {
         if (string.IsNullOrEmpty(startupRepo))
             return false;
@@ -357,7 +357,25 @@ public class Launcher : ObservableObject
     /// リポジトリをタブで開く。既に開いているタブがあればそちらに切り替える。
     /// pageがnullの場合は新規タブまたはアクティブタブを再利用する。
     /// </summary>
-    public void OpenRepositoryInTab(RepositoryNode node, LauncherPage page)
+    public void OpenSubRepository(LauncherPage owner, string fullPath)
+    {
+        var normalized = fullPath.Replace(Path.DirectorySeparatorChar, '/').TrimEnd('/');
+        var ownerName = owner.Node.Name;
+        var colon = ownerName.LastIndexOf(':');
+        if (colon >= 0)
+            ownerName = ownerName[(colon + 1)..].Trim();
+        var node = Preferences.Instance.FindNode(normalized) ?? new RepositoryNode
+        {
+            Id = normalized,
+            Name = $"{ownerName}: {Path.GetFileName(normalized)}",
+            Bookmark = owner.Node.Bookmark,
+            IsRepository = true,
+            IsUnmanaged = true,
+        };
+        OpenRepositoryInTab(node, null, owner);
+    }
+
+    public void OpenRepositoryInTab(RepositoryNode node, LauncherPage page, LauncherPage insertAfter = null)
     {
         // 既に開いているタブがあればそちらに切り替え
         foreach (var one in Pages)
@@ -391,7 +409,12 @@ public class Launcher : ObservableObject
         var repo = new Repository(isBare, node.Id, gitDir);
         repo.Open();
 
-        if (page is null)
+        if (page is null && insertAfter is not null && Pages.Contains(insertAfter))
+        {
+            page = new LauncherPage(node, repo);
+            Pages.Insert(Pages.IndexOf(insertAfter) + 1, page);
+        }
+        else if (page is null)
         {
             // アクティブタブがリポジトリの場合は新規タブを追加、そうでなければ既存タブを再利用
             if (_activePage is null || _activePage.Node.IsRepository)

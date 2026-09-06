@@ -1,5 +1,7 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -23,6 +25,14 @@ public class GitFlowStart : Popup
     /// <summary>
     /// ブランチ名のプレフィックス（例: "feature/"）。
     /// </summary>
+    public List<Models.Branch> LocalBranches { get; } = [];
+
+    public Models.Branch StartPoint
+    {
+        get => _startPoint;
+        set => SetProperty(ref _startPoint, value);
+    }
+
     public string Prefix
     {
         get;
@@ -33,7 +43,6 @@ public class GitFlowStart : Popup
     /// 新規ブランチの名前（プレフィックスを除いた部分）。バリデーション付き。
     /// </summary>
     [Required(ErrorMessage = "Name is required!!!")]
-    [RegularExpression(@"^[\w\-/\.#]+$", ErrorMessage = "Bad branch name format!")]
     [CustomValidation(typeof(GitFlowStart), nameof(ValidateBranchName))]
     public string Name
     {
@@ -50,6 +59,13 @@ public class GitFlowStart : Popup
 
         Type = type;
         Prefix = _repo.GitFlow.GetPrefix(type);
+        foreach (var branch in repo.Branches)
+        {
+            if (branch.IsLocal && !branch.IsDetachedHead)
+                LocalBranches.Add(branch);
+        }
+        var defaultName = type == Models.GitFlowBranchType.Hotfix ? repo.GitFlow.Master : repo.GitFlow.Develop;
+        StartPoint = LocalBranches.Find(branch => branch.Name.Equals(defaultName, StringComparison.Ordinal));
     }
 
     /// <summary>
@@ -60,6 +76,9 @@ public class GitFlowStart : Popup
     {
         if (ctx.ObjectInstance is GitFlowStart starter)
         {
+            if (!Models.RefName.IsValidBranchName($"{starter.Prefix}{name}"))
+                return new ValidationResult("Bad branch name format!");
+
             // プレフィックス付きのフルネームで既存ブランチと比較
             var check = $"{starter.Prefix}{name}";
             foreach (var b in starter._repo.Branches)
@@ -83,11 +102,12 @@ public class GitFlowStart : Popup
         var log = _repo.CreateLog("GitFlow - Start");
         Use(log);
 
-        var succ = await Commands.GitFlow.StartAsync(_repo.FullPath, Type, _name, log);
+        var succ = await Commands.GitFlow.StartAsync(_repo.FullPath, Type, _name, log, _startPoint);
         log.Complete();
         return succ;
     }
 
     private readonly Repository _repo;
+    private Models.Branch _startPoint;
     private string _name = null;
 }

@@ -349,6 +349,17 @@ public class ThemedTextDiffPresenter : TextEditor
                     drawingContext.DrawEllipse(null, pen, new Point(indicatorX, indicatorY), radius, radius);
                     drawingContext.DrawLine(pen, new Point(indicatorX - radius + 3, indicatorY), new Point(indicatorX + radius - 3, indicatorY));
                 }
+                else if (_presenter.ShowHiddenSymbols &&
+                    info.Type is Models.TextDiffLineType.Normal or Models.TextDiffLineType.Added or Models.TextDiffLineType.Deleted)
+                {
+                    var lastTextLine = line.TextLines[^1];
+                    var indicatorX = lastTextLine.WidthIncludingTrailingWhitespace - textView.HorizontalOffset + 2;
+                    var indicatorY = line.GetTextLineVisualYPosition(lastTextLine, VisualYPosition.TextMiddle) - textView.VerticalOffset;
+                    var ending = info.RawContent.Length > 0 && info.RawContent[^1] == '\r' ? "\\r\\n" : "\\n";
+                    var indicator = new FormattedText(ending, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+                        textView.CreateTypeface(), _presenter.FontSize, _presenter.LineBrush);
+                    drawingContext.DrawText(indicator, new Point(indicatorX, indicatorY - indicator.Height * 0.5));
+                }
 
                 if (changeBlock is null)
                     continue;
@@ -739,7 +750,7 @@ public class ThemedTextDiffPresenter : TextEditor
     {
         if (e.KeyModifiers.Equals(OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
         {
-            if (e.Key == Key.C)
+            if (e.Key is Key.C or Key.Insert)
             {
                 e.Handled = true;
 
@@ -1146,6 +1157,8 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
     {
         base.OnLoaded(e);
 
+        ApplyTemplate();
+
         _scrollViewer = this.FindDescendantOfType<ScrollViewer>();
         if (_scrollViewer is not null)
         {
@@ -1217,7 +1230,6 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
                 builder.Append('\n');
             }
 
-            builder.Length--;
             Text = builder.ToString();
         }
         else
@@ -1395,6 +1407,8 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
     {
         base.OnLoaded(e);
 
+        ApplyTemplate();
+
         _scrollViewer = this.FindDescendantOfType<ScrollViewer>();
         if (_scrollViewer is not null)
         {
@@ -1469,7 +1483,6 @@ public class SingleSideTextDiffPresenter : ThemedTextDiffPresenter
                 builder.Append('\n');
             }
 
-            builder.Length--;
             Text = builder.ToString();
         }
         else

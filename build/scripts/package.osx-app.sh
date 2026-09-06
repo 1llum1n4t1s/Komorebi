@@ -11,4 +11,6 @@ sed "s/KOMOREBI_VERSION/$VERSION/g" resources/app/App.plist > Komorebi.app/Conte
 rm -rf Komorebi.app/Contents/MacOS/Komorebi.dsym
 rm -f Komorebi.app/Contents/MacOS/*.pdb
 
+clang ../tools/setsid-macos/setsid.c -o Komorebi.app/Contents/MacOS/setsid -mmacosx-version-min=13.0
+
 zip "komorebi_$VERSION.$LABEL.zip" -r Komorebi.app

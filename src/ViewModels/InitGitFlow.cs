@@ -19,7 +19,6 @@ public partial class InitGitFlow : Popup
 
     /// <summary>masterブランチ名。バリデーション付き。</summary>
     [Required(ErrorMessage = "Master branch name is required!!!")]
-    [RegularExpression(@"^[\w\-/\.]+$", ErrorMessage = "Bad branch name format!")]
     [CustomValidation(typeof(InitGitFlow), nameof(ValidateBaseBranch))]
     public string Master
     {
@@ -29,7 +28,6 @@ public partial class InitGitFlow : Popup
 
     /// <summary>developブランチ名。バリデーション付き。</summary>
     [Required(ErrorMessage = "Develop branch name is required!!!")]
-    [RegularExpression(@"^[\w\-/\.]+$", ErrorMessage = "Bad branch name format!")]
     [CustomValidation(typeof(InitGitFlow), nameof(ValidateBaseBranch))]
     public string Develop
     {
@@ -99,10 +97,13 @@ public partial class InitGitFlow : Popup
     /// <summary>
     /// master/developブランチ名の重複チェックバリデーション。
     /// </summary>
-    public static ValidationResult ValidateBaseBranch(string _, ValidationContext ctx)
+    public static ValidationResult ValidateBaseBranch(string name, ValidationContext ctx)
     {
         if (ctx.ObjectInstance is InitGitFlow initializer)
         {
+            if (!Models.RefName.IsValidBranchName(name))
+                return new ValidationResult("Bad branch name format!");
+
             if (initializer._master == initializer._develop)
                 return new ValidationResult("Develop branch has the same name with master branch!");
         }

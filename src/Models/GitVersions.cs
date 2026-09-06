@@ -24,4 +24,7 @@ public static class GitVersions
     /// `git replay`コマンドをサポートする最低バージョン
     /// </summary>
     public static readonly System.Version REPLAY = new(2, 44, 0);
+
+    /// <summary>merge-tree --write-tree によるマージ事前検証の最低バージョン。</summary>
+    public static readonly System.Version TESTING_MERGE = new(2, 38, 0);
 }

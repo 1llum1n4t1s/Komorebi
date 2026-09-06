@@ -13,7 +13,7 @@
           <TextBlock>
             <Run Text="{DynamicResource Text.Welcome.Clone}"/>
             <Run Text=" "/>
-            <Run Text="{OnPlatform Ctrl+N, macOS=⌘+N}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+            <Run Text="{OnPlatform Ctrl+R, macOS=⌘+R}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
           </TextBlock>
         </ToolTip.Tip>
         <Path Width="16" Height="16" Data="{StaticResource Icons.Clone}" Margin="0,4,0,0"/>
@@ -24,7 +24,7 @@
           <TextBlock>
             <Run Text="{DynamicResource Text.Welcome.OpenOrInit}"/>
             <Run Text=" "/>
-            <Run Text="{OnPlatform Ctrl+Shift+O, macOS=⌘+⇧+O}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+            <Run Text="{OnPlatform Ctrl+L, macOS=⌘+L}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
           </TextBlock>
         </ToolTip.Tip>
         <Path Width="14" Height="14" Data="{StaticResource Icons.Folder.Open}" Margin="0,2,0,0"/>

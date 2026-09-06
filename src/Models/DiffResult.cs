@@ -1,7 +1,8 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using Avalonia.Media.Imaging;
 
@@ -42,6 +43,8 @@ public class TextRange(int p, int n)
 /// </summary>
 public class TextDiffLine
 {
+    /// <summary>パッチ適用に使う元のバイト列。行末 CR も保持する。</summary>
+    public byte[] RawContent { get; set; } = [];
     /// <summary>行の種別（追加/削除/通常等）</summary>
     public TextDiffLineType Type { get; set; } = TextDiffLineType.None;
     /// <summary>行の内容テキスト</summary>
@@ -70,9 +73,19 @@ public class TextDiffLine
     /// <param name="oldLine">変更前の行番号</param>
     /// <param name="newLine">変更後の行番号</param>
     public TextDiffLine(TextDiffLineType type, string content, int oldLine, int newLine)
+        : this(type, Encoding.UTF8.GetBytes(content), oldLine, newLine)
+    {
+    }
+
+    /// <summary>表示用文字列とパッチ適用用の生バイトを分けて保持する。</summary>
+    public TextDiffLine(TextDiffLineType type, byte[] rawContent, int oldLine, int newLine)
     {
         Type = type;
-        Content = content;
+        RawContent = rawContent;
+        var contentLength = rawContent.Length;
+        if (contentLength > 0 && rawContent[^1] == '\r')
+            contentLength--;
+        Content = Encoding.UTF8.GetString(rawContent, 0, contentLength);
         OldLineNumber = oldLine;
         NewLineNumber = newLine;
     }
@@ -233,7 +246,7 @@ public partial class TextDiff
         writer.WriteLine($"+++ b/{file}");
 
         // If last line of selection is a change. Find one more line.
-        string tail = null;
+        TextDiffLine tail = null;
         if (selection.EndLine < Lines.Count)
         {
             var lastLine = Lines[selection.EndLine - 1];
@@ -248,7 +261,7 @@ public partial class TextDiff
                         (revert && line.Type == TextDiffLineType.Added) ||
                         (!revert && line.Type == TextDiffLineType.Deleted))
                     {
-                        tail = line.Content;
+                        tail = line;
                         break;
                     }
                 }
@@ -331,8 +344,8 @@ public partial class TextDiff
             }
         }
 
-        if (!string.IsNullOrEmpty(tail))
-            writer.WriteLine($" {tail}");
+        if (tail is not null)
+            WriteLine(writer, ' ', tail);
         writer.Flush();
     }
 
@@ -356,7 +369,7 @@ public partial class TextDiff
         writer.WriteLine($"+++ b/{file}");
 
         // If last line of selection is a change. Find one more line.
-        string tail = null;
+        TextDiffLine tail = null;
         if (selection.EndLine < Lines.Count)
         {
             var lastLine = Lines[selection.EndLine - 1];
@@ -371,7 +384,7 @@ public partial class TextDiff
                     {
                         if (line.Type == TextDiffLineType.Normal || line.Type == TextDiffLineType.Added)
                         {
-                            tail = line.Content;
+                            tail = line;
                             break;
                         }
                     }
@@ -379,7 +392,7 @@ public partial class TextDiff
                     {
                         if (line.Type == TextDiffLineType.Normal || line.Type == TextDiffLineType.Deleted)
                         {
-                            tail = line.Content;
+                            tail = line;
                             break;
                         }
                     }
@@ -491,8 +504,8 @@ public partial class TextDiff
             }
         }
 
-        if (!string.IsNullOrEmpty(tail))
-            writer.WriteLine($" {tail}");
+        if (tail is not null)
+            WriteLine(writer, ' ', tail);
         writer.Flush();
     }
 
@@ -661,7 +674,10 @@ public partial class TextDiff
     /// <param name="line">diff行データ</param>
     private static void WriteLine(StreamWriter writer, char prefix, TextDiffLine line)
     {
-        writer.WriteLine($"{prefix}{line.Content}");
+        writer.Flush();
+        writer.BaseStream.WriteByte((byte)prefix);
+        writer.BaseStream.Write(line.RawContent);
+        writer.BaseStream.WriteByte((byte)'\n');
 
         if (line.NoNewLineEndOfFile)
             writer.WriteLine("\\ No newline at end of file");
@@ -688,6 +704,10 @@ public class LFSDiff
 /// </summary>
 public class BinaryDiff
 {
+    public string Repository { get; set; } = string.Empty;
+    public string FilePath { get; set; } = string.Empty;
+    public string NewRevision { get; set; } = string.Empty;
+
     /// <summary>変更前のファイルサイズ（バイト）</summary>
     public long OldSize { get; set; } = 0;
     /// <summary>変更後のファイルサイズ（バイト）</summary>

@@ -30,6 +30,7 @@ public partial class RemoteProtocolSwitcher : UserControl
 
     public RemoteProtocolSwitcher()
     {
+        IsVisible = false;
         InitializeComponent();
     }
 

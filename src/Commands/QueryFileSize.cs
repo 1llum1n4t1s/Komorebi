@@ -1,20 +1,14 @@
-using System.Text.RegularExpressions;
+
 using System.Threading.Tasks;
 
 namespace Komorebi.Commands;
 
 /// <summary>
 /// 指定リビジョンにおけるファイルサイズを取得するクラス。
-/// git ls-tree -l を使用する。
+/// git cat-file -s を使用する。
 /// </summary>
-public partial class QueryFileSize : Command
+public class QueryFileSize : Command
 {
-    /// <summary>
-    /// ls-tree -l の出力からファイルサイズを抽出する正規表現。
-    /// </summary>
-    [GeneratedRegex(@"^\d+\s+\w+\s+[0-9a-f]+\s+(\d+)\s+.*$")]
-    private static partial Regex REG_FORMAT();
-
     /// <summary>
     /// コンストラクタ。指定リビジョンのファイルサイズを取得するコマンドを設定する。
     /// </summary>
@@ -25,7 +19,8 @@ public partial class QueryFileSize : Command
     {
         WorkingDirectory = repo;
         Context = repo;
-        Args = $"ls-tree {revision} -l -- {file.Quoted()}";
+        Args = $"cat-file -s {(revision + ":" + file).Quoted()}";
+        RaiseError = false;
     }
 
     /// <summary>
@@ -35,12 +30,8 @@ public partial class QueryFileSize : Command
     public async Task<long> GetResultAsync()
     {
         var rs = await ReadToEndAsync().ConfigureAwait(false);
-        if (rs.IsSuccess)
-        {
-            var match = REG_FORMAT().Match(rs.StdOut);
-            if (match.Success)
-                return long.Parse(match.Groups[1].Value);
-        }
+        if (rs.IsSuccess && long.TryParse(rs.StdOut.Trim(), out var size))
+            return size;
 
         return 0;
     }

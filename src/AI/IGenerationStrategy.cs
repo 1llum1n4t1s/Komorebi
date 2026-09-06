@@ -20,5 +20,7 @@ public interface IGenerationStrategy
     /// <param name="changeList">変更ファイル一覧（git status --porcelain 相当）</param>
     /// <param name="onUpdate">部分結果のコールバック</param>
     /// <param name="cancellation">キャンセルトークン</param>
-    Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation);
+    /// <param name="amendParent">Amend 時の比較元。通常のコミットでは null。</param>
+    /// <param name="currentBranch">現在のブランチ名。detached HEAD では null。</param>
+    Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation, string? amendParent = null, string? currentBranch = null);
 }

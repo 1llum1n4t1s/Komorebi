@@ -98,6 +98,11 @@ public class SubmoduleRevisionCompare : ObservableObject
     /// <summary>Base と To を入れ替える。</summary>
     public void Swap()
     {
+        // upstreamとの差分: 読み込み完了前に比較対象を入れ替えない。
+        if (IsLoading)
+            return;
+        IsLoading = true;
+        _changes = [];
         (Base, To) = (To, Base);
         Refresh();
     }
@@ -135,33 +140,21 @@ public class SubmoduleRevisionCompare : ObservableObject
         VisibleChanges = [];
         SelectedChanges = [];
 
+        var start = _base.SHA;
+        var end = _to.SHA;
         Task.Run(async () =>
         {
-            _changes = await new Commands.CompareRevisions(_repo, _base.SHA, _to.SHA)
+            var changes = await new Commands.CompareRevisions(_repo, start, end)
                 .ReadAsync()
                 .ConfigureAwait(false);
 
-            var visible = _changes;
-            if (!string.IsNullOrWhiteSpace(_searchFilter))
-            {
-                visible = [];
-                foreach (var c in _changes)
-                {
-                    if (c.Path.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
-                        visible.Add(c);
-                }
-            }
-
             Dispatcher.UIThread.Post(() =>
             {
-                TotalChanges = _changes.Count;
-                VisibleChanges = visible;
+                _changes = changes;
+                TotalChanges = changes.Count;
                 IsLoading = false;
-
-                if (VisibleChanges.Count > 0)
-                    SelectedChanges = [VisibleChanges[0]];
-                else
-                    SelectedChanges = [];
+                RefreshVisible();
+                SelectedChanges = VisibleChanges.Count > 0 ? [VisibleChanges[0]] : [];
             });
         });
     }
@@ -171,7 +164,7 @@ public class SubmoduleRevisionCompare : ObservableObject
     /// </summary>
     private void RefreshVisible()
     {
-        if (_changes == null)
+        if (IsLoading || _changes == null)
             return;
 
         if (string.IsNullOrEmpty(_searchFilter))

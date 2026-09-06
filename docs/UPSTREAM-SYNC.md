@@ -37,6 +37,76 @@ Komorebi は [sourcegit-scm/sourcegit](https://github.com/sourcegit-scm/sourcegi
 
 ## ログ
 
+### 2026-09-06 過去分の再検証・追加取り込み（ローカル未コミット）
+
+共通祖先 `01feffa1` から `upstream/master = 5c53601a`（v2026.19）までの非mergeコミット673件を再評価した。
+判定・採用範囲・検証の限界・SHA別の状態は [詳細台帳](UPSTREAM-SYNC-2026-09-06.md) を参照。
+非UTF-8部分ステージ、履歴選択とグラフ、独立詳細ウィンドウ、バイナリ表示、gitflow-next、SSHキー生成、プロセス中断などを既存設計に合わせて移植した。
+翻訳差分は後日精査とし、新機能に必要なキーのみ英語で補完した。commit・push・リリースは未実施。
+
+### 2026-09-06 バッチ（v2026.19 まで、ローカル未コミット）
+
+取得先は upstream/master = 5c53601a（v2026.19）。記録済みの 8b1b6b2b 以降には
+merge を除き 207 コミットがある。一覧を分類し、既存機能に対応する不具合修正を中心に
+差分とローカル実装を照合した。全機能を上流と同一にする同期ではない。
+develop は取得のみで、採用基準は master とした。
+
+互換性と同期時の保守性を基準に、20 コミットの修正・小規模改善を手動移植した。
+コミット・push は行わず、既存の .gitignore、プロジェクト、lockfile の未コミット変更は保持。
+以下の applied は作業ツリーへの適用を指し、Komorebi SHA は未確定。
+
+| 上流 SHA | サマリ | ステータス・適用内容 |
+|---|---|---|
+| 5bbf965d | upstream 未設定ブランチで checkout がクラッシュ | applied — Repository の比較を null 安全にし、独自の全ブランチ再取得を維持 |
+| 36c0e216 | worktree/submodule の LFS 判定 | applied — worktree の共通 hooks を見るため GitDir ではなく既存の _gitCommonDir を使用 |
+| 4fca32f1 | Windows のターミナル選択フィルタ | applied — 区切り文字で実行ファイル候補を分割 |
+| b09b6d1b | 作業ツリーのフォルダパスコピー | applied — staged/unstaged 双方でフォルダおよび複数ファイルを処理 |
+| 16b965fb | 差分のスクロール同期 | applied — テンプレート生成後に ScrollViewer を取得。独自の AOT 対応同期を維持 |
+| f7a4e66c | Amend で変更一覧が更新されない | applied — Amend では既存の完全更新経路を使い、バックグラウンド取得と UI スレッド更新を維持 |
+| f153843d | コミット件名の 1 文字境界 | applied |
+| e6b96d98 | Git 2.45 未満の commentChar 互換性 | applied — rebase と各 continue に ASCII fallback + commentString |
+| edcf9148 | worktree 使用中ブランチの候補除外 | applied |
+| 877c1802 | worktree の追跡ブランチ選択 | applied — 完全一致を優先し、末尾一致は / 境界に限定 |
+| 59aadc51 | 不正ロケールの英語フォールバック | applied |
+| d907a7a1 | Pull で UI の merge 選択を尊重 | applied — --rebase=false を明示 |
+| 67e7ecbb | 右クリックからタブドラッグが始まる | applied |
+| d235132c | remote 削除失敗で履歴フィルタが消える | applied |
+| 24fa13f7 | 履歴ツリーのフォルダパス生成 | applied（部分）— Backend.Path を使用。Blame 表示構造の変更は対象外 |
+| 98ba6428 | Blame の末尾に余分な空行 | applied — 先頭空行も維持するため文字列長ではなく LineInfos.Count で区切りを判定 |
+| 5410422a | Clone フォルダ選択の初期位置 | applied — 既存 try 内で入力済みフォルダを設定 |
+| 141b2993 | 差分の Ctrl+Insert コピー | applied |
+| 68d13477 | 新規 submodule 選択時の差分状態 | applied — 前回のモード・空白無視・差分情報をクリア |
+| f547ea86 | AI の Amend 差分取得 | applied — OpenAI 系と Anthropic 双方へ比較元を伝搬。既存パス検証を維持 |
+
+確認した非採用・保留:
+
+| 上流 SHA | ステータス | 理由 |
+|---|---|---|
+| 190b4d97 | superseded | CommitDetail.ActiveTabIndex の変更通知と VM 経由の切り替えは既存実装に存在 |
+| dd163e55 / cb1664f1 / b4201ed9 / 1e255299 / 70dec954 | superseded | 2026-07-03 バッチに採用記録あり |
+| 4a970e67 | superseded | de_DE のタイトルは既に Merge-Konflikte |
+| 13a95cd0 / 18f178e0 / 1b8ce0e5 | declined | Komorebi の CommitMessageToolBox は対象の幅強制設定を持たない |
+| d70e4f46 | declined | 独自 Diff パーサーには上流の CR マーカー処理がない |
+| bb9a3603 / 66c2138c | declined | 上流の自作 Chart とブランチフィルタが前提。独自 LiveCharts 構成を維持 |
+| e0e2ab6c / a036d650 / 45b66569 / faf98d87 | deferred | IPC 名・ロック配置の変更は既存プロセスとの通信互換性を含めて別途検証が必要 |
+| aad04037 / e308279e / 0c342cb5 | deferred | Linux データ保存先と移行処理の変更。永続データ配置を変えるため別途判断 |
+| a984953a / 8d0e2d37 / 864c42b6 / b14de177 / 3d8d6f21 | deferred | SSH Key Helper 一式は独自 SSHKeyPicker との設計統合が必要 |
+| 8317794e / 3b9f55f2 / 8fbda46a / ce072094 / 89ce9b10 / 415564bb | deferred | OS 別のプロセス終了方式と Popup キャンセル設計の一体検証が必要 |
+| cd614c8c / 4b4c22f4 | deferred | 新しい conflict state 判定コマンドと UI が前提 |
+| 7695c807 | deferred | 独自 Toolbox 検出は除外リストとアイコン選択を持ち、上流の supported 配列変更だけでは適用できない |
+| 5f611d95 | deferred | 既存 StreamReader がストリームを破棄する。保存処理の例外経路まで含める改善は別途調査 |
+| aba413d1 / d43ce179 | deferred | 名前検証の共通ルール変更と既存 validator の整合確認が必要 |
+
+その他の新機能（hex viewer、グラフ強調、AI reasoning 設定等）、画面刷新、
+純粋なスタイル・翻訳更新、上流固有の依存・バージョン変更は今回の移植対象外。
+過去の deferred はこのバッチで解消したもの以外は引き続き保留。
+
+検証: 全 1,656 テスト成功（実 Git を使った AI Amend 回帰テストを含む）。
+Blame の既存テストは末尾の余分な改行を検出する完全一致検証へ強化。
+ビルド、dotnet format --verify-no-changes、17 言語ローカライズ検証も成功。
+GUI の実操作、macOS/Linux 実機、Git 2.45 未満の実行は未検証。
+
+
 ### 2026-07-02 バッチ（`fbe82dbf`..`upstream/master`, 353 commits 精査、v2026.14 まで）
 
 前回 sync 点 `fbe82dbf`（2026-04-29 cherry-pick 分）から upstream `master` 先端（`8b1b6b2b` = v2026.14, 2026-06-29）までを精査。

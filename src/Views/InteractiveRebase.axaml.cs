@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -201,6 +201,13 @@ public class InteractiveRebaseIndicator : Control
 /// </summary>
 public partial class InteractiveRebase : ChromelessWindow
 {
+    private void OnOpenDetailsStandalone(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.InteractiveRebase { Detail: ViewModels.CommitDetail detail })
+            App.ShowWindow(new CommitDetailStandalone { DataContext = detail.Clone() });
+        e.Handled = true;
+    }
+
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>

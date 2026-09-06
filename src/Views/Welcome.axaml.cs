@@ -47,7 +47,32 @@ public class RepositoryListBox : ListBoxEx
     {
         if (SelectedItem is ViewModels.RepositoryNode node && e.KeyModifiers == KeyModifiers.None)
         {
-            if (e.Key is Key.Delete or Key.Back)
+            if (e.Key == Key.Left)
+            {
+                if (!node.IsRepository && node.IsExpanded)
+                    ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
+                else
+                {
+                    for (var i = Items.IndexOf(node) - 1; i >= 0; i--)
+                    {
+                        if (Items[i] is ViewModels.RepositoryNode parent && parent.Depth < node.Depth)
+                        {
+                            SelectNode(parent);
+                            break;
+                        }
+                    }
+                }
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Right && node.SubNodes.Count > 0)
+            {
+                if (!node.IsExpanded)
+                    ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
+                else
+                    SelectNode(node.SubNodes[0]);
+                e.Handled = true;
+            }
+            else if (e.Key is Key.Delete or Key.Back)
             {
                 node.Delete();
                 e.Handled = true;
@@ -70,6 +95,13 @@ public class RepositoryListBox : ListBoxEx
         if (!e.Handled)
             base.OnKeyDown(e);
     }
+    private void SelectNode(ViewModels.RepositoryNode node)
+    {
+        SelectedItem = node;
+        ScrollIntoView(node);
+        ContainerFromItem(node)?.Focus();
+    }
+
 }
 
 /// <summary>

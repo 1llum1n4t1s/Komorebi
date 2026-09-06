@@ -24,7 +24,7 @@ public enum CommitSearchMethod
 /// Gitコミットの情報を表すクラス。
 /// SHA、著者、コミッター、親コミット、デコレーター等を保持する。
 /// </summary>
-public class Commit
+public class Commit : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     /// <summary>
     /// 空ツリーのSHA1ハッシュ。初回コミットのdiff表示に使用する。
@@ -50,6 +50,13 @@ public class Commit
 
     /// <summary>現在のブランチにマージ済みかどうか（グラフ描画用）。</summary>
     public bool IsMerged { get; set; } = false;
+    public bool IsHighlightedInGraph
+    {
+        get => _isHighlightedInGraph;
+        set => SetProperty(ref _isHighlightedInGraph, value);
+    }
+
+    private bool _isHighlightedInGraph;
     /// <summary>グラフ描画時の色インデックス。</summary>
     public int Color { get; set; } = 0;
     /// <summary>グラフ描画時の左マージン。</summary>

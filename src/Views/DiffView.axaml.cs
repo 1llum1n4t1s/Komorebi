@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -131,4 +131,13 @@ public partial class DiffView : UserControl
             App.ShowWindow(vm);
         }
     }
+    private async void OnOpenBinaryFileViewer(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: Models.BinaryDiff diff } && diff.NewSize > 0 && TopLevel.GetTopLevel(this) is Window owner)
+        {
+            await App.ShowDialog(new ViewModels.BinaryFileViewer(diff.Repository, diff.FilePath, diff.NewRevision), owner);
+            e.Handled = true;
+        }
+    }
+
 }

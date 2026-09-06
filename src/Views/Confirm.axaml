@@ -53,6 +53,7 @@
 
       <Button Classes="flat primary"
               x:Name="BtnNo"
+              HotKey="Escape"
               Width="80"
               Height="30"
               Margin="4,0"

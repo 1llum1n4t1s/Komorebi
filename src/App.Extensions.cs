@@ -22,7 +22,25 @@ public static class StringExtensions
     /// <returns>エスケープ済みダブルクォート付き文字列（例: "foo\"bar"）</returns>
     public static string Quoted(this string value)
     {
-        return $"\"{Escaped(value)}\"";
+        // 上流との差分: 引用符直前と文字列末尾のバックスラッシュも引数解析規則に合わせる。
+        var builder = new StringBuilder(value.Length + 2);
+        builder.Append('"');
+        var backslashes = 0;
+        foreach (var c in value)
+        {
+            if (c == '\\')
+            {
+                backslashes++;
+                continue;
+            }
+
+            builder.Append('\\', c == '"' ? backslashes * 2 + 1 : backslashes);
+            builder.Append(c);
+            backslashes = 0;
+        }
+
+        builder.Append('\\', backslashes * 2);
+        return builder.Append('"').ToString();
     }
 
     /// <summary>

@@ -19,6 +19,28 @@ namespace Komorebi.Views;
 /// </summary>
 public partial class Repository : UserControl
 {
+    private void OnOpenGraphHighlightingMenu(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Control control || DataContext is not ViewModels.Repository repo)
+            return;
+
+        var menu = new ContextMenu();
+        foreach (var mode in Enum.GetValues<Models.CommitGraphHighlighting>())
+        {
+            var item = new MenuItem { Header = App.Text($"Histories.HighlightsInGraph.{mode}") };
+            if (mode == repo.GraphHighlighting)
+                item.Icon = App.CreateMenuIcon("Icons.Check");
+            item.Click += (_, ev) =>
+            {
+                repo.GraphHighlighting = mode;
+                ev.Handled = true;
+            };
+            menu.Items.Add(item);
+        }
+        menu.Open(control);
+        e.Handled = true;
+    }
+
     /// <summary>
     /// コンストラクタ。コンポーネントを初期化する。
     /// </summary>
@@ -1169,6 +1191,13 @@ public partial class Repository : UserControl
                 ev.Handled = true;
             };
             menu.Items.Add(appData);
+
+            menu.Items.Add(new MenuItem
+            {
+                Header = App.Text("SSHKeyHelper"),
+                Icon = App.CreateMenuIcon("Icons.Password"),
+                Command = App.OpenSSHKeyHelperCommand,
+            });
 
             // Hotkeys
             var hotkeys = new MenuItem();

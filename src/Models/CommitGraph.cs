@@ -8,6 +8,15 @@ using Avalonia.Media;
 
 namespace Komorebi.Models;
 
+public enum CommitGraphHighlighting
+{
+    All,
+    CurrentBranchOnly,
+    SelectedCommitsOnly,
+    CurrentBranchAndSelectedCommits,
+    SelectedCommitsOnlyFirstParent,
+}
+
 /// <summary>
 /// コミットグラフのレイアウト情報を保持するレコード。
 /// </summary>
@@ -140,8 +149,11 @@ public class CommitGraph
     /// </summary>
     /// <param name="commits">コミットのリスト。</param>
     /// <param name="firstParentOnlyEnabled">最初の親のみ表示モードかどうか。</param>
+    /// <param name="highlighting">グラフで強調するコミットの範囲。</param>
+    /// <param name="extraHeads">強調の起点となる選択コミット。</param>
     /// <returns>解析済みのコミットグラフ。</returns>
-    public static CommitGraph Parse(List<Commit> commits, bool firstParentOnlyEnabled)
+    public static CommitGraph Parse(List<Commit> commits, bool firstParentOnlyEnabled,
+        CommitGraphHighlighting highlighting = CommitGraphHighlighting.CurrentBranchOnly, HashSet<string> extraHeads = null)
     {
         // グラフ描画の単位サイズ定数
         const double unitWidth = 12;
@@ -158,6 +170,19 @@ public class CommitGraph
         }
 
         List<PathHelper> unsolved = [];  // 未解決（続行中）のパス
+        var highlighted = extraHeads == null ? new HashSet<string>(StringComparer.Ordinal) : new HashSet<string>(extraHeads, StringComparer.Ordinal);
+        // マージ済み判定は選択による強調から独立させ、背景スレッドでの初回解析でも確定する。
+        var merged = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var commit in commits)
+        {
+            if (merged.Remove(commit.SHA))
+                commit.IsMerged = true;
+            if (commit.IsMerged)
+            {
+                for (var i = 0; i < commit.Parents.Count && (!firstParentOnlyEnabled || i == 0); i++)
+                    merged.Add(commit.Parents[i]);
+            }
+        }
         List<PathHelper> ended = [];      // 終了したパス
         // 未解決パスのNext→PathHelper検索用Dictionary（旧: List.Find()のO(n) → O(1)）
         var unsolvedByNext = new Dictionary<string, PathHelper>(StringComparer.Ordinal);
@@ -167,7 +192,14 @@ public class CommitGraph
         foreach (var commit in commits)
         {
             PathHelper major = null;
-            var isMerged = commit.IsMerged;
+            var isMerged = highlighting == CommitGraphHighlighting.All ||
+                ((highlighting == CommitGraphHighlighting.CurrentBranchOnly || highlighting == CommitGraphHighlighting.CurrentBranchAndSelectedCommits) && commit.IsMerged);
+            if (highlighting >= CommitGraphHighlighting.SelectedCommitsOnly && highlighted.Remove(commit.SHA))
+            {
+                isMerged = true;
+                if (commit.Parents.Count > 0)
+                    highlighted.Add(commit.Parents[0]);
+            }
 
             // Update current y offset
             offsetY += unitHeight;
@@ -252,6 +284,7 @@ public class CommitGraph
             else
                 anchor.Type = DotType.Default;
             temp.Dots.Add(anchor);
+            commit.IsHighlightedInGraph = isMerged;
 
             // Deal with other parents (the first parent has been processed)
             // Dictionaryで親コミットをO(1)検索（旧: List.Find()はO(n)）
@@ -270,6 +303,9 @@ public class CommitGraph
 
             if (!firstParentOnlyEnabled)
             {
+                if (highlighting == CommitGraphHighlighting.SelectedCommitsOnlyFirstParent)
+                    isMerged = false;
+
                 for (int j = 1; j < commit.Parents.Count; j++)
                 {
                     var parentHash = commit.Parents[j];
@@ -305,7 +341,6 @@ public class CommitGraph
             }
 
             // Margins & merge state (used by Views.Histories).
-            commit.IsMerged = isMerged;
             commit.Color = dotColor;
             commit.LeftMargin = Math.Max(offsetX, maxOffsetOld) + halfWidth + 2;
         }

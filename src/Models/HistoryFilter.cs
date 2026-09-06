@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.Json.Serialization;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -100,12 +101,13 @@ public class HistoryFilter : ObservableObject
     /// <summary>
     /// ブランチフィルターかどうか（タグでなければtrue）
     /// </summary>
-    public bool IsBranch
+    [JsonIgnore]
+    public bool IsValid
     {
-        get => Type != FilterType.Tag;
+        get => _isValid;
+        set => SetProperty(ref _isValid, value);
     }
 
-    /// <summary>デフォルトコンストラクタ</summary>
     public HistoryFilter()
     {
     }
@@ -124,6 +126,7 @@ public class HistoryFilter : ObservableObject
     }
 
     /// <summary>フィルターパターンのバッキングフィールド</summary>
+    private bool _isValid = true;
     private string _pattern = string.Empty;
     /// <summary>フィルターモードのバッキングフィールド</summary>
     private FilterMode _mode = FilterMode.None;

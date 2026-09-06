@@ -181,7 +181,17 @@ public class CommitRefsPresenter : Control
             UseGraphColorProperty,
             BackgroundProperty,
             ShowTagsProperty,
-            UseCompactBranchNamesProperty);
+            UseCompactBranchNamesProperty,
+            HasSingleRemoteProperty);
+    }
+
+    public static readonly StyledProperty<bool> HasSingleRemoteProperty =
+        AvaloniaProperty.Register<CommitRefsPresenter, bool>(nameof(HasSingleRemote));
+
+    public bool HasSingleRemote
+    {
+        get => GetValue(HasSingleRemoteProperty);
+        set => SetValue(HasSingleRemoteProperty, value);
     }
 
     /// <summary>
@@ -273,8 +283,12 @@ public class CommitRefsPresenter : Control
                 foreach (var remote in item.Remotes)
                 {
                     context.DrawLine(new Pen(item.Brush), new Point(rx, y), new Point(rx, y + 16));
-                    context.DrawText(remote, new Point(rx + 4, y + 8.0 - remote.Height * 0.5));
-                    rx += remote.WidthIncludingTrailingWhitespace + 9;
+                    using (context.PushTransform(Matrix.CreateTranslation(rx + 4, y + 4)))
+                        context.DrawGeometry(fg, null, CommitRefsIconCache.Instance.GetIcon(Models.DecoratorType.RemoteBranchHead));
+                    if (HasSingleRemote)
+                        break;
+                    context.DrawText(remote, new Point(rx + 16, y + 8.0 - remote.Height * 0.5));
+                    rx += remote.WidthIncludingTrailingWhitespace + 22;
                 }
             }
 
@@ -385,7 +399,7 @@ public class CommitRefsPresenter : Control
                         fg);
 
                     item.Remotes.Add(remote);
-                    item.Width += remote.Width + 9;
+                    item.Width += HasSingleRemote ? (item.Remotes.Count == 1 ? 18 : 0) : remote.WidthIncludingTrailingWhitespace + 22;
                     skippedIdx.Add(j);
                 }
             }

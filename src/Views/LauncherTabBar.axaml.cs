@@ -277,12 +277,18 @@ public partial class LauncherTabBar : UserControl
                     vm.CloseTab(page);
                 e.Handled = true;
             }
-            else
+            else if (point.Properties.IsLeftButtonPressed)
             {
                 _pressedTab = true;
                 _startDragTab = false;
                 _pressedTabPosition = e.GetPosition(border);
                 _pressedTabEvent = e;
+            }
+            else
+            {
+                _pressedTab = false;
+                _startDragTab = false;
+                _pressedTabEvent = null;
             }
         }
     }

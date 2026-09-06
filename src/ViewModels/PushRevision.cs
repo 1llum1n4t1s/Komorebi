@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Komorebi.ViewModels;
 
@@ -57,15 +57,20 @@ public class PushRevision : Popup
         Use(log);
 
         // コミットSHAを直接指定してプッシュ
-        var succ = await new Commands.Push(
-            _repo.FullPath,
-            Revision.SHA,
-            RemoteBranch.Remote,
-            RemoteBranch.Name,
-            false,
-            false,
-            false,
-            Force).Use(log).RunAsync();
+        bool succ;
+        using (var cancellation = BeginCancellableOperation())
+        {
+            succ = await new Commands.Push(
+                _repo.FullPath,
+                Revision.SHA,
+                RemoteBranch.Remote,
+                RemoteBranch.Name,
+                false,
+                false,
+                false,
+                Force)
+            { CancellationToken = cancellation.Token }.Use(log).RunAsync();
+        }
 
         log.Complete();
         return succ;

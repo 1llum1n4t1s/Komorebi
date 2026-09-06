@@ -52,6 +52,19 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>Git Flow設定（master/develop/feature/release/hotfixのブランチ名プレフィックス）。</summary>
+    public bool IsHistoryFiltersCollapsed
+    {
+        get => _uiStates.IsHistoryFiltersCollapsed;
+        set
+        {
+            if (_uiStates.IsHistoryFiltersCollapsed != value)
+            {
+                _uiStates.IsHistoryFiltersCollapsed = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public Models.GitFlow GitFlow
     {
         get;
@@ -145,14 +158,20 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>履歴グラフで現在のブランチのみハイライトするかどうか。</summary>
     public bool OnlyHighlightCurrentBranchInHistory
     {
-        get => _uiStates.OnlyHighlightCurrentBranchInHistory;
+        get => GraphHighlighting != Models.CommitGraphHighlighting.All;
+    }
+
+    public Models.CommitGraphHighlighting GraphHighlighting
+    {
+        get => _uiStates.GraphHighlighting ?? (_uiStates.OnlyHighlightCurrentBranchInHistory ? Models.CommitGraphHighlighting.CurrentBranchOnly : Models.CommitGraphHighlighting.All);
         set
         {
-            if (value != _uiStates.OnlyHighlightCurrentBranchInHistory)
-            {
-                _uiStates.OnlyHighlightCurrentBranchInHistory = value;
-                OnPropertyChanged();
-            }
+            if (value == GraphHighlighting)
+                return;
+            _uiStates.GraphHighlighting = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(OnlyHighlightCurrentBranchInHistory));
+            _histories?.RefreshGraph();
         }
     }
 
@@ -763,7 +782,8 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>Git LFSが有効かどうか。pre-pushフックの存在とLFSコマンドの含有を確認する。</summary>
     public bool IsLFSEnabled()
     {
-        var path = Path.Combine(FullPath, ".git", "hooks", "pre-push");
+        // upstream 36c0e216 の GitDir と異なり、worktree で共有する hooks ディレクトリを使う。
+        var path = Path.Combine(_gitCommonDir, "hooks", "pre-push");
         if (!File.Exists(path))
             return false;
 
@@ -899,16 +919,9 @@ public class Repository : ObservableObject, Models.IRepository
                 }
             });
 
-            if (config.TryGetValue("gitflow.branch.master", out var masterName))
-                GitFlow.Master = masterName;
-            if (config.TryGetValue("gitflow.branch.develop", out var developName))
-                GitFlow.Develop = developName;
-            if (config.TryGetValue("gitflow.prefix.feature", out var featurePrefix))
-                GitFlow.FeaturePrefix = featurePrefix;
-            if (config.TryGetValue("gitflow.prefix.release", out var releasePrefix))
-                GitFlow.ReleasePrefix = releasePrefix;
-            if (config.TryGetValue("gitflow.prefix.hotfix", out var hotfixPrefix))
-                GitFlow.HotfixPrefix = hotfixPrefix;
+            var isNext = config.ContainsKey("gitflow.initialized") &&
+                await Commands.GitFlow.IsNextAsync(FullPath).ConfigureAwait(false);
+            GitFlow.Parse(config, isNext);
         });
     }
 
@@ -1414,6 +1427,7 @@ public class Repository : ObservableObject, Models.IRepository
                 CurrentBranch = branches.Find(x => x.IsCurrent);
                 LocalBranchTrees = builder.Locals;
                 RemoteBranchTrees = builder.Remotes;
+                ValidateHistoryFilters(true);
 
                 var localBranchesCount = 0;
                 foreach (var b in branches)
@@ -1464,6 +1478,7 @@ public class Repository : ObservableObject, Models.IRepository
                     return;
 
                 Tags = tags;
+                ValidateHistoryFilters(false);
                 VisibleTags = BuildVisibleTags();
             });
         }, token);
@@ -1478,6 +1493,7 @@ public class Repository : ObservableObject, Models.IRepository
         // Close 済みなら Disposed CTS 回避のため早期 return
         if (_isClosed)
             return;
+        var highlighting = GraphHighlighting;
         var token = RenewCancellation(ref _cancellationRefreshCommits);
 
         Task.Run(async () =>
@@ -1510,7 +1526,7 @@ public class Repository : ObservableObject, Models.IRepository
                 if (_isClosed || token.IsCancellationRequested)
                     return;
 
-                var graph = Models.CommitGraph.Parse(commits, _uiStates.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly));
+                var graph = Models.CommitGraph.Parse(commits, _uiStates.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.FirstParentOnly), highlighting);
 
                 // bisect情報の収集はgitプロセス起動+ファイルI/Oを伴うため、UIスレッドに入る前に済ませる
                 var bisectSnapshot = _histories?.QueryBisectInfo() ?? (null, Models.BisectState.None);
@@ -1525,6 +1541,8 @@ public class Repository : ObservableObject, Models.IRepository
                         _histories.IsLoading = false;
                         _histories.Commits = commits;
                         _histories.Graph = graph;
+                        if (GraphHighlighting != highlighting || GraphHighlighting >= Models.CommitGraphHighlighting.SelectedCommitsOnly)
+                            _histories.RefreshGraph();
 
                         BisectState = _histories.ApplyBisectInfo(bisectSnapshot);
 
@@ -1651,6 +1669,9 @@ public class Repository : ObservableObject, Models.IRepository
                     return;
 
                 var changes = await new Commands.QueryLocalChanges(FullPath, _uiStates.IncludeUntrackedInLocalChanges, noOptionalLocks)
+                {
+                    CancellationToken = token,
+                }
                     .GetResultAsync()
                     .ConfigureAwait(false);
 
@@ -1770,7 +1791,7 @@ public class Repository : ObservableObject, Models.IRepository
             foreach (var b in _branches)
             {
                 if (b.IsLocal &&
-                    b.Upstream.Equals(branch.FullName, StringComparison.Ordinal) &&
+                    string.Equals(b.Upstream, branch.FullName, StringComparison.Ordinal) &&
                     b.Ahead.Count == 0)
                 {
                     if (b.Behind.Count > 0)
@@ -1903,18 +1924,7 @@ public class Repository : ObservableObject, Models.IRepository
             return;
 
         var root = Path.GetFullPath(Path.Combine(FullPath, submodule));
-        var normalizedPath = root.Replace('\\', '/').TrimEnd('/');
-
-        var node = Preferences.Instance.FindNode(normalizedPath) ??
-            new RepositoryNode
-            {
-                Id = normalizedPath,
-                Name = Path.GetFileName(normalizedPath),
-                Bookmark = selfPage.Node.Bookmark,
-                IsRepository = true,
-            };
-
-        App.GetLauncher().OpenRepositoryInTab(node, null);
+        App.GetLauncher().OpenSubRepository(selfPage, root);
     }
 
     /// <summary>ワークツリー追加ダイアログを表示する。</summary>
@@ -2271,6 +2281,16 @@ public class Repository : ObservableObject, Models.IRepository
     }
 
     /// <summary>
+    /// リモート単位の自動 fetch 設定を更新する。
+    /// </summary>
+    public async Task ToggleAutoFetchOnRemoteAsync(Models.Remote remote)
+    {
+        var disabled = !remote.DisableAutoFetch;
+        if (await new Commands.Config(FullPath).SetAsync($"remote.{remote.Name}.disableautofetch", disabled ? "true" : "false"))
+            remote.DisableAutoFetch = disabled;
+    }
+
+    /// <summary>
     /// UI スレッド上で 1 回分の自動フェッチを実行する。
     /// <see cref="AutoFetchService"/> から呼び出される。インターバル判定はサービス側で行うため、
     /// ここではリポジトリ固有の安全条件（クローズ中・ロックファイル・ポップアップ中・リモート無し）のみチェックする。
@@ -2290,7 +2310,10 @@ public class Repository : ObservableObject, Models.IRepository
 
         List<string> remotes = [];
         foreach (var r in _remotes)
-            remotes.Add(r.Name);
+        {
+            if (!r.DisableAutoFetch)
+                remotes.Add(r.Name);
+        }
 
         if (remotes.Count == 0)
             return;
@@ -2312,7 +2335,8 @@ public class Repository : ObservableObject, Models.IRepository
                     remotes.Find(x => x.Equals(_settings.DefaultRemote, StringComparison.Ordinal)) :
                     remotes[0];
 
-                await new Commands.Fetch(FullPath, remote).Use(log).RunAsync();
+                if (!string.IsNullOrEmpty(remote))
+                    await new Commands.Fetch(FullPath, remote).Use(log).RunAsync();
             }
         }
         catch
@@ -2389,4 +2413,36 @@ public class Repository : ObservableObject, Models.IRepository
     // コストを避けるため 1 秒 TTL でキャッシュする。キャッシュミス時のみディスク I/O が走る。
     private bool _submoduleCacheValue;
     private long _submoduleCacheExpiryTick;
+    private void ValidateHistoryFilters(bool forBranch)
+    {
+        if (_historyFilterMode == Models.FilterMode.None)
+            return;
+
+        HashSet<string> set = new(StringComparer.Ordinal);
+
+        if (forBranch)
+        {
+            foreach (var b in _branches)
+                set.Add(b.FullName);
+
+            foreach (var f in _uiStates.HistoryFilters)
+            {
+                if (f.Type is Models.FilterType.LocalBranch or Models.FilterType.RemoteBranch)
+                    f.IsValid = set.Contains(f.Pattern);
+            }
+        }
+        else
+        {
+            foreach (var t in _tags)
+                set.Add(t.Name);
+
+            foreach (var f in _uiStates.HistoryFilters)
+            {
+                if (f.Type is Models.FilterType.Tag)
+                    f.IsValid = set.Contains(f.Pattern);
+            }
+        }
+    }
+
+
 }

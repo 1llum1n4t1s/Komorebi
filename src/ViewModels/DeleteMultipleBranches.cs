@@ -14,6 +14,9 @@ public class DeleteMultipleBranches : Popup
     /// <summary>
     /// 削除対象のブランチリスト。
     /// </summary>
+    public bool Force { get; set; }
+    public bool IsLocal => _isLocal;
+
     public List<Models.Branch> Targets
     {
         get;
@@ -50,7 +53,7 @@ public class DeleteMultipleBranches : Popup
                 foreach (var target in Targets)
                     tasks.Add(new Commands.Branch(_repo.FullPath, target.Name)
                         .Use(log)
-                        .DeleteLocalAsync(false));
+                        .DeleteLocalAsync(Force));
                 await Task.WhenAll(tasks);
             }
             else

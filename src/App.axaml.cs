@@ -465,8 +465,11 @@ public partial class App : Application
     /// <param name="localeKey">ロケールキー（例: "ja_JP", "en_US"）</param>
     public static void SetLocale(string localeKey)
     {
+        var locale = Models.Locale.Supported.Find(x => x.Key.Equals(localeKey, StringComparison.OrdinalIgnoreCase));
+        var finalLocaleKey = locale?.Key ?? "en_US";
+
         if (Current is not App app ||
-            app.Resources[localeKey] is not ResourceDictionary targetLocale ||
+            app.Resources[finalLocaleKey] is not ResourceDictionary targetLocale ||
             targetLocale == app._activeLocale)
             return;
 
@@ -1203,7 +1206,8 @@ public partial class App : Application
         }
 
         var repo = test.StdOut.Trim();
-        var relativePath = Path.GetRelativePath(repo, fullPath);
+        // upstream 6a9e9267: Git のパスと詳細フィルターの区切りを一致させる。
+        var relativePath = Path.GetRelativePath(repo, fullPath).Replace(Path.DirectorySeparatorChar, '/');
 
         if (File.Exists(fullPath))
         {
@@ -1216,7 +1220,7 @@ public partial class App : Application
         {
             desktop.MainWindow = new Views.DirHistories()
             {
-                DataContext = new ViewModels.DirHistories(repo, relativePath)
+                DataContext = new ViewModels.DirHistories(repo, relativePath.TrimEnd('/'))
             };
         }
         else
@@ -1360,6 +1364,15 @@ public partial class App : Application
 
         _launcher = new ViewModels.Launcher(startupRepo);
         desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
+
+        if (this.TryGetFeature<IActivatableLifetime>() is { } activatable)
+        {
+            activatable.Activated += (_, e) =>
+            {
+                if (e is FileActivatedEventArgs { Files: { Count: > 0 } } files)
+                    _launcher.TryOpenRepositoryFromPath(files.Files[0].Path.LocalPath);
+            };
+        }
 
         // MainWindow クローズで自動終了するのではなく、Views.Launcher の OnClosed から
         // 明示的に App.Quit(0) を呼び desktop.Shutdown へ落とす流れに統一する。

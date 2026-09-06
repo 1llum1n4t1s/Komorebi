@@ -11,6 +11,10 @@ namespace Komorebi.Models;
 /// </summary>
 public class RevisionBinaryFile
 {
+    public string Repository { get; set; } = string.Empty;
+    public string File { get; set; } = string.Empty;
+    public string Revision { get; set; } = string.Empty;
+
     /// <summary>ファイルサイズ（バイト）</summary>
     public long Size { get; set; } = 0;
 }

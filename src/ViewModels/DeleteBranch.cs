@@ -91,7 +91,8 @@ public class DeleteBranch : Popup
             else
             {
                 succ = await DeleteRemoteBranchAsync(Target, log);
-                _repo.UIStates.RemoveHistoryFilter(Target.FullName, Models.FilterType.RemoteBranch);
+                if (succ)
+                    _repo.UIStates.RemoveHistoryFilter(Target.FullName, Models.FilterType.RemoteBranch);
             }
         }
 

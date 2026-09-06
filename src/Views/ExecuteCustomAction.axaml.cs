@@ -58,7 +58,7 @@ public partial class ExecuteCustomAction : UserControl
             var options = new FilePickerOpenOptions()
             {
                 AllowMultiple = false,
-                FileTypeFilter = [new FilePickerFileType("File") { Patterns = ["*.*"] }]
+                FileTypeFilter = [new FilePickerFileType("File") { Patterns = ["*"] }]
             };
 
             var selected = await topLevel.StorageProvider.OpenFilePickerAsync(options);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Komorebi.Commands;
@@ -51,36 +52,40 @@ public class CompareRevisions : Command
     /// <returns>変更されたファイルのリスト（パスの数値順でソート済み）。</returns>
     public async Task<List<Models.Change>> ReadAsync()
     {
+        try
+        {
+            return await ReadAsync(CreateGitStartInfo(true), CancellationToken).ConfigureAwait(false);
+        }
+        catch
+        {
+            // 起動設定の作成失敗も従来どおり空の一覧として扱う。
+            return [];
+        }
+    }
+
+    /// <summary>差分プロセスを所有し、実終了まで出力を読み取る。</summary>
+    internal static async Task<List<Models.Change>> ReadAsync(ProcessStartInfo start, CancellationToken cancellationToken)
+    {
         List<Models.Change> changes = [];
+        if (cancellationToken.IsCancellationRequested)
+            return changes;
         try
         {
             // gitプロセスを起動して差分出力を取得する
             using var proc = new Process();
-            proc.StartInfo = CreateGitStartInfo(true);
+            proc.StartInfo = start;
             proc.Start();
 
             // CommitDetail はコミット切替のたびに CancellationToken を渡してくる。
             // ここで尊重しないと、切替を連打した分だけ巨大 diff の git プロセスが
             // 走り続けて積み上がる。基底の ReadToEndAsync と同じくプロセスツリーごと落とす。
-            using var cancelRegistration = CancellationToken.CanBeCanceled
-                ? CancellationToken.Register(() =>
-                {
-                    try
-                    {
-                        if (!proc.HasExited)
-                            proc.Kill(entireProcessTree: true);
-                    }
-                    catch
-                    {
-                        // 既に終了しているプロセスへの Kill は無視する
-                    }
-                })
-                : default;
+            using var cancelRegistration = cancellationToken.Register(() => Native.CommandCancellation.Terminate(proc, false));
 
             var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             // 基底クラスの共通パーサーを使用して--name-status出力を解析する
-            while (await proc.StandardOutput.ReadLineAsync(CancellationToken).ConfigureAwait(false) is { } line)
+            // 中止通知では読み取りを抜けず、Kill後のEOFまで登録を保持する。
+            while (await proc.StandardOutput.ReadLineAsync().ConfigureAwait(false) is { } line)
             {
                 var parsed = ParseNameStatusLine(line);
                 if (parsed is null)
@@ -94,6 +99,8 @@ public class CompareRevisions : Command
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
             await stderrDrain.ConfigureAwait(false);
+            if (cancellationToken.IsCancellationRequested)
+                return [];
 
             // パスの数値を考慮した自然順ソートを行う
             changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));

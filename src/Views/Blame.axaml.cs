@@ -29,36 +29,28 @@ public class BlameTextEditor : TextEditor
     /// </summary>
     public class CommitInfoMargin : AbstractMargin
     {
-        /// <summary>
-        /// コンストラクタ。コンポーネントを初期化する。
-        /// </summary>
         public CommitInfoMargin(BlameTextEditor editor)
         {
             _editor = editor;
             ClipToBounds = true;
         }
 
-        /// <summary>
-        /// コントロールの描画処理を行う。
-        /// </summary>
         public override void Render(DrawingContext context)
         {
-            if (_editor.BlameData is null)
+            _shaHitBoxes.Clear();
+            if (_editor.BlameData == null)
                 return;
 
             var view = TextView;
             if (view is { VisualLinesValid: true })
             {
                 var typeface = view.CreateTypeface();
-                // パフォーマンス: 描画毎のPen生成を排除
-                var underlinePen = s_underlinePen ??= new Pen(Brushes.DarkOrange);
                 var width = Bounds.Width;
                 var lineHeight = view.DefaultLineHeight;
-                var pixelHeight = PixelSnapHelpers.GetPixelSize(view).Height;
 
                 foreach (var line in view.VisualLines)
                 {
-                    if (line.IsDisposed || line.FirstDocumentLine is null || line.FirstDocumentLine.IsDeleted)
+                    if (line.IsDisposed || line.FirstDocumentLine == null || line.FirstDocumentLine.IsDeleted)
                         continue;
 
                     var lineNumber = line.FirstDocumentLine.LineNumber;
@@ -66,9 +58,24 @@ public class BlameTextEditor : TextEditor
                         break;
 
                     var info = _editor.BlameData.LineInfos[lineNumber - 1];
-                    var x = 0.0;
+                    var x = 8.0;
+                    var lineTop = line.GetTextLineVisualYPosition(line.TextLines[0], VisualYPosition.LineTop) - view.VerticalOffset;
                     var y = line.GetTextLineVisualYPosition(line.TextLines[0], VisualYPosition.LineMiddle) - view.VerticalOffset;
-                    if (!info.IsFirstInGroup && y > lineHeight)
+
+                    var forceDrawFirstVisualLine = lineTop < 0;
+                    if (forceDrawFirstVisualLine)
+                    {
+                        // When there is enough space (the 2nd visual line is not a group leader),
+                        // move the line to make sure it is not cropped
+                        if (lineNumber < _editor.BlameData.LineInfos.Count)
+                        {
+                            var nextLineInfo = _editor.BlameData.LineInfos[lineNumber];
+                            if (!nextLineInfo.IsFirstInGroup)
+                                y = lineHeight * 0.5;
+                        }
+                    }
+
+                    if (!info.IsFirstInGroup && !forceDrawFirstVisualLine)
                         continue;
 
                     var shaLink = new FormattedText(
@@ -78,10 +85,8 @@ public class BlameTextEditor : TextEditor
                         typeface,
                         _editor.FontSize,
                         Brushes.DarkOrange);
-                    var shaLinkTop = y - shaLink.Height * 0.5;
-                    var underlineY = PixelSnapHelpers.PixelAlign(y + shaLink.Height * 0.5 + 0.5, pixelHeight);
-                    context.DrawText(shaLink, new Point(x, shaLinkTop));
-                    context.DrawLine(underlinePen, new Point(x, underlineY), new Point(x + shaLink.Width, underlineY));
+                    var shaLinkMiddle = y - shaLink.Height * 0.5;
+                    context.DrawText(shaLink, new Point(x, shaLinkMiddle));
                     x += shaLink.Width + 8;
 
                     var author = new FormattedText(
@@ -103,30 +108,27 @@ public class BlameTextEditor : TextEditor
                         _editor.FontSize,
                         _editor.Foreground);
                     var timeTop = y - time.Height * 0.5;
-                    context.DrawText(time, new Point(width - time.Width, timeTop));
+                    context.DrawText(time, new Point(width - time.Width - 8, timeTop));
+
+                    if (lineNumber > 1)
+                        context.DrawLine(new Pen(_editor.BorderBrush, 1), new Point(0, lineTop), new Point(Bounds.Width, lineTop));
+
+                    var hitBox = new HitBox(new Rect(8, y - lineHeight * 0.5, shaLink.Width, lineHeight), info);
+                    _shaHitBoxes.Add(hitBox);
                 }
             }
         }
 
-        /// <summary>
-        /// コントロールの測定処理をオーバーライドする。
-        /// </summary>
         protected override Size MeasureOverride(Size availableSize)
         {
             var view = TextView;
             var maxWidth = 0.0;
-            if (view is { VisualLinesValid: true } && _editor.BlameData is not null)
+            if (view is { VisualLinesValid: true } && _editor.BlameData != null)
             {
                 var typeface = view.CreateTypeface();
                 var calculated = new HashSet<string>();
-                foreach (var line in view.VisualLines)
+                foreach (var info in _editor.BlameData.LineInfos)
                 {
-                    var lineNumber = line.FirstDocumentLine.LineNumber;
-                    if (lineNumber > _editor.BlameData.LineInfos.Count)
-                        break;
-
-                    var info = _editor.BlameData.LineInfos[lineNumber - 1];
-
                     if (!calculated.Add(info.CommitSHA))
                         continue;
 
@@ -159,121 +161,65 @@ public class BlameTextEditor : TextEditor
                         _editor.Foreground);
                     x += time.Width;
 
-                    if (maxWidth < x)
-                        maxWidth = x;
+                    var required = x + 16;
+                    if (maxWidth < required)
+                        maxWidth = required;
                 }
             }
 
             return new Size(maxWidth, 0);
         }
 
-        /// <summary>
-        /// ポインターが移動した際のイベント処理。
-        /// </summary>
         protected override void OnPointerMoved(PointerEventArgs e)
         {
             base.OnPointerMoved(e);
 
-            var view = TextView;
-            if (!e.Handled && view is { VisualLinesValid: true })
+            if (DataContext is not ViewModels.Blame blame)
+                return;
+
+            var pos = e.GetPosition(this);
+            foreach (var box in _shaHitBoxes)
             {
-                var pos = e.GetPosition(this);
-                var typeface = view.CreateTypeface();
-                var lineHeight = view.DefaultLineHeight;
-
-                foreach (var line in view.VisualLines)
+                if (box.Rect.Contains(pos))
                 {
-                    if (line.IsDisposed || line.FirstDocumentLine is null || line.FirstDocumentLine.IsDeleted)
-                        continue;
-
-                    var lineNumber = line.FirstDocumentLine.LineNumber;
-                    if (lineNumber > _editor.BlameData.LineInfos.Count)
-                        break;
-
-                    var info = _editor.BlameData.LineInfos[lineNumber - 1];
-                    var y = line.GetTextLineVisualYPosition(line.TextLines[0], VisualYPosition.LineTop) - view.VerticalOffset;
-                    var shaLink = new FormattedText(
-                        info.CommitSHA,
-                        CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight,
-                        typeface,
-                        _editor.FontSize,
-                        Brushes.DarkOrange);
-
-                    var rect = new Rect(0, y, shaLink.Width, lineHeight);
-                    if (rect.Contains(pos))
-                    {
-                        Cursor = Cursor.Parse("Hand");
-
-                        if (DataContext is ViewModels.Blame blame)
-                        {
-                            var msg = blame.GetCommitMessage(info.CommitSHA);
-                            ToolTip.SetTip(this, msg);
-                        }
-
-                        return;
-                    }
+                    Cursor = Cursor.Parse("Hand");
+                    var msg = blame.GetCommitMessage(box.LineInfo.CommitSHA);
+                    ToolTip.SetTip(this, msg);
+                    return;
                 }
-
-                Cursor = Cursor.Default;
-                ToolTip.SetTip(this, null);
             }
+
+            Cursor = Cursor.Default;
+            ToolTip.SetTip(this, null);
         }
 
-        /// <summary>
-        /// ポインターが押された際のイベント処理。
-        /// </summary>
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
+            if (e.Handled || !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+                return;
 
-            var view = TextView;
-            if (!e.Handled && e.GetCurrentPoint(this).Properties.IsLeftButtonPressed && view is { VisualLinesValid: true })
+            if (DataContext is not ViewModels.Blame blame)
+                return;
+
+            var pos = e.GetPosition(this);
+            foreach (var box in _shaHitBoxes)
             {
-                var pos = e.GetPosition(this);
-                var typeface = view.CreateTypeface();
-
-                foreach (var line in view.VisualLines)
+                if (box.Rect.Contains(pos))
                 {
-                    if (line.IsDisposed || line.FirstDocumentLine is null || line.FirstDocumentLine.IsDeleted)
-                        continue;
-
-                    var lineNumber = line.FirstDocumentLine.LineNumber;
-                    if (lineNumber > _editor.BlameData.LineInfos.Count)
-                        break;
-
-                    var info = _editor.BlameData.LineInfos[lineNumber - 1];
-                    var y = line.GetTextLineVisualYPosition(line.TextLines[0], VisualYPosition.TextTop) - view.VerticalOffset;
-                    var shaLink = new FormattedText(
-                        info.CommitSHA,
-                        CultureInfo.CurrentCulture,
-                        FlowDirection.LeftToRight,
-                        typeface,
-                        _editor.FontSize,
-                        Brushes.DarkOrange);
-
-                    var rect = new Rect(0, y, shaLink.Width, shaLink.Height);
-                    if (rect.Contains(pos))
-                    {
-                        if (DataContext is ViewModels.Blame blame)
-                            blame.NavigateToCommit(info.File, info.CommitSHA);
-
-                        e.Handled = true;
-                        break;
-                    }
+                    blame.NavigateToCommit(box.LineInfo.File, box.LineInfo.CommitSHA);
+                    e.Handled = true;
+                    break;
                 }
             }
         }
 
-        /// <summary>親のBlameTextEditorへの参照。</summary>
+        private record HitBox(Rect Rect, Models.BlameLineInfo LineInfo);
+
         private readonly BlameTextEditor _editor = null;
-        // パフォーマンス: 描画毎のPen生成を排除するstaticキャッシュ
-        private static Pen s_underlinePen;
+        private List<HitBox> _shaHitBoxes = [];
     }
 
-    /// <summary>
-    /// VerticalSeparatorMarginクラス。
-    /// </summary>
     public class VerticalSeparatorMargin : AbstractMargin
     {
         /// <summary>

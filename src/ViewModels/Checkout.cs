@@ -63,6 +63,7 @@ public class Checkout : Popup
 
         var log = _repo.CreateLog($"Checkout '{branchName}'");
         Use(log);
+        var autoStash = new Commands.Stash(_repo.FullPath).Use(log);
 
         // DetachedHEAD状態の場合、到達不能コミットの警告を表示する
         if (!await _repo.WarnIfDetachedHeadLosesCommitsAsync())
@@ -88,9 +89,7 @@ public class Checkout : Popup
                 var changes = await new Commands.CountLocalChanges(_repo.FullPath, false).GetResultAsync();
                 if (changes > 0)
                 {
-                    succ = await new Commands.Stash(_repo.FullPath)
-                        .Use(log)
-                        .PushAsync("CHECKOUT_AUTO_STASH", false);
+                    succ = await autoStash.PushAutoAsync("CHECKOUT_AUTO_STASH");
                     if (!succ)
                         stashFailed = true;
                     else
@@ -115,13 +114,10 @@ public class Checkout : Popup
             {
                 // サブモジュールを自動更新する
                 await _repo.AutoUpdateSubmodulesAsync(log);
-
-                // 自動スタッシュを行った場合はポップして復元する
-                if (needPopStash)
-                    await new Commands.Stash(_repo.FullPath)
-                        .Use(log)
-                        .PopAsync("stash@{0}");
             }
+
+            if (needPopStash)
+                await autoStash.RestoreAutoAsync(_repo.GitDir);
         }
 
         log.Complete();

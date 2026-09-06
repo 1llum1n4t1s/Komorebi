@@ -58,7 +58,7 @@ internal class Linux : OS.IBackend
 
     /// <summary>
     /// Linuxのアプリケーションデータディレクトリパスを返す。
-    /// AppImageポータブルモード、~/.komorebi、旧設定ディレクトリからの移行に対応する。
+    /// AppImageポータブルモードと既存の保存先を優先し、新規環境ではXDG設定ディレクトリを使う。
     /// </summary>
     public string GetDataDir()
     {
@@ -77,21 +77,15 @@ internal class Linux : OS.IBackend
         if (Directory.Exists(dataDir))
             return dataDir;
 
-        // 旧データディレクトリ ~/.config/Komorebi からの移行を試みる
+        // Komorebi独自: 既存設定は移動せず、その場所で使い続ける。
         var oldDataDir = Path.Combine(home, ".config", "Komorebi");
         if (Directory.Exists(oldDataDir))
-        {
-            try
-            {
-                Directory.Move(oldDataDir, dataDir);
-            }
-            catch
-            {
-                // Ignore errors
-            }
-        }
+            return oldDataDir;
 
-        return dataDir;
+        var configHome = Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
+        return !string.IsNullOrEmpty(configHome) && Path.IsPathFullyQualified(configHome)
+            ? Path.Combine(configHome, "Komorebi")
+            : oldDataDir;
     }
 
     /// <summary>

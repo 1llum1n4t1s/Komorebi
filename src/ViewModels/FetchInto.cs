@@ -47,20 +47,24 @@ public class FetchInto : Popup
         var log = _repo.CreateLog($"Fetch Into '{Local.FriendlyName}'");
         Use(log);
 
-        await new Commands.Fetch(_repo.FullPath, Local, Upstream)
-            .Use(log)
-            .RunAsync();
+        bool succ;
+        using (var cancellation = BeginCancellableOperation())
+        {
+            succ = await new Commands.Fetch(_repo.FullPath, Local, Upstream) { CancellationToken = cancellation.Token }
+                .Use(log)
+                .RunAsync();
+        }
 
         log.Complete();
 
         // 履歴ビュー表示中の場合、更新後のHEADへナビゲート
-        if (_repo.SelectedViewIndex == 0)
+        if (succ && _repo.SelectedViewIndex == 0)
         {
             var newHead = await new Commands.QueryRevisionByRefName(_repo.FullPath, Local.Name).GetResultAsync();
             _repo.NavigateToCommit(newHead, true);
         }
 
-        return true;
+        return succ;
     }
 
     private readonly Repository _repo = null;

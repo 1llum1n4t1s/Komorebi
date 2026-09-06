@@ -1,5 +1,6 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Avalonia.Media;
@@ -15,6 +16,22 @@ namespace Komorebi.ViewModels;
 /// </summary>
 public class Statistics : ObservableObject
 {
+    public List<Models.Branch> Branches
+    {
+        get => _branches;
+        private set => SetProperty(ref _branches, value);
+    }
+
+    public Models.Branch SelectedBranch
+    {
+        get => _selectedBranch;
+        set
+        {
+            if (value != null && SetProperty(ref _selectedBranch, value))
+                LoadStatistics();
+        }
+    }
+
     /// <summary>
     /// 統計データの読み込み中かどうか。
     /// </summary>
@@ -82,13 +99,34 @@ public class Statistics : ObservableObject
     /// </summary>
     public Statistics(string repo)
     {
+        _repo = repo;
+        var allBranches = _selectedBranch;
+        Task.Run(async () =>
+        {
+            var branches = await new Commands.QueryBranches(repo).GetResultAsync().ConfigureAwait(false);
+            branches.Insert(0, allBranches);
+            Dispatcher.UIThread.Post(() => Branches = branches);
+        });
+        LoadStatistics();
+    }
+
+    private void LoadStatistics()
+    {
+        IsLoading = true;
+        var generation = ++_generation;
+        var branch = _selectedBranch;
+        var max = Preferences.Instance.MaxHistoryCommits;
         Task.Run(async () =>
         {
             // バックグラウンドスレッドで統計データを取得
-            var result = await new Commands.Statistics(repo, Preferences.Instance.MaxHistoryCommits).ReadAsync().ConfigureAwait(false);
+            var result = await new Commands.Statistics(_repo, max, branch).ReadAsync().ConfigureAwait(false);
             // UIスレッドに戻してデータを反映
             Dispatcher.UIThread.Post(() =>
             {
+                // 上流との差分: 選択し直す前の集計結果で表示を巻き戻さない。
+                if (generation != _generation)
+                    return;
+
                 _data = result;
                 RefreshReport();
                 IsLoading = false;
@@ -116,6 +154,10 @@ public class Statistics : ObservableObject
         SelectedReport = report;
     }
 
+    private readonly string _repo;
+    private List<Models.Branch> _branches = [];
+    private Models.Branch _selectedBranch = new() { Name = "--- (All)", IsLocal = true, FullName = string.Empty, Head = "---" };
+    private int _generation;
     private bool _isLoading = true;
     private Models.Statistics _data = null;
     private Models.StatisticsReport _selectedReport = null;
