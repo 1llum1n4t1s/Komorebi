@@ -43,7 +43,7 @@ updates:
       - "nuget"
     commit-message:
       prefix: "deps"
-    # ベータ版 (Azure.AI.OpenAI 2.9.0-beta.1 等) は明示的に許可しないと更新されない
+    # manifest に明示されたすべての依存を更新対象にする
     allow:
       - dependency-type: "all"
     # 破壊的変更を含む major バージョンアップは手動確認を要するため、
@@ -53,6 +53,23 @@ updates:
         update-types: ["version-update:semver-major"]
     groups:
       nuget-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  # global.json の .NET SDK
+  - package-ecosystem: "dotnet-sdk"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "deps"
+    groups:
+      dotnet-sdk-minor-patch:
         patterns: ["*"]
         update-types: ["minor", "patch"]
 
