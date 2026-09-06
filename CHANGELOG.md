@@ -13,6 +13,12 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 
 ## [Unreleased]
 
+## [1.0.104] - 2026-09-07
+
+### 修正
+
+- Avalonia 12 環境で統計グラフの生成時に例外が発生する問題を修正しました
+
 ## [1.0.103] - 2026-09-07
 
 ### 追加
