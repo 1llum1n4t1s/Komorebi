@@ -35,7 +35,7 @@ $VpkVersion = (Invoke-RestMethod 'https://api.nuget.org/v3-flatcontainer/vpk/ind
     Where-Object { $_ -notmatch '-' } | Select-Object -Last 1
 if (-not $VpkVersion) { throw 'vpk の最新安定版バージョンの取得に失敗しました (NuGet API)' }
 Write-Host "vpk 最新安定版: $VpkVersion"
-$WranglerVersion = '4.92.0'         # サプライチェーン対策でバージョン固定
+$WranglerVersion = '4.129.0'         # サプライチェーン対策でバージョン固定
 $Bucket = 'komorebi-updates'
 $BaseUrl = 'https://komorebi.kagayoi.com'
 $AccountId = '10901bfadbf1005164774a7350082985'
