@@ -267,7 +267,7 @@ Version format: `Directory.Build.props` stores the version in `<Version>` tag (e
 - **Velopack 1.2.0** — auto-update framework (`VelopackUpdateDialog.Avalonia` 経由の推移的依存)
 - **depends/AvaloniaEdit** — vendored (directly tracked, not a git submodule), text editor for diff/blame
 - **OpenAI 2.13.0 / Azure.AI.OpenAI 2.9.0-beta.1** — AI commit message generation
-- **LiveChartsCore 2.0.5** — contribution statistics charts
+- **LiveChartsCore.SkiaSharpView.Avalonia 2.1.0-dev-798** — contribution statistics charts。Avalonia 12 対応版を選び、更新時は `LibraryCompatibilityTests` でチャート生成の互換性を検証する。
 - **BitMiracle.LibTiff.NET / Pfim** — TIFF / DDS image format support in ImageDiffView
 - **Tmds.DBus.Protocol** — Linux desktop DBus integration (notifications, etc.)
 - **CRDebugger.Avalonia** (Debug builds only) — Avalonia diagnostics helper

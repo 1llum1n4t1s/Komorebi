@@ -33,5 +33,6 @@ Komorebi は SourceGit を基にした、Windows・macOS・Linux 向けの Git G
 - **起動診断は通常ロガーから独立させる。** `StartupDiagnostics` の同期ログと到達ステージのマーカーで、ロガー初期化前やログを書けない終了を補足する。最初のアイドル後も60秒観察し、正常終了経路ではマーカーを消して誤検出を抑える。
 - **更新先を固定する。** `Preferences.CanonicalUpdateBaseUrl` を正本とし、JSON からの更新 URL 上書きを受け付けない。Velopack の取得・適用経路と R2 の配信経路を接続する。Windows は対話認証が必要な署名のためローカルで配信し、CI は Windows 更新フィードを生成しない。両経路の削除処理は他方の manifest を保持対象へ取り込む。
 - **テーマと翻訳を資源として切り替える。** `Themes.axaml` の色・ブラシと各 locale 辞書を利用し、英語辞書を翻訳キー集合の基準とする。差分エディタは追跡済みの `depends/AvaloniaEdit` を利用する。
+- **Velopack は参照される更新処理だけを AOT で保持する。** アセンブリ全体を `TrimmerRootAssembly` に指定すると、未使用の旧 COM API まで AOT 解析対象になるため、全体保持は行わない。更新フィードの JSON 読み取り互換性は `LibraryCompatibilityTests` で検証する。
 
 上流との機能差と同期時の採否は [docs/UPSTREAM-SYNC.md](docs/UPSTREAM-SYNC.md) に記録される。上流追従の保守性と Komorebi 固有機能の維持を両立するため、採否の作業規約は AGENTS.md に集約する。
