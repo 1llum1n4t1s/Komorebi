@@ -246,7 +246,8 @@ public class Histories : ObservableObject, IDisposable
     }
 
     public double DetailMinimumHeight => IsDetailsPanelExpanded ? 200 : 0;
-    public double DetailSplitterHeight => IsDetailsPanelExpanded ? 3 : 0;
+    // Komorebi 独自の詳細パネル開閉用。double では Height に変換できず既定の 1* になる。
+    public GridLength DetailSplitterHeight => new(IsDetailsPanelExpanded ? 3 : 0);
 
     public void ToggleDetailsPanel()
     {
