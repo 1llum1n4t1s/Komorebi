@@ -13,6 +13,12 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-07
+
+### 修正
+
+- 履歴一覧とコミット詳細の間に大きな空白領域が表示される問題を修正しました
+
 ## [1.0.104] - 2026-09-07
 
 ### 修正
