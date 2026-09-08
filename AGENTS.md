@@ -243,11 +243,11 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **release.yml** — triggered by push to `release/**` branches: full AOT publish (5 platforms) → packages (zip/deb/rpm/AppImage) → Velopack (osx/linux のみ) → R2 単独配信 (GitHub Releases は作らない)
 - **build.yml** — reusable workflow for 5-platform AOT publish (used by release.yml only。win-* は `package.yml` の standalone zip 用に残置)
 - **velopack.yml** — reusable workflow creating Velopack packages。**win-x64 / win-arm64 は matrix から除外済み** — 未署名 win フィードがローカル署名リリースの成果物を R2 上で上書きしないようにするため
-- **deploy-landing.yml** — `web/` 配下のランディングページを Cloudflare Worker としてデプロイ (リリース配信とは独立)
+- 製品ページの配信は `vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
 
 ### Windows リリース (ローカル実行)
 
-`pwsh scripts/release-local.ps1` — Lhamiel / Ferry で確立したローカル署名付きリリースフローの横展開。コード署名 (Authenticode、Certum **Open Source Code Signing in the cloud**、CN=`Open Source Developer Yuichiro Shinozaki`) は SimplySign Desktop のトークンログイン中セッション + スマホ OTP が必要で GitHub Actions からは署名できないため、win-x64 / win-arm64 の 2 チャンネルはローカルスクリプトでリリースする。スクリプトは publish (Native AOT) → `vpk pack` + **Authenticode 署名** (`--signParams`、タイムスタンプ `http://time.certum.pl`) → 署名検証 → `wrangler` (pnpm dlx) で R2 バケット `komorebi-updates` にアップロード (manifest は最後) → 配信確認 (`releases.{channel}.json` HTTP 200) → **manifest 外の旧 `*.nupkg` を Cloudflare API V4 で自動削除** (Aggressive 保持戦略。今回ビルドしないチャンネルの manifest は R2 から取得して keep set に加えるため、macOS / Linux の nupkg は誤削除しない) まで一括実行。Cloudflare トークンは `C:\Users\IMT\dev\Secret\secrets.json` の `cloudflare.api_token` を実行時に読む。動作確認は `-SkipUpload` (ビルド + 署名のみ)、RID 絞り込みは `-Runtimes win-x64`。**実行前提: SimplySign Desktop がトークンログイン済み** (証明書が CurrentUser\My に見えること。スクリプトがプリフライトで検査して落とす)。**`/vava` は `vava.config.json` の `localRelease` キーを読んでこのスクリプトを自動実行する**。
+- 製品ページの配信は `vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
 
 ### macOS / Linux + standalone パッケージ (CI)
 
