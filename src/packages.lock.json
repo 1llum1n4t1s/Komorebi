@@ -88,14 +88,14 @@
       },
       "CRDebugger.Avalonia": {
         "type": "Direct",
-        "requested": "[1.0.30, )",
-        "resolved": "1.0.30",
-        "contentHash": "x7IuBgW7ca16RiJVbQ2LsfSH2Rc/4vH80I+qAOSECHeOsh49R7DpOoYtHO74N38V7OHMi+wfkSDzDsZLmQk51g==",
+        "requested": "[1.0.32, )",
+        "resolved": "1.0.32",
+        "contentHash": "0T0D5L8z1o5NJnJ+cJjKyTjpjcNv2OknAjsiMhd+4qkBdu/VRqbp9ynwDHQ3aLql9khLk3+h0/qIgKdZ3BvhqQ==",
         "dependencies": {
-          "Avalonia": "12.1.1",
-          "Avalonia.Themes.Fluent": "12.1.1",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.11",
-          "SuperLightLogger": "1.0.15"
+          "Avalonia": "12.1.2",
+          "Avalonia.Themes.Fluent": "12.1.2",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.12",
+          "SuperLightLogger": "1.0.16"
         }
       },
       "LiveChartsCore.SkiaSharpView.Avalonia": {
@@ -326,8 +326,8 @@
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.0.11",
-        "contentHash": "/a1aJz4m7ylhEDf25ugQChLQoN5XwoGjWw/BoR/ZWWKsO1v4DdJElS1uyngahz4B/eOzjFk1KNTkarRLE5wsIg=="
+        "resolved": "10.0.12",
+        "contentHash": "9/qymSh7hVDMGTGwrLz8MRp5zRyXy9adGDOs4HwRdnLil3oZGYuWeZjbmHgCQ9BL1qBroVfgUK3U/nb61617Cw=="
       },
       "Microsoft.Extensions.Diagnostics.Abstractions": {
         "type": "Transitive",
@@ -370,10 +370,10 @@
       },
       "Microsoft.Extensions.Logging.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.0.11",
-        "contentHash": "Ljd0Uxoq5XpScD2Bg0nM/r3mwx7Ao5Uq24eo2ARxbGvqJ7Zht6rt2cJtwVRH4Cv+1ZVMdXz6TB43KbpmsxRrvQ==",
+        "resolved": "10.0.12",
+        "contentHash": "+24lC4plfbEDNfLAdTV/SWKS7dW+16X4HdydO3R++134kSNTzcbYA4KpR1Hdh6uWisB8Za3AzwyOn+K+NxWIug==",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.11"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.12"
         }
       },
       "Microsoft.Extensions.Options": {
