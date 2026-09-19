@@ -38,6 +38,7 @@ dotnet build -p:DisableUpdateDetection=true
 - `GenerateDocumentationFile=true` — required for `IDE0005` to detect unused usings; produces an XML doc next to the assembly.
 - `NoWarn=CS1591` — silences "missing XML doc comment" warnings so IDE-style analysis stays the only signal.
 - `<Version>` here is the source of truth for both packaging and Velopack.
+- `RestorePackagesWithLockFile=true` — app/test projects keep separate `packages.lock.json` files. After changing a `PackageReference`, run `dotnet restore --force-evaluate`, review the resulting changes in both lockfiles, then verify with `dotnet restore --locked-mode`.
 
 ## Tests
 
@@ -71,13 +72,13 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 ## Architecture
 
 ### MVVM Pattern
-- **ViewModels** (`src/ViewModels/`, ~131 files) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class (which itself inherits `ObservableValidator` for validation support).
-- **Views** (`src/Views/`, ~142 code-behind files + ~120 `.axaml`) — Avalonia XAML (`.axaml`) + code-behind (`.axaml.cs`) with compiled bindings (`x:DataType`)
-- **Models** (`src/Models/`, ~80 files) — plain data classes for git objects and app state
+- **ViewModels** (`src/ViewModels/`) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class (which itself inherits `ObservableValidator` for validation support).
+- **Views** (`src/Views/`) — Avalonia XAML (`.axaml`) + code-behind (`.axaml.cs`) with compiled bindings (`x:DataType`)
+- **Models** (`src/Models/`) — plain data classes for git objects and app state
 - **Converters** (`src/Converters/`) — IValueConverters for XAML bindings
 
 ### Git Command Layer
-`src/Commands/` (~83 files) wraps git CLI invocations:
+`src/Commands/` wraps git CLI invocations:
 - `Command.cs` is the base — configures `Process.StartInfo`, handles stdout/stderr capture
 - Each subclass sets `Args` and calls `Exec()` or `ExecAsync()`
 - Commands are stateless: create, configure, execute
@@ -118,7 +119,6 @@ Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS
 - `Popup.cs` — base class for all dialog VMs (`Sure()` = confirm action, `[Required]` validation)
 - `Preferences.cs` — singleton app settings (serialized to `preference.json`)
 - `InitSetup.cs` — first-launch popup for language + default clone directory selection
-- `SelfUpdate.cs` — handles Velopack download progress and apply
 
 ### View Switching Pattern (Upstream-compliant)
 Both tab switching and sub-view switching use `ContentControl + DataTemplate`, matching upstream SourceGit. The fork previously experimented with an `ItemsControl + Panel + IsVisible` view-caching scheme, but it was reverted because forcing View recreation introduced screen flickering and other layout regressions.
@@ -134,7 +134,7 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 
 ### 起動時クラッシュの記録 (StartupDiagnostics)
 
-`Models.Logger` (SuperLightLogger) は「初期化後」かつ「非同期バッファ経由」でしか書けないため、起動時クラッシュを 2 種類取りこぼす。`src/Models/StartupDiagnostics.cs` がその穴を埋める。出力先はどちらも `<DataDir>/logs`。
+`Models.Logger` (SuperLightLogger) は「初期化後」かつ「非同期バッファ経由」でしか書けないため、起動時クラッシュを 2 種類取りこぼす。`src/Models/StartupDiagnostics.cs` がその穴を埋める。`Bind()` 前の同期ログは `%TEMP%/Komorebi`、DataDir 確定後の同期ログとマーカーは `<DataDir>/logs` に出力する。
 
 1. **ロガー初期化前の失敗** (Velopack フック / `SetupDataDir` / `Logger.Initialize` 自体) → `StartupDiagnostics.WriteFatal()` が Logger 非依存の同期書き込みで `Komorebi_startup_crash.log` に残す (DataDir 確定前は `%TEMP%/Komorebi`)。
 2. **プロセス内で何も書けない死に方** (Native AOT のアクセス違反、ランタイム abort、強制終了、電源断) → 起動中は `logs/startup-<pid>.marker` を置き、`MarkStage()` で到達ステージを同期更新する。UI スレッドが最初のアイドル (`DispatcherPriority.ApplicationIdle`) に到達したら `Stabilizing` へ遷移し、**60 秒の安定化観察期間**を経てから `MarkCompleted()` でマーカーを削除する（起動数秒後のサイレントクラッシュも検出するため）。正規終了経路 (`App.Quit` / `desktop.Exit` / IPC 二重起動の即終了 / リベースエディタ終了) では観察期間中でも即座に `MarkCompleted()` して誤検出を防ぐ。次回起動時に残留マーカーを見つけたら「前回の起動が完了しませんでした（到達ステージ付き）」を通常ログ (Warning) とブートストラップログの両方へ記録する。PID 再利用の誤検出は `startedTicks` (プロセス開始時刻) の一致判定で防ぐ。
@@ -151,9 +151,8 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 - 配信元 URL は `Preferences.CanonicalUpdateBaseUrl` 定数で 1 箇所管理する。`UpdateBaseUrl` プロパティは `[JsonIgnore]` 付きの薄いラッパーで、外部 JSON からの上書きを不可にする
 - 通常リリースは **R2 単独配信**（GitHub Releases は作らない）。**win-x64 / win-arm64 はローカル署名リリース (`scripts/release-local.ps1`)、osx-arm64 / linux-x64 / linux-arm64 + standalone パッケージは CI (`.github/workflows/release.yml` の `r2-upload` ジョブ)** の役割分担（詳細は後述「CI/CD」）
 - 旧 `GithubSource` クライアント救済は GitHub Releases に「踏み台 (R2 対応版を含む最初のバージョン)」を **1 つだけ** publish する方式。2 段階更新（旧 → 踏み台版 → R2 最新）で乗り換えさせる。踏み台 publish は `/transfer-cf` 移行作業時に 1 回だけ実施し、踏み台 Release は **削除せず残す**（継続併用はしない）
-- `Models.VelopackUpdate` holds `UpdateManager` + `UpdateInfo`
-- `ViewModels.SelfUpdate` handles download progress and `ApplyUpdatesAndRestart()`
-- `mgr.IsInstalled` guards against running in dev/unpackaged mode
+- `App.Check4Update()` constructs the `UpdateManager` and delegates update checks, progress UI, download, and apply/restart to `VelopackUpdateDialog.UpdateDialogWindow.ShowAsync()`
+- `Models.UpdateDialogStrings` supplies localized dialog text; ignored versions remain in `Preferences.IgnoreUpdateTag`
 - Compile flag `DISABLE_UPDATE_DETECTION` skips update checks entirely
 
 ### Localization
@@ -165,7 +164,7 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 - `Models/Locales.cs` defines the `Locale.Supported` list used in UI dropdowns
 - `App.SetLocale()` swaps the active `ResourceDictionary` at runtime
 - Each locale must be registered in `App.axaml` as `<ResourceInclude x:Key="xx_YY">`
-- First-launch: `InitSetup` popup lets user choose language + clone directory (bypasses OS auto-detection)
+- First-launch: `InitSetup` initializes the language from `Preferences.DetectedLocale`, then lets the user confirm or change it together with the default clone directory
 
 ### Theme System
 `src/Resources/Themes.axaml` defines 5 built-in themes (Default/Light/Dark/White/OneDark) as `ResourceDictionary` entries with `ThemeVariant` keys. Each theme defines `Color.*` resources that `Brush.*` `SolidColorBrush` resources reference via `DynamicResource`. User-customizable color overrides are applied via `Models/ThemeOverrides.cs` which loads a JSON file and merges overrides into the active resource dictionary at runtime. When adding new themed colors, define both the `Color` and `Brush` in `Themes.axaml` and reference them with `{DynamicResource Brush.MyName}` in AXAML — use resources rather than hardcoding color literals.
@@ -176,14 +175,16 @@ Both tab switching and sub-view switching use `ContentControl + DataTemplate`, m
 Usage: `await new Alert().ShowAsync(this, message, isError: true);` — titles are localized via `Launcher.Error` / `Launcher.Info` keys. The dialog is resizable (`CanResize=True` + `MinWidth/MinHeight`) and wraps long messages in a `ScrollViewer`.
 
 ### Window State Persistence Pattern
-Stand-alone windows (FileHistories, Blame, Launcher) persist width/height/position/state across sessions via `ViewModels.LayoutInfo` properties. The pattern:
+Stand-alone windows persist width/height/position/state across sessions via `ViewModels.LayoutInfo` properties. `FileHistories` and `Blame` use this pattern:
 
 1. **Constructor**: set `Width` / `Height` from `LayoutInfo` (safe — no `Screens` dependency) and subscribe `PositionChanged`. Leave `Position` unset in the constructor: `App.ShowWindow(...)` will overwrite it with an active-screen-centered value before calling `Show()`, which serves as a deterministic first-launch fallback.
 2. **OnOpened**: call `TryRestoreWindowPosition(x, y, w, h)` (protected helper on `ChromelessWindow`) — returns true if the saved `PixelRect` fits entirely within a connected screen's working area, and sets `Position` accordingly, overriding the centering from step 1. Also restore `WindowState = Maximized` if previously maximized. If `TryRestoreWindowPosition` returns false (first launch, or saved coords on a disconnected monitor), no action is needed — the step-1 centering remains as fallback.
 3. **OnSizeChanged** / **OnPositionChanged**: save to `LayoutInfo` only when `WindowState == Normal` (avoid saving maximized/snapped sizes).
 4. **OnPropertyChanged(WindowStateProperty)**: save state only when `!= Minimized` (otherwise a taskbar-minimize would cause the next launch to start minimized).
 
-This order means a returning user with a valid saved position may see a one-frame flash at the centered position before `OnOpened` snaps to the saved coordinates (Avalonia 11 has no way to resolve `Screens` pre-`OnOpened` for a cross-monitor save). The flash is acceptable in exchange for correct fallback on first launch.
+This order means a returning user with a valid saved position may see a one-frame flash at the centered position before `OnOpened` snaps to the saved coordinates (Avalonia does not expose the required `Screens` state before `OnOpened` for this cross-monitor restore path). The flash is acceptable in exchange for correct fallback on first launch.
+
+`Launcher` is the exception: its constructor restores size and a valid saved position directly (or sets `WindowStartupLocation.CenterScreen`), subscribes `PositionChanged` there, and `OnOpened` restores only maximized/full-screen state. Keep that separate path when changing window persistence.
 
 ### AI Commit Message Generation
 `src/AI/` contains AI integration for generating commit messages. Supported providers: OpenAI, Azure OpenAI, Gemini, Anthropic.
@@ -243,11 +244,10 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **release.yml** — triggered by push to `release/**` branches: full AOT publish (5 platforms) → packages (zip/deb/rpm/AppImage) → Velopack (osx/linux のみ) → R2 単独配信 (GitHub Releases は作らない)
 - **build.yml** — reusable workflow for 5-platform AOT publish (used by release.yml only。win-* は `package.yml` の standalone zip 用に残置)
 - **velopack.yml** — reusable workflow creating Velopack packages。**win-x64 / win-arm64 は matrix から除外済み** — 未署名 win フィードがローカル署名リリースの成果物を R2 上で上書きしないようにするため
-- 製品ページの配信は `vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
-
 ### Windows リリース (ローカル実行)
 
-- 製品ページの配信は `vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
+- `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。
+- 製品ページの配信は兄弟リポジトリの `../vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
 
 ### macOS / Linux + standalone パッケージ (CI)
 
@@ -257,7 +257,7 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 
 Linux builds run directly on `ubuntu-latest` runner (no Docker container). arm64 cross-compilation adds ports.ubuntu.com sources with dynamic codename detection. RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
 
-Version format: `Directory.Build.props` stores the version in `<Version>` tag (e.g., `1.0.65`). CI reads it directly for both packaging and Velopack.
+Version format: `Directory.Build.props` stores the semantic version in the `<Version>` tag. CI reads it directly for both packaging and Velopack.
 
 ## Key Dependencies
 
