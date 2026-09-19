@@ -88,7 +88,7 @@
     <PackageReference Include="StbImageSharp" Version="2.30.16" />
     <PackageReference Include="SuperLightLogger" Version="1.0.17" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.95.1" />
-    <PackageReference Include="VelopackUpdateDialog.Avalonia" Version="1.0.17" />
+    <PackageReference Include="VelopackUpdateDialog.Avalonia" Version="1.0.18" />
 
     <ProjectReference Include="../depends/AvaloniaEdit/src/AvaloniaEdit.TextMate/AvaloniaEdit.TextMate.csproj" />
   </ItemGroup>
