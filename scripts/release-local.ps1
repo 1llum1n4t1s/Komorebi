@@ -67,6 +67,10 @@ Write-Host '== プリフライト ==' -ForegroundColor Cyan
 # リンク段 (Microsoft.NETCore.Native.targets) の vswhere.exe 解決が壊れるため補完する
 if (-not ${env:ProgramFiles(x86)}) { ${env:ProgramFiles(x86)} = 'C:\Program Files (x86)' }
 
+# 一部の非対話シェルでは Windows 標準の OS 環境変数も欠落する。
+# Native AOT は OS=Windows_NT でホスト OS を判定するため、未設定時だけ補完する。
+if (-not $env:OS) { $env:OS = 'Windows_NT' }
+
 # VS 2026 の vcvarsall は PATH 上の vswhere.exe を呼ぶ (GitHub ランナーは PATH 済み)。
 # ローカルでは VS Installer ディレクトリが PATH に無いので AOT リンクが落ちる → 追加
 $vsInstallerDir = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer'
