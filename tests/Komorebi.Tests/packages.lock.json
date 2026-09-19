@@ -228,13 +228,12 @@
       },
       "CRDebugger.Avalonia": {
         "type": "Transitive",
-        "resolved": "1.0.32",
-        "contentHash": "0T0D5L8z1o5NJnJ+cJjKyTjpjcNv2OknAjsiMhd+4qkBdu/VRqbp9ynwDHQ3aLql9khLk3+h0/qIgKdZ3BvhqQ==",
+        "resolved": "1.0.34",
+        "contentHash": "6yVMxw4yAZUKoqH9omLBc/bfkIQRB+tpQFnAtt/ijhTe3RrGBamY1NrAso+hBYznGw1qZff0H0ZCnI/fWqs0lA==",
         "dependencies": {
           "Avalonia": "12.1.2",
           "Avalonia.Themes.Fluent": "12.1.2",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.12",
-          "SuperLightLogger": "1.0.16"
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.12"
         }
       },
       "HarfBuzzSharp": {
@@ -669,7 +668,7 @@
           "AvaloniaUI.DiagnosticsSupport": "[2.2.3, )",
           "Azure.AI.OpenAI": "[2.9.0-beta.1, )",
           "BitMiracle.LibTiff.NET": "[2.4.660, )",
-          "CRDebugger.Avalonia": "[1.0.32, )",
+          "CRDebugger.Avalonia": "[1.0.34, )",
           "CommunityToolkit.Mvvm": "[8.4.2, )",
           "LiveChartsCore.SkiaSharpView.Avalonia": "[2.1.0-dev-798, )",
           "OpenAI": "[2.13.0, )",
