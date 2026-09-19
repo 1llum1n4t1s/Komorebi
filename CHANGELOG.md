@@ -13,6 +13,12 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-20
+
+### 変更
+
+- アプリアイコンを抽象的なクリスタル調のデザインへ刷新しました
+
 ## [1.1.0] - 2026-09-07
 
 ### 修正
