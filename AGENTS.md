@@ -38,7 +38,7 @@ dotnet build -p:DisableUpdateDetection=true
 - `GenerateDocumentationFile=true` — required for `IDE0005` to detect unused usings; produces an XML doc next to the assembly.
 - `NoWarn=CS1591` — silences "missing XML doc comment" warnings so IDE-style analysis stays the only signal.
 - `<Version>` here is the source of truth for both packaging and Velopack.
-- `RestorePackagesWithLockFile=true` — app/test projects keep separate `packages.lock.json` files. After changing a `PackageReference`, run `dotnet restore --force-evaluate`, review the resulting changes in both lockfiles, then verify with `dotnet restore --locked-mode`.
+- `RestorePackagesWithLockFile=true` — app/test projects keep separate `packages.lock.json` files. After changing a `PackageReference`, run `dotnet restore --force-evaluate`, review all affected lockfiles, then verify with `dotnet restore --locked-mode`. E2E projects outside the solution require the same restore checks with their explicit project paths.
 
 ## Tests
 
@@ -60,6 +60,21 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komore
 
 `global.json` は Microsoft.Testing.Platform を選択しているため、テスト実行では上記の `--project` 形式を使う。CI と同じ検証は `dotnet build -c Release` の後に `dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj -c Release --no-build` を実行する。
 
+### 実行経路の E2E 検証
+
+次のプロジェクトは `Komorebi.slnx` と通常 CI の対象外なので、対応する実装を変更した場合は個別に実行する。Git を引数に取る検証では、インストール済みの実行ファイルの絶対パスを指定する。
+
+| 変更対象 | 必須コマンド（Windows の例） | 検証範囲・詳細 |
+|---|---|---|
+| クローン、長いパス復旧、サブモジュール認証 | `dotnet run --project tests/CloneLongPaths.E2E/CloneLongPaths.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'` | [実 Git のクローンと復旧](tests/CloneLongPaths.E2E/README.md) |
+| API キー保存、IPC のロック・転送・復旧 | `dotnet run --project tests/Recovery.E2E/Recovery.E2E.csproj -c Release -p:DisableAOT=true` | [実暗号化と別プロセス](tests/Recovery.E2E/README.md) |
+| 画像差分、View 再利用、Fetch/Pull/Push の入力、About | `dotnet run --project tests/UIWorkflow.E2E/UIWorkflow.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'` | [実 AXAML・Headless 入力と画像](tests/UIWorkflow.E2E/README.md) |
+| ローカライズ検証 CLI の失敗時終了 | `pwsh -NoProfile -File tests/Localization.E2E/Run.ps1` | 読込失敗時の exit 1 と書込抑止 |
+
+各実行の `result.json`、ログ、fixture・画像を成果物として保持し、結果と再現手順を報告する。設定と資格情報は検証用に隔離される。GUI の起動・OS 支援技術・外部 SSH 接続まで検証したとは扱わず、必要な実デスクトップ確認は別途行う。成果物の具体的な保存先は各 README と実行出力を参照する（ローカライズ検証は `tests/CloneLongPaths.E2E/bin/localization-artifacts/<実行ID>/`）。
+
+### 同梱エディタの検証
+
 同梱エディタを変更した場合は、ルートの `Komorebi.slnx` に含まれない demo と NUnit テストも別途検証する（いずれも net10.0）。
 
 ```bash
@@ -78,19 +93,15 @@ dotnet test --project depends/AvaloniaEdit/test/AvaloniaEdit.Tests/AvaloniaEdit.
 - `.github/workflows/` — CI/CD workflows
 - `build/` — packaging scripts and resources
 
-## Architecture
+## 実装時の規約
 
-### MVVM Pattern
-- **ViewModels** (`src/ViewModels/`) — inherit `ObservableObject` (CommunityToolkit.Mvvm). Dialog VMs inherit `Popup` base class (which itself inherits `ObservableValidator` for validation support).
-- **Views** (`src/Views/`) — Avalonia XAML (`.axaml`) + code-behind (`.axaml.cs`) with compiled bindings (`x:DataType`)
-- **Models** (`src/Models/`) — plain data classes for git objects and app state
-- **Converters** (`src/Converters/`) — IValueConverters for XAML bindings
+構造・責務・データフローは [DESIGN.md](DESIGN.md) を正本とする。以下は実装変更時に守る手順と制約である。
 
 ### Git Command Layer
 `src/Commands/` wraps git CLI invocations:
 - `Command.cs` is the base — configures `Process.StartInfo`, handles stdout/stderr capture
 - Each subclass sets `Args` and calls `Exec()` or `ExecAsync()`
-- Commands are stateless: create, configure, execute
+- コマンドは操作ごとに生成する。`Args`・`WorkingDirectory`・認証指定・`ErrorMessage` などの実行状態を持つため、同じインスタンスを並行実行しない。`ErrorMessage` は直近の `ExecAsync()` の秘密値除去済みエラーで、再実行ごとにリセットされる。
 
 **Base class shared utilities** (use these instead of re-implementing):
 - `ExecWithSSHKeyAsync(remote)` — fetches SSH key from git config then runs `ExecAsync()` (used by Push/Pull/Fetch)
@@ -120,39 +131,18 @@ Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS
 ### Remote Configuration
 `RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including URL editing, per-remote SSH key selection, and per-remote push prohibition. Push prohibition uses `git remote set-url --push <name> no_push` to set an invalid push URL — this is the standard git idiom for preventing pushes to upstream/fork-parent remotes. The `SelectedRemotePushDisabled` property detects this state by comparing push URL with fetch URL.
 
-### Key ViewModels
-- `Launcher.cs` / `LauncherPage.cs` — top-level window with tab management. `Launcher.ActivePage` is TwoWay-bound from `LauncherTabBar` (a ListBox) and feeds the page `ContentControl` in `Launcher.axaml`.
-- `Repository.cs` — central VM for an open repo (branches, tags, history, working copy). Caches three sub-view VMs (`_histories`, `_workingCopy`, `_stashesPage`) constructed in `Open()` and exposes them via `HistoriesVM`/`WorkingCopyVM`/`StashesPageVM` for content-toolbar bindings. The `SelectedViewIndex` setter swaps `SelectedView` to the matching cached VM.
-- `Histories.cs` — commit graph and log
-- `WorkingCopy.cs` — staging/unstaging, diff, committing
-- `Popup.cs` — base class for all dialog VMs (`Sure()` = confirm action, `[Required]` validation)
-- `Preferences.cs` — singleton app settings (serialized to `preference.json`)
-- `InitSetup.cs` — first-launch popup for language + default clone directory selection
+### View の再利用と入力
 
-### View Switching Pattern (Upstream-compliant)
-Both tab switching and sub-view switching use `ContentControl + DataTemplate`, matching upstream SourceGit. The fork previously experimented with an `ItemsControl + Panel + IsVisible` view-caching scheme, but it was reverted because forcing View recreation introduced screen flickering and other layout regressions.
+- `ContentControl + DataTemplate` の切替と Repository の VM 保持を維持する（[設計](DESIGN.md#データフローと寿命)）。View の `DataContext` 変更時は旧 VM のイベント購読を解除し、新 VM に付け直す。VM に属する状態を code-behind に保持しない。
+- Fetch/Pull/Push は `ModifierButton` の `Click` 経由で処理する。ポインターの `Tapped` だけに依存せず、Enter・Space・UIA でも同じ操作へ一度だけ到達させる。修飾キーは `ClickModifiers` から取得する。
 
-- **Tab level** (`Launcher.axaml`): `<ContentControl Content="{Binding ActivePage}">` with a `<DataTemplate DataType="vm:LauncherPage"><v:LauncherPage/></DataTemplate>`.
-- **Sub-view level** (`Repository.axaml`): `<ContentControl Content="{Binding SelectedView}">` with three `<DataTemplate>` entries for `Histories`, `WorkingCopy`, `StashesPage` VM types. Toolbar visibility for the active sub-view is still gated by `SelectedViewIndex` + `IntConverters.IsZero`/`IsOne`/`IsTwo`.
-- **VM caching, View recycling**: Sub-view VMs are kept alive on `Repository`, so heavy state (history graph, staged changes) survives switches. Avalonia's `ContentPresenter` also recycles the *View* instance when content switches between two instances of the same VM type (see "ContentControl recycles Views" pitfall). State that must follow VM lifecycle should live on the VM, not in code-behind fields.
+### 起動・IPC の変更
 
-### Platform Abstraction
-`src/Native/`:
-- `OS.cs` — static facade with `IBackend` interface
-- `Windows.cs`, `MacOS.cs`, `Linux.cs` — platform implementations
+診断の出力先・ステージ・単一起動の責務は [DESIGN.md](DESIGN.md#起動診断と単一起動) を参照する。
 
-### 起動時クラッシュの記録 (StartupDiagnostics)
-
-`Models.Logger` (SuperLightLogger) は「初期化後」かつ「非同期バッファ経由」でしか書けないため、起動時クラッシュを 2 種類取りこぼす。`src/Models/StartupDiagnostics.cs` がその穴を埋める。`Bind()` 前の同期ログは `%TEMP%/Komorebi`、DataDir 確定後の同期ログとマーカーは `<DataDir>/logs` に出力する。
-
-1. **ロガー初期化前の失敗** (Velopack フック / `SetupDataDir` / `Logger.Initialize` 自体) → `StartupDiagnostics.WriteFatal()` が Logger 非依存の同期書き込みで `Komorebi_startup_crash.log` に残す (DataDir 確定前は `%TEMP%/Komorebi`)。
-2. **プロセス内で何も書けない死に方** (Native AOT のアクセス違反、ランタイム abort、強制終了、電源断) → 起動中は `logs/startup-<pid>.marker` を置き、`MarkStage()` で到達ステージを同期更新する。UI スレッドが最初のアイドル (`DispatcherPriority.ApplicationIdle`) に到達したら `Stabilizing` へ遷移し、**60 秒の安定化観察期間**を経てから `MarkCompleted()` でマーカーを削除する（起動数秒後のサイレントクラッシュも検出するため）。正規終了経路 (`App.Quit` / `desktop.Exit` / IPC 二重起動の即終了 / リベースエディタ終了) では観察期間中でも即座に `MarkCompleted()` して誤検出を防ぐ。次回起動時に残留マーカーを見つけたら「前回の起動が完了しませんでした（到達ステージ付き）」を通常ログ (Warning) とブートストラップログの両方へ記録する。PID 再利用の誤検出は `startedTicks` (プロセス開始時刻) の一致判定で防ぐ。
-
-ステージは `StartupStage` enum (ProcessStart → VelopackHook → DataDir → LoggerInit → LaunchModeCheck → AvaloniaStart → AppInitialize → FrameworkInitialized → WaitingFirstIdle → Stabilizing → Completed)。`Logger.LogCrash` のレポートにも現在ステージが入る。起動シーケンスに新しい重い処理を挟むときは対応する `MarkStage()` を追加する。
-
-`Environment.Exit` は `finally` を走らせないため、リベースエディタモードの終了前には `MarkCompleted()` + `Logger.Dispose()` を明示的に呼ぶ。
-
-通常 GUI 起動では `TryLaunchAsNormal` 冒頭で `Models.FontWarmup.Run()` がフォールバックフォントの GlyphTypeface を一括生成する（SkiaSharp 3.x の DirectWrite 読み取り × GC ファイナライザ競合クラッシュの軽減。詳細は [docs/PITFALLS.md](docs/PITFALLS.md)）。
+- 起動シーケンスに重い処理を挟むときは対応する `StartupDiagnostics.MarkStage()` を追加する。`TryLaunchAsNormal` の `FontWarmup.Run()` を維持する。
+- 正常終了では観察期間中でも `MarkCompleted()` を呼ぶ。`Environment.Exit` は `finally` を実行しないため、正常なリベースエディタ終了・IPC 転送成功の終了では `MarkCompleted()` と `Logger.Dispose()` を明示する。
+- ロック未取得を正常な二重起動と断定しない。転送成功だけを exit 0 とし、転送不能・IPC 初期化失敗の診断と exit 1 を維持する。
 
 ### Auto-Update (Velopack)
 - Entry point: `Main()` (`App.axaml.cs`) では起動診断の開始・ステージ記録に続けて `VelopackApp.Build().Run()` を呼び、DataDir・Logger・Avalonia の初期化より前に更新フックを処理する。
@@ -195,25 +185,9 @@ This order means a returning user with a valid saved position may see a one-fram
 
 `Launcher` is the exception: its constructor restores size and a valid saved position directly (or sets `WindowStartupLocation.CenterScreen`), subscribes `PositionChanged` there, and `OnOpened` restores only maximized/full-screen state. Keep that separate path when changing window persistence.
 
-### AI Commit Message Generation
-`src/AI/` contains AI integration for generating commit messages. Supported providers: OpenAI, Azure OpenAI, Gemini, Anthropic.
-- `Service.cs` — API client configuration (provider, server, model, API key)
-- `Provider.cs` — Provider enum (OpenAI, AzureOpenAI, Gemini, Anthropic)
-- `Agent.cs` — orchestrates generation with tool use (OpenAI SDK or Anthropic raw HTTP)
-- `ChatTools.cs` — tool definitions for file diff retrieval (OpenAI SDK + Anthropic JSON)
-- Configured in Preferences under AI settings; requires an API key
+### AI 資格情報の保存
 
-### Application Entry Point
-`App.axaml.cs` contains `Main()`. The app can also launch as a rebase editor (invoked by git during interactive rebase). `App.axaml.cs` is split across partial classes: `App.Commands.cs`, `App.Extensions.cs`, `App.JsonCodeGen.cs`.
-
-### Toolbar Architecture
-The app uses a unified toolbar design (RepositoryToolbar was removed):
-- **`Launcher.axaml` title bar**: Page tabs (`LauncherTabBar`) and page switcher button only.
-- **`WelcomeToolbar.axaml`**: Shown on Welcome page. Contains Clone/Open/Terminal buttons, workspace selector (`● Name ▾`), and `···` overflow menu (Preferences, AppDataDir, Hotkeys, Update, About, Quit).
-- **Repository view (`Repository.axaml`)**: Toolbar is split into two areas:
-  - **Left sidebar top**: Branch selector, create branch button, Fetch/Pull/Push buttons (in a 36px branch bar above the filter box).
-  - **Content toolbar (right panel Row 0)**: Segmented control (Histories/WorkingCopy/Stashes), search bar, view-specific action buttons, settings gear, workspace selector, and `···` overflow menu.
-- Global keyboard shortcuts (Ctrl+,, F1, Ctrl+Q) are handled in `Launcher.axaml.cs` `OnKeyDown()`.
+保存方式と復旧時の不変条件は [DESIGN.md](DESIGN.md#設定と資格情報) を参照する。`Service.ProtectedApiKey` と source-generated JSON 経由の実際の保存・復号を `Recovery.E2E` で検証する。既存鍵の読込失敗を鍵の再生成で置き換えず、暗号化・移行失敗時に平文を保存しない。
 
 ### Adding a New Popup Dialog
 1. Create `src/ViewModels/MyDialog.cs` inheriting `Popup`, override `Sure()` for confirm logic
@@ -255,7 +229,7 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 - **velopack.yml** — reusable workflow creating Velopack packages。**win-x64 / win-arm64 は matrix から除外済み** — 未署名 win フィードがローカル署名リリースの成果物を R2 上で上書きしないようにするため
 ### Windows リリース (ローカル実行)
 
-- `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。
+- `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL の取得内容を比較し、不一致の場合だけキャッシュをパージする。全配信ファイルの SHA-256 一致まで確認してから旧版清掃へ進む。HTTP 200 だけを配信完了条件にしない。
 - 製品ページの配信は兄弟リポジトリの `../vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
 
 ### macOS / Linux + standalone パッケージ (CI)
