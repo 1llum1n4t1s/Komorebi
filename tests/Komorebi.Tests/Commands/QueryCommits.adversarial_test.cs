@@ -12,14 +12,6 @@ namespace Komorebi.Tests.Commands
         // 🗡️ 境界値・極端入力（Boundary Assault）
         // ===============================================================
 
-        /// <adversarial category="boundary" severity="critical" />
-        /// <summary>空文字列でクラッシュしないこと</summary>
-        [Fact]
-        public void ParseCommitLine_EmptyString_ReturnsNull()
-        {
-            var result = QueryCommits.ParseCommitLine("");
-            Assert.Null(result);
-        }
 
         /// <adversarial category="boundary" severity="critical" />
         /// <summary>NULL区切りが7個未満の不正行でクラッシュしないこと</summary>

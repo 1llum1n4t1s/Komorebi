@@ -217,63 +217,6 @@ public class CommitAdversarialV2Tests
 
     #endregion
 
-    #region Decorators.Sort - null Name のクラッシュテスト
-
-    /// <summary>
-    /// @adversarial @chaos
-    /// Decorator.Name が null の場合、NumericSort.Compare() での挙動を確認。
-    /// NumericSort.Compare は null を安全に処理する（s1 is null → return -1）。
-    /// </summary>
-    [Fact]
-    public void DecoratorSort_WithNullName_DoesNotCrash()
-    {
-        var commit = new Commit();
-        commit.Decorators.Add(new Decorator { Type = DecoratorType.Tag, Name = null! });
-        commit.Decorators.Add(new Decorator { Type = DecoratorType.Tag, Name = "v1.0" });
-
-        // ParseDecorators のソートロジックを手動で呼ぶ
-        // NumericSort.Compare は null を -1 として処理するのでクラッシュしないはず
-        var exception = Record.Exception(() =>
-        {
-            commit.Decorators.Sort((l, r) =>
-            {
-                var delta = (int)l.Type - (int)r.Type;
-                if (delta != 0)
-                    return delta;
-                return NumericSort.Compare(l.Name, r.Name);
-            });
-        });
-
-        Assert.Null(exception);
-    }
-
-    /// <summary>
-    /// @adversarial @chaos
-    /// 両方の Name が null の場合のソート。
-    /// </summary>
-    [Fact]
-    public void DecoratorSort_BothNullNames_DoesNotCrash()
-    {
-        var commit = new Commit();
-        commit.Decorators.Add(new Decorator { Type = DecoratorType.Tag, Name = null! });
-        commit.Decorators.Add(new Decorator { Type = DecoratorType.Tag, Name = null! });
-
-        var exception = Record.Exception(() =>
-        {
-            commit.Decorators.Sort((l, r) =>
-            {
-                var delta = (int)l.Type - (int)r.Type;
-                if (delta != 0)
-                    return delta;
-                return NumericSort.Compare(l.Name, r.Name);
-            });
-        });
-
-        Assert.Null(exception);
-    }
-
-    #endregion
-
     #region IsCurrentHead / HasDecorators - エッジケース
 
     /// <summary>

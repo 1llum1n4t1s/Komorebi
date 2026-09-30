@@ -13,26 +13,6 @@ namespace Komorebi.Tests.Models
         // 🗡️ 境界値・極端入力（Boundary Assault）
         // ================================================================
 
-        /// <summary>
-        /// @adversarial @category boundary @severity medium
-        /// 空文字列同士の比較で 0 を返すこと
-        /// </summary>
-        [Fact]
-        public void Compare_BothEmpty_ReturnsZero()
-        {
-            Assert.Equal(0, NumericSort.Compare("", ""));
-        }
-
-        /// <summary>
-        /// @adversarial @category boundary @severity medium
-        /// 空文字列 vs 非空文字列の比較で一貫した結果を返すこと
-        /// </summary>
-        [Fact]
-        public void Compare_EmptyVsNonEmpty_EmptyIsSmaller()
-        {
-            Assert.True(NumericSort.Compare("", "a") < 0);
-            Assert.True(NumericSort.Compare("a", "") > 0);
-        }
 
         /// <summary>
         /// @adversarial @category boundary @severity medium

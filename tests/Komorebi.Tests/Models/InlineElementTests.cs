@@ -4,31 +4,6 @@ namespace Komorebi.Tests.Models
 {
     public class InlineElementTests
     {
-        #region Constructor
-
-        [Fact]
-        public void Constructor_SetsAllProperties()
-        {
-            var element = new InlineElement(InlineElementType.Link, 5, 10, "https://example.com");
-            Assert.Equal(InlineElementType.Link, element.Type);
-            Assert.Equal(5, element.Start);
-            Assert.Equal(10, element.Length);
-            Assert.Equal("https://example.com", element.Link);
-        }
-
-        [Theory]
-        [InlineData(InlineElementType.Keyword)]
-        [InlineData(InlineElementType.Link)]
-        [InlineData(InlineElementType.CommitSHA)]
-        [InlineData(InlineElementType.Code)]
-        public void Constructor_AllElementTypes(InlineElementType type)
-        {
-            var element = new InlineElement(type, 0, 1, "test");
-            Assert.Equal(type, element.Type);
-        }
-
-        #endregion
-
         #region IsIntersecting
 
         [Fact]

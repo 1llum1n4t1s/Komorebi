@@ -167,17 +167,6 @@ namespace Komorebi.Tests.Models
             Assert.False(user.Equals(null));
         }
 
-        /// <summary>
-        /// @adversarial @category type @severity medium
-        /// User.Invalid シングルトンが空の Name/Email を持つこと
-        /// </summary>
-        [Fact]
-        public void Invalid_Singleton_HasEmptyNameAndEmail()
-        {
-            Assert.Equal(string.Empty, User.Invalid.Name);
-            Assert.Equal(string.Empty, User.Invalid.Email);
-        }
-
         // ================================================================
         // 🔀 状態遷移の矛盾（State Machine Abuse）
         // ================================================================

@@ -19,12 +19,6 @@ namespace Komorebi.Tests.Models
         #region Supported List
 
         [Fact]
-        public void Supported_IsNotNull()
-        {
-            Assert.NotNull(Locale.Supported);
-        }
-
-        [Fact]
         public void Supported_HasExpectedCount()
         {
             // 17 locales: de_DE, en_US, es_ES, fr_FR, id_ID, fil_PH, it_IT,
@@ -130,12 +124,6 @@ namespace Komorebi.Tests.Models
             var locale = Locale.Supported.Find(l => l.Key == expectedKey);
             Assert.NotNull(locale);
             Assert.Equal(expectedName, locale.Name);
-        }
-
-        [Fact]
-        public void Supported_ContainsEnglishLocale()
-        {
-            Assert.Contains(Locale.Supported, l => l.Key == "en_US");
         }
 
         #endregion

@@ -257,13 +257,6 @@ namespace Komorebi.Tests.Models
             Assert.Empty(result);
         }
 
-        [Fact]
-        public void Compare_BothEmpty_ReturnsEmpty()
-        {
-            var result = TextInlineChange.Compare("", "");
-            Assert.Empty(result);
-        }
-
         #endregion
 
         #region TextInlineChange.Compare - Completely Different

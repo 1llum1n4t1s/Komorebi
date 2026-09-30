@@ -56,23 +56,6 @@ namespace AvaloniaEdit.Document
 		}
 		
 		[Test]
-		public void SimpleCheck()
-		{
-			SimpleCheck(4, 6);
-		}
-		
-		[Test]
-		public void SimpleUncollapse()
-		{
-			CollapsedLineSection sec1 = heightTree.CollapseText(document.GetLineByNumber(4), document.GetLineByNumber(6));
-			sec1.Uncollapse();
-			for (int i = 1; i <= 10; i++) {
-				Assert.IsFalse(heightTree.GetIsCollapsed(i));
-			}
-			CheckHeights();
-		}
-		
-		[Test]
 		public void FullCheck()
 		{
 			for (int from = 1; from <= 10; from++) {

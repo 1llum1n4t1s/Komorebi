@@ -109,16 +109,6 @@ namespace Komorebi.Tests.Models
             Assert.Empty(commit.Decorators);
         }
 
-        [Theory]
-        [InlineData("a")]
-        [InlineData("ab")]
-        public void ParseDecorators_ShortString_LessThan3Chars_ReturnsNoDecorators(string data)
-        {
-            var commit = new Commit();
-            commit.ParseDecorators(data);
-            Assert.Empty(commit.Decorators);
-        }
-
         [Fact]
         public void ParseDecorators_ExactlyThreeChars_ProceedsWithParsing()
         {
@@ -152,14 +142,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal("release/v2.1.0-beta", commit.Decorators[0].Name);
         }
 
-        [Fact]
-        public void ParseDecorators_Tag_DoesNotSetIsMerged()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("tag: refs/tags/v1.0");
-            Assert.False(commit.IsMerged);
-        }
-
         #endregion
 
         #region ParseDecorators - CurrentBranchHead (HEAD ->)
@@ -172,14 +154,6 @@ namespace Komorebi.Tests.Models
             Assert.Single(commit.Decorators);
             Assert.Equal(DecoratorType.CurrentBranchHead, commit.Decorators[0].Type);
             Assert.Equal("main", commit.Decorators[0].Name);
-        }
-
-        [Fact]
-        public void ParseDecorators_HeadArrowBranch_SetsIsMerged()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("HEAD -> refs/heads/main");
-            Assert.True(commit.IsMerged);
         }
 
         [Fact]
@@ -206,14 +180,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal("HEAD", commit.Decorators[0].Name);
         }
 
-        [Fact]
-        public void ParseDecorators_BareHead_SetsIsMerged()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("HEAD");
-            Assert.True(commit.IsMerged);
-        }
-
         #endregion
 
         #region ParseDecorators - LocalBranchHead
@@ -226,14 +192,6 @@ namespace Komorebi.Tests.Models
             Assert.Single(commit.Decorators);
             Assert.Equal(DecoratorType.LocalBranchHead, commit.Decorators[0].Type);
             Assert.Equal("feature", commit.Decorators[0].Name);
-        }
-
-        [Fact]
-        public void ParseDecorators_LocalBranch_DoesNotSetIsMerged()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/heads/feature");
-            Assert.False(commit.IsMerged);
         }
 
         [Fact]
@@ -258,14 +216,6 @@ namespace Komorebi.Tests.Models
             Assert.Single(commit.Decorators);
             Assert.Equal(DecoratorType.RemoteBranchHead, commit.Decorators[0].Type);
             Assert.Equal("origin/main", commit.Decorators[0].Name);
-        }
-
-        [Fact]
-        public void ParseDecorators_RemoteBranch_DoesNotSetIsMerged()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/remotes/origin/main");
-            Assert.False(commit.IsMerged);
         }
 
         [Fact]

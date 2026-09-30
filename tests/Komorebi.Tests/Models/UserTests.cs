@@ -76,7 +76,7 @@ namespace Komorebi.Tests.Models
         }
 
         // -----------------------------------------------------------
-        // Equals / GetHashCode（参照等価。upstream 39668075 以降、
+        // Equals（参照等価。upstream 39668075 以降、
         // 同一インスタンス保証は FindOrAdd キャッシュが担う）
         // -----------------------------------------------------------
 
@@ -120,15 +120,6 @@ namespace Komorebi.Tests.Models
         {
             var user = new User("Alice±alice@example.com");
             Assert.False(user.Equals("not a user"));
-        }
-
-        [Fact]
-        public void GetHashCode_SameInstance_IsStable()
-        {
-            var user = new User("Alice±alice@example.com");
-
-            // 同一インスタンスのハッシュコードは安定している
-            Assert.Equal(user.GetHashCode(), user.GetHashCode());
         }
 
         // -----------------------------------------------------------

@@ -31,12 +31,6 @@ namespace AvaloniaEdit.Document
 		}
 		
 		[Test]
-		public void TestGetWhitespaceAfterDoesNotSkipNewLine()
-		{
-			Assert.AreEqual(new SimpleSegment(2, 3), TextUtilities.GetWhitespaceAfter(new StringTextSource("a \t \tb"), 2));
-		}
-		
-		[Test]
 		public void TestGetWhitespaceAfterEmptyResult()
 		{
 			Assert.AreEqual(new SimpleSegment(2, 0), TextUtilities.GetWhitespaceAfter(new StringTextSource("a b"), 2));

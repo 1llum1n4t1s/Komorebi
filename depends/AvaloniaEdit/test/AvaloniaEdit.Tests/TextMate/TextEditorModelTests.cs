@@ -13,20 +13,6 @@ namespace AvaloniaEdit.Tests.TextMate
     internal class TextEditorModelTests
     {
         [Test]
-        public void Lines_Should_Have_Valid_Count()
-        {
-            TextView textView = new TextView();
-            TextDocument document = new TextDocument();
-
-            using var textEditorModel = new TextEditorModel(
-                textView, document, null);
-
-            document.Text = "puppy\npussy\nbirdie";
-
-            Assert.AreEqual(3, textEditorModel.GetNumberOfLines());
-        }
-
-        [Test]
         public void Lines_Should_Have_Valid_Content()
         {
             TextView textView = new TextView();

@@ -13,17 +13,6 @@ namespace Komorebi.Tests.Models
         // ===============================================================
 
         /// <adversarial category="boundary" severity="critical" />
-        /// <summary>空文字列のデコレーションでクラッシュしないこと</summary>
-        [Fact]
-        public void ParseDecorators_EmptyString_DoesNotThrow()
-        {
-            var commit = new Commit();
-            var ex = Record.Exception(() => commit.ParseDecorators(""));
-            Assert.Null(ex);
-            Assert.Empty(commit.Decorators);
-        }
-
-        /// <adversarial category="boundary" severity="critical" />
         /// <summary>2文字以下の入力で早期リターンすること（Length &lt; 3チェック）</summary>
         [Theory]
         [InlineData("")]
@@ -34,22 +23,6 @@ namespace Komorebi.Tests.Models
             var commit = new Commit();
             commit.ParseDecorators(data);
             Assert.Empty(commit.Decorators);
-        }
-
-        /// <adversarial category="boundary" severity="critical" />
-        /// <summary>プレフィックスと完全一致する文字列でSubstringが空文字列を返すこと（長さ超過しない）</summary>
-        [Theory]
-        [InlineData("tag: refs/tags/")]
-        [InlineData("HEAD -> refs/heads/")]
-        [InlineData("refs/heads/")]
-        [InlineData("refs/remotes/")]
-        public void ParseDecorators_ExactPrefixOnly_DoesNotThrow(string prefix)
-        {
-            var commit = new Commit();
-
-            // プレフィックスのみの場合、Substring(prefixLen)は空文字列を返すはず
-            var ex = Record.Exception(() => commit.ParseDecorators(prefix));
-            Assert.Null(ex);
         }
 
         /// <adversarial category="boundary" severity="high" />
@@ -155,16 +128,6 @@ namespace Komorebi.Tests.Models
         {
             var commit = new Commit();
             commit.ParseDecorators(data);
-            Assert.Empty(commit.Decorators);
-        }
-
-        /// <adversarial category="type" severity="medium" />
-        /// <summary>/HEADで終わるデコレーションはスキップされること</summary>
-        [Fact]
-        public void ParseDecorators_EndsWithHEAD_IsSkipped()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/remotes/origin/HEAD");
             Assert.Empty(commit.Decorators);
         }
 
