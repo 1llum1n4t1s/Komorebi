@@ -30,7 +30,7 @@ public class Service
         set
         {
             // キーを差し替えたら、読み込み時の暗号文は再利用できなくなる
-            if (!string.Equals(_apiKey, value, StringComparison.Ordinal))
+            if (string.IsNullOrEmpty(value) || !string.Equals(_apiKey, value, StringComparison.Ordinal))
                 _storedCipher = string.Empty;
 
             _apiKey = value ?? string.Empty;
@@ -52,18 +52,22 @@ public class Service
         get
         {
             if (string.IsNullOrEmpty(_apiKey))
-                return string.Empty;
+                return _storedCipher;
 
             var cipher = ApiKeyProtector.Protect(_apiKey);
             if (!string.IsNullOrEmpty(cipher))
+            {
+                _storedCipher = cipher;
                 return cipher;
+            }
 
             // 暗号化失敗。平文は絶対に書かず、直前の暗号文があればそれを維持する
             return _storedCipher;
         }
         set
         {
-            _storedCipher = value ?? string.Empty;
+            // 復号できない暗号文も保持する。旧平文の移行失敗時には平文を書き戻さない。
+            _storedCipher = ApiKeyProtector.IsProtected(value) ? value : string.Empty;
             _apiKey = ApiKeyProtector.UnprotectOrPlainText(value);
         }
     }
@@ -172,6 +176,8 @@ internal static partial class ApiKeyProtector
     }
     private static string s_keyDirectoryOverride;
 
+    internal static bool IsProtected(string value) => value?.StartsWith(Prefix, StringComparison.Ordinal) == true;
+
     public static string Protect(string plainText)
     {
         if (string.IsNullOrEmpty(plainText))
@@ -261,21 +267,12 @@ internal static partial class ApiKeyProtector
 
         if (File.Exists(file))
         {
-            try
-            {
-                var existing = TryReadKeyFile(file);
-                if (existing is not null && existing.Length == KeySize)
-                    return existing;
+            // 一時的な I/O・DPAPI 障害では元の鍵を保持し、次回読込での復旧を可能にする。
+            var existing = TryReadKeyFile(file);
+            if (existing is not null && existing.Length == KeySize)
+                return existing;
 
-                // 不正サイズや復号失敗: バックアップ取って新規生成
-                Models.Logger.Log("AI APIキー鍵ファイルが破損しています。バックアップ後に再生成します。", Models.LogLevel.Warning);
-                BackupKeyFile(file);
-            }
-            catch (Exception ex)
-            {
-                Models.Logger.LogException("AI APIキー鍵ファイルの読み込みに失敗。新規生成します", ex);
-                BackupKeyFile(file);
-            }
+            throw new CryptographicException("AI APIキー鍵ファイルを読み込めません。既存の鍵は変更していません。");
         }
 
         var key = RandomNumberGenerator.GetBytes(KeySize);
@@ -331,21 +328,6 @@ internal static partial class ApiKeyProtector
         else
         {
             File.WriteAllText(file, Convert.ToBase64String(rawKey));
-        }
-    }
-
-    private static void BackupKeyFile(string file)
-    {
-        try
-        {
-            File.Copy(file, file + ".bak", overwrite: true);
-            // バックアップにも同じパーミッションを適用（Unix の chmod 600）
-            RestrictKeyFile(file + ".bak");
-        }
-        catch (Exception ex)
-        {
-            // バックアップ失敗は致命ではないので続行
-            Models.Logger.LogException("AI APIキー鍵ファイルのバックアップに失敗", ex);
         }
     }
 

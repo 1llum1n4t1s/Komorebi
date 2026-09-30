@@ -80,4 +80,7 @@ async function calculateTranslationRate() {
     await fs.writeFile(outputFile, content, 'utf8');
 }
 
-calculateTranslationRate().catch(err => console.error(err));
+calculateTranslationRate().catch(err => {
+    console.error(err);
+    process.exitCode = 1;
+});

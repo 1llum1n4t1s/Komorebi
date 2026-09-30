@@ -67,13 +67,14 @@ public partial class Repository : UserControl
             {
                 Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                 {
-                    if (DataContext is ViewModels.Repository current && current.SelectedViewIndex == 0)
-                        current.SelectedViewIndex = desiredIndex;
+                    if (ReferenceEquals(DataContext, repo) && repo.SelectedViewIndex == 0)
+                        repo.SelectedViewIndex = desiredIndex;
                 }, Avalonia.Threading.DispatcherPriority.Background);
             }
 
-            repo.PropertyChanged += OnRepoPropertyChanged;
         }
+
+        UpdateRepositorySubscription(DataContext as ViewModels.Repository);
 
         // HEAD が指すアクティブブランチを表示領域内にスクロールする（upstream issue #1022 対応）。
         // レイアウト完了後に実行するため Background priority で遅延実行。
@@ -91,6 +92,10 @@ public partial class Repository : UserControl
     {
         base.OnDataContextChanged(e);
 
+        // 上流との差分: 同型VM間でViewが再利用されても、検索通知の購読先を移管する。
+        if (IsLoaded)
+            UpdateRepositorySubscription(DataContext as ViewModels.Repository);
+
         // DataContext が Repository（=別リポジトリへの切替）になった場合のみスクロール
         if (DataContext is ViewModels.Repository)
         {
@@ -103,15 +108,35 @@ public partial class Repository : UserControl
     protected override void OnUnloaded(RoutedEventArgs e)
     {
         base.OnUnloaded(e);
-        if (DataContext is ViewModels.Repository repo)
-            repo.PropertyChanged -= OnRepoPropertyChanged;
+        UpdateRepositorySubscription(null);
     }
+
+    private void UpdateRepositorySubscription(ViewModels.Repository repo)
+    {
+        if (ReferenceEquals(_subscribedRepository, repo))
+            return;
+
+        if (_subscribedRepository is not null)
+            _subscribedRepository.PropertyChanged -= OnRepoPropertyChanged;
+        _subscribedRepository = repo;
+        if (_subscribedRepository is not null)
+            _subscribedRepository.PropertyChanged += OnRepoPropertyChanged;
+    }
+
+    private ViewModels.Repository _subscribedRepository;
 
     private void OnRepoPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ViewModels.Repository.IsSearchingCommits) &&
             DataContext is ViewModels.Repository { IsSearchingCommits: true })
-            Avalonia.Threading.Dispatcher.UIThread.Post(() => TxtSearchCommitsBox.Focus(NavigationMethod.Pointer));
+        {
+            var repo = _subscribedRepository;
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (IsLoaded && ReferenceEquals(DataContext, repo) && repo is { IsSearchingCommits: true })
+                    TxtSearchCommitsBox.Focus(NavigationMethod.Tab);
+            });
+        }
     }
 
     /// <summary>
@@ -946,11 +971,11 @@ public partial class Repository : UserControl
     /// <summary>
     /// Fetchの処理を行う。
     /// </summary>
-    private async void Fetch(object sender, TappedEventArgs e)
+    private async void Fetch(object sender, RoutedEventArgs e)
     {
         if (DataContext is ViewModels.Repository repo)
         {
-            await repo.FetchAsync(e.KeyModifiers is KeyModifiers.Control);
+            await repo.FetchAsync(sender is ModifierButton { ClickModifiers: KeyModifiers.Control });
             e.Handled = true;
         }
     }
@@ -973,11 +998,11 @@ public partial class Repository : UserControl
     /// <summary>
     /// Pullの処理を行う。
     /// </summary>
-    private async void Pull(object sender, TappedEventArgs e)
+    private async void Pull(object sender, RoutedEventArgs e)
     {
         if (DataContext is ViewModels.Repository repo)
         {
-            await repo.PullAsync(e.KeyModifiers is KeyModifiers.Control);
+            await repo.PullAsync(sender is ModifierButton { ClickModifiers: KeyModifiers.Control });
             e.Handled = true;
         }
     }
@@ -1000,11 +1025,11 @@ public partial class Repository : UserControl
     /// <summary>
     /// Pushの処理を行う。
     /// </summary>
-    private async void Push(object sender, TappedEventArgs e)
+    private async void Push(object sender, RoutedEventArgs e)
     {
         if (DataContext is ViewModels.Repository repo)
         {
-            await repo.PushAsync(e.KeyModifiers is KeyModifiers.Control);
+            await repo.PushAsync(sender is ModifierButton { ClickModifiers: KeyModifiers.Control });
             e.Handled = true;
         }
     }

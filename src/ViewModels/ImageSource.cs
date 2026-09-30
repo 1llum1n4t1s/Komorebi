@@ -60,8 +60,20 @@ public class ImageSource
     /// </summary>
     public static async Task<ImageSource> FromFileAsync(string fullpath, Models.ImageDecoder decoder)
     {
-        await using var stream = File.OpenRead(fullpath);
-        return await Task.Run(() => LoadFromStream(stream, decoder)).ConfigureAwait(false);
+        // 上流との差分: 削除済みの側や、差分取得後に消えたファイルは空の画像として表示する。
+        try
+        {
+            await using var stream = File.OpenRead(fullpath);
+            return await Task.Run(() => LoadFromStream(stream, decoder)).ConfigureAwait(false);
+        }
+        catch (FileNotFoundException)
+        {
+            return new ImageSource(null, 0);
+        }
+        catch (DirectoryNotFoundException)
+        {
+            return new ImageSource(null, 0);
+        }
     }
 
     /// <summary>

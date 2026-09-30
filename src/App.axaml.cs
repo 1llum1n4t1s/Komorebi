@@ -954,7 +954,7 @@ public partial class App : Application
                 return;
 
             _ipcChannel = new Models.IpcChannel();
-            if (!_ipcChannel.IsFirstInstance)
+            if (_ipcChannel.State == Models.IpcChannelState.LockUnavailable)
             {
                 var arg = desktop.Args is { Length: > 0 } ? desktop.Args[0] : string.Empty;
                 if (!string.IsNullOrEmpty(arg))
@@ -965,14 +965,31 @@ public partial class App : Application
                         arg = Path.GetFullPath(arg);
                 }
 
-                _ipcChannel.SendToFirstInstance(arg);
+                // 上流との差分: ロック競合中の起動レースは再送し、相手の終了後はロックを再取得する。
+                // 送信成功だけを正常な二重起動終了として扱う。
+                for (var attempt = 0; attempt < 3 && _ipcChannel.State == Models.IpcChannelState.LockUnavailable; attempt++)
+                {
+                    if (_ipcChannel.SendToFirstInstance(arg))
+                    {
+                        Models.StartupDiagnostics.MarkCompleted();
+                        _ipcChannel.Dispose();
+                        Models.Logger.Dispose();
+                        Environment.Exit(0);
+                    }
 
-                // 二重起動の転送経路は意図した正常終了。マーカーを残すと次回起動時に
-                // 「前回の起動が完了しなかった」と誤検出されるため、明示的に完了扱いにする。
-                // Environment.Exit は finally を実行しないため Logger も同期フラッシュする。
-                Models.StartupDiagnostics.MarkCompleted();
+                    Models.Logger.LogException("既存インスタンスへの IPC 転送に失敗しました", _ipcChannel.LastError);
+                    _ipcChannel.TryAcquireFirstInstance();
+                }
+            }
+
+            if (!_ipcChannel.IsFirstInstance)
+            {
+                // IPC 初期化失敗は二重起動と区別し、診断と非 0 終了を残す。
+                Models.StartupDiagnostics.WriteFatal("IpcChannel.Startup", _ipcChannel.LastError);
+                Models.Logger.LogException("IPC の初期化に失敗しました", _ipcChannel.LastError);
+                _ipcChannel.Dispose();
                 Models.Logger.Dispose();
-                Environment.Exit(0);
+                Environment.Exit(1);
             }
             else
             {

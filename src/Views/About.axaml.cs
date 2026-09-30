@@ -43,17 +43,18 @@ public partial class About : ChromelessWindow
                 break;
             }
 
-            // upstream 63a06ba2: AssemblyInformationalVersion から git source revision を抽出して About に表示
-            var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            if (informationVersion != null)
+        }
+
+        // 上流との差分: BuildDateの列挙順や解析結果に依存せず、コミット識別子を表示する。
+        var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        if (informationVersion != null)
+        {
+            var infoVer = informationVersion.InformationalVersion;
+            var idx = infoVer.IndexOf('+');
+            if (idx > 0 && infoVer.Length >= idx + 11)
             {
-                var infoVer = informationVersion.InformationalVersion;
-                var idx = infoVer.IndexOf('+');
-                if (idx > 0 && infoVer.Length > idx + 11)
-                {
-                    TxtGitSourceRevision.Text = infoVer.Substring(idx + 1, 10);
-                    PnlGitSourceRevision.IsVisible = true;
-                }
+                TxtGitSourceRevision.Text = infoVer.Substring(idx + 1, 10);
+                PnlGitSourceRevision.IsVisible = true;
             }
         }
 
