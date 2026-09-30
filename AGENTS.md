@@ -43,7 +43,7 @@ dotnet build -p:DisableUpdateDetection=true
 ## Tests
 
 ```bash
-# Run all tests
+# Run application tests
 dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj
 
 # Run specific test class
@@ -59,6 +59,15 @@ node build/scripts/localization-check.js
 Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komorebi.csproj`.
 
 `global.json` は Microsoft.Testing.Platform を選択しているため、テスト実行では上記の `--project` 形式を使う。CI と同じ検証は `dotnet build -c Release` の後に `dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj -c Release --no-build` を実行する。
+
+同梱エディタを変更した場合は、ルートの `Komorebi.slnx` に含まれない demo と NUnit テストも別途検証する（いずれも net10.0）。
+
+```bash
+dotnet build depends/AvaloniaEdit/AvaloniaEdit.sln -c Release
+dotnet test --project depends/AvaloniaEdit/test/AvaloniaEdit.Tests/AvaloniaEdit.Tests.csproj -c Release --no-build
+```
+
+`depends/AvaloniaEdit` の更新では日本語 IME、描画余白、矩形選択の文字列 DataFormat、Avalonia 12 対応を維持する。統合元は [同梱エディタの README](depends/AvaloniaEdit/README.md)、アプリとの責務境界と寿命は [DESIGN.md](DESIGN.md) を参照する。
 
 ## Solution Structure
 
@@ -261,18 +270,18 @@ Version format: `Directory.Build.props` stores the semantic version in the `<Ver
 
 ## Key Dependencies
 
-- **Avalonia 12.1.2** — cross-platform XAML UI (`Avalonia.Controls.DataGrid` は 12.0.x の間だけ 12.0.1 に固定していたが、12.1.0 で本体とバージョンが揃ったため固定を解除済み。今後も本体と同じバージョンで上げる)
+- **Avalonia 12.1.3** — cross-platform XAML UI。`Avalonia.Controls.DataGrid` は現在 12.1.2。本体とは指定バージョンが異なるため、更新時は各パッケージの利用可能なバージョンと互換性を確認する。
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 1.2.0** — auto-update framework (`VelopackUpdateDialog.Avalonia` 経由の推移的依存)
-- **depends/AvaloniaEdit** — vendored (directly tracked, not a git submodule), text editor for diff/blame
+- **depends/AvaloniaEdit** — vendored (directly tracked, not a git submodule), text editor for diff/blame。TextMateSharp / TextMateSharp.Grammars は 2.0.4。保守時の制約と追加検証は本書の Tests 節を参照する。
 - **OpenAI 2.14.0 / Azure.AI.OpenAI 2.9.0-beta.1** — AI commit message generation
 - **LiveChartsCore.SkiaSharpView.Avalonia 2.1.0-dev-798** — contribution statistics charts。Avalonia 12 対応版を選び、更新時は `LibraryCompatibilityTests` でチャート生成の互換性を検証する。
 - **BitMiracle.LibTiff.NET / Pfim** — TIFF / DDS image format support in ImageDiffView
 - **Tmds.DBus.Protocol** — Linux desktop DBus integration (notifications, etc.)
-- **CRDebugger.Avalonia** (Debug builds only) — Avalonia diagnostics helper
+- **AvaloniaUI.DiagnosticsSupport** (Debug builds only) / **CRDebugger.Avalonia** — Avalonia diagnostics helpers
 
-Fonts are **not bundled** — the app uses system fonts with per-locale fallback chains defined in `InstalledFont.GetLocaleDefaults()`. The `Avalonia.Fonts.Inter` NuGet package provides the Inter font for non-CJK locales.
+CJK フォントは同梱せず、`InstalledFont.GetLocaleDefaults()` のロケール別フォールバックでシステムフォントを使う。非 CJK 向けの Inter は `Avalonia.Fonts.Inter` NuGet パッケージから提供する。
 
 ## Upstream-Faithful Policy
 

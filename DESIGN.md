@@ -8,6 +8,7 @@ Komorebi は SourceGit を基にした、Windows・macOS・Linux 向けの Git G
 |---|---|---|
 | アプリ起動 | 更新フック、データ保存先・ログ初期化、通常 GUI と Git のリベースエディタ起動の分岐 | `src/App.axaml.cs`、`src/App.Commands.cs` |
 | UI | Avalonia の View とバインディング、入力・描画・ウィンドウ操作 | `src/Views/`、`src/Converters/` |
+| テキストエディタ | テキスト描画・編集、TextMate による文法解析と色付け。Git 差分の解釈と表示モードはアプリ側が担当 | `depends/AvaloniaEdit/src/`、`src/Models/TextMateHelper.cs`、`src/Views/TextDiffView.axaml.cs`、`src/Views/Blame.axaml.cs` |
 | アプリ状態 | Launcher のタブ、Repository の履歴・作業コピー・スタッシュ、Popup の検証と操作進捗 | `src/ViewModels/` |
 | Git 実行 | 引数・作業ディレクトリ・SSH 環境の構築、プロセス実行、出力解析・中断 | `src/Commands/Command.cs` と各派生コマンド |
 | データモデル | コミット・参照・差分・グラフ、ファイル監視、リポジトリ UI 状態 | `src/Models/` |
@@ -32,7 +33,8 @@ Komorebi は SourceGit を基にした、Windows・macOS・Linux 向けの Git G
 - **バイナリ表示は必要な範囲を読む。** `Models.BinaryFile` はバッファを用い、履歴から抽出した一時ファイルの削除も Dispose に結び付ける。全内容の常時メモリ保持を避ける代わりに、表示中のファイル資源を管理する。
 - **起動診断は通常ロガーから独立させる。** `StartupDiagnostics` の同期ログと到達ステージのマーカーで、ロガー初期化前やログを書けない終了を補足する。最初のアイドル後も60秒観察し、正常終了経路ではマーカーを消して誤検出を抑える。
 - **更新先を固定する。** `Preferences.CanonicalUpdateBaseUrl` を正本とし、JSON からの更新 URL 上書きを受け付けない。Velopack の取得・適用経路と R2 の配信経路を接続する。Windows は対話認証が必要な署名のためローカルで配信し、CI は Windows 更新フィードを生成しない。両経路の削除処理は他方の manifest を保持対象へ取り込む。
-- **テーマと翻訳を資源として切り替える。** `Themes.axaml` の色・ブラシと各 locale 辞書を利用し、英語辞書を翻訳キー集合の基準とする。差分エディタは追跡済みの `depends/AvaloniaEdit` を利用する。
+- **テーマと翻訳を資源として切り替える。** `Themes.axaml` の色・ブラシと各 locale 辞書を利用し、英語辞書を翻訳キー集合の基準とする。
+- **エディタはソースを同梱し、アプリ側の拡張と分離する。** AvaloniaEdit の上流安定版を基に、日本語 IME・描画余白・矩形選択と Avalonia 12 への対応を保持する。NuGet のエディタへ置き換えず、これらの差分を維持するために直接追跡する。`TextMateHelper` は追加文法とアプリのテーマを供給し、同梱側は文書スナップショットと解析・描画資源を管理する。差分・Blame の View は読み込み時に TextMate の `Installation` を作成し、アンロード時に Dispose してイベント購読と解析資源を解放する。統合元の情報は [同梱エディタの README](depends/AvaloniaEdit/README.md)、更新時の制約・検証は [AGENTS.md](AGENTS.md) を参照する。
 - **Velopack は参照される更新処理だけを AOT で保持する。** アセンブリ全体を `TrimmerRootAssembly` に指定すると、未使用の旧 COM API まで AOT 解析対象になるため、全体保持は行わない。更新フィードの JSON 読み取り互換性は `LibraryCompatibilityTests` で検証する。
 
 上流との機能差と同期時の採否は [docs/UPSTREAM-SYNC.md](docs/UPSTREAM-SYNC.md) に記録される。上流追従の保守性と Komorebi 固有機能の維持を両立するため、採否の作業規約は AGENTS.md に集約する。
