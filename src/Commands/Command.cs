@@ -95,6 +95,11 @@ public partial class Command
     public bool RaiseError { get; set; } = true;
 
     /// <summary>
+    /// 直近の非同期実行で発生した、秘密値を除去済みのエラーメッセージ。
+    /// </summary>
+    public string ErrorMessage { get; protected set; } = string.Empty;
+
+    /// <summary>
     /// 共通オプション組み立て時に credential helper（GCM 等）を完全無効化するフラグ。
     /// AWS CodeCommit (GRC / HTTPS / SSH) のリモートは git-remote-codecommit が SigV4 署名済みの
     /// 巨大な一時 HTTPS URL を返すため、GCM が Windows 資格情報マネージャに保存しようとして
@@ -115,6 +120,8 @@ public partial class Command
     /// <returns>コマンドが成功した場合はtrue。</returns>
     public async Task<bool> ExecAsync()
     {
+        ErrorMessage = string.Empty;
+
         // コマンドラインをログに記録する
         Log?.AppendLine($"$ git {RedactSensitiveText(Args)}\n");
 
@@ -137,8 +144,9 @@ public partial class Command
         }
         catch (Exception e)
         {
+            ErrorMessage = RedactSensitiveText(e.Message);
             if (RaiseError)
-                App.RaiseException(Context, e.Message);
+                App.RaiseException(Context, ErrorMessage);
             return false;
         }
 
@@ -153,13 +161,13 @@ public partial class Command
         // キャンセルされておらず、終了コードが0以外の場合はエラーとして処理する
         if (!CancellationToken.IsCancellationRequested && proc.ExitCode != 0)
         {
+            ErrorMessage = string.Join("\n", errs).Trim();
             if (RaiseError)
             {
                 // エラーメッセージを結合してユーザーに通知する
                 // ConcurrentQueueはIEnumerable<T>を実装するため.ToArray()は不要
-                var errMsg = string.Join("\n", errs).Trim();
-                if (!string.IsNullOrEmpty(errMsg))
-                    App.RaiseException(Context, errMsg);
+                if (!string.IsNullOrEmpty(ErrorMessage))
+                    App.RaiseException(Context, ErrorMessage);
             }
 
             return false;

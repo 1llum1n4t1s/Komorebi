@@ -1,4 +1,8 @@
+using System;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Komorebi.Commands;
 
@@ -50,5 +54,130 @@ public class Clone : Command
             builder.Append(localName.Quoted());
 
         Args = builder.ToString();
+    }
+
+    /// <summary>
+    /// クローンとサブモジュール初期化を実行し、Windowsの長いパスによる失敗を一度だけ復旧する。
+    /// </summary>
+    /// <param name="repositoryPath">クローン先の絶対パス。</param>
+    /// <param name="initializeSubmodules">サブモジュールも再帰的に初期化するかどうか。</param>
+    /// <returns>クローンと必要な復旧・初期化が完了した場合はtrue。</returns>
+    public async Task<bool> CloneAsync(string repositoryPath, bool initializeSubmodules)
+    {
+        var originalArgs = Args;
+        var originalDirectory = WorkingDirectory;
+        var raiseError = RaiseError;
+        var ownsDestination = IsUnusedDestination(repositoryPath);
+        var retried = false;
+        RaiseError = false;
+
+        try
+        {
+            var success = await ExecAsync().ConfigureAwait(false);
+            if (!success)
+            {
+                // 上流との差分: 新規クローンの長いパスエラーだけ、取得済みHEADから展開を再開する。
+                // cloneを再実行すると、取得済みの非空フォルダーを理由に失敗してしまう。
+                if (!ownsDestination || !CanRetryWithLongPaths(repositoryPath))
+                    return ReportFailure(raiseError);
+
+                var submodulesFailed = ErrorMessage.Contains("submodule path", StringComparison.Ordinal);
+                retried = true;
+                if (!await EnableLongPathsAsync(repositoryPath).ConfigureAwait(false) ||
+                    !await ExecInRepositoryAsync(repositoryPath, "-c core.longpaths=true reset --hard HEAD").ConfigureAwait(false))
+                    return ReportFailure(raiseError);
+
+                initializeSubmodules |= submodulesFailed;
+            }
+
+            if (initializeSubmodules &&
+                (Directory.Exists(Path.Combine(repositoryPath, ".git")) || File.Exists(Path.Combine(repositoryPath, ".git"))))
+            {
+                var args = retried
+                    ? "-c core.longpaths=true submodule update --init --recursive --checkout --force"
+                    : "submodule update --init --recursive";
+                success = await UpdateSubmodulesAsync(repositoryPath, args).ConfigureAwait(false);
+                if (!success)
+                {
+                    if (retried || !ownsDestination || !CanRetryWithLongPaths(repositoryPath))
+                        return ReportFailure(raiseError);
+
+                    retried = true;
+                    if (!await EnableLongPathsAsync(repositoryPath).ConfigureAwait(false) ||
+                        !await UpdateSubmodulesAsync(repositoryPath, "-c core.longpaths=true submodule update --init --recursive --checkout --force").ConfigureAwait(false))
+                        return ReportFailure(raiseError);
+                }
+            }
+
+            return !CancellationToken.IsCancellationRequested;
+        }
+        finally
+        {
+            Args = originalArgs;
+            WorkingDirectory = originalDirectory;
+            RaiseError = raiseError;
+        }
+    }
+
+    private bool CanRetryWithLongPaths(string repositoryPath)
+    {
+        return OperatingSystem.IsWindows() && !CancellationToken.IsCancellationRequested &&
+            ErrorMessage.Contains("Filename too long", StringComparison.OrdinalIgnoreCase) &&
+            (Directory.Exists(Path.Combine(repositoryPath, ".git")) || File.Exists(Path.Combine(repositoryPath, ".git")));
+    }
+
+    private static bool IsUnusedDestination(string repositoryPath)
+    {
+        try
+        {
+            return !Directory.Exists(repositoryPath) || !Directory.EnumerateFileSystemEntries(repositoryPath).Any();
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    private Task<bool> EnableLongPathsAsync(string repositoryPath)
+    {
+        // Git for Windowsは起動初期にlongpathsをキャッシュするため、globalの明示的falseも更新する。
+        return ExecInRepositoryAsync(repositoryPath, "config --global core.longpaths true");
+    }
+
+    private Task<bool> ExecInRepositoryAsync(string repositoryPath, string args)
+    {
+        WorkingDirectory = repositoryPath;
+        Args = args;
+        return ExecAsync();
+    }
+
+    private async Task<bool> UpdateSubmodulesAsync(string repositoryPath, string args)
+    {
+        // 上流との差分: 親リモートの認証指定を別ホストのサブモジュールへ引き継がない。
+        // 従来の独立したSubmoduleコマンドと同じく、親環境とホスト別SSH設定を使用する。
+        var sshKey = SSHKey;
+        var disableCredentialHelper = DisableCredentialHelper;
+        SSHKey = string.Empty;
+        DisableCredentialHelper = false;
+        try
+        {
+            return await ExecInRepositoryAsync(repositoryPath, args).ConfigureAwait(false);
+        }
+        finally
+        {
+            SSHKey = sshKey;
+            DisableCredentialHelper = disableCredentialHelper;
+        }
+    }
+
+    private bool ReportFailure(bool raiseError)
+    {
+        if (raiseError && !CancellationToken.IsCancellationRequested && !string.IsNullOrEmpty(ErrorMessage))
+            App.RaiseException(Context, ErrorMessage);
+        return false;
     }
 }

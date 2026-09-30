@@ -236,20 +236,6 @@ public class Clone : Popup
                 : _sshKey;
         }
 
-        // git cloneコマンドを実行する
-        bool succ;
-        using (var cancellation = BeginCancellableOperation())
-        {
-            succ = await new Commands.Clone(_pageId, _parentFolder, _remote, _local, resolvedSSHKey, _extraArgs) { CancellationToken = cancellation.Token }
-                .Use(log)
-                .ExecAsync();
-        }
-        if (!succ)
-        {
-            log.Complete();
-            return false;
-        }
-
         // クローン先のフルパスを決定する
         var path = _parentFolder;
         if (!string.IsNullOrEmpty(_local))
@@ -277,6 +263,19 @@ public class Clone : Popup
             path = Path.GetFullPath(Path.Combine(path, name));
         }
 
+        // 上流との差分: クローン後の初期化と長いパス復旧も同じ中断可能な操作に含める。
+        using (var cancellation = BeginCancellableOperation())
+        {
+            var succ = await new Commands.Clone(_pageId, _parentFolder, _remote, _local, resolvedSSHKey, _extraArgs) { CancellationToken = cancellation.Token }
+                .Use(log)
+                .CloneAsync(path, InitAndUpdateSubmodules);
+            if (!succ || cancellation.Token.IsCancellationRequested)
+            {
+                log.Complete();
+                return false;
+            }
+        }
+
         // クローン先フォルダが存在するか確認する
         if (!Directory.Exists(path))
         {
@@ -291,16 +290,6 @@ public class Clone : Popup
             await new Commands.Config(path)
                 .Use(log)
                 .SetAsync("remote.origin.sshkey", _sshKey);
-        }
-
-        // サブモジュールの初期化と更新を行う
-        if (InitAndUpdateSubmodules)
-        {
-            var submodules = await new Commands.QueryUpdatableSubmodules(path, true).GetResultAsync();
-            if (submodules.Count > 0)
-                await new Commands.Submodule(path)
-                    .Use(log)
-                    .UpdateAsync(submodules, true, true, false);
         }
 
         log.Complete();
