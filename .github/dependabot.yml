@@ -32,6 +32,10 @@ updates:
     directories:
       - "/src"
       - "/tests/Komorebi.Tests"
+      - "/depends/AvaloniaEdit/src/AvaloniaEdit"
+      - "/depends/AvaloniaEdit/src/AvaloniaEdit.TextMate"
+      - "/depends/AvaloniaEdit/src/AvaloniaEdit.Demo"
+      - "/depends/AvaloniaEdit/test/AvaloniaEdit.Tests"
     schedule:
       interval: "weekly"
       day: "monday"

@@ -18,7 +18,6 @@ using AvaloniaEdit.Folding;
 using AvaloniaEdit.Rendering;
 using AvaloniaEdit.TextMate;
 using TextMateSharp.Grammars;
-using Avalonia.Diagnostics;
 using Avalonia.Layout;
 using AvaloniaEdit.Snippets;
 using Snippet = AvaloniaEdit.Snippets.Snippet;
@@ -48,7 +47,6 @@ namespace AvaloniaEdit.Demo
         {
             InitializeComponent();
 
-            this.AttachDevTools();
 
             _textEditor = this.FindControl<TextEditor>("Editor");
             _textEditor.HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Visible;

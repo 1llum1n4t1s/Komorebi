@@ -2,6 +2,14 @@
 [![Current stable version](https://img.shields.io/nuget/v/Avalonia.AvaloniaEdit.svg)](https://www.nuget.org/packages/Avalonia.AvaloniaEdit)
 # AvaloniaEdit
 
+この同梱コピーの製品用 `src/AvaloniaEdit` と `src/AvaloniaEdit.TextMate` は、上流安定版 12.0.0
+（`86fdebec4cff7affb0e14c7885df71d28edce777`）のソースを統合しています。
+love-linger fork の日本語 IME、描画余白、矩形選択の文字列 DataFormat と
+Komorebi の Avalonia 12 対応を維持し、製品の target framework と assembly version は変更していません。
+同梱 demo と NUnit プロジェクトも net10.0 と Avalonia 12 に揃えています。
+`dotnet build depends/AvaloniaEdit/AvaloniaEdit.sln -c Release` と
+`dotnet test --project depends/AvaloniaEdit/test/AvaloniaEdit.Tests/AvaloniaEdit.Tests.csproj -c Release` で検証できます。
+
 This project is a port of [AvalonEdit](https://github.com/icsharpcode/AvalonEdit), a WPF-based text editor for [Avalonia](https://github.com/AvaloniaUI/Avalonia).
 
 AvaloniaEdit supports features like:

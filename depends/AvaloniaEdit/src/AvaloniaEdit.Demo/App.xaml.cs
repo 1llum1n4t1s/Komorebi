@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Diagnostics;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using System;
@@ -13,6 +14,7 @@ namespace AvaloniaEdit.Demo
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            this.AttachDeveloperTools();
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -47,7 +49,7 @@ namespace AvaloniaEdit.Demo
             if (sender is not MainWindowViewModel mainWindowViewModel) return;
             if (e.PropertyName == nameof(MainWindowViewModel.SelectedTheme))
             {
-                RequestedThemeVariant = mainWindowViewModel.SelectedTheme.ThemeName.ToString().ToLower().Contains("light")
+                RequestedThemeVariant = mainWindowViewModel.SelectedTheme.ThemeName.ToString().Contains("light", StringComparison.OrdinalIgnoreCase)
                     ? ThemeVariant.Light
                     : ThemeVariant.Dark;
             }
