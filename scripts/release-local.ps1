@@ -54,6 +54,18 @@ Set-Location $RepoRoot
 $WorkDir = Join-Path $RepoRoot 'local-release'
 $ArtifactsDir = Join-Path $WorkDir 'artifacts'
 
+# 清掃先をリポジトリ直下の専用ディレクトリに固定し、リンク先へ削除が及ぶのを防ぐ。
+$WorkDir = [System.IO.Path]::GetFullPath($WorkDir)
+if ([System.IO.Path]::GetDirectoryName($WorkDir) -ne [System.IO.Path]::GetFullPath($RepoRoot)) {
+    throw 'リリース作業ディレクトリがリポジトリの範囲外です'
+}
+if (Test-Path -LiteralPath $WorkDir) {
+    $linked = @(Get-Item -LiteralPath $WorkDir -Force) + @(Get-ChildItem -LiteralPath $WorkDir -Recurse -Force)
+    if ($linked | Where-Object { $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint }) {
+        throw 'リリース作業ディレクトリにリンクがあります。清掃範囲を確認してください'
+    }
+}
+
 function Invoke-Native {
     param([string]$Description, [scriptblock]$Block)
     & $Block
@@ -109,7 +121,7 @@ if (-not $SkipUpload) {
     $env:CLOUDFLARE_ACCOUNT_ID = $AccountId
 }
 
-if (Test-Path $WorkDir) { Remove-Item $WorkDir -Recurse -Force }
+if (Test-Path -LiteralPath $WorkDir) { Remove-Item -LiteralPath $WorkDir -Recurse -Force }
 New-Item -ItemType Directory -Path $ArtifactsDir -Force | Out-Null
 
 # ---- 1. ビルド + 署名付きパッケージング (RID ごと) ----
@@ -137,6 +149,7 @@ foreach ($runtime in $Runtimes) {
             --mainExe Komorebi.exe `
             --packDir $publishDir `
             --outputDir $ArtifactsDir `
+            --runtime $runtime `
             --channel $config.Channel `
             --icon (Join-Path $RepoRoot 'src\App.ico') `
             --signParams $SignParams
@@ -179,19 +192,34 @@ foreach ($f in $ordered) {
 Write-Host "✅ R2 アップロード完了: $uploaded ファイル"
 
 # ---- 2.5 Cloudflare エッジキャッシュのパージ ----
-# 固定名ファイル (Setup.exe / Portable.zip / RELEASES / releases.*.json / assets.*.json) は
-# 毎リリースで中身が変わるのに URL が不変。CDN エッジが旧版を Cache-Control の max-age 分保持するため、
-# パージしないと新規ダウンロード・自動更新が旧バージョンを掴む。アップロード直後に該当 URL をパージして
-# 伝播を確定する。バージョン付き nupkg は URL が一意 (旧キャッシュなし) のためパージ不要。
+# 新鮮な配信物をローカルの SHA-256 と比較し、不一致が実証された固定 URL だけパージする。
 Write-Host '== Cloudflare キャッシュパージ ==' -ForegroundColor Cyan
-$cfHeaders = @{ Authorization = "Bearer $($env:CLOUDFLARE_API_TOKEN)" }
-$zoneName = ([uri]$BaseUrl).Host -replace '^[^.]+\.', ''   # <sub>.kagayoi.com → kagayoi.com (apex)
-$zoneResp = Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/zones?name=$zoneName" -Headers $cfHeaders -TimeoutSec 30
-if (-not $zoneResp.success -or @($zoneResp.result).Count -eq 0) { throw "Cloudflare zone '$zoneName' の取得に失敗しました" }
-$zoneId = $zoneResp.result[0].id
-$purgeUrls = @(Get-ChildItem $ArtifactsDir -File | Where-Object { $_.Name -notlike '*.nupkg' } | ForEach-Object { "$BaseUrl/$($_.Name)" })
+$verificationDir = Join-Path $WorkDir 'verification'
+New-Item -ItemType Directory -Path $verificationDir -Force | Out-Null
+function Test-PublishedFile {
+    param([System.IO.FileInfo]$File, [switch]$Fresh)
+    $target = Join-Path $verificationDir $File.Name
+    $url = "$BaseUrl/$($File.Name)"
+    $request = @{ Uri = $url; OutFile = $target; TimeoutSec = 120; MaximumRetryCount = 3; RetryIntervalSec = 5 }
+    if ($Fresh) {
+        $request.Uri += "?_=$([Guid]::NewGuid().ToString('N'))"
+        $request.Headers = @{ 'Cache-Control' = 'no-cache' }
+    }
+    Invoke-WebRequest @request
+    return (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash -eq (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash
+}
+$purgeUrls = @(Get-ChildItem $ArtifactsDir -File | Where-Object { $_.Name -notlike '*.nupkg' } | ForEach-Object {
+    $freshMatches = Test-PublishedFile -File $_ -Fresh
+    $canonicalMatches = Test-PublishedFile -File $_
+    if (-not $freshMatches -or -not $canonicalMatches) { "$BaseUrl/$($_.Name)" }
+})
 if ($purgeUrls.Count -gt 0) {
-    $purgeBody = "{`"files`":$(ConvertTo-Json -InputObject $purgeUrls -AsArray -Compress)}"
+    $cfHeaders = @{ Authorization = "Bearer $($env:CLOUDFLARE_API_TOKEN)" }
+    $zoneName = ([uri]$BaseUrl).Host -replace '^[^.]+\.', ''
+    $zoneResp = Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/zones?name=$zoneName" -Headers $cfHeaders -TimeoutSec 30
+    if (-not $zoneResp.success -or @($zoneResp.result).Count -ne 1) { throw "Cloudflare zone '$zoneName' を一意に取得できませんでした" }
+    $zoneId = $zoneResp.result[0].id
+    $purgeBody = [PSCustomObject]@{ files = $purgeUrls } | ConvertTo-Json -Compress
     $purgeResp = Invoke-RestMethod -Method Post -Uri "https://api.cloudflare.com/client/v4/zones/$zoneId/purge_cache" `
         -Headers $cfHeaders -ContentType 'application/json' -Body $purgeBody -TimeoutSec 30
     if (-not $purgeResp.success) { throw "Cloudflare キャッシュパージに失敗しました: $($purgeResp.errors | ConvertTo-Json -Compress)" }
@@ -208,6 +236,10 @@ foreach ($runtime in $Runtimes) {
     $url = "$BaseUrl/releases.$channel.json"
     $resp = Invoke-WebRequest -Uri $url -TimeoutSec 30 -MaximumRetryCount 3 -RetryIntervalSec 5
     Write-Host "  $url → HTTP $($resp.StatusCode) ($($resp.RawContentLength) bytes)"
+}
+foreach ($file in (Get-ChildItem $ArtifactsDir -File)) {
+    if (-not (Test-PublishedFile -File $file)) { throw "配信ファイルの SHA-256 が一致しません: $($file.Name)" }
+    Write-Host "  ✅ SHA-256 一致: $($file.Name)"
 }
 
 # ---- 4. 旧バージョン nupkg のクリーンアップ (Aggressive 戦略) ----
