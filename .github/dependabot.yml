@@ -1,96 +1,83 @@
-# Dependabot 設定
-# サプライチェーン保護: GitHub Actions と NuGet の依存を自動更新し、
-# タグポイズニング攻撃（actions/*@v7 等の可変タグ）を軽減する。
-# Actions は SHA 固定を推奨するが、Dependabot が SHA と更新 PR を自動で提示する。
+# 更新方針: 毎週月曜09:00（日本時間）、minor/patchを集約、majorは個別PR。
+# マージ可否は既定ブランチのDependabot auto-mergeが最新CIで判定します。
 version: 2
 updates:
-  # GitHub Actions のバージョン固定（タグ → SHA 自動更新）
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Asia/Tokyo"
-    labels:
-      - "dependencies"
-      - "github-actions"
-    commit-message:
-      prefix: "ci"
-    # patch/minor はまとめて 1 PR にし、破壊的変更を含む major は個別 PR で
-    # 互換性を確認できるようにする
-    groups:
-      actions-minor-patch:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-
-  # NuGet 依存の自動更新
-  # src (アプリ本体) と tests (xunit / Moq 等のテスト依存) の両方を対象にする。
-  # depends/AvaloniaEdit は upstream から取り込んだ vendored ソースであり、
-  # 自動更新すると upstream 追従（cherry-pick）と衝突するため対象外にしている。
-  - package-ecosystem: "nuget"
-    directories:
-      - "/src"
-      - "/tests/Komorebi.Tests"
-      - "/depends/AvaloniaEdit/src/AvaloniaEdit"
-      - "/depends/AvaloniaEdit/src/AvaloniaEdit.TextMate"
-      - "/depends/AvaloniaEdit/src/AvaloniaEdit.Demo"
-      - "/depends/AvaloniaEdit/test/AvaloniaEdit.Tests"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Asia/Tokyo"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-      - "nuget"
-    commit-message:
-      prefix: "deps"
-    # manifest に明示されたすべての依存を更新対象にする
-    allow:
-      - dependency-type: "all"
-    # 破壊的変更を含む major バージョンアップは手動確認を要するため、
-    # Dependabot には minor/patch のみを提案させ、major は無視する
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
-    groups:
-      nuget-minor-patch:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-
-  # global.json の .NET SDK
-  - package-ecosystem: "dotnet-sdk"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Asia/Tokyo"
-    labels:
-      - "dependencies"
-    commit-message:
-      prefix: "deps"
-    groups:
-      dotnet-sdk-minor-patch:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-
-  # npm 依存 (build/scripts/ の localization-check.js 用)
-  - package-ecosystem: "npm"
-    directory: "/build/scripts"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Asia/Tokyo"
-    labels:
-      - "dependencies"
-      - "npm"
-    commit-message:
-      prefix: "deps"
-    groups:
-      npm-minor-patch:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: weekly
+    day: monday
+    time: 09:00
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 5
+  groups:
+    minor-and-patch:
+      patterns:
+      - '*'
+      update-types:
+      - minor
+      - patch
+  commit-message:
+    prefix: deps
+- package-ecosystem: npm
+  directory: /build/scripts
+  schedule:
+    interval: weekly
+    day: monday
+    time: 09:00
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 5
+  groups:
+    minor-and-patch:
+      patterns:
+      - '*'
+      update-types:
+      - minor
+      - patch
+  commit-message:
+    prefix: deps
+- package-ecosystem: nuget
+  directories:
+  - /depends/AvaloniaEdit/src/AvaloniaEdit
+  - /depends/AvaloniaEdit/src/AvaloniaEdit.Demo
+  - /depends/AvaloniaEdit/src/AvaloniaEdit.TextMate
+  - /depends/AvaloniaEdit/test/AvaloniaEdit.Tests
+  - /src
+  - /tests/CloneLongPaths.E2E
+  - /tests/Komorebi.Tests
+  - /tests/Recovery.E2E
+  - /tests/UIWorkflow.E2E
+  schedule:
+    interval: weekly
+    day: monday
+    time: 09:00
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 5
+  groups:
+    minor-and-patch:
+      patterns:
+      - '*'
+      update-types:
+      - minor
+      - patch
+  commit-message:
+    prefix: deps
+  allow:
+  - dependency-type: all
+- package-ecosystem: dotnet-sdk
+  directory: /
+  schedule:
+    interval: weekly
+    day: monday
+    time: 09:00
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 5
+  groups:
+    minor-and-patch:
+      patterns:
+      - '*'
+      update-types:
+      - minor
+      - patch
+  commit-message:
+    prefix: deps
