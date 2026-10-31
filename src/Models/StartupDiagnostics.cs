@@ -92,18 +92,18 @@ public static class StartupDiagnostics
     private static readonly List<string> s_previousIncomplete = [];
 
     /// <summary>
-    /// 出力先を DataDir 配下の logs に切り替え、自プロセスの起動マーカーを作成する。
+    /// 出力先をログディレクトリに切り替え、自プロセスの起動マーカーを作成する。
     /// 同時に、前回起動の残留マーカーを検出して <see cref="PreviousIncompleteStartups"/> に積む。
     /// </summary>
-    /// <param name="dataDir">アプリケーションデータディレクトリ（<c>Native.OS.DataDir</c>）</param>
-    public static void Bind(string dataDir)
+    /// <param name="logDirectory">ログディレクトリ</param>
+    public static void Bind(string logDirectory)
     {
         try
         {
-            if (string.IsNullOrEmpty(dataDir))
+            if (string.IsNullOrEmpty(logDirectory))
                 return;
 
-            var dir = Path.Combine(dataDir, "logs");
+            var dir = logDirectory;
             Directory.CreateDirectory(dir);
 
             lock (s_sync)
@@ -119,6 +119,13 @@ public static class StartupDiagnostics
         {
             // 診断機構の失敗で起動を止めない
         }
+    }
+
+    /// <summary>旧ログフォルダーの未完了マーカーを収集する。実行中のプロセスのものは残す。</summary>
+    internal static void CollectLegacyMarkers(string logDirectory)
+    {
+        if (LegacyLogMigration.IsSafeDirectory(logDirectory))
+            CollectAbandonedMarkers(logDirectory);
     }
 
     /// <summary>
@@ -214,6 +221,8 @@ public static class StartupDiagnostics
         {
             try
             {
+                if ((File.GetAttributes(marker) & FileAttributes.ReparsePoint) != 0)
+                    continue;
                 if (string.Equals(marker, s_markerFile, StringComparison.OrdinalIgnoreCase))
                     continue;
 

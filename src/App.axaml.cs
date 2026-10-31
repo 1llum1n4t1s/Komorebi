@@ -73,15 +73,41 @@ public partial class App : Application
             Models.StartupDiagnostics.MarkStage(Models.StartupStage.DataDir);
             Native.OS.SetupDataDir();
 
-            // DataDir が確定したので、診断出力先を logs 配下へ切り替えて起動マーカーを作る。
+            // Windows の通常モードではログを Local AppData に分離する。
+            var logDirectory = Path.Combine(Native.OS.DataDir, "logs");
+            string legacyRoamingLogs = null;
+            string legacyLocalDirectory = null;
+            if (OperatingSystem.IsWindows() && string.Equals(
+                Native.OS.DataDir,
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Komorebi"),
+                StringComparison.OrdinalIgnoreCase))
+            {
+                var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                logDirectory = Path.Combine(localAppData, "Komorebi", "logs");
+                legacyRoamingLogs = Path.Combine(Native.OS.DataDir, "logs");
+                legacyLocalDirectory = Path.Combine(localAppData, "Kagayoi", "Komorebi");
+                Models.LegacyLogMigration.Move(legacyRoamingLogs, logDirectory);
+                Models.LegacyLogMigration.Move(Path.Combine(legacyLocalDirectory, "logs"), logDirectory);
+            }
+
+            // ログ出力先に起動マーカーを作る。
             // ここで前回起動の残留マーカー（= 前回はサイレントに落ちた）も検出される。
-            Models.StartupDiagnostics.Bind(Native.OS.DataDir);
+            Models.StartupDiagnostics.Bind(logDirectory);
+            if (legacyRoamingLogs is not null && legacyLocalDirectory is not null)
+            {
+                var legacyLocalLogs = Path.Combine(legacyLocalDirectory, "logs");
+                Models.StartupDiagnostics.CollectLegacyMarkers(legacyRoamingLogs);
+                Models.StartupDiagnostics.CollectLegacyMarkers(legacyLocalLogs);
+                Models.LegacyLogMigration.RemoveEmptyDirectory(legacyRoamingLogs);
+                Models.LegacyLogMigration.RemoveEmptyDirectory(legacyLocalLogs);
+                Models.LegacyLogMigration.RemoveEmptyDirectory(legacyLocalDirectory);
+            }
 
             // ログシステムを初期化し、起動ログを記録する
             Models.StartupDiagnostics.MarkStage(Models.StartupStage.LoggerInit);
             Models.Logger.Initialize(new Models.LoggerConfig
             {
-                LogDirectory = Path.Combine(Native.OS.DataDir, "logs"),
+                LogDirectory = logDirectory,
                 FilePrefix = "Komorebi",
             });
             Models.Logger.LogStartup();

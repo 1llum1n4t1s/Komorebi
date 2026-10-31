@@ -65,7 +65,9 @@ Windows の `Filename too long` に限り、実行前に宛先が未使用で、
 
 ## 起動診断と単一起動
 
-`Models.Logger` (SuperLightLogger) は「初期化後」かつ「非同期バッファ経由」でしか書けないため、起動時クラッシュを 2 種類取りこぼす。`src/Models/StartupDiagnostics.cs` がその穴を埋める。`Bind()` 前の同期ログは `%TEMP%/Komorebi`、DataDir 確定後の同期ログとマーカーは `<DataDir>/logs` に出力する。
+`Models.Logger` (SuperLightLogger) は「初期化後」かつ「非同期バッファ経由」でしか書けないため、起動時クラッシュを 2 種類取りこぼす。`src/Models/StartupDiagnostics.cs` がその穴を埋める。`Bind()` 前の同期ログは `%TEMP%/Komorebi`、その後の同期ログとマーカーは通常ログと同じディレクトリに出力する。Windows の通常モードでは `%LOCALAPPDATA%/Komorebi/logs`、それ以外は `<DataDir>/logs` を使う。
+
+Windows の旧ログフォルダーに残った起動マーカーも収集し、稼働中のプロセスのものは次回に残す。
 
 1. **ロガー初期化前の失敗** (Velopack フック / `SetupDataDir` / `Logger.Initialize` 自体) → `StartupDiagnostics.WriteFatal()` が Logger 非依存の同期書き込みで `Komorebi_startup_crash.log` に残す (DataDir 確定前は `%TEMP%/Komorebi`)。
 2. **プロセス内で何も書けない死に方** (Native AOT のアクセス違反、ランタイム abort、強制終了、電源断) → 起動中は `logs/startup-<pid>.marker` を置き、`MarkStage()` で到達ステージを同期更新する。UI スレッドが最初のアイドル (`DispatcherPriority.ApplicationIdle`) に到達したら `Stabilizing` へ遷移し、**60 秒の安定化観察期間**を経てから `MarkCompleted()` でマーカーを削除する（起動数秒後のサイレントクラッシュも検出するため）。正規終了経路 (`App.Quit` / `desktop.Exit` / IPC 転送成功後の終了 / リベースエディタ終了) では観察期間中でも即座に `MarkCompleted()` して誤検出を防ぐ。次回起動時に残留マーカーを見つけたら「前回の起動が完了しませんでした（到達ステージ付き）」を通常ログ (Warning) とブートストラップログの両方へ記録する。PID 再利用の誤検出は `startedTicks` (プロセス開始時刻) の一致判定で防ぐ。

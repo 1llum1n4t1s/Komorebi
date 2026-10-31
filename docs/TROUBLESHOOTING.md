@@ -12,6 +12,8 @@ Komorebi はクラッシュ・エラー・主要操作をローカルログに�
 | macOS | `~/Library/Application Support/Komorebi/logs/Komorebi_YYYYMMDD.log` |
 | Linux | `~/.local/share/Komorebi/logs/Komorebi_YYYYMMDD.log` |
 
+Windows の旧ログは起動時に新しい保存先へ移します。同名ログは別名で残し、使用中などで移動できなかったログは旧保存先に残して次回再試行します。ポータブルモードでは `data\logs` を使います。
+
 > ⚠️ **PII 注意**: ログにはリポジトリの絶対パスが含まれることがあり、Windows では `C:\Users\<ユーザー名>\...` のようにユーザー名が露出します。Issue に添付する前に必要なら手動で `<UserName>` などに伏字化してください。
 
 ## シナリオ別 復旧手順
@@ -30,7 +32,7 @@ Komorebi はクラッシュ・エラー・主要操作をローカルログに�
    - **Server** URL が `https://` で始まっているか
 2. ログに `AI commit message generation failed` がある場合、HTTP ステータスを確認
 3. API key が暗号化できない場合の復旧:
-   - `%LOCALAPPDATA%\Komorebi\ai-api-key.key` を削除すると次回起動時に新規鍵生成 → preference.json 内の暗号化済み API key は復号できなくなるので **再入力が必要**
+   - `%APPDATA%\Komorebi\ai-api-key.key` を削除すると次回起動時に新規鍵生成 → preference.json 内の暗号化済み API key は復号できなくなるので **再入力が必要**（ポータブルモードでは `data` 配下）
    - 念のため `ai-api-key.key.bak` (1 世代前) があれば復元を試みる
 
 ### C. Komorebi が起動しなくなった
