@@ -13,7 +13,7 @@
 # 前提:
 #   - SimplySign Desktop が接続済み (証明書が CurrentUser\My に見えていること)
 #   - Directory.Build.props の <Version> がリリースしたいバージョンになっていること (/vava 済み)
-#   - C:\Users\IMT\dev\Secret\secrets.json に cloudflare.api_token があること
+#   - D:\Dev\Secret\secrets.json に cloudflare.api_token があること
 #
 # 使い方:
 #   pwsh scripts/release-local.ps1                # フルリリース (build + sign + upload + cleanup)
@@ -29,34 +29,6 @@ param(
 
 
 
-# 検証済みの作業対象だけを標準APIで削除する。
-function Remove-LocalWorkItem {
-    param([string[]]$LiteralPath, [string]$AllowedRoot, [switch]$IgnoreMissing, [switch]$AllowLeafJunction)
-    if ([string]::IsNullOrWhiteSpace($AllowedRoot) -or -not [IO.Path]::IsPathRooted($AllowedRoot)) { throw 'Cleanup root must be absolute.' }
-    $boundary = [IO.Path]::GetFullPath($AllowedRoot).TrimEnd('\','/') + [IO.Path]::DirectorySeparatorChar
-    foreach ($target in $LiteralPath) {
-        if ([string]::IsNullOrWhiteSpace($target) -or -not [IO.Path]::IsPathRooted($target)) { throw 'Cleanup target must be absolute.' }
-        $resolved = [IO.Path]::GetFullPath($target)
-        if (-not $resolved.StartsWith($boundary, [StringComparison]::OrdinalIgnoreCase)) { throw 'Cleanup target is outside the allowed root.' }
-        $ancestor = $resolved
-        while ($ancestor) {
-            if (Test-Path -LiteralPath $ancestor) {
-                $item = Get-Item -LiteralPath $ancestor -Force -ErrorAction Stop
-                if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -and -not ($AllowLeafJunction -and $ancestor -eq $resolved -and $item.LinkType -eq 'Junction')) { throw 'Cleanup path contains a reparse point.' }
-            }
-            $ancestor = Split-Path $ancestor -Parent
-        }
-        if (-not (Test-Path -LiteralPath $resolved)) { if ($IgnoreMissing) { continue }; throw "Cleanup target is missing: $resolved" }
-        $item = Get-Item -LiteralPath $resolved -Force -ErrorAction Stop
-        $leafLink = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)
-        if ($item.PSIsContainer -and -not $leafLink) {
-            if (@(Get-ChildItem -LiteralPath $resolved -Recurse -Force -ErrorAction Stop | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }).Count) { throw 'Cleanup directory contains a reparse point.' }
-        }
-        Remove-Item -LiteralPath $resolved -Recurse:($item.PSIsContainer -and -not $leafLink) -Force -ErrorAction Stop
-        if (Test-Path -LiteralPath $resolved) { throw "Cleanup target remains: $resolved" }
-    }
-}
-
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
@@ -66,11 +38,11 @@ $VpkVersion = (Invoke-RestMethod 'https://api.nuget.org/v3-flatcontainer/vpk/ind
     Where-Object { $_ -notmatch '-' } | Select-Object -Last 1
 if (-not $VpkVersion) { throw 'vpk の最新安定版バージョンの取得に失敗しました (NuGet API)' }
 Write-Host "vpk 最新安定版: $VpkVersion"
-$WranglerVersion = '4.129.0'         # サプライチェーン対策でバージョン固定
+$WranglerVersion = '4.156.0'         # サプライチェーン対策でバージョン固定
 $Bucket = 'komorebi-updates'
 $BaseUrl = 'https://komorebi.kagayoi.com'
 $AccountId = '10901bfadbf1005164774a7350082985'
-$SecretsPath = 'C:\Users\IMT\dev\Secret\secrets.json'
+$SecretsPath = 'D:\Dev\Secret\secrets.json'
 $CertSubjectName = 'Open Source Developer Yuichiro Shinozaki'
 # /n (Subject 名) で選択: 証明書の年次更新で thumbprint が変わっても動く
 $SignParams = "/n `"$CertSubjectName`" /fd SHA256 /td SHA256 /tr http://time.certum.pl"
@@ -82,10 +54,14 @@ $RuntimeMatrix = @{
 }
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
+if ($Runtimes.Count -eq 0 -or @($Runtimes | Select-Object -Unique).Count -ne $Runtimes.Count) { throw 'RID は重複なしで 1 個以上指定してください' }
+foreach ($runtime in $Runtimes) {
+    if (-not $RuntimeMatrix.ContainsKey($runtime)) { throw "未知の runtime: $runtime" }
+}
 $WorkDir = Join-Path $RepoRoot 'local-release'
 $ArtifactsDir = Join-Path $WorkDir 'artifacts'
 
-# 清掃先をリポジトリ直下の専用ディレクトリに固定し、リンク先へ削除が及ぶのを防ぐ。
+# 作業先をリポジトリ直下に固定する。削除は CMD から Prunlet を直接実行する。
 $WorkDir = [System.IO.Path]::GetFullPath($WorkDir)
 if ([System.IO.Path]::GetDirectoryName($WorkDir) -ne [System.IO.Path]::GetFullPath($RepoRoot)) {
     throw 'リリース作業ディレクトリがリポジトリの範囲外です'
@@ -95,6 +71,7 @@ if (Test-Path -LiteralPath $WorkDir) {
     if ($linked | Where-Object { $_.Attributes -band [System.IO.FileAttributes]::ReparsePoint }) {
         throw 'リリース作業ディレクトリにリンクがあります。清掃範囲を確認してください'
     }
+    throw "既存の作業領域があります。保持内容を確認し、CMD から Prunlet で清掃してから再実行してください: $WorkDir"
 }
 
 function Invoke-Native {
@@ -136,14 +113,6 @@ if (-not $cert) {
 }
 Write-Host "署名証明書: $($cert.Subject) (期限 $($cert.NotAfter.ToString('yyyy-MM-dd')))"
 
-# vpk を固定バージョンで用意
-$vpkInstalled = (dotnet tool list --global | Select-String -SimpleMatch 'vpk') -match [regex]::Escape($VpkVersion)
-if (-not $vpkInstalled) {
-    Write-Host "vpk $VpkVersion をインストールします..."
-    dotnet tool uninstall --global vpk 2>$null | Out-Null
-    Invoke-Native 'vpk のインストール' { dotnet tool install --global vpk --version $VpkVersion }
-}
-
 # Cloudflare トークン (アップロード時のみ必要)
 if (-not $SkipUpload) {
     $secrets = Get-Content $SecretsPath -Raw | ConvertFrom-Json
@@ -152,8 +121,12 @@ if (-not $SkipUpload) {
     $env:CLOUDFLARE_ACCOUNT_ID = $AccountId
 }
 
-if (Test-Path -LiteralPath $WorkDir) { Remove-LocalWorkItem -LiteralPath $WorkDir -AllowedRoot $RepoRoot }
 New-Item -ItemType Directory -Path $ArtifactsDir -Force | Out-Null
+$toolDir = Join-Path $WorkDir 'tools'
+Invoke-Native 'vpk のローカルインストール' { dotnet tool install vpk --tool-path $toolDir --version $VpkVersion }
+$vpk = Join-Path $toolDir 'vpk.exe'
+$sourceSHA = (git rev-parse HEAD).Trim()
+if ($LASTEXITCODE -ne 0 -or $sourceSHA -notmatch '^[a-f0-9]{40}$') { throw 'リリース元 SHA を取得できませんでした' }
 
 # ---- 1. ビルド + 署名付きパッケージング (RID ごと) ----
 foreach ($runtime in $Runtimes) {
@@ -163,7 +136,7 @@ foreach ($runtime in $Runtimes) {
 
     Write-Host "== publish: $runtime ==" -ForegroundColor Cyan
     Invoke-Native "dotnet publish ($runtime)" {
-        dotnet publish src/Komorebi.csproj -c Release -r $runtime -o $publishDir
+        dotnet publish src/Komorebi.csproj -c Release -r $runtime -o $publishDir -p:RestoreLockedMode=true -p:UseSharedCompilation=false -nodeReuse:false
     }
 
     if (-not (Test-Path (Join-Path $publishDir 'Komorebi.exe'))) {
@@ -174,7 +147,7 @@ foreach ($runtime in $Runtimes) {
     # CI (velopack.yml) の Windows 系 vpk pack 引数 + --signParams (ローカル署名の追加分)
     # --icon: Setup.exe のアイコン (旧 CI は未指定でアイコン無し Setup.exe になっていた)
     Invoke-Native "vpk pack ($runtime)" {
-        vpk pack `
+        & $vpk pack `
             --packId Komorebi `
             --packVersion $version `
             --mainExe Komorebi.exe `
@@ -187,8 +160,64 @@ foreach ($runtime in $Runtimes) {
     }
 }
 
-# 署名検証 (Setup.exe が正しく署名されているかリリース前に確認)
-Write-Host '== 署名検証 ==' -ForegroundColor Cyan
+# 署名後の最終パッケージと manifest を一体で照合する。展開物は検証用に保持する。
+Write-Host '== 配信前の実物検証 ==' -ForegroundColor Cyan
+$verificationRoot = Join-Path $WorkDir 'preupload-verification'
+New-Item -ItemType Directory -Path $verificationRoot | Out-Null
+function Assert-SignedApp {
+    param([string]$Path, [string]$Runtime)
+    $sig = Get-AuthenticodeSignature -LiteralPath $Path
+    if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notlike "CN=$CertSubjectName*") { throw "アプリ署名検証失敗: $Path" }
+    $info = [Diagnostics.FileVersionInfo]::GetVersionInfo($Path)
+    if ($info.FileVersion -ne "$version.0" -or ($info.ProductVersion -split '\+')[0] -ne $version) { throw "アプリの版が不一致: $Path ($($info.FileVersion), $($info.ProductVersion))" }
+    if ($info.ProductVersion.Contains('+') -and $info.ProductVersion -ne "$version+$sourceSHA") { throw "アプリの source SHA が不一致: $Path" }
+    $bytes = [IO.File]::ReadAllBytes($Path)
+    $pe = [BitConverter]::ToInt32($bytes, 0x3c)
+    $machine = [BitConverter]::ToUInt16($bytes, $pe + 4)
+    $expectedMachine = if ($Runtime -eq 'win-x64') { 0x8664 } else { 0xaa64 }
+    if ($machine -ne $expectedMachine) { throw "アプリの CPU が不一致: $Path ($Runtime)" }
+}
+function Read-PackageApp {
+    param([string]$Path, [string]$Runtime, [string]$Kind)
+    $zip = [IO.Compression.ZipFile]::OpenRead($Path)
+    try {
+        $appEntry = if ($Kind -eq 'nupkg') { 'lib/app/Komorebi.exe' } else { 'current/Komorebi.exe' }
+        $apps = @($zip.Entries | Where-Object { $_.FullName -ceq $appEntry })
+        if ($apps.Count -ne 1) { throw "Komorebi.exe が一意に存在しません: $Path" }
+        if ($Kind -eq 'nupkg') {
+            $specs = @($zip.Entries | Where-Object { $_.FullName -like '*.nuspec' })
+            if ($specs.Count -ne 1) { throw "nuspec が一意に存在しません: $Path" }
+            $reader = [IO.StreamReader]::new($specs[0].Open())
+            try { $spec = [xml]$reader.ReadToEnd() } finally { $reader.Dispose() }
+            $meta = $spec.package.metadata
+            if ($meta.id -cne 'Komorebi' -or $meta.version -ne $version -or $meta.rid -ne $Runtime -or $meta.channel -ne $Runtime -or $meta.mainExe -cne 'Komorebi.exe') { throw "nupkg identity が不一致: $Path" }
+        }
+        $target = Join-Path $verificationRoot "$Runtime-$Kind.exe"
+        [IO.Compression.ZipFileExtensions]::ExtractToFile($apps[0], $target)
+        Assert-SignedApp -Path $target -Runtime $Runtime
+        return (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash
+    } finally { $zip.Dispose() }
+}
+foreach ($runtime in $Runtimes) {
+    $manifestPath = Join-Path $ArtifactsDir "releases.$runtime.json"
+    $assets = @((Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json).Assets)
+    if ($assets.Count -ne 1) { throw "新規リリースの manifest は full package 1 個を必要とします: $runtime" }
+    $asset = $assets[0]
+    $packageName = "Komorebi-$version-$runtime-full.nupkg"
+    if ($asset.PackageId -cne 'Komorebi' -or $asset.Version -ne $version -or $asset.Type -ne 'Full' -or $asset.FileName -cne $packageName) { throw "manifest identity が不一致: $runtime" }
+    $package = Get-Item -LiteralPath (Join-Path $ArtifactsDir $packageName)
+    if ($package.Length -ne $asset.Size -or (Get-FileHash -LiteralPath $package.FullName -Algorithm SHA1).Hash -ne $asset.SHA1 -or (Get-FileHash -LiteralPath $package.FullName -Algorithm SHA256).Hash -ne $asset.SHA256) { throw "manifest の size/hash が不一致: $packageName" }
+    $appHash = Read-PackageApp -Path $package.FullName -Runtime $runtime -Kind 'nupkg'
+    $portableHash = Read-PackageApp -Path (Join-Path $ArtifactsDir "Komorebi-$runtime-Portable.zip") -Runtime $runtime -Kind 'portable'
+    if ($appHash -ne $portableHash) { throw "portable と nupkg のアプリが不一致: $runtime" }
+    if (-not (Test-Path -LiteralPath (Join-Path $ArtifactsDir "Komorebi-$runtime-Setup.exe") -PathType Leaf)) { throw "Setup.exe がありません: $runtime" }
+    $inventory = @(Get-Content -LiteralPath (Join-Path $ArtifactsDir "assets.$runtime.json") -Raw | ConvertFrom-Json)
+    $expectedNames = @($packageName, "Komorebi-$runtime-Setup.exe", "Komorebi-$runtime-Portable.zip")
+    if ($inventory.Count -ne 3 -or @(Compare-Object ($inventory.RelativeFileName | Sort-Object) ($expectedNames | Sort-Object)).Count) { throw "assets manifest が不一致: $runtime" }
+    $legacy = @(Get-Content -LiteralPath (Join-Path $ArtifactsDir "RELEASES-$runtime"))
+    if ($legacy.Count -ne 1 -or $legacy[0].Trim() -ne "$($asset.SHA1) $packageName $($asset.Size)") { throw "RELEASES manifest が不一致: $runtime" }
+    Write-Host "  ✅ $runtime : manifest / nupkg / portable の版・CPU・署名・hash が一致"
+}
 foreach ($exe in Get-ChildItem $ArtifactsDir -Filter '*.exe') {
     $sig = Get-AuthenticodeSignature $exe.FullName
     if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notlike "CN=$CertSubjectName*") {
@@ -388,27 +417,16 @@ if (-not $toDelete) {
     if ($failed -gt 0 -and $deleted -eq 0) { throw '旧 nupkg の削除がすべて失敗しました。API token の権限を確認してください。' }
 }
 
-# ---- 5. packages.lock.json のクリーンアップ (リリース後の working tree clean 化) ----
-# RID 付き AOT publish (dotnet publish -r <rid>) は src/packages.lock.json を汚染する:
-# RID セクション (net10.0/win-arm64 等) が追加され、Microsoft.DotNet.ILCompiler /
-# Microsoft.NET.ILLink.Tasks が混入し、Debug 専用の AvaloniaUI.DiagnosticsSupport が落ちる。
-# この汚染 lock は ContinuousIntegrationBuild=true 時の RestoreLockedMode (Directory.Build.props)
-# で NU1004 になり、lockfile の supply-chain diff 検知も AOT churn で無意味化する。
-# --force-evaluate で RID なし clean 状態に戻し、毎回 working tree が clean な状態でリリースを終える
-# (/vava のリリース後 lock drift 手動 commit/revert が不要になる)。
-# 成果物は既にアップロード済みなので、ここでの失敗はリリースには影響しない → warning に留めて継続する。
-Write-Host '== packages.lock.json クリーンアップ ==' -ForegroundColor Cyan
+# ---- 5. 通常開発用lockfileの検証 ----
+# Directory.Build.targets が構成・AOT・RIDごとにlockを分けるため、
+# publish後にDebugの正本を再生成しない。検証のみ行い、既存の固定値を維持する。
+Write-Host '== 通常開発用lockfile 検証 ==' -ForegroundColor Cyan
 try {
-    Invoke-Native 'dotnet restore --force-evaluate' {
-        dotnet restore Komorebi.slnx --force-evaluate
-    }
-    # clean lock の検証: locked-mode 復元が NU1004 ゼロで通れば RID なし clean 状態
-    Invoke-Native 'dotnet restore --locked-mode (clean lock 検証)' {
+    Invoke-Native 'dotnet restore --locked-mode' {
         dotnet restore Komorebi.slnx --locked-mode
     }
-    Write-Host '  ✅ packages.lock.json は RID なし clean 状態 (locked-mode 検証 OK)'
+    Write-Host '  ✅ 通常開発用lockfile の固定復元 OK'
 } catch {
-    Write-Warning "  packages.lock.json のクリーンアップに失敗しました (アップロード済みリリースには影響なし)。手動で 'dotnet restore Komorebi.slnx --force-evaluate' を実行してください — $($_.Exception.Message)"
+    Write-Warning "  lockfile の固定復元に失敗しました (アップロード済みリリースには影響なし)。依存関係と構成を確認してください — $($_.Exception.Message)"
 }
-
 Write-Host "`n🎉 リリース完了: v$version → $BaseUrl (Windows チャンネルのみ。macOS/Linux は release.yml が配信)" -ForegroundColor Green

@@ -57,6 +57,8 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checkout release verification
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Download Velopack artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
@@ -71,13 +73,22 @@ jobs:
           merge-multiple: true
       - name: List artifacts
         run: ls -lh packages/
+      - name: Verify final packages before upload
+        env:
+          RELEASE_VERSION: ${{ needs.version.outputs.version }}
+          RELEASE_SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rpm rpm2cpio squashfs-tools libarchive-tools
+          python3 build/scripts/verify-release-artifacts.py --packages packages --version "$RELEASE_VERSION" --source-sha "$RELEASE_SOURCE_SHA"
       - name: Setup Node.js (wrangler 4.x が Node.js >=20 を要求、推奨 22)
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.x'
       - name: Install wrangler CLI
         # サプライチェーン保護のためバージョン固定。wrangler 本体を更新したら、この --version も合わせて更新すること。
-        run: npm install -g wrangler@4.129.0
+        run: npm install -g wrangler@4.156.0
       # R2 アップロード仕様:
       # - releases.{channel}.json (manifest) は同 channel の旧版を冪等に上書き
       #   → 新リリース後、クライアントはここから新 nupkg URL を取得する
@@ -106,6 +117,19 @@ jobs:
         run: |
           set -euo pipefail
           base="https://komorebi.kagayoi.com"
+          for artifact in packages/*; do
+            name=$(basename "$artifact")
+            delivered="$RUNNER_TEMP/delivered-$name"
+            curl --fail --silent --show-error --max-time 180 --retry 3 --retry-delay 5 --retry-all-errors \
+              -H 'Cache-Control: no-cache' -o "$delivered" "${base}/${name}?cb=$(date +%s%N)"
+            expected=$(sha256sum "$artifact" | cut -d' ' -f1)
+            actual=$(sha256sum "$delivered" | cut -d' ' -f1)
+            if [[ "$expected" != "$actual" ]]; then
+              echo "::error::Delivered SHA-256 differs: $name"
+              exit 1
+            fi
+            echo "Verified delivery SHA-256: $name $actual"
+          done
           for channel in win-x64 win-arm64 osx-arm64 linux-x64 linux-arm64; do
             manifest_url="${base}/releases.${channel}.json?cb=$(date +%s%N)"
             echo "Checking ${manifest_url}"

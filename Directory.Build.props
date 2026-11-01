@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
     <!-- IDEコードスタイル分析（IDE0005等）をビルド時にも強制する -->
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <!-- IDE0005（不要なusing検出）にはドキュメント生成が必須 -->
@@ -12,14 +12,9 @@
     <!-- Condition: submodule (depends/AvaloniaEdit) では lockfile を生成しない。 -->
     <!--            submodule は外部リポジトリで Komorebi 側から管理すべきでないため。 -->
     <RestorePackagesWithLockFile Condition="!$(MSBuildProjectDirectory.Contains('depends'))">true</RestorePackagesWithLockFile>
-    <!-- CI ビルド時のみ lockfile を厳格モードで検証する（ローカル開発では新規パッケージ追加を許可）。
-         注意: $(CI) で判定すると、AOT publish が動的に追加する transitive deps
-         (Microsoft.DotNet.ILCompiler / Microsoft.NET.ILLink.Tasks) と multi-RID 展開が
-         lockfile と整合せず NU1004 エラーで CI が落ちる（v1.0.73 で実証済み）。
-         AOT + RestoreLockedMode の両立は構造的に困難なため、$(ContinuousIntegrationBuild) を
-         維持して実質無効化している（DIVERGE.md "8. CI / サプライチェーン保護" 参照）。
-         lockfile 生成 (RestorePackagesWithLockFile) は維持されるためリパッケージ攻撃の
-         基本検知 (lockfile diff) は機能する。 -->
+    <!-- CI ビルド時の固定復元。構成・AOT・RIDによる依存グラフの差は
+         Directory.Build.targetsで別lockfileへ分け、通常Debugの正本を保護する。
+         新しい構成やSDK由来のAOTツール更新時は、対象lockを明示的に再生成する。 -->
     <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true' And !$(MSBuildProjectDirectory.Contains('depends'))">true</RestoreLockedMode>
     <Nullable>enable</Nullable>
     <!-- 警告をエラー扱いにして品質ゲートを他リポジトリと揃える。 -->
