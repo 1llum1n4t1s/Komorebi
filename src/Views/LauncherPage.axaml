@@ -152,7 +152,7 @@
                         <Path Grid.Column="0" Width="14" Height="14" Data="{StaticResource Icons.Info}" Fill="Green" IsVisible="{Binding !IsError}"/>
                         <TextBlock Grid.Column="1" Margin="8,0,0,0" FontWeight="Bold" FontSize="14" Text="{DynamicResource Text.Launcher.Error}" IsVisible="{Binding IsError}"/>
                         <TextBlock Grid.Column="1" Margin="8,0,0,0" FontWeight="Bold" FontSize="14" Text="{DynamicResource Text.Launcher.Info}" IsVisible="{Binding !IsError}"/>
-                        <Button Grid.Column="2" Classes="icon_button" Width="16" Height="16" Click="OnCopyNotification">
+                        <Button Grid.Column="2" Classes="icon_button" Width="16" Height="16" Click="OnCopyNotification" ToolTip.Tip="{DynamicResource Text.Copy}">
                           <Path Width="12" Height="12" Data="{StaticResource Icons.Copy}"/>
                         </Button>
                         <Button Grid.Column="3" Classes="icon_button" Width="16" Height="16" Margin="8,0,0,0" Click="OnDismissNotification">

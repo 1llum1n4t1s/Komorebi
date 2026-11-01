@@ -19,15 +19,25 @@
     <!-- Left Panel -->
     <Grid Grid.Column="0" RowDefinitions="Auto,*">
       <!-- ブランチ操作バー（ブランチセレクター + Fetch/Pull/Push） -->
-      <Border Grid.Row="0" Height="36" Background="{DynamicResource Brush.ToolBar}" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}">
-        <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" Margin="4,0">
+      <Border Grid.Row="0" MinHeight="36" Background="{DynamicResource Brush.ToolBar}" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}">
+        <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="36,Auto" Margin="4,0">
+          <TextBlock Grid.Row="1" Grid.ColumnSpan="4" Margin="6,0,0,4" FontSize="11" FontFamily="{DynamicResource Fonts.Monospace}"
+                     Foreground="{DynamicResource Brush.Accent}" Text="{Binding CurrentBranch.TrackStatusDescription}"
+                     IsVisible="{Binding CurrentBranch.IsTrackStatusVisible, FallbackValue=False}"/>
           <!-- ブランチセレクター: クリックでHEADにナビゲート -->
           <!-- HEADにナビゲート -->
           <Button Grid.Column="0" Classes="icon_button" Width="28" Height="26" Margin="2,0,0,0" VerticalAlignment="Center" Click="NavigateToHead">
             <ToolTip.Tip>
-              <TextBlock Text="{Binding CurrentBranch.FriendlyName, FallbackValue='--'}"/>
+              <StackPanel>
+                <TextBlock Text="{Binding CurrentBranch.FriendlyName, FallbackValue='--'}"/>
+                <TextBlock Text="{Binding CurrentBranch.TrackStatusDescription}"/>
+              </StackPanel>
             </ToolTip.Tip>
-            <Path Width="14" Height="14" Data="{StaticResource Icons.Home}"/>
+            <Grid>
+              <Path Width="14" Height="14" Data="{StaticResource Icons.Home}"/>
+              <Ellipse Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top"
+                       Fill="{DynamicResource Brush.Accent}" IsVisible="{Binding CurrentBranch.IsTrackStatusVisible, FallbackValue=False}"/>
+            </Grid>
           </Button>
 
           <!-- ブランチ作成ボタン -->
@@ -104,6 +114,7 @@
 
             <TextBox.InnerRightContent>
               <Button Classes="icon_button"
+                      Focusable="False"
                       Width="16"
                       Margin="0,0,6,0"
                       Command="{Binding ClearFilter}"
@@ -585,7 +596,7 @@
                          FontSize="11" VerticalContentAlignment="Center"
                          PlaceholderText="{DynamicResource Text.Repository.SearchFiles}"
                          Text="{Binding WorkingCopyVM.Filter, Mode=TwoWay}"/>
-                <Button Grid.Column="2" Classes="icon_button"
+                <Button Grid.Column="2" Classes="icon_button" Focusable="False"
                         Width="16" Height="16" Margin="0,0,2,0"
                         Click="OnClearWorkingCopyFilter"
                         IsVisible="{Binding WorkingCopyVM.Filter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
@@ -606,7 +617,7 @@
                          FontSize="11" VerticalContentAlignment="Center"
                          PlaceholderText="{DynamicResource Text.Repository.SearchStashes}"
                          Text="{Binding StashesPageVM.SearchFilter, Mode=TwoWay}"/>
-                <Button Grid.Column="2" Classes="icon_button"
+                <Button Grid.Column="2" Classes="icon_button" Focusable="False"
                         Width="16" Height="16" Margin="0,0,2,0"
                         Click="OnClearStashesFilter"
                         IsVisible="{Binding StashesPageVM.SearchFilter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
@@ -698,7 +709,8 @@
       </Border>
 
       <!-- InProgressContext bar -->
-      <Grid Grid.Row="1" Height="28" ColumnDefinitions="*,Auto,Auto" Background="{DynamicResource Brush.Conflict}" IsVisible="{Binding InProgressContext, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <Grid Grid.Row="1" Height="28" ColumnDefinitions="*,Auto,Auto,Auto" Background="{DynamicResource Brush.Conflict}" IsVisible="{Binding InProgressContext, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <v:LoadingIcon Grid.Column="3" Width="14" Height="14" Margin="4,0,8,0" IsVisible="{Binding WorkingCopyVM.IsCommitting}"/>
         <ContentControl Grid.Column="0" Margin="8,0" Content="{Binding InProgressContext}">
           <ContentControl.DataTemplates>
             <DataTemplate DataType="m:Commit">

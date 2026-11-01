@@ -28,13 +28,15 @@
                  PlaceholderText="{DynamicResource Text.CommitDetail.Files.Search}"
                  Text="{Binding RevisionFileSearchFilter, Mode=TwoWay}"
                  KeyDown="OnSearchBoxKeyDown"
-                 TextChanged="OnSearchBoxTextChanged">
+                 TextChanged="OnSearchBoxTextChanged"
+                 LayoutUpdated="OnSearchBoxLayoutUpdated">
           <TextBox.InnerLeftContent>
             <Path Width="14" Height="14" Margin="4,0,0,0" Fill="{DynamicResource Brush.FG2}" Data="{StaticResource Icons.Search}"/>
           </TextBox.InnerLeftContent>
 
           <TextBox.InnerRightContent>
             <Button Classes="icon_button"
+                    Focusable="False"
                     IsVisible="{Binding RevisionFileSearchFilter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                     Command="{Binding ClearRevisionFileSearchFilter}">
               <Path Width="14" Height="14" Fill="{DynamicResource Brush.FG2}" Data="{StaticResource Icons.Clear}"/>
@@ -154,7 +156,19 @@
             </Grid>
           </Border>
 
-          <v:RevisionFileContentViewer Grid.Row="1" Content="{Binding ViewRevisionFileContent}"/>
+          <v:RevisionFileContentViewer Grid.Row="1">
+            <v:RevisionFileContentViewer.Content>
+              <Binding Path="ViewRevisionFileContent">
+                <Binding.TargetNullValue>
+                  <StackPanel VerticalAlignment="Center">
+                    <Path Width="64" Height="64" Data="{StaticResource Icons.File}" Fill="{DynamicResource Brush.FG2}"/>
+                    <TextBlock Margin="0,16,0,0" Text="{DynamicResource Text.CommitDetail.Files.Tips}" FontSize="18" FontWeight="Bold"
+                               Foreground="{DynamicResource Brush.FG2}" HorizontalAlignment="Center"/>
+                  </StackPanel>
+                </Binding.TargetNullValue>
+              </Binding>
+            </v:RevisionFileContentViewer.Content>
+          </v:RevisionFileContentViewer>
         </Grid>
       </Border>
     </Grid>

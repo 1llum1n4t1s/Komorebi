@@ -394,6 +394,14 @@ public partial class LauncherTabBar : UserControl
                     ev.Handled = true;
                 };
                 menu.Items.Add(copyPath);
+
+                var explore = new MenuItem { Header = App.Text("Repository.Explore"), Icon = App.CreateMenuIcon("Icons.Folder.Open") };
+                explore.Click += (_, ev) =>
+                {
+                    Native.OS.OpenInFileManager(repo.FullPath);
+                    ev.Handled = true;
+                };
+                menu.Items.Add(explore);
                 menu.Items.Add(new MenuItem() { Header = "-" });
 
                 var edit = new MenuItem();

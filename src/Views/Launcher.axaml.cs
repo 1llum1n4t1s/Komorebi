@@ -357,7 +357,7 @@ public partial class Launcher : ChromelessWindow
                         return;
                     case Key.F when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
                         // Ctrl+Shift+F → コミット検索を開始する
-                        repo.IsSearchingCommits = true;
+                        repo.IsSearchingCommits = !repo.IsSearchingCommits;
                         e.Handled = true;
                         return;
                     case Key.H when e.KeyModifiers.HasFlag(KeyModifiers.Shift):

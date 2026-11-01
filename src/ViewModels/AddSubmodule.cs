@@ -16,7 +16,7 @@ public class AddSubmodule : Popup
     /// <summary>
     /// サブモジュールのリポジトリURL。必須入力でURL形式のバリデーション付き。
     /// </summary>
-    [Required(ErrorMessage = "Url is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.UrlRequired))]
     [CustomValidation(typeof(AddSubmodule), nameof(ValidateURL))]
     public string Url
     {
@@ -60,7 +60,7 @@ public class AddSubmodule : Popup
     public static ValidationResult ValidateURL(string url, ValidationContext ctx)
     {
         if (!Models.Remote.IsValidURL(url))
-            return new ValidationResult("Invalid repository URL format");
+            return new ValidationResult(App.Text("Validation.RemoteUrlInvalid"));
 
         return ValidationResult.Success;
     }

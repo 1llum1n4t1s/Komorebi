@@ -29,7 +29,14 @@ public class Apply : Popup
     public bool FromClipboard
     {
         get => _fromClipboard;
-        set => SetProperty(ref _fromClipboard, value);
+        set
+        {
+            if (SetProperty(ref _fromClipboard, value))
+            {
+                // upstreamとの差分: 入力元の変更で不要になったファイルエラーを解除する。
+                ValidateProperty(_patchFile, nameof(PatchFile));
+            }
+        }
     }
 
     /// <summary>
@@ -81,16 +88,16 @@ public class Apply : Popup
     public static ValidationResult ValidatePatchFile(string file, ValidationContext ctx)
     {
         if (ctx.ObjectInstance is not Apply apply)
-            return new ValidationResult("Invalid object instance!!!");
+            return new ValidationResult(App.Text("Validation.ContextInvalid"));
 
         if (apply.FromClipboard)
             return ValidationResult.Success;
 
         if (string.IsNullOrEmpty(file))
-            return new ValidationResult("Please select a patch file!!!");
+            return new ValidationResult(App.Text("Validation.PatchFileRequired"));
 
         if (!File.Exists(file))
-            return new ValidationResult($"File '{file}' can NOT be found!!!");
+            return new ValidationResult(App.Text("Error.FolderNotFound", file));
 
         return ValidationResult.Success;
     }
@@ -118,7 +125,7 @@ public class Apply : Popup
                 var content = await App.GetClipboardTextAsync();
                 if (string.IsNullOrEmpty(content) || !content.StartsWith("diff --git ", StringComparison.Ordinal))
                 {
-                    App.RaiseException(_repo.FullPath, "There's no valid patch content in clipboard!!!");
+                    App.RaiseException(_repo.FullPath, App.Text("Error.InvalidClipboardPatch"));
                     return false;
                 }
 

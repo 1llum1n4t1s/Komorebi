@@ -208,12 +208,15 @@ internal class MacOS : OS.IBackend
     /// <summary>
     /// macOSのopenコマンドで指定ターミナルアプリを起動する。
     /// </summary>
-    public void OpenTerminal(string workdir, string _)
+    public void OpenTerminal(string workdir, string args)
     {
         var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         var dir = string.IsNullOrEmpty(workdir) ? home : workdir;
         // -a オプションでアプリケーション名を指定して起動する
-        Process.Start("open", $"-a {OS.ShellOrTerminal} {dir.Quoted()}")?.Dispose();
+        if (string.IsNullOrEmpty(args))
+            Process.Start("open", $"-a {OS.ShellOrTerminal} {dir.Quoted()}")?.Dispose();
+        else
+            Process.Start("open", $"-a {OS.ShellOrTerminal} --args {args} {dir.Quoted()}")?.Dispose();
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -70,7 +71,7 @@ public class Remote : Command
     {
         // git remote prune: リモートに存在しなくなった追跡ブランチを削除する
         Args = $"remote prune {name.Quoted()}";
-        return await ExecAsync();
+        return await ExecWithSSHKeyAsync(name);
     }
 
     /// <summary>
@@ -114,7 +115,8 @@ public class Remote : Command
     public async Task<bool> DeletePushURLAsync(string name, string pushUrl)
     {
         // git remote set-url --push --delete: プッシュ専用URLを削除する
-        Args = $"remote set-url --push --delete {name.Quoted()} {pushUrl.Quoted()}";
+        // Komorebi: git は URL 引数を正規表現として扱うため、URL 内の [] 等を文字通りに照合する。
+        Args = $"remote set-url --push --delete {name.Quoted()} {("^" + Regex.Escape(pushUrl) + "$").Quoted()}";
         return await ExecAsync();
     }
 

@@ -32,6 +32,16 @@ public class Statistics : ObservableObject
         }
     }
 
+    /// <summary>現在グラフで強調表示している著者。</summary>
+    public Models.StatisticsAuthor SelectedAuthor => _selectedReport?.SelectedAuthor;
+
+    /// <summary>円グラフの選択を既存の時系列グラフへ反映する。</summary>
+    public void ChangeAuthor(Models.StatisticsAuthor author)
+    {
+        _selectedReport?.ChangeAuthor(author);
+        OnPropertyChanged(nameof(SelectedAuthor));
+    }
+
     /// <summary>
     /// 統計データの読み込み中かどうか。
     /// </summary>
@@ -115,7 +125,7 @@ public class Statistics : ObservableObject
         IsLoading = true;
         var generation = ++_generation;
         var branch = _selectedBranch;
-        var max = Preferences.Instance.MaxHistoryCommits;
+        const int max = 200000;
         Task.Run(async () =>
         {
             // バックグラウンドスレッドで統計データを取得

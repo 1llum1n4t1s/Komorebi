@@ -1,4 +1,4 @@
-﻿<v:ChromelessWindow xmlns="https://github.com/avaloniaui"
+<v:ChromelessWindow xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -44,7 +44,7 @@
           <TextBlock Classes="tab_header" Text="{DynamicResource Text.Configure.Git}"/>
         </TabItem.Header>
 
-        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,Auto,32,32,32,32,32" ColumnDefinitions="Auto,*">
+        <Grid Margin="16,4,16,8" RowDefinitions="32,32,32,32,32,32,32,32,32,32,32,32,Auto,32,32,32,32,32,32" ColumnDefinitions="Auto,*">
           <TextBlock Grid.Row="0" Grid.Column="0"
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
@@ -214,6 +214,8 @@
                      Margin="0,0,8,0"
                      Text="{DynamicResource Text.Remote.Name}"/>
           <TextBox Grid.Row="14" Grid.Column="1"
+                   x:Name="TxtRemoteName"
+                   IsEnabled="{Binding IsRemoteSettingsLoaded}"
                    Height="28"
                    CornerRadius="3"
                    Text="{Binding SelectedRemoteName, Mode=TwoWay}"/>
@@ -223,7 +225,7 @@
                      HorizontalAlignment="Right" VerticalAlignment="Center"
                      Margin="0,0,8,0"
                      Text="URL"/>
-          <Grid Grid.Row="15" Grid.Column="1" ColumnDefinitions="*,Auto">
+          <Grid Grid.Row="15" Grid.Column="1" ColumnDefinitions="*,Auto" IsEnabled="{Binding IsRemoteSettingsLoaded}">
             <TextBox Grid.Column="0" x:Name="TxtRemoteUrl"
                      Height="28"
                      CornerRadius="3"
@@ -239,11 +241,20 @@
                      Text="{DynamicResource Text.SSHKey}"
                      IsVisible="{Binding SelectedRemoteUseSSH}"/>
           <v:SSHKeyPicker Grid.Row="16" Grid.Column="1"
+                          IsEnabled="{Binding IsRemoteSettingsLoaded}"
                           SSHKeyPath="{Binding SelectedRemoteSSHKey, Mode=TwoWay}"
                           IsVisible="{Binding SelectedRemoteUseSSH}"/>
 
+          <TextBlock Grid.Row="18" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                     Margin="0,0,8,0" Text="{DynamicResource Text.SetPushUrl.PushURL}"/>
+          <Grid Grid.Row="18" Grid.Column="1" IsEnabled="{Binding IsRemoteSettingsLoaded}">
+            <TextBox Height="28" CornerRadius="3"
+                     IsEnabled="{Binding !SelectedRemotePushDisabled}" Text="{Binding SelectedRemotePushUrl, Mode=TwoWay}"/>
+          </Grid>
+
           <!-- プッシュ禁止 -->
           <CheckBox Grid.Row="17" Grid.Column="1"
+                    IsEnabled="{Binding IsRemoteSettingsLoaded}"
                     Content="{DynamicResource Text.Configure.Remote.PushDisabled}"
                     IsChecked="{Binding SelectedRemotePushDisabled, Mode=TwoWay}"
                     ToolTip.Tip="git remote set-url --push &lt;name&gt; no_push"/>

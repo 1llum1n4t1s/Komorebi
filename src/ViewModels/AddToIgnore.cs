@@ -24,7 +24,7 @@ public class AddToIgnore : Popup
     /// <summary>
     /// 追加する無視パターン。必須入力。
     /// </summary>
-    [Required(ErrorMessage = "Ignore pattern is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.IgnorePatternRequired))]
     public string Pattern
     {
         get => _pattern;
@@ -35,7 +35,7 @@ public class AddToIgnore : Popup
     /// パターンの保存先ファイル（.gitignore等）。必須選択。
     /// 選択に応じてパターンを保存先基準の相対形式に切り替える。
     /// </summary>
-    [Required(ErrorMessage = "Storage file is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.StorageFileRequired))]
     public Models.GitIgnoreFile SelectedStorageFile
     {
         get => _selectedStorageFile;

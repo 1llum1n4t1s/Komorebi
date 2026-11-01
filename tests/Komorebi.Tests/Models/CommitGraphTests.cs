@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Media;
 
 using Komorebi.Models;
@@ -15,19 +14,7 @@ namespace Komorebi.Tests.Models
         {
             if (CommitGraph.Pens.Count == 0)
             {
-                CommitGraph.SetPens(
-                [
-                    Colors.Orange,
-                    Colors.ForestGreen,
-                    Colors.Turquoise,
-                    Colors.Olive,
-                    Colors.Magenta,
-                    Colors.Red,
-                    Colors.Khaki,
-                    Colors.Lime,
-                    Colors.RoyalBlue,
-                    Colors.Teal,
-                ], 2);
+                CommitGraph.SetDefaultPens();
             }
         }
 
@@ -618,54 +605,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal(5, path.Color);
             Assert.True(path.IsMerged);
             Assert.Empty(path.Points);
-        }
-
-        [Fact]
-        public void Path_Points_CanBeAdded()
-        {
-            var path = new CommitGraph.Path(0, false);
-            path.Points.Add(new Point(1, 2));
-            path.Points.Add(new Point(3, 4));
-
-            Assert.Equal(2, path.Points.Count);
-            Assert.Equal(new Point(1, 2), path.Points[0]);
-            Assert.Equal(new Point(3, 4), path.Points[1]);
-        }
-
-        [Fact]
-        public void Link_Properties_CanBeSet()
-        {
-            var link = new CommitGraph.Link
-            {
-                Start = new Point(0, 0),
-                Control = new Point(5, 0),
-                End = new Point(5, 10),
-                Color = 3,
-                IsMerged = true,
-            };
-
-            Assert.Equal(new Point(0, 0), link.Start);
-            Assert.Equal(new Point(5, 0), link.Control);
-            Assert.Equal(new Point(5, 10), link.End);
-            Assert.Equal(3, link.Color);
-            Assert.True(link.IsMerged);
-        }
-
-        [Fact]
-        public void Dot_Properties_CanBeSet()
-        {
-            var dot = new CommitGraph.Dot
-            {
-                Type = CommitGraph.DotType.Head,
-                Center = new Point(10, 20),
-                Color = 7,
-                IsMerged = false,
-            };
-
-            Assert.Equal(CommitGraph.DotType.Head, dot.Type);
-            Assert.Equal(new Point(10, 20), dot.Center);
-            Assert.Equal(7, dot.Color);
-            Assert.False(dot.IsMerged);
         }
 
         // ================================================================

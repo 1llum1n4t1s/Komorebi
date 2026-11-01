@@ -1,12 +1,47 @@
 using System.Diagnostics;
 using System.IO.Pipes;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using Komorebi.AI;
 using Komorebi.Models;
 using Komorebi.ViewModels;
+
+if (args is ["logger", var loggerRoot])
+{
+    Directory.CreateDirectory(loggerRoot);
+    Logger.Initialize(new LoggerConfig { LogDirectory = loggerRoot, FilePrefix = "Komorebi" });
+    Logger.Log("logger-before-unobserved");
+    var handler = typeof(Komorebi.App).GetMethod("OnUnobservedTaskException", BindingFlags.Static | BindingFlags.NonPublic)!
+        .CreateDelegate<EventHandler<UnobservedTaskExceptionEventArgs>>();
+    using var observed = new ManualResetEventSlim();
+    TaskScheduler.UnobservedTaskException += (_, e) =>
+    {
+        handler(null, e);
+        if (e.Observed)
+            observed.Set();
+    };
+    CreateUnobservedTask();
+    for (var attempt = 0; attempt < 20 && !observed.IsSet; attempt++)
+    {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        observed.Wait(TimeSpan.FromMilliseconds(50));
+    }
+    Require(observed.IsSet, "Application handler did not observe the task exception.");
+    Logger.Log("logger-after-unobserved");
+    Logger.Dispose();
+    var log = string.Join('\n', Directory.GetFiles(loggerRoot, "Komorebi_*.log").Select(File.ReadAllText));
+    Require(log.Contains("logger-before-unobserved", StringComparison.Ordinal), "Initial log was lost.");
+    Require(log.Contains("UnobservedTaskException", StringComparison.Ordinal), "Task exception log was lost.");
+    Require(log.Contains("logger-after-unobserved", StringComparison.Ordinal), "Continuing application lost logging after the task exception.");
+    return 0;
+}
 
 // 実ファイル、Windows DPAPI / AES-GCM、別プロセスのロックとパイプで復旧経路を検証する。
 // 内部 API は reflection で呼び、製品側に E2E 専用の公開 API を加えない。
@@ -41,7 +76,11 @@ List<object> results = [];
 var failures = 0;
 try
 {
+    await CheckAsync("logging-continues-after-unobserved-task-exception", VerifyLoggingAsync);
     await CheckAsync("encrypted-preferences-read-failure-save-twice-recover", VerifyCredentialsAsync);
+    if (OperatingSystem.IsWindows())
+        await CheckAsync("legacy-key-atomic-migration-failure-and-recovery", VerifyLegacyKeyMigrationAsync);
+    await CheckAsync("ai-headers-through-provider-http-and-retry", VerifyHeadersAsync);
     await CheckAsync("ipc-cross-process-forward-and-peer-exit-recovery", () => VerifyIpcAsync("normal"));
     await CheckAsync("ipc-lock-before-pipe-start-race", () => VerifyIpcAsync("delayed"));
     await CheckAsync("ipc-pipe-init-failure-and-lock-release", () =>
@@ -97,6 +136,89 @@ async Task CheckAsync(string name, Func<Task> run)
     }
 }
 
+async Task VerifyHeadersAsync()
+{
+    foreach (var provider in Service.AllProviders)
+    {
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        using var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        var expectedRequests = provider == Provider.OpenAI ? 2 : 1;
+        var receivedRequests = 0;
+        var receive = Task.Run(async () =>
+        {
+            for (var attempt = 0; attempt < expectedRequests; attempt++)
+            {
+                using var client = await listener.AcceptTcpClientAsync(timeout.Token);
+                await using var stream = client.GetStream();
+                var headers = new StringBuilder();
+                var one = new byte[1];
+                var terminator = 0;
+                do
+                {
+                    await stream.ReadExactlyAsync(one, timeout.Token);
+                    headers.Append((char)one[0]);
+                    terminator = (terminator << 8) | one[0];
+                    Require(headers.Length < 65536, "HTTP header limit exceeded.");
+                } while (terminator != 0x0d0a0d0a);
+                var text = headers.ToString();
+                Require(System.Text.RegularExpressions.Regex.IsMatch(text, @"(?im)^X-Fixture: synthetic-last-value\r?$"),
+                    $"{provider}: additional header was missing or duplicated.");
+                Require(System.Text.RegularExpressions.Regex.IsMatch(text, @"(?im)^Content-Type: application/json\r?$"),
+                    $"{provider}: content header was not applied.");
+                var length = System.Text.RegularExpressions.Regex.Match(text, @"(?im)^Content-Length:\s*(\d+)");
+                Require(length.Success, "Fixture expects a fixed-length request body.");
+                var size = int.Parse(length.Groups[1].Value);
+                Require(size < 1024 * 1024, "HTTP body limit exceeded.");
+                await stream.ReadExactlyAsync(new byte[size], timeout.Token);
+                receivedRequests++;
+                var retry = attempt == 0 && expectedRequests > 1;
+                var body = retry ? "{\"error\":{\"message\":\"synthetic retry\",\"type\":\"rate_limit_error\"}}" :
+                    provider == Provider.Anthropic
+                        ? "{\"id\":\"fixture\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"fixture\",\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"test: header fixture\"}],\"usage\":{\"input_tokens\":1,\"output_tokens\":1}}"
+                        : "{\"id\":\"fixture\",\"object\":\"chat.completion\",\"created\":1,\"model\":\"fixture\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"test: header fixture\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":1,\"completion_tokens\":1,\"total_tokens\":2}}";
+                var bodyBytes = Encoding.UTF8.GetBytes(body);
+                var status = retry ? "429 Too Many Requests" : "200 OK";
+                var response = $"HTTP/1.1 {status}\r\nContent-Type: application/json\r\nContent-Length: {bodyBytes.Length}\r\nRetry-After: 0\r\nConnection: close\r\n\r\n";
+                await stream.WriteAsync(Encoding.ASCII.GetBytes(response), timeout.Token);
+                await stream.WriteAsync(bodyBytes, timeout.Token);
+            }
+        }, timeout.Token);
+        try
+        {
+            var service = new Service
+            {
+                Provider = provider,
+                Server = $"http://127.0.0.1:{port}" + (provider == Provider.Anthropic ? "" : "/v1"),
+                ApiKey = "synthetic-local-http-key",
+                Model = "fixture",
+                ExtraHeaders = "X-Fixture: synthetic-first-value\nContent-Type: application/json\nX-Fixture: synthetic-last-value",
+            };
+            var result = new StringBuilder();
+            await new Agent(service).GenerateCommitMessageAsync(root, "fixture.txt", text => result.Append(text), timeout.Token);
+            await receive;
+            Require(receivedRequests == expectedRequests && result.ToString().Contains("test: header fixture", StringComparison.Ordinal),
+                $"{provider}: provider output or retry was lost.");
+            File.WriteAllText(Path.Combine(root, $"http-headers-{provider}.json"), JsonSerializer.Serialize(new
+            {
+                Provider = provider.ToString(),
+                Requests = receivedRequests,
+                ExpectedRequests = expectedRequests,
+                AdditionalAndContentHeadersVerified = true,
+                Output = result.ToString(),
+            }));
+        }
+        finally
+        {
+            await timeout.CancelAsync();
+            listener.Stop();
+            try { await receive; }
+            catch (Exception) when (timeout.IsCancellationRequested) { }
+        }
+    }
+}
+
 Task VerifyCredentialsAsync()
 {
     var fixture = Path.Combine(root, "credentials");
@@ -113,6 +235,7 @@ Task VerifyCredentialsAsync()
     var file = Path.Combine(fixture, "preference.json");
     var keyFile = Path.Combine(fixture, "ai-api-key.key");
     const string syntheticSecret = "synthetic-e2e-key-only";
+    const string syntheticHeaders = "Authorization: Bearer synthetic-e2e-header-only\nX-Fixture: synthetic-header-value";
     Preferences ReadyToSave(Preferences preferences)
     {
         // 実アプリでは Instance が Load 後に読み込みフラグを下ろし、App が保存を許可する。
@@ -121,10 +244,10 @@ Task VerifyCredentialsAsync()
         return preferences;
     }
     Preferences Load() => ReadyToSave((Preferences)JsonSerializer.Deserialize(File.ReadAllText(file), info)!);
-    string Cipher()
+    string Cipher(string property = "ApiKey")
     {
         using var document = JsonDocument.Parse(File.ReadAllText(file));
-        return document.RootElement.GetProperty("OpenAIServices")[0].GetProperty("ApiKey").GetString()!;
+        return document.RootElement.GetProperty("OpenAIServices")[0].GetProperty(property).GetString()!;
     }
     void Save(Preferences preferences)
     {
@@ -139,24 +262,30 @@ Task VerifyCredentialsAsync()
     {
         keyOverride.SetValue(null, fixture);
         var preferences = ReadyToSave(new Preferences());
-        preferences.OpenAIServices.Add(new Service { Name = "isolated", ApiKey = syntheticSecret });
+        preferences.OpenAIServices.Add(new Service { Name = "isolated", ApiKey = syntheticSecret, ExtraHeaders = syntheticHeaders });
         Save(preferences);
         var cipher = Cipher();
+        var headersCipher = Cipher("ExtraHeaders");
         Require(cipher.StartsWith("komorebi:v1:aes:", StringComparison.Ordinal), "Synthetic key was not encrypted.");
+        Require(headersCipher.StartsWith("komorebi:v1:aes:", StringComparison.Ordinal) &&
+            !File.ReadAllText(file).Contains("synthetic-e2e-header-only", StringComparison.Ordinal), "Header credentials were stored in plaintext.");
         var originalKey = File.ReadAllBytes(keyFile);
         keyOverride.SetValue(null, fixture);
         using (var locked = File.Open(keyFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
         {
             var unreadable = Load();
             Require(unreadable.OpenAIServices[0].ApiKey.Length == 0, "Key read failure did not occur.");
+            Require(unreadable.OpenAIServices[0].ExtraHeaders.Length == 0, "Unreadable headers were exposed as ciphertext.");
             Save(unreadable);
             Require(Cipher() == cipher, "First save lost the unreadable cipher.");
             Save(unreadable);
             Require(Cipher() == cipher, "Second save lost the unreadable cipher.");
+            Require(Cipher("ExtraHeaders") == headersCipher, "Saving lost unreadable encrypted headers.");
         }
         Require(File.ReadAllBytes(keyFile).SequenceEqual(originalKey), "Read failure replaced the original key.");
         keyOverride.SetValue(null, fixture);
         Require(Load().OpenAIServices[0].ApiKey == syntheticSecret, "Restored key could not decrypt the saved credential.");
+        Require(Load().OpenAIServices[0].ExtraHeaders == syntheticHeaders, "Restored key could not decrypt the headers.");
 
         // DPAPI / 不正形式の読込失敗でも既存鍵を再生成しない。
         File.WriteAllText(keyFile, OperatingSystem.IsWindows() ? "dpapi:v1:AQIDBA==" : "AQIDBA==");
@@ -166,21 +295,28 @@ Task VerifyCredentialsAsync()
         Save(unreadableAgain);
         Save(unreadableAgain);
         Require(Cipher() == cipher, "Invalid key lost the cipher.");
+        Require(Cipher("ExtraHeaders") == headersCipher, "Invalid key lost the header cipher.");
         Require(File.ReadAllBytes(keyFile).SequenceEqual(damagedKey), "Invalid key was regenerated.");
         Require(!File.Exists(keyFile + ".bak"), "Read failure created a replacement backup.");
         File.WriteAllBytes(keyFile, originalKey);
         keyOverride.SetValue(null, fixture);
         Require(Load().OpenAIServices[0].ApiKey == syntheticSecret, "Credential failed to recover after key restoration.");
+        Require(Load().OpenAIServices[0].ExtraHeaders == syntheticHeaders, "Headers failed to recover after key restoration.");
 
         keyOverride.SetValue(null, fixture);
         using (var locked = File.Open(keyFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
         {
             var clear = Load();
             clear.OpenAIServices[0].ApiKey = string.Empty;
+            clear.OpenAIServices[0].ExtraHeaders = string.Empty;
             Save(clear);
             Require(Cipher().Length == 0, "Explicit clear retained an unreadable cipher.");
+            Require(Cipher("ExtraHeaders").Length == 0, "Explicit clear retained unreadable headers.");
             var legacy = new Service { ProtectedApiKey = "synthetic-legacy-plain" };
             Require(legacy.ApiKey == "synthetic-legacy-plain" && legacy.ProtectedApiKey.Length == 0, "Failed legacy migration wrote plaintext back.");
+            var legacyHeaders = new Service { ProtectedExtraHeaders = syntheticHeaders };
+            Require(legacyHeaders.ExtraHeaders == syntheticHeaders && legacyHeaders.ProtectedExtraHeaders.Length == 0,
+                "Failed header migration wrote plaintext back.");
         }
 
         // 旧平文 API キーの移行と環境変数名の解決も維持する。
@@ -188,6 +324,8 @@ Task VerifyCredentialsAsync()
         var migrated = new Service { ProtectedApiKey = "synthetic-legacy-plain" };
         var migratedCipher = migrated.ProtectedApiKey;
         Require(new Service { ProtectedApiKey = migratedCipher }.ApiKey == "synthetic-legacy-plain", "Legacy plaintext did not migrate.");
+        var migratedHeaders = new Service { ProtectedExtraHeaders = syntheticHeaders }.ProtectedExtraHeaders;
+        Require(new Service { ProtectedExtraHeaders = migratedHeaders }.ExtraHeaders == syntheticHeaders, "Legacy headers did not migrate.");
         var variable = "KOMOREBI_RECOVERY_E2E_" + Guid.NewGuid().ToString("N");
         Environment.SetEnvironmentVariable(variable, syntheticSecret);
         try
@@ -205,6 +343,102 @@ Task VerifyCredentialsAsync()
     {
         keyOverride.SetValue(null, oldOverride);
         dataDir.SetValue(null, oldDataDir);
+    }
+}
+
+Task VerifyLegacyKeyMigrationAsync()
+{
+    var fixture = Path.Combine(root, "legacy-key-migration");
+    Directory.CreateDirectory(fixture);
+    var protector = typeof(Service).Assembly.GetType("Komorebi.AI.ApiKeyProtector", throwOnError: true)!;
+    var keyOverride = protector.GetProperty("KeyDirectoryOverride", BindingFlags.NonPublic | BindingFlags.Static)!;
+    var readKey = protector.GetMethod("TryReadKeyFile", BindingFlags.NonPublic | BindingFlags.Static)!;
+    var writeKey = protector.GetMethod("WriteKeyFile", BindingFlags.NonPublic | BindingFlags.Static)!;
+    var oldOverride = keyOverride.GetValue(null);
+    var contextType = typeof(Service).Assembly.GetType("Komorebi.JsonCodeGen", throwOnError: true)!;
+    var context = (JsonSerializerContext)contextType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetValue(null)!;
+    var info = context.GetTypeInfo(typeof(Preferences))!;
+    var keyFile = Path.Combine(fixture, "ai-api-key.key");
+    // 27664f25 の親版は32バイト鍵を Convert.ToBase64String + File.WriteAllText で保存していた。
+    var rawKey = Enumerable.Range(1, 32).Select(value => (byte)value).ToArray();
+    var original = Encoding.UTF8.GetBytes(Convert.ToBase64String(rawKey));
+    const string secret = "synthetic-legacy-migration-key";
+    const string headers = "Authorization: Bearer synthetic-legacy-migration-header";
+    void AssertNoStage() => Require(!Directory.EnumerateFiles(fixture, "ai-api-key.key.*.tmp").Any(), "Migration retained a staging key.");
+    try
+    {
+        File.WriteAllBytes(keyFile, original);
+        keyOverride.SetValue(null, fixture);
+        var preferences = new Preferences();
+        preferences.OpenAIServices.Add(new Service { ApiKey = secret, ExtraHeaders = headers });
+        var json = JsonSerializer.Serialize(preferences, info);
+        File.WriteAllText(Path.Combine(fixture, "preference.json"), json);
+        File.WriteAllBytes(Path.Combine(fixture, "legacy-key-original.fixture"), original);
+        Require(!json.Contains(secret, StringComparison.Ordinal) && !json.Contains(headers, StringComparison.Ordinal), "Legacy fixture stored plaintext credentials.");
+
+        foreach (var failure in new[] { "partial-write", "replace", "success" })
+        {
+            File.WriteAllBytes(keyFile, original);
+            keyOverride.SetValue(null, fixture);
+            var injected = false;
+            Action<Stream, string>? write = failure == "partial-write" ? (stream, content) =>
+            {
+                injected = true;
+                var bytes = Encoding.UTF8.GetBytes(content);
+                stream.Write(bytes, 0, bytes.Length / 2);
+                throw new IOException("Synthetic staging write failure.");
+            } : null;
+            Action<string, string>? replace = failure == "replace" ? (stage, destination) =>
+            {
+                injected = true;
+                Require(destination == keyFile && Path.GetDirectoryName(stage) == fixture, "Migration staged outside the key directory.");
+                Require(File.ReadAllText(stage).StartsWith("dpapi:v1:", StringComparison.Ordinal), "Replacement received an incomplete staging key.");
+                throw new IOException("Synthetic atomic replacement failure.");
+            } : null;
+            var loadedKey = (byte[])readKey.Invoke(null, [keyFile, write, replace])!;
+            Require(loadedKey.SequenceEqual(rawKey), "Migration failure lost the usable legacy key.");
+            if (failure != "success")
+            {
+                Require(injected, "Migration fault boundary was not exercised.");
+                Require(File.ReadAllBytes(keyFile).SequenceEqual(original), "Migration failure changed the original key bytes.");
+            }
+            else
+                Require(File.ReadAllText(keyFile).StartsWith("dpapi:v1:", StringComparison.Ordinal), "Successful migration did not protect the key with DPAPI.");
+            AssertNoStage();
+
+            // キャッシュを破棄して実 JSON を再読込し、次回起動相当の復号と移行を確認する。
+            keyOverride.SetValue(null, fixture);
+            var recovered = (Preferences)JsonSerializer.Deserialize(json, info)!;
+            Require(recovered.OpenAIServices[0].ApiKey == secret && recovered.OpenAIServices[0].ExtraHeaders == headers,
+                "Legacy credentials did not recover after a fresh key read.");
+            var migratedKey = File.ReadAllBytes(keyFile);
+            keyOverride.SetValue(null, fixture);
+            var reloaded = (Preferences)JsonSerializer.Deserialize(json, info)!;
+            Require(reloaded.OpenAIServices[0].ApiKey == secret && reloaded.OpenAIServices[0].ExtraHeaders == headers,
+                "Migrated credentials did not survive another fresh key read.");
+            Require(File.ReadAllBytes(keyFile).SequenceEqual(migratedKey), "Reading the migrated key rewrote it.");
+            Require(Directory.EnumerateFiles(fixture, "ai-api-key.key*").Count() == 1, "Migration duplicated the authoritative key.");
+            AssertNoStage();
+        }
+
+        // 新規生成の公開境界は既存鍵を上書きしない。生成競合の勝者を保つ。
+        var winner = File.ReadAllBytes(keyFile);
+        var collision = false;
+        try
+        {
+            writeKey.Invoke(null, [keyFile, RandomNumberGenerator.GetBytes(32), false, null, null]);
+        }
+        catch (TargetInvocationException ex) when (ex.InnerException is IOException)
+        {
+            collision = true;
+        }
+        Require(collision && File.ReadAllBytes(keyFile).SequenceEqual(winner), "New-key creation overwrote the winning key.");
+        AssertNoStage();
+        return Task.CompletedTask;
+    }
+    finally
+    {
+        keyOverride.SetValue(null, oldOverride);
     }
 }
 
@@ -245,6 +479,32 @@ async Task VerifyIpcAsync(string mode)
         }
     }
 }
+
+async Task VerifyLoggingAsync()
+{
+    var start = new ProcessStartInfo(Environment.ProcessPath!) { UseShellExecute = false, CreateNoWindow = true };
+    if (Path.GetFileNameWithoutExtension(Environment.ProcessPath) == "dotnet")
+        start.ArgumentList.Add(Assembly.GetExecutingAssembly().Location);
+    start.ArgumentList.Add("logger");
+    start.ArgumentList.Add(Path.Combine(root, "logger"));
+    using var peer = Process.Start(start)!;
+    try
+    {
+        await peer.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(10));
+        Require(peer.ExitCode == 0, "Logger child failed; inspect its retained log files.");
+    }
+    finally
+    {
+        if (!peer.HasExited)
+        {
+            peer.Kill(entireProcessTree: true);
+            await peer.WaitForExitAsync();
+        }
+    }
+}
+
+[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+static void CreateUnobservedTask() => _ = Task.FromException(new InvalidOperationException("synthetic-unobserved-task"));
 
 static IpcChannel CreateChannel(string? pipe, string path) => (IpcChannel)Activator.CreateInstance(typeof(IpcChannel), BindingFlags.Instance | BindingFlags.NonPublic, null, [pipe, path], null)!;
 static void Retry(IpcChannel channel) => typeof(IpcChannel).GetMethod("TryAcquireFirstInstance", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(channel, null);

@@ -1,7 +1,5 @@
 using System.Diagnostics;
 
-using Avalonia.Media;
-
 using Komorebi.Models;
 
 namespace Komorebi.Tests.Models
@@ -20,19 +18,7 @@ namespace Komorebi.Tests.Models
         {
             if (CommitGraph.Pens.Count == 0)
             {
-                CommitGraph.SetPens(
-                [
-                    Colors.Orange,
-                    Colors.ForestGreen,
-                    Colors.Turquoise,
-                    Colors.Olive,
-                    Colors.Magenta,
-                    Colors.Red,
-                    Colors.Khaki,
-                    Colors.Lime,
-                    Colors.RoyalBlue,
-                    Colors.Teal,
-                ], 2);
+                CommitGraph.SetDefaultPens();
             }
         }
 

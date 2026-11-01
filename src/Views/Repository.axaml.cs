@@ -1,4 +1,4 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
 using System.Collections.Generic;
@@ -134,7 +134,10 @@ public partial class Repository : UserControl
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
                 if (IsLoaded && ReferenceEquals(DataContext, repo) && repo is { IsSearchingCommits: true })
-                    TxtSearchCommitsBox.Focus(NavigationMethod.Tab);
+                {
+                    TxtSearchCommitsBox.Focus(NavigationMethod.Directional);
+                    TxtSearchCommitsBox.SelectAll();
+                }
             });
         }
     }

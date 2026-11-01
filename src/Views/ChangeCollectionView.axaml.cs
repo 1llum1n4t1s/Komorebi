@@ -395,20 +395,11 @@ public partial class ChangeCollectionView : UserControl
 
         _disableSelectionChangingEvent = true;
 
-        List<Models.Change> selected = [];
-        if (sender is ListBox { SelectedItems: { } selectedItems })
-        {
-            foreach (var item in selectedItems)
-            {
-                if (item is Models.Change c)
-                    selected.Add(c);
-                else if (item is ViewModels.ChangeTreeNode node)
-                    CollectChangesInNode(selected, node);
-            }
-        }
+        List<Models.Change> selected = new ViewModels.ChangeSelection((sender as ListBox)?.SelectedItems);
 
         var old = SelectedChanges ?? [];
-        if (old.Count != selected.Count)
+        if (old.Count != selected.Count ||
+            (old is ViewModels.ChangeSelection { IsSingleFolder: true }) != (selected is ViewModels.ChangeSelection { IsSingleFolder: true }))
         {
             SetCurrentValue(SelectedChangesProperty, selected);
         }

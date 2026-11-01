@@ -99,6 +99,7 @@ public class ExternalTool
                 FileName = ExecFile,
                 Arguments = args,
                 UseShellExecute = false,
+                CreateNoWindow = true,
             })?.Dispose();
         }
     }

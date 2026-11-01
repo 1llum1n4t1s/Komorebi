@@ -122,7 +122,7 @@ public class Compare : ObservableObject
             if (SetProperty(ref _selectedChanges, value))
             {
                 // 選択が1件の場合のみ差分コンテキストを生成する
-                if (value is { Count: 1 })
+                if (value is { Count: 1 } and not ChangeSelection { IsSingleFolder: true })
                     DiffContext = new DiffContext(_repo, new Models.DiffOption(_based, _to, value[0]), _diffContext);
                 else
                     DiffContext = null;

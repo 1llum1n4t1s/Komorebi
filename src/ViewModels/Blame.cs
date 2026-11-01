@@ -1,4 +1,4 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
 using System.Collections.Generic;
@@ -172,7 +172,8 @@ public class Blame : ObservableObject
     /// </summary>
     /// <param name="file">対象ファイルパス</param>
     /// <param name="sha">コミットSHA（短縮形）</param>
-    public void NavigateToCommit(string file, string sha)
+    /// <param name="changeBlame">Blame対象も変更するかどうか。</param>
+    public void NavigateToCommit(string file, string sha, bool changeBlame = true)
     {
         // ランチャーのページからリポジトリを探して、コミットグラフ上でも移動する
         if (App.GetLauncher() is { Pages: { } pages })
@@ -188,7 +189,7 @@ public class Blame : ObservableObject
         }
 
         // 既に同じリビジョンを表示中なら何もしない
-        if (Revision.SHA.StartsWith(sha, StringComparison.Ordinal))
+        if (!changeBlame || Revision.SHA.StartsWith(sha, StringComparison.Ordinal))
             return;
 
         // 現在位置より後の履歴を削除してから新しいリビジョンを追加する

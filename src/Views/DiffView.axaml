@@ -377,7 +377,7 @@
 
               <TabItem>
                 <TabItem.Header>
-                  <TextBlock Text="IMAGE" FontWeight="Bold"/>
+                  <TextBlock Text="{DynamicResource Text.Diff.Image}" FontWeight="Bold"/>
                 </TabItem.Header>
 
                 <ContentControl Content="{Binding Image}"/>

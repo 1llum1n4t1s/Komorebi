@@ -15,7 +15,7 @@ public class CreateGroup : Popup
     /// <summary>
     /// グループ名。必須項目。
     /// </summary>
-    [Required(ErrorMessage = "Group name is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.GroupNameRequired))]
     public string Name
     {
         get => _name;

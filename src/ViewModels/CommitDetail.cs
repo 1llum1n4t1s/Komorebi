@@ -67,7 +67,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
                 OnPropertyChanged();
 
                 // 変更タブに切り替え時、選択が1件で差分コンテキストがない場合は生成する
-                if (value == 1 && DiffContext is null && _selectedChanges is { Count: 1 })
+                if (value == 1 && DiffContext is null && _selectedChanges is { Count: 1 } and not ChangeSelection { IsSingleFolder: true })
                     DiffContext = new DiffContext(_repo.FullPath, new Models.DiffOption(_commit, _selectedChanges[0]));
             }
         }
@@ -155,7 +155,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
             if (SetProperty(ref _selectedChanges, value))
             {
                 // 変更タブ以外または選択が1件でない場合は差分コンテキストをクリアする
-                if (ActiveTabIndex != 1 || value is not { Count: 1 })
+                if (ActiveTabIndex != 1 || value is not { Count: 1 } || value is ChangeSelection { IsSingleFolder: true })
                     DiffContext = null;
                 else
                     DiffContext = new DiffContext(_repo.FullPath, new Models.DiffOption(_commit, value[0]), _diffContext);
@@ -252,8 +252,14 @@ public partial class CommitDetail : ObservableObject, IDisposable
     /// <param name="repo">対象のリポジトリViewModel</param>
     /// <param name="sharedData">タブインデックス共有データ（nullの場合は新規作成）</param>
     public CommitDetail(Repository repo, CommitDetailSharedData sharedData)
+        : this(repo, sharedData, LoadRevisionFileAsync)
+    {
+    }
+
+    internal CommitDetail(Repository repo, CommitDetailSharedData sharedData, Func<string, string, Models.Object, Task<object>> revisionFileLoader)
     {
         _repo = repo;
+        _revisionFileLoader = revisionFileLoader;
         _sharedData = sharedData ?? new CommitDetailSharedData();
         // リモート情報からWebリンクを生成する
         WebLinks = Models.CommitLink.Get(repo.Remotes);
@@ -273,6 +279,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
     public void Dispose()
     {
         _disposed = true;
+        ++_revisionFileRequest;
         _cancellationSource?.Cancel();
         // 上流との差分: 実行中の読み取りが参照するリポジトリとコミットは完了まで保持する。
         _changes = null;
@@ -610,27 +617,43 @@ public partial class CommitDetail : ObservableObject, IDisposable
     /// <param name="file">表示対象のファイルオブジェクト（nullの場合は表示をクリア）</param>
     public async Task ViewRevisionFileAsync(Models.Object file)
     {
-        var obj = file ?? new Models.Object() { Path = string.Empty, Type = Models.ObjectType.None };
-        ViewRevisionFilePath = obj.Path;
+        if (_disposed)
+            return;
 
-        switch (obj.Type)
+        // 上流との差分: 選択の交錯とコミット切替をまたぐ結果を反映しない。
+        var request = ++_revisionFileRequest;
+        var revision = _commit?.SHA;
+        var repo = _repo.FullPath;
+        var obj = file is null
+            ? new Models.Object() { Path = string.Empty, Type = Models.ObjectType.None }
+            : new Models.Object() { Path = file.Path, SHA = file.SHA, Type = file.Type };
+        ViewRevisionFilePath = obj.Path;
+        CanOpenRevisionFileWithDefaultEditor = revision is not null && obj.Type == Models.ObjectType.Blob;
+        ViewRevisionFileContent = null;
+
+        if (revision is null || obj.Type is not (Models.ObjectType.Blob or Models.ObjectType.Commit))
+            return;
+
+        object content;
+        try
         {
-            case Models.ObjectType.Blob:
-                // 通常ファイル（Blob）の場合はデフォルトエディタで開ける
-                CanOpenRevisionFileWithDefaultEditor = true;
-                await SetViewingBlobAsync(obj);
-                break;
-            case Models.ObjectType.Commit:
-                // サブモジュール（Commit）の場合はエディタで開けない
-                CanOpenRevisionFileWithDefaultEditor = false;
-                await SetViewingCommitAsync(obj);
-                break;
-            default:
-                // その他の場合は表示をクリアする
-                CanOpenRevisionFileWithDefaultEditor = false;
-                ViewRevisionFileContent = null;
-                break;
+            content = await _revisionFileLoader(repo, revision, obj);
         }
+        catch (Exception) when (_disposed || request != _revisionFileRequest)
+        {
+            return;
+        }
+
+        if (_disposed || request != _revisionFileRequest)
+        {
+            if (content is Models.RevisionImageFile image)
+                image.Image?.Dispose();
+            return;
+        }
+
+        ViewRevisionFileContent = content is RevisionLFSImageRequest lfs
+            ? new RevisionLFSImage(repo, obj.Path, lfs.Object, lfs.Decoder)
+            : content;
     }
 
     /// <summary>
@@ -681,6 +704,8 @@ public partial class CommitDetail : ObservableObject, IDisposable
     {
         if (_disposed)
             return;
+
+        ++_revisionFileRequest;
 
         // リビジョンファイル関連の状態をリセットする
         _requestingRevisionFiles = false;
@@ -988,71 +1013,50 @@ public partial class CommitDetail : ObservableObject, IDisposable
     }
 
     /// <summary>
-    /// Blobオブジェクト（通常ファイル）の表示内容を設定する。
-    /// バイナリ/テキスト/LFS/画像を判別して適切な表示モデルを生成する。
+    /// 要求時点のリビジョンとファイル情報から表示内容を取得する。
     /// </summary>
-    /// <param name="file">表示対象のファイルオブジェクト</param>
-    private async Task SetViewingBlobAsync(Models.Object file)
+    private static async Task<object> LoadRevisionFileAsync(string repo, string revision, Models.Object file)
     {
-        // バイナリファイルかどうかを判定する
-        var isBinary = await new Commands.IsBinary(_repo.FullPath, _commit.SHA, file.Path).GetResultAsync();
+        if (file.Type == Models.ObjectType.Commit)
+        {
+            var submoduleRoot = Path.Combine(repo, file.Path);
+            return await new Commands.QuerySubmoduleRevision(submoduleRoot, file.SHA).GetResultAsync();
+        }
+
+        var isBinary = await new Commands.IsBinary(repo, revision, file.Path).GetResultAsync();
         if (isBinary)
         {
-            // 画像ファイルの場合はデコーダを使用して表示する
             var imgDecoder = ImageSource.GetDecoder(file.Path);
             if (imgDecoder != Models.ImageDecoder.None)
             {
-                var source = await ImageSource.FromRevisionAsync(_repo.FullPath, _commit.SHA, file.Path, imgDecoder);
-                ViewRevisionFileContent = new Models.RevisionImageFile(file.Path, source.Bitmap, source.Size);
-            }
-            else
-            {
-                // 画像以外のバイナリファイルはサイズ情報のみ表示する
-                var size = await new Commands.QueryFileSize(_repo.FullPath, file.Path, _commit.SHA).GetResultAsync();
-                ViewRevisionFileContent = new Models.RevisionBinaryFile { Repository = _repo.FullPath, File = file.Path, Revision = _commit.SHA, Size = size };
+                var source = await ImageSource.FromRevisionAsync(repo, revision, file.Path, imgDecoder);
+                return new Models.RevisionImageFile(file.Path, source.Bitmap, source.Size);
             }
 
-            return;
+            var size = await new Commands.QueryFileSize(repo, file.Path, revision).GetResultAsync();
+            return new Models.RevisionBinaryFile { Repository = repo, File = file.Path, Revision = revision, Size = size };
         }
 
-        // テキストファイルの内容を読み込む
-        var contentStream = await Commands.QueryFileContent.RunAsync(_repo.FullPath, _commit.SHA, file.Path);
+        using var contentStream = await Commands.QueryFileContent.RunAsync(repo, revision, file.Path);
         if (contentStream is null)
-            return;
+            return null;
 
-        string content;
-        using (var reader = new StreamReader(contentStream))
-            content = await reader.ReadToEndAsync();
-
-        // LFSオブジェクトかどうかを判定する
+        using var reader = new StreamReader(contentStream);
+        var content = await reader.ReadToEndAsync();
         var lfs = Models.LFSObject.Parse(content);
         if (lfs is not null)
         {
-            // LFSオブジェクトの場合は画像かどうかで表示を切り替える
             var imgDecoder = ImageSource.GetDecoder(file.Path);
             if (imgDecoder != Models.ImageDecoder.None)
-                ViewRevisionFileContent = new RevisionLFSImage(_repo.FullPath, file.Path, lfs, imgDecoder);
-            else
-                ViewRevisionFileContent = new Models.RevisionLFSObject() { Object = lfs };
+                return new RevisionLFSImageRequest(lfs, imgDecoder);
+
+            return new Models.RevisionLFSObject() { Object = lfs };
         }
-        else
-        {
-            // 通常テキストファイルの内容を表示する
-            ViewRevisionFileContent = new Models.RevisionTextFile() { FileName = file.Path, Content = content };
-        }
+
+        return new Models.RevisionTextFile() { FileName = file.Path, Content = content };
     }
 
-    /// <summary>
-    /// Commitオブジェクト（サブモジュール）の表示内容を設定する。
-    /// サブモジュールのコミット情報とメッセージを取得して表示する。
-    /// </summary>
-    /// <param name="file">表示対象のファイルオブジェクト（サブモジュール）</param>
-    private async Task SetViewingCommitAsync(Models.Object file)
-    {
-        // サブモジュールのルートパスを構築する
-        var submoduleRoot = Path.Combine(_repo.FullPath, file.Path);
-        ViewRevisionFileContent = await new Commands.QuerySubmoduleRevision(submoduleRoot, file.SHA).GetResultAsync();
-    }
+    private sealed record RevisionLFSImageRequest(Models.LFSObject Object, Models.ImageDecoder Decoder);
 
     /// <summary>URLパターンの正規表現（http/https/ftp）</summary>
     [GeneratedRegex(@"\b(https?://|ftp://)[\w\d\._/\-~%@()+:?&=#!]*[\w\d/]")]
@@ -1092,8 +1096,12 @@ public partial class CommitDetail : ObservableObject, IDisposable
     private string _viewRevisionFilePath = string.Empty;
     /// <summary>リビジョンファイルビューアの表示内容</summary>
     private object _viewRevisionFileContent = null;
-    /// <summary>非同期処理キャンセル用トークンソース</summary>
+    /// <summary>要求時点の情報からリビジョン内容を読み込む処理</summary>
+    private readonly Func<string, string, Models.Object, Task<object>> _revisionFileLoader;
+    /// <summary>最新のリビジョンファイル要求番号</summary>
+    private long _revisionFileRequest;
     private bool _disposed;
+    /// <summary>非同期処理キャンセル用トークンソース</summary>
     private CancellationTokenSource _cancellationSource = null;
     /// <summary>リビジョンファイル名一覧取得中フラグ</summary>
     private bool _requestingRevisionFiles = false;

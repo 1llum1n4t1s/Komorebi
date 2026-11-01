@@ -19,14 +19,6 @@ namespace Komorebi.Tests.Models
         #region Supported List
 
         [Fact]
-        public void Supported_HasExpectedCount()
-        {
-            // 17 locales: de_DE, en_US, es_ES, fr_FR, id_ID, fil_PH, it_IT,
-            // pt_BR, uk_UA, ru_RU, zh_CN, zh_TW, ja_JP, ta_IN, ko_KR, la, sa
-            Assert.Equal(17, Locale.Supported.Count);
-        }
-
-        [Fact]
         public void Supported_AllItemsHaveNonEmptyName()
         {
             foreach (var locale in Locale.Supported)
@@ -102,6 +94,7 @@ namespace Komorebi.Tests.Models
         #region Expected Locales
 
         [Theory]
+        [InlineData("ca_ES", "Català")]
         [InlineData("de_DE", "Deutsch")]
         [InlineData("en_US", "English")]
         [InlineData("es_ES", "Espa\u00f1ol")]
@@ -138,7 +131,7 @@ namespace Komorebi.Tests.Models
             {
                 "de_DE", "en_US", "es_ES", "fr_FR", "id_ID", "fil_PH",
                 "it_IT", "pt_BR", "uk_UA", "ru_RU", "zh_CN", "zh_TW",
-                "ja_JP", "ta_IN", "ko_KR", "la", "sa"
+                "ja_JP", "ta_IN", "ko_KR", "la", "sa", "ca_ES"
             };
 
             var actualKeys = new HashSet<string>();

@@ -10,7 +10,7 @@ public class PushToNewBranch : ObservableValidator
 {
     public string Remote { get; }
 
-    [Required(ErrorMessage = "Branch name is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.BranchNameRequired))]
     [CustomValidation(typeof(PushToNewBranch), nameof(ValidateBranchName))]
     public string BranchName
     {
@@ -27,7 +27,7 @@ public class PushToNewBranch : ObservableValidator
     {
         return Models.RefName.IsValidBranchName(name)
             ? ValidationResult.Success
-            : new ValidationResult("Bad branch name format!");
+            : new ValidationResult(App.Text("Validation.BranchNameInvalid"));
     }
 
     [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2026:RequiresUnreferencedCode")]

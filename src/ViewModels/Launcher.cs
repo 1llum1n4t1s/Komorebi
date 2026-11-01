@@ -2,7 +2,6 @@
 #nullable disable warnings
 using System;
 using System.IO;
-using System.Text;
 
 using Avalonia.Collections;
 using Avalonia.Threading;
@@ -17,13 +16,6 @@ namespace Komorebi.ViewModels;
 /// </summary>
 public class Launcher : ObservableObject
 {
-    /// <summary>ウィンドウタイトル。アクティブタブとワークスペース名から構築される。</summary>
-    public string Title
-    {
-        get => _title;
-        private set => SetProperty(ref _title, value);
-    }
-
     /// <summary>開いているタブページの一覧。</summary>
     public AvaloniaList<LauncherPage> Pages
     {
@@ -129,7 +121,11 @@ public class Launcher : ObservableObject
         if (ActivePage is not { Data: Welcome { }, Popup: null })
             AddNewTab();
 
-        ActivePage.Popup = new Init(ActivePage.Node.Id, startupRepo, null, 0, test.StdErr ?? "Unknown error occurred while opening the repository.");
+        if (Models.SafeDirectories.IsUntrustedRepository(test.StdErr) &&
+            Models.SafeDirectories.TryGetSafeDirectoryValue(startupRepo, test.StdErr, out var safeDirectory))
+            ActivePage.Popup = new TrustRepository(ActivePage.Node.Id, test.StdErr, safeDirectory, null, false, true, pref.FindNode(startupRepo)?.Bookmark ?? 0);
+        else
+            ActivePage.Popup = new Init(ActivePage.Node.Id, startupRepo, null, 0, test.StdErr ?? App.Text("Error.InvalidGitRepository"));
         return true;
     }
 
@@ -399,6 +395,8 @@ public class Launcher : ObservableObject
         var gitDir = isBare ? node.Id : GetRepositoryGitDir(node.Id);
         if (string.IsNullOrEmpty(gitDir))
         {
+            if (TryShowTrustRepositoryPopup(node.Id, ActivePage))
+                return;
             App.RaiseException(node.Id, App.Text("Error.InvalidGitRepository"));
             return;
         }
@@ -562,21 +560,23 @@ public class Launcher : ObservableObject
         if (_activePage is { Data: Repository repo })
             _activeWorkspace.ActiveIdx = _activeWorkspace.Repositories.IndexOf(repo.FullPath);
 
-        // ウィンドウタイトルを「ページ名 - ワークスペース名」形式で構築
-        var builder = new StringBuilder(512);
-        builder.Append(string.IsNullOrEmpty(_activePage.Node.Name) ? "Repositories" : _activePage.Node.Name);
-
-        var workspaces = Preferences.Instance.Workspaces;
-        if (workspaces.Count == 0 || workspaces.Count > 1 || workspaces[0] != _activeWorkspace)
-            builder.Append(" - ").Append(_activeWorkspace.Name);
-
-        Title = builder.ToString();
         CommandPalette = null;
     }
 
     private Workspace _activeWorkspace;       // 現在アクティブなワークスペース
     private LauncherPage _activePage;          // 現在アクティブなタブページ
     private bool _ignoreIndexChange;           // インデックス変更通知を抑制するフラグ
-    private string _title = string.Empty;      // ウィンドウタイトル
     private ICommandPalette _commandPalette;   // 現在表示中のコマンドパレット
+    private static bool TryShowTrustRepositoryPopup(string path, LauncherPage page)
+    {
+        if (page is null || !page.CanCreatePopup())
+            return false;
+        var test = new Commands.QueryRepositoryRootPath(path).GetResult();
+        if (test.IsSuccess || !Models.SafeDirectories.IsUntrustedRepository(test.StdErr) ||
+            !Models.SafeDirectories.TryGetSafeDirectoryValue(path, test.StdErr, out var safeDirectory))
+            return false;
+        page.Popup = new TrustRepository(page.Node.Id, test.StdErr, safeDirectory, null, false, true, Preferences.Instance.FindNode(path)?.Bookmark ?? 0);
+        return true;
+    }
+
 }

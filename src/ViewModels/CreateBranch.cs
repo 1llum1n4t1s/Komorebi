@@ -16,7 +16,7 @@ public class CreateBranch : Popup
     /// 作成するブランチの名前。
     /// 必須入力で、正規表現による書式チェックと既存ブランチとの重複チェックを行う。
     /// </summary>
-    [Required(ErrorMessage = "Branch name is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.BranchNameRequired))]
     [CustomValidation(typeof(CreateBranch), nameof(ValidateBranchName))]
     public string Name
     {
@@ -201,21 +201,21 @@ public class CreateBranch : Popup
         if (ctx.ObjectInstance is CreateBranch creator)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult("Bad branch name format!");
+                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
 
             if (!creator._allowOverwrite)
             {
                 foreach (var b in creator._repo.Branches)
                 {
                     if (b.FriendlyName.Equals(name, StringComparison.Ordinal))
-                        return new ValidationResult("A branch with same name already exists!");
+                        return new ValidationResult(App.Text("Validation.BranchExists"));
                 }
             }
 
             return ValidationResult.Success;
         }
 
-        return new ValidationResult("Missing runtime context to create branch!");
+        return new ValidationResult(App.Text("Validation.ContextInvalid"));
     }
 
     /// <summary>
@@ -318,7 +318,8 @@ public class CreateBranch : Popup
             if (folderEndIdx > 10)
                 _repo.UIStates.ExpandedBranchNodesInSideBar.Add(fake.FullName[..folderEndIdx]);
 
-            if (_repo.HistoryFilterMode == Models.FilterMode.Included)
+            if (_repo.HistoryFilterMode == Models.FilterMode.Included &&
+                !_repo.UIStates.IsCoveredByFolderFilter(fake.FullName, Models.FilterType.LocalBranchFolder))
                 _repo.SetBranchFilterMode(fake, Models.FilterMode.Included, false, false);
         }
 

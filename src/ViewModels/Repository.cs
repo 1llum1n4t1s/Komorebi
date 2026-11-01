@@ -273,6 +273,7 @@ public class Repository : ObservableObject, Models.IRepository
             var oldHead = _currentBranch?.Head;
             if (SetProperty(ref _currentBranch, value) && value is not null)
             {
+                GetOwnerPage()?.ChangeDirtyState(Models.DirtyState.HasPendingPullOrPush, !value.IsTrackStatusVisible);
                 if (oldHead != _currentBranch.Head && _workingCopy is { UseAmend: true })
                     _workingCopy.UseAmend = false;
             }
@@ -654,7 +655,7 @@ public class Repository : ObservableObject, Models.IRepository
         // _isClosed チェックで早期 return できるようにする。null クリアより前に立てるのが重要。
         // /rere レビュー P0#1: 「_uiStates = null + _watcher は null にしない」の非対称が
         // race condition を生んでいた問題への対策。
-        _isClosed = true;
+        StopRefreshes();
 
         // Close 時刻をログに残す。
         // 「タブ閉じた直後にクラッシュ」報告でクラッシュ時刻と Close 時刻の比較が
@@ -667,25 +668,6 @@ public class Repository : ObservableObject, Models.IRepository
         Logs.Clear();
 
         _uiStates.Unload(_workingCopy.CommitMessage);
-
-        // CTS を Dispose した後 null 化する。
-        // 旧コードは Dispose 後も非 null だったため、RenewCancellation 内の
-        // `cts.IsCancellationRequested` アクセスで ObjectDisposedException が出る経路があった。
-        _cancellationRefreshBranches?.Cancel();
-        _cancellationRefreshBranches?.Dispose();
-        _cancellationRefreshBranches = null;
-        _cancellationRefreshTags?.Cancel();
-        _cancellationRefreshTags?.Dispose();
-        _cancellationRefreshTags = null;
-        _cancellationRefreshWorkingCopyChanges?.Cancel();
-        _cancellationRefreshWorkingCopyChanges?.Dispose();
-        _cancellationRefreshWorkingCopyChanges = null;
-        _cancellationRefreshCommits?.Cancel();
-        _cancellationRefreshCommits?.Dispose();
-        _cancellationRefreshCommits = null;
-        _cancellationRefreshStashes?.Cancel();
-        _cancellationRefreshStashes?.Dispose();
-        _cancellationRefreshStashes = null;
 
         _filterDebounceTimer?.Dispose();
         _filterDebounceTimer = null;
@@ -804,7 +786,7 @@ public class Repository : ObservableObject, Models.IRepository
         var log = CreateLog("Install LFS");
         var succ = await new Commands.LFS(FullPath).Use(log).InstallAsync();
         if (succ)
-            App.SendNotification(FullPath, "LFS enabled successfully!");
+            App.SendNotification(FullPath, App.Text("GitLFS.Enabled"));
 
         log.Complete();
     }
@@ -818,7 +800,7 @@ public class Repository : ObservableObject, Models.IRepository
             .TrackAsync(pattern, isFilenameMode);
 
         if (succ)
-            App.SendNotification(FullPath, $"Tracking successfully! Pattern: {pattern}");
+            App.SendNotification(FullPath, App.Text("GitLFS.PatternTracked", pattern));
 
         log.Complete();
         return succ;
@@ -833,7 +815,7 @@ public class Repository : ObservableObject, Models.IRepository
             .LockAsync(remote, path);
 
         if (succ)
-            App.SendNotification(FullPath, $"Lock file successfully! File: {path}");
+            App.SendNotification(FullPath, App.Text("GitLFS.FileLocked", path));
 
         log.Complete();
         return succ;
@@ -848,7 +830,7 @@ public class Repository : ObservableObject, Models.IRepository
             .UnlockAsync(remote, path, force);
 
         if (succ && notify)
-            App.SendNotification(FullPath, $"Unlock file successfully! File: {path}");
+            App.SendNotification(FullPath, App.Text("GitLFS.FileUnlocked", path));
 
         log.Complete();
         return succ;
@@ -1379,20 +1361,61 @@ public class Repository : ObservableObject, Models.IRepository
         _submoduleCacheExpiryTick = 0;
     }
 
-    /// <summary>
-    /// CancellationTokenSourceを安全にキャンセル・破棄して新しいインスタンスに差し替え、そのトークンを返す。
-    /// Refresh*メソッド群で繰り返される前処理パターンを共通化する。
-    /// Close 後に呼ばれた場合は、Disposed CTS への IsCancellationRequested アクセスを
-    /// 避けるため、呼び出し側が _isClosed をチェックしてから呼ぶ責任を持つ (この static メソッドは
-    /// Repository 状態を知らないため、呼び出し側でガードする方が責任分担として明確)。
-    /// </summary>
-    private static CancellationToken RenewCancellation(ref CancellationTokenSource cts)
+    // Komorebi: Watcher と Close の CTS 所有権の移動だけを排他する。
+    // Cancel の同期コールバックが UI 待ちや再入を伴っても、ロックを保持しない。
+    internal bool TryRenewCancellation(ref CancellationTokenSource source, out CancellationToken token)
     {
-        if (cts is { IsCancellationRequested: false })
-            cts.Cancel();
-        cts?.Dispose();
-        cts = new CancellationTokenSource();
-        return cts.Token;
+        CancellationTokenSource previous;
+        lock (_refreshLock)
+        {
+            if (_isClosed)
+            {
+                token = new CancellationToken(true);
+                return false;
+            }
+
+            previous = source;
+            var current = new CancellationTokenSource();
+            source = current;
+            token = current.Token;
+        }
+
+        CancelAndDispose(previous);
+        return !_isClosed && !token.IsCancellationRequested;
+    }
+
+    internal void StopRefreshes()
+    {
+        CancellationTokenSource[] sources;
+        lock (_refreshLock)
+        {
+            _isClosed = true;
+            sources = [_cancellationRefreshBranches, _cancellationRefreshTags,
+                _cancellationRefreshWorkingCopyChanges, _cancellationRefreshCommits, _cancellationRefreshStashes];
+            _cancellationRefreshBranches = null;
+            _cancellationRefreshTags = null;
+            _cancellationRefreshWorkingCopyChanges = null;
+            _cancellationRefreshCommits = null;
+            _cancellationRefreshStashes = null;
+        }
+
+        foreach (var source in sources)
+            CancelAndDispose(source);
+    }
+
+    private static void CancelAndDispose(CancellationTokenSource source)
+    {
+        if (source is null)
+            return;
+
+        try
+        {
+            source.Cancel();
+        }
+        finally
+        {
+            source.Dispose();
+        }
     }
 
     /// <summary>
@@ -1401,16 +1424,16 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshBranches()
     {
-        // Close 後の Watcher.Tick から呼ばれた場合、Disposed CTS への
-        // アクセスを避けるため早期 return。
-        if (_isClosed)
+        if (!TryRenewCancellation(ref _cancellationRefreshBranches, out var token))
             return;
-        var token = RenewCancellation(ref _cancellationRefreshBranches);
 
         Task.Run(async () =>
         {
-            var branchesTask = new Commands.QueryBranches(FullPath).GetResultAsync();
-            var remotesTask = new Commands.QueryRemotes(FullPath).GetResultAsync();
+            if (_isClosed || token.IsCancellationRequested)
+                return;
+
+            var branchesTask = new Commands.QueryBranches(FullPath) { CancellationToken = token }.GetResultAsync();
+            var remotesTask = new Commands.QueryRemotes(FullPath) { CancellationToken = token }.GetResultAsync();
             await Task.WhenAll(branchesTask, remotesTask).ConfigureAwait(false);
 
             var branches = branchesTask.Result;
@@ -1419,7 +1442,7 @@ public class Repository : ObservableObject, Models.IRepository
 
             Dispatcher.UIThread.Invoke(() =>
             {
-                if (token.IsCancellationRequested)
+                if (_isClosed || token.IsCancellationRequested)
                     return;
 
                 Remotes = remotes;
@@ -1464,17 +1487,18 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshTags()
     {
-        // Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed)
+        if (!TryRenewCancellation(ref _cancellationRefreshTags, out var token))
             return;
-        var token = RenewCancellation(ref _cancellationRefreshTags);
 
         Task.Run(async () =>
         {
-            var tags = await new Commands.QueryTags(FullPath).GetResultAsync().ConfigureAwait(false);
+            if (_isClosed || token.IsCancellationRequested)
+                return;
+
+            var tags = await new Commands.QueryTags(FullPath) { CancellationToken = token }.GetResultAsync().ConfigureAwait(false);
             Dispatcher.UIThread.Invoke(() =>
             {
-                if (token.IsCancellationRequested)
+                if (_isClosed || token.IsCancellationRequested)
                     return;
 
                 Tags = tags;
@@ -1490,11 +1514,9 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshCommits()
     {
-        // Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed)
+        if (!TryRenewCancellation(ref _cancellationRefreshCommits, out var token))
             return;
         var highlighting = GraphHighlighting;
-        var token = RenewCancellation(ref _cancellationRefreshCommits);
 
         Task.Run(async () =>
         {
@@ -1520,7 +1542,7 @@ public class Repository : ObservableObject, Models.IRepository
                     .Append(_uiStates.BuildHistoryParams(GitDir));
 
                 Models.Logger.Log($"RefreshCommits開始: {FullPath}", Models.LogLevel.Debug);
-                var commits = await new Commands.QueryCommits(FullPath, builder.ToString()).GetResultAsync().ConfigureAwait(false);
+                var commits = await new Commands.QueryCommits(FullPath, builder.ToString()) { CancellationToken = token }.GetResultAsync().ConfigureAwait(false);
                 Models.Logger.Log($"RefreshCommits: {commits.Count}件取得、グラフ解析開始", Models.LogLevel.Debug);
 
                 if (_isClosed || token.IsCancellationRequested)
@@ -1533,7 +1555,7 @@ public class Repository : ObservableObject, Models.IRepository
 
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    if (token.IsCancellationRequested)
+                    if (_isClosed || token.IsCancellationRequested)
                         return;
 
                     if (_histories is not null)
@@ -1652,10 +1674,8 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
-        // Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed)
+        if (!TryRenewCancellation(ref _cancellationRefreshWorkingCopyChanges, out var token))
             return;
-        var token = RenewCancellation(ref _cancellationRefreshWorkingCopyChanges);
         // 2回目以降の QueryLocalChanges は noOptionalLocks=true で optional locks を取得しない。
         // これは意図的で、FSW 連打時の index.lock 競合を避けるための最適化（初回のみ index 更新を許可）。
         var noOptionalLocks = Interlocked.Add(ref _queryLocalChangesTimes, 1) > 1;
@@ -1684,7 +1704,7 @@ public class Repository : ObservableObject, Models.IRepository
 
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    if (token.IsCancellationRequested)
+                    if (_isClosed || token.IsCancellationRequested)
                         return;
 
                     LocalChangesCount = changes.Count;
@@ -1708,19 +1728,20 @@ public class Repository : ObservableObject, Models.IRepository
         if (IsBare)
             return;
 
-        // Close 済みなら Disposed CTS 回避のため早期 return
-        if (_isClosed)
+        if (!TryRenewCancellation(ref _cancellationRefreshStashes, out var token))
             return;
-        var token = RenewCancellation(ref _cancellationRefreshStashes);
 
         Task.Run(async () =>
         {
             try
             {
-                var stashes = await new Commands.QueryStashes(FullPath).GetResultAsync().ConfigureAwait(false);
+                if (_isClosed || token.IsCancellationRequested)
+                    return;
+
+                var stashes = await new Commands.QueryStashes(FullPath) { CancellationToken = token }.GetResultAsync().ConfigureAwait(false);
                 Dispatcher.UIThread.Invoke(() =>
                 {
-                    if (token.IsCancellationRequested)
+                    if (_isClosed || token.IsCancellationRequested)
                         return;
 
                     if (_stashesPage is not null)
@@ -2403,6 +2424,7 @@ public class Repository : ObservableObject, Models.IRepository
     private bool _isBisectCommandRunning = false;                                      // Bisectコマンド実行中フラグ
 
     private System.Threading.Timer _filterDebounceTimer = null;                          // フィルタデバウンスタイマー
+    private readonly object _refreshLock = new();
     private CancellationTokenSource _cancellationRefreshBranches = null;               // ブランチ更新キャンセルトークン
     private CancellationTokenSource _cancellationRefreshTags = null;                   // タグ更新キャンセルトークン
     private CancellationTokenSource _cancellationRefreshWorkingCopyChanges = null;     // ワーキングコピー更新キャンセルトークン

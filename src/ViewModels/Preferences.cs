@@ -667,6 +667,26 @@ public class Preferences : ObservableObject
         return FindNodeRecursive(id, RepositoryNodes);
     }
 
+    /// <summary>クローン先の相対階層に対応するグループを取得または作成する。</summary>
+    public RepositoryNode FindOrCreateGroupRecursive(string path)
+    {
+        var collection = RepositoryNodes;
+        RepositoryNode parent = null;
+        foreach (var name in path.Split('/', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var node = collection.Find(x => !x.IsRepository && x.Name.Equals(name, StringComparison.Ordinal));
+            if (node is null)
+            {
+                node = new RepositoryNode { Id = Guid.NewGuid().ToString(), Name = name, IsRepository = false, IsExpanded = true };
+                collection.Add(node);
+                SortNodes(collection);
+            }
+            parent = node;
+            collection = node.SubNodes;
+        }
+        return parent;
+    }
+
     /// <summary>
     /// リポジトリパスに対応するノードを検索し、存在しなければ新規作成して追加する。
     /// shouldMoveNodeがtrueで既存ノードがある場合は指定グループに移動する。

@@ -135,7 +135,7 @@ public partial class WorkingCopy : UserControl
             }
             else if (e.Key is Key.Delete or Key.Back && vm.SelectedUnstaged is { Count: > 0 })
             {
-                vm.Discard(vm.SelectedUnstaged);
+                vm.Discard(vm.SelectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
                 e.Handled = true;
             }
             else if (e.Key is Key.O && e.KeyModifiers == cmdKey && vm.SelectedUnstaged is { Count: 1 })
@@ -256,9 +256,9 @@ public partial class WorkingCopy : UserControl
     /// <summary>
     /// StageAllButtonClickedイベントのハンドラ。
     /// </summary>
-    private async void OnStageAllButtonClicked(object _, RoutedEventArgs e)
+    private async void OnStageAllButtonClicked(object sender, RoutedEventArgs e)
     {
-        if (DataContext is ViewModels.WorkingCopy vm)
+        if (DataContext is ViewModels.WorkingCopy vm && sender is Button { IsEffectivelyVisible: true })
             await vm.StageChangesAsync(vm.VisibleUnstaged, null);
 
         e.Handled = true;
@@ -282,9 +282,9 @@ public partial class WorkingCopy : UserControl
     /// <summary>
     /// UnstageAllButtonClickedイベントのハンドラ。
     /// </summary>
-    private async void OnUnstageAllButtonClicked(object _, RoutedEventArgs e)
+    private async void OnUnstageAllButtonClicked(object sender, RoutedEventArgs e)
     {
-        if (DataContext is ViewModels.WorkingCopy vm)
+        if (DataContext is ViewModels.WorkingCopy vm && sender is Button { IsEffectivelyVisible: true })
             await vm.UnstageChangesAsync(vm.VisibleStaged, null);
 
         e.Handled = true;
@@ -491,7 +491,7 @@ public partial class WorkingCopy : UserControl
                 discard.Tag = "Back/Delete";
                 discard.Click += (_, e) =>
                 {
-                    vm.Discard(selectedUnstaged);
+                    vm.Discard(selectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
                     e.Handled = true;
                 };
 
@@ -929,7 +929,7 @@ public partial class WorkingCopy : UserControl
             discard.Tag = "Back/Delete";
             discard.Click += (_, e) =>
             {
-                vm.Discard(selectedUnstaged);
+                vm.Discard(selectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
                 e.Handled = true;
             };
 

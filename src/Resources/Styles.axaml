@@ -4,7 +4,6 @@
         xmlns:vm="using:Komorebi.ViewModels"
         xmlns:v="using:Komorebi.Views"
         xmlns:c="using:Komorebi.Converters"
-        xmlns:ae="using:AvaloniaEdit"
         xmlns:aec="using:AvaloniaEdit.CodeCompletion"
         xmlns:aee="using:AvaloniaEdit.Editing"
         xmlns:aes="using:AvaloniaEdit.Search">
@@ -940,7 +939,7 @@
                     <StackPanel Orientation="Horizontal">
                       <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                       <Border Margin="4,0,0,0" Height="16" Background="Green" CornerRadius="8" VerticalAlignment="Center" IsVisible="{Binding IsGlobal}">
-                        <TextBlock Text="GLOBAL" Margin="8,0" FontSize="10" Foreground="White"/>
+                        <TextBlock Text="{DynamicResource Text.Hotkeys.Global}" Margin="8,0" FontSize="10" Foreground="White"/>
                       </Border>
                     </StackPanel>
                   </DataTemplate>
@@ -1543,6 +1542,10 @@
   </Style>
 
   <Style Selector="aes|SearchPanel">
+    <Setter Property="NoMatchesText" Value="{DynamicResource Text.TextSearch.NoMatches}"/>
+    <Setter Property="OneMatchText" Value="{DynamicResource Text.TextSearch.OneMatch}"/>
+    <Setter Property="MatchesText" Value="{DynamicResource Text.TextSearch.Matches}"/>
+    <Setter Property="MatchOfTotalText" Value="{DynamicResource Text.TextSearch.MatchOfTotal}"/>
     <Setter Property="Template">
       <ControlTemplate TargetType="aes:SearchPanel">
         <Border Name="PART_Border"
@@ -1555,7 +1558,7 @@
                 Padding="10">
           <Grid RowDefinitions="Auto,Auto">
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-              <TextBox PlaceholderText="{x:Static ae:SR.SearchLabel}"
+              <TextBox PlaceholderText="{DynamicResource Text.TextSearch.Placeholder}"
                        Name="PART_searchTextBox"
                        Width="265" Height="28"
                        Margin="0,0,0,0"
@@ -1564,21 +1567,21 @@
                 <TextBox.InnerRightContent>
                   <StackPanel Orientation="Horizontal">
                     <ToggleButton IsChecked="{Binding $parent[aes:SearchPanel].MatchCase, Mode=TwoWay}"
-                                  ToolTip.Tip="Match case"
+                                  ToolTip.Tip="{DynamicResource Text.TextSearch.MatchCase}"
                                   Padding="0"
                                   Width="24" Height="20"
                                   VerticalAlignment="Center">
                       <Path Width="12" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Data="{StaticResource Icons.CaseSensitive}" Fill="{DynamicResource Brush.FG1}"/>
                     </ToggleButton>
                     <ToggleButton IsChecked="{Binding $parent[aes:SearchPanel].WholeWords, Mode=TwoWay}"
-                                  ToolTip.Tip="Match whole words"
+                                  ToolTip.Tip="{DynamicResource Text.TextSearch.WholeWord}"
                                   Margin="3,0,0,0" Padding="0"
                                   Width="24" Height="20"
                                   VerticalAlignment="Center">
                       <Path Width="14" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Data="{StaticResource Icons.CompleteWord}" Fill="{DynamicResource Brush.FG1}"/>
                     </ToggleButton>
                     <ToggleButton IsChecked="{Binding $parent[aes:SearchPanel].UseRegex, Mode=TwoWay}"
-                                  ToolTip.Tip="Use regular expressions"
+                                  ToolTip.Tip="{DynamicResource Text.TextSearch.Regex}"
                                   Margin="3,0,5,0" Padding="0"
                                   Width="24" Height="20"
                                   VerticalAlignment="Center">
@@ -1592,7 +1595,7 @@
                       Background="Transparent"
                       VerticalAlignment="Stretch"
                       Command="{x:Static aes:SearchCommands.FindPrevious}"
-                      ToolTip.Tip="Find Previous (Shift+F3)">
+                      ToolTip.Tip="{DynamicResource Text.TextSearch.Previous}">
                 <Path Width="14" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Data="{StaticResource Icons.Up}" Fill="{DynamicResource Brush.FG1}"/>
               </Button>
               <Button Margin="3,0,0,0"
@@ -1600,7 +1603,7 @@
                       Width="28"
                       Background="Transparent"
                       Command="{x:Static aes:SearchCommands.FindNext}"
-                      ToolTip.Tip="Find Next (F3)">
+                      ToolTip.Tip="{DynamicResource Text.TextSearch.Next}">
                 <Path Width="14" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Data="{StaticResource Icons.Down}" Fill="{DynamicResource Brush.FG1}"/>
               </Button>
             </StackPanel>

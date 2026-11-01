@@ -15,8 +15,8 @@ public class AddRemote : Popup
     /// <summary>
     /// リモート名。バリデーション付きで、英数字・ハイフン・ドット・アンダースコアのみ許可。
     /// </summary>
-    [Required(ErrorMessage = "Remote name is required!!!")]
-    [RegularExpression(@"^[\w\-\.]+$", ErrorMessage = "Bad remote name format!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RemoteNameRequired))]
+    [RegularExpression(@"^[\w\-\.]+$", ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RemoteNameInvalid))]
     [CustomValidation(typeof(AddRemote), nameof(ValidateRemoteName))]
     public string Name
     {
@@ -27,7 +27,7 @@ public class AddRemote : Popup
     /// <summary>
     /// リモートリポジトリのURL。設定時にSSH接続かどうかを自動判定する。
     /// </summary>
-    [Required(ErrorMessage = "Remote URL is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RemoteUrlRequired))]
     [CustomValidation(typeof(AddRemote), nameof(ValidateRemoteURL))]
     public string Url
     {
@@ -89,7 +89,7 @@ public class AddRemote : Popup
             // 同じ名前のリモートが既に存在するか確認する
             var exists = add._repo.FindRemoteByName(name);
             if (exists is not null)
-                return new ValidationResult("A remote with given name already exists!!!");
+                return new ValidationResult(App.Text("Validation.RemoteNameExists"));
         }
 
         return ValidationResult.Success;
@@ -107,12 +107,12 @@ public class AddRemote : Popup
         {
             // URL形式の妥当性を検証する
             if (!Models.Remote.IsValidURL(url))
-                return new ValidationResult("Bad remote URL format!!!");
+                return new ValidationResult(App.Text("Validation.RemoteUrlInvalid"));
 
             // 同じURLのリモートが既に存在するか確認する
             var exists = add._repo.Remotes.Find(x => x.URL == url);
             if (exists is not null)
-                return new ValidationResult("A remote with the same url already exists!!!");
+                return new ValidationResult(App.Text("Validation.RemoteUrlExists"));
         }
 
         return ValidationResult.Success;
@@ -129,7 +129,7 @@ public class AddRemote : Popup
         if (ctx.ObjectInstance is AddRemote { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
         {
             if (!File.Exists(sshkey))
-                return new ValidationResult("Given SSH private key can NOT be found!");
+                return new ValidationResult(App.Text("Validation.SSHKeyNotFound"));
 
             if (sshkey.EndsWith(".pub", System.StringComparison.OrdinalIgnoreCase))
                 return new ValidationResult(App.Text("SSHKey.PublicKeySelected"));

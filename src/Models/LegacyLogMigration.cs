@@ -55,7 +55,10 @@ internal static class LegacyLogMigration
 
     internal static bool IsSafeDirectory(string directory)
     {
-        try { return Directory.Exists(directory) && !HasLink(directory); }
+        try
+        {
+            return Directory.Exists(directory) && !HasLink(directory);
+        }
         catch (IOException) { return false; }
         catch (UnauthorizedAccessException) { return false; }
     }

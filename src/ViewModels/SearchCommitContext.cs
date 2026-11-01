@@ -26,7 +26,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
             if (SetProperty(ref _method, value))
             {
                 UpdateSuggestions();
-                if (_repo.IsSearchingCommits)
+                if (_repo?.IsSearchingCommits == true)
                     StartSearch();
             }
         }
@@ -115,7 +115,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
         set
         {
             if (SetProperty(ref _selected, value) && value is not null)
-                _repo.NavigateToCommit(value.SHA);
+                _repo?.NavigateToCommit(value.SHA);
         }
     }
 
@@ -123,8 +123,22 @@ public class SearchCommitContext : ObservableObject, IDisposable
     /// コンストラクタ。対象リポジトリを設定する。
     /// </summary>
     public SearchCommitContext(Repository repo)
+        : this(repo, QueryCommitsAsync, action => Dispatcher.UIThread.Post(action),
+            path => new Commands.QueryUsers(path).GetResultAsync(),
+            path => new Commands.QueryRevisionFileNames(path, "HEAD").GetResultAsync())
+    {
+    }
+
+    internal SearchCommitContext(Repository repo,
+        Func<string, string, Models.CommitSearchMethod, bool, Task<List<Models.Commit>>> query,
+        Action<Action> post, Func<string, Task<List<Models.User>>> queryUsers,
+        Func<string, Task<List<string>>> queryFiles)
     {
         _repo = repo;
+        _query = query;
+        _post = post;
+        _queryUsers = queryUsers;
+        _queryFiles = queryFiles;
     }
 
     /// <summary>
@@ -132,12 +146,15 @@ public class SearchCommitContext : ObservableObject, IDisposable
     /// </summary>
     public void Dispose()
     {
+        InvalidateRequests();
         _repo = null;
         _suggestions?.Clear();
         _results?.Clear();
         _resultsBySha.Clear();
         _worktreeFiles?.Clear();
         _users = null;
+        _pendingUsers = null;
+        _pendingFiles = null;
     }
 
     /// <summary>
@@ -145,6 +162,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     /// </summary>
     public void ClearFilter()
     {
+        InvalidateRequests();
         Filter = string.Empty;
         Selected = null;
         Results = null;
@@ -155,6 +173,7 @@ public class SearchCommitContext : ObservableObject, IDisposable
     /// </summary>
     public void ClearSuggestions()
     {
+        ++_suggestionGeneration;
         Suggestions = null;
     }
 
@@ -163,80 +182,119 @@ public class SearchCommitContext : ObservableObject, IDisposable
     /// </summary>
     public void StartSearch()
     {
+        _ = StartSearchAsync();
+    }
+
+    // Komorebi: UI スレッドで入力と所有者を固定し、遅延結果は同じ要求だけへ反映する。
+    internal Task StartSearchAsync()
+    {
+        var repo = _repo;
+        if (repo is null || repo.IsClosed)
+            return Task.CompletedTask;
+
+        var generation = ++_searchGeneration;
+        ++_suggestionGeneration;
+        var filter = _filter;
+        var method = (Models.CommitSearchMethod)_method;
+        var onlyCurrentBranch = _onlySearchCurrentBranch;
+        var repoPath = repo.FullPath;
         Results = null;
         Selected = null;
         Suggestions = null;
+        IsQuerying = !string.IsNullOrEmpty(filter);
+        if (!IsQuerying)
+            return Task.CompletedTask;
 
-        if (string.IsNullOrEmpty(_filter))
-            return;
-
-        IsQuerying = true;
-
-        Task.Run(async () =>
+        return Task.Run(async () =>
         {
-            List<Models.Commit> result = [];
-            var method = (Models.CommitSearchMethod)_method;
-            var repoPath = _repo.FullPath;
-
-            if (method == Models.CommitSearchMethod.BySHA)
+            List<Models.Commit> result = null;
+            try
             {
-                var isCommitSHA = await new Commands.IsCommitSHA(repoPath, _filter)
-                    .GetResultAsync()
-                    .ConfigureAwait(false);
-
-                if (isCommitSHA)
+                result = await _query(repoPath, filter, method, onlyCurrentBranch).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Models.Logger.LogException($"SearchCommits失敗: {repoPath}", ex);
+            }
+            finally
+            {
+                _post(() =>
                 {
-                    // コミット情報取得と祖先チェックを並列実行する
-                    var commitTask = new Commands.QuerySingleCommit(repoPath, _filter).GetResultAsync();
-                    var ancestorTask = new Commands.IsAncestor(repoPath, _filter, "HEAD").GetResultAsync();
-                    await Task.WhenAll(commitTask, ancestorTask).ConfigureAwait(false);
+                    if (_repo != repo || repo.IsClosed || generation != _searchGeneration)
+                        return;
 
-                    var commit = commitTask.Result;
-                    if (commit is not null)
+                    IsQuerying = false;
+                    if (repo.IsSearchingCommits && result is not null)
                     {
-                        commit.IsMerged = ancestorTask.Result;
-                        result.Add(commit);
+                        Results = result;
+                        if (method == Models.CommitSearchMethod.BySHA && result.Count == 1)
+                            Selected = result[0];
                     }
+                });
+            }
+        });
+    }
+
+    private static async Task<List<Models.Commit>> QueryCommitsAsync(string repoPath, string filter,
+        Models.CommitSearchMethod method, bool onlyCurrentBranch)
+    {
+        List<Models.Commit> result = [];
+
+        if (method == Models.CommitSearchMethod.BySHA)
+        {
+            var isCommitSHA = await new Commands.IsCommitSHA(repoPath, filter)
+                .GetResultAsync()
+                .ConfigureAwait(false);
+
+            if (isCommitSHA)
+            {
+                // コミット情報取得と祖先チェックを並列実行する
+                var commitTask = new Commands.QuerySingleCommit(repoPath, filter).GetResultAsync();
+                var ancestorTask = new Commands.IsAncestor(repoPath, filter, "HEAD").GetResultAsync();
+                await Task.WhenAll(commitTask, ancestorTask).ConfigureAwait(false);
+
+                var commit = commitTask.Result;
+                if (commit is not null)
+                {
+                    commit.IsMerged = ancestorTask.Result;
+                    result.Add(commit);
                 }
             }
-            else if (_onlySearchCurrentBranch)
+        }
+        else if (onlyCurrentBranch)
+        {
+            result = await new Commands.QueryCommits(repoPath, filter, method, true)
+                .GetResultAsync()
+                .ConfigureAwait(false);
+
+            foreach (var c in result)
+                c.IsMerged = true;
+        }
+        else
+        {
+            result = await new Commands.QueryCommits(repoPath, filter, method, false)
+                .GetResultAsync()
+                .ConfigureAwait(false);
+
+            if (result.Count > 0)
             {
-                result = await new Commands.QueryCommits(repoPath, _filter, method, true)
+                var set = await new Commands.QueryCurrentBranchCommitHashes(repoPath, result[^1].CommitterTime)
                     .GetResultAsync()
                     .ConfigureAwait(false);
 
                 foreach (var c in result)
-                    c.IsMerged = true;
+                    c.IsMerged = set.Contains(c.SHA);
             }
-            else
-            {
-                result = await new Commands.QueryCommits(repoPath, _filter, method, false)
-                    .GetResultAsync()
-                    .ConfigureAwait(false);
+        }
 
-                if (result.Count > 0)
-                {
-                    var set = await new Commands.QueryCurrentBranchCommitHashes(repoPath, result[^1].CommitterTime)
-                        .GetResultAsync()
-                        .ConfigureAwait(false);
+        return result;
+    }
 
-                    foreach (var c in result)
-                        c.IsMerged = set.Contains(c.SHA);
-                }
-            }
-
-            Dispatcher.UIThread.Post(() =>
-            {
-                IsQuerying = false;
-
-                if (_repo.IsSearchingCommits)
-                {
-                    Results = result;
-                    if (method == Models.CommitSearchMethod.BySHA && result.Count == 1)
-                        Selected = result[0];
-                }
-            });
-        });
+    private void InvalidateRequests()
+    {
+        ++_searchGeneration;
+        ++_suggestionGeneration;
+        IsQuerying = false;
     }
 
     /// <summary>
@@ -244,7 +302,9 @@ public class SearchCommitContext : ObservableObject, IDisposable
     /// </summary>
     public void EndSearch()
     {
+        InvalidateRequests();
         _worktreeFiles = null;
+        _pendingFiles = null;
         Suggestions = null;
         Results = null;
     }
@@ -256,26 +316,26 @@ public class SearchCommitContext : ObservableObject, IDisposable
     /// </summary>
     private void UpdateSuggestions()
     {
+        var repo = _repo;
+        if (repo is null || repo.IsClosed)
+            return;
+
+        var generation = ++_suggestionGeneration;
+        var repoPath = repo.FullPath;
+        Suggestions = null;
         if (_method == (int)Models.CommitSearchMethod.ByAuthor)
         {
             if (_users is null)
             {
-                if (_requestingUsers)
-                    return;
-
-                _requestingUsers = true;
-
+                var pending = _pendingUsers ??= Task.Run(() => _queryUsers(repoPath));
                 Task.Run(async () =>
                 {
-                    var users = await new Commands.QueryUsers(_repo.FullPath)
-                        .GetResultAsync()
+                    var users = await pending
                         .ConfigureAwait(false);
 
-                    Dispatcher.UIThread.Post(() =>
+                    _post(() =>
                     {
-                        _requestingUsers = false;
-
-                        if (_repo.IsSearchingCommits)
+                        if (_repo == repo && !repo.IsClosed && repo.IsSearchingCommits && generation == _suggestionGeneration)
                         {
                             _users = users;
                             UpdateSuggestions();
@@ -306,22 +366,15 @@ public class SearchCommitContext : ObservableObject, IDisposable
         {
             if (_worktreeFiles is null)
             {
-                if (_requestingWorktreeFiles)
-                    return;
-
-                _requestingWorktreeFiles = true;
-
+                var pending = _pendingFiles ??= Task.Run(() => _queryFiles(repoPath));
                 Task.Run(async () =>
                 {
-                    var files = await new Commands.QueryRevisionFileNames(_repo.FullPath, "HEAD")
-                        .GetResultAsync()
+                    var files = await pending
                         .ConfigureAwait(false);
 
-                    Dispatcher.UIThread.Post(() =>
+                    _post(() =>
                     {
-                        _requestingWorktreeFiles = false;
-
-                        if (_repo.IsSearchingCommits)
+                        if (_repo == repo && !repo.IsClosed && repo.IsSearchingCommits && generation == _suggestionGeneration)
                         {
                             _worktreeFiles = files;
                             UpdateSuggestions();
@@ -357,6 +410,14 @@ public class SearchCommitContext : ObservableObject, IDisposable
         }
     }
 
+    private readonly Func<string, string, Models.CommitSearchMethod, bool, Task<List<Models.Commit>>> _query;
+    private readonly Action<Action> _post;
+    private readonly Func<string, Task<List<Models.User>>> _queryUsers;
+    private readonly Func<string, Task<List<string>>> _queryFiles;
+    private Task<List<Models.User>> _pendingUsers;
+    private Task<List<string>> _pendingFiles;
+    private long _searchGeneration;
+    private long _suggestionGeneration;
     private Repository _repo = null;
     private int _method = (int)Models.CommitSearchMethod.ByMessage;
     private string _filter = string.Empty;
@@ -366,8 +427,6 @@ public class SearchCommitContext : ObservableObject, IDisposable
     private List<Models.Commit> _results = null;
     private readonly Dictionary<string, Models.Commit> _resultsBySha = new(StringComparer.Ordinal);
     private Models.Commit _selected = null;
-    private bool _requestingWorktreeFiles = false;
     private List<string> _worktreeFiles = null;
-    private bool _requestingUsers = false;
     private List<Models.User> _users = null;
 }

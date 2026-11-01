@@ -1,5 +1,6 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
+using System;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -45,7 +46,7 @@ public partial class RevisionFiles : UserControl
         {
             if (vm.RevisionFileSearchSuggestion?.Count > 0)
             {
-                SearchSuggestionBox.Focus(NavigationMethod.Tab);
+                SearchSuggestionBox.Focus(NavigationMethod.Directional);
                 SearchSuggestionBox.SelectedIndex = 0;
             }
 
@@ -67,9 +68,16 @@ public partial class RevisionFiles : UserControl
             await FileTree.SetSearchResultAsync(null);
     }
 
-    /// <summary>
-    /// SearchSuggestionBoxKeyDownイベントのハンドラ。
-    /// </summary>
+    /// <summary>非表示になった検索欄の候補を閉じる。</summary>
+    private void OnSearchBoxLayoutUpdated(object sender, EventArgs e)
+    {
+        if (DataContext is not ViewModels.CommitDetail vm)
+            return;
+
+        if (sender is TextBox { IsEffectivelyVisible: false })
+            vm.CancelRevisionFileSuggestions();
+    }
+
     private async void OnSearchSuggestionBoxKeyDown(object _, KeyEventArgs e)
     {
         if (DataContext is not ViewModels.CommitDetail vm)

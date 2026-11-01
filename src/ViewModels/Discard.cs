@@ -1,5 +1,6 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -95,10 +96,11 @@ public class Discard : Popup
     /// <summary>
     /// コンストラクタ。変更リストに応じて適切な破棄モードを選択する。
     /// </summary>
-    public Discard(Repository repo, List<Models.Change> changes)
+    public Discard(Repository repo, List<Models.Change> changes, Action onDiscarded = null)
     {
         _repo = repo;
         _changes = changes;
+        _onDiscarded = onDiscarded;
 
         if (_changes is null)
             Mode = new DiscardAllMode();
@@ -144,10 +146,12 @@ public class Discard : Popup
         }
 
         log.Complete();
+        _onDiscarded?.Invoke();
         _repo.MarkWorkingCopyDirtyManually();
         return true;
     }
 
+    private readonly Action _onDiscarded;
     private readonly Repository _repo = null; // 対象リポジトリ
     private readonly List<Models.Change> _changes = null; // 破棄対象の変更リスト（nullの場合は全変更）
 }

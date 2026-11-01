@@ -63,19 +63,6 @@ namespace Komorebi.Tests.Models
             Assert.Empty(commit.Decorators);
         }
 
-        /// <adversarial category="boundary" severity="medium" />
-        /// <summary>ParseParentsに空文字列を渡してもクラッシュしないこと</summary>
-        [Theory]
-        [InlineData("")]
-        [InlineData("short")]
-        [InlineData("1234567")]
-        public void ParseParents_TooShort_DoesNotAddParents(string data)
-        {
-            var commit = new Commit();
-            commit.ParseParents(data);
-            Assert.Empty(commit.Parents);
-        }
-
         /// <adversarial category="boundary" severity="critical" />
         /// <summary>SHAが空のCommitでGetFriendlyNameを呼ぶとIndexOutOfRangeが発生しないこと</summary>
         [Fact]

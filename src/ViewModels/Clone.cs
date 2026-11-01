@@ -20,7 +20,7 @@ public class Clone : Popup
     /// リモートリポジトリのURL。バリデーション付き。
     /// SSH URLが設定された場合はUseSSHフラグを自動的にtrueにする。
     /// </summary>
-    [Required(ErrorMessage = "Remote URL is required")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RemoteUrlRequired))]
     [CustomValidation(typeof(Clone), nameof(ValidateRemote))]
     public string Remote
     {
@@ -39,7 +39,14 @@ public class Clone : Popup
     public bool UseSSH
     {
         get => _useSSH;
-        set => SetProperty(ref _useSSH, value);
+        set
+        {
+            if (SetProperty(ref _useSSH, value))
+            {
+                // upstreamとの差分: 接続方式を変えたら非表示になる鍵のエラーも再検証する。
+                ValidateProperty(_sshKey, nameof(SSHKey));
+            }
+        }
     }
 
     /// <summary>
@@ -55,7 +62,7 @@ public class Clone : Popup
     /// <summary>
     /// クローン先の親フォルダパス。バリデーション付き。
     /// </summary>
-    [Required(ErrorMessage = "Parent folder is required")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.ParentFolderRequired))]
     [CustomValidation(typeof(Clone), nameof(ValidateParentFolder))]
     public string ParentFolder
     {
@@ -75,7 +82,7 @@ public class Clone : Popup
     /// <summary>
     /// クローン先に追加可能なグループ一覧（リポジトリツリー内の非リポジトリノードをフラット化したもの）。
     /// </summary>
-    public List<RepositoryNode> Groups
+    public List<TargetGroup> Groups
     {
         get;
     }
@@ -83,7 +90,7 @@ public class Clone : Popup
     /// <summary>
     /// クローン先として選択されているグループ。null の場合はルートに追加される。
     /// </summary>
-    public RepositoryNode SelectedGroup
+    public TargetGroup SelectedGroup
     {
         get => _selectedGroup;
         set => SetProperty(ref _selectedGroup, value);
@@ -136,9 +143,10 @@ public class Clone : Popup
 
         // グループ一覧を構築する（先頭に「No Group (Uncategorized)」を配置し、既定選択にする）
         Groups = [];
-        Groups.Add(new RepositoryNode { Name = "No Group (Uncategorized)", Id = string.Empty });
+        Groups.Add(new TargetGroup(null, App.Text("RepositoryGroup.Auto"), App.Text("RepositoryGroup.AutoDescription"), true));
+        Groups.Add(new TargetGroup(null, App.Text("RepositoryGroup.NoGroup"), string.Empty));
         SelectedGroup = Groups[0];
-        CollectGroups(Groups, Preferences.Instance.RepositoryNodes);
+        TargetGroup.Collect(Groups, Preferences.Instance.RepositoryNodes);
 
         // ブックマーク色のインデックス一覧を構築する
         Bookmarks = [];
@@ -150,6 +158,7 @@ public class Clone : Popup
         _parentFolder = activeWorkspace?.DefaultCloneDir;
         if (string.IsNullOrEmpty(ParentFolder))
             _parentFolder = Preferences.Instance.GitDefaultCloneDir;
+        _defaultCloneDir = _parentFolder;
 
         // クリップボードからURLを検出する
         // クリップボードアクセスはUIスレッドが必須のためDispatcher経由で実行する
@@ -178,7 +187,7 @@ public class Clone : Popup
     public static ValidationResult ValidateRemote(string remote, ValidationContext _)
     {
         if (!Models.Remote.IsValidURL(remote))
-            return new ValidationResult("Invalid remote repository URL format");
+            return new ValidationResult(App.Text("Validation.RemoteUrlInvalid"));
         return ValidationResult.Success;
     }
 
@@ -192,7 +201,7 @@ public class Clone : Popup
     public static ValidationResult ValidateParentFolder(string folder, ValidationContext _)
     {
         if (!Directory.Exists(folder))
-            return new ValidationResult("Given path can NOT be found");
+            return new ValidationResult(App.Text("Validation.PathNotFound"));
         return ValidationResult.Success;
     }
 
@@ -204,7 +213,7 @@ public class Clone : Popup
         if (ctx.ObjectInstance is Clone { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
         {
             if (!File.Exists(sshkey))
-                return new ValidationResult("Given SSH private key can NOT be found!");
+                return new ValidationResult(App.Text("Validation.SSHKeyNotFound"));
 
             if (sshkey.EndsWith(".pub", System.StringComparison.OrdinalIgnoreCase))
                 return new ValidationResult(App.Text("SSHKey.PublicKeySelected"));
@@ -295,7 +304,13 @@ public class Clone : Popup
         log.Complete();
 
         // 「No Group (Uncategorized)」（Id=string.Empty）は内部的に null を親として扱う
-        var parent = _selectedGroup is { Id: not "" } ? _selectedGroup : null;
+        var parent = _selectedGroup?.Node;
+        if (_selectedGroup is { IsAuto: true } && !string.IsNullOrEmpty(_defaultCloneDir))
+        {
+            var relative = Path.GetRelativePath(_defaultCloneDir, _parentFolder).Replace('\\', '/');
+            if (relative != "." && relative != ".." && !relative.StartsWith("../", StringComparison.Ordinal) && !Path.IsPathRooted(relative))
+                parent = Preferences.Instance.FindOrCreateGroupRecursive(relative);
+        }
 
         // リポジトリノードを設定に登録する（選択されたグループ配下に追加、ブックマーク色を適用）
         var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path, parent, true);
@@ -320,22 +335,6 @@ public class Clone : Popup
         return true;
     }
 
-    /// <summary>
-    /// リポジトリノードツリーを再帰的に探索し、グループノード（非リポジトリ）のみをフラットリストに収集する。
-    /// クローン時のグループ選択ドロップダウンに使用する。
-    /// </summary>
-    private static void CollectGroups(List<RepositoryNode> outs, List<RepositoryNode> collections)
-    {
-        foreach (var node in collections)
-        {
-            if (!node.IsRepository)
-            {
-                outs.Add(node);
-                CollectGroups(outs, node.SubNodes);
-            }
-        }
-    }
-
     /// <summary>クローン操作を行うページのID</summary>
     private string _pageId = string.Empty;
     /// <summary>リモートリポジトリのURL</summary>
@@ -351,7 +350,9 @@ public class Clone : Popup
     /// <summary>git cloneの追加引数</summary>
     private string _extraArgs = string.Empty;
     /// <summary>選択されたグループ（null=ルート配下）</summary>
-    private RepositoryNode _selectedGroup = null;
+    private TargetGroup _selectedGroup = null;
     /// <summary>選択されたブックマーク色のインデックス</summary>
     private int _bookmark = 0;
+    private string _defaultCloneDir = string.Empty;
+
 }

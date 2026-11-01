@@ -407,7 +407,11 @@ public static partial class OS
         if (string.IsNullOrEmpty(ShellOrTerminal))
             App.RaiseException(workdir, App.Text("Error.TerminalNotSpecified"));
         else
-            _backend.OpenTerminal(workdir, ShellOrTerminalArgs);
+        {
+            var cwd = string.IsNullOrEmpty(workdir) ? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) : workdir;
+            var args = ShellOrTerminalArgs?.Replace("$FOLDER_NAME", Path.GetFileName(Path.TrimEndingDirectorySeparator(cwd.Trim())));
+            _backend.OpenTerminal(cwd, args);
+        }
     }
 
     /// <summary>

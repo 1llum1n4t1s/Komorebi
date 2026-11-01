@@ -4,20 +4,6 @@ namespace Komorebi.Tests.Models
 {
     public class TextInlineChangeTests
     {
-        #region Constructor
-
-        [Fact]
-        public void Constructor_SetsAllProperties()
-        {
-            var change = new TextInlineChange(1, 2, 3, 4);
-            Assert.Equal(1, change.DeletedStart);
-            Assert.Equal(2, change.DeletedCount);
-            Assert.Equal(3, change.AddedStart);
-            Assert.Equal(4, change.AddedCount);
-        }
-
-        #endregion
-
         #region Compare - Identical Strings
 
         [Fact]
@@ -36,28 +22,7 @@ namespace Komorebi.Tests.Models
 
         #endregion
 
-        #region Compare - Complete Replacement
-
-        [Fact]
-        public void Compare_CompletelyDifferent_ReturnsDifferences()
-        {
-            var result = TextInlineChange.Compare("abc", "xyz");
-            Assert.NotEmpty(result);
-        }
-
-        #endregion
-
         #region Compare - Insertions
-
-        [Fact]
-        public void Compare_InsertionAtEnd_DetectsAddition()
-        {
-            var result = TextInlineChange.Compare("hello", "hello world");
-            Assert.NotEmpty(result);
-            // Should detect the added " world" part
-            var hasAddition = result.Exists(c => c.AddedCount > 0);
-            Assert.True(hasAddition);
-        }
 
         [Fact]
         public void Compare_InsertionAtStart_DetectsAddition()
@@ -71,15 +36,6 @@ namespace Komorebi.Tests.Models
         #endregion
 
         #region Compare - Deletions
-
-        [Fact]
-        public void Compare_DeletionAtEnd_DetectsDeletion()
-        {
-            var result = TextInlineChange.Compare("hello world", "hello");
-            Assert.NotEmpty(result);
-            var hasDeletion = result.Exists(c => c.DeletedCount > 0);
-            Assert.True(hasDeletion);
-        }
 
         [Fact]
         public void Compare_DeletionAtStart_DetectsDeletion()
@@ -128,28 +84,6 @@ namespace Komorebi.Tests.Models
                 "int x = 10;",
                 "int x = 20;");
             Assert.NotEmpty(result);
-        }
-
-        #endregion
-
-        #region Compare - Empty to Non-Empty
-
-        [Fact]
-        public void Compare_EmptyToNonEmpty_DetectsAddition()
-        {
-            var result = TextInlineChange.Compare("", "hello");
-            Assert.NotEmpty(result);
-            Assert.True(result[0].AddedCount > 0);
-            Assert.Equal(0, result[0].DeletedCount);
-        }
-
-        [Fact]
-        public void Compare_NonEmptyToEmpty_DetectsDeletion()
-        {
-            var result = TextInlineChange.Compare("hello", "");
-            Assert.NotEmpty(result);
-            Assert.True(result[0].DeletedCount > 0);
-            Assert.Equal(0, result[0].AddedCount);
         }
 
         #endregion

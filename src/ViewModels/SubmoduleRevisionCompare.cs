@@ -57,7 +57,7 @@ public class SubmoduleRevisionCompare : ObservableObject
         {
             if (SetProperty(ref _selectedChanges, value))
             {
-                if (value is { Count: 1 })
+                if (value is { Count: 1 } and not ChangeSelection { IsSingleFolder: true })
                     DiffContext = new DiffContext(_repo, new Models.DiffOption(_base.SHA, _to.SHA, value[0]), _diffContext);
                 else
                     DiffContext = null;

@@ -1,4 +1,4 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +16,7 @@ public class Archive : Popup
     /// <summary>
     /// 出力ファイルのパス。必須入力。
     /// </summary>
-    [Required(ErrorMessage = "Output file name is required")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.OutputFileRequired))]
     public string SaveFile
     {
         get => _saveFile;
@@ -93,7 +93,7 @@ public class Archive : Popup
 
         // 成功時にデスクトップ通知を送信する
         if (succ)
-            App.SendNotification(_repo.FullPath, $"Save archive to : {_saveFile}");
+            App.SendNotification(_repo.FullPath, App.Text("Archive.Saved", _saveFile));
         return succ;
     }
 

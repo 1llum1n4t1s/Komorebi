@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
 
 namespace Komorebi.AI;
 
-public class Service
+public class Service : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     public static IReadOnlyList<Provider> AllProviders => [Provider.OpenAI, Provider.AzureOpenAI, Provider.Anthropic, Provider.Gemini];
 
@@ -72,8 +72,54 @@ public class Service
         }
     }
 
-    public bool ReadApiKeyFromEnv { get; set; } = false;
+    public bool ReadApiKeyFromEnv
+    {
+        get => _readApiKeyFromEnv;
+        set => SetProperty(ref _readApiKeyFromEnv, value);
+    }
+
+    private bool _readApiKeyFromEnv;
     public string AdditionalPrompt { get; set; } = string.Empty;
+
+    /// <summary>リクエストへ追加するHTTPヘッダー。1行につき「名前: 値」で指定する。</summary>
+    [JsonIgnore]
+    public string ExtraHeaders
+    {
+        get => _extraHeaders;
+        set
+        {
+            if (string.IsNullOrEmpty(value) || !string.Equals(_extraHeaders, value, StringComparison.Ordinal))
+                _storedExtraHeadersCipher = string.Empty;
+            _extraHeaders = value ?? string.Empty;
+        }
+    }
+
+    /// <summary>APIキーと同じ保護方式で追加ヘッダーを保存する。</summary>
+    [JsonPropertyName("ExtraHeaders")]
+    public string ProtectedExtraHeaders
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_extraHeaders))
+                return _storedExtraHeadersCipher;
+            var cipher = ApiKeyProtector.Protect(_extraHeaders);
+            if (!string.IsNullOrEmpty(cipher))
+            {
+                _storedExtraHeadersCipher = cipher;
+                return cipher;
+            }
+            return _storedExtraHeadersCipher;
+        }
+        set
+        {
+            _storedExtraHeadersCipher = ApiKeyProtector.IsProtected(value) ? value : string.Empty;
+            _extraHeaders = ApiKeyProtector.UnprotectOrPlainText(value);
+        }
+    }
+
+    private string _extraHeaders = string.Empty;
+    private string _storedExtraHeadersCipher = string.Empty;
+
 
     public ApiKeyCredential Credential
     {
@@ -276,15 +322,25 @@ internal static partial class ApiKeyProtector
         }
 
         var key = RandomNumberGenerator.GetBytes(KeySize);
-        WriteKeyFile(file, key);
-        RestrictKeyFile(file);
+        try
+        {
+            WriteKeyFile(file, key, false);
+        }
+        catch (IOException) when (File.Exists(file))
+        {
+            // 別プロセスが先に鍵を作った場合、その鍵を上書きせず共有する。
+            var existing = TryReadKeyFile(file);
+            if (existing is not null && existing.Length == KeySize)
+                return existing;
+            throw;
+        }
         return key;
     }
 
     /// <summary>
     /// 鍵ファイルを読み込んで生鍵を返す。Windows の旧形式（平文 Base64）はこの場で DPAPI に移行する。
     /// </summary>
-    private static byte[] TryReadKeyFile(string file)
+    private static byte[] TryReadKeyFile(string file, Action<Stream, string> writeContents = null, Action<string, string> replaceFile = null)
     {
         var content = File.ReadAllText(file).Trim();
         if (string.IsNullOrEmpty(content))
@@ -307,8 +363,7 @@ internal static partial class ApiKeyProtector
         {
             try
             {
-                WriteKeyFile(file, raw);
-                RestrictKeyFile(file);
+                WriteKeyFile(file, raw, true, writeContents, replaceFile);
             }
             catch (Exception ex)
             {
@@ -318,16 +373,59 @@ internal static partial class ApiKeyProtector
         return raw;
     }
 
-    private static void WriteKeyFile(string file, byte[] rawKey)
+    private static void WriteKeyFile(string file, byte[] rawKey, bool replaceExisting,
+        Action<Stream, string> writeContents = null, Action<string, string> replaceFile = null)
     {
-        if (OperatingSystem.IsWindows())
+        var content = OperatingSystem.IsWindows()
+            ? DpapiPrefix + Convert.ToBase64String(DpapiProtect(rawKey))
+            : Convert.ToBase64String(rawKey);
+        var stage = file + "." + Guid.NewGuid().ToString("N") + ".tmp";
+        var created = false;
+        try
         {
-            var protectedBlob = DpapiProtect(rawKey);
-            File.WriteAllText(file, DpapiPrefix + Convert.ToBase64String(protectedBlob));
+            var options = new FileStreamOptions { Mode = FileMode.CreateNew, Access = FileAccess.Write, Share = FileShare.None };
+            if (!OperatingSystem.IsWindows())
+                options.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
+            using (var stream = new FileStream(stage, options))
+            {
+                created = true;
+                if (writeContents is not null)
+                    writeContents(stream, content);
+                else
+                {
+                    using var writer = new StreamWriter(stream, new UTF8Encoding(false), leaveOpen: true);
+                    writer.Write(content);
+                    writer.Flush();
+                }
+                stream.Flush(true);
+            }
+            RestrictKeyFile(stage);
+
+            // 上流との差分: 移行中の I/O 失敗で唯一の旧鍵を失わないよう、同じディレクトリで置換する。
+            // 新規生成は上書きを禁止し、別プロセスが先に保存した鍵を保護する。
+            if (replaceExisting)
+            {
+                if (replaceFile is not null)
+                    replaceFile(stage, file);
+                else
+                    File.Replace(stage, file, null);
+            }
+            else
+                File.Move(stage, file);
         }
-        else
+        finally
         {
-            File.WriteAllText(file, Convert.ToBase64String(rawKey));
+            if (created)
+            {
+                try
+                {
+                    File.Delete(stage);
+                }
+                catch (Exception ex)
+                {
+                    Models.Logger.LogException("AI APIキー鍵ファイルの一時ファイル清掃に失敗", ex);
+                }
+            }
         }
     }
 

@@ -52,7 +52,7 @@ public class Pull : Popup
     /// <summary>
     /// プル元のリモートブランチ（必須入力）。
     /// </summary>
-    [Required(ErrorMessage = "Remote branch to pull is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RemoteBranchRequired))]
     public Models.Branch SelectedBranch
     {
         get => _selectedBranch;

@@ -20,6 +20,7 @@ public partial class RepositoryConfigure : ChromelessWindow
     }
 
     private bool _saved;
+    private bool _saving;
 
     /// <summary>
     /// ウィンドウが閉じられる際の処理。
@@ -35,17 +36,32 @@ public partial class RepositoryConfigure : ChromelessWindow
         if (DataContext is ViewModels.RepositoryConfigure configure)
         {
             e.Cancel = true;
-            await configure.SaveAsync();
-
-            // 保存エラー（リモート名の重複等）がある場合はウィンドウを開いたままにする
-            if (configure.HasSaveError)
-            {
-                configure.HasSaveError = false;
+            if (_saving)
                 return;
-            }
 
-            _saved = true;
-            Close();
+            // Komorebi独自: 保存待ち中の編集・再Closeで保存処理が重ならないようにする。
+            _saving = true;
+            var wasEnabled = IsEnabled;
+            IsEnabled = false;
+            try
+            {
+                await configure.SaveAsync();
+
+                // 保存エラー（リモート名の重複等）がある場合はウィンドウを開いたままにする
+                if (configure.HasSaveError)
+                {
+                    configure.HasSaveError = false;
+                    return;
+                }
+
+                _saved = true;
+                Close();
+            }
+            finally
+            {
+                IsEnabled = wasEnabled;
+                _saving = false;
+            }
         }
     }
 

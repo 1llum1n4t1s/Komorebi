@@ -42,26 +42,6 @@ namespace Komorebi.Tests.Models
         }
 
         /// <summary>
-        /// privateフィールド _file を取得するヘルパー。
-        /// </summary>
-        private static string GetFilePath(Komorebi.Models.RepositorySettings settings)
-        {
-            var field = typeof(Komorebi.Models.RepositorySettings)
-                .GetField("_file", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            return (string)field.GetValue(settings)!;
-        }
-
-        /// <summary>
-        /// privateフィールド _orgHash を取得するヘルパー。
-        /// </summary>
-        private static string GetOrgHash(Komorebi.Models.RepositorySettings settings)
-        {
-            var field = typeof(Komorebi.Models.RepositorySettings)
-                .GetField("_orgHash", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            return (string)field.GetValue(settings)!;
-        }
-
-        /// <summary>
         /// private static HashContent をリフレクション経由で呼び出すヘルパー。
         /// </summary>
         private static string InvokeHashContent(string source)
@@ -347,12 +327,14 @@ namespace Komorebi.Tests.Models
         }
 
         /// <adversarial category="boundary" severity="critical"
-        ///   description="不正なJSON（壊れた構文）でもクラッシュせずデフォルトが返ること"
+        ///   description="JSONの構文や型が不正でもクラッシュせずデフォルトが返ること"
         ///   expected="catch節でnew()が返る" />
         [Theory]
         [InlineData("{invalid json")]
         [InlineData("")]
-        public void Get_InvalidJsonSyntax_ReturnsDefaultWithoutCrash(string content)
+        [InlineData("[1,2,3]")]
+        [InlineData("<xml/>")]
+        public void Get_InvalidJson_ReturnsDefaultWithoutCrash(string content)
         {
             var dir = Path.Combine(_tempDir, $"invalid_json_{content.GetHashCode():X}");
             Directory.CreateDirectory(dir);
@@ -381,20 +363,6 @@ namespace Komorebi.Tests.Models
             // 修正後: setting ??= new() で新規インスタンスへフォールバックするため、例外なしで returns。
             Assert.Null(ex);
             Assert.NotNull(result);
-        }
-
-        [Theory]
-        [InlineData("[1,2,3]")]
-        [InlineData("<xml/>")]
-        public void Get_InvalidJson_ReturnsDefaultWithoutCrash(string content)
-        {
-            var dir = Path.Combine(_tempDir, $"invalid_json_{content.GetHashCode():X}");
-            Directory.CreateDirectory(dir);
-            File.WriteAllText(Path.Combine(dir, "komorebi.settings"), content);
-
-            var ex = Record.Exception(() => Komorebi.Models.RepositorySettings.Get(dir));
-
-            Assert.Null(ex);
         }
 
         /// <adversarial category="boundary" severity="medium"

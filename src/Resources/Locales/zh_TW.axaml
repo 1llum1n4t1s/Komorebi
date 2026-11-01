@@ -183,7 +183,7 @@
   <x:String x:Key="Text.CommitCM.Fixup" xml:space="preserve">修正至父提交</x:String>
   <x:String x:Key="Text.CommitDetail.Changes" xml:space="preserve">變更對比</x:String>
   <x:String x:Key="Text.CommitDetail.Changes.Count" xml:space="preserve">個檔案已變更</x:String>
-  <x:String x:Key="Text.CommitDetail.Changes.Search" xml:space="preserve">搜尋變更...</x:String>
+  <x:String x:Key="Text.CommitDetail.Changes.Search" xml:space="preserve">篩選變更...</x:String>
   <x:String x:Key="Text.CommitDetail.Files" xml:space="preserve">檔案列表</x:String>
   <x:String x:Key="Text.CommitDetail.Files.LFS" xml:space="preserve">LFS 檔案</x:String>
   <x:String x:Key="Text.CommitDetail.Files.Search" xml:space="preserve">搜尋檔案...</x:String>
@@ -992,12 +992,12 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">開啟本機存放庫</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">開啟終端機</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">重新掃描預設複製 (clone) 目錄下的存放庫</x:String>
-  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
-  <x:String x:Key="Text.Welcome.Search" xml:space="preserve">快速搜尋存放庫...</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">檢查所有存放庫的遠端連線</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">所有遠端均可連線</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">部分遠端無法連線</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">所有遠端均無法連線</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">尚未設定遠端</x:String>
+  <x:String x:Key="Text.Welcome.Search" xml:space="preserve">篩選存放庫...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">本機變更</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">加入至 .gitignore 忽略清單</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">忽略所有 *{0} 檔案</x:String>
@@ -1007,11 +1007,11 @@
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.TopFolder" xml:space="preserve">忽略 '{0}' 資料夾</x:String>
   <x:String x:Key="Text.WorkingCopy.Amend" xml:space="preserve">修補</x:String>
   <x:String x:Key="Text.WorkingCopy.CanStageTip" xml:space="preserve">現在您已可將其加入暫存區中</x:String>
-  <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">清除提交訊息歷史</x:String>
+  <x:String x:Key="Text.WorkingCopy.ClearCommitHistories" xml:space="preserve">清除提交訊息記錄</x:String>
   <x:String x:Key="Text.WorkingCopy.ClearCommitHistories.Confirm" xml:space="preserve">您確定要清除所有提交訊息記錄嗎 (執行後無法復原)?</x:String>
   <x:String x:Key="Text.WorkingCopy.Commit" xml:space="preserve">提  交</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitAndPush" xml:space="preserve">提交並推送</x:String>
-  <x:String x:Key="Text.WorkingCopy.CommitMessageHelper" xml:space="preserve">歷史輸入/範本</x:String>
+  <x:String x:Key="Text.WorkingCopy.CommitMessageHelper" xml:space="preserve">提交訊息記錄/範本</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitTip" xml:space="preserve">觸發點擊事件</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitToEdit" xml:space="preserve">提交 (修改原始提交)</x:String>
   <x:String x:Key="Text.WorkingCopy.CommitWithAutoStage" xml:space="preserve">自動暫存全部變更並提交</x:String>
@@ -1208,59 +1208,159 @@
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">簽出標籤...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">遞迴更新多層級子模組</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">忽略同路徑下所有新增檔案</x:String>
-  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
-  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
-  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
-  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
-  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
-  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
-  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
-  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
-  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
-  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
-  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
-  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
-  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
-  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
-  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
-  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
-  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
-  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
-  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
-  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
-  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">啟用定時自動提取</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">繞過 pre-push hook</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">繞過 pre-rebase hook</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">差異檔案</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">差異提交</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">左側獨有提交</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">右側獨有提交</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">提示: 如果比較的另一方是 HEAD，您可以揀選 (cherry-pick) 已選擇的提交 (使用滑鼠右鍵)</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">分支名稱:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">開始於:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">合併前重定基底</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">二進位檔案</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">檢視內容</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">前往地址...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">個篩選規則已啟用</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">摺疊篩選器</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">展開篩選器</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">收合詳細面板</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">在新視窗中開啟</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">提交詳細資訊</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">比較</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">推理努力等級</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">開啟 SSH 金鑰工具</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">您確定要刪除以下的金鑰嗎?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">指紋</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">產生 SSH 金鑰</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">再次輸入您的密碼:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">電子郵件:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">必填。</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">金鑰名稱:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">必填，例如: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">輸入您的密碼:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">產  生</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">類型:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">為私密金鑰檔案設定密碼</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">路徑</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">公開金鑰</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH 金鑰工具</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">上色分支</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">全部</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">僅目前分支</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">僅選取的提交</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">目前分支和選取的提交</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">僅選取的提交 (First-parent 模式)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">終止執行</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">檔案類型變更:</x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">新增檔案類型:</x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">刪除檔案類型:</x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">一般檔案</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">可執行檔案</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">目錄</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">符號連結</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">子模組</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">未知</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">已保留自動暫存 {0}。請完成或中止目前的 Git 操作，再從暫存清單還原。</x:String>
+  <x:String x:Key="Text.TextSearch.MatchCase">區分大小寫</x:String>
+  <x:String x:Key="Text.TextSearch.WholeWord">全字比對</x:String>
+  <x:String x:Key="Text.TextSearch.Regex">使用正規表示式</x:String>
+  <x:String x:Key="Text.TextSearch.Previous">尋找上一個 (Shift+F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Next">尋找下一個 (F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Placeholder">尋找...</x:String>
+  <x:String x:Key="Text.TextSearch.NoMatches">找不到相符項目</x:String>
+  <x:String x:Key="Text.TextSearch.OneMatch">1 個相符項目</x:String>
+  <x:String x:Key="Text.TextSearch.Matches">{0} 個相符項目</x:String>
+  <x:String x:Key="Text.TextSearch.MatchOfTotal">第 {0} 個，共 {1} 個</x:String>
+  <x:String x:Key="Text.Validation.BranchExists">同名分支已存在。</x:String>
+  <x:String x:Key="Text.Validation.BranchNameInvalid">無效的值：分支名稱</x:String>
+  <x:String x:Key="Text.Validation.BranchNameRequired">必填欄位：分支名稱</x:String>
+  <x:String x:Key="Text.Validation.CommitDescriptionRequired">必填欄位：簡述</x:String>
+  <x:String x:Key="Text.Validation.CommitMessageRequired">必填欄位：提交訊息</x:String>
+  <x:String x:Key="Text.Validation.CommitTypeRequired">必填欄位：類型</x:String>
+  <x:String x:Key="Text.Validation.ContextInvalid">無法取得操作內容。</x:String>
+  <x:String x:Key="Text.Validation.DevelopBranchRequired">必填欄位：開發分支</x:String>
+  <x:String x:Key="Text.Validation.EmailInvalid">無效的值：電子郵件</x:String>
+  <x:String x:Key="Text.Validation.EmailRequired">必填欄位：電子郵件</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixInvalid">無效的值：功能分支前置詞</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixRequired">必填欄位：功能分支前置詞</x:String>
+  <x:String x:Key="Text.Validation.GitFlowBranchesEqual">開發分支與主分支的名稱必須不同。</x:String>
+  <x:String x:Key="Text.Validation.GroupNameRequired">必填欄位：名稱</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixInvalid">無效的值：修復分支前置詞</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixRequired">必填欄位：修復分支前置詞</x:String>
+  <x:String x:Key="Text.Validation.IgnorePatternRequired">必填欄位：比對模式</x:String>
+  <x:String x:Key="Text.Validation.LFSPatternRequired">必填欄位：規則</x:String>
+  <x:String x:Key="Text.Validation.LocalBranchRequired">必填欄位：本機分支</x:String>
+  <x:String x:Key="Text.Validation.MasterBranchRequired">必填欄位：發行分支</x:String>
+  <x:String x:Key="Text.Validation.NameRequired">必填欄位：名稱</x:String>
+  <x:String x:Key="Text.Validation.OutputFileRequired">必填欄位：封存檔案路徑</x:String>
+  <x:String x:Key="Text.Validation.ParentFolderRequired">必填欄位：上層目錄</x:String>
+  <x:String x:Key="Text.Validation.PassphraseMismatch">密碼片語與確認輸入不相符。</x:String>
+  <x:String x:Key="Text.Validation.PassphraseRequired">必填欄位：輸入您的密碼</x:String>
+  <x:String x:Key="Text.Validation.PatchFileRequired">必填欄位：修補檔</x:String>
+  <x:String x:Key="Text.Validation.PathNotEmpty">所選路徑不是空的。</x:String>
+  <x:String x:Key="Text.Validation.PathNotFound">找不到所選路徑。</x:String>
+  <x:String x:Key="Text.Validation.PathRequired">必填欄位：路徑</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixInvalid">無效的值：發行分支前置詞</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixRequired">必填欄位：發行分支前置詞</x:String>
+  <x:String x:Key="Text.Validation.RemoteBranchRequired">必填欄位：上游分支</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameExists">同名遠端已存在。</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameInvalid">無效的值：唯一遠端名稱</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameRequired">必填欄位：唯一遠端名稱</x:String>
+  <x:String x:Key="Text.Validation.RemoteRequired">必填欄位：遠端設定</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlExists">相同 URL 的遠端已存在。</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlInvalid">無效的值：存放庫網址</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlRequired">必填欄位：存放庫網址</x:String>
+  <x:String x:Key="Text.Validation.RepositoryFolderRequired">必填欄位：存放庫位置</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNameInvalid">名稱僅可包含英文字母、數字、底線與連字號。</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNotFound">找不到 SSH 私密金鑰。</x:String>
+  <x:String x:Key="Text.Validation.StorageFileRequired">必填欄位：封存檔案路徑</x:String>
+  <x:String x:Key="Text.Validation.TagExists">同名標籤已存在。</x:String>
+  <x:String x:Key="Text.Validation.TagNameInvalid">無效的值：標籤名稱</x:String>
+  <x:String x:Key="Text.Validation.TagNameRequired">必填欄位：標籤名稱</x:String>
+  <x:String x:Key="Text.Validation.TagPrefixInvalid">無效的值：版本標籤前置詞</x:String>
+  <x:String x:Key="Text.Validation.UrlRequired">必填欄位：存放庫網址</x:String>
+  <x:String x:Key="Text.Validation.WorktreePathRequired">必填欄位：位置</x:String>
+  <x:String x:Key="Text.Error.InvalidClipboardPatch">剪貼簿中沒有有效的修補內容。</x:String>
+  <x:String x:Key="Text.Archive.Saved">封存檔已儲存至：{0}</x:String>
+  <x:String x:Key="Text.GitLFS.Enabled">已啟用 LFS。</x:String>
+  <x:String x:Key="Text.GitLFS.PatternTracked">追蹤模式：{0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileLocked">已鎖定檔案：{0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileUnlocked">已解除檔案鎖定：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveSettings">儲存設定失敗：{0}</x:String>
+  <x:String x:Key="Text.Error.FailedToLoadRemoteSettings">載入遠端設定失敗：{0}</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.KeyExists">同名金鑰已存在。</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.Failed">產生 SSH 金鑰失敗：{0}</x:String>
+  <x:String x:Key="Text.AddToIgnore.LocalOnly">僅限本機</x:String>
+  <x:String x:Key="Text.Conflict.Mine">我方</x:String>
+  <x:String x:Key="Text.Conflict.Theirs">對方</x:String>
+  <x:String x:Key="Text.Diff.Image">影像</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Text">文字方塊</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Path">路徑選擇器</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Checkbox">核取方塊</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Combobox">下拉式方塊</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">本機分支選擇器</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">遠端分支選擇器</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">簽出 (checkout) ${0}$ 為工作樹...</x:String>
+  <x:String x:Key="Text.GitFlow.Finish">完成 ${0}$</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders">額外標頭 (每行一組 `名稱: 值`)</x:String>
+  <x:String x:Key="Text.TagCM.Merge">合併 ${0}$ 到 ${1}$...</x:String>
+  <x:String x:Key="Text.TrustRepository">不受信任的存放庫</x:String>
+  <x:String x:Key="Text.TrustRepository.CommandTip">您是否要執行 `git config --global --add safe.directory {0}` 命令以信任該存放庫?</x:String>
+  <x:String x:Key="Text.TrustRepository.Description">Git 拒絕存取該存放庫:</x:String>
+  <x:String x:Key="Text.TrustRepository.Path">路徑:</x:String>
+  <x:String x:Key="Text.Progress.TrustingRepository">正在將「{0}」加入 Git safe.directory...</x:String>
+  <x:String x:Key="Text.Progress.OpeningRepository">正在開啟「{0}」...</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenTrustedRepository">信任存放庫後仍無法開啟。</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders.Tip">每行一個標頭：名稱: 值</x:String>
+  <x:String x:Key="Text.Statistics.Others">其他</x:String>
+  <x:String x:Key="Text.Statistics.TopAuthors.Count">提交次數</x:String>
+  <x:String x:Key="Text.RepositoryGroup.Auto">自動</x:String>
+  <x:String x:Key="Text.RepositoryGroup.NoGroup">無群組 (未分類)</x:String>
+  <x:String x:Key="Text.RepositoryGroup.AutoDescription">依據預設的複製目錄</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Tips">選取檔案以檢視內容。</x:String>
+  <x:String x:Key="Text.SetPushUrl">設定推送 URL</x:String>
+  <x:String x:Key="Text.SetPushUrl.PushURL">推送 URL：</x:String>
+  <x:String x:Key="Text.Error.SelectChangedLines">請至少選取一行已變更的內容。</x:String>
 </ResourceDictionary>

@@ -4,7 +4,7 @@ This file provides guidance to Codex and other coding agents working in this rep
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.1.3**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.1.4**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
 
 設計の概要・責務とデータフローは [DESIGN.md](DESIGN.md) を参照する。本ファイルは作業規約・実装時の制約・検証手順を扱う。
 
@@ -39,6 +39,8 @@ dotnet build -p:DisableUpdateDetection=true
 - `NoWarn=CS1591` — silences "missing XML doc comment" warnings so IDE-style analysis stays the only signal.
 - `<Version>` here is the source of truth for both packaging and Velopack.
 - `RestorePackagesWithLockFile=true` — app/test projects keep separate `packages.lock.json` files. After changing a `PackageReference`, run `dotnet restore --force-evaluate`, review all affected lockfiles, then verify with `dotnet restore --locked-mode`. E2E projects outside the solution require the same restore checks with their explicit project paths.
+- `Directory.Build.targets` separates restore graphs: `packages.lock.json` is the non-RID Debug baseline; Release uses `packages.Release.lock.json`, and the app with `DisableAOT=true` uses `packages.Release.NoAOT.lock.json`. An explicit RID adds a suffix (for example `packages.Release.win-x64.lock.json`). Regenerate and locked-restore each affected configuration with `-p:Configuration=Release` / `-p:DisableAOT=true` / `-r <rid>` as appropriate. SDK changes can update the implicit AOT tool packages. Publishing must not overwrite or regenerate the Debug baseline.
+- Locked restore also requires the selected lockfile to exist before NuGet runs. Keep the Release locks for all five publish RIDs (`win-x64`, `win-arm64`, `osx-arm64`, `linux-x64`, `linux-arm64`) tracked, and publish with `-p:RestoreLockedMode=true`. Generate cross-compilation locks with `NETCoreSdkRuntimeIdentifier` matching the build host (`win-x64` for Windows, `linux-x64` for Linux, `osx-arm64` for macOS); missing files must fail rather than silently generate an unlocked baseline.
 
 ## Tests
 
@@ -56,9 +58,9 @@ dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "Fully
 node build/scripts/localization-check.js
 ```
 
-Test project: `tests/Komorebi.Tests/` — xUnit v3 + Moq, references `src/Komorebi.csproj`.
+Test project: `tests/Komorebi.Tests/` — xUnit v3, references `src/Komorebi.csproj`.
 
-`global.json` は Microsoft.Testing.Platform を選択しているため、テスト実行では上記の `--project` 形式を使う。CI と同じ検証は `dotnet build -c Release` の後に `dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj -c Release --no-build` を実行する。
+`global.json` は Microsoft.Testing.Platform を選択しているため、テスト実行では上記の `--project` 形式を使う。CI と同じ検証は `dotnet build -c Release -p:RestoreLockedMode=true` の後に `dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj -c Release --no-build` を実行する。
 
 ### 実行経路の E2E 検証
 
@@ -129,7 +131,7 @@ Three URL formats are supported:
 Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS()`, `TryParseCodeCommitSSH()`, `TryParseCodeCommitGRC()`. `TryGetVisitURL()` and `TryGetCreatePullRequestURL()` convert all three forms to AWS Console URLs. `RemoteProtocolSwitcher` hides for CodeCommit URLs (HTTPS↔SSH auto-conversion not applicable).
 
 ### Remote Configuration
-`RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including URL editing, per-remote SSH key selection, and per-remote push prohibition. Push prohibition uses `git remote set-url --push <name> no_push` to set an invalid push URL — this is the standard git idiom for preventing pushes to upstream/fork-parent remotes. The `SelectedRemotePushDisabled` property detects this state by comparing push URL with fetch URL.
+`RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including fetch/push URL editing, per-remote SSH key selection, and per-remote push prohibition. Push prohibition uses `git remote set-url --push <name> no_push` to set an invalid push URL. `SelectedRemotePushDisabled` detects only `no_push`; a custom push URL different from the fetch URL is valid and must survive unrelated edits.
 
 ### View の再利用と入力
 
@@ -155,8 +157,8 @@ Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS
 - Compile flag `DISABLE_UPDATE_DETECTION` skips update checks entirely
 
 ### Localization
-- XAML resource dictionaries in `src/Resources/Locales/` (17 languages)
-- Supported: de_DE, en_US, es_ES, fil_PH, fr_FR, id_ID, it_IT, ja_JP, ko_KR, la, pt_BR, ru_RU, sa, ta_IN, uk_UA, zh_CN, zh_TW
+- XAML resource dictionaries in `src/Resources/Locales/` (18 languages)
+- Supported: ca_ES, de_DE, en_US, es_ES, fil_PH, fr_FR, id_ID, it_IT, ja_JP, ko_KR, la, pt_BR, ru_RU, sa, ta_IN, uk_UA, zh_CN, zh_TW
 - `en_US.axaml` is the reference locale — all other locales must match its key set
 - `build/scripts/localization-check.js` validates translations in CI
 - Keys follow `Text.Category.Name` convention (e.g., `Text.InitSetup.Message`)
@@ -176,8 +178,8 @@ Usage: `await new Alert().ShowAsync(this, message, isError: true);` — titles a
 ### Window State Persistence Pattern
 Stand-alone windows persist width/height/position/state across sessions via `ViewModels.LayoutInfo` properties. `FileHistories` and `Blame` use this pattern:
 
-1. **Constructor**: set `Width` / `Height` from `LayoutInfo` (safe — no `Screens` dependency) and subscribe `PositionChanged`. Leave `Position` unset in the constructor: `App.ShowWindow(...)` will overwrite it with an active-screen-centered value before calling `Show()`, which serves as a deterministic first-launch fallback.
-2. **OnOpened**: call `TryRestoreWindowPosition(x, y, w, h)` (protected helper on `ChromelessWindow`) — returns true if the saved `PixelRect` fits entirely within a connected screen's working area, and sets `Position` accordingly, overriding the centering from step 1. Also restore `WindowState = Maximized` if previously maximized. If `TryRestoreWindowPosition` returns false (first launch, or saved coords on a disconnected monitor), no action is needed — the step-1 centering remains as fallback.
+1. **Constructor**: set `Width` / `Height` from `LayoutInfo` (safe — no `Screens` dependency). Leave `Position` unset in the constructor: `App.ShowWindow(...)` will overwrite it with an active-screen-centered value before calling `Show()`, which serves as a deterministic first-launch fallback.
+2. **OnOpened**: call `TryRestoreWindowPosition(x, y, w, h)` (protected helper on `ChromelessWindow`) — returns true if the saved `PixelRect` fits entirely within a connected screen's working area, and sets `Position` accordingly, overriding the centering from step 1. Also restore `WindowState = Maximized` if previously maximized. If `TryRestoreWindowPosition` returns false (first launch, or saved coords on a disconnected monitor), no action is needed — the step-1 centering remains as fallback. Subscribe `PositionChanged` after restoring position and state, so initial centering cannot overwrite the saved position.
 3. **OnSizeChanged** / **OnPositionChanged**: save to `LayoutInfo` only when `WindowState == Normal` (avoid saving maximized/snapped sizes).
 4. **OnPropertyChanged(WindowStateProperty)**: save state only when `!= Minimized` (otherwise a taskbar-minimize would cause the next launch to start minimized).
 
@@ -244,7 +246,7 @@ Version format: `Directory.Build.props` stores the semantic version in the `<Ver
 
 ## Key Dependencies
 
-- **Avalonia 12.1.3** — cross-platform XAML UI。`Avalonia.Controls.DataGrid` は現在 12.1.2。本体とは指定バージョンが異なるため、更新時は各パッケージの利用可能なバージョンと互換性を確認する。
+- **Avalonia 12.1.4** — cross-platform XAML UI。`Avalonia.Controls.DataGrid` は現在 12.1.2。本体とは指定バージョンが異なるため、更新時は各パッケージの利用可能なバージョンと互換性を確認する。
 - **CommunityToolkit.Mvvm** — MVVM source generators
 - **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
 - **Velopack 1.2.0** — auto-update framework (`VelopackUpdateDialog.Avalonia` 経由の推移的依存)

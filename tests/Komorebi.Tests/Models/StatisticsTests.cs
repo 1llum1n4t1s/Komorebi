@@ -16,6 +16,35 @@ namespace Komorebi.Tests.Models
         #region AddCommit - Total Count
 
         [Fact]
+        public void AddCommit_All_UsesLocalCalendarMonthForAllAuthorsAndSelection()
+        {
+            var statistics = new Statistics();
+            var january = new DateTime(2025, 1, 1, 0, 15, 0, DateTimeKind.Local);
+            var february = new DateTime(2025, 2, 28, 23, 45, 0, DateTimeKind.Local);
+            statistics.AddCommit("Alice±calendar-alice@example.invalid", new DateTimeOffset(january).ToUnixTimeSeconds());
+            statistics.AddCommit("Bob±calendar-bob@example.invalid", new DateTimeOffset(january).ToUnixTimeSeconds());
+            statistics.AddCommit("Alice±calendar-alice@example.invalid", new DateTimeOffset(february).ToUnixTimeSeconds());
+            statistics.Complete();
+
+            var report = statistics.All;
+            var points = report.Series[0].Values!.Cast<LiveChartsCore.Defaults.DateTimePoint>().OrderBy(x => x.DateTime).ToArray();
+            Assert.Equal(3, report.Total);
+            Assert.Equal(2, points.Length);
+            Assert.Equal(new DateTime(2025, 1, 1), points[0].DateTime);
+            Assert.Equal(new DateTime(2025, 2, 1), points[1].DateTime);
+            Assert.All(points, point => Assert.Equal(DateTimeKind.Unspecified, point.DateTime.Kind));
+            Assert.Equal(2d, points[0].Value);
+            Assert.Equal(1d, points[1].Value);
+
+            report.SelectedAuthor = report.Authors.Single(x => x.User.Email == "calendar-alice@example.invalid");
+            var selected = report.Series[1].Values!.Cast<LiveChartsCore.Defaults.DateTimePoint>().OrderBy(x => x.DateTime).ToArray();
+            Assert.Equal(points.Select(x => x.DateTime), selected.Select(x => x.DateTime));
+            Assert.All(selected, point => Assert.Equal(1d, point.Value));
+            report.SelectedAuthor = null!;
+            Assert.Single(report.Series);
+        }
+
+        [Fact]
         public void AddCommit_IncrementsTotalCount()
         {
             var report = new StatisticsReport(StatisticsMode.ThisWeek, DateTime.Now.Date);

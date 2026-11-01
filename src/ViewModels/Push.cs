@@ -26,14 +26,18 @@ public class Push : Popup
     /// <summary>
     /// プッシュ元のローカルブランチ（必須入力）。変更時にリモートブランチを自動選択する。
     /// </summary>
-    [Required(ErrorMessage = "Local branch is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.LocalBranchRequired))]
     public Models.Branch SelectedLocalBranch
     {
         get => _selectedLocalBranch;
         set
         {
             if (SetProperty(ref _selectedLocalBranch, value, true))
+            {
+                Tracking = string.IsNullOrEmpty(value?.Upstream);
+                UpdatePreferredPushRemote();
                 AutoSelectBranchByRemote();
+            }
         }
     }
 
@@ -50,13 +54,13 @@ public class Push : Popup
     /// </summary>
     public List<Models.Remote> Remotes
     {
-        get => _repo.Remotes;
+        get => _remotes;
     }
 
     /// <summary>
     /// プッシュ先のリモート（必須入力）。変更時にリモートブランチを自動選択する。
     /// </summary>
-    [Required(ErrorMessage = "Remote is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RemoteRequired))]
     public Models.Remote SelectedRemote
     {
         get => _selectedRemote;
@@ -79,7 +83,7 @@ public class Push : Popup
     /// <summary>
     /// プッシュ先のリモートブランチ（必須入力）。変更時に追跡設定の表示を更新する。
     /// </summary>
-    [Required(ErrorMessage = "Remote branch is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RemoteBranchRequired))]
     public Models.Branch SelectedRemoteBranch
     {
         get => _selectedRemoteBranch;
@@ -154,6 +158,7 @@ public class Push : Popup
     public Push(Repository repo, Models.Branch localBranch)
     {
         _repo = repo;
+        _remotes = [.. repo.Remotes];
 
         // すべてのローカルブランチを収集し、現在のブランチを特定
         LocalBranches = [];
@@ -210,7 +215,8 @@ public class Push : Popup
             _selectedRemote = remote ?? repo.Remotes[0];
         }
 
-        // Auto select preferred remote branch.
+        // branch.<name>.pushRemote は追跡先より優先する。
+        UpdatePreferredPushRemote();
         AutoSelectBranchByRemote();
     }
 
@@ -300,6 +306,7 @@ public class Push : Popup
                 branches.Add(branch);
         }
 
+        // Komorebi独自: pushRemoteはリモートだけを選ぶ。別リモートのmerge名を転用しない。
         // 選択中のローカルブランチにアップストリームがあれば、収集済みリモートブランチから探す
         if (!string.IsNullOrEmpty(_selectedLocalBranch.Upstream))
         {
@@ -337,6 +344,27 @@ public class Push : Popup
     }
 
     /// <summary>対象リポジトリ</summary>
+    private void UpdatePreferredPushRemote()
+    {
+        _remotes = [.. _repo.Remotes];
+        _preferredPushRemote = _selectedLocalBranch is null ? string.Empty :
+            new Commands.Config(_repo.FullPath).Get($"branch.{_selectedLocalBranch.Name}.pushRemote");
+        if (!string.IsNullOrEmpty(_preferredPushRemote))
+        {
+            var remote = _remotes.Find(x => x.Name == _preferredPushRemote || x.URL == _preferredPushRemote);
+            if (remote is null)
+            {
+                remote = new Models.Remote { Name = _preferredPushRemote };
+                _remotes.Add(remote);
+            }
+            _selectedRemote = remote;
+            OnPropertyChanged(nameof(SelectedRemote));
+        }
+        OnPropertyChanged(nameof(Remotes));
+    }
+
+    private List<Models.Remote> _remotes = [];
+    private string _preferredPushRemote;
     private readonly Repository _repo = null;
     /// <summary>選択されたローカルブランチ</summary>
     private Models.Branch _selectedLocalBranch = null;

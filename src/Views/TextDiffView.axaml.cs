@@ -719,21 +719,20 @@ public class ThemedTextDiffPresenter : TextEditor
 
         // upstream 8713e586 (#2276): LineNumberMargin の幅計算は MeasureOverride に移動したため、
         // ここでの事前計算は不要。
-        AutoScrollToFirstChange();
-    }
+        if (DataContext is not ViewModels.TextDiffContext ctx)
+            return;
+        if (ctx.IsSideBySide() && !IsOld)
+            return;
 
-    /// <summary>
-    /// サイズが変更された際の処理。
-    /// </summary>
-    protected override void OnSizeChanged(SizeChangedEventArgs e)
-    {
-        base.OnSizeChanged(e);
+        var line = ctx.BlockNavigation.GetCurrentBlock()?.Start ?? 0;
+        if (line == 0)
+            return;
 
-        if (!_execSizeChanged)
+        Dispatcher.UIThread.Post(() =>
         {
-            _execSizeChanged = true;
-            AutoScrollToFirstChange();
-        }
+            if (ReferenceEquals(DataContext, ctx))
+                ScrollToLine(line);
+        }, DispatcherPriority.Background);
     }
 
     /// <summary>
@@ -957,40 +956,6 @@ public class ThemedTextDiffPresenter : TextEditor
         }
     }
 
-    /// <summary>
-    /// AutoScrollToFirstChangeの処理を行う。
-    /// </summary>
-    private void AutoScrollToFirstChange()
-    {
-        if (Bounds.Height < 0.1)
-            return;
-
-        if (DataContext is not ViewModels.TextDiffContext ctx)
-            return;
-
-        var curBlock = ctx.BlockNavigation.GetCurrentBlock();
-        if (curBlock is null)
-            return;
-
-        var lineHeight = TextArea.TextView.DefaultLineHeight;
-        var vOffset = lineHeight * (curBlock.Start - 1) - Bounds.Height * 0.5;
-        if (vOffset >= 0)
-        {
-            var scroller = this.FindDescendantOfType<ScrollViewer>();
-            if (scroller is not null)
-            {
-                var scrollOffset = new Vector(0, vOffset);
-                scroller.Offset = scrollOffset;
-                ctx.ScrollOffset = scrollOffset;
-            }
-        }
-    }
-
-    /// <summary>
-    /// コピー可能なテキストが選択されているか判定する。
-    /// hunkインジケーター行のみが選択されている場合はコピー不可とする。
-    /// </summary>
-    /// <returns>コピー可能な場合はtrue</returns>
     private bool CanCopyText()
     {
         var selection = TextArea.Selection;
@@ -1103,7 +1068,7 @@ public class ThemedTextDiffPresenter : TextEditor
         var patchSelection = diff.MakeSelection(startIdx + 1, endIdx + 1, isCombined, IsOld);
         if (!patchSelection.HasChanges)
         {
-            App.RaiseException(string.Empty, "You should select at least one changed line!");
+            App.RaiseException(string.Empty, App.Text("Error.SelectChangedLines"));
             return;
         }
 
@@ -1121,8 +1086,6 @@ public class ThemedTextDiffPresenter : TextEditor
         await App.CopyTextAsync(patchText);
     }
 
-    /// <summary>サイズ変更イベントの初回実行済みフラグ。</summary>
-    private bool _execSizeChanged;
     /// <summary>TextMateシンタックスハイライト用インスタンス。</summary>
     private TextMate.Installation _textMate;
     /// <summary>前回の選択範囲の開始位置。</summary>

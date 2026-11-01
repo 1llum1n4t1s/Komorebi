@@ -94,10 +94,10 @@
   <x:String x:Key="Text.BranchTree.AheadBehind" xml:space="preserve">{0} commit(கள்) முன்னால், {1} commit(கள்) பின்னால்</x:String>
   <x:String x:Key="Text.BranchTree.Behind" xml:space="preserve">{0} commit(கள்) பின்னால்</x:String>
   <x:String x:Key="Text.BranchTree.InvalidUpstream" xml:space="preserve">செல்லாதது</x:String>
-  <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">REMOTE</x:String>
-  <x:String x:Key="Text.BranchTree.Status" xml:space="preserve">STATUS</x:String>
-  <x:String x:Key="Text.BranchTree.Tracking" xml:space="preserve">TRACKING</x:String>
-  <x:String x:Key="Text.BranchTree.Unpublished" xml:space="preserve">UNPUBLISHED</x:String>
+  <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">தொலை</x:String>
+  <x:String x:Key="Text.BranchTree.Status" xml:space="preserve">நிலை</x:String>
+  <x:String x:Key="Text.BranchTree.Tracking" xml:space="preserve">கண்காணிக்கப்படுகிறது</x:String>
+  <x:String x:Key="Text.BranchTree.Unpublished" xml:space="preserve">வெளியிடப்படாதது</x:String>
   <x:String x:Key="Text.BranchTree.URL" xml:space="preserve">URL</x:String>
   <x:String x:Key="Text.BranchTree.Worktree" xml:space="preserve">WORKTREE</x:String>
   <x:String x:Key="Text.Cancel" xml:space="preserve">விடு</x:String>
@@ -149,7 +149,7 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">களஞ்சிய முகவரி:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">மூடு</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">திருத்தி</x:String>
-  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">கிளைகள்</x:String>
   <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">கிளைகள் &amp; குறிச்சொற்கள்</x:String>
   <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">களஞ்சிய தனிப்பயன் செயல்கள்</x:String>
   <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">திருத்தக் கோப்புகள்</x:String>
@@ -170,7 +170,7 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Edit" xml:space="preserve">திருத்து...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Fixup" xml:space="preserve">பெற்றோருக்குள் Fixup செய்...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">${0}$-ஐ ${1}$-இல் ஊடாடும் Rebase செய்</x:String>
-  <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Reword...</x:String>
+  <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">செய்தியை மாற்று...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">பெற்றோருக்குள் Squash செய்...</x:String>
   <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">ஒன்றிணை ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">${0}$-ஐ ${1}$-க்கு Push செய்</x:String>
@@ -205,9 +205,9 @@
   <x:String x:Key="Text.CommitDetail.Info.SHA" xml:space="preserve">பாகொவ</x:String>
   <x:String x:Key="Text.CommitDetail.Info.Signer" xml:space="preserve">கையொப்பமிட்டவர்:</x:String>
   <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">உலாவியில் திற</x:String>
-  <x:String x:Key="Text.CommitMessageTextBox.Column" xml:space="preserve">COL</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.Column" xml:space="preserve">நெடுவரிசை</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">Commit செய்தியை உள்ளிடவும். தலைப்பையும் விளக்கத்தையும் பிரிக்க வெற்று வரியைப் பயன்படுத்தவும்!</x:String>
-  <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">SUBJECT</x:String>
+  <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">தலைப்பு</x:String>
   <x:String x:Key="Text.Compare" xml:space="preserve">ஒப்பிடு</x:String>
   <x:String x:Key="Text.Compare.WithHead" xml:space="preserve">HEAD உடன் ஒப்பிடு</x:String>
   <x:String x:Key="Text.Configure" xml:space="preserve">களஞ்சியம் உள்ளமை</x:String>
@@ -242,7 +242,7 @@
   <x:String x:Key="Text.Configure.CustomAction.Scope.Branch" xml:space="preserve">கிளை</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Scope.Commit" xml:space="preserve">உறுதிமொழி</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Scope.File" xml:space="preserve">கோப்பு</x:String>
-  <x:String x:Key="Text.Configure.CustomAction.Scope.Remote" xml:space="preserve">Remote</x:String>
+  <x:String x:Key="Text.Configure.CustomAction.Scope.Remote" xml:space="preserve">தொலைக் களஞ்சியம்</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Scope.Repository" xml:space="preserve">களஞ்சியம்</x:String>
   <x:String x:Key="Text.Configure.CustomAction.Scope.Tag" xml:space="preserve">குறிச்சொல்</x:String>
   <x:String x:Key="Text.Configure.CustomAction.WaitForExit" xml:space="preserve">செயல்பாட்டிலிருந்து வெளியேற காத்திரு</x:String>
@@ -336,7 +336,7 @@
   <x:String x:Key="Text.CreateTag.PushToAllRemotes" xml:space="preserve">உருவாக்கப்பட்ட பிறகு அனைத்து தொலைகளுக்கும் தள்ளு</x:String>
   <x:String x:Key="Text.CreateTag.Title" xml:space="preserve">புதிய குறிசொல் உருவாக்கு</x:String>
   <x:String x:Key="Text.CreateTag.Type" xml:space="preserve">வகை:</x:String>
-  <x:String x:Key="Text.CreateTag.Type.Annotated" xml:space="preserve">annotated</x:String>
+  <x:String x:Key="Text.CreateTag.Type.Annotated" xml:space="preserve">குறிப்புரையுடன்</x:String>
   <x:String x:Key="Text.CreateTag.Type.Lightweight" xml:space="preserve">குறைந்தஎடை</x:String>
   <x:String x:Key="Text.CtrlClickTip" xml:space="preserve">நேரடியாகத் தொடங்க  கட்டுப்பாட்டை அழுத்திப் பிடி</x:String>
   <x:String x:Key="Text.Cut" xml:space="preserve">வெட்டு</x:String>
@@ -373,10 +373,10 @@
   <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">கோப்பு முறை மாற்றப்பட்டது</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">முதல் வேறுபாடு</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">வெள்ளைவெளி மாற்றத்தை புறக்கணி</x:String>
-  <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">BLEND</x:String>
-  <x:String x:Key="Text.Diff.Image.Difference" xml:space="preserve">DIFFERENCE</x:String>
+  <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">கலவை</x:String>
+  <x:String x:Key="Text.Diff.Image.Difference" xml:space="preserve">வேறுபாடு</x:String>
   <x:String x:Key="Text.Diff.Image.SideBySide" xml:space="preserve">அருகருகே</x:String>
-  <x:String x:Key="Text.Diff.Image.Swipe" xml:space="preserve">SWIPE</x:String>
+  <x:String x:Key="Text.Diff.Image.Swipe" xml:space="preserve">தேய்த்தல்</x:String>
   <x:String x:Key="Text.Diff.Last" xml:space="preserve">கடைசி வேறுபாடு</x:String>
   <x:String x:Key="Text.Diff.LFS" xml:space="preserve">பெகோஅ பொருள் மாற்றம்</x:String>
   <x:String x:Key="Text.Diff.New" xml:space="preserve">புதியது</x:String>
@@ -582,7 +582,7 @@
   <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">பணியிடங்கள்</x:String>
   <x:String x:Key="Text.Merge" xml:space="preserve">கிளையை ஒன்றிணை</x:String>
   <x:String x:Key="Text.Merge.Edit" xml:space="preserve">Merge செய்தியைத் தனிப்பயனாக்கு</x:String>
-  <x:String x:Key="Text.Merge.Into" xml:space="preserve">Into:</x:String>
+  <x:String x:Key="Text.Merge.Into" xml:space="preserve">இதனுள்:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">இணைப்பு விருப்பம்:</x:String>
   <x:String x:Key="Text.Merge.Source" xml:space="preserve">இதனுள்:</x:String>
   <x:String x:Key="Text.Merge.Test" xml:space="preserve">Merge சோதிக்கப்படுகிறது...</x:String>
@@ -687,7 +687,7 @@
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">உறுதிமொழி விவரங்களில் குழந்தைகளைக் காட்டு</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">உறுதிமொழி வரைபடத்தில் குறிச்சொற்களைக் காட்டு</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">பொருள் வழிகாட்டி நீளம்</x:String>
-  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24 மணி நேரம்</x:String>
   <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Commit வரைபடத்தில் சுருக்கமான branch பெயர்களைப் பயன்படுத்து</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Github பாணி இயல்புநிலை அவதாரத்தை உருவாக்கு</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">அறிவிலி</x:String>
@@ -932,7 +932,7 @@
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">உறுதிமொழிகள்: </x:String>
   <x:String x:Key="Text.Submodule" xml:space="preserve">துணைத் தொகுதி</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">துணைத் தொகுதியைச் சேர்</x:String>
-  <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCH</x:String>
+  <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">கிளை</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">கிளை</x:String>
   <x:String x:Key="Text.Submodule.CopyPath" xml:space="preserve">உறவு பாதை</x:String>
   <x:String x:Key="Text.Submodule.Deinit" xml:space="preserve">நிறுத்து</x:String>
@@ -945,7 +945,7 @@
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">துணை தொகுதியை நீக்கு</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">கிளையை அமை</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">URL-ஐ மாற்று</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATUS</x:String>
+  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">நிலை</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">மாற்றப்பட்டது</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">துவக்கப்படவில்லை</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">திருத்தம் மாற்றப்பட்டது</x:String>
@@ -956,7 +956,7 @@
   <x:String x:Key="Text.SubmoduleRevisionCompare.OpenDetails" xml:space="preserve">விவரங்களைத் திற</x:String>
   <x:String x:Key="Text.Sure" xml:space="preserve">சரி</x:String>
   <x:String x:Key="Text.Tag.Tagger" xml:space="preserve">TAGGER</x:String>
-  <x:String x:Key="Text.Tag.Time" xml:space="preserve">TIME</x:String>
+  <x:String x:Key="Text.Tag.Time" xml:space="preserve">நேரம்</x:String>
   <x:String x:Key="Text.TagCM.CompareTwo" xml:space="preserve">2 குறிச்சொற்களை ஒப்பிடு</x:String>
   <x:String x:Key="Text.TagCM.CompareWith" xml:space="preserve">இதனுடன் ஒப்பிடு...</x:String>
   <x:String x:Key="Text.TagCM.CompareWithHead" xml:space="preserve">HEAD உடன் ஒப்பிடு</x:String>
@@ -992,11 +992,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">களஞ்சியத்தைத் திற</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">முனையத்தைத் திற</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">இயல்புநிலை நகலி அடைவில் களஞ்சியங்களை மீண்டும் வருடு</x:String>
-  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">அனைத்துக் களஞ்சியங்களின் தொலை இணைப்புகளைச் சரிபார்</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">அனைத்துத் தொலைக் களஞ்சியங்களையும் அணுகலாம்</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">சில தொலைக் களஞ்சியங்களை அணுக முடியவில்லை</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">எந்தத் தொலைக் களஞ்சியத்தையும் அணுக முடியவில்லை</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">தொலைக் களஞ்சியங்கள் அமைக்கப்படவில்லை</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">களஞ்சியங்களைத் தேடு...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">உள்ளக மாற்றங்கள்</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">அறிவிலி புறக்கணி</x:String>
@@ -1018,7 +1018,7 @@
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">நீங்கள் ஒரு பிரிந்த HEAD-இல் commit உருவாக்குகிறீர்கள். தொடர விரும்புகிறீர்களா?</x:String>
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">நீங்கள் {0} கோப்புகளை நிலைப்படுத்தியுள்ளீர்கள், ஆனால் {1} கோப்புகள் மட்டுமே காட்டப்பட்டுள்ளன ({2} கோப்புகள் வடிகட்டப்பட்டுள்ளன). தொடர விரும்புகிறீர்களா?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">மோதல்கள் கண்டறியப்பட்டது</x:String>
-  <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">MERGE</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">ஒன்றிணை</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">வெளிப்புறக் கருவியுடன் Merge செய்</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.OpenExternalMergeToolAllConflicts" xml:space="preserve">அனைத்து முரண்பாடுகளையும் வெளிப்புற MERGETOOL-இல் திற</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Resolved" xml:space="preserve">கோப்பு மோதல்கள் தீர்க்கப்பட்டது</x:String>
@@ -1041,12 +1041,12 @@
   <x:String x:Key="Text.Workspace" xml:space="preserve">பணியிடம்:</x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">பணியிடங்களை உள்ளமை...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">பணிமரம்</x:String>
-  <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">BRANCH</x:String>
+  <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">கிளை</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">பாதையை நகலெடு</x:String>
   <x:String x:Key="Text.Worktree.Head" xml:space="preserve">HEAD</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">பூட்டு</x:String>
   <x:String x:Key="Text.Worktree.Open" xml:space="preserve">திற</x:String>
-  <x:String x:Key="Text.Worktree.Path" xml:space="preserve">PATH</x:String>
+  <x:String x:Key="Text.Worktree.Path" xml:space="preserve">பாதை</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">நீக்கு</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">திற</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">ஆம்</x:String>
@@ -1193,7 +1193,7 @@
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory இல் சேர்</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">மூலம்:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">கோப்பு</x:String>
-  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Clipboard</x:String>
+  <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">கிளிப்போர்டு</x:String>
   <x:String x:Key="Text.Bisect.WaitingForCheckoutAnother" xml:space="preserve">Bisect நடந்து கொண்டிருக்கிறது. வேறு ஒரு commit-ஐ checkout செய்து அதை நல்லது அல்லது மோசம் என குறிக்கவும்.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForFirstBad" xml:space="preserve">Bisect நடந்து கொண்டிருக்கிறது. தற்போதைய commit-ஐ மோசம் என குறிக்கவும் அல்லது வேறொன்றை checkout செய்து மோசம் என குறிக்கவும்.</x:String>
   <x:String x:Key="Text.Bisect.WaitingForFirstGood" xml:space="preserve">Bisect நடந்து கொண்டிருக்கிறது. தற்போதைய commit-ஐ நல்லது அல்லது மோசம் என குறித்து, பின் வேறொன்றை checkout செய்யவும்.</x:String>
@@ -1208,59 +1208,159 @@
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Tag-ஐ Checkout செய்...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">உள்ளமைக்கப்பட்ட submodule-களை புதுப்பி</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">அதே கோப்புறையில் உள்ள கண்காணிக்கப்படாத அனைத்து கோப்புகளையும் புறக்கணி</x:String>
-  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
-  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
-  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
-  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
-  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
-  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
-  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
-  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
-  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
-  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
-  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
-  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
-  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
-  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
-  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
-  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
-  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
-  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
-  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
-  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
-  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">தானியங்கு பெறுதலை இயக்கு</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">pre-push hook-ஐத் தவிர்</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">pre-rebase கொக்கியைத் தவிர்</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">மாற்றங்கள்</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">கமிட்கள்</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">இடதுபுற கமிட்கள் மட்டும்</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">வலதுபுற கமிட்கள் மட்டும்</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">குறிப்பு: மறுபக்கம் HEAD ஆக இருந்தால், சூழல் பட்டி மூலம் தேர்ந்தெடுத்த கமிட்களைச் செர்ரி-பிக் செய்யலாம்.</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">பெயர்:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">தொடங்கும் இடம்:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">ஒன்றிணைப்பதற்கு முன் மறுஅடித்தளமிடு</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">இருமக் கோப்பு</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">பதினாறுமக் காட்சிப்படுத்தி</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">முகவரிக்குச் செல்...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">வடிப்பான்கள் இயக்கப்பட்டுள்ளன</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">வடிப்பான்களைச் சுருக்கு</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">வடிப்பான்களை விரிவாக்கு</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">விவரங்களைச் சுருக்கு</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">தனி சாளரத்தில் திற</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">கமிட் விவரங்கள்</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">திருத்த ஒப்பீடு</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">பகுத்தறியும் முயற்சியின் நிலை</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">SSH விசை மேலாளரைத் திற</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">பின்வரும் விசைகளை நிச்சயமாக நீக்க வேண்டுமா?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">விசையின் கைரேகை</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">SSH விசையை உருவாக்கு</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">கடவுச்சொற்றொடரை உறுதிப்படுத்து:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">மின்னஞ்சல்:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">கட்டாயம்.</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">விசையின் பெயர்:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">கட்டாயம். எடுத்துக்காட்டு: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">கடவுச்சொற்றொடர்:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">உருவாக்கு</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">வகை:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">தனிப்பட்ட விசைக்குக் கடவுச்சொற்றொடரைப் பயன்படுத்து</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">பாதை</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">பொது விசை</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH விசை மேலாளர்</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">வரைபடத்தில் முன்னிலைப்படுத்தல்</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">அனைத்தும்</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">தற்போதைய கிளை மட்டும்</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">தேர்ந்தெடுத்த கமிட்கள் மட்டும்</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">தற்போதைய கிளையும் தேர்ந்தெடுத்த கமிட்களும்</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">தேர்ந்தெடுத்த கமிட்கள் (முதல் பெற்றோர் மட்டும்)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">நிறுத்து</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">கோப்பு முறை மாற்றம்: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">புதிய கோப்பு முறை: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">நீக்கப்பட்ட கோப்பின் முறை: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">சாதாரணம்</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">இயக்கக்கூடியது</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">அடைவு</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">குறியீட்டு இணைப்பு</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">துணைத்தொகுதி</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">தெரியாதது</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">தானியங்கு சேமிப்பு {0} தக்கவைக்கப்பட்டது. தற்போதைய Git செயலை முடிக்கவும் அல்லது நிறுத்தவும்; பின்னர் சேமிப்புப் பட்டியலிலிருந்து மீட்டெடுக்கவும்.</x:String>
+  <x:String x:Key="Text.TextSearch.MatchCase">பெரிய/சிறிய எழுத்துகளை வேறுபடுத்து</x:String>
+  <x:String x:Key="Text.TextSearch.WholeWord">முழுச் சொற்கள் மட்டும்</x:String>
+  <x:String x:Key="Text.TextSearch.Regex">வழக்கமான கோவைகளைப் பயன்படுத்து</x:String>
+  <x:String x:Key="Text.TextSearch.Previous">முந்தையதைத் தேடு (Shift+F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Next">அடுத்ததைத் தேடு (F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Placeholder">தேடு...</x:String>
+  <x:String x:Key="Text.TextSearch.NoMatches">பொருத்தங்கள் இல்லை</x:String>
+  <x:String x:Key="Text.TextSearch.OneMatch">1 பொருத்தம்</x:String>
+  <x:String x:Key="Text.TextSearch.Matches">{0} பொருத்தங்கள்</x:String>
+  <x:String x:Key="Text.TextSearch.MatchOfTotal">{1} இல் {0}</x:String>
+  <x:String x:Key="Text.Validation.BranchExists">இதே பெயரில் ஒரு கிளை ஏற்கனவே உள்ளது.</x:String>
+  <x:String x:Key="Text.Validation.BranchNameInvalid">தவறான மதிப்பு: கிளை பெயர்</x:String>
+  <x:String x:Key="Text.Validation.BranchNameRequired">தேவையான புலம்: கிளை பெயர்</x:String>
+  <x:String x:Key="Text.Validation.CommitDescriptionRequired">தேவையான புலம்: குறுகிய விளக்கம்</x:String>
+  <x:String x:Key="Text.Validation.CommitMessageRequired">தேவையான புலம்: செய்தி</x:String>
+  <x:String x:Key="Text.Validation.CommitTypeRequired">தேவையான புலம்: மாற்ற வகை</x:String>
+  <x:String x:Key="Text.Validation.ContextInvalid">செயலின் சூழல் கிடைக்கவில்லை.</x:String>
+  <x:String x:Key="Text.Validation.DevelopBranchRequired">தேவையான புலம்: மேம்பாட்டு கிளை</x:String>
+  <x:String x:Key="Text.Validation.EmailInvalid">தவறான மதிப்பு: மின்னஞ்சல்</x:String>
+  <x:String x:Key="Text.Validation.EmailRequired">தேவையான புலம்: மின்னஞ்சல்</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixInvalid">தவறான மதிப்பு: நற்பொருத்தம் முன்னொட்டு</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixRequired">தேவையான புலம்: நற்பொருத்தம் முன்னொட்டு</x:String>
+  <x:String x:Key="Text.Validation.GitFlowBranchesEqual">உருவாக்கக் கிளையும் முதன்மைக் கிளையும் வெவ்வேறு பெயர்களைக் கொண்டிருக்க வேண்டும்.</x:String>
+  <x:String x:Key="Text.Validation.GroupNameRequired">தேவையான புலம்: பெயர்</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixInvalid">தவறான மதிப்பு: சூடானதிருத்தம் முன்னொட்டு</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixRequired">தேவையான புலம்: சூடானதிருத்தம் முன்னொட்டு</x:String>
+  <x:String x:Key="Text.Validation.IgnorePatternRequired">தேவையான புலம்: வடிவம்</x:String>
+  <x:String x:Key="Text.Validation.LFSPatternRequired">தேவையான புலம்: தனிப்பயன் வடிவம்</x:String>
+  <x:String x:Key="Text.Validation.LocalBranchRequired">தேவையான புலம்: கிளை</x:String>
+  <x:String x:Key="Text.Validation.MasterBranchRequired">தேவையான புலம்: உற்பத்தி கிளை</x:String>
+  <x:String x:Key="Text.Validation.NameRequired">தேவையான புலம்: பெயர்</x:String>
+  <x:String x:Key="Text.Validation.OutputFileRequired">தேவையான புலம்: இதற்கு காப்பகத்தை சேமி</x:String>
+  <x:String x:Key="Text.Validation.ParentFolderRequired">தேவையான புலம்: பெற்றோர் கோப்புறை</x:String>
+  <x:String x:Key="Text.Validation.PassphraseMismatch">கடவுச்சொற்றொடரும் உறுதிப்படுத்தலும் பொருந்தவில்லை.</x:String>
+  <x:String x:Key="Text.Validation.PassphraseRequired">தேவையான புலம்: கடவுச்சொற்றொடர்</x:String>
+  <x:String x:Key="Text.Validation.PatchFileRequired">தேவையான புலம்: ஒட்டு கோப்பு</x:String>
+  <x:String x:Key="Text.Validation.PathNotEmpty">தேர்ந்தெடுத்த பாதை காலியாக இல்லை.</x:String>
+  <x:String x:Key="Text.Validation.PathNotFound">தேர்ந்தெடுத்த பாதையைக் கண்டறிய முடியவில்லை.</x:String>
+  <x:String x:Key="Text.Validation.PathRequired">தேவையான புலம்: பாதை</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixInvalid">தவறான மதிப்பு: வெளியீடு முன்னொட்டு</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixRequired">தேவையான புலம்: வெளியீடு முன்னொட்டு</x:String>
+  <x:String x:Key="Text.Validation.RemoteBranchRequired">தேவையான புலம்: மேல்ஓடை</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameExists">இதே பெயரில் தொலைக் களஞ்சியம் ஏற்கனவே உள்ளது.</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameInvalid">தவறான மதிப்பு: களஞ்சிய பெயர்</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameRequired">தேவையான புலம்: களஞ்சிய பெயர்</x:String>
+  <x:String x:Key="Text.Validation.RemoteRequired">தேவையான புலம்: தொலை</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlExists">இதே URL உடைய தொலைக் களஞ்சியம் ஏற்கனவே உள்ளது.</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlInvalid">தவறான மதிப்பு: களஞ்சிய முகவரி</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlRequired">தேவையான புலம்: களஞ்சிய முகவரி</x:String>
+  <x:String x:Key="Text.Validation.RepositoryFolderRequired">தேவையான புலம்: கோப்புறை</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNameInvalid">பெயரில் இலத்தீன் எழுத்துகள், எண்கள், அடிக்கோடுகள், இணைப்புக்குறிகள் மட்டுமே இருக்கலாம்.</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNotFound">தனிப்பட்ட SSH விசையைக் கண்டறிய முடியவில்லை.</x:String>
+  <x:String x:Key="Text.Validation.StorageFileRequired">தேவையான புலம்: இதற்கு காப்பகத்தை சேமி</x:String>
+  <x:String x:Key="Text.Validation.TagExists">இதே பெயரில் ஒரு குறிச்சொல் ஏற்கனவே உள்ளது.</x:String>
+  <x:String x:Key="Text.Validation.TagNameInvalid">தவறான மதிப்பு: குறிச்சொல் பெயர்</x:String>
+  <x:String x:Key="Text.Validation.TagNameRequired">தேவையான புலம்: குறிச்சொல் பெயர்</x:String>
+  <x:String x:Key="Text.Validation.TagPrefixInvalid">தவறான மதிப்பு: பதிப்பு குறிச்சொல் முன்னொட்டு</x:String>
+  <x:String x:Key="Text.Validation.UrlRequired">தேவையான புலம்: முகவரி</x:String>
+  <x:String x:Key="Text.Validation.WorktreePathRequired">தேவையான புலம்: PATH</x:String>
+  <x:String x:Key="Text.Error.InvalidClipboardPatch">கிளிப்போர்டில் செல்லுபடியான திருத்த உள்ளடக்கம் இல்லை.</x:String>
+  <x:String x:Key="Text.Archive.Saved">காப்பகம் சேமிக்கப்பட்ட இடம்: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.Enabled">LFS வெற்றிகரமாக இயக்கப்பட்டது.</x:String>
+  <x:String x:Key="Text.GitLFS.PatternTracked">கண்காணிக்கப்படும் முறை: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileLocked">கோப்பு பூட்டப்பட்டது: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileUnlocked">கோப்பின் பூட்டு நீக்கப்பட்டது: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveSettings">அமைப்புகளைச் சேமிக்க முடியவில்லை: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToLoadRemoteSettings">தொலை அமைப்புகளை ஏற்ற முடியவில்லை: {0}</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.KeyExists">இதே பெயரில் ஒரு விசை ஏற்கனவே உள்ளது.</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.Failed">SSH விசையை உருவாக்க முடியவில்லை: {0}</x:String>
+  <x:String x:Key="Text.AddToIgnore.LocalOnly">உள்ளூரில் மட்டும்</x:String>
+  <x:String x:Key="Text.Conflict.Mine">என்னுடையது</x:String>
+  <x:String x:Key="Text.Conflict.Theirs">அவர்களுடையது</x:String>
+  <x:String x:Key="Text.Diff.Image">படம்</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Text">உரைப்பெட்டி</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Path">பாதைத் தேர்வி</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Checkbox">தேர்வுப்பெட்டி</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Combobox">சேர்க்கைப்பெட்டி</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">உள்ளூர் கிளைத் தேர்வி</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">தொலைக் கிளைத் தேர்வி</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ ஐ பணிமரமாகச் சரிபார்...</x:String>
+  <x:String x:Key="Text.GitFlow.Finish">${0}$ ஐ முடி</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders">கூடுதல் தலைப்புகள் (ஒரு வரிக்கு ஒரு `பெயர்: மதிப்பு`)</x:String>
+  <x:String x:Key="Text.TagCM.Merge">${0}$ ஐ ${1}$ உடன் ஒன்றிணை...</x:String>
+  <x:String x:Key="Text.TrustRepository">நம்பகமற்ற களஞ்சியம்</x:String>
+  <x:String x:Key="Text.TrustRepository.CommandTip">இந்தப் பாதையை நம்ப `git config --global --add safe.directory {0}` கட்டளையை இயக்க வேண்டுமா?</x:String>
+  <x:String x:Key="Text.TrustRepository.Description">இந்தக் களஞ்சியத்திற்கான அணுகலை Git மறுத்தது: </x:String>
+  <x:String x:Key="Text.TrustRepository.Path">பாதை:</x:String>
+  <x:String x:Key="Text.Progress.TrustingRepository">Git safe.directory இல் «{0}» சேர்க்கப்படுகிறது...</x:String>
+  <x:String x:Key="Text.Progress.OpeningRepository">«{0}» திறக்கப்படுகிறது...</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenTrustedRepository">நம்பகமானதாகக் குறித்த பின்னரும் களஞ்சியத்தைத் திறக்க முடியவில்லை.</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders.Tip">ஒரு வரிக்கு ஒரு தலைப்பு: பெயர்: மதிப்பு</x:String>
+  <x:String x:Key="Text.Statistics.Others">மற்றவர்கள்</x:String>
+  <x:String x:Key="Text.Statistics.TopAuthors.Count">உறுதிமொழிகள்</x:String>
+  <x:String x:Key="Text.RepositoryGroup.Auto">தானியங்கு</x:String>
+  <x:String x:Key="Text.RepositoryGroup.NoGroup">குழு இல்லை (வகைப்படுத்தப்படாதது)</x:String>
+  <x:String x:Key="Text.RepositoryGroup.AutoDescription">இயல்புநிலை நகலாக்க அடைவின் அடிப்படையில்</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Tips">உள்ளடக்கத்தைப் பார்க்க ஒரு கோப்பைத் தேர்ந்தெடுக்கவும்.</x:String>
+  <x:String x:Key="Text.SetPushUrl">புஷ் URL ஐ அமை</x:String>
+  <x:String x:Key="Text.SetPushUrl.PushURL">புஷ் URL:</x:String>
+  <x:String x:Key="Text.Error.SelectChangedLines">மாற்றப்பட்ட வரிகளில் குறைந்தது ஒன்றையாவது தேர்ந்தெடுக்கவும்.</x:String>
 </ResourceDictionary>

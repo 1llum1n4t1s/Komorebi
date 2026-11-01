@@ -18,7 +18,7 @@ public class OpenLocalRepository : Popup
     /// <summary>
     /// 対象リポジトリのフォルダパス。バリデーション付き。
     /// </summary>
-    [Required(ErrorMessage = "Repository folder is required")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.RepositoryFolderRequired))]
     [CustomValidation(typeof(OpenLocalRepository), nameof(ValidateRepoPath))]
     public string RepoPath
     {
@@ -29,7 +29,7 @@ public class OpenLocalRepository : Popup
     /// <summary>
     /// 追加先として選択可能なグループ一覧（非リポジトリノードをフラット化したもの）。
     /// </summary>
-    public List<RepositoryNode> Groups
+    public List<TargetGroup> Groups
     {
         get;
     }
@@ -37,7 +37,7 @@ public class OpenLocalRepository : Popup
     /// <summary>
     /// 追加先として選択されているグループ。null の場合はルートに追加される。
     /// </summary>
-    public RepositoryNode Group
+    public TargetGroup Group
     {
         get => _group;
         set => SetProperty(ref _group, value);
@@ -71,9 +71,9 @@ public class OpenLocalRepository : Popup
 
         // 先頭に「No Group (Uncategorized)」を配置し、引数の group があればそれを、なければ Uncategorized を既定選択にする
         Groups = [];
-        Groups.Add(new RepositoryNode { Name = "No Group (Uncategorized)", Id = string.Empty });
-        Group = group ?? Groups[0];
-        CollectGroups(Groups, Preferences.Instance.RepositoryNodes);
+        Groups.Add(new TargetGroup(null, App.Text("RepositoryGroup.NoGroup"), string.Empty));
+        TargetGroup.Collect(Groups, Preferences.Instance.RepositoryNodes);
+        Group = group is null ? Groups[0] : Groups.Find(x => x.Node == group) ?? Groups[0];
 
         Bookmarks = [];
         for (var i = 0; i < Models.Bookmarks.Brushes.Length; i++)
@@ -86,7 +86,7 @@ public class OpenLocalRepository : Popup
     public static ValidationResult ValidateRepoPath(string folder, ValidationContext _)
     {
         if (!Directory.Exists(folder))
-            return new ValidationResult("Given path can NOT be found");
+            return new ValidationResult(App.Text("Validation.PathNotFound"));
         return ValidationResult.Success;
     }
 
@@ -99,7 +99,7 @@ public class OpenLocalRepository : Popup
         // ベアリポジトリかどうかを判定する
         var isBare = await new Commands.IsBareRepository(_repoPath).GetResultAsync();
         // 「No Group (Uncategorized)」（Id=string.Empty）は内部的に null を親として扱う
-        var parent = _group is { Id: not "" } ? _group : null;
+        var parent = _group?.Node;
         var repoRoot = _repoPath;
         if (!isBare)
         {
@@ -118,7 +118,11 @@ public class OpenLocalRepository : Popup
                     if (page.Node.Id.Equals(_pageId, StringComparison.Ordinal))
                     {
                         // upstream 95279943: OpenLocalRepository で選択されたブックマーク色を Init ポップアップに継承
-                        page.Popup = new Init(page.Node.Id, _repoPath, parent, _bookmark, test.StdErr);
+                        if (Models.SafeDirectories.IsUntrustedRepository(test.StdErr) &&
+                            Models.SafeDirectories.TryGetSafeDirectoryValue(_repoPath, test.StdErr, out var safeDirectory))
+                            page.Popup = new TrustRepository(page.Node.Id, test.StdErr, safeDirectory, parent, true, true, _bookmark);
+                        else
+                            page.Popup = new Init(page.Node.Id, _repoPath, parent, _bookmark, test.StdErr);
                         break;
                     }
                 }
@@ -136,27 +140,12 @@ public class OpenLocalRepository : Popup
         return true;
     }
 
-    /// <summary>
-    /// リポジトリノードツリーを再帰的に探索し、グループノード（非リポジトリ）のみをフラットリストに収集する。
-    /// </summary>
-    private static void CollectGroups(List<RepositoryNode> outs, List<RepositoryNode> collections)
-    {
-        foreach (var node in collections)
-        {
-            if (!node.IsRepository)
-            {
-                outs.Add(node);
-                CollectGroups(outs, node.SubNodes);
-            }
-        }
-    }
-
     /// <summary>操作を行うページのID</summary>
     private string _pageId = string.Empty;
     /// <summary>対象リポジトリのフォルダパス</summary>
     private string _repoPath = string.Empty;
     /// <summary>追加先グループ</summary>
-    private RepositoryNode _group = null;
+    private TargetGroup _group = null;
     /// <summary>選択されたブックマーク色のインデックス</summary>
     private int _bookmark = 0;
 }

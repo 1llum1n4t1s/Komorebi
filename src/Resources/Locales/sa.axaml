@@ -992,11 +992,11 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">भण्डारम् उद्घाटयतु</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">सम्प्रेषकम् उद्घाटयतु</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">पूर्वनिर्धारितप्रतिरूपणनिर्देशिकायां भण्डाराणि पुनः परीक्षतु</x:String>
-  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">सर्वेषां भण्डाराणां दूरस्थसम्पर्कं परीक्ष्यताम्</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">सर्वे दूरस्थभण्डाराः प्राप्याः सन्ति</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">केचन दूरस्थभण्डाराः अप्राप्याः सन्ति</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">सर्वे दूरस्थभण्डाराः अप्राप्याः सन्ति</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">दूरस्थभण्डाराः न विन्यस्ताः</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">भण्डाराणि अन्विष्यतु...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">स्थानीयपरिवर्तनानि</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git उपेक्षा</x:String>
@@ -1208,59 +1208,159 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">चिह्नं चिनोतु...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">नीडितोपमॉड्यूलान् अद्यतनं कुरुत</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">समानपत्रिकायां सर्वाणि अनुगमनरहितानि सञ्चिकाः उपेक्षन्ताम्</x:String>
-  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
-  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
-  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
-  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
-  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
-  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
-  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
-  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
-  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
-  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
-  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
-  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
-  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
-  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
-  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
-  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
-  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
-  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
-  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
-  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
-  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">स्वचालितं प्राप्तिं सक्रियं करोतु</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">pre-push हुकं त्यजतु</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">pre-rebase हुकं त्यजतु</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">परिवर्तनानि</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">प्रतिबद्धताः</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">वामपक्षस्यैव प्रतिबद्धताः</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">दक्षिणपक्षस्यैव प्रतिबद्धताः</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">सूचना: अन्यपक्षः HEAD चेत् सन्दर्भसूचीतः चयनितप्रतिबद्धताः पृथक् प्रयोक्तुं शक्यन्ते।</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">नाम:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">आरम्भस्थानम्:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">विलयनात् पूर्वं पुनराधारं करोतु</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">द्व्याधारी सञ्चिका</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">षोडशाधारी दर्शकः</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">सङ्केतं गच्छतु...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">शोधकाः सक्रियाः</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">शोधकान् सङ्कोचयतु</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">शोधकान् विस्तारयतु</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">विवरणं सङ्कोचयतु</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">पृथग्जानके उद्घाटयतु</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">प्रतिबद्धताविवरणम्</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">संस्करणतुलना</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">तर्कप्रयासस्तरः</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">SSH कुञ्जीप्रबन्धकं उद्घाटयतु</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">किं भवान् निम्नलिखिताः कुञ्जीः निश्चयेन विलोपयितुम् इच्छति?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">कुञ्जीचिह्नम्</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">SSH कुञ्जीं जनयतु</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">गुप्तवाक्यं पुष्टीकरोतु:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">विद्युत्पत्रम्:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">अनिवार्यम्।</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">कुञ्जीनाम:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">अनिवार्यम्। उदाहरणम्: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">गुप्तवाक्यम्:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">जनयतु</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">प्रकारः:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">निजकुञ्ज्यै गुप्तवाक्यम् उपयोजयतु</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">मार्गः</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">सार्वजनिककुञ्जी</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH कुञ्जीप्रबन्धकः</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">आलेखे विशेषाङ्कनम्</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">सर्वाः</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">वर्तमानशाखा एव</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">चयनितप्रतिबद्धताः एव</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">वर्तमानशाखा तथा चयनितप्रतिबद्धताः</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">चयनितप्रतिबद्धताः (प्रथमजनकः एव)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">समापयतु</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">सञ्चिकाप्रकारपरिवर्तनम्: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">नूतनसञ्चिकाप्रकारः: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">विलोपितसञ्चिकाप्रकारः: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">साधारणम्</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">निष्पादनीयम्</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">निर्देशिका</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">प्रतीकात्मकसम्बन्धः</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">उपघटकः</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">अज्ञातम्</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">स्वचालितं परिवर्तनसञ्चयं {0} रक्षितम्। वर्तमानं Git कार्यं समापयतु अथवा निरस्यतु, ततः सञ्चयसूचीतः पुनःस्थापयतु।</x:String>
+  <x:String x:Key="Text.TextSearch.MatchCase">बृहल्लघ्वक्षरभेदं गणयतु</x:String>
+  <x:String x:Key="Text.TextSearch.WholeWord">सम्पूर्णशब्दान् अन्विष्यतु</x:String>
+  <x:String x:Key="Text.TextSearch.Regex">नियमितव्यञ्जनानि उपयोजयतु</x:String>
+  <x:String x:Key="Text.TextSearch.Previous">पूर्वं शोधयतु (Shift+F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Next">अग्रिमं शोधयतु (F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Placeholder">शोधयतु...</x:String>
+  <x:String x:Key="Text.TextSearch.NoMatches">सादृश्यं न प्राप्तम्</x:String>
+  <x:String x:Key="Text.TextSearch.OneMatch">१ सादृश्यम्</x:String>
+  <x:String x:Key="Text.TextSearch.Matches">{0} सादृश्यानि</x:String>
+  <x:String x:Key="Text.TextSearch.MatchOfTotal">{1} मध्ये {0}</x:String>
+  <x:String x:Key="Text.Validation.BranchExists">समाननाम्नी शाखा पूर्वमेव अस्ति।</x:String>
+  <x:String x:Key="Text.Validation.BranchNameInvalid">अमान्यं मूल्यम्: शाखानाम</x:String>
+  <x:String x:Key="Text.Validation.BranchNameRequired">अनिवार्यं क्षेत्रम्: शाखानाम</x:String>
+  <x:String x:Key="Text.Validation.CommitDescriptionRequired">अनिवार्यं क्षेत्रम्: संक्षिप्तविवरणम्</x:String>
+  <x:String x:Key="Text.Validation.CommitMessageRequired">अनिवार्यं क्षेत्रम्: सन्देशः</x:String>
+  <x:String x:Key="Text.Validation.CommitTypeRequired">अनिवार्यं क्षेत्रम्: परिवर्तनप्रकारः</x:String>
+  <x:String x:Key="Text.Validation.ContextInvalid">कार्यसन्दर्भः अनुपलब्धः।</x:String>
+  <x:String x:Key="Text.Validation.DevelopBranchRequired">अनिवार्यं क्षेत्रम्: विकासशाखा</x:String>
+  <x:String x:Key="Text.Validation.EmailInvalid">अमान्यं मूल्यम्: विद्युत्पत्रम्</x:String>
+  <x:String x:Key="Text.Validation.EmailRequired">अनिवार्यं क्षेत्रम्: विद्युत्पत्रम्</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixInvalid">अमान्यं मूल्यम्: विशेषतापूर्वप्रत्ययः</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixRequired">अनिवार्यं क्षेत्रम्: विशेषतापूर्वप्रत्ययः</x:String>
+  <x:String x:Key="Text.Validation.GitFlowBranchesEqual">विकासशाखायाः मुख्यशाखायाश्च नामनी भिन्ने भवेताम्।</x:String>
+  <x:String x:Key="Text.Validation.GroupNameRequired">अनिवार्यं क्षेत्रम्: नाम</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixInvalid">अमान्यं मूल्यम्: तात्कालिकसंशोधनपूर्वप्रत्ययः</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixRequired">अनिवार्यं क्षेत्रम्: तात्कालिकसंशोधनपूर्वप्रत्ययः</x:String>
+  <x:String x:Key="Text.Validation.IgnorePatternRequired">अनिवार्यं क्षेत्रम्: प्रतिमानम्</x:String>
+  <x:String x:Key="Text.Validation.LFSPatternRequired">अनिवार्यं क्षेत्रम्: अभिरुचिप्रतिमानम्</x:String>
+  <x:String x:Key="Text.Validation.LocalBranchRequired">अनिवार्यं क्षेत्रम्: शाखा</x:String>
+  <x:String x:Key="Text.Validation.MasterBranchRequired">अनिवार्यं क्षेत्रम्: उत्पादनशाखा</x:String>
+  <x:String x:Key="Text.Validation.NameRequired">अनिवार्यं क्षेत्रम्: नाम</x:String>
+  <x:String x:Key="Text.Validation.OutputFileRequired">अनिवार्यं क्षेत्रम्: संग्रहणं रक्षतु</x:String>
+  <x:String x:Key="Text.Validation.ParentFolderRequired">अनिवार्यं क्षेत्रम्: जनकपत्रिका</x:String>
+  <x:String x:Key="Text.Validation.PassphraseMismatch">गुप्तवाक्यं पुष्टीकरणञ्च न समाने।</x:String>
+  <x:String x:Key="Text.Validation.PassphraseRequired">अनिवार्यं क्षेत्रम्: गुप्तवाक्यम्</x:String>
+  <x:String x:Key="Text.Validation.PatchFileRequired">अनिवार्यं क्षेत्रम्: पैच्-सञ्चिका</x:String>
+  <x:String x:Key="Text.Validation.PathNotEmpty">चयनितमार्गः रिक्तः नास्ति।</x:String>
+  <x:String x:Key="Text.Validation.PathNotFound">चयनितमार्गः न प्राप्तः।</x:String>
+  <x:String x:Key="Text.Validation.PathRequired">अनिवार्यं क्षेत्रम्: मार्गः</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixInvalid">अमान्यं मूल्यम्: प्रकाशनपूर्वप्रत्ययः</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixRequired">अनिवार्यं क्षेत्रम्: प्रकाशनपूर्वप्रत्ययः</x:String>
+  <x:String x:Key="Text.Validation.RemoteBranchRequired">अनिवार्यं क्षेत्रम्: ऊर्ध्वप्रवाहः</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameExists">समाननामकं दूरस्थभण्डारं पूर्वमेव अस्ति।</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameInvalid">अमान्यं मूल्यम्: दूरस्थनाम</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameRequired">अनिवार्यं क्षेत्रम्: दूरस्थनाम</x:String>
+  <x:String x:Key="Text.Validation.RemoteRequired">अनिवार्यं क्षेत्रम्: दूरस्थम्</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlExists">समान-URL-युक्तं दूरस्थभण्डारं पूर्वमेव अस्ति।</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlInvalid">अमान्यं मूल्यम्: भण्डार-URL</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlRequired">अनिवार्यं क्षेत्रम्: भण्डार-URL</x:String>
+  <x:String x:Key="Text.Validation.RepositoryFolderRequired">अनिवार्यं क्षेत्रम्: प्रकोष्ठः</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNameInvalid">नाम्नि केवलं लैटिनाक्षराणि अङ्काः अधोरेखाः योजकचिह्नानि च अनुमतानि।</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNotFound">SSH निजकुञ्जी न प्राप्ता।</x:String>
+  <x:String x:Key="Text.Validation.StorageFileRequired">अनिवार्यं क्षेत्रम्: संग्रहणं रक्षतु</x:String>
+  <x:String x:Key="Text.Validation.TagExists">समाननामकं चिह्नं पूर्वमेव अस्ति।</x:String>
+  <x:String x:Key="Text.Validation.TagNameInvalid">अमान्यं मूल्यम्: चिह्ननाम</x:String>
+  <x:String x:Key="Text.Validation.TagNameRequired">अनिवार्यं क्षेत्रम्: चिह्ननाम</x:String>
+  <x:String x:Key="Text.Validation.TagPrefixInvalid">अमान्यं मूल्यम्: संस्करणचिह्नपूर्वप्रत्ययः</x:String>
+  <x:String x:Key="Text.Validation.UrlRequired">अनिवार्यं क्षेत्रम्: URL</x:String>
+  <x:String x:Key="Text.Validation.WorktreePathRequired">अनिवार्यं क्षेत्रम्: मार्गः</x:String>
+  <x:String x:Key="Text.Error.InvalidClipboardPatch">प्रतिलिपिफलके मान्यं संशोधनं नास्ति।</x:String>
+  <x:String x:Key="Text.Archive.Saved">सङ्ग्रहः अत्र रक्षितः: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.Enabled">LFS सफलतया सक्रियीकृतम्।</x:String>
+  <x:String x:Key="Text.GitLFS.PatternTracked">अनुगमनप्रतिरूपम्: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileLocked">सञ्चिका तालिता: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileUnlocked">सञ्चिका मुक्ततालिता: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveSettings">विन्यासरक्षणं विफलम्: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToLoadRemoteSettings">दूरस्थविन्यासपठनं विफलम्: {0}</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.KeyExists">समाननाम्नी कुञ्जी पूर्वमेव अस्ति।</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.Failed">SSH कुञ्जीजननं विफलम्: {0}</x:String>
+  <x:String x:Key="Text.AddToIgnore.LocalOnly">स्थानीयमेव</x:String>
+  <x:String x:Key="Text.Conflict.Mine">मम</x:String>
+  <x:String x:Key="Text.Conflict.Theirs">तेषाम्</x:String>
+  <x:String x:Key="Text.Diff.Image">चित्रम्</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Text">पाठक्षेत्रम्</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Path">मार्गचयनकम्</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Checkbox">चयनपेटिका</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Combobox">संयोजनपेटिका</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">स्थानीयशाखाचयनकम्</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">दूरस्थशाखाचयनकम्</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ कार्यवृक्षरूपेण निष्कासयतु...</x:String>
+  <x:String x:Key="Text.GitFlow.Finish">${0}$ समापयतु</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders">अतिरिक्तशीर्षकाणि (प्रतिपङ्क्ति एकं `नाम: मूल्यम्`)</x:String>
+  <x:String x:Key="Text.TagCM.Merge">${0}$ इत्येतत् ${1}$ मध्ये विलयतु...</x:String>
+  <x:String x:Key="Text.TrustRepository">अविश्वस्तभण्डारः</x:String>
+  <x:String x:Key="Text.TrustRepository.CommandTip">अस्य मार्गस्य विश्वासाय `git config --global --add safe.directory {0}` चालयितुम् इच्छति किम्?</x:String>
+  <x:String x:Key="Text.TrustRepository.Description">Git अस्मिन् भण्डारे प्रवेशं निराकृतवान्: </x:String>
+  <x:String x:Key="Text.TrustRepository.Path">मार्गः:</x:String>
+  <x:String x:Key="Text.Progress.TrustingRepository">Git safe.directory मध्ये «{0}» योज्यते...</x:String>
+  <x:String x:Key="Text.Progress.OpeningRepository">«{0}» उद्घाट्यते...</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenTrustedRepository">विश्वासानन्तरं भण्डारोद्घाटनं विफलम्।</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders.Tip">प्रतिपङ्क्ति एकं शीर्षकम्: नाम: मूल्यम्</x:String>
+  <x:String x:Key="Text.Statistics.Others">अन्ये</x:String>
+  <x:String x:Key="Text.Statistics.TopAuthors.Count">प्रतिबद्धानि</x:String>
+  <x:String x:Key="Text.RepositoryGroup.Auto">स्वचालितम्</x:String>
+  <x:String x:Key="Text.RepositoryGroup.NoGroup">समूहः नास्ति (अवर्गीकृतम्)</x:String>
+  <x:String x:Key="Text.RepositoryGroup.AutoDescription">पूर्वनिर्धारितप्रतिलिपिनिर्देशिकाम् आधृत्य</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Tips">विषयं द्रष्टुं सञ्चिकां चिनोतु।</x:String>
+  <x:String x:Key="Text.SetPushUrl">प्रेषण-URL विन्यस्यतु</x:String>
+  <x:String x:Key="Text.SetPushUrl.PushURL">प्रेषण-URL:</x:String>
+  <x:String x:Key="Text.Error.SelectChangedLines">न्यूनातिन्यूनम् एकां परिवर्तितपङ्क्तिं चिनोतु।</x:String>
 </ResourceDictionary>

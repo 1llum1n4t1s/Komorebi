@@ -49,14 +49,7 @@ public partial class App : Application
         };
 
         // Task内の未観測例外をクラッシュログに記録し、プロセス終了を防ぐ。
-        // Logger.Dispose() は idempotent なので、AppDomain.UnhandledException や finally ブロックと
-        // 二重 Dispose になっても安全。非同期バッファのフラッシュ保証のため明示的に呼ぶ。
-        TaskScheduler.UnobservedTaskException += (_, e) =>
-        {
-            Models.Logger.LogCrash(e.Exception, "UnobservedTaskException");
-            e.SetObserved();
-            Models.Logger.Dispose();
-        };
+        TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
 
         try
         {
@@ -164,6 +157,13 @@ public partial class App : Application
         // abort()するため、プロセスを強制終了して回避する。
         if (OperatingSystem.IsMacOS())
             Process.GetCurrentProcess().Kill();
+    }
+
+    private static void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+    {
+        Models.Logger.LogCrash(e.Exception, "UnobservedTaskException");
+        e.SetObserved();
+        // プロセスは継続するため、ロガーの終了は通常の終了経路に任せる。
     }
 
     /// <summary>

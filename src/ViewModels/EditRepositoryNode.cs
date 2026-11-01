@@ -32,7 +32,7 @@ public class EditRepositoryNode : Popup
     /// <summary>
     /// ノードの表示名。必須バリデーション付き。
     /// </summary>
-    [Required(ErrorMessage = "Name is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.NameRequired))]
     public string Name
     {
         get => _name;

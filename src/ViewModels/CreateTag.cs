@@ -25,7 +25,7 @@ public class CreateTag : Popup
     /// <summary>
     /// 作成するタグの名前。必須入力で書式チェックと重複チェックを行う。
     /// </summary>
-    [Required(ErrorMessage = "Tag name is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.TagNameRequired))]
     [CustomValidation(typeof(CreateTag), nameof(ValidateTagName))]
     public string TagName
     {
@@ -108,11 +108,11 @@ public class CreateTag : Popup
         if (ctx.ObjectInstance is CreateTag creator)
         {
             if (!Models.RefName.IsValidTagName(name))
-                return new ValidationResult("Bad tag name format!");
+                return new ValidationResult(App.Text("Validation.TagNameInvalid"));
 
             var found = creator._repo.Tags.Find(x => x.Name == name);
             if (found is not null)
-                return new ValidationResult("A tag with same name already exists!");
+                return new ValidationResult(App.Text("Validation.TagExists"));
         }
         return ValidationResult.Success;
     }

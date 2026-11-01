@@ -57,6 +57,7 @@ public partial class Remote
     public string Name { get; set; }
     /// <summary>リモートURL</summary>
     public string URL { get; set; }
+    public string PushURL { get; set; }
     /// <summary>このリモートを定期的な自動 fetch から除外する。</summary>
     public bool DisableAutoFetch { get; set; }
 
@@ -291,6 +292,8 @@ public partial class Remote
         if (match.Success)
         {
             var host = match.Groups[1].Value;
+            if (host.Equals("ssh.bitbucket.org", StringComparison.OrdinalIgnoreCase))
+                host = "bitbucket.org";
             var supportHTTPS = HTTPSValidator.IsSupported(host);
             var scheme = supportHTTPS ? "https" : "http";
             url = $"{scheme}://{host}/{match.Groups[2].Value}";

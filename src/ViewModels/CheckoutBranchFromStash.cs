@@ -25,7 +25,7 @@ public class CheckoutBranchFromStash : Popup
     /// Git の参照名規則に合わせ、'.' や '/' で始まる／終わるもの、'..' を含むものは弾く。
     /// （参考: CreateTag.cs の tag 名バリデーションと同等の lookahead を採用）
     /// </summary>
-    [Required(ErrorMessage = "Branch name is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.BranchNameRequired))]
     [CustomValidation(typeof(CheckoutBranchFromStash), nameof(ValidateBranchName))]
     public string BranchName
     {
@@ -53,7 +53,7 @@ public class CheckoutBranchFromStash : Popup
         if (ctx.ObjectInstance is CheckoutBranchFromStash caller)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult("Bad branch name format!");
+                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
 
             var comparison = OperatingSystem.IsLinux()
                 ? StringComparison.Ordinal
@@ -62,13 +62,13 @@ public class CheckoutBranchFromStash : Popup
             foreach (var b in caller._repo.Branches)
             {
                 if (b.FriendlyName.Equals(name, comparison))
-                    return new ValidationResult("A branch with same name already exists!");
+                    return new ValidationResult(App.Text("Validation.BranchExists"));
             }
 
             return ValidationResult.Success;
         }
 
-        return new ValidationResult("Missing runtime context to create branch!");
+        return new ValidationResult(App.Text("Validation.ContextInvalid"));
     }
 
     /// <summary>

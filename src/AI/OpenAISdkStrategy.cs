@@ -1,6 +1,7 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
+using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -93,7 +94,7 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
 
                         foreach (var call in completion.ToolCalls)
                         {
-                            var result = await ChatTools.ProcessAsync(call, repo, onUpdate, amendParent);
+                            var result = await ChatTools.ProcessAsync(call, repo, onUpdate, amendParent, cancellation);
                             messages.Add(result);
                         }
 
@@ -111,23 +112,29 @@ internal sealed class OpenAISdkStrategy(Service service) : IGenerationStrategy
         } while (true);
     }
 
-    private OpenAIClient CreateClient() => service.Provider switch
+    private OpenAIClient CreateClient()
     {
-        Provider.AzureOpenAI => new AzureOpenAIClient(new Uri(service.Server), service.Credential),
-        Provider.Gemini => new OpenAIClient(
-            service.Credential,
-            new()
-            {
-                Endpoint = new Uri(string.IsNullOrEmpty(service.Server)
-                    ? "https://generativelanguage.googleapis.com/v1beta/openai/"
-                    : service.Server),
-            }),
-        // OpenAI（旧設定ファイルの Azure フォールバックを含む）
-        _ when !string.IsNullOrEmpty(service.Server) &&
-               service.Server.Contains("openai.azure.com", StringComparison.Ordinal)
-            => new AzureOpenAIClient(new Uri(service.Server), service.Credential),
-        _ when string.IsNullOrEmpty(service.Server)
-            => new OpenAIClient(service.Credential),
-        _ => new OpenAIClient(service.Credential, new() { Endpoint = new Uri(service.Server) }),
-    };
+        if (service.Provider == Provider.AzureOpenAI ||
+            (service.Provider == Provider.OpenAI && !string.IsNullOrEmpty(service.Server) &&
+             service.Server.Contains("openai.azure.com", StringComparison.Ordinal)))
+        {
+            var azureOptions = new AzureOpenAIClientOptions();
+            ApplyExtraHeaders(azureOptions);
+            return new AzureOpenAIClient(new Uri(service.Server), service.Credential, azureOptions);
+        }
+
+        var options = new OpenAIClientOptions();
+        if (!string.IsNullOrEmpty(service.Server))
+            options.Endpoint = new Uri(service.Server);
+        else if (service.Provider == Provider.Gemini)
+            options.Endpoint = new Uri("https://generativelanguage.googleapis.com/v1beta/openai/");
+        ApplyExtraHeaders(options);
+        return new OpenAIClient(service.Credential, options);
+    }
+
+    private void ApplyExtraHeaders(ClientPipelineOptions options)
+    {
+        if (!string.IsNullOrWhiteSpace(service.ExtraHeaders))
+            options.AddPolicy(new ExtraHeadersPolicy(service.ExtraHeaders), PipelinePosition.PerCall);
+    }
 }

@@ -17,6 +17,12 @@ namespace Komorebi.ViewModels;
 /// </summary>
 public class WorkingCopy : ObservableObject, IDisposable
 {
+    /// <summary>検索条件に一致した変更数と全変更数。</summary>
+    public string UnstagedCountInfo => _visibleUnstaged.Count == _unstaged.Count ? $"({_unstaged.Count})" : $"({_visibleUnstaged.Count}/{_unstaged.Count})";
+
+    /// <summary>検索条件に一致したステージ済み変更数と全変更数。</summary>
+    public string StagedCountInfo => _visibleStaged.Count == _staged.Count ? $"({_staged.Count})" : $"({_visibleStaged.Count}/{_staged.Count})";
+
     /// <summary>
     /// 対応するリポジトリViewModel。
     /// </summary>
@@ -198,7 +204,11 @@ public class WorkingCopy : ObservableObject, IDisposable
     public List<Models.Change> Unstaged
     {
         get => _unstaged;
-        private set => SetProperty(ref _unstaged, value);
+        private set
+        {
+            if (SetProperty(ref _unstaged, value))
+                OnPropertyChanged(nameof(UnstagedCountInfo));
+        }
     }
 
     /// <summary>
@@ -207,7 +217,11 @@ public class WorkingCopy : ObservableObject, IDisposable
     public List<Models.Change> VisibleUnstaged
     {
         get => _visibleUnstaged;
-        private set => SetProperty(ref _visibleUnstaged, value);
+        private set
+        {
+            if (SetProperty(ref _visibleUnstaged, value))
+                OnPropertyChanged(nameof(UnstagedCountInfo));
+        }
     }
 
     /// <summary>
@@ -216,7 +230,11 @@ public class WorkingCopy : ObservableObject, IDisposable
     public List<Models.Change> Staged
     {
         get => _staged;
-        private set => SetProperty(ref _staged, value);
+        private set
+        {
+            if (SetProperty(ref _staged, value))
+                OnPropertyChanged(nameof(StagedCountInfo));
+        }
     }
 
     /// <summary>
@@ -225,7 +243,11 @@ public class WorkingCopy : ObservableObject, IDisposable
     public List<Models.Change> VisibleStaged
     {
         get => _visibleStaged;
-        private set => SetProperty(ref _visibleStaged, value);
+        private set
+        {
+            if (SetProperty(ref _visibleStaged, value))
+                OnPropertyChanged(nameof(StagedCountInfo));
+        }
     }
 
     /// <summary>
@@ -250,7 +272,7 @@ public class WorkingCopy : ObservableObject, IDisposable
                     if (_selectedStaged is { Count: > 0 })
                         SelectedStaged = [];
 
-                    if (value.Count == 1)
+                    if (value.Count == 1 && value is not ChangeSelection { IsSingleFolder: true })
                         SetDetail(value[0], true);
                     else
                         SetDetail(null, true);
@@ -281,7 +303,7 @@ public class WorkingCopy : ObservableObject, IDisposable
                     if (_selectedUnstaged is { Count: > 0 })
                         SelectedUnstaged = [];
 
-                    if (value.Count == 1)
+                    if (value.Count == 1 && value is not ChangeSelection { IsSingleFolder: true })
                         SetDetail(value[0], false);
                     else
                         SetDetail(null, false);
@@ -437,7 +459,9 @@ public class WorkingCopy : ObservableObject, IDisposable
             // hasConflict は全 unstaged から立てるが、探索対象はフィルタ適用後なので
             // 「コンフリクトはあるが今の絞り込みでは見えない」場合に null が返る。
             // null を選択リストへ入れると ChangeCollectionView 側の走査で NRE になるため弾く。
-            var firstConflict = visibleUnstaged.Find(x => x.IsConflicted);
+            var firstConflict = Preferences.Instance.UnstagedChangeViewMode == Models.ChangeViewMode.Tree
+                ? FindFirstConflictInTree(ChangeTreeNode.Build(visibleUnstaged, [], Preferences.Instance.EnableCompactFoldersInChangesTree))
+                : visibleUnstaged.Find(x => x.IsConflicted);
             if (firstConflict is not null)
                 selectedUnstaged.Add(firstConflict);
         }
@@ -562,10 +586,10 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// <summary>
     /// 変更を破棄するダイアログを表示する。
     /// </summary>
-    public void Discard(List<Models.Change> changes)
+    public void Discard(List<Models.Change> changes, Models.Change next = null)
     {
         if (_repo.CanCreatePopup())
-            _repo.ShowPopup(new Discard(_repo, changes));
+            _repo.ShowPopup(new Discard(_repo, changes, () => SelectedUnstaged = next is null ? [] : [next]));
     }
 
     /// <summary>
@@ -704,6 +728,9 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// </summary>
     public async Task SkipMergeAsync()
     {
+        if (IsCommitting)
+            return;
+
         if (_inProgressContext is not null)
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -727,6 +754,9 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// </summary>
     public async Task AbortMergeAsync()
     {
+        if (IsCommitting)
+            return;
+
         if (_inProgressContext is not null)
         {
             using var lockWatcher = _repo.LockWatcher();
@@ -998,9 +1028,9 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// </summary>
     private void UpdateDetail()
     {
-        if (_selectedUnstaged.Count == 1)
+        if (_selectedUnstaged.Count == 1 && _selectedUnstaged is not ChangeSelection { IsSingleFolder: true })
             SetDetail(_selectedUnstaged[0], true);
-        else if (_selectedStaged.Count == 1)
+        else if (_selectedStaged.Count == 1 && _selectedStaged is not ChangeSelection { IsSingleFolder: true })
             SetDetail(_selectedStaged[0], false);
         else
             SetDetail(null, false);
@@ -1030,6 +1060,10 @@ public class WorkingCopy : ObservableObject, IDisposable
         if (_inProgressContext is not null && _inProgressContext.GetType() == oldType && !string.IsNullOrEmpty(_commitMessage))
             return;
 
+        // 上流 0b253cc5: 外部で終了した操作の自動入力だけを消し、ユーザーの編集は保持する。
+        if (_inProgressContext is null && oldType is not null && IsAutoLoadedCommitMessage())
+            CommitMessage = string.Empty;
+
         // MERGE_MSGファイルからコミットメッセージを読み込み
         if (LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "MERGE_MSG")))
             return;
@@ -1041,7 +1075,7 @@ public class WorkingCopy : ObservableObject, IDisposable
         if (LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "rebase-merge", "message")))
             return;
 
-        CommitMessage = new Commands.QueryCommitFullMessage(_repo.FullPath, rebasing.StoppedAt.SHA).GetResult();
+        SetAutoLoadedCommitMessage(new Commands.QueryCommitFullMessage(_repo.FullPath, rebasing.StoppedAt.SHA).GetResult());
     }
 
     /// <summary>
@@ -1056,14 +1090,41 @@ public class WorkingCopy : ObservableObject, IDisposable
         if (string.IsNullOrEmpty(msg))
             return false;
 
-        CommitMessage = msg;
+        SetAutoLoadedCommitMessage(msg);
         return true;
     }
 
-    /// <summary>
-    /// 選択された変更に応じて詳細コンテキストを設定する。
-    /// コンフリクトの場合はConflict、それ以外はDiffContextを生成する。
-    /// </summary>
+    private static Models.Change FindFirstConflictInTree(List<ChangeTreeNode> nodes)
+    {
+        foreach (var node in nodes)
+        {
+            if (node.IsFolder)
+            {
+                var found = FindFirstConflictInTree(node.Children);
+                if (found is not null)
+                    return found;
+            }
+            else if (node.Change.IsConflicted)
+            {
+                return node.Change;
+            }
+        }
+        return null;
+    }
+
+    /// <summary>操作により自動入力したメッセージを記録する。</summary>
+    private void SetAutoLoadedCommitMessage(string msg)
+    {
+        _autoLoadedCommitMessage = msg;
+        CommitMessage = msg;
+    }
+
+    private bool IsAutoLoadedCommitMessage()
+    {
+        return !string.IsNullOrEmpty(_autoLoadedCommitMessage) &&
+            string.Equals(_autoLoadedCommitMessage, _commitMessage, StringComparison.Ordinal);
+    }
+
     private void SetDetail(Models.Change change, bool isUnstaged)
     {
         if (_isLoadingData)
@@ -1117,4 +1178,6 @@ public class WorkingCopy : ObservableObject, IDisposable
 
     private bool _hasUnsolvedConflicts = false;
     private InProgressContext _inProgressContext = null;
+    private string _autoLoadedCommitMessage;
+
 }

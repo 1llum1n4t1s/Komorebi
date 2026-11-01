@@ -6,17 +6,12 @@ namespace Komorebi.Tests.Models
     {
         #region ParseParents
 
-        [Fact]
-        public void ParseParents_EmptyString_ReturnsNoParents()
-        {
-            var commit = new Commit();
-            commit.ParseParents(string.Empty);
-            Assert.Empty(commit.Parents);
-        }
-
         [Theory]
+        [InlineData("")]
         [InlineData("a")]
+        [InlineData("short")]
         [InlineData("abcdefg")]
+        [InlineData("1234567")]
         public void ParseParents_ShortString_LessThan8Chars_ReturnsNoParents(string data)
         {
             var commit = new Commit();

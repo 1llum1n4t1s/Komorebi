@@ -433,6 +433,17 @@ public class RepositoryUIStates
         return true;
     }
 
+    /// <summary>指定ブランチを含むフォルダーフィルターが存在するか調べる。</summary>
+    public bool IsCoveredByFolderFilter(string path, FilterType type)
+    {
+        foreach (var filter in HistoryFilters)
+        {
+            if (filter.Type == type && path.StartsWith($"{filter.Pattern}/", StringComparison.Ordinal))
+                return true;
+        }
+        return false;
+    }
+
     /// <summary>指定パターンとタイプの履歴フィルターを削除する</summary>
     public void RemoveHistoryFilter(string pattern, FilterType type)
     {

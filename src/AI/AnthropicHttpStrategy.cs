@@ -95,6 +95,20 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
             request.Headers.Add("x-api-key", service.ResolvedApiKey);
             request.Headers.Add("anthropic-version", AnthropicApiVersion);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+            foreach (var header in ExtraHeadersPolicy.Parse(service.ExtraHeaders))
+            {
+                try
+                {
+                    request.Headers.Remove(header.Key);
+                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+                catch (InvalidOperationException)
+                {
+                    // Content-Type等はHttpRequestHeadersへ設定できない。
+                    request.Content.Headers.Remove(header.Key);
+                    request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
             using var response = await s_httpClient.SendAsync(request, cancellation);
             response.EnsureSuccessStatusCode();
 
@@ -168,7 +182,7 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
                 }
 
                 var toolResultObjects = await Task.WhenAll(toolCalls.Select(c =>
-                    ChatTools.ProcessAnthropicCall(c.Id, c.Name, c.Input, repo, onUpdate, amendParent))).ConfigureAwait(false);
+                    ChatTools.ProcessAnthropicCall(c.Id, c.Name, c.Input, repo, onUpdate, amendParent, cancellation))).ConfigureAwait(false);
 
                 var toolResults = new JsonArray();
                 foreach (var r in toolResultObjects)

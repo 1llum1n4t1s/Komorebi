@@ -74,7 +74,7 @@ public partial class Blame : Command
             {
                 result.IsBinary = true;
                 result.LineInfos.Clear();
-                break;
+                return result;
             }
 
             var match = REG_FORMAT().Match(line);

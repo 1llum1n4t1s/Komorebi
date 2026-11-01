@@ -69,6 +69,7 @@ public class Watcher : IDisposable
             combined.Renamed += OnRepositoryChanged;
             combined.Changed += OnRepositoryChanged;
             combined.Deleted += OnRepositoryChanged;
+            combined.Error += OnWatcherError;
             combined.EnableRaisingEvents = false;
 
             _watchers.Add(combined);
@@ -85,6 +86,7 @@ public class Watcher : IDisposable
             wc.Renamed += OnWorkingCopyChanged;
             wc.Changed += OnWorkingCopyChanged;
             wc.Deleted += OnWorkingCopyChanged;
+            wc.Error += OnWatcherError;
             wc.EnableRaisingEvents = false;
 
             var git = new FileSystemWatcher();
@@ -96,6 +98,7 @@ public class Watcher : IDisposable
             git.Renamed += OnGitDirChanged;
             git.Changed += OnGitDirChanged;
             git.Deleted += OnGitDirChanged;
+            git.Error += OnWatcherError;
             git.EnableRaisingEvents = false;
 
             _watchers.Add(wc);
@@ -291,7 +294,19 @@ public class Watcher : IDisposable
             HandleWorkingCopyFileChanged(name, e.FullPath);
     }
 
-    /// <summary>gitディレクトリのファイル変更イベントハンドラー（分離ウォッチャー用）</summary>
+    /// <summary>監視バッファあふれなどで欠落した変更を全体の再読込で回復する。</summary>
+    private void OnWatcherError(object sender, ErrorEventArgs e)
+    {
+        var desired = DateTime.Now.AddSeconds(1).ToFileTime();
+        Interlocked.Exchange(ref _updateBranch, desired);
+        Interlocked.Exchange(ref _updateTags, desired);
+        Interlocked.Exchange(ref _updateStashes, desired);
+        Interlocked.Exchange(ref _updateWC, desired);
+        if (_repo.MayHaveSubmodules())
+            Interlocked.Exchange(ref _updateSubmodules, desired);
+    }
+
+    /// <summary>git ディレクトリのファイル変更を処理する。</summary>
     private void OnGitDirChanged(object o, FileSystemEventArgs e)
     {
         if (string.IsNullOrEmpty(e.Name))
@@ -349,7 +364,7 @@ public class Watcher : IDisposable
         {
             Interlocked.Exchange(ref _updateTags, DateTime.Now.AddSeconds(.5).ToFileTime());
         }
-        else if (name.StartsWith("refs/stash", StringComparison.Ordinal))
+        else if (name.StartsWith("refs/stash", StringComparison.Ordinal) || name.Equals("logs/refs/stash", StringComparison.Ordinal))
         {
             Interlocked.Exchange(ref _updateStashes, DateTime.Now.AddSeconds(.5).ToFileTime());
         }
@@ -360,6 +375,12 @@ public class Watcher : IDisposable
             (name.StartsWith("worktrees/", StringComparison.Ordinal) && name.EndsWith("/HEAD", StringComparison.Ordinal)))
         {
             Interlocked.Exchange(ref _updateBranch, DateTime.Now.AddSeconds(.5).ToFileTime());
+        }
+        else if (name.Equals("packed-refs", StringComparison.Ordinal))
+        {
+            var desired = DateTime.Now.AddSeconds(.5).ToFileTime();
+            Interlocked.Exchange(ref _updateBranch, desired);
+            Interlocked.Exchange(ref _updateTags, desired);
         }
         else if (name.StartsWith("reftable/", StringComparison.Ordinal))
         {

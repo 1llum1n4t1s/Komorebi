@@ -29,7 +29,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     /// <summary>
     /// 選択されたコミットタイプ。変更時にプリフィル説明があれば自動設定する。
     /// </summary>
-    [Required(ErrorMessage = "Type of changes can not be null")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.CommitTypeRequired))]
     public Models.ConventionalCommitType SelectedType
     {
         get => _selectedType;
@@ -53,7 +53,7 @@ public class ConventionalCommitMessageBuilder : ObservableValidator
     /// <summary>
     /// 変更の短い説明。必須項目。
     /// </summary>
-    [Required(ErrorMessage = "Short description can not be empty")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.CommitDescriptionRequired))]
     public string Description
     {
         get => _description;

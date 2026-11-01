@@ -59,7 +59,7 @@ Windows の `Filename too long` に限り、実行前に宛先が未使用で、
 
 ## 設定と資格情報
 
-`Preferences` の JSON 保存は UI 状態と AI サービス設定を扱う。`AI.Service` の公開 API キーと JSON に書く `ProtectedApiKey` は分離され、`ApiKeyProtector` が AES-GCM で暗号化する。鍵は DataDir の `ai-api-key.key` に置き、Windows は DPAPI CurrentUser、Unix はファイル権限で保護する。
+`Preferences` の JSON 保存は UI 状態と AI サービス設定を扱う。`AI.Service` の公開 API キーと JSON に書く `ProtectedApiKey` は分離され、`ApiKeyProtector` が AES-GCM で暗号化する。追加 HTTP ヘッダーも `ExtraHeaders` と `ProtectedExtraHeaders` を分離し、Authorization 等を含む設定全体へ同じ保護・暗号文保持・旧平文移行を適用する。鍵は DataDir の `ai-api-key.key` に置き、Windows は DPAPI CurrentUser、Unix はファイル権限で保護する。
 
 既存鍵の I/O・形式・DPAPI 読込失敗では鍵を再生成せず、復号できない暗号文も保持する。これにより一時障害中に設定を保存しても、元の鍵が再び読めるようになった後に復旧できる。旧平文の暗号化移行や新しい暗号化に失敗しても平文は書き戻さない。利用者がキーを明示的に空へ変更した場合は、保持した暗号文も削除する。
 

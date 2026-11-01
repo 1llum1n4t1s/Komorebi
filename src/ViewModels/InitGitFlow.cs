@@ -18,26 +18,37 @@ public partial class InitGitFlow : Popup
     private static partial Regex REG_TAG_PREFIX();
 
     /// <summary>masterブランチ名。バリデーション付き。</summary>
-    [Required(ErrorMessage = "Master branch name is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.MasterBranchRequired))]
     [CustomValidation(typeof(InitGitFlow), nameof(ValidateBaseBranch))]
     public string Master
     {
         get => _master;
-        set => SetProperty(ref _master, value, true);
+        set
+        {
+            if (SetProperty(ref _master, value, true))
+            {
+                // upstreamとの差分: 名前の重複は両方の入力に依存する。
+                ValidateProperty(_develop, nameof(Develop));
+            }
+        }
     }
 
     /// <summary>developブランチ名。バリデーション付き。</summary>
-    [Required(ErrorMessage = "Develop branch name is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.DevelopBranchRequired))]
     [CustomValidation(typeof(InitGitFlow), nameof(ValidateBaseBranch))]
     public string Develop
     {
         get => _develop;
-        set => SetProperty(ref _develop, value, true);
+        set
+        {
+            if (SetProperty(ref _develop, value, true))
+                ValidateProperty(_master, nameof(Master));
+        }
     }
 
     /// <summary>featureブランチのプレフィックス（例: "feature/"）。</summary>
-    [Required(ErrorMessage = "Feature prefix is required!!!")]
-    [RegularExpression(@"^[\w\-\.]+/$", ErrorMessage = "Bad feature prefix format!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.FeaturePrefixRequired))]
+    [RegularExpression(@"^[\w\-\.]+/$", ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.FeaturePrefixInvalid))]
     public string FeaturePrefix
     {
         get => _featurePrefix;
@@ -45,8 +56,8 @@ public partial class InitGitFlow : Popup
     }
 
     /// <summary>releaseブランチのプレフィックス（例: "release/"）。</summary>
-    [Required(ErrorMessage = "Release prefix is required!!!")]
-    [RegularExpression(@"^[\w\-\.]+/$", ErrorMessage = "Bad release prefix format!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.ReleasePrefixRequired))]
+    [RegularExpression(@"^[\w\-\.]+/$", ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.ReleasePrefixInvalid))]
     public string ReleasePrefix
     {
         get => _releasePrefix;
@@ -54,8 +65,8 @@ public partial class InitGitFlow : Popup
     }
 
     /// <summary>hotfixブランチのプレフィックス（例: "hotfix/"）。</summary>
-    [Required(ErrorMessage = "Hotfix prefix is required!!!")]
-    [RegularExpression(@"^[\w\-\.]+/$", ErrorMessage = "Bad hotfix prefix format!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.HotfixPrefixRequired))]
+    [RegularExpression(@"^[\w\-\.]+/$", ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.HotfixPrefixInvalid))]
     public string HotfixPrefix
     {
         get => _hotfixPrefix;
@@ -102,10 +113,10 @@ public partial class InitGitFlow : Popup
         if (ctx.ObjectInstance is InitGitFlow initializer)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult("Bad branch name format!");
+                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
 
             if (initializer._master == initializer._develop)
-                return new ValidationResult("Develop branch has the same name with master branch!");
+                return new ValidationResult(App.Text("Validation.GitFlowBranchesEqual"));
         }
 
         return ValidationResult.Success;
@@ -117,7 +128,7 @@ public partial class InitGitFlow : Popup
     public static ValidationResult ValidateTagPrefix(string tagPrefix, ValidationContext ctx)
     {
         if (!string.IsNullOrWhiteSpace(tagPrefix) && !REG_TAG_PREFIX().IsMatch(tagPrefix))
-            return new ValidationResult("Bad tag prefix format!");
+            return new ValidationResult(App.Text("Validation.TagPrefixInvalid"));
 
         return ValidationResult.Success;
     }

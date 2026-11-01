@@ -56,8 +56,13 @@ public partial class QueryRemotes : Command
             };
 
             // 同名のリモートは重複して追加しない（fetch/push両方の行があるため）
-            if (outs.Find(x => x.Name == remote.Name) is not null)
+            var existing = outs.Find(x => x.Name == remote.Name);
+            if (existing is not null)
+            {
+                if (line.EndsWith("(push)", StringComparison.Ordinal))
+                    existing.PushURL = remote.URL;
                 continue;
+            }
 
             // SSH形式のURLからホスト名を抽出してHTTPS検証リストに追加
             if (remote.URL.StartsWith("git@", StringComparison.Ordinal))

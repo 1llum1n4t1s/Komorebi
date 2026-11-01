@@ -17,16 +17,16 @@ public class SSHKeyGenerator : ObservableValidator
         set => SetProperty(ref _type, value);
     }
 
-    [Required(ErrorMessage = "Name is required.")]
-    [RegularExpression(@"^[a-zA-Z0-9_\-]+$", ErrorMessage = "Name can only contain letters, numbers, underscores, and hyphens.")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.NameRequired))]
+    [RegularExpression(@"^[a-zA-Z0-9_\-]+$", ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.SSHKeyNameInvalid))]
     public string Name
     {
         get => _name;
         set => SetProperty(ref _name, value, true);
     }
 
-    [Required(ErrorMessage = "Email is required.")]
-    [EmailAddress(ErrorMessage = "Invalid email address.")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.EmailRequired))]
+    [EmailAddress(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.EmailInvalid))]
     public string Email
     {
         get => _email;
@@ -77,7 +77,7 @@ public class SSHKeyGenerator : ObservableValidator
             return ValidationResult.Success;
 
         if (string.IsNullOrEmpty(password))
-            return new ValidationResult("Passphrase is required!");
+            return new ValidationResult(App.Text("Validation.PassphraseRequired"));
 
         return ValidationResult.Success;
     }
@@ -89,7 +89,7 @@ public class SSHKeyGenerator : ObservableValidator
             return ValidationResult.Success;
 
         if (confirmedPassword != instance.Passphrase)
-            return new ValidationResult("Passphrase and confirmation do not match!");
+            return new ValidationResult(App.Text("Validation.PassphraseMismatch"));
 
         return ValidationResult.Success;
     }
@@ -107,7 +107,7 @@ public class SSHKeyGenerator : ObservableValidator
         // 上流との差分: 既存鍵の上書き確認待ちや誤った成功判定を防ぐ。
         if (File.Exists(keyFile) || File.Exists(publicKeyFile))
         {
-            ErrorMessage = "A key with this name already exists.";
+            ErrorMessage = App.Text("SSHKeyGenerator.KeyExists");
             return null;
         }
 
@@ -143,7 +143,7 @@ public class SSHKeyGenerator : ObservableValidator
             var error = await stderr;
             if (process.ExitCode != 0 || !File.Exists(keyFile) || !File.Exists(publicKeyFile))
             {
-                ErrorMessage = "Failed to generate SSH key: " + error;
+                ErrorMessage = App.Text("SSHKeyGenerator.Failed", error);
                 return null;
             }
 
@@ -151,7 +151,7 @@ public class SSHKeyGenerator : ObservableValidator
         }
         catch (Exception e)
         {
-            ErrorMessage = "Failed to generate SSH key: " + e.Message;
+            ErrorMessage = App.Text("SSHKeyGenerator.Failed", e.Message);
             return null;
         }
         finally

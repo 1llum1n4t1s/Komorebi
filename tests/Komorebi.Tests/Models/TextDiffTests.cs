@@ -282,6 +282,8 @@ namespace Komorebi.Tests.Models
         {
             var result = TextInlineChange.Compare("", "hello");
             Assert.NotEmpty(result);
+            Assert.True(result[0].AddedCount > 0);
+            Assert.Equal(0, result[0].DeletedCount);
             Assert.True(result.All(c => c.DeletedCount == 0));
             var totalAdded = result.Sum(c => c.AddedCount);
             Assert.Equal(5, totalAdded);
@@ -292,6 +294,8 @@ namespace Komorebi.Tests.Models
         {
             var result = TextInlineChange.Compare("hello", "");
             Assert.NotEmpty(result);
+            Assert.True(result[0].DeletedCount > 0);
+            Assert.Equal(0, result[0].AddedCount);
             Assert.True(result.All(c => c.AddedCount == 0));
             var totalDeleted = result.Sum(c => c.DeletedCount);
             Assert.Equal(5, totalDeleted);
@@ -319,6 +323,7 @@ namespace Komorebi.Tests.Models
             // "hello" -> "hello world"
             var result = TextInlineChange.Compare("hello", "hello world");
             Assert.NotEmpty(result);
+            Assert.True(result.Exists(c => c.AddedCount > 0));
             // The space and "world" should be added
             var totalAdded = result.Sum(c => c.AddedCount);
             Assert.True(totalAdded > 0);
@@ -330,6 +335,7 @@ namespace Komorebi.Tests.Models
             // "hello world" -> "hello"
             var result = TextInlineChange.Compare("hello world", "hello");
             Assert.NotEmpty(result);
+            Assert.True(result.Exists(c => c.DeletedCount > 0));
             // The space and "world" should be deleted
             var totalDeleted = result.Sum(c => c.DeletedCount);
             Assert.True(totalDeleted > 0);

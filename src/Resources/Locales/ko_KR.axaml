@@ -149,7 +149,7 @@
   <x:String x:Key="Text.Clone.RemoteURL" xml:space="preserve">저장소 URL:</x:String>
   <x:String x:Key="Text.Close" xml:space="preserve">닫기</x:String>
   <x:String x:Key="Text.CodeEditor" xml:space="preserve">에디터</x:String>
-  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">Branches</x:String>
+  <x:String x:Key="Text.CommandPalette.Branches" xml:space="preserve">브랜치</x:String>
   <x:String x:Key="Text.CommandPalette.BranchesAndTags" xml:space="preserve">브랜치 &amp; 태그</x:String>
   <x:String x:Key="Text.CommandPalette.RepositoryActions" xml:space="preserve">저장소 사용자 정의 액션</x:String>
   <x:String x:Key="Text.CommandPalette.RevisionFiles" xml:space="preserve">리비전 파일</x:String>
@@ -687,7 +687,7 @@
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">커밋 세부 정보에 자식 커밋 표시</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">커밋 그래프에 태그 표시</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">제목 가이드 길이</x:String>
-  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24시간 형식</x:String>
   <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">커밋 그래프에 간략한 브랜치 이름 사용</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">GitHub 스타일 기본 아바타 생성</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
@@ -992,11 +992,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">저장소 열기</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">터미널 열기</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">기본 복제 디렉터리의 저장소 다시 스캔</x:String>
-  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">모든 저장소의 원격 연결 확인</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">모든 원격 저장소에 연결할 수 있습니다</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">일부 원격 저장소에 연결할 수 없습니다</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">모든 원격 저장소에 연결할 수 없습니다</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">설정된 원격 저장소가 없습니다</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">저장소 검색...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">로컬 변경 사항</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git 무시</x:String>
@@ -1208,59 +1208,159 @@
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">태그 체크아웃...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">중첩된 서브모듈 업데이트</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">같은 폴더의 추적되지 않는 모든 파일 무시</x:String>
-  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
-  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
-  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
-  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
-  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
-  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
-  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
-  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
-  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
-  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
-  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
-  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
-  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
-  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
-  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
-  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
-  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
-  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
-  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
-  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
-  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">자동 Fetch 사용</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">pre-push 훅 건너뛰기</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">pre-rebase 훅 건너뛰기</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">변경점</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">커밋</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">왼쪽에만 있는 커밋</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">오른쪽에만 있는 커밋</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">팁: 반대편이 HEAD인 경우 선택한 커밋을 체리픽할 수 있습니다(컨텍스트 메뉴 사용).</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">이름:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">시작 위치:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">병합 전에 리베이스</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">바이너리 파일</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">16진수 뷰어</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">주소로 이동...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">필터 사용 중</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">필터 접기</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">필터 펼치기</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">세부 정보 접기</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">별도의 창으로 열기</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">커밋 세부 정보</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">리비전 비교</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">추론 노력 수준</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">SSH 키 도우미 열기</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">다음 키를 삭제하시겠습니까?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">지문</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">SSH 키 생성</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">암호문 확인:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">이메일:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">필수 항목입니다.</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">키 이름:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">필수 항목입니다. 예: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">암호문:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">생성</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">유형:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">개인 키에 암호문 사용</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">경로</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">공개 키</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH 키 도우미</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">그래프 강조 표시</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">모두</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">현재 브랜치만</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">선택한 커밋만</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">현재 브랜치와 선택한 커밋</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">선택한 커밋 (첫 번째 부모만)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">종료</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">파일 모드 변경: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">새 파일 모드: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">삭제된 파일 모드: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">일반</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">실행 가능</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">디렉터리</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">심볼릭 링크</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">하위 모듈</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">알 수 없음</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">자동 스태시 {0}을(를) 보관했습니다. 현재 Git 작업을 완료하거나 중단한 다음 스태시 목록에서 복원하세요.</x:String>
+  <x:String x:Key="Text.TextSearch.MatchCase">대소문자 구분</x:String>
+  <x:String x:Key="Text.TextSearch.WholeWord">단어 단위로 검색</x:String>
+  <x:String x:Key="Text.TextSearch.Regex">정규식 사용</x:String>
+  <x:String x:Key="Text.TextSearch.Previous">이전 찾기 (Shift+F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Next">다음 찾기 (F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Placeholder">찾기...</x:String>
+  <x:String x:Key="Text.TextSearch.NoMatches">일치하는 항목 없음</x:String>
+  <x:String x:Key="Text.TextSearch.OneMatch">일치 항목 1개</x:String>
+  <x:String x:Key="Text.TextSearch.Matches">일치 항목 {0}개</x:String>
+  <x:String x:Key="Text.TextSearch.MatchOfTotal">{1}개 중 {0}번째</x:String>
+  <x:String x:Key="Text.Validation.BranchExists">같은 이름의 브랜치가 이미 있습니다.</x:String>
+  <x:String x:Key="Text.Validation.BranchNameInvalid">잘못된 값: 브랜치 이름</x:String>
+  <x:String x:Key="Text.Validation.BranchNameRequired">필수 항목: 브랜치 이름</x:String>
+  <x:String x:Key="Text.Validation.CommitDescriptionRequired">필수 항목: 간단한 설명</x:String>
+  <x:String x:Key="Text.Validation.CommitMessageRequired">필수 항목: 메시지</x:String>
+  <x:String x:Key="Text.Validation.CommitTypeRequired">필수 항목: 변경 유형</x:String>
+  <x:String x:Key="Text.Validation.ContextInvalid">작업 컨텍스트를 사용할 수 없습니다.</x:String>
+  <x:String x:Key="Text.Validation.DevelopBranchRequired">필수 항목: 개발 브랜치</x:String>
+  <x:String x:Key="Text.Validation.EmailInvalid">잘못된 값: 이메일</x:String>
+  <x:String x:Key="Text.Validation.EmailRequired">필수 항목: 이메일</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixInvalid">잘못된 값: Feature 접두사</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixRequired">필수 항목: Feature 접두사</x:String>
+  <x:String x:Key="Text.Validation.GitFlowBranchesEqual">개발 브랜치와 주 브랜치의 이름은 달라야 합니다.</x:String>
+  <x:String x:Key="Text.Validation.GroupNameRequired">필수 항목: 이름</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixInvalid">잘못된 값: Hotfix 접두사</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixRequired">필수 항목: Hotfix 접두사</x:String>
+  <x:String x:Key="Text.Validation.IgnorePatternRequired">필수 항목: 패턴</x:String>
+  <x:String x:Key="Text.Validation.LFSPatternRequired">필수 항목: 사용자 정의 패턴</x:String>
+  <x:String x:Key="Text.Validation.LocalBranchRequired">필수 항목: 브랜치</x:String>
+  <x:String x:Key="Text.Validation.MasterBranchRequired">필수 항목: 운영 브랜치</x:String>
+  <x:String x:Key="Text.Validation.NameRequired">필수 항목: 이름</x:String>
+  <x:String x:Key="Text.Validation.OutputFileRequired">필수 항목: 아카이브 저장 위치</x:String>
+  <x:String x:Key="Text.Validation.ParentFolderRequired">필수 항목: 상위 폴더</x:String>
+  <x:String x:Key="Text.Validation.PassphraseMismatch">암호문과 확인 입력이 일치하지 않습니다.</x:String>
+  <x:String x:Key="Text.Validation.PassphraseRequired">필수 항목: 암호문</x:String>
+  <x:String x:Key="Text.Validation.PatchFileRequired">필수 항목: 패치 파일</x:String>
+  <x:String x:Key="Text.Validation.PathNotEmpty">선택한 경로가 비어 있지 않습니다.</x:String>
+  <x:String x:Key="Text.Validation.PathNotFound">선택한 경로를 찾을 수 없습니다.</x:String>
+  <x:String x:Key="Text.Validation.PathRequired">필수 항목: 경로</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixInvalid">잘못된 값: Release 접두사</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixRequired">필수 항목: Release 접두사</x:String>
+  <x:String x:Key="Text.Validation.RemoteBranchRequired">필수 항목: 업스트림</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameExists">같은 이름의 원격 저장소가 이미 있습니다.</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameInvalid">잘못된 값: 원격 이름</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameRequired">필수 항목: 원격 이름</x:String>
+  <x:String x:Key="Text.Validation.RemoteRequired">필수 항목: 원격</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlExists">같은 URL의 원격 저장소가 이미 있습니다.</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlInvalid">잘못된 값: 저장소 URL</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlRequired">필수 항목: 저장소 URL</x:String>
+  <x:String x:Key="Text.Validation.RepositoryFolderRequired">필수 항목: 폴더</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNameInvalid">이름에는 영문자, 숫자, 밑줄, 하이픈만 사용할 수 있습니다.</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNotFound">SSH 개인 키를 찾을 수 없습니다.</x:String>
+  <x:String x:Key="Text.Validation.StorageFileRequired">필수 항목: 아카이브 저장 위치</x:String>
+  <x:String x:Key="Text.Validation.TagExists">같은 이름의 태그가 이미 있습니다.</x:String>
+  <x:String x:Key="Text.Validation.TagNameInvalid">잘못된 값: 태그 이름</x:String>
+  <x:String x:Key="Text.Validation.TagNameRequired">필수 항목: 태그 이름</x:String>
+  <x:String x:Key="Text.Validation.TagPrefixInvalid">잘못된 값: 버전 태그 접두사</x:String>
+  <x:String x:Key="Text.Validation.UrlRequired">필수 항목: URL</x:String>
+  <x:String x:Key="Text.Validation.WorktreePathRequired">필수 항목: 경로</x:String>
+  <x:String x:Key="Text.Error.InvalidClipboardPatch">클립보드에 유효한 패치 내용이 없습니다.</x:String>
+  <x:String x:Key="Text.Archive.Saved">압축 파일 저장 위치: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.Enabled">LFS를 활성화했습니다.</x:String>
+  <x:String x:Key="Text.GitLFS.PatternTracked">추적 패턴: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileLocked">파일 잠금: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileUnlocked">파일 잠금 해제: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveSettings">설정을 저장하지 못했습니다: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToLoadRemoteSettings">원격 설정을 불러오지 못했습니다: {0}</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.KeyExists">같은 이름의 키가 이미 있습니다.</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.Failed">SSH 키를 생성하지 못했습니다: {0}</x:String>
+  <x:String x:Key="Text.AddToIgnore.LocalOnly">로컬만</x:String>
+  <x:String x:Key="Text.Conflict.Mine">내 것</x:String>
+  <x:String x:Key="Text.Conflict.Theirs">상대 것</x:String>
+  <x:String x:Key="Text.Diff.Image">이미지</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Text">텍스트 상자</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Path">경로 선택기</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Checkbox">확인란</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Combobox">콤보 상자</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">로컬 브랜치 선택기</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">원격 브랜치 선택기</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$을(를) 작업 트리로 체크아웃...</x:String>
+  <x:String x:Key="Text.GitFlow.Finish">${0}$ 완료</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders">추가 헤더 (한 줄에 하나의 `이름: 값`)</x:String>
+  <x:String x:Key="Text.TagCM.Merge">${0}$을(를) ${1}$에 병합...</x:String>
+  <x:String x:Key="Text.TrustRepository">신뢰되지 않은 저장소</x:String>
+  <x:String x:Key="Text.TrustRepository.CommandTip">`git config --global --add safe.directory {0}` 명령을 실행하여 이 경로를 신뢰하시겠습니까?</x:String>
+  <x:String x:Key="Text.TrustRepository.Description">Git이 이 저장소에 대한 접근을 거부했습니다: </x:String>
+  <x:String x:Key="Text.TrustRepository.Path">경로:</x:String>
+  <x:String x:Key="Text.Progress.TrustingRepository">Git safe.directory에 «{0}» 추가 중...</x:String>
+  <x:String x:Key="Text.Progress.OpeningRepository">«{0}» 여는 중...</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenTrustedRepository">저장소를 신뢰한 후에도 열지 못했습니다.</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders.Tip">한 줄에 하나의 헤더: 이름: 값</x:String>
+  <x:String x:Key="Text.Statistics.Others">기타</x:String>
+  <x:String x:Key="Text.Statistics.TopAuthors.Count">커밋</x:String>
+  <x:String x:Key="Text.RepositoryGroup.Auto">자동</x:String>
+  <x:String x:Key="Text.RepositoryGroup.NoGroup">그룹 없음 (미분류)</x:String>
+  <x:String x:Key="Text.RepositoryGroup.AutoDescription">기본 복제 디렉터리 기준</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Tips">내용을 보려면 파일을 선택하세요.</x:String>
+  <x:String x:Key="Text.SetPushUrl">푸시 URL 설정</x:String>
+  <x:String x:Key="Text.SetPushUrl.PushURL">푸시 URL:</x:String>
+  <x:String x:Key="Text.Error.SelectChangedLines">변경된 줄을 하나 이상 선택하세요.</x:String>
 </ResourceDictionary>

@@ -456,7 +456,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Completa Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Completa Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Completa Rilascio</x:String>
-  <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Target:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Destinazione:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Esegui squash durante il merge</x:String>
   <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Prefisso Hotfix:</x:String>
@@ -579,7 +579,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Launcher.Info" xml:space="preserve">AVVISO</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">Apri Repository</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">Schede</x:String>
-  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">Workspaces</x:String>
+  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">Spazi di lavoro</x:String>
   <x:String x:Key="Text.Merge" xml:space="preserve">Unisci Branch</x:String>
   <x:String x:Key="Text.Merge.Edit" xml:space="preserve">Personalizza messaggio di merge</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">In:</x:String>
@@ -653,7 +653,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Chiave API</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Modello</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Nome</x:String>
-  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Provider</x:String>
+  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Fornitore</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Il valore inserito è il nome per caricare la chiave API da ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Server</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">ASPETTO</x:String>
@@ -687,7 +687,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Preferences.General.ShowChildren" xml:space="preserve">Mostra i figli nei dettagli del commit</x:String>
   <x:String x:Key="Text.Preferences.General.ShowTagsInGraph" xml:space="preserve">Mostra i tag nel grafico dei commit</x:String>
   <x:String x:Key="Text.Preferences.General.SubjectGuideLength" xml:space="preserve">Lunghezza Guida Oggetto</x:String>
-  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24-Hours</x:String>
+  <x:String x:Key="Text.Preferences.General.Use24Hours" xml:space="preserve">24 ore</x:String>
   <x:String x:Key="Text.Preferences.General.UseCompactBranchNames" xml:space="preserve">Usa nomi branch compatti nel grafico dei commit</x:String>
   <x:String x:Key="Text.Preferences.General.UseGitHubStyleAvatar" xml:space="preserve">Genera avatar predefinito stile GitHub</x:String>
   <x:String x:Key="Text.Preferences.Git" xml:space="preserve">GIT</x:String>
@@ -802,7 +802,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Exclude" xml:space="preserve">Nascondi nel grafico dei commit</x:String>
   <x:String x:Key="Text.Repository.FilterCommits.Include" xml:space="preserve">Filtra nel grafico dei commit</x:String>
   <x:String x:Key="Text.Repository.FoldAll" xml:space="preserve">Comprimi tutto</x:String>
-  <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">LAYOUT</x:String>
+  <x:String x:Key="Text.Repository.HistoriesLayout" xml:space="preserve">DISPOSIZIONE</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Horizontal" xml:space="preserve">Orizzontale</x:String>
   <x:String x:Key="Text.Repository.HistoriesLayout.Vertical" xml:space="preserve">Verticale</x:String>
   <x:String x:Key="Text.Repository.HistoriesOrder" xml:space="preserve">Ordine dei commit</x:String>
@@ -992,14 +992,14 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Apri Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Apri Terminale</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Riscansiona Repository nella Cartella Clone Predefinita</x:String>
-  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Verifica la connessione ai remoti di tutti i repository</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">Tutti i remoti sono raggiungibili</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Alcuni remoti non sono raggiungibili</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">Nessun remoto è raggiungibile</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">Nessun remoto configurato</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Cerca Repository...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">MODIFICHE LOCALI</x:String>
-  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>
+  <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Ignora in Git</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Ignora tutti i file *{0}</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.ExtensionInSameFolder" xml:space="preserve">Ignora i file *{0} nella stessa cartella</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.InFolder" xml:space="preserve">Ignora la cartella '{0}'</x:String>
@@ -1027,9 +1027,9 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.WorkingCopy.IncludeUntracked" xml:space="preserve">INCLUDI FILE NON TRACCIATI</x:String>
   <x:String x:Key="Text.WorkingCopy.NoCommitHistories" xml:space="preserve">NESSUN MESSAGGIO RECENTE INSERITO</x:String>
   <x:String x:Key="Text.WorkingCopy.NoCommitTemplates" xml:space="preserve">NESSUN TEMPLATE DI COMMIT</x:String>
-  <x:String x:Key="Text.WorkingCopy.NoVerify" xml:space="preserve">No-Verify</x:String>
+  <x:String x:Key="Text.WorkingCopy.NoVerify" xml:space="preserve">Salta gli hook</x:String>
   <x:String x:Key="Text.WorkingCopy.ResetAuthor" xml:space="preserve">Reimposta Autore</x:String>
-  <x:String x:Key="Text.WorkingCopy.SignOff" xml:space="preserve">SignOff</x:String>
+  <x:String x:Key="Text.WorkingCopy.SignOff" xml:space="preserve">Aggiungi firma di approvazione</x:String>
   <x:String x:Key="Text.WorkingCopy.Staged" xml:space="preserve">IN STAGE</x:String>
   <x:String x:Key="Text.WorkingCopy.Staged.Unstage" xml:space="preserve">RIMUOVI DA STAGE</x:String>
   <x:String x:Key="Text.WorkingCopy.Staged.UnstageAll" xml:space="preserve">RIMUOVI TUTTO DA STAGE</x:String>
@@ -1205,62 +1205,162 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.CopyAsPatch" xml:space="preserve">Copia come Patch</x:String>
   <x:String x:Key="Text.Diff.EmptyFile" xml:space="preserve">FILE VUOTO</x:String>
   <x:String x:Key="Text.Preferences.Git.UseStashAndReapplyByDefault" xml:space="preserve">Esegui stash e riapplica le modifiche per impostazione predefinita durante il checkout o il merge dei branch</x:String>
-  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Checkout Tag...</x:String>
+  <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Checkout del tag...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Aggiorna sottomoduli annidati</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Ignora tutti i file non tracciati nella stessa cartella</x:String>
-  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
-  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
-  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
-  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
-  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
-  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
-  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
-  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
-  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
-  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
-  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
-  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Abilita fetch automatico</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Ignora l'hook di pre-push</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Salta l’hook pre-rebase</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">MODIFICHE</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMIT</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">COMMIT SOLO A SINISTRA</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">COMMIT SOLO A DESTRA</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Suggerimento: puoi applicare i commit selezionati tramite cherry-pick se l’altro lato è HEAD (dal menu contestuale).</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Nome:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Inizia da:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Esegui rebase prima di unire</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">FILE BINARIO</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">VISUALIZZATORE ESADECIMALE</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Vai all’indirizzo...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filtri attivi</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Comprimi filtri</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Espandi filtri</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Comprimi dettagli</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Apri in una finestra separata</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Dettagli del commit</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Confronto revisioni</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Livello di sforzo di ragionamento</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Apri gestione chiavi SSH</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Vuoi davvero eliminare le seguenti chiavi?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Impronta digitale</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Genera chiave SSH</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Conferma passphrase:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">E-mail:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Obbligatorio.</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Nome chiave:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Obbligatorio. Ad esempio: id_github</x:String>
   <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
-  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
-  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
-  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
-  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
-  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
-  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
-  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
-  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
-  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERA</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Tipo:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Usa una passphrase per la chiave privata</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Percorso</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Chiave pubblica</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">Gestione chiavi SSH</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">EVIDENZIA NEL GRAFO</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">Tutti</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Solo ramo corrente</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Solo commit selezionati</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Ramo corrente e commit selezionati</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Commit selezionati (solo primo genitore)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINA</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">Cambio modalità file: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">Nuova modalità file: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Modalità file eliminato: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Regolare</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Eseguibile</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Cartella</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Collegamento simbolico</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Sottomodulo</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Sconosciuto</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">Lo stash automatico {0} è stato conservato. Completa o annulla l’operazione Git in corso, quindi ripristinalo dagli stash.</x:String>
+  <x:String x:Key="Text.TextSearch.MatchCase">Distingui maiuscole e minuscole</x:String>
+  <x:String x:Key="Text.TextSearch.WholeWord">Solo parole intere</x:String>
+  <x:String x:Key="Text.TextSearch.Regex">Usa espressioni regolari</x:String>
+  <x:String x:Key="Text.TextSearch.Previous">Trova precedente (Shift+F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Next">Trova successivo (F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Placeholder">Trova...</x:String>
+  <x:String x:Key="Text.TextSearch.NoMatches">Nessuna corrispondenza</x:String>
+  <x:String x:Key="Text.TextSearch.OneMatch">1 corrispondenza</x:String>
+  <x:String x:Key="Text.TextSearch.Matches">{0} corrispondenze</x:String>
+  <x:String x:Key="Text.TextSearch.MatchOfTotal">{0} di {1}</x:String>
+  <x:String x:Key="Text.Validation.BranchExists">Esiste già un ramo con questo nome.</x:String>
+  <x:String x:Key="Text.Validation.BranchNameInvalid">Valore non valido: Nome Branch</x:String>
+  <x:String x:Key="Text.Validation.BranchNameRequired">Campo obbligatorio: Nome Branch</x:String>
+  <x:String x:Key="Text.Validation.CommitDescriptionRequired">Campo obbligatorio: Descrizione Breve</x:String>
+  <x:String x:Key="Text.Validation.CommitMessageRequired">Campo obbligatorio: MESSAGGIO</x:String>
+  <x:String x:Key="Text.Validation.CommitTypeRequired">Campo obbligatorio: Tipo di Modifica</x:String>
+  <x:String x:Key="Text.Validation.ContextInvalid">Il contesto dell’operazione non è disponibile.</x:String>
+  <x:String x:Key="Text.Validation.DevelopBranchRequired">Campo obbligatorio: Branch di Sviluppo</x:String>
+  <x:String x:Key="Text.Validation.EmailInvalid">Valore non valido: E-mail</x:String>
+  <x:String x:Key="Text.Validation.EmailRequired">Campo obbligatorio: E-mail</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixInvalid">Valore non valido: Prefisso Feature</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixRequired">Campo obbligatorio: Prefisso Feature</x:String>
+  <x:String x:Key="Text.Validation.GitFlowBranchesEqual">I rami di sviluppo e principale devono avere nomi diversi.</x:String>
+  <x:String x:Key="Text.Validation.GroupNameRequired">Campo obbligatorio: Nome</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixInvalid">Valore non valido: Prefisso Hotfix</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixRequired">Campo obbligatorio: Prefisso Hotfix</x:String>
+  <x:String x:Key="Text.Validation.IgnorePatternRequired">Campo obbligatorio: Pattern</x:String>
+  <x:String x:Key="Text.Validation.LFSPatternRequired">Campo obbligatorio: Modello Personalizzato</x:String>
+  <x:String x:Key="Text.Validation.LocalBranchRequired">Campo obbligatorio: Branch</x:String>
+  <x:String x:Key="Text.Validation.MasterBranchRequired">Campo obbligatorio: Branch di Produzione</x:String>
+  <x:String x:Key="Text.Validation.NameRequired">Campo obbligatorio: Nome</x:String>
+  <x:String x:Key="Text.Validation.OutputFileRequired">Campo obbligatorio: Salva Archivio In</x:String>
+  <x:String x:Key="Text.Validation.ParentFolderRequired">Campo obbligatorio: Cartella Principale</x:String>
+  <x:String x:Key="Text.Validation.PassphraseMismatch">La passphrase e la conferma non corrispondono.</x:String>
+  <x:String x:Key="Text.Validation.PassphraseRequired">Campo obbligatorio: Passphrase</x:String>
+  <x:String x:Key="Text.Validation.PatchFileRequired">Campo obbligatorio: File Patch</x:String>
+  <x:String x:Key="Text.Validation.PathNotEmpty">Il percorso selezionato non è vuoto.</x:String>
+  <x:String x:Key="Text.Validation.PathNotFound">Il percorso selezionato non è stato trovato.</x:String>
+  <x:String x:Key="Text.Validation.PathRequired">Campo obbligatorio: Percorso</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixInvalid">Valore non valido: Prefisso Rilascio</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixRequired">Campo obbligatorio: Prefisso Rilascio</x:String>
+  <x:String x:Key="Text.Validation.RemoteBranchRequired">Campo obbligatorio: Upstream</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameExists">Esiste già un remoto con questo nome.</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameInvalid">Valore non valido: Nome del remoto</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameRequired">Campo obbligatorio: Nome del remoto</x:String>
+  <x:String x:Key="Text.Validation.RemoteRequired">Campo obbligatorio: Remoto</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlExists">Esiste già un remoto con questo URL.</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlInvalid">Valore non valido: URL del Repository</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlRequired">Campo obbligatorio: URL del Repository</x:String>
+  <x:String x:Key="Text.Validation.RepositoryFolderRequired">Campo obbligatorio: Cartella</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNameInvalid">Il nome può contenere solo lettere latine, numeri, trattini bassi e trattini.</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNotFound">La chiave SSH privata non è stata trovata.</x:String>
+  <x:String x:Key="Text.Validation.StorageFileRequired">Campo obbligatorio: Salva Archivio In</x:String>
+  <x:String x:Key="Text.Validation.TagExists">Esiste già un tag con questo nome.</x:String>
+  <x:String x:Key="Text.Validation.TagNameInvalid">Valore non valido: Nome Tag</x:String>
+  <x:String x:Key="Text.Validation.TagNameRequired">Campo obbligatorio: Nome Tag</x:String>
+  <x:String x:Key="Text.Validation.TagPrefixInvalid">Valore non valido: Prefisso Tag Versione</x:String>
+  <x:String x:Key="Text.Validation.UrlRequired">Campo obbligatorio: URL</x:String>
+  <x:String x:Key="Text.Validation.WorktreePathRequired">Campo obbligatorio: PERCORSO</x:String>
+  <x:String x:Key="Text.Error.InvalidClipboardPatch">Gli appunti non contengono una patch valida.</x:String>
+  <x:String x:Key="Text.Archive.Saved">Archivio salvato in: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.Enabled">LFS abilitato correttamente.</x:String>
+  <x:String x:Key="Text.GitLFS.PatternTracked">Schema tracciato: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileLocked">File bloccato: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileUnlocked">File sbloccato: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveSettings">Impossibile salvare le impostazioni: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToLoadRemoteSettings">Impossibile caricare le impostazioni remote: {0}</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.KeyExists">Esiste già una chiave con questo nome.</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.Failed">Impossibile generare la chiave SSH: {0}</x:String>
+  <x:String x:Key="Text.AddToIgnore.LocalOnly">SOLO LOCALE</x:String>
+  <x:String x:Key="Text.Conflict.Mine">MIO</x:String>
+  <x:String x:Key="Text.Conflict.Theirs">LORO</x:String>
+  <x:String x:Key="Text.Diff.Image">IMMAGINE</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Text">Casella di testo</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Path">Selettore percorso</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Checkbox">Casella di controllo</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Combobox">Casella combinata</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Selettore ramo locale</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Selettore ramo remoto</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Esegui checkout di ${0}$ come albero di lavoro...</x:String>
+  <x:String x:Key="Text.GitFlow.Finish">Completa ${0}$</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Intestazioni aggiuntive (una `Nome: Valore` per riga)</x:String>
+  <x:String x:Key="Text.TagCM.Merge">Unisci ${0}$ in ${1}$...</x:String>
+  <x:String x:Key="Text.TrustRepository">Repository non attendibile</x:String>
+  <x:String x:Key="Text.TrustRepository.CommandTip">Vuoi eseguire `git config --global --add safe.directory {0}` per considerare attendibile questo percorso?</x:String>
+  <x:String x:Key="Text.TrustRepository.Description">Git ha negato l’accesso a questo repository: </x:String>
+  <x:String x:Key="Text.TrustRepository.Path">Percorso:</x:String>
+  <x:String x:Key="Text.Progress.TrustingRepository">Aggiunta di «{0}» a safe.directory di Git...</x:String>
+  <x:String x:Key="Text.Progress.OpeningRepository">Apertura di «{0}»...</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenTrustedRepository">Impossibile aprire il repository dopo averlo considerato attendibile.</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders.Tip">Un’intestazione per riga: Nome: Valore</x:String>
+  <x:String x:Key="Text.Statistics.Others">Altri</x:String>
+  <x:String x:Key="Text.Statistics.TopAuthors.Count">COMMIT</x:String>
+  <x:String x:Key="Text.RepositoryGroup.Auto">Automatico</x:String>
+  <x:String x:Key="Text.RepositoryGroup.NoGroup">Nessun gruppo (senza categoria)</x:String>
+  <x:String x:Key="Text.RepositoryGroup.AutoDescription">In base alla cartella di clonazione predefinita</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Tips">Seleziona un file per visualizzarne il contenuto.</x:String>
+  <x:String x:Key="Text.SetPushUrl">Imposta URL di push</x:String>
+  <x:String x:Key="Text.SetPushUrl.PushURL">URL di push:</x:String>
+  <x:String x:Key="Text.Error.SelectChangedLines">Seleziona almeno una riga modificata.</x:String>
 </ResourceDictionary>

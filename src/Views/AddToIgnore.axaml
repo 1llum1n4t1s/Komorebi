@@ -58,7 +58,7 @@
                       Background="Gray"
                       HorizontalAlignment="Left" VerticalAlignment="Center"
                       IsVisible="{Binding IsLocalOnly}">
-                <TextBlock Text="LOCAL ONLY" Margin="6,0" FontSize="10" Foreground="White"/>
+                <TextBlock Text="{DynamicResource Text.AddToIgnore.LocalOnly}" Margin="6,0" FontSize="10" Foreground="White"/>
               </Border>
             </StackPanel>
           </DataTemplate>

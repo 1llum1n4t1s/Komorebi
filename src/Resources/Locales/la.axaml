@@ -95,7 +95,7 @@
   <x:String x:Key="Text.BranchTree.Behind" xml:space="preserve">{0} committum(-a) post</x:String>
   <x:String x:Key="Text.BranchTree.InvalidUpstream" xml:space="preserve">Invalidum</x:String>
   <x:String x:Key="Text.BranchTree.Remote" xml:space="preserve">REMOTUM</x:String>
-  <x:String x:Key="Text.BranchTree.Status" xml:space="preserve">STATUS</x:String>
+  <x:String x:Key="Text.BranchTree.Status" xml:space="preserve">CONDICIO</x:String>
   <x:String x:Key="Text.BranchTree.Tracking" xml:space="preserve">SEQUENTIA</x:String>
   <x:String x:Key="Text.BranchTree.Unpublished" xml:space="preserve">NON EDITUM</x:String>
   <x:String x:Key="Text.BranchTree.URL" xml:space="preserve">URL</x:String>
@@ -172,7 +172,7 @@
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Manually" xml:space="preserve">Rebasa ${0}$ super ${1}$ Interactive</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Reword" xml:space="preserve">Rescribe...</x:String>
   <x:String x:Key="Text.CommitCM.InteractiveRebase.Squash" xml:space="preserve">Squash in Parentem...</x:String>
-  <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Merge ...</x:String>
+  <x:String x:Key="Text.CommitCM.MergeMultiple" xml:space="preserve">Coniunge ...</x:String>
   <x:String x:Key="Text.CommitCM.PushRevision" xml:space="preserve">Push ${0}$ ad ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Rebase" xml:space="preserve">Rebasa ${0}$ super ${1}$</x:String>
   <x:String x:Key="Text.CommitCM.Reset" xml:space="preserve">Redige ${0}$ ad ${1}$</x:String>
@@ -275,7 +275,7 @@
   <x:String x:Key="Text.Configure.OpenAI" xml:space="preserve">AI</x:String>
   <x:String x:Key="Text.Configure.OpenAI.Preferred" xml:space="preserve">Servitium Praelatum:</x:String>
   <x:String x:Key="Text.Configure.OpenAI.Preferred.Tip" xml:space="preserve">Si 'Servitium Praelatum' constitutum est, Komorebi solum id in hoc repositorio utetur. Aliter, si plus quam unum servitium praesto est, menu contextuale ad eligendum unum ex eis ostendetur.</x:String>
-  <x:String x:Key="Text.Configure.Proxy" xml:space="preserve">HTTP Proxy</x:String>
+  <x:String x:Key="Text.Configure.Proxy" xml:space="preserve">Procurator HTTP</x:String>
   <x:String x:Key="Text.Configure.Proxy.Placeholder" xml:space="preserve">HTTP proxy ab hoc repositorio adhibitum</x:String>
   <x:String x:Key="Text.Configure.User" xml:space="preserve">Nomen Usoris</x:String>
   <x:String x:Key="Text.Configure.User.Placeholder" xml:space="preserve">Nomen usoris pro hoc repositorio</x:String>
@@ -575,7 +575,7 @@
   <x:String x:Key="Text.IssueLinkCM.CopyLink" xml:space="preserve">Copia Nexum</x:String>
   <x:String x:Key="Text.IssueLinkCM.OpenInBrowser" xml:space="preserve">Aperi in Navigatro</x:String>
   <x:String x:Key="Text.Launcher.Commands" xml:space="preserve">Mandata</x:String>
-  <x:String x:Key="Text.Launcher.Error" xml:space="preserve">ERROR</x:String>
+  <x:String x:Key="Text.Launcher.Error" xml:space="preserve">ERROR OPERATIONIS</x:String>
   <x:String x:Key="Text.Launcher.Info" xml:space="preserve">NOTITIA</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">Aperi Repositoria</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">Tabulae</x:String>
@@ -653,7 +653,7 @@
   <x:String x:Key="Text.Preferences.AI.ApiKey" xml:space="preserve">Clavis API</x:String>
   <x:String x:Key="Text.Preferences.AI.Model" xml:space="preserve">Exemplar</x:String>
   <x:String x:Key="Text.Preferences.AI.Name" xml:space="preserve">Nomen</x:String>
-  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Provider</x:String>
+  <x:String x:Key="Text.Preferences.AI.Provider" xml:space="preserve">Provisor</x:String>
   <x:String x:Key="Text.Preferences.AI.ReadApiKeyFromEnv" xml:space="preserve">Valor inscriptus est nomen ad onerandum clavem API ex ENV</x:String>
   <x:String x:Key="Text.Preferences.AI.Server" xml:space="preserve">Servitor</x:String>
   <x:String x:Key="Text.Preferences.Appearance" xml:space="preserve">ASPECTUS</x:String>
@@ -819,7 +819,7 @@
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">Aperi in Instrumentis Externis</x:String>
   <x:String x:Key="Text.Repository.Remotes" xml:space="preserve">REMOTA</x:String>
   <x:String x:Key="Text.Repository.Remotes.Add" xml:space="preserve">Adde Remotum</x:String>
-  <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">RESOLVE</x:String>
+  <x:String x:Key="Text.Repository.Resolve" xml:space="preserve">RESOLVE CONFLICTUS</x:String>
   <x:String x:Key="Text.Repository.Search" xml:space="preserve">Quaere Committum</x:String>
   <x:String x:Key="Text.Repository.SearchFiles" xml:space="preserve">Filtra Documenta</x:String>
   <x:String x:Key="Text.Repository.SearchStashes" xml:space="preserve">Quaere Reposita</x:String>
@@ -945,7 +945,7 @@
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Dele</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Constitue Ramum</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Muta URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATUS</x:String>
+  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">CONDICIO</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">mutatum</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">non initiatum</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revisio mutata</x:String>
@@ -992,11 +992,11 @@
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Aperi Repositorium</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Aperi Terminale</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Reperlege Repositoria in Directorio Clonandi Praefinito</x:String>
-  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Check Remote Reachability for All Repositories</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">All remotes are reachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Some remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">All remotes are unreachable</x:String>
-  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">No remotes configured</x:String>
+  <x:String x:Key="Text.Welcome.ScanRemotesReachability" xml:space="preserve">Aditum ad repositoria remota omnium repositoriorum verifica</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllReachable" xml:space="preserve">Omnia repositoria remota adiri possunt</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.SomeUnreachable" xml:space="preserve">Quaedam repositoria remota adiri non possunt</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.AllUnreachable" xml:space="preserve">Nulla repositoria remota adiri possunt</x:String>
+  <x:String x:Key="Text.Welcome.RemoteReachability.NoRemotes" xml:space="preserve">Nulla repositoria remota configurata</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Quaere Repositoria...</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">MUTATIONES LOCALES</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignora</x:String>
@@ -1018,7 +1018,7 @@
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithDetachedHead" xml:space="preserve">Committum in capite separato creas. Visne pergere?</x:String>
   <x:String x:Key="Text.WorkingCopy.ConfirmCommitWithFilter" xml:space="preserve">Proposuisti {0} documentum(-a) sed solum {1} documentum(-a) ostenduntur ({2} documenta filtrata sunt). Visne pergere?</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts" xml:space="preserve">CONFLICTA DETECTA</x:String>
-  <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">MERGE</x:String>
+  <x:String x:Key="Text.WorkingCopy.Conflicts.Merge" xml:space="preserve">CONIUNGE</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.MergeExternal" xml:space="preserve">Merge cum Instrumento Externo</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.OpenExternalMergeToolAllConflicts" xml:space="preserve">APERI OMNIA CONFLICTA IN INSTRUMENTO MERGE EXTERNO</x:String>
   <x:String x:Key="Text.WorkingCopy.Conflicts.Resolved" xml:space="preserve">CONFLICTA DOCUMENTI RESOLUTA SUNT</x:String>
@@ -1029,7 +1029,7 @@
   <x:String x:Key="Text.WorkingCopy.NoCommitTemplates" xml:space="preserve">NULLA EXEMPLARIA COMMITTENDI</x:String>
   <x:String x:Key="Text.WorkingCopy.NoVerify" xml:space="preserve">Sine Verificatione</x:String>
   <x:String x:Key="Text.WorkingCopy.ResetAuthor" xml:space="preserve">Redige Auctorem</x:String>
-  <x:String x:Key="Text.WorkingCopy.SignOff" xml:space="preserve">SignOff</x:String>
+  <x:String x:Key="Text.WorkingCopy.SignOff" xml:space="preserve">Subscriptionem approbationis adde</x:String>
   <x:String x:Key="Text.WorkingCopy.Staged" xml:space="preserve">PROPOSITA</x:String>
   <x:String x:Key="Text.WorkingCopy.Staged.Unstage" xml:space="preserve">DEPONE</x:String>
   <x:String x:Key="Text.WorkingCopy.Staged.UnstageAll" xml:space="preserve">DEPONE OMNIA</x:String>
@@ -1047,7 +1047,7 @@
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">Claude</x:String>
   <x:String x:Key="Text.Worktree.Open" xml:space="preserve">Aperi</x:String>
   <x:String x:Key="Text.Worktree.Path" xml:space="preserve">SEMITA</x:String>
-  <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Remove</x:String>
+  <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Amove</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Recludi</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">ITA</x:String>
   <x:String x:Key="Text.Error.BisectHasLocalChanges" xml:space="preserve">Mutationes locales non commissae habes. Prius abice aut reconde eas.</x:String>
@@ -1208,59 +1208,159 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">Excipe Signum...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">Renova submodulos nidificatos</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">Ignora omnia documenta non tracta in eodem fasciculo</x:String>
-  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
-  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
-  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
-  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
-  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
-  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
-  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
-  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
-  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
-  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
-  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
-  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
-  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
-  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
-  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
-  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
-  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
-  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
-  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
-  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
-  <x:String x:Key="Text.Stash.AutoRetained">Automatic stash {0} was kept. Finish or abort the current Git operation, then restore it from Stashes.</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Acquisitionem automaticam activa</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Uncum pre-push praeteri</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Uncum pre-rebase praeteri</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">MUTATIONES</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMISSIONES</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">COMMISSIONES SOLUM SINISTRAE</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">COMMISSIONES SOLUM DEXTRAE</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Consilium: commissiones selectas excerpere potes si pars altera HEAD est (per tabulam contextualem).</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Nomen:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Initium ab:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Ante coniunctionem rebase fac</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">PLICULA BINARIA</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">VISOR HEXADECIMALIS</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Ad inscriptionem...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filtra activa</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Filtra contrahe</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Filtra expande</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Singula contrahe</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">In fenestra separata aperi</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Singula commissionis</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Comparatio revisionum</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Gradus laboris ratiocinandi</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Administratorem clavium SSH aperi</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Has claves vere delere vis?</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Impressio clavis</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Clavem SSH genera</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Tesseram confirma:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Inscriptio electronica:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Necessarium.</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Nomen clavis:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Necessarium. Exempli gratia: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Tessera:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERA</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Genus:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Clavem privatam tessera protege</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Iter</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Clavis publica</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">Administrator clavium SSH</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">NOTAE IN GRAPHO</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">Omnes</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Solus ramus praesens</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Solae commissiones selectae</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Ramus praesens et commissiones selectae</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Commissiones selectae (solum primus parens)</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINA</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">Mutatio modi pliculae: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">Novus modus pliculae: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Modus pliculae deletae: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Ordinaria</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Exsecutabilis</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directorium</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Nexus symbolicus</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodulus</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Ignotus</x:String>
+  <x:String x:Key="Text.Stash.AutoRetained">Conditorium automaticum {0} servatum est. Operationem Git praesentem perfice aut interrumpe, deinde e conditoriis restitue.</x:String>
+  <x:String x:Key="Text.TextSearch.MatchCase">Litteras maiusculas et minusculas distingue</x:String>
+  <x:String x:Key="Text.TextSearch.WholeWord">Sola verba integra</x:String>
+  <x:String x:Key="Text.TextSearch.Regex">Expressionibus regularibus utere</x:String>
+  <x:String x:Key="Text.TextSearch.Previous">Priorem reperi (Shift+F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Next">Proximum reperi (F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Placeholder">Quaere...</x:String>
+  <x:String x:Key="Text.TextSearch.NoMatches">Nihil repertum</x:String>
+  <x:String x:Key="Text.TextSearch.OneMatch">1 inventum</x:String>
+  <x:String x:Key="Text.TextSearch.Matches">{0} inventa</x:String>
+  <x:String x:Key="Text.TextSearch.MatchOfTotal">{0} ex {1}</x:String>
+  <x:String x:Key="Text.Validation.BranchExists">Ramus eiusdem nominis iam exstat.</x:String>
+  <x:String x:Key="Text.Validation.BranchNameInvalid">Valor invalidus: Nomen Rami</x:String>
+  <x:String x:Key="Text.Validation.BranchNameRequired">Campus necessarius: Nomen Rami</x:String>
+  <x:String x:Key="Text.Validation.CommitDescriptionRequired">Campus necessarius: Brevis Descriptio</x:String>
+  <x:String x:Key="Text.Validation.CommitMessageRequired">Campus necessarius: NUNTIUS</x:String>
+  <x:String x:Key="Text.Validation.CommitTypeRequired">Campus necessarius: Genus Mutationis</x:String>
+  <x:String x:Key="Text.Validation.ContextInvalid">Contextus operationis non praesto est.</x:String>
+  <x:String x:Key="Text.Validation.DevelopBranchRequired">Campus necessarius: Ramus Evolutionis</x:String>
+  <x:String x:Key="Text.Validation.EmailInvalid">Valor invalidus: Inscriptio electronica</x:String>
+  <x:String x:Key="Text.Validation.EmailRequired">Campus necessarius: Inscriptio electronica</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixInvalid">Valor invalidus: Praefixum Proprietatis</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixRequired">Campus necessarius: Praefixum Proprietatis</x:String>
+  <x:String x:Key="Text.Validation.GitFlowBranchesEqual">Ramus evolutionis et ramus principalis nomina diversa habere debent.</x:String>
+  <x:String x:Key="Text.Validation.GroupNameRequired">Campus necessarius: Nomen</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixInvalid">Valor invalidus: Praefixum Correctionis Urgentis</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixRequired">Campus necessarius: Praefixum Correctionis Urgentis</x:String>
+  <x:String x:Key="Text.Validation.IgnorePatternRequired">Campus necessarius: Exemplar</x:String>
+  <x:String x:Key="Text.Validation.LFSPatternRequired">Campus necessarius: Exemplar Proprium</x:String>
+  <x:String x:Key="Text.Validation.LocalBranchRequired">Campus necessarius: Ramus</x:String>
+  <x:String x:Key="Text.Validation.MasterBranchRequired">Campus necessarius: Ramus Productionis</x:String>
+  <x:String x:Key="Text.Validation.NameRequired">Campus necessarius: Nomen</x:String>
+  <x:String x:Key="Text.Validation.OutputFileRequired">Campus necessarius: Serva Archivum In</x:String>
+  <x:String x:Key="Text.Validation.ParentFolderRequired">Campus necessarius: Fasciculus Parentis</x:String>
+  <x:String x:Key="Text.Validation.PassphraseMismatch">Tessera et confirmatio non congruunt.</x:String>
+  <x:String x:Key="Text.Validation.PassphraseRequired">Campus necessarius: Tessera</x:String>
+  <x:String x:Key="Text.Validation.PatchFileRequired">Campus necessarius: Documentum Emplastri</x:String>
+  <x:String x:Key="Text.Validation.PathNotEmpty">Iter selectum vacuum non est.</x:String>
+  <x:String x:Key="Text.Validation.PathNotFound">Iter selectum non repertum est.</x:String>
+  <x:String x:Key="Text.Validation.PathRequired">Campus necessarius: Iter</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixInvalid">Valor invalidus: Praefixum Editionis</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixRequired">Campus necessarius: Praefixum Editionis</x:String>
+  <x:String x:Key="Text.Validation.RemoteBranchRequired">Campus necessarius: Fons Superior</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameExists">Repositorium remotum eiusdem nominis iam exstat.</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameInvalid">Valor invalidus: Nomen remoti</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameRequired">Campus necessarius: Nomen remoti</x:String>
+  <x:String x:Key="Text.Validation.RemoteRequired">Campus necessarius: Remotum</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlExists">Repositorium remotum eiusdem URL iam exstat.</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlInvalid">Valor invalidus: URL Repositorii</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlRequired">Campus necessarius: URL Repositorii</x:String>
+  <x:String x:Key="Text.Validation.RepositoryFolderRequired">Campus necessarius: Plica</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNameInvalid">Nomen solum litteras Latinas, numeros, lineas subscriptas et tractus continere potest.</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNotFound">Clavis privata SSH non reperta est.</x:String>
+  <x:String x:Key="Text.Validation.StorageFileRequired">Campus necessarius: Serva Archivum In</x:String>
+  <x:String x:Key="Text.Validation.TagExists">Nota eiusdem nominis iam exstat.</x:String>
+  <x:String x:Key="Text.Validation.TagNameInvalid">Valor invalidus: Nomen Signi</x:String>
+  <x:String x:Key="Text.Validation.TagNameRequired">Campus necessarius: Nomen Signi</x:String>
+  <x:String x:Key="Text.Validation.TagPrefixInvalid">Valor invalidus: Praefixum Signi Versionis</x:String>
+  <x:String x:Key="Text.Validation.UrlRequired">Campus necessarius: URL</x:String>
+  <x:String x:Key="Text.Validation.WorktreePathRequired">Campus necessarius: SEMITA</x:String>
+  <x:String x:Key="Text.Error.InvalidClipboardPatch">Tabula exemplaris nullam emendationem validam continet.</x:String>
+  <x:String x:Key="Text.Archive.Saved">Archivum servatum in: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.Enabled">LFS feliciter activatum.</x:String>
+  <x:String x:Key="Text.GitLFS.PatternTracked">Forma observata: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileLocked">Plicula clausa: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileUnlocked">Plicula reserata: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveSettings">Configuratio servari non potuit: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToLoadRemoteSettings">Configuratio remota legi non potuit: {0}</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.KeyExists">Clavis eiusdem nominis iam exstat.</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.Failed">Clavis SSH generari non potuit: {0}</x:String>
+  <x:String x:Key="Text.AddToIgnore.LocalOnly">SOLUM LOCALE</x:String>
+  <x:String x:Key="Text.Conflict.Mine">MEA</x:String>
+  <x:String x:Key="Text.Conflict.Theirs">EORUM</x:String>
+  <x:String x:Key="Text.Diff.Image">IMAGO</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Text">Campus textus</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Path">Selector itineris</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Checkbox">Capsula electionis</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Combobox">Capsula combinata</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Selector rami localis</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Selector rami remoti</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ ut arborem operis extrahe...</x:String>
+  <x:String x:Key="Text.GitFlow.Finish">${0}$ perfice</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Tituli additi (unus `Nomen: Valor` per lineam)</x:String>
+  <x:String x:Key="Text.TagCM.Merge">${0}$ in ${1}$ coniunge...</x:String>
+  <x:String x:Key="Text.TrustRepository">Repositorium non fidum</x:String>
+  <x:String x:Key="Text.TrustRepository.CommandTip">Visne `git config --global --add safe.directory {0}` exsequi ut huic itineri fidas?</x:String>
+  <x:String x:Key="Text.TrustRepository.Description">Git aditum ad hoc repositorium recusavit: </x:String>
+  <x:String x:Key="Text.TrustRepository.Path">Iter:</x:String>
+  <x:String x:Key="Text.Progress.TrustingRepository">«{0}» ad safe.directory Git additur...</x:String>
+  <x:String x:Key="Text.Progress.OpeningRepository">«{0}» aperitur...</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenTrustedRepository">Repositorium post fidem datam aperiri non potuit.</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders.Tip">Unus titulus per lineam: Nomen: Valor</x:String>
+  <x:String x:Key="Text.Statistics.Others">Alii</x:String>
+  <x:String x:Key="Text.Statistics.TopAuthors.Count">COMMITTA</x:String>
+  <x:String x:Key="Text.RepositoryGroup.Auto">Automaticum</x:String>
+  <x:String x:Key="Text.RepositoryGroup.NoGroup">Nullus grex (sine categoria)</x:String>
+  <x:String x:Key="Text.RepositoryGroup.AutoDescription">Secundum directorium ordinarium ad clonandum</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Tips">Pliculam elige ut eius contentum videas.</x:String>
+  <x:String x:Key="Text.SetPushUrl">URL missionis constitue</x:String>
+  <x:String x:Key="Text.SetPushUrl.PushURL">URL missionis:</x:String>
+  <x:String x:Key="Text.Error.SelectChangedLines">Saltem unam lineam mutatam elige.</x:String>
 </ResourceDictionary>

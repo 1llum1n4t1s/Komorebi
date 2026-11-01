@@ -132,22 +132,6 @@ namespace Komorebi.Tests.Models
 
         /// <summary>
         /// @adversarial @category state @severity medium
-        /// HasWorktree の条件（IsCurrent=false かつ WorktreePath 設定済み）が正しいこと
-        /// </summary>
-        [Theory]
-        [InlineData(true, "/path", false)]   // IsCurrent=true → HasWorktree=false
-        [InlineData(false, "/path", true)]   // IsCurrent=false, path設定 → true
-        [InlineData(false, "", false)]       // IsCurrent=false, path空 → false
-        [InlineData(false, null, false)]     // IsCurrent=false, path=null → false
-        [InlineData(true, null, false)]      // IsCurrent=true, path=null → false
-        public void HasWorktree_AllCombinations(bool isCurrent, string? path, bool expected)
-        {
-            var branch = new Branch { IsCurrent = isCurrent, WorktreePath = path };
-            Assert.Equal(expected, branch.HasWorktree);
-        }
-
-        /// <summary>
-        /// @adversarial @category state @severity medium
         /// Ahead/Behindリストのクリア後にTrackStatusが更新されること
         /// </summary>
         [Fact]

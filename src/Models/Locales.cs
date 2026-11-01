@@ -23,6 +23,7 @@ public class Locale
     /// </summary>
     public static readonly List<Locale> Supported =
     [
+        new Locale("Català", "ca_ES"),
         new Locale("Deutsch", "de_DE"),
         new Locale("English", "en_US"),
         new Locale("Español", "es_ES"),

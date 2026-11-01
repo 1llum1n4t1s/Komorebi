@@ -42,12 +42,6 @@ public class AutoFetchService
     private static readonly Lazy<AutoFetchService> s_instance = new(() => new AutoFetchService(), System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
-    /// バックグラウンド処理が 1 サイクル分進行中かどうか。
-    /// TOCTOU 回避のため int + Interlocked.CompareExchange ベースに変更。
-    /// </summary>
-    public bool IsRunning => Volatile.Read(ref _isRunningInt) != 0;
-
-    /// <summary>
     /// バックグラウンドループを開始する。再呼び出しは無視される（多重起動防止）。
     /// 複数スレッドからの同時 Start でもループが 1 本しか走らないよう
     /// <see cref="Interlocked.CompareExchange{T}(ref T, T, T)"/> で CTS を atomic に入れ替える。

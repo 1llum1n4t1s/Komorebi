@@ -1,4 +1,4 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
 
@@ -111,7 +111,7 @@ public class SubmoduleTreeNodeIcon : UserControl
         {
             Width = 12,
             Height = 12,
-            HorizontalAlignment = HorizontalAlignment.Left,
+            HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = margin,
             Data = geo,

@@ -33,32 +33,18 @@ namespace Komorebi.Tests.Models
 
         #region HasWorktree
 
-        [Fact]
-        public void HasWorktree_NotCurrentAndHasPath_ReturnsTrue()
+        [Theory]
+        [InlineData(false, "/path/to/worktree", true)]
+        [InlineData(true, "/path/to/worktree", false)]
+        [InlineData(true, "/path", false)]
+        [InlineData(false, "/path", true)]
+        [InlineData(false, "", false)]
+        [InlineData(false, null, false)]
+        [InlineData(true, null, false)]
+        public void HasWorktree_ReturnsExpected(bool isCurrent, string? path, bool expected)
         {
-            var branch = new Branch { IsCurrent = false, WorktreePath = "/path/to/worktree" };
-            Assert.True(branch.HasWorktree);
-        }
-
-        [Fact]
-        public void HasWorktree_IsCurrent_ReturnsFalse()
-        {
-            var branch = new Branch { IsCurrent = true, WorktreePath = "/path/to/worktree" };
-            Assert.False(branch.HasWorktree);
-        }
-
-        [Fact]
-        public void HasWorktree_NullPath_ReturnsFalse()
-        {
-            var branch = new Branch { IsCurrent = false, WorktreePath = null };
-            Assert.False(branch.HasWorktree);
-        }
-
-        [Fact]
-        public void HasWorktree_EmptyPath_ReturnsFalse()
-        {
-            var branch = new Branch { IsCurrent = false, WorktreePath = "" };
-            Assert.False(branch.HasWorktree);
+            var branch = new Branch { IsCurrent = isCurrent, WorktreePath = path };
+            Assert.Equal(expected, branch.HasWorktree);
         }
 
         #endregion

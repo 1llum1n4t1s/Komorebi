@@ -1,4 +1,4 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
 using System.Collections.Generic;
@@ -946,6 +946,8 @@ public partial class BranchTree : UserControl
                 e.Handled = true;
             };
             menu.Items.Add(checkout);
+            if (hasNoWorktree)
+                menu.Items.Add(CreateCheckoutAsWorktreeMenuItem(repo, branch));
             menu.Items.Add(new MenuItem() { Header = "-" });
 
             if (upstream is not null && hasNoWorktree)
@@ -1272,6 +1274,14 @@ public partial class BranchTree : UserControl
         };
 
         menu.Items.Add(fetch);
+        var setPushUrl = new MenuItem { Header = App.Text("SetPushUrl"), Icon = App.CreateMenuIcon("Icons.Link") };
+        setPushUrl.Click += async (_, e) =>
+        {
+            var configure = new ViewModels.RepositoryConfigure(repo) { SelectedRemote = remote };
+            await App.ShowDialog(configure);
+            e.Handled = true;
+        };
+        menu.Items.Add(setPushUrl);
         menu.Items.Add(new MenuItem() { Header = "-" });
         if (ViewModels.Preferences.Instance.EnableAutoFetch)
         {
@@ -1313,6 +1323,7 @@ public partial class BranchTree : UserControl
             e.Handled = true;
         };
         menu.Items.Add(checkout);
+        menu.Items.Add(CreateCheckoutAsWorktreeMenuItem(repo, branch));
         menu.Items.Add(new MenuItem() { Header = "-" });
 
         if (repo.CurrentBranch is { } current)
@@ -1548,4 +1559,20 @@ public partial class BranchTree : UserControl
     /// 次の <see cref="NodesProperty"/> 更新で再実行するための pending フラグ。
     /// </summary>
     private bool _pendingScrollToCurrentBranch = false;
+    private static MenuItem CreateCheckoutAsWorktreeMenuItem(ViewModels.Repository repo, Models.Branch branch)
+    {
+        var item = new MenuItem
+        {
+            Header = App.Text("BranchCM.CheckoutAsWorktree", branch.FriendlyName),
+            Icon = App.CreateMenuIcon("Icons.Worktree.Add"),
+        };
+        item.Click += (_, e) =>
+        {
+            if (repo.CanCreatePopup())
+                repo.ShowPopup(new ViewModels.AddWorktree(repo, branch));
+            e.Handled = true;
+        };
+        return item;
+    }
+
 }

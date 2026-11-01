@@ -107,7 +107,8 @@ public class StatisticsReport
         if (_mode == StatisticsMode.ThisWeek || _mode == StatisticsMode.ThisMonth)
             normalized = time.Date;
         else
-            normalized = new DateTime(time.Year, time.Month, 1).ToLocalTime();
+            // upstreamとの差分: time はローカル時刻なので、暦上の月初を再変換しない。
+            normalized = new DateTime(time.Year, time.Month, 1);
 
         if (_mapSamples.TryGetValue(normalized, out var vs))
             _mapSamples[normalized] = vs + 1;

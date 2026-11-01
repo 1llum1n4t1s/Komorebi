@@ -29,7 +29,7 @@ public class InitSetup : Popup
     }
 
     /// <summary>デフォルトのクローン先ディレクトリ。必須入力。</summary>
-    [Required]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.PathRequired))]
     public string DefaultCloneDir
     {
         get => _defaultCloneDir;

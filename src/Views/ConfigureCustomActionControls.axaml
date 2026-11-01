@@ -128,12 +128,12 @@
               <!-- Type -->
               <TextBlock Margin="0,12,0,0" Text="{DynamicResource Text.ConfigureCustomActionControls.Type}"/>
               <ComboBox Margin="0,4,0,0" Height="28" HorizontalAlignment="Stretch" SelectedIndex="{Binding Type, Mode=TwoWay}">
-                <ComboBoxItem Content="TextBox"/>
-                <ComboBoxItem Content="Path Selector"/>
-                <ComboBoxItem Content="CheckBox"/>
-                <ComboBoxItem Content="ComboBox"/>
-                <ComboBoxItem Content="Local Branch Selector"/>
-                <ComboBoxItem Content="Remote Branch Selector"/>
+                <ComboBoxItem Content="{DynamicResource Text.ConfigureCustomActionControls.Type.Text}"/>
+                <ComboBoxItem Content="{DynamicResource Text.ConfigureCustomActionControls.Type.Path}"/>
+                <ComboBoxItem Content="{DynamicResource Text.ConfigureCustomActionControls.Type.Checkbox}"/>
+                <ComboBoxItem Content="{DynamicResource Text.ConfigureCustomActionControls.Type.Combobox}"/>
+                <ComboBoxItem Content="{DynamicResource Text.ConfigureCustomActionControls.Type.LocalBranch}"/>
+                <ComboBoxItem Content="{DynamicResource Text.ConfigureCustomActionControls.Type.RemoteBranch}"/>
               </ComboBox>
 
               <!-- Description -->

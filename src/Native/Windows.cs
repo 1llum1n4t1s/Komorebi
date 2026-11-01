@@ -273,19 +273,19 @@ internal class Windows : OS.IBackend
         var cwd = string.IsNullOrEmpty(workdir) ? home : workdir;
         var terminal = OS.ShellOrTerminal;
 
-        // ターミナルの存在を確認する
-        if (!File.Exists(terminal))
-        {
-            App.RaiseException(workdir, App.Text("Error.TerminalNotSpecified"));
-            return;
-        }
-
         // ターミナルプロセスを起動する
         var startInfo = new ProcessStartInfo();
         startInfo.WorkingDirectory = cwd;
         startInfo.FileName = terminal;
         startInfo.Arguments = args;
-        Process.Start(startInfo)?.Dispose();
+        try
+        {
+            Process.Start(startInfo)?.Dispose();
+        }
+        catch (Exception e)
+        {
+            App.RaiseException(workdir, e.Message);
+        }
     }
 
     /// <summary>

@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenAI.Chat;
 
@@ -77,8 +78,9 @@ public static class ChatTools
     /// "repo" / "file" / "originalFile" を取り出し、パス検証 → git diff 取得 → 結果文字列を返す。
     /// 各 Process* は結果文字列を SDK 固有のメッセージ型に包むだけ。
     /// </summary>
-    private static async Task<string> GetDetailChangesContentAsync(JsonElement input, string expectedRepoFullPath, Action<string> output, string? amendParent = null)
+    private static async Task<string> GetDetailChangesContentAsync(JsonElement input, string expectedRepoFullPath, Action<string> output, string? amendParent, CancellationToken cancellation)
     {
+        cancellation.ThrowIfCancellationRequested();
         var hasRepo = input.TryGetProperty("repo", out var repoPath);
         var hasFile = input.TryGetProperty("file", out var filePath);
         var hasOriginalFile = input.TryGetProperty("originalFile", out var originalFilePath);
@@ -110,26 +112,32 @@ public static class ChatTools
             }
         }
 
-        var rs = await new Commands.GetFileChangeForAI(check.Repo, check.File, orgFilePath, amendParent).ReadAsync();
+        // upstream との差分: 生成の中断を Git に伝え、中断結果を通常のツール失敗として返さない。
+        var command = new Commands.GetFileChangeForAI(check.Repo, check.File, orgFilePath, amendParent)
+        {
+            CancellationToken = cancellation,
+        };
+        var rs = await command.ReadAsync();
+        cancellation.ThrowIfCancellationRequested();
         return rs.IsSuccess ? rs.StdOut : $"Failed to get diff for '{check.File}'. Error: {rs.StdErr}";
     }
 
-    public static async Task<ToolChatMessage> ProcessAsync(ChatToolCall call, string expectedRepoFullPath, Action<string> output, string? amendParent = null)
+    public static async Task<ToolChatMessage> ProcessAsync(ChatToolCall call, string expectedRepoFullPath, Action<string> output, string? amendParent = null, CancellationToken cancellation = default)
     {
         if (!call.FunctionName.Equals(GetDetailChangesInFile.FunctionName))
             throw new NotSupportedException($"The tool {call.FunctionName} is not supported");
 
         using var doc = JsonDocument.Parse(call.FunctionArguments);
-        var message = await GetDetailChangesContentAsync(doc.RootElement, expectedRepoFullPath, output, amendParent);
+        var message = await GetDetailChangesContentAsync(doc.RootElement, expectedRepoFullPath, output, amendParent, cancellation);
         return new ToolChatMessage(call.Id, message);
     }
 
-    public static async Task<JsonObject> ProcessAnthropicCall(string toolId, string toolName, JsonElement toolInput, string expectedRepoFullPath, Action<string> output, string? amendParent = null)
+    public static async Task<JsonObject> ProcessAnthropicCall(string toolId, string toolName, JsonElement toolInput, string expectedRepoFullPath, Action<string> output, string? amendParent = null, CancellationToken cancellation = default)
     {
         if (toolName != GetDetailChangesInFile.FunctionName)
             throw new NotSupportedException($"The tool {toolName} is not supported");
 
-        var message = await GetDetailChangesContentAsync(toolInput, expectedRepoFullPath, output, amendParent);
+        var message = await GetDetailChangesContentAsync(toolInput, expectedRepoFullPath, output, amendParent, cancellation);
         return new JsonObject
         {
             ["type"] = "tool_result",

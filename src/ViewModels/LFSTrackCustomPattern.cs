@@ -11,7 +11,7 @@ namespace Komorebi.ViewModels;
 public class LFSTrackCustomPattern : Popup
 {
     /// <summary>追跡パターン（例: "*.psd", "Assets/**"）。必須入力。</summary>
-    [Required(ErrorMessage = "LFS track pattern is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.LFSPatternRequired))]
     public string Pattern
     {
         get => _pattern;

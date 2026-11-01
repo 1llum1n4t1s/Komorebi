@@ -1,11 +1,11 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 using Avalonia.Data.Converters;
 using Avalonia.Input;
-using Avalonia.Styling;
 
 namespace Komorebi.Converters;
 
@@ -15,6 +15,29 @@ namespace Komorebi.Converters;
 /// </summary>
 public static class StringConverters
 {
+    /// <summary>タブやワークスペースの名称変更をウィンドウタイトルへ反映する。</summary>
+    public sealed class ToWindowTitleConverter : IMultiValueConverter
+    {
+        public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values is not { Count: 2 })
+                return "Komorebi";
+
+            var page = values[0] as string;
+            var workspace = values[1] as string;
+            if (string.IsNullOrEmpty(page))
+                page = App.Text("PageTabBar.Welcome.Title");
+
+            var workspaces = ViewModels.Preferences.Instance.Workspaces;
+            return string.IsNullOrEmpty(workspace) || workspaces.Count == 1
+                ? page
+                : $"{page} - {workspace}";
+        }
+    }
+
+    /// <summary>ウィンドウタイトル用コンバーター。</summary>
+    public static readonly ToWindowTitleConverter ToWindowTitle = new ToWindowTitleConverter();
+
     /// <summary>
     /// ロケールキー文字列をLocaleオブジェクトに変換するコンバータ。
     /// 双方向変換をサポートし、設定画面の言語ドロップダウンで使用される。
@@ -48,39 +71,6 @@ public static class StringConverters
     /// ToLocaleConverterのシングルトンインスタンス。
     /// </summary>
     public static readonly ToLocaleConverter ToLocale = new ToLocaleConverter();
-
-    /// <summary>
-    /// テーマ名文字列をThemeVariantに変換するコンバータ。
-    /// 双方向変換をサポートし、設定画面のテーマドロップダウンで使用される。
-    /// </summary>
-    public class ToThemeConverter : IValueConverter
-    {
-        /// <summary>
-        /// テーマ名文字列からThemeVariantオブジェクトに変換する。
-        /// </summary>
-        /// <param name="value">テーマ名文字列（例: "Dark", "Light"）。</param>
-        /// <param name="targetType">ターゲット型（未使用）。</param>
-        /// <param name="parameter">パラメータ（未使用）。</param>
-        /// <param name="culture">カルチャ情報（未使用）。</param>
-        /// <returns>対応するThemeVariantオブジェクト。</returns>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return App.ParseThemeVariant(value as string);
-        }
-
-        /// <summary>
-        /// ThemeVariantからテーマ名文字列に逆変換する。
-        /// </summary>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (value as ThemeVariant)?.Key;
-        }
-    }
-
-    /// <summary>
-    /// ToThemeConverterのシングルトンインスタンス。
-    /// </summary>
-    public static readonly ToThemeConverter ToTheme = new ToThemeConverter();
 
     /// <summary>
     /// リソースキーを使用してフォーマットされた文字列を生成するコンバータ。

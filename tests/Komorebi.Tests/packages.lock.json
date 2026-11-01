@@ -18,20 +18,11 @@
           "Microsoft.TestPlatform.TestHost": "18.11.0"
         }
       },
-      "Moq": {
-        "type": "Direct",
-        "requested": "[4.21.0, )",
-        "resolved": "4.21.0",
-        "contentHash": "HUjrhhzEJ/AfbSBCnR8lPkpveVGpV/dNuOlnpfqBNTME93izly1CRV4N5zBySqz4m2yCRlHLPy/PnPzYokbwIg==",
-        "dependencies": {
-          "Castle.Core": "5.2.1"
-        }
-      },
       "Tmds.DBus.Protocol": {
         "type": "Direct",
-        "requested": "[0.95.1, )",
-        "resolved": "0.95.1",
-        "contentHash": "IbGhqZAqqgB/DkT70+lAk4MNv95tZtsTMFQ+S3uGy0aTfOkGVeFjeNJsX8dBI/3+CPnO5XW6lRQKGeFEgHElKw=="
+        "requested": "[0.95.2, )",
+        "resolved": "0.95.2",
+        "contentHash": "4zlJSYYZGCKnF5xE1L5VEm5YsfjLTz5jlWBgvBxHA7yk8Lnys/6WWpeD+CWmNm4QmawR+x0xIbGGZNcMxcy8nQ=="
       },
       "xunit.runner.visualstudio": {
         "type": "Direct",
@@ -180,6 +171,15 @@
           "Avalonia.Skia": "12.1.4"
         }
       },
+      "AvaloniaUI.DiagnosticsSupport": {
+        "type": "Transitive",
+        "resolved": "2.2.3",
+        "contentHash": "kQCInYusi2c9tjd9hV05Lln6Csbo07kiC672M3G7dsalDBe2j+pOk3We2nzdyy5ptQYy/9gQiC8ZaHhb6u/5Kw==",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "Microsoft.IO.RecyclableMemoryStream": "3.0.1"
+        }
+      },
       "Azure.AI.OpenAI": {
         "type": "Transitive",
         "resolved": "2.9.0-beta.1",
@@ -203,14 +203,6 @@
         "type": "Transitive",
         "resolved": "2.4.660",
         "contentHash": "Drd0fDFVrR3v19IJtqiDVnjgcVZoGlzFw/CYni1OQ5/xVYvjPNp18E9eu+dH/RmpIUw6Pn/JhE/H+Yc3kHI89A=="
-      },
-      "Castle.Core": {
-        "type": "Transitive",
-        "resolved": "5.2.1",
-        "contentHash": "wHARzQA695jwwKreOzNsq54KiGqKP38tv8hi8e2FXDEC/sA6BtrX90tVPDkOfVu13PbEzr00TCV8coikl+D1Iw==",
-        "dependencies": {
-          "System.Diagnostics.EventLog": "6.0.0"
-        }
       },
       "CommunityToolkit.Mvvm": {
         "type": "Transitive",
@@ -383,6 +375,11 @@
         "resolved": "10.0.14",
         "contentHash": "1bbZqqCJTPba3inTADExbp/9PsGVyvGOX3zr6tFr7ySCgVkX9Lpw7BV0TizktNItd3SsbUu1sQfSAYm1GZMoNw=="
       },
+      "Microsoft.IO.RecyclableMemoryStream": {
+        "type": "Transitive",
+        "resolved": "3.0.1",
+        "contentHash": "s/s20YTVY9r9TPfTrN5g8zPF1YhwxyqO6PxUkrYTGI2B+OGPe9AdajWZrLhFqXIvqIW23fnUE4+ztrUWNU1+9g=="
+      },
       "Microsoft.Testing.Extensions.Telemetry": {
         "type": "Transitive",
         "resolved": "2.5.1",
@@ -513,11 +510,6 @@
           "System.Memory.Data": "10.0.9"
         }
       },
-      "System.Diagnostics.EventLog": {
-        "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "lcyUiXTsETK2ALsZrX+nWuHSIQeazhqPphLfaRxzdGaG93+0kELqpgEHtwWOlQe7+jSFnKwaCAgL4kjeZCQJnw=="
-      },
       "System.Memory.Data": {
         "type": "Transitive",
         "resolved": "10.0.9",
@@ -551,8 +543,8 @@
       },
       "VelopackUpdateDialog.Avalonia": {
         "type": "Transitive",
-        "resolved": "1.0.20",
-        "contentHash": "JwUdg47IowAll1TaD8L8e9aBGGGgwjXT4fXBmxyHMYCPrhFrTKF+eV9sim9ETsgPgvAkyfB9S2ta93/OIE6Pwg==",
+        "resolved": "1.0.21",
+        "contentHash": "/uN8WhaiEAc2l7MQzNDowNyY8KvvAm2Rc+94RomYdsKV3YzUmpwXKcjJfMLvqljPoUg3CTuCDAPULw/fOJka4A==",
         "dependencies": {
           "Avalonia": "12.1.4",
           "CommunityToolkit.Mvvm": "8.4.2",
@@ -651,6 +643,7 @@
           "Avalonia.Fonts.Inter": "[12.1.4, )",
           "Avalonia.Themes.Fluent": "[12.1.4, )",
           "AvaloniaEdit.TextMate": "[11.3.0, )",
+          "AvaloniaUI.DiagnosticsSupport": "[2.2.3, )",
           "Azure.AI.OpenAI": "[2.9.0-beta.1, )",
           "BitMiracle.LibTiff.NET": "[2.4.660, )",
           "CRDebugger.Avalonia": "[1.0.34, )",
@@ -660,8 +653,8 @@
           "Pfim": "[0.11.4, )",
           "StbImageSharp": "[2.30.16, )",
           "SuperLightLogger": "[1.0.19, )",
-          "Tmds.DBus.Protocol": "[0.95.1, )",
-          "VelopackUpdateDialog.Avalonia": "[1.0.20, )"
+          "Tmds.DBus.Protocol": "[0.95.2, )",
+          "VelopackUpdateDialog.Avalonia": "[1.0.21, )"
         }
       }
     }

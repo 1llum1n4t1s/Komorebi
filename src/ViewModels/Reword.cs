@@ -21,7 +21,7 @@ public class Reword : Popup
     /// <summary>
     /// 新しいコミットメッセージ。空文字は許可されない。
     /// </summary>
-    [Required(ErrorMessage = "Commit message is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.CommitMessageRequired))]
     public string Message
     {
         get => _message;

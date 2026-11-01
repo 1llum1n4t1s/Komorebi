@@ -21,7 +21,7 @@ public class MoveSubmodule : Popup
     /// <summary>
     /// 移動先のパス（必須入力、バリデーション付き）。
     /// </summary>
-    [Required(ErrorMessage = "Path is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.PathRequired))]
     public string MoveTo
     {
         get => _moveTo;

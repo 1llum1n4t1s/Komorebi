@@ -108,6 +108,44 @@ namespace AvaloniaEdit.Search
             set => SetValue(SearchPatternProperty, value);
         }
 
+        // Komorebi: ホストの言語切替に追従できるよう、検索結果の文言を注入する。
+        // 未指定時は同梱エディタの標準リソースを使う。
+        public static readonly StyledProperty<string> NoMatchesTextProperty =
+            AvaloniaProperty.Register<SearchPanel, string>(nameof(NoMatchesText));
+
+        public string NoMatchesText
+        {
+            get => GetValue(NoMatchesTextProperty);
+            set => SetValue(NoMatchesTextProperty, value);
+        }
+
+        public static readonly StyledProperty<string> OneMatchTextProperty =
+            AvaloniaProperty.Register<SearchPanel, string>(nameof(OneMatchText));
+
+        public string OneMatchText
+        {
+            get => GetValue(OneMatchTextProperty);
+            set => SetValue(OneMatchTextProperty, value);
+        }
+
+        public static readonly StyledProperty<string> MatchesTextProperty =
+            AvaloniaProperty.Register<SearchPanel, string>(nameof(MatchesText));
+
+        public string MatchesText
+        {
+            get => GetValue(MatchesTextProperty);
+            set => SetValue(MatchesTextProperty, value);
+        }
+
+        public static readonly StyledProperty<string> MatchOfTotalTextProperty =
+            AvaloniaProperty.Register<SearchPanel, string>(nameof(MatchOfTotalText));
+
+        public string MatchOfTotalText
+        {
+            get => GetValue(MatchOfTotalTextProperty);
+            set => SetValue(MatchOfTotalTextProperty, value);
+        }
+
         public static readonly StyledProperty<bool> IsReplaceModeProperty =
             AvaloniaProperty.Register<SearchPanel, bool>(nameof(IsReplaceMode));
 
@@ -175,6 +213,10 @@ namespace AvaloniaEdit.Search
             MatchCaseProperty.Changed.Subscribe(SearchPatternChangedCallback);
             WholeWordsProperty.Changed.Subscribe(SearchPatternChangedCallback);
             SearchPatternProperty.Changed.Subscribe(SearchPatternChangedCallback);
+            NoMatchesTextProperty.Changed.Subscribe(e => ((SearchPanel)e.Sender).UpdateSearchLabel());
+            OneMatchTextProperty.Changed.Subscribe(e => ((SearchPanel)e.Sender).UpdateSearchLabel());
+            MatchesTextProperty.Changed.Subscribe(e => ((SearchPanel)e.Sender).UpdateSearchLabel());
+            MatchOfTotalTextProperty.Changed.Subscribe(e => ((SearchPanel)e.Sender).UpdateSearchLabel());
         }
 
         /// <summary>
@@ -280,6 +322,9 @@ namespace AvaloniaEdit.Search
             _replaceTextBox = e.NameScope.Find<TextBox>("PART_replaceTextBox");
             _messageView = e.NameScope.Find<Panel>("PART_MessageView");
             _messageViewContent = e.NameScope.Find<TextBlock>("PART_MessageContent");
+            // Komorebi: Open や言語リソースの更新がテンプレート生成より先でも結果を表示する。
+            if (!IsClosed)
+                UpdateSearchLabel();
         }
 
         /// <summary>
@@ -490,14 +535,14 @@ namespace AvaloniaEdit.Search
 
         void UpdateSearchLabel()
         {
-            if (_messageView == null || _messageViewContent == null)
+            if (_renderer == null || _messageView == null || _messageViewContent == null)
                 return;
 
             _messageView.IsVisible = true;
 
             if (!_renderer.CurrentResults.Any())
             {
-                _messageViewContent.Text = SR.SearchNoMatchesFoundText;
+                _messageViewContent.Text = NoMatchesText ?? SR.SearchNoMatchesFoundText;
             }
             else
             {
@@ -505,17 +550,17 @@ namespace AvaloniaEdit.Search
                 {
                     if (_renderer.CurrentResults.Count == 1)
                     {
-                        _messageViewContent.Text = SR.Search1Match;
+                        _messageViewContent.Text = OneMatchText ?? SR.Search1Match;
                     }
                     else
                     {
-                        _messageViewContent.Text = string.Format(SR.SearchXMatches,
+                        _messageViewContent.Text = string.Format(MatchesText ?? SR.SearchXMatches,
                             _renderer.CurrentResults.Count);                        
                     }
                 }
                 else
                 {
-                    _messageViewContent.Text = string.Format(SR.SearchXOfY,
+                    _messageViewContent.Text = string.Format(MatchOfTotalText ?? SR.SearchXOfY,
                         _currentSearchResultIndex + 1,
                         _renderer.CurrentResults.Count);
                 }

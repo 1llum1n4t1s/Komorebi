@@ -23,7 +23,7 @@ public class RenameBranch : Popup
     /// <summary>
     /// 新しいブランチ名（必須、正規表現による形式チェック、重複チェック付き）。
     /// </summary>
-    [Required(ErrorMessage = "Branch name is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.BranchNameRequired))]
     [CustomValidation(typeof(RenameBranch), nameof(ValidateBranchName))]
     public string Name
     {
@@ -51,13 +51,13 @@ public class RenameBranch : Popup
         if (ctx.ObjectInstance is RenameBranch rename)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult("Bad branch name format!");
+                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
 
             // 同名のローカルブランチが存在するかチェック（自分自身は除外）
             foreach (var b in rename._repo.Branches)
             {
                 if (b.IsLocal && b != rename.Target && b.Name.Equals(name, StringComparison.Ordinal))
-                    return new ValidationResult("A branch with same name already exists!!!");
+                    return new ValidationResult(App.Text("Validation.BranchExists"));
             }
         }
 

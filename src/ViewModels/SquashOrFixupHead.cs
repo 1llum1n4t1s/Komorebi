@@ -28,7 +28,7 @@ public class SquashOrFixupHead : Popup
     /// <summary>
     /// 新しいコミットメッセージ。
     /// </summary>
-    [Required(ErrorMessage = "Commit message is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.CommitMessageRequired))]
     public string Message
     {
         get => _message;

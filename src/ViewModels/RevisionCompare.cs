@@ -118,7 +118,7 @@ public class RevisionCompare : ObservableObject, IDisposable
         {
             if (SetProperty(ref _selectedChanges, value))
             {
-                if (value is { Count: 1 })
+                if (value is { Count: 1 } and not ChangeSelection { IsSingleFolder: true })
                 {
                     var option = new Models.DiffOption(GetSHA(_startPoint), GetSHA(_endPoint), value[0]);
                     DiffContext = new DiffContext(_repo.FullPath, option, _diffContext);

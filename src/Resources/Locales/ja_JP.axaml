@@ -1208,59 +1208,159 @@
   <x:String x:Key="Text.TagCM.Checkout" xml:space="preserve">タグをチェックアウト...</x:String>
   <x:String x:Key="Text.UpdateSubmodules.Recursive" xml:space="preserve">入れ子になったサブモジュールも更新</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.UntrackedInSameFolder" xml:space="preserve">同じフォルダーで未追跡のファイルをすべて無視</x:String>
-  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">Enable Auto-Fetch</x:String>
-  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">Bypass the pre-push hook</x:String>
-  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
-  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">CHANGES</x:String>
-  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">LEFT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">RIGHT ONLY COMMITS</x:String>
-  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">Tips: You can cherry-pick selected commits if the other side is HEAD (using context menu).</x:String>
-  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">Name:</x:String>
-  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">Start at:</x:String>
-  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">Rebase before merging</x:String>
-  <x:String x:Key="Text.File.Binary" xml:space="preserve">BINARY FILE</x:String>
-  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">HEX VIEWER</x:String>
-  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">Go to address...</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">filter(s) enabled</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">Collapse Filters</x:String>
-  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">Expand Filters</x:String>
-  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">Collapse details</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">Open in separate window</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">Commit Detail</x:String>
-  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">Revision Compare</x:String>
-  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">Reasoning Effort Level</x:String>
-  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">Open SSH Key Helper</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">Do you really want to delete the following keys?</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">Fingerprint</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">Generate SSH Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">Confirm Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">Email:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">Required.</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">Key Name:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">Required. For example: id_github</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">Passphrase:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">GENERATE</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">Type:</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">Use passphrase for private key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">Path</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">Public Key</x:String>
-  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH Key Helper</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">Selected Commits Only</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">Current Branch &amp; Selected Commits</x:String>
-  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">Selected Commits (First-parent Only)</x:String>
-  <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
-  <x:String x:Key="Text.FileModeChange" xml:space="preserve">File mode change: </x:String>
-  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">New file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">Deleted file mode: </x:String>
-  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">Normal</x:String>
-  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">Executable</x:String>
-  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">Directory</x:String>
-  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">Symlink</x:String>
-  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">Submodule</x:String>
-  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">Unknown</x:String>
+  <x:String x:Key="Text.RemoteCM.EnableAutoFetch" xml:space="preserve">自動フェッチを有効化</x:String>
+  <x:String x:Key="Text.Push.NoVerify" xml:space="preserve">プッシュ前のフックを実行しない</x:String>
+  <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">リベース前のフックを実行しない</x:String>
+  <x:String x:Key="Text.Compare.Changes" xml:space="preserve">変更</x:String>
+  <x:String x:Key="Text.Compare.Commits" xml:space="preserve">コミット</x:String>
+  <x:String x:Key="Text.Compare.Commits.LeftOnly" xml:space="preserve">左側のみに含まれるコミット</x:String>
+  <x:String x:Key="Text.Compare.Commits.RightOnly" xml:space="preserve">右側のみに含まれるコミット</x:String>
+  <x:String x:Key="Text.Compare.Commits.Tips" xml:space="preserve">ヒント: もう片側が HEAD を指しているのであれば、(コンテキストメニューから) コミットを選択して取り込むことができます。</x:String>
+  <x:String x:Key="Text.GitFlow.StartName" xml:space="preserve">名前:</x:String>
+  <x:String x:Key="Text.GitFlow.StartAt" xml:space="preserve">開始地点:</x:String>
+  <x:String x:Key="Text.GitFlow.FinishWithRebase" xml:space="preserve">マージする前にリベース</x:String>
+  <x:String x:Key="Text.File.Binary" xml:space="preserve">バイナリファイル</x:String>
+  <x:String x:Key="Text.File.HexViewer" xml:space="preserve">バイナリビューアー</x:String>
+  <x:String x:Key="Text.File.HexViewer.GotoAddress" xml:space="preserve">アドレスに移動...</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Summary" xml:space="preserve">個の条件で絞り込んでいます</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Collapse" xml:space="preserve">絞り込み条件を折りたたむ</x:String>
+  <x:String x:Key="Text.Repository.FilterCommits.Expand" xml:space="preserve">絞り込み条件を広げる</x:String>
+  <x:String x:Key="Text.CommitDetail.CollapseToBottom" xml:space="preserve">詳細を折りたたむ</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone" xml:space="preserve">別のウィンドウで開く</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.CommitDetail" xml:space="preserve">コミットの詳細</x:String>
+  <x:String x:Key="Text.HistoriesDetailsStandalone.RevisionCompare" xml:space="preserve">リビジョンを比較</x:String>
+  <x:String x:Key="Text.Preferences.AI.ReasoningEffortLevel" xml:space="preserve">思考努力レベル</x:String>
+  <x:String x:Key="Text.SSHKeyHelper" xml:space="preserve">SSH の鍵ツールを開く</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.ConfirmDeletion" xml:space="preserve">これらの鍵を削除しますか？</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Fingerprint" xml:space="preserve">フィンガープリント</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator" xml:space="preserve">SSH 鍵を生成</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.ConfirmPassphrase" xml:space="preserve">パスフレーズを確認:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email" xml:space="preserve">メールアドレス:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Email.Placeholder" xml:space="preserve">必須</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name" xml:space="preserve">鍵の名前:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Name.Placeholder" xml:space="preserve">必須 - 例: id_github</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Passphrase" xml:space="preserve">パスフレーズ:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Start" xml:space="preserve">生成</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.Type" xml:space="preserve">種類:</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Generator.UsePassphrase" xml:space="preserve">秘密鍵にパスフレーズを使用</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Path" xml:space="preserve">パス</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.PublicKey" xml:space="preserve">公開鍵</x:String>
+  <x:String x:Key="Text.SSHKeyHelper.Title" xml:space="preserve">SSH の鍵ツール</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">グラフでの強調表示</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">全範囲</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">現在のブランチのみ</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnly" xml:space="preserve">選択したコミットのみ</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchAndSelectedCommits" xml:space="preserve">現在のブランチ &amp; 選択したコミット</x:String>
+  <x:String x:Key="Text.Histories.HighlightsInGraph.SelectedCommitsOnlyFirstParent" xml:space="preserve">選択したコミットかつ最初の親コミットのみ</x:String>
+  <x:String x:Key="Text.Terminate" xml:space="preserve">中止</x:String>
+  <x:String x:Key="Text.FileModeChange" xml:space="preserve">ファイルモードの変更: </x:String>
+  <x:String x:Key="Text.FileModeChange.New" xml:space="preserve">新しいファイルのモード: </x:String>
+  <x:String x:Key="Text.FileModeChange.Deleted" xml:space="preserve">削除されたファイルのモード: </x:String>
+  <x:String x:Key="Text.FileModeChange.Normal" xml:space="preserve">通常</x:String>
+  <x:String x:Key="Text.FileModeChange.Executable" xml:space="preserve">実行可能</x:String>
+  <x:String x:Key="Text.FileModeChange.Directory" xml:space="preserve">ディレクトリ</x:String>
+  <x:String x:Key="Text.FileModeChange.Symlink" xml:space="preserve">シンボリックリンク</x:String>
+  <x:String x:Key="Text.FileModeChange.Submodule" xml:space="preserve">サブモジュール</x:String>
+  <x:String x:Key="Text.FileModeChange.Unknown" xml:space="preserve">不明</x:String>
   <x:String x:Key="Text.Stash.AutoRetained">自動スタッシュ {0} を保持しました。進行中の Git 操作を完了または中止してから、スタッシュ一覧で復元してください。</x:String>
+  <x:String x:Key="Text.TextSearch.MatchCase">大文字と小文字を区別</x:String>
+  <x:String x:Key="Text.TextSearch.WholeWord">単語単位で検索</x:String>
+  <x:String x:Key="Text.TextSearch.Regex">正規表現を使用</x:String>
+  <x:String x:Key="Text.TextSearch.Previous">前を検索 (Shift+F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Next">次を検索 (F3)</x:String>
+  <x:String x:Key="Text.TextSearch.Placeholder">検索...</x:String>
+  <x:String x:Key="Text.TextSearch.NoMatches">一致する項目はありません</x:String>
+  <x:String x:Key="Text.TextSearch.OneMatch">1 件一致</x:String>
+  <x:String x:Key="Text.TextSearch.Matches">{0} 件一致</x:String>
+  <x:String x:Key="Text.TextSearch.MatchOfTotal">{1} 件中 {0} 件目</x:String>
+  <x:String x:Key="Text.Validation.BranchExists">同じ名前のブランチが既に存在します。</x:String>
+  <x:String x:Key="Text.Validation.BranchNameInvalid">無効な値です: ブランチの名前</x:String>
+  <x:String x:Key="Text.Validation.BranchNameRequired">入力が必要です: ブランチの名前</x:String>
+  <x:String x:Key="Text.Validation.CommitDescriptionRequired">入力が必要です: 簡単な説明</x:String>
+  <x:String x:Key="Text.Validation.CommitMessageRequired">入力が必要です: メッセージ</x:String>
+  <x:String x:Key="Text.Validation.CommitTypeRequired">入力が必要です: 変更の種類</x:String>
+  <x:String x:Key="Text.Validation.ContextInvalid">操作のコンテキストを利用できません。</x:String>
+  <x:String x:Key="Text.Validation.DevelopBranchRequired">入力が必要です: 開発ブランチ</x:String>
+  <x:String x:Key="Text.Validation.EmailInvalid">無効な値です: メールアドレス</x:String>
+  <x:String x:Key="Text.Validation.EmailRequired">入力が必要です: メールアドレス</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixInvalid">無効な値です: 新機能の実装用のプレフィックス</x:String>
+  <x:String x:Key="Text.Validation.FeaturePrefixRequired">入力が必要です: 新機能の実装用のプレフィックス</x:String>
+  <x:String x:Key="Text.Validation.GitFlowBranchesEqual">開発ブランチと本番ブランチには異なる名前を指定してください。</x:String>
+  <x:String x:Key="Text.Validation.GroupNameRequired">入力が必要です: 名前</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixInvalid">無効な値です: 緊急のバグ修正用のプレフィックス</x:String>
+  <x:String x:Key="Text.Validation.HotfixPrefixRequired">入力が必要です: 緊急のバグ修正用のプレフィックス</x:String>
+  <x:String x:Key="Text.Validation.IgnorePatternRequired">入力が必要です: パターン</x:String>
+  <x:String x:Key="Text.Validation.LFSPatternRequired">入力が必要です: カスタムパターン</x:String>
+  <x:String x:Key="Text.Validation.LocalBranchRequired">入力が必要です: ブランチ</x:String>
+  <x:String x:Key="Text.Validation.MasterBranchRequired">入力が必要です: 本番ブランチ</x:String>
+  <x:String x:Key="Text.Validation.NameRequired">入力が必要です: 名前</x:String>
+  <x:String x:Key="Text.Validation.OutputFileRequired">入力が必要です: アーカイブの保存先</x:String>
+  <x:String x:Key="Text.Validation.ParentFolderRequired">入力が必要です: 親フォルダ</x:String>
+  <x:String x:Key="Text.Validation.PassphraseMismatch">パスフレーズと確認用の入力が一致しません。</x:String>
+  <x:String x:Key="Text.Validation.PassphraseRequired">入力が必要です: パスフレーズ</x:String>
+  <x:String x:Key="Text.Validation.PatchFileRequired">入力が必要です: パッチファイル</x:String>
+  <x:String x:Key="Text.Validation.PathNotEmpty">選択したパスは空ではありません。</x:String>
+  <x:String x:Key="Text.Validation.PathNotFound">選択したパスが見つかりません。</x:String>
+  <x:String x:Key="Text.Validation.PathRequired">入力が必要です: パス</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixInvalid">無効な値です: リリース作業用のプレフィックス</x:String>
+  <x:String x:Key="Text.Validation.ReleasePrefixRequired">入力が必要です: リリース作業用のプレフィックス</x:String>
+  <x:String x:Key="Text.Validation.RemoteBranchRequired">入力が必要です: 上流のブランチ</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameExists">同じ名前のリモートが既に存在します。</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameInvalid">無効な値です: リモート名</x:String>
+  <x:String x:Key="Text.Validation.RemoteNameRequired">入力が必要です: リモート名</x:String>
+  <x:String x:Key="Text.Validation.RemoteRequired">入力が必要です: リモート設定</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlExists">同じURLのリモートが既に存在します。</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlInvalid">無効な値です: リポジトリの URL</x:String>
+  <x:String x:Key="Text.Validation.RemoteUrlRequired">入力が必要です: リポジトリの URL</x:String>
+  <x:String x:Key="Text.Validation.RepositoryFolderRequired">入力が必要です: フォルダ</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNameInvalid">名前に使用できるのは半角英数字、アンダースコア、ハイフンのみです。</x:String>
+  <x:String x:Key="Text.Validation.SSHKeyNotFound">SSH秘密鍵が見つかりません。</x:String>
+  <x:String x:Key="Text.Validation.StorageFileRequired">入力が必要です: アーカイブの保存先</x:String>
+  <x:String x:Key="Text.Validation.TagExists">同じ名前のタグが既に存在します。</x:String>
+  <x:String x:Key="Text.Validation.TagNameInvalid">無効な値です: タグ名</x:String>
+  <x:String x:Key="Text.Validation.TagNameRequired">入力が必要です: タグ名</x:String>
+  <x:String x:Key="Text.Validation.TagPrefixInvalid">無効な値です: バージョンタグのプレフィックス</x:String>
+  <x:String x:Key="Text.Validation.UrlRequired">入力が必要です: URL</x:String>
+  <x:String x:Key="Text.Validation.WorktreePathRequired">入力が必要です: パス</x:String>
+  <x:String x:Key="Text.Error.InvalidClipboardPatch">クリップボードに有効なパッチがありません。</x:String>
+  <x:String x:Key="Text.Archive.Saved">アーカイブを保存しました: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.Enabled">LFS を有効にしました。</x:String>
+  <x:String x:Key="Text.GitLFS.PatternTracked">追跡パターン: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileLocked">ファイルをロックしました: {0}</x:String>
+  <x:String x:Key="Text.GitLFS.FileUnlocked">ファイルのロックを解除しました: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToSaveSettings">設定を保存できませんでした: {0}</x:String>
+  <x:String x:Key="Text.Error.FailedToLoadRemoteSettings">リモート設定を読み込めませんでした: {0}</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.KeyExists">同じ名前の鍵が既に存在します。</x:String>
+  <x:String x:Key="Text.SSHKeyGenerator.Failed">SSH鍵を生成できませんでした: {0}</x:String>
+  <x:String x:Key="Text.AddToIgnore.LocalOnly">ローカルのみ</x:String>
+  <x:String x:Key="Text.Conflict.Mine">自分</x:String>
+  <x:String x:Key="Text.Conflict.Theirs">相手</x:String>
+  <x:String x:Key="Text.Diff.Image">画像</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Text">テキストボックス</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Path">パス選択</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Checkbox">チェックボックス</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.Combobox">コンボボックス</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">ローカルブランチ選択</x:String>
+  <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">リモートブランチ選択</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ をワークツリーとしてチェックアウト...</x:String>
+  <x:String x:Key="Text.GitFlow.Finish">${0}$ を完了</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders">追加のヘッダー (`名前: 値` を一行ごとに指定してください)</x:String>
+  <x:String x:Key="Text.TagCM.Merge">${0}$ を ${1}$ にマージ...</x:String>
+  <x:String x:Key="Text.TrustRepository">信頼されていないリポジトリ</x:String>
+  <x:String x:Key="Text.TrustRepository.CommandTip">`git config --global --add safe.directory {0}` を実行して、このパスを信頼しますか？</x:String>
+  <x:String x:Key="Text.TrustRepository.Description">Git がこのリポジトリへのアクセスを拒否しました: </x:String>
+  <x:String x:Key="Text.TrustRepository.Path">パス:</x:String>
+  <x:String x:Key="Text.Progress.TrustingRepository">Git の safe.directory に「{0}」を追加しています...</x:String>
+  <x:String x:Key="Text.Progress.OpeningRepository">「{0}」を開いています...</x:String>
+  <x:String x:Key="Text.Error.FailedToOpenTrustedRepository">リポジトリを信頼した後も開けませんでした。</x:String>
+  <x:String x:Key="Text.Preferences.AI.ExtraHeaders.Tip">1行に1つのヘッダー: 名前: 値</x:String>
+  <x:String x:Key="Text.Statistics.Others">その他</x:String>
+  <x:String x:Key="Text.Statistics.TopAuthors.Count">コミット</x:String>
+  <x:String x:Key="Text.RepositoryGroup.Auto">自動</x:String>
+  <x:String x:Key="Text.RepositoryGroup.NoGroup">グループなし (未分類)</x:String>
+  <x:String x:Key="Text.RepositoryGroup.AutoDescription">既定のクローン先ディレクトリに基づく</x:String>
+  <x:String x:Key="Text.CommitDetail.Files.Tips">ファイルを選択すると内容を表示します。</x:String>
+  <x:String x:Key="Text.SetPushUrl">プッシュURLを設定</x:String>
+  <x:String x:Key="Text.SetPushUrl.PushURL">プッシュURL:</x:String>
+  <x:String x:Key="Text.Error.SelectChangedLines">変更された行を1行以上選択してください。</x:String>
 </ResourceDictionary>

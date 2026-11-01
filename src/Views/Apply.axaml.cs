@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
@@ -29,7 +29,7 @@ public partial class Apply : UserControl
         var options = new FilePickerOpenOptions()
         {
             AllowMultiple = false,
-            FileTypeFilter = [new FilePickerFileType("Patch File") { Patterns = ["*.patch"] }]
+            FileTypeFilter = [new FilePickerFileType("Patch File") { Patterns = ["*.patch", "*.diff"] }]
         };
 
         var selected = await topLevel.StorageProvider.OpenFilePickerAsync(options);

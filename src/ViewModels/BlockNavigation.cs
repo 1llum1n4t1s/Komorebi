@@ -1,4 +1,4 @@
-﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
+// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
 using System.Collections.Generic;
@@ -178,14 +178,20 @@ public class BlockNavigation : ObservableObject
             if (chunkStart > block.End)
                 continue;
 
-            // チャンクがブロックより後にある場合は1つ前のブロックを選択する
-            if (chunkEnd < block.Start)
+            var hasChangeAfter = false;
+            for (var j = i; j < _blocks.Count; j++)
             {
-                _current = i - 1;
-                break;
+                if (chunkEnd < _blocks[j].End)
+                {
+                    _current = i;
+                    hasChangeAfter = true;
+                    break;
+                }
             }
 
-            _current = i;
+            if (!hasChangeAfter)
+                _current = chunkStart > block.Start ? i : i - 1;
+            break;
         }
     }
 

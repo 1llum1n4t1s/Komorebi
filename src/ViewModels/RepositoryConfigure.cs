@@ -54,16 +54,26 @@ public class RepositoryConfigure : ObservableObject
             var pendingUseSSH = _selectedRemoteUseSSH;
             var pendingSSHKey = _selectedRemoteSSHKey;
             var pendingPushDisabled = _selectedRemotePushDisabled;
+            var pendingPushUrl = _selectedRemotePushUrl;
 
             if (SetProperty(ref _selectedRemote, value))
             {
                 // 前のリモートの編集内容をキャプチャした値で保存（タスクを連鎖して順序を保証）
-                if (old is not null)
-                    _pendingSaveTask = ChainSaveAsync(old, pendingName, pendingUrl, pendingUseSSH, pendingSSHKey, pendingPushDisabled);
+                if (old is not null && IsRemoteSettingsLoaded)
+                    _pendingSaveTask = ChainSaveAsync(old, pendingName, pendingUrl, pendingUseSSH, pendingSSHKey, pendingPushDisabled, pendingPushUrl);
+                IsRemoteSettingsLoaded = false;
+                var generation = ++_remoteLoadGeneration;
                 if (value is not null)
-                    _loadTask = LoadRemoteSettingsAsync(value);
+                    _loadTask = LoadRemoteSettingsAsync(value, generation);
             }
         }
+    }
+
+    /// <summary>選択中リモートの設定を読み込み終え、編集・保存できるかどうか。</summary>
+    public bool IsRemoteSettingsLoaded
+    {
+        get => _isRemoteSettingsLoaded;
+        private set => SetProperty(ref _isRemoteSettingsLoaded, value);
     }
 
     /// <summary>選択中リモートの名前。</summary>
@@ -101,12 +111,19 @@ public class RepositoryConfigure : ObservableObject
     /// <summary>選択中リモートのプッシュが禁止されているかどうか。</summary>
     /// <remarks>
     /// git remote set-url --push &lt;name&gt; no_push で push URL を無効値に設定することで実現する。
-    /// push URL が fetch URL と一致しない場合にプッシュ禁止とみなす。
+    /// 無効値 no_push のみをプッシュ禁止とみなし、別の有効なURLは保持する。
     /// </remarks>
     public bool SelectedRemotePushDisabled
     {
         get => _selectedRemotePushDisabled;
         set => SetProperty(ref _selectedRemotePushDisabled, value);
+    }
+
+    /// <summary>プッシュ専用URL。空の場合はフェッチURLを使用する。</summary>
+    public string SelectedRemotePushUrl
+    {
+        get => _selectedRemotePushUrl;
+        set => SetProperty(ref _selectedRemotePushUrl, value);
     }
 
     /// <summary>デフォルトのリモート名（Push/Pull時に使用）。</summary>
@@ -413,6 +430,10 @@ public class RepositoryConfigure : ObservableObject
 
         try
         {
+            // Komorebi独自: 先行するリモート保存とgit configへの書込を競合させない。
+            await _pendingSaveTask;
+            await _loadTask;
+
             await SetIfChangedAsync("user.name", UserName, "");
             await SetIfChangedAsync("user.email", UserEmail, "");
             await SetIfChangedAsync("commit.gpgsign", GPGCommitSigningEnabled ? "true" : "false", "false");
@@ -421,12 +442,8 @@ public class RepositoryConfigure : ObservableObject
             await SetIfChangedAsync("http.proxy", HttpProxy, "");
             await SetIfChangedAsync("fetch.prune", EnablePruneOnFetch ? "true" : "false", "false");
 
-            // リモート設定の読み込み・保存の完了を待ってから現在のリモートを保存
-            await _pendingSaveTask;
-            await _loadTask;
-
             // リモート設定の保存
-            if (_selectedRemote is not null)
+            if (_selectedRemote is not null && IsRemoteSettingsLoaded)
                 await SaveRemoteSettingsAsync();
 
             await ApplyIssueTrackerChangesAsync();
@@ -438,7 +455,7 @@ public class RepositoryConfigure : ObservableObject
         catch (Exception ex)
         {
             HasSaveError = true;
-            App.RaiseException(_repo.FullPath, $"Failed to save settings: {ex.Message}");
+            App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", ex.Message));
         }
     }
 
@@ -450,24 +467,31 @@ public class RepositoryConfigure : ObservableObject
     }
 
     /// <summary>選択されたリモートの設定を読み込む。</summary>
-    private async Task LoadRemoteSettingsAsync(Models.Remote remote)
+    private async Task LoadRemoteSettingsAsync(Models.Remote remote, int generation)
     {
-        SelectedRemoteName = remote.Name;
-        SelectedRemoteUrl = remote.URL;
-        SelectedRemoteUseSSH = Models.Remote.IsSSH(remote.URL);
-        SelectedRemoteSSHKey = string.Empty;
-        SelectedRemotePushDisabled = false;
-
         try
         {
-            var remoteCmd = new Commands.Remote(_repo.FullPath);
-
-            // プッシュURLを取得し、フェッチURLと異なればプッシュ禁止と判定する
-            var pushUrl = await remoteCmd.GetURLAsync(remote.Name, true);
-            if (!ReferenceEquals(_selectedRemote, remote))
+            // Komorebi独自: 再選択時は先行保存を待ち、古い設定の再読込を避ける。
+            await _pendingSaveTask;
+            if (generation != _remoteLoadGeneration)
                 return;
 
-            SelectedRemotePushDisabled = !string.IsNullOrEmpty(pushUrl) && pushUrl != remote.URL;
+            SelectedRemoteName = remote.Name;
+            SelectedRemoteUrl = remote.URL;
+            SelectedRemoteUseSSH = Models.Remote.IsSSH(remote.URL);
+            SelectedRemoteSSHKey = string.Empty;
+            SelectedRemotePushDisabled = false;
+            SelectedRemotePushUrl = string.Empty;
+
+            var remoteCmd = new Commands.Remote(_repo.FullPath);
+
+            // no_push のみ禁止とし、独立したプッシュURLは編集用に保持する。
+            var pushUrl = await remoteCmd.GetURLAsync(remote.Name, true);
+            if (generation != _remoteLoadGeneration)
+                return;
+
+            SelectedRemotePushDisabled = pushUrl == "no_push";
+            SelectedRemotePushUrl = pushUrl == remote.URL || pushUrl == "no_push" ? string.Empty : pushUrl;
 
             if (SelectedRemoteUseSSH)
             {
@@ -475,15 +499,18 @@ public class RepositoryConfigure : ObservableObject
                     .GetAsync($"remote.{remote.Name}.sshkey");
 
                 // await中にリモート選択が変わっていたら結果を破棄する（競合状態防止）
-                if (!ReferenceEquals(_selectedRemote, remote))
+                if (generation != _remoteLoadGeneration)
                     return;
 
                 SelectedRemoteSSHKey = key;
             }
+
+            // 未読込の既定値を切替時に保存しない。同じリモートへの再選択も世代で区別する。
+            IsRemoteSettingsLoaded = true;
         }
         catch (Exception ex)
         {
-            App.RaiseException(_repo.FullPath, $"Failed to load remote settings: {ex.Message}");
+            App.RaiseException(_repo.FullPath, App.Text("Error.FailedToLoadRemoteSettings", ex.Message));
         }
     }
 
@@ -495,22 +522,22 @@ public class RepositoryConfigure : ObservableObject
 
         return SavePendingRemoteSettingsAsync(
             _selectedRemote, _selectedRemoteName, _selectedRemoteUrl,
-            _selectedRemoteUseSSH, _selectedRemoteSSHKey, _selectedRemotePushDisabled);
+            _selectedRemoteUseSSH, _selectedRemoteSSHKey, _selectedRemotePushDisabled, _selectedRemotePushUrl);
     }
 
     /// <summary>前のリモート保存タスクの完了を待ってから次の保存を実行する。</summary>
     private async Task ChainSaveAsync(
-        Models.Remote remote, string name, string url, bool useSSH, string sshKey, bool pushDisabled)
+        Models.Remote remote, string name, string url, bool useSSH, string sshKey, bool pushDisabled, string pushUrl)
     {
         // ConfigureAwait(false) は使わない — SavePendingRemoteSettingsAsync 内で
         // Remotes リストや OnPropertyChanged 等の UI バインドプロパティを更新するため
         await _pendingSaveTask;
-        await SavePendingRemoteSettingsAsync(remote, name, url, useSSH, sshKey, pushDisabled);
+        await SavePendingRemoteSettingsAsync(remote, name, url, useSSH, sshKey, pushDisabled, pushUrl);
     }
 
     /// <summary>指定リモートの設定をキャプチャ済みの値でgit configに保存する。</summary>
     private async Task SavePendingRemoteSettingsAsync(
-        Models.Remote remote, string name, string url, bool useSSH, string sshKey, bool pushDisabled)
+        Models.Remote remote, string name, string url, bool useSSH, string sshKey, bool pushDisabled, string pushUrl)
     {
         var remoteName = remote.Name;
         var remoteCmd = new Commands.Remote(_repo.FullPath);
@@ -538,8 +565,7 @@ public class RepositoryConfigure : ObservableObject
             {
                 // リネーム失敗時はエラーを通知し、URL/SSHキーの更新も中止する
                 HasSaveError = true;
-                App.RaiseException(_repo.FullPath,
-                    $"Failed to rename remote '{remoteName}' to '{name}'");
+                App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
                 return;
             }
         }
@@ -551,39 +577,38 @@ public class RepositoryConfigure : ObservableObject
             if (succ)
             {
                 remote.URL = url;
-
-                // プッシュ禁止中でなければ Push URL を fetch URL に同期する
-                if (!pushDisabled)
-                {
-                    var pushUrl = await remoteCmd.GetURLAsync(remoteName, true);
-                    if (!string.IsNullOrEmpty(pushUrl) && pushUrl != url)
-                        await remoteCmd.SetURLAsync(remoteName, url, true);
-                }
             }
             else
             {
                 // URL変更失敗時はエラーを通知し、SSHキーの更新も中止する
                 HasSaveError = true;
-                App.RaiseException(_repo.FullPath,
-                    $"Failed to set URL for remote '{remoteName}'");
+                App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
                 return;
             }
         }
 
-        // プッシュ禁止設定
-        var currentPushUrl = await remoteCmd.GetURLAsync(remoteName, true);
-        var isPushCurrentlyDisabled = !string.IsNullOrEmpty(currentPushUrl) && currentPushUrl != (url ?? remote.URL);
-        if (pushDisabled != isPushCurrentlyDisabled)
+        // フェッチURLとは独立した pushurl を保持し、禁止指定だけを no_push にする。
+        var currentPushUrl = await new Commands.Config(_repo.FullPath).GetAsync($"remote.{remoteName}.pushurl");
+        var desiredPushUrl = pushDisabled ? "no_push" : pushUrl;
+        if (string.IsNullOrEmpty(desiredPushUrl))
         {
-            if (pushDisabled)
+            if (!string.IsNullOrEmpty(currentPushUrl))
             {
-                // push URL を無効値に設定してプッシュを禁止する
-                await remoteCmd.SetURLAsync(remoteName, "no_push", true);
+                if (!await remoteCmd.DeletePushURLAsync(remoteName, currentPushUrl))
+                {
+                    HasSaveError = true;
+                    App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
+                    return;
+                }
             }
-            else
+        }
+        else if (desiredPushUrl != currentPushUrl)
+        {
+            if (!await remoteCmd.SetURLAsync(remoteName, desiredPushUrl, true))
             {
-                // push URL を削除して fetch URL に戻す
-                await remoteCmd.DeletePushURLAsync(remoteName, currentPushUrl);
+                HasSaveError = true;
+                App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
+                return;
             }
         }
 
@@ -663,6 +688,8 @@ public class RepositoryConfigure : ObservableObject
 
     private Task _pendingSaveTask = Task.CompletedTask;                       // 保留中のリモート設定保存タスク
     private Task _loadTask = Task.CompletedTask;                             // 進行中のリモート設定読み込みタスク
+    private int _remoteLoadGeneration;
+    private bool _isRemoteSettingsLoaded;
     private readonly Repository _repo;                                       // 対象リポジトリ
     private readonly Dictionary<string, string> _cached;                     // git configの初期値キャッシュ
     private string _httpProxy;                                               // HTTPプロキシ設定
@@ -675,4 +702,6 @@ public class RepositoryConfigure : ObservableObject
     private bool _selectedRemoteUseSSH;                                      // 選択中リモートがSSH接続か
     private string _selectedRemoteSSHKey = string.Empty;                     // 選択中リモートのSSHキーパス
     private bool _selectedRemotePushDisabled;                                // 選択中リモートのプッシュ禁止状態
+    private string _selectedRemotePushUrl = string.Empty;
+
 }

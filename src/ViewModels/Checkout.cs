@@ -130,7 +130,8 @@ public class Checkout : Popup
 
         // フィルタモードでチェックアウトしたブランチをIncludedに設定する
         var b = _repo.FindLocalBranchByName(branchName);
-        if (b is not null && _repo.HistoryFilterMode == Models.FilterMode.Included)
+        if (b is not null && _repo.HistoryFilterMode == Models.FilterMode.Included &&
+                !_repo.UIStates.IsCoveredByFolderFilter(b.FullName, Models.FilterType.LocalBranchFolder))
             _repo.SetBranchFilterMode(b, Models.FilterMode.Included, false, false);
 
         // ブランチ一覧の更新を通知する

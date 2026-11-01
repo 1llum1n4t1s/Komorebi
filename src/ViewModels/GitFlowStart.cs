@@ -42,7 +42,7 @@ public class GitFlowStart : Popup
     /// <summary>
     /// 新規ブランチの名前（プレフィックスを除いた部分）。バリデーション付き。
     /// </summary>
-    [Required(ErrorMessage = "Name is required!!!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.NameRequired))]
     [CustomValidation(typeof(GitFlowStart), nameof(ValidateBranchName))]
     public string Name
     {
@@ -77,14 +77,14 @@ public class GitFlowStart : Popup
         if (ctx.ObjectInstance is GitFlowStart starter)
         {
             if (!Models.RefName.IsValidBranchName($"{starter.Prefix}{name}"))
-                return new ValidationResult("Bad branch name format!");
+                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
 
             // プレフィックス付きのフルネームで既存ブランチと比較
             var check = $"{starter.Prefix}{name}";
             foreach (var b in starter._repo.Branches)
             {
                 if (b.FriendlyName == check)
-                    return new ValidationResult("A branch with same name already exists!");
+                    return new ValidationResult(App.Text("Validation.BranchExists"));
             }
         }
 

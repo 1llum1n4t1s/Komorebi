@@ -101,6 +101,15 @@ namespace Komorebi.Tests.Models
 
         #endregion
 
+        [Fact]
+        public void TryGetVisitURL_BitbucketAlternateSshHost_UsesWebHost()
+        {
+            HTTPSValidator.Add("bitbucket.org");
+            var remote = new Remote { URL = "git@ssh.bitbucket.org:workspace/repo.git" };
+            Assert.True(remote.TryGetVisitURL(out var url));
+            Assert.Equal("https://bitbucket.org/workspace/repo", url);
+        }
+
         #region TryGetVisitURL - SSH URLs
 
         [Fact]

@@ -46,8 +46,11 @@
                 ItemsSource="{Binding Groups}"
                 SelectedItem="{Binding Group, Mode=TwoWay}">
         <ComboBox.ItemTemplate>
-          <DataTemplate DataType="vm:RepositoryNode">
-            <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+          <DataTemplate DataType="vm:TargetGroup">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="{Binding Name}"/>
+              <TextBlock Grid.Column="1" Margin="8,0,0,0" Foreground="{DynamicResource Brush.FG2}" Text="{Binding Description}"/>
+            </Grid>
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>

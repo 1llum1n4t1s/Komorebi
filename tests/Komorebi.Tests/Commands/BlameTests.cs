@@ -15,6 +15,17 @@ namespace Komorebi.Tests.Commands
         }
 
         [Fact]
+        public void ParseBlameOutput_LeadingEmptyLines_PreservesLineNumbers()
+        {
+            var output = "abc1234 file.txt (Author 1700000000 +0000 1) \n" +
+                "abc1234 file.txt (Author 1700000000 +0000 2) \n" +
+                "abc1234 file.txt (Author 1700000000 +0000 3) text";
+            var result = Blame.ParseBlameOutput(output);
+            Assert.Equal("\n\ntext", result.Content);
+            Assert.Equal(3, result.LineInfos.Count);
+        }
+
+        [Fact]
         public void ParseBlameOutput_SingleLine_ParsesAllFields()
         {
             // Format: ^?SHA filename (author timestamp timezone linenum) content
@@ -83,6 +94,7 @@ namespace Komorebi.Tests.Commands
 
             Assert.True(result.IsBinary);
             Assert.Empty(result.LineInfos);
+            Assert.Equal(string.Empty, result.Content);
         }
 
         [Fact]

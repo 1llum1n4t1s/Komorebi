@@ -17,7 +17,7 @@ public class AddWorktree : Popup
     /// <summary>
     /// ワークツリーのパス。必須入力でパスの妥当性チェック付き。
     /// </summary>
-    [Required(ErrorMessage = "Worktree path is required!")]
+    [Required(ErrorMessageResourceType = typeof(ValidationMessages), ErrorMessageResourceName = nameof(ValidationMessages.WorktreePathRequired))]
     [CustomValidation(typeof(AddWorktree), nameof(ValidateWorktreePath))]
     public string Path
     {
@@ -137,6 +137,25 @@ public class AddWorktree : Popup
         }
     }
 
+    /// <summary>選択ブランチを別のワークツリーとして開く既定値を設定する。</summary>
+    public AddWorktree(Repository repo, Models.Branch branch) : this(repo)
+    {
+        var parent = System.IO.Path.GetFullPath(System.IO.Path.Combine(repo.FullPath, ".."));
+        var isWorktree = repo.GitDir.Replace('\\', '/').Contains("/worktrees/", StringComparison.Ordinal) &&
+            File.Exists(System.IO.Path.Combine(repo.GitDir, "commondir"));
+        var folder = isWorktree ? parent : System.IO.Path.Combine(parent, $"{System.IO.Path.GetFileName(repo.FullPath)}-worktrees");
+        Path = System.IO.Path.Combine(folder, branch.Name.Replace('/', '-').Replace('\\', '-'));
+        CreateNewBranch = !branch.IsLocal;
+        if (branch.IsLocal)
+            SelectedLocalBranch = branch;
+        else
+        {
+            SelectedBranch = branch.Name;
+            SetTrackingBranch = true;
+            SelectedTrackingBranch = branch;
+        }
+    }
+
     /// <summary>
     /// ワークツリーパスが空でなく、指定ディレクトリが空であることを検証する。
     /// </summary>
@@ -146,10 +165,10 @@ public class AddWorktree : Popup
     public static ValidationResult ValidateWorktreePath(string path, ValidationContext ctx)
     {
         if (ctx.ObjectInstance is not AddWorktree creator)
-            return new ValidationResult("Missing runtime context to create branch!");
+            return new ValidationResult(App.Text("Validation.ContextInvalid"));
 
         if (string.IsNullOrEmpty(path))
-            return new ValidationResult("Worktree path is required!");
+            return new ValidationResult(App.Text("Validation.WorktreePathRequired"));
 
         // 相対パスの場合はリポジトリのルートと結合してフルパスにする
         var fullPath = System.IO.Path.IsPathRooted(path) ? path : System.IO.Path.Combine(creator._repo.FullPath, path);
@@ -159,11 +178,11 @@ public class AddWorktree : Popup
             // ディレクトリが空でないか確認する
             var files = info.GetFiles();
             if (files.Length > 0)
-                return new ValidationResult("Given path is not empty!!!");
+                return new ValidationResult(App.Text("Validation.PathNotEmpty"));
 
             var folders = info.GetDirectories();
             if (folders.Length > 0)
-                return new ValidationResult("Given path is not empty!!!");
+                return new ValidationResult(App.Text("Validation.PathNotEmpty"));
         }
 
         return ValidationResult.Success;
@@ -176,7 +195,7 @@ public class AddWorktree : Popup
     {
         if (ctx.ObjectInstance is AddWorktree { CreateNewBranch: true } &&
             !string.IsNullOrEmpty(name) && !Models.RefName.IsValidBranchName(name))
-            return new ValidationResult("Bad branch name format!");
+            return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
 
         return ValidationResult.Success;
     }
@@ -198,9 +217,9 @@ public class AddWorktree : Popup
         Use(log);
 
         // git worktree addコマンドを実行する
-        var succ = await new Commands.Worktree(_repo.FullPath)
-            .Use(log)
-            .AddAsync(_path, branchName, _createNewBranch, tracking);
+        using var cancellation = BeginCancellableOperation();
+        var command = new Commands.Worktree(_repo.FullPath) { CancellationToken = cancellation.Token };
+        var succ = await command.Use(log).AddAsync(_path, branchName, _createNewBranch, tracking);
 
         log.Complete();
         return succ;

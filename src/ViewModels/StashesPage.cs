@@ -127,7 +127,7 @@ public class StashesPage : ObservableObject, IDisposable
         {
             if (SetProperty(ref _selectedChanges, value))
             {
-                if (value is not { Count: 1 })
+                if (value is not { Count: 1 } || value is ChangeSelection { IsSingleFolder: true })
                     DiffContext = null;
                 else if (_untracked.Contains(value[0]))
                     DiffContext = new DiffContext(_repo.FullPath, new Models.DiffOption(Models.Commit.EmptyTreeSHA1, _selectedStash.Parents[2], value[0]), _diffContext);
