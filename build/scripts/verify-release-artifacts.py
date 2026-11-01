@@ -91,10 +91,12 @@ def zip_app(path, rid, version, source_sha, package=False):
             for node in metadata:
                 if node.tag.split("}")[-1] == "repository" and node.get("commit"):
                     require(node.get("commit") == source_sha, f"{path.name}: wrong nuspec source SHA")
-        for entry in names:
-            if entry.endswith("Contents/Info.plist"):
-                info = plistlib.loads(archive.read(entry))
-                require(info.get("CFBundleShortVersionString") == version and info.get("CFBundleVersion") == version + ".0", f"{path.name}: wrong bundle version")
+        if rid.startswith("osx-"):
+            # 主実行ファイルに対応する plist のみ照合し、同梱 dSYM の metadata は含めない。
+            plist = apps[0].removesuffix("MacOS/Komorebi") + "Info.plist"
+            require(names.count(plist) == 1, f"{path.name}: missing/duplicate main app Info.plist")
+            info = plistlib.loads(archive.read(plist))
+            require(info.get("CFBundleShortVersionString") == version and info.get("CFBundleVersion") == version + ".0", f"{path.name}: wrong bundle version")
         data = archive.read(apps[0])
     if package and rid.startswith("linux-"):
         with tempfile.TemporaryDirectory(prefix="komorebi-release-") as work:
