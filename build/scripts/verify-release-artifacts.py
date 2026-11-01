@@ -226,7 +226,7 @@ def verify(root, version, source_sha):
     for rid, deb_arch, rpm_arch in (("linux-x64", "amd64", "x86_64"), ("linux-arm64", "arm64", "aarch64")):
         deb = root / f"komorebi_{version}-1_{deb_arch}.deb"
         metadata = run("dpkg-deb", "-f", str(deb), "Package", "Version", "Architecture").decode()
-        require(metadata.splitlines() == ["Package: komorebi", f"Version: {version}-1", f"Architecture: {deb_arch}"], f"{deb.name}: wrong metadata")
+        require(metadata.splitlines() == ["Package: komorebi", f"Version: {version}", f"Architecture: {deb_arch}"], f"{deb.name}: wrong metadata")
         payloads = [(deb.name, tar_app(run("dpkg-deb", "--fsys-tarfile", str(deb))))]
         rpm = root / f"komorebi-{version}-1.{rpm_arch}.rpm"
         metadata = run("rpm", "-qp", "--qf", "%{NAME}|%{VERSION}|%{RELEASE}|%{ARCH}", str(rpm)).decode()
