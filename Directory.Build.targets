@@ -1,0 +1,24 @@
+<Project>
+  <!-- 条件付き参照とAOTの暗黙依存を、通常のDebug用lockfileへ混在させない。
+       PublishAotは各csprojで設定されるため、propsではなく評価後のtargetsで選ぶ。 -->
+  <PropertyGroup Condition="!$(MSBuildProjectDirectory.Contains('depends')) And '$(NuGetLockFilePath)' == ''">
+    <_KomorebiLockProfile>$(Configuration)</_KomorebiLockProfile>
+    <_KomorebiLockProfile Condition="'$(MSBuildProjectName)' == 'Komorebi' And '$(Configuration)' == 'Release' And '$(PublishAot)' != 'true'">Release.NoAOT</_KomorebiLockProfile>
+    <_KomorebiLockRuntime>$(RuntimeIdentifier)</_KomorebiLockRuntime>
+    <!-- dotnet restore -r は複数形RuntimeIdentifiersを設定する。build/publishの単数形と同じ保存先にする。 -->
+    <_KomorebiLockRuntime Condition="'$(_KomorebiLockRuntime)' == '' And '$(RuntimeIdentifiers)' != ''">$([System.String]::Copy('$(RuntimeIdentifiers)').Trim(';').Replace(';', '_'))</_KomorebiLockRuntime>
+    <_KomorebiLockProfile Condition="'$(_KomorebiLockRuntime)' != ''">$(_KomorebiLockProfile).$(_KomorebiLockRuntime)</_KomorebiLockProfile>
+    <NuGetLockFilePath Condition="'$(_KomorebiLockProfile)' != 'Debug'">$(MSBuildProjectDirectory)/packages.$(_KomorebiLockProfile).lock.json</NuGetLockFilePath>
+  </PropertyGroup>
+  <!-- NuGetはlockが存在しない場合、locked-modeでも新規生成するため先に拒否する。 -->
+  <Target Name="RequireExistingNuGetLockFile"
+          BeforeTargets="_GenerateRestoreGraphProjectEntry"
+          Condition="'$(RestoreLockedMode)' == 'true' And '$(RestorePackagesWithLockFile)' == 'true' And !$(MSBuildProjectDirectory.Contains('depends'))">
+    <PropertyGroup>
+      <_KomorebiRequiredLockFile>$(NuGetLockFilePath)</_KomorebiRequiredLockFile>
+      <_KomorebiRequiredLockFile Condition="'$(_KomorebiRequiredLockFile)' == ''">$(MSBuildProjectDirectory)/packages.lock.json</_KomorebiRequiredLockFile>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(_KomorebiRequiredLockFile)')"
+           Text="固定復元に必要なlockfileがありません: $(_KomorebiRequiredLockFile)。対象の構成・RIDで通常復元し、内容をレビューして追加してください。"/>
+  </Target>
+</Project>

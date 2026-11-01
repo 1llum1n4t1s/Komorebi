@@ -65,7 +65,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y llvm gcc-aarch64-linux-gnu
       - name: Publish
-        run: dotnet publish src/Komorebi.csproj -c Release -o publish -r ${{ matrix.runtime }}
+        run: dotnet publish src/Komorebi.csproj -c Release -o publish -r ${{ matrix.runtime }} -p:RestoreLockedMode=true
       - name: Rename executable file
         if: startsWith(matrix.runtime, 'linux-')
         run: mv publish/Komorebi publish/komorebi

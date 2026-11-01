@@ -14,16 +14,15 @@ async function parseXml(filePath) {
     return parser.parseStringPromise(data);
 }
 
-async function filterAndSortTranslations(localeData, enUSKeys, enUSData) {
+function filterAndSortTranslations(localeData, enUSKeyOrder) {
     const strings = localeData.ResourceDictionary['x:String'];
     // Remove keys that don't exist in English file
-    const filtered = strings.filter(item => enUSKeys.has(item.$['x:Key']));
+    const filtered = strings.filter(item => enUSKeyOrder.has(item.$['x:Key']));
 
     // Sort based on the key order in English file
-    const enUSKeysArray = enUSData.ResourceDictionary['x:String'].map(item => item.$['x:Key']);
     filtered.sort((a, b) => {
-        const aIndex = enUSKeysArray.indexOf(a.$['x:Key']);
-        const bIndex = enUSKeysArray.indexOf(b.$['x:Key']);
+        const aIndex = enUSKeyOrder.get(a.$['x:Key']);
+        const bIndex = enUSKeyOrder.get(b.$['x:Key']);
         return aIndex - bIndex;
     });
 
@@ -33,6 +32,8 @@ async function filterAndSortTranslations(localeData, enUSKeys, enUSData) {
 async function calculateTranslationRate() {
     const enUSData = await parseXml(enUSFile);
     const enUSKeys = new Set(enUSData.ResourceDictionary['x:String'].map(item => item.$['x:Key']));
+    // 上流との差分: 並べ替えごとの線形検索を避け、全ロケールで同じ索引を共有する。
+    const enUSKeyOrder = new Map([...enUSKeys].map((key, index) => [key, index]));
     const files = (await fs.readdir(localesDir)).filter(file => file !== 'en_US.axaml' && file.endsWith('.axaml'));
 
     const lines = [];
@@ -50,7 +51,7 @@ async function calculateTranslationRate() {
         const missingKeys = [...enUSKeys].filter(key => !localeKeys.has(key));
 
         // Sort and clean up extra translations
-        const sortedAndCleaned = await filterAndSortTranslations(localeData, enUSKeys, enUSData);
+        const sortedAndCleaned = filterAndSortTranslations(localeData, enUSKeyOrder);
         localeData.ResourceDictionary['x:String'] = sortedAndCleaned;
 
         // Save the updated file
