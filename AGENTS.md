@@ -133,6 +133,10 @@ Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS
 ### Remote Configuration
 `RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including fetch/push URL editing, per-remote SSH key selection, and per-remote push prohibition. Push prohibition uses `git remote set-url --push <name> no_push` to set an invalid push URL. `SelectedRemotePushDisabled` detects only `no_push`; a custom push URL different from the fetch URL is valid and must survive unrelated edits.
 
+### リポジトリの信頼確認
+
+所有権エラーからの起動・追加・オープンでは `Models.SafeDirectories` と `TrustRepository` を使う。stderr の提案だけで別パスやワイルドカードを信頼せず、ファイルシステム上のリポジトリ境界を確認する。変更時は `SafeDirectoriesTests` を検証し、中断・登録失敗後にリポジトリを開かない契約を維持する。設計は [DESIGN.md](DESIGN.md#リポジトリの信頼境界) を参照する。
+
 ### View の再利用と入力
 
 - `ContentControl + DataTemplate` の切替と Repository の VM 保持を維持する（[設計](DESIGN.md#データフローと寿命)）。View の `DataContext` 変更時は旧 VM のイベント購読を解除し、新 VM に付け直す。VM に属する状態を code-behind に保持しない。
@@ -189,7 +193,7 @@ This order means a returning user with a valid saved position may see a one-fram
 
 ### AI 資格情報の保存
 
-保存方式と復旧時の不変条件は [DESIGN.md](DESIGN.md#設定と資格情報) を参照する。`Service.ProtectedApiKey` と source-generated JSON 経由の実際の保存・復号を `Recovery.E2E` で検証する。既存鍵の読込失敗を鍵の再生成で置き換えず、暗号化・移行失敗時に平文を保存しない。
+保存方式と復旧時の不変条件は [DESIGN.md](DESIGN.md#設定と資格情報) を参照する。`Service.ProtectedApiKey`・`ProtectedExtraHeaders` と source-generated JSON 経由の実際の保存・復号を `Recovery.E2E` で検証する。既存鍵の読込失敗を鍵の再生成で置き換えず、暗号化・移行失敗時に平文を保存しない。
 
 ### Adding a New Popup Dialog
 1. Create `src/ViewModels/MyDialog.cs` inheriting `Popup`, override `Sure()` for confirm logic
@@ -232,11 +236,14 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 ### Windows リリース (ローカル実行)
 
 - `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL の取得内容を比較し、不一致の場合だけキャッシュをパージする。全配信ファイルの SHA-256 一致まで確認してから旧版清掃へ進む。HTTP 200 だけを配信完了条件にしない。
+- ローカルスクリプトのアップロード前検証（manifest・nupkg・portable の版・CPU・署名・hash）を維持する。`-SkipUpload` でもこの検証を通す。
 - 製品ページの配信は兄弟リポジトリの `../vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
 
 ### macOS / Linux + standalone パッケージ (CI)
 
-`release/**` ブランチへの push で `release.yml` が `build.yml` → `package.yml` → `velopack.yml` → `r2-upload` を順に呼ぶ。`r2-upload` の **cleanup は R2 上の `releases.win-*.json` を keep set に取り込む** (CI 成果物に win manifest が無いため、取り込まないと署名済み win nupkg を「keep set 外」と誤判定して削除する。取得失敗時は安全側で cleanup を中止)。ローカル署名リリースが配る固定名 installer (`Komorebi-win-*` = Setup.exe / Portable.zip) も明示保護される。
+`release/**` ブランチへの push で `release.yml` が `build.yml` → `package.yml` → `velopack.yml` → `r2-upload` を順に呼ぶ。アップロード前に `python3 build/scripts/verify-release-artifacts.py --packages packages --version <version> --source-sha <40桁SHA>` で最終配布物を検証する（Linux 上で `rpm`・`rpm2cpio`・`squashfs-tools`・`libarchive-tools` が必要）。版・ソース SHA・CPU・manifest の hash/size と各パッケージの実体が一致しない場合は配信しない。
+
+旧版清掃は所有する配信経路に限定する。CI は Windows の全世代の nupkg・standalone zip・固定名 installer を保護し、Windows はローカル署名リリースだけが清掃する。ローカル側は未ビルドのチャンネルの manifest 参照も保持し、取得・形式検証に失敗したら清掃を中止する。並行配信中の相手の新パッケージを削除しない理由は [DESIGN.md](DESIGN.md#不変条件と採用済み設計判断) を参照する。
 
 > ℹ️ `package.yml` の win standalone zip (`komorebi_*.zip`) は引き続き CI で生成される未署名バイナリ。署名対象に含めたい場合はローカルスクリプトへの移植が必要。
 

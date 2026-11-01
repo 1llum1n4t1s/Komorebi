@@ -40,7 +40,7 @@ Launcher は `LauncherPage` のタブと `ActivePage` を管理する。Reposito
 - **プロセスの中断を共通化する。** `Native.CommandCancellation` が OS 差を吸収し、キャンセル済みの結果は成功として扱わない。検証手順は [AGENTS.md](AGENTS.md#adding-a-new-git-command) を参照する。
 - **バイナリ表示は必要な範囲を読む。** `Models.BinaryFile` はバッファを用い、履歴から抽出した一時ファイルの削除も Dispose に結び付ける。全内容の常時メモリ保持を避ける代わりに、表示中のファイル資源を管理する。
 - **起動診断は通常ロガーから独立させる。** ロガー初期化前とログを書けない終了を補足する。出力と単一起動の状態分岐は[起動診断と単一起動](#起動診断と単一起動)に記載する。
-- **更新先を固定する。** `Preferences.CanonicalUpdateBaseUrl` を正本とし、JSON からの更新 URL 上書きを受け付けない。Velopack の取得・適用経路と R2 の配信経路を接続する。Windows は対話認証が必要な署名のためローカルで配信し、CI は Windows 更新フィードを生成しない。両経路の削除処理は他方の manifest を保持対象へ取り込む。Windows 配布物は `vpk pack --runtime` で CPU を固定する。アップロード後は固定名 URL の取得内容をローカルと比較し、不一致の場合だけキャッシュをパージする。全配信ファイルの SHA-256 一致後に旧版清掃へ進むことで、HTTP 成功だけでは検出できない旧キャッシュや配信内容の不一致を検出する。
+- **更新先を固定し、配信物の実体を検証する。** `Preferences.CanonicalUpdateBaseUrl` を正本とし、JSON からの更新 URL 上書きを受け付けない。Velopack の取得・適用経路と R2 の配信経路を接続する。Windows は対話認証が必要な署名のためローカルで配信し、CI は Windows 更新フィードを生成しない。アップロード前に最終パッケージの版・CPU・manifest と実体の整合を確認し、CI ではソース SHA、Windows では署名も確認する。CI の清掃は Windows 成果物を全世代保護し、ローカル側は Windows だけを清掃する。相手の manifest 更新前に新パッケージを誤削除しないための責務分離である。Windows の配信後は固定 URL の全ファイルの SHA-256 をローカルと照合してから清掃する。実行コマンドと保持条件は [AGENTS.md](AGENTS.md#cicd) を参照する。
 - **テーマと翻訳を資源として切り替える。** `Themes.axaml` の色・ブラシと各 locale 辞書を利用し、英語辞書を翻訳キー集合の基準とする。
 - **エディタはソースを同梱し、アプリ側の拡張と分離する。** AvaloniaEdit の上流安定版を基に、日本語 IME・描画余白・矩形選択と Avalonia 12 への対応を保持する。NuGet のエディタへ置き換えず、これらの差分を維持するために直接追跡する。`TextMateHelper` は追加文法とアプリのテーマを供給し、同梱側は文書スナップショットと解析・描画資源を管理する。差分・Blame の View は読み込み時に TextMate の `Installation` を作成し、アンロード時に Dispose してイベント購読と解析資源を解放する。統合元の情報は [同梱エディタの README](depends/AvaloniaEdit/README.md)、更新時の制約・検証は [AGENTS.md](AGENTS.md) を参照する。
 - **Velopack は参照される更新処理だけを AOT で保持する。** アセンブリ全体を `TrimmerRootAssembly` に指定すると、未使用の旧 COM API まで AOT 解析対象になるため、全体保持は行わない。更新フィードの JSON 読み取り互換性は `LibraryCompatibilityTests` で検証する。
@@ -57,11 +57,17 @@ Windows の `Filename too long` に限り、実行前に宛先が未使用で、
 
 独立したサブモジュール更新では、親リモート専用の `SSHKey` と CodeCommit の credential helper 抑止を一時的に解除する。別ホストに親の認証設定を持ち出さず、親プロセスの環境とホスト別設定を利用する。コマンドの引数・作業ディレクトリ・認証指定は処理後に復元する。
 
+## リポジトリの信頼境界
+
+起動・追加・オープン時に Git が所有権エラーを返した場合、`Launcher` / `OpenLocalRepository` は `TrustRepository` で対象と理由を表示し、利用者の確認後に `AddSafeDirectory` で Git のグローバル `safe.directory` へ登録する。登録成功後にルートを再照会してリポジトリを追加・表示し、失敗・中断時は先へ進めない。
+
+`Models.SafeDirectories` は選択パスから最も近い `.git`（worktree のファイルを含む）または bare リポジトリの境界を求める。stderr の提案はその境界と一致する場合だけ採用し、`*` や `/*` による範囲拡大を認めない。Windows の UNC パスでは Git の `%(prefix)/` 表現を保持する。診断文字列に埋め込まれた別パスを信頼対象にしないためである。
+
 ## 設定と資格情報
 
 `Preferences` の JSON 保存は UI 状態と AI サービス設定を扱う。`AI.Service` の公開 API キーと JSON に書く `ProtectedApiKey` は分離され、`ApiKeyProtector` が AES-GCM で暗号化する。追加 HTTP ヘッダーも `ExtraHeaders` と `ProtectedExtraHeaders` を分離し、Authorization 等を含む設定全体へ同じ保護・暗号文保持・旧平文移行を適用する。鍵は DataDir の `ai-api-key.key` に置き、Windows は DPAPI CurrentUser、Unix はファイル権限で保護する。
 
-既存鍵の I/O・形式・DPAPI 読込失敗では鍵を再生成せず、復号できない暗号文も保持する。これにより一時障害中に設定を保存しても、元の鍵が再び読めるようになった後に復旧できる。旧平文の暗号化移行や新しい暗号化に失敗しても平文は書き戻さない。利用者がキーを明示的に空へ変更した場合は、保持した暗号文も削除する。
+既存鍵の I/O・形式・DPAPI 読込失敗では鍵を再生成せず、復号できない暗号文も保持する。これにより一時障害中に設定を保存しても、元の鍵が再び読めるようになった後に復旧できる。鍵は同じディレクトリの一時ファイルへ書き込み・権限制限・flush を済ませてから確定し、旧鍵の移行では置換、新規生成では上書き禁止とする。同時生成時は先に確定した鍵を読むことで、唯一の鍵の破損や別プロセスによる上書きを防ぐ。旧平文の暗号化移行や新しい暗号化に失敗しても平文は書き戻さない。利用者が API キーまたは追加ヘッダーを明示的に空へ変更した場合は、その保持した暗号文も削除する。
 
 ## 起動診断と単一起動
 

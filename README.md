@@ -43,7 +43,7 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 |------|------|
 | **SSH 鍵管理 UI** | `~/.ssh/` をスキャンし、リモートごと・グローバルで SSH 鍵を選択可能。3 段フォールバック（リモート個別 → グローバル → ssh-agent）。SSH 鍵の一覧表示・生成にも対応 |
 | **AWS CodeCommit 対応** | HTTPS / SSH / git-remote-codecommit（`codecommit://` / `codecommit::region://`）に対応。FIPS・China・GovCloud エンドポイント、AWS コンソールへのリンク生成・PR 作成 URL 生成にも対応 |
-| **リモート設定の統合** | リモート URL 編集・SSH 鍵選択・Prune を統合した RepositoryConfigure ダイアログ |
+| **リモート設定の統合** | Fetch / Push URL の個別編集・プッシュ禁止・SSH 鍵選択・Prune を統合したリポジトリ設定ダイアログ |
 
 ### アプリケーション基盤
 
@@ -94,6 +94,10 @@ C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム
 
 > [!TIP]
 > 実行ファイルと同じディレクトリに `data` フォルダを作成すると、ポータブルモードとして動作します（Windows / Linux AppImage のみ）。
+
+### リポジトリの信頼確認
+
+リポジトリを開く際に Git が所有者の相違（`dubious ownership`）を検出すると、信頼確認ダイアログを表示します。対象パスと理由を確認し、信頼できる場合に承認すると、そのリポジトリを Git のグローバル `safe.directory` に登録して開きます。
 
 ### Windows
 
@@ -176,6 +180,7 @@ OpenAI / Azure OpenAI / Gemini / Anthropic を利用してコミットメッセ�
 * **プロンプトのカスタマイズ** — 分析プロンプト・生成プロンプトをそれぞれ変更可能
 * **複数 AI サービスの登録** — グローバル設定で複数サービスを管理、リポジトリごとに使い分け
 * **環境変数からの API キー取得** に対応
+* **追加 HTTP ヘッダー** — サービス設定に `名前: 値` を1行ずつ指定可能。保存時は API キーと同じ方式で暗号化
 * **ストリーミング応答** / **Chain-of-thought タグの自動除去**
 
 設定に保存する API キーは暗号化されます。保存先はデータフォルダ内の `preference.json` と `ai-api-key.key` です。Windows の鍵は現在の Windows ユーザーに紐付きます。鍵を一時的に読めない場合も保存済みの暗号文と鍵を保持します。API キーが使えなくなった場合は、鍵ファイルへのアクセスを回復してアプリを再起動してください。必要に応じて設定でキーを再入力できます。キーを空欄にして保存すると、保存済みの値を削除します。
@@ -223,7 +228,7 @@ VS Code / VS Code Insiders / VSCodium / Cursor / Sublime Text / Zed / Visual Stu
 | OS | 対応ターミナル |
 |----|-------------|
 | Windows | Git Bash / PowerShell / CMD / Windows Terminal |
-| macOS | Terminal.app / iTerm2 / Warp / Ghostty / kitty |
+| macOS | Terminal.app / iTerm2 / Warp / Ghostty / kitty / Alacritty / Otty / cmux / mux0 |
 | Linux | GNOME Terminal / Konsole / XFCE4 Terminal / LXTerminal / Deepin Terminal / MATE Terminal / Foot / WezTerm / Ptyxis / Ghostty / kitty / Custom |
 
 ---
@@ -243,7 +248,9 @@ VS Code / VS Code Insiders / VSCodium / Cursor / Sublime Text / Zed / Visual Stu
 
 ### リポジトリ設定
 
-リポジトリごとにユーザー名・メール / デフォルトリモート / マージモード / GPG 署名 / HTTP プロキシ / 自動 Fetch（間隔設定・リモートごとの除外が可能）/ サブモジュール自動更新の確認 / リモートごとのプッシュ禁止 / コミットテンプレート / Issue トラッカー / AI サービス / カスタムアクション / Conventional Commit タイプ を個別に設定できます。
+リポジトリごとにユーザー名・メール / デフォルトリモート / マージモード / GPG 署名 / HTTP プロキシ / サブモジュール自動更新の確認 / リモートごとのプッシュ禁止 / コミットテンプレート / Issue トラッカー / AI サービス / カスタムアクション / Conventional Commit タイプ を個別に設定できます。
+
+自動 Fetch の有効化と間隔は全体設定で共通に指定します。リモートごとの自動 Fetch 除外は、サイドバーのリモートのコンテキストメニューで切り替えられます。
 
 ---
 
