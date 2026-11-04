@@ -67,6 +67,8 @@ public class CommandCancellationTests
             Komorebi.Native.CommandCancellation.Terminate(process, true);
             await process.WaitForExitAsync(timeout.Token);
             await Task.WhenAll(output, error).WaitAsync(TimeSpan.FromSeconds(5), timeout.Token);
+            // パイプのEOFと非子プロセスの回収は同時ではないため、同じ期限内で終了通知も待つ。
+            await child.WaitForExitAsync(timeout.Token);
             Assert.True(child.HasExited);
             Assert.True(File.Exists(cleaned), "The leader did not receive its TERM cleanup opportunity.");
             await File.WriteAllTextAsync(Path.Combine(root, "result.json"), "{\"descendantExited\":true,\"pipesClosed\":true,\"leaderCleaned\":true}", timeout.Token);
