@@ -71,7 +71,9 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3, references `src/Komorebi.csp
 | クローン、長いパス復旧、サブモジュール認証 | `dotnet run --project tests/CloneLongPaths.E2E/CloneLongPaths.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'` | [実 Git のクローンと復旧](tests/CloneLongPaths.E2E/README.md) |
 | API キー保存、IPC のロック・転送・復旧 | `dotnet run --project tests/Recovery.E2E/Recovery.E2E.csproj -c Release -p:DisableAOT=true` | [実暗号化と別プロセス](tests/Recovery.E2E/README.md) |
 | 画像差分、View 再利用、Fetch/Pull/Push の入力、About | `dotnet run --project tests/UIWorkflow.E2E/UIWorkflow.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'` | [実 AXAML・Headless 入力と画像](tests/UIWorkflow.E2E/README.md) |
-| ローカライズ検証 CLI の失敗時終了 | `pwsh -NoProfile -File tests/Localization.E2E/Run.ps1` | 読込失敗時の exit 1 と書込抑止 |
+| ローカライズ検証 CLI の失敗時終了 | `bun tests/Localization.E2E/Run.mjs` | 読込失敗時の exit 1 と書込抑止。本番 CI と同じ Node CLI を子プロセスで検証する。`--node <実行ファイル>`、`--artifacts <絶対パス>` で検証対象・成果物の親ディレクトリを指定可 |
+
+ローカライズ E2E ハーネス変更時は `bun test tests/Localization.E2E/Run.test.mjs` も実行し、書込み例外を握りつぶす CLI の書込み試行が検出されることを確認する。テストの成果物の親ディレクトリは `KOMOREBI_LOCALIZATION_ARTIFACTS` で指定できる。
 
 各実行の `result.json`、ログ、fixture・画像を成果物として保持し、結果と再現手順を報告する。設定と資格情報は検証用に隔離される。GUI の起動・OS 支援技術・外部 SSH 接続まで検証したとは扱わず、必要な実デスクトップ確認は別途行う。成果物の具体的な保存先は各 README と実行出力を参照する（ローカライズ検証は `tests/CloneLongPaths.E2E/bin/localization-artifacts/<実行ID>/`）。
 
@@ -286,6 +288,8 @@ Komorebi tracks `sourcegit-scm/sourcegit` via periodic cherry-pick batches. To k
 - 配信は `komorebi.kagayoi.com`（R2 `komorebi-updates`）。旧 `komorebi.nephilim.jp` は route に併記して残してある。
 
 ### ローカルリリースの実行
+
+R2 配布は PowerShell 7.2 以降と同梱の `scripts/R2Distribution.Common.ps1` を使う。配布に Node.js・pnpm・Wrangler は不要（製品の JS ビルド要件は別途維持）。署名・転送・検証の正本は同梱の `scripts/R2Transfer.Core.cs` とし、PS helper は公開関数の互換入口とする。更新時は中核と使用する入口を同じディレクトリへ同梱する。固定名は `no-cache, must-revalidate`、バージョン付き成果物は不変として 1 年キャッシュし、payload を先、assets・RELEASES・releases を最後に送信する。
 
 リポジトリルートで事前確認を行い、失敗時は「署名証明書が見つからないよ。SimplySign Desktop を起動してトークンでログインしてから /vava を再実行してね」。公開依頼時に成功を確認してから実行する。
 

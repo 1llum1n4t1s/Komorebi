@@ -31,6 +31,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+. (Join-Path $PSScriptRoot 'R2Distribution.Common.ps1')
 
 # ---- 定数 ----
 # Velopack (vpk) は常に最新安定版を使う (ゆろ君ルール): NuGet から実行時に最新を解決して pin する
@@ -38,7 +39,6 @@ $VpkVersion = (Invoke-RestMethod 'https://api.nuget.org/v3-flatcontainer/vpk/ind
     Where-Object { $_ -notmatch '-' } | Select-Object -Last 1
 if (-not $VpkVersion) { throw 'vpk の最新安定版バージョンの取得に失敗しました (NuGet API)' }
 Write-Host "vpk 最新安定版: $VpkVersion"
-$WranglerVersion = '4.156.0'         # サプライチェーン対策でバージョン固定
 $Bucket = 'komorebi-updates'
 $BaseUrl = 'https://komorebi.kagayoi.com'
 $AccountId = '10901bfadbf1005164774a7350082985'
@@ -239,14 +239,15 @@ if ($SkipUpload) {
 # - *.nupkg は put のみ (過去版は cleanup ステップが manifest 基準で削除)
 Write-Host '== R2 アップロード ==' -ForegroundColor Cyan
 $files = Get-ChildItem $ArtifactsDir -File
-$ordered = @($files | Where-Object { $_.Name -notlike 'releases.*.json' }) +
-           @($files | Where-Object { $_.Name -like 'releases.*.json' })
+$ordered = @($files | Where-Object { $_.Name -notmatch '^(?:releases\..*\.json|assets\..*\.json|RELEASES(?:-.*)?)$' }) +
+           @($files | Where-Object { $_.Name -match '^(?:releases\..*\.json|assets\..*\.json|RELEASES(?:-.*)?)$' })
 $uploaded = 0
 foreach ($f in $ordered) {
     Write-Host "  ↑ $($f.Name)"
-    Invoke-Native "R2 put ($($f.Name))" {
-        pnpm dlx "wrangler@$WranglerVersion" r2 object put "$Bucket/$($f.Name)" --file $f.FullName --remote
-    }
+    $immutable = $f.Name -match '(?:\.nupkg$|[-_.]\d+\.\d+\.\d+(?:[-_.]|$))'
+    $cacheControl = if ($immutable) { 'public, max-age=31536000, immutable' } else { 'no-cache, must-revalidate' }
+    $contentType = switch -Regex ($f.Name) { '\.json$' { 'application/json'; break }; '^RELEASES' { 'text/plain'; break }; '\.(zip|nupkg)$' { 'application/zip'; break }; default { 'application/octet-stream' } }
+    Publish-R2Object -AccountId $AccountId -Bucket $Bucket -FilePath $f.FullName -Immutable:$immutable -CacheControl $cacheControl -ContentType $contentType | Out-Null
     $uploaded++
 }
 Write-Host "✅ R2 アップロード完了: $uploaded ファイル"

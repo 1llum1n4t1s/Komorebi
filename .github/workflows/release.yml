@@ -20,6 +20,7 @@ jobs:
   build:
     name: Build
     uses: ./.github/workflows/build.yml
+    secrets: inherit
   version:
     name: Prepare version string
     runs-on: ubuntu-latest
@@ -28,7 +29,18 @@ jobs:
       tag: ${{ steps.version.outputs.tag }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git init .
+          git remote add origin "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" submodule update --init --recursive
+        working-directory: ${{ github.workspace }}
       - name: Output version string
         id: version
         run: |
@@ -39,16 +51,20 @@ jobs:
     needs: [build, version]
     name: Package
     uses: ./.github/workflows/package.yml
+    secrets: inherit
     with:
       version: ${{ needs.version.outputs.version }}
+      build-attempts: ${{ toJSON(needs.build.outputs) }}
   velopack:
     needs: [build, version]
     name: Velopack
     uses: ./.github/workflows/velopack.yml
+    secrets: inherit
     with:
       version: ${{ needs.version.outputs.version }}
+      build-attempts: ${{ toJSON(needs.build.outputs) }}
   r2-upload:
-    needs: [package, velopack, version]
+    needs: [build, package, velopack, version]
     name: R2 Upload
     runs-on: ubuntu-latest
     # R2 が唯一の配信元 (通常リリースは /vava → R2 単独)。
@@ -58,19 +74,72 @@ jobs:
       contents: read
     steps:
       - name: Checkout release verification
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git init .
+          git remote add origin "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" submodule update --init --recursive
+        working-directory: ${{ github.workspace }}
       - name: Download Velopack artifacts
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          pattern: velopack.*
-          path: packages
-          merge-multiple: true
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+          BUILD_ARTIFACT_ATTEMPTS: ${{ toJSON(needs.build.outputs) }}
+          PACKAGE_ARTIFACT_ATTEMPTS: ${{ toJSON(needs.package.outputs) }}
+          VELOPACK_ARTIFACT_ATTEMPTS: ${{ toJSON(needs.velopack.outputs) }}
+        run: |
+          $attempts = @{
+            build = ($env:BUILD_ARTIFACT_ATTEMPTS | ConvertFrom-Json -AsHashtable)
+            package = ($env:PACKAGE_ARTIFACT_ATTEMPTS | ConvertFrom-Json -AsHashtable)
+            velopack = ($env:VELOPACK_ARTIFACT_ATTEMPTS | ConvertFrom-Json -AsHashtable)
+          }
+          $origins = @(
+            @{ Name = 'velopack.macos-apple-silicon'; Runtime = 'osx-arm64'; Producer = 'velopack' },
+            @{ Name = 'velopack.linux-x64'; Runtime = 'linux-x64'; Producer = 'velopack' },
+            @{ Name = 'velopack.linux-arm64'; Runtime = 'linux-arm64'; Producer = 'velopack' }
+          )
+          foreach ($origin in $origins) {
+            $attempt = $attempts[$origin.Producer][$origin.Runtime]
+            & ./scripts/Receive-ReleaseArtifact.ps1 -Name $origin.Name -Destination 'packages' -RunAttempt $attempt
+          }
+        working-directory: ${{ github.workspace }}
       - name: Download package artifacts
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          pattern: package.*
-          path: packages
-          merge-multiple: true
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+          BUILD_ARTIFACT_ATTEMPTS: ${{ toJSON(needs.build.outputs) }}
+          PACKAGE_ARTIFACT_ATTEMPTS: ${{ toJSON(needs.package.outputs) }}
+          VELOPACK_ARTIFACT_ATTEMPTS: ${{ toJSON(needs.velopack.outputs) }}
+        run: |
+          $attempts = @{
+            build = ($env:BUILD_ARTIFACT_ATTEMPTS | ConvertFrom-Json -AsHashtable)
+            package = ($env:PACKAGE_ARTIFACT_ATTEMPTS | ConvertFrom-Json -AsHashtable)
+            velopack = ($env:VELOPACK_ARTIFACT_ATTEMPTS | ConvertFrom-Json -AsHashtable)
+          }
+          $origins = @(
+            @{ Name = 'package.windows-x64'; Runtime = 'win-x64'; Producer = 'package' },
+            @{ Name = 'package.windows-arm64'; Runtime = 'win-arm64'; Producer = 'package' },
+            @{ Name = 'package.macos-apple-silicon'; Runtime = 'osx-arm64'; Producer = 'package' },
+            @{ Name = 'package.linux-x64'; Runtime = 'linux-x64'; Producer = 'package' },
+            @{ Name = 'package.linux-arm64'; Runtime = 'linux-arm64'; Producer = 'package' }
+          )
+          foreach ($origin in $origins) {
+            $attempt = $attempts[$origin.Producer][$origin.Runtime]
+            & ./scripts/Receive-ReleaseArtifact.ps1 -Name $origin.Name -Destination 'packages' -RunAttempt $attempt
+          }
+        working-directory: ${{ github.workspace }}
       - name: List artifacts
         run: ls -lh packages/
       - name: Verify final packages before upload
@@ -82,13 +151,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rpm rpm2cpio squashfs-tools libarchive-tools
           python3 build/scripts/verify-release-artifacts.py --packages packages --version "$RELEASE_VERSION" --source-sha "$RELEASE_SOURCE_SHA"
-      - name: Setup Node.js (wrangler 4.x が Node.js >=20 を要求、推奨 22)
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: '26.x'
-      - name: Install wrangler CLI
-        # サプライチェーン保護のためバージョン固定。wrangler 本体を更新したら、この --version も合わせて更新すること。
-        run: npm install -g wrangler@4.156.0
       # R2 アップロード仕様:
       # - releases.{channel}.json (manifest) は同 channel の旧版を冪等に上書き
       #   → 新リリース後、クライアントはここから新 nupkg URL を取得する
@@ -97,22 +159,22 @@ jobs:
       # - リリース完了後、後段の Cleanup step が「今 upload したファイル一式」以外を全削除する
       #   → R2 は常に最新 1 バージョンのみ保持。旧 delta は manifest からも消えているため
       #     クライアントは最新フル nupkg を取得して追いつく
-      - name: Upload to R2 bucket (komorebi-updates)
+      - name: Publish verified artifacts to R2
+        shell: pwsh
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          set -euo pipefail
-          uploaded=0
-          for f in packages/*; do
-            [ -f "$f" ] || continue
-            name=$(basename "$f")
-            echo "::group::Upload $name"
-            wrangler r2 object put "komorebi-updates/$name" --file="$f" --remote
-            echo "::endgroup::"
-            uploaded=$((uploaded + 1))
-          done
-          echo "✅ R2 アップロード完了: $uploaded ファイル"
+          . ./scripts/R2Distribution.Common.ps1
+          $files = @(Get-ChildItem -Path 'packages' -File)
+          $metadata = '^(?:releases\..*\.json|assets\..*\.json|RELEASES(?:-.*)?)$'
+          $ordered = @($files | Where-Object { $_.Name -notmatch $metadata }) + @($files | Where-Object { $_.Name -match $metadata })
+          foreach ($file in $ordered) {
+            $immutable = $file.Name -match '(?:\.nupkg$|[-_.]\d+\.\d+\.\d+(?:[-_.]|$))'
+            $cacheControl = if ($immutable) { 'public, max-age=31536000, immutable' } else { 'no-cache, must-revalidate' }
+            $contentType = switch -Regex ($file.Name) { '\.json$' { 'application/json'; break }; '^RELEASES' { 'text/plain'; break }; '\.(zip|nupkg)$' { 'application/zip'; break }; default { 'application/octet-stream' } }
+            Publish-R2Object -AccountId $env:CLOUDFLARE_ACCOUNT_ID -Bucket 'komorebi-updates' -FilePath $file.FullName -Immutable:$immutable -CacheControl $cacheControl -ContentType $contentType | Out-Null
+          }
       - name: Verify delivery (5 channel すべての manifest と参照先 nupkg を検証)
         run: |
           set -euo pipefail

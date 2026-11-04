@@ -1,13 +1,31 @@
 name: Package
 on:
   workflow_call:
+    outputs:
+      win-x64:
+        value: ${{ jobs['windows'].outputs['win-x64'] }}
+      win-arm64:
+        value: ${{ jobs['windows'].outputs['win-arm64'] }}
+      osx-arm64:
+        value: ${{ jobs['osx-app'].outputs['osx-arm64'] }}
+      linux-x64:
+        value: ${{ jobs['linux'].outputs['linux-x64'] }}
+      linux-arm64:
+        value: ${{ jobs['linux'].outputs['linux-arm64'] }}
     inputs:
+      build-attempts:
+        description: Exact producer attempt for each build runtime
+        required: true
+        type: string
       version:
         description: Komorebi package version
         required: true
         type: string
 jobs:
   windows:
+    outputs:
+      win-x64: ${{ steps.artifact-attempt.outputs['win-x64'] }}
+      win-arm64: ${{ steps.artifact-attempt.outputs['win-arm64'] }}
     name: Package Windows
     runs-on: windows-2022
     strategy:
@@ -19,12 +37,29 @@ jobs:
             label: windows-arm64
     steps:
       - name: Checkout sources
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git init .
+          git remote add origin "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" submodule update --init --recursive
+        working-directory: ${{ github.workspace }}
       - name: Download build
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          name: komorebi.${{ matrix.runtime }}
-          path: build/Komorebi
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+          R2_ARTIFACT_RUN_ATTEMPT: ${{ fromJSON(inputs.build-attempts)[matrix.runtime] }}
+        run: |
+          & ./scripts/Receive-ReleaseArtifact.ps1 -Name 'komorebi.${{ matrix.runtime }}' -Destination 'build/Komorebi' -RunAttempt $env:R2_ARTIFACT_RUN_ATTEMPT
+        working-directory: ${{ github.workspace }}
       - name: Package
         shell: pwsh
         env:
@@ -32,12 +67,29 @@ jobs:
           LABEL: ${{ matrix.label }}
         run: ./build/scripts/package.win.ps1
       - name: Upload package artifact
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with:
-          name: package.${{ matrix.label }}
-          path: build/komorebi_*.zip
-          retention-days: 3
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          . ./scripts/R2Artifact.Common.ps1
+          Publish-R2Artifact -AccountId $env:R2_ARTIFACT_ACCOUNT_ID -Bucket $env:R2_ARTIFACT_BUCKET -AccessKeyId $env:R2_ARTIFACT_ACCESS_KEY_ID -SecretAccessKey $env:R2_ARTIFACT_SECRET_ACCESS_KEY -Name 'package.${{ matrix.label }}' -Path 'build/komorebi_*.zip' | Out-Null
+        working-directory: ${{ github.workspace }}
+      - name: Record artifact producer attempt
+        id: artifact-attempt
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        working-directory: ${{ github.workspace }}
+        env:
+          ARTIFACT_RUNTIME: ${{ matrix.runtime }}
+        run: |
+          printf '%s=%s\n' "$ARTIFACT_RUNTIME" "$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
   osx-app:
+    outputs:
+      osx-arm64: ${{ steps.artifact-attempt.outputs['osx-arm64'] }}
     name: Package macOS
     runs-on: macos-latest
     strategy:
@@ -47,12 +99,29 @@ jobs:
             label: macos-apple-silicon
     steps:
       - name: Checkout sources
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git init .
+          git remote add origin "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" submodule update --init --recursive
+        working-directory: ${{ github.workspace }}
       - name: Download build
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          name: komorebi.${{ matrix.runtime }}
-          path: build
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+          R2_ARTIFACT_RUN_ATTEMPT: ${{ fromJSON(inputs.build-attempts)[matrix.runtime] }}
+        run: |
+          & ./scripts/Receive-ReleaseArtifact.ps1 -Name 'komorebi.${{ matrix.runtime }}' -Destination 'build' -RunAttempt $env:R2_ARTIFACT_RUN_ATTEMPT
+        working-directory: ${{ github.workspace }}
       - name: Package
         env:
           VERSION: ${{ inputs.version }}
@@ -62,12 +131,30 @@ jobs:
           tar -xf "build/komorebi.${{ matrix.runtime }}.tar" -C build/Komorebi
           ./build/scripts/package.osx-app.sh
       - name: Upload package artifact
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with:
-          name: package.${{ matrix.label }}
-          path: build/komorebi_*.zip
-          retention-days: 3
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          . ./scripts/R2Artifact.Common.ps1
+          Publish-R2Artifact -AccountId $env:R2_ARTIFACT_ACCOUNT_ID -Bucket $env:R2_ARTIFACT_BUCKET -AccessKeyId $env:R2_ARTIFACT_ACCESS_KEY_ID -SecretAccessKey $env:R2_ARTIFACT_SECRET_ACCESS_KEY -Name 'package.${{ matrix.label }}' -Path 'build/komorebi_*.zip' | Out-Null
+        working-directory: ${{ github.workspace }}
+      - name: Record artifact producer attempt
+        id: artifact-attempt
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        working-directory: ${{ github.workspace }}
+        env:
+          ARTIFACT_RUNTIME: ${{ matrix.runtime }}
+        run: |
+          printf '%s=%s\n' "$ARTIFACT_RUNTIME" "$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
   linux:
+    outputs:
+      linux-x64: ${{ steps.artifact-attempt.outputs['linux-x64'] }}
+      linux-arm64: ${{ steps.artifact-attempt.outputs['linux-arm64'] }}
     name: Package Linux
     runs-on: ubuntu-latest
     strategy:
@@ -79,16 +166,33 @@ jobs:
             label: linux-arm64
     steps:
       - name: Checkout sources
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git init .
+          git remote add origin "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" submodule update --init --recursive
+        working-directory: ${{ github.workspace }}
       - name: Install packaging dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y dpkg-dev fakeroot desktop-file-utils rpm libfuse2
       - name: Download build
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          name: komorebi.${{ matrix.runtime }}
-          path: build
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+          R2_ARTIFACT_RUN_ATTEMPT: ${{ fromJSON(inputs.build-attempts)[matrix.runtime] }}
+        run: |
+          & ./scripts/Receive-ReleaseArtifact.ps1 -Name 'komorebi.${{ matrix.runtime }}' -Destination 'build' -RunAttempt $env:R2_ARTIFACT_RUN_ATTEMPT
+        working-directory: ${{ github.workspace }}
       - name: Package
         env:
           VERSION: ${{ inputs.version }}
@@ -100,11 +204,23 @@ jobs:
           tar -xf "build/komorebi.${{ matrix.runtime }}.tar" -C build/Komorebi
           ./build/scripts/package.linux.sh
       - name: Upload package artifacts
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with:
-          name: package.${{ matrix.label }}
-          path: |
-            build/komorebi-*.AppImage
-            build/komorebi_*.deb
-            build/komorebi-*.rpm
-          retention-days: 3
+        shell: pwsh
+        env:
+          R2_ARTIFACT_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ARTIFACT_BUCKET: ${{ vars.R2_ARTIFACT_BUCKET }}
+          R2_ARTIFACT_ACCESS_KEY_ID: ${{ secrets.R2_ARTIFACT_ACCESS_KEY_ID }}
+          R2_ARTIFACT_SECRET_ACCESS_KEY: ${{ secrets.R2_ARTIFACT_SECRET_ACCESS_KEY }}
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          . ./scripts/R2Artifact.Common.ps1
+          Publish-R2Artifact -AccountId $env:R2_ARTIFACT_ACCOUNT_ID -Bucket $env:R2_ARTIFACT_BUCKET -AccessKeyId $env:R2_ARTIFACT_ACCESS_KEY_ID -SecretAccessKey $env:R2_ARTIFACT_SECRET_ACCESS_KEY -Name 'package.${{ matrix.label }}' -Path 'build/komorebi-*.AppImage', 'build/komorebi_*.deb', 'build/komorebi-*.rpm' | Out-Null
+        working-directory: ${{ github.workspace }}
+      - name: Record artifact producer attempt
+        id: artifact-attempt
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        working-directory: ${{ github.workspace }}
+        env:
+          ARTIFACT_RUNTIME: ${{ matrix.runtime }}
+        run: |
+          printf '%s=%s\n' "$ARTIFACT_RUNTIME" "$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
