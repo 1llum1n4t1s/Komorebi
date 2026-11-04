@@ -93,7 +93,9 @@ public sealed class LegacyLogMigrationTests
         File.WriteAllText(locked, "locked");
         File.WriteAllText(Path.Combine(old, "other.txt"), "unrelated");
 
-        using (new FileStream(locked, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete))
+        // UnixではFileShare.Noneだけが排他ロックになるため、実際にロックされた入力を用意する。
+        var share = OperatingSystem.IsWindows() ? FileShare.ReadWrite | FileShare.Delete : FileShare.None;
+        using (new FileStream(locked, FileMode.Open, FileAccess.Write, share))
         {
             LegacyLogMigration.Move(old, current);
             Assert.True(File.Exists(locked));
