@@ -1,0 +1,287 @@
+name: Bun security maintenance
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  BUN_SECURITY_LEDGER_ISSUE: ${{ vars.BUN_SECURITY_LEDGER_ISSUE }}
+
+concurrency:
+  group: bun-security-maintenance
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      statuses: read
+      actions: read
+      checks: read
+    outputs:
+      has_changes: ${{ steps.pr.outputs.has_changes }}
+      pr_number: ${{ steps.pr.outputs.pr_number }}
+      base_sha: ${{ steps.pr.outputs.base_sha }}
+      head_sha: ${{ steps.pr.outputs.head_sha }}
+      merge_sha: ${{ steps.pr.outputs.merge_sha }}
+      remaining_count: ${{ steps.pr.outputs.remaining_count }}
+      needs_followup: ${{ steps.pr.outputs.needs_followup }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Prepare native Bun
+        shell: pwsh
+        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
+      - name: Reconcile previous native merge
+        id: reconcile
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUN_SECURITY_NATIVE_MERGE_ACTIVATED: ${{ vars.BUN_SECURITY_NATIVE_MERGE_ACTIVATED }}
+          DEPENDENCY_GUARD_APP_ID: ${{ vars.DEPENDENCY_GUARD_APP_ID }}
+          DEPENDENCY_GUARD_APP_CLIENT_ID: ${{ vars.DEPENDENCY_GUARD_APP_CLIENT_ID }}
+          DEPENDENCY_GUARD_APP_SLUG: ${{ vars.DEPENDENCY_GUARD_APP_SLUG }}
+          DEPENDENCY_GUARD_APP_BOT_ID: ${{ vars.DEPENDENCY_GUARD_APP_BOT_ID }}
+          DEPENDENCY_GUARD_RULESET_ID: ${{ vars.DEPENDENCY_GUARD_RULESET_ID }}
+          DEPENDENCY_GUARD_RULESET_UPDATED_AT: ${{ vars.DEPENDENCY_GUARD_RULESET_UPDATED_AT }}
+        run: bun build/scripts/security/Security-Pull-Request.mjs reconcile
+      - name: Test automation safeguards without package installation
+        env:
+          BUN_SECURITY_TEST_ROOT: ${{ runner.temp }}
+        shell: bash
+        run: |
+          # fixture の警告を実際の監査の annotation として扱わない。
+          token="$(cat /proc/sys/kernel/random/uuid)"
+          echo "::stop-commands::$token"
+          set +e
+          bun test ./build/scripts/security
+          result=$?
+          echo "::$token::"
+          exit "$result"
+      # 候補のライフサイクルは実行しない。生の監査は除外せず記録する。
+      - name: Audit and prepare isolated security fixes
+        id: audit
+        if: steps.reconcile.outputs.main_updated != 'true'
+        shell: bash
+        run: |
+          set +e
+          bun build/scripts/security/Maintain-Security.mjs fix --repo "$GITHUB_WORKSPACE/build/scripts" --temp-root "$RUNNER_TEMP" --output "$RUNNER_TEMP/bun-security.json"
+          result=$?
+          if [ "$result" -ne 0 ] && [ "$result" -ne 2 ]; then exit "$result"; fi
+      - name: Report blocked reconciliation
+        if: always() && steps.reconcile.outputs.blocked == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REASON: ${{ steps.reconcile.outputs.reason }}
+          FAILURE_MESSAGE: ${{ steps.reconcile.outputs.failure_message }}
+        run: |
+          printf '### Native merge reconciliation\n\n%s\n' "$REASON" >> "$GITHUB_STEP_SUMMARY"
+          bun build/scripts/security/Security-Pull-Request.mjs report --status native-merge-unresolved --details "$REASON $FAILURE_MESSAGE"
+      - name: Fail on reconciliation error
+        if: always() && steps.reconcile.outcome == 'failure'
+        run: |
+          printf '### Native merge reconciliation\n\nFailed; candidate updates are blocked. See the reconciliation step log.\n' >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+      - name: Create or refresh security pull request
+        id: pr
+        if: steps.reconcile.outputs.blocked == 'false' && steps.reconcile.outputs.main_updated != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun build/scripts/security/Security-Pull-Request.mjs prepare --report "$RUNNER_TEMP/bun-security.json" --checkout "$GITHUB_WORKSPACE"
+      - name: Publish audit summary and unresolved notification
+        if: always() && steps.audit.outcome != 'skipped'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ALLOW_CLOSE: ${{ steps.reconcile.outcome == 'success' && steps.reconcile.outputs.blocked == 'false' && steps.audit.outcome == 'success' && steps.pr.outcome == 'success' }}
+        run: bun build/scripts/security/Security-Pull-Request.mjs report --report "$RUNNER_TEMP/bun-security.json" --allow-close "$ALLOW_CLOSE"
+
+
+  validate:
+    name: Validate fixed merge
+    needs: prepare
+    if: needs.prepare.outputs.has_changes == 'true'
+    permissions:
+      contents: read
+      pull-requests: read
+    uses: ./.github/workflows/dependency-validation.yml
+    with:
+      mode: bun-security
+      pr: ${{ needs.prepare.outputs.pr_number }}
+      base_sha: ${{ needs.prepare.outputs.base_sha }}
+      head_sha: ${{ needs.prepare.outputs.head_sha }}
+      merge_sha: ${{ needs.prepare.outputs.merge_sha }}
+
+  attest:
+    needs: [prepare, validate]
+    if: needs.prepare.outputs.has_changes == 'true' && needs.validate.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+      actions: read
+      checks: read
+      statuses: read
+    outputs:
+      ready: ${{ steps.attest.outputs.ready || 'false' }}
+      merge_state: ${{ steps.attest.outputs.merge_state }}
+      hold_reason: ${{ steps.attest.outputs.hold_reason }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Prepare trusted native Bun
+        shell: pwsh
+        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
+      - name: Verify the validated merge snapshot
+        id: attest
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ needs.prepare.outputs.pr_number }}
+          BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+          HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
+          MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
+        run: bun build/scripts/security/Security-Pull-Request.mjs attest --pr "$PR" --base-sha "$BASE_SHA" --head-sha "$HEAD_SHA" --merge-sha "$MERGE_SHA" --validation-success true
+
+  merge:
+    needs: [prepare, validate, attest]
+    if: needs.prepare.outputs.has_changes == 'true' && needs.validate.result == 'success' && needs.attest.outputs.ready == 'true' && vars.BUN_SECURITY_NATIVE_MERGE_ACTIVATED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: read
+      checks: read
+      statuses: read
+      actions: read
+    outputs:
+      merged: ${{ steps.merge.outputs.merged }}
+      hold_reason: ${{ steps.merge.outputs.hold_reason || steps.guard.outputs.hold_reason }}
+      merge_state: ${{ steps.merge.outputs.merge_state || steps.guard.outputs.merge_state }}
+      failure_message: ${{ steps.merge.outputs.failure_message }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Prepare native Bun
+        shell: pwsh
+        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
+      - name: Create restricted guard App token
+        id: guard-token
+        if: vars.DEPENDENCY_GUARD_APP_CLIENT_ID != '' && vars.DEPENDENCY_GUARD_APP_ID != '' && vars.DEPENDENCY_GUARD_RULESET_ID != '' && vars.DEPENDENCY_GUARD_RULESET_UPDATED_AT != ''
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510
+        with:
+          client-id: ${{ vars.DEPENDENCY_GUARD_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DEPENDENCY_GUARD_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-statuses: write
+      - name: Verify and sign the exact head
+        id: guard
+        if: steps.guard-token.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPENDENCY_GUARD_APP_TOKEN: ${{ steps.guard-token.outputs.token }}
+          DEPENDENCY_GUARD_ACTION_SLUG: ${{ steps.guard-token.outputs.app-slug }}
+          DEPENDENCY_GUARD_APP_CLIENT_ID: ${{ vars.DEPENDENCY_GUARD_APP_CLIENT_ID }}
+          DEPENDENCY_GUARD_APP_SLUG: ${{ vars.DEPENDENCY_GUARD_APP_SLUG }}
+          DEPENDENCY_GUARD_APP_BOT_ID: ${{ vars.DEPENDENCY_GUARD_APP_BOT_ID }}
+          DEPENDENCY_GUARD_APP_ID: ${{ vars.DEPENDENCY_GUARD_APP_ID }}
+          DEPENDENCY_GUARD_RULESET_ID: ${{ vars.DEPENDENCY_GUARD_RULESET_ID }}
+          DEPENDENCY_GUARD_RULESET_UPDATED_AT: ${{ vars.DEPENDENCY_GUARD_RULESET_UPDATED_AT }}
+          BUN_SECURITY_NATIVE_MERGE_ACTIVATED: ${{ vars.BUN_SECURITY_NATIVE_MERGE_ACTIVATED }}
+          PR: ${{ needs.prepare.outputs.pr_number }}
+          BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+          HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
+          MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
+        run: bun build/scripts/security/Security-Pull-Request.mjs sign --pr "$PR" --base-sha "$BASE_SHA" --head-sha "$HEAD_SHA" --merge-sha "$MERGE_SHA" --validation-success true
+      - name: Merge exactly the tested snapshot
+        id: merge
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUN_SECURITY_NATIVE_MERGE_ACTIVATED: ${{ vars.BUN_SECURITY_NATIVE_MERGE_ACTIVATED }}
+          DEPENDENCY_GUARD_APP_SLUG: ${{ vars.DEPENDENCY_GUARD_APP_SLUG }}
+          DEPENDENCY_GUARD_APP_CLIENT_ID: ${{ vars.DEPENDENCY_GUARD_APP_CLIENT_ID }}
+          DEPENDENCY_GUARD_APP_BOT_ID: ${{ vars.DEPENDENCY_GUARD_APP_BOT_ID }}
+          DEPENDENCY_GUARD_APP_ID: ${{ vars.DEPENDENCY_GUARD_APP_ID }}
+          DEPENDENCY_GUARD_RULESET_ID: ${{ vars.DEPENDENCY_GUARD_RULESET_ID }}
+          DEPENDENCY_GUARD_RULESET_UPDATED_AT: ${{ vars.DEPENDENCY_GUARD_RULESET_UPDATED_AT }}
+          STATUS_ID: ${{ steps.guard.outputs.status_id }}
+          NONCE: ${{ steps.guard.outputs.nonce }}
+          PR: ${{ needs.prepare.outputs.pr_number }}
+          BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+          HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
+          MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
+        run: bun build/scripts/security/Security-Pull-Request.mjs merge --pr "$PR" --base-sha "$BASE_SHA" --head-sha "$HEAD_SHA" --merge-sha "$MERGE_SHA" --status-id "$STATUS_ID" --nonce "$NONCE" --validation-success true
+
+  report-failure:
+    needs: [prepare, validate, attest, merge]
+    if: always() && (needs.prepare.result == 'failure' || (needs.prepare.outputs.has_changes == 'true' && (needs.validate.result == 'failure' || needs.attest.result == 'failure' || needs.merge.result == 'failure')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Prepare native Bun
+        shell: pwsh
+        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
+      - name: Update one actionable notification
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ needs.prepare.outputs.pr_number }}
+          DETAILS: "prepare=${{ needs.prepare.result }}, validation=${{ needs.validate.result }}, attest=${{ needs.attest.result }}, merge=${{ needs.merge.result }}, merged=${{ needs.merge.outputs.merged }}, reason=${{ needs.merge.outputs.hold_reason }}"
+        run: bun build/scripts/security/Security-Pull-Request.mjs report --status validation-failed --details "$DETAILS" --pr "$PR"
+
+  report-held:
+    needs: [prepare, validate, attest, merge]
+    if: always() && (needs.prepare.result == 'cancelled' || (needs.prepare.outputs.has_changes == 'true' && needs.prepare.result == 'success' && needs.validate.result != 'failure' && needs.attest.result != 'failure' && needs.merge.result != 'failure' && (needs.validate.result != 'success' || needs.attest.result != 'success' || vars.BUN_SECURITY_NATIVE_MERGE_ACTIVATED != 'true' || needs.attest.outputs.ready != 'true' || needs.merge.result != 'success' || needs.merge.outputs.merged != 'true')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Prepare trusted native Bun
+        shell: pwsh
+        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
+      - name: Report validated configuration wait or unresolved native request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ needs.prepare.outputs.pr_number }}
+          ATTEST_READY: ${{ needs.attest.outputs.ready }}
+          ACTIVATED: ${{ vars.BUN_SECURITY_NATIVE_MERGE_ACTIVATED }}
+          PREPARE_RESULT: ${{ needs.prepare.result }}
+          VALIDATE_RESULT: ${{ needs.validate.result }}
+          ATTEST_RESULT: ${{ needs.attest.result }}
+          MERGE_RESULT: ${{ needs.merge.result }}
+          STATE: ${{ needs.merge.outputs.merge_state || needs.attest.outputs.merge_state }}
+          DETAILS: "prepare=${{ needs.prepare.result }}, validation=${{ needs.validate.result }}, attest=${{ needs.attest.result }}, merge=${{ needs.merge.result }}, state=${{ needs.merge.outputs.merge_state || needs.attest.outputs.merge_state }}, activation=${{ vars.BUN_SECURITY_NATIVE_MERGE_ACTIVATED }}, reason=${{ needs.merge.outputs.hold_reason || needs.attest.outputs.hold_reason }}, failure=${{ needs.merge.outputs.failure_message }}"
+        run: |
+          status=validated-awaiting-configuration
+          if [ "$PREPARE_RESULT" = 'cancelled' ] || [ "$VALIDATE_RESULT" != 'success' ] || [ "$ATTEST_RESULT" != 'success' ] || [ "$MERGE_RESULT" = 'cancelled' ] || { [ "$ATTEST_READY" = 'true' ] && [ "$ACTIVATED" = 'true' ]; }; then status=native-merge-unresolved; fi
+          bun build/scripts/security/Security-Pull-Request.mjs report --status "$status" --details "$DETAILS" --pr "$PR"

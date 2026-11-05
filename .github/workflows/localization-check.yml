@@ -4,12 +4,21 @@ on:
     branches: [main]
     paths:
       - 'src/Resources/Locales/**'
+      - 'build/scripts/**'
+      - 'tests/Localization.E2E/**'
+      - '.github/workflows/localization-check.yml'
   pull_request:
     branches: [main]
     paths:
       - 'src/Resources/Locales/**'
+      - 'build/scripts/**'
+      - 'tests/Localization.E2E/**'
+      - '.github/workflows/localization-check.yml'
   workflow_dispatch:
   workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
   localization-check:
@@ -19,50 +28,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
+          persist-credentials: false
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-        with:
-          version: 12.16.1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: '26.13.0'
-          cache: 'pnpm'
-          cache-dependency-path: build/scripts/pnpm-lock.yaml
+      - name: Set up native Bun
+        shell: pwsh
+        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
 
       - name: Install dependencies
-        # pnpm install --frozen-lockfile は pnpm-lock.yaml と厳格に一致するバージョンを取得するため、
-        # サプライチェーン攻撃（レジストリ上のバージョン差し替え）に強い。
-        # path@0.12.7 は node 内蔵モジュールの非推奨 npm 版のため削除（pnpm-lock.yaml にも含まれていない）。
         working-directory: build/scripts
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Verify failure and write protection
+        env:
+          KOMOREBI_LOCALIZATION_ARTIFACTS: ${{ runner.temp }}
+        run: |
+          bun test tests/Localization.E2E/Run.test.mjs
+          bun tests/Localization.E2E/Run.mjs --artifacts "$RUNNER_TEMP"
 
       - name: Run localization check
-        run: node build/scripts/localization-check.js
-
-      - name: Commit changes
-        if: github.event_name == 'push'
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          if [ -n "$(git status --porcelain)" ]; then
-            git add docs/TRANSLATION.md src/Resources/Locales/*.axaml
-            git commit -m 'doc: Update translation status and sort locale files'
-            git push
-          else
-            echo "No changes to commit"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun build/scripts/localization-check.js
 
       - name: Verify no changes (PR only)
         if: github.event_name == 'pull_request'
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            echo "::error::Localization files need updating. Run 'node build/scripts/localization-check.js' locally and commit the changes."
+            echo "::error::Localization files need updating. Run 'bun build/scripts/localization-check.js' locally and commit the changes."
             git diff --stat
             exit 1
           fi

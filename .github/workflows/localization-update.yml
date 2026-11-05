@@ -1,0 +1,123 @@
+name: Update localization
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/Resources/Locales/**'
+      - 'build/scripts/**'
+      - 'tests/Localization.E2E/**'
+      - '.github/scripts/localization-*.sh'
+      - '.github/scripts/localization-*.cs'
+      - '.github/workflows/localization-update.yml'
+
+permissions: {}
+
+jobs:
+  generate-localization:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Set up native Bun
+        shell: pwsh
+        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
+
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+
+      - name: Install dependencies
+        working-directory: build/scripts
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Verify failure and write protection
+        env:
+          KOMOREBI_LOCALIZATION_ARTIFACTS: ${{ runner.temp }}
+        run: |
+          test -z "${GH_TOKEN:-}${GITHUB_TOKEN:-}"
+          ! git config --local --get-regexp '^http\..*\.extraheader$'
+          bash tests/Localization.E2E/Workflow.test.sh "$RUNNER_TEMP"
+          bun test tests/Localization.E2E/Run.test.mjs
+          bun tests/Localization.E2E/Run.mjs --artifacts "$RUNNER_TEMP"
+
+      - name: Run localization check
+        run: bun build/scripts/localization-check.js
+
+      - name: Upload generated localization
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: localization-generated
+          path: |
+            docs/TRANSLATION.md
+            src/Resources/Locales/*.axaml
+          if-no-files-found: error
+          retention-days: 1
+
+  update-localization:
+    needs: generate-localization
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout trusted repository revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Download generated localization
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: localization-generated
+          path: ${{ runner.temp }}/localization-generated
+
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          global-json-file: global.json
+
+      - name: Validate and apply generated files
+        run: bash .github/scripts/localization-apply.sh "$RUNNER_TEMP/localization-generated"
+
+      - name: Check guard configuration
+        id: guard-config
+        run: bash .github/scripts/localization-update.sh --guard-config
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GUARD_CLIENT_ID: ${{ vars.DEPENDENCY_GUARD_APP_CLIENT_ID }}
+          GUARD_APP_ID: ${{ vars.DEPENDENCY_GUARD_APP_ID }}
+          GUARD_APP_SLUG: ${{ vars.DEPENDENCY_GUARD_APP_SLUG }}
+          GUARD_BOT_ID: ${{ vars.DEPENDENCY_GUARD_APP_BOT_ID }}
+          GUARD_PRIVATE_KEY: ${{ secrets.DEPENDENCY_GUARD_PRIVATE_KEY }}
+          GUARD_REPOSITORY_ID: ${{ github.event.repository.id }}
+
+      - name: Create guard App token
+        id: guard-token
+        if: steps.guard-config.outputs.enabled == 'true'
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
+        with:
+          client-id: ${{ vars.DEPENDENCY_GUARD_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DEPENDENCY_GUARD_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-statuses: write
+
+      - name: Commit changes
+        run: bash .github/scripts/localization-update.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GUARD_ENABLED: ${{ steps.guard-config.outputs.enabled }}
+          GUARD_CLIENT_ID: ${{ vars.DEPENDENCY_GUARD_APP_CLIENT_ID }}
+          GUARD_APP_ID: ${{ vars.DEPENDENCY_GUARD_APP_ID }}
+          GUARD_EXPECTED_SLUG: ${{ vars.DEPENDENCY_GUARD_APP_SLUG }}
+          GUARD_BOT_ID: ${{ vars.DEPENDENCY_GUARD_APP_BOT_ID }}
+          GUARD_APP_TOKEN: ${{ steps.guard-token.outputs.token }}
+          GUARD_APP_SLUG: ${{ steps.guard-token.outputs.app-slug }}
+          GUARD_REPOSITORY_ID: ${{ github.event.repository.id }}
+          GUARD_HELPER: ${{ steps.guard-config.outputs.helper }}

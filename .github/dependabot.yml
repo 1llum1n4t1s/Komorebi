@@ -19,7 +19,8 @@ updates:
       - patch
   commit-message:
     prefix: deps
-- package-ecosystem: npm
+# セキュリティ監査・自動修正は dependency-security.yml で毎日実行する。
+- package-ecosystem: bun
   directory: /build/scripts
   schedule:
     interval: weekly

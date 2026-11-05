@@ -55,8 +55,40 @@ dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "Fully
 dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ParseLine_Untracked"
 
 # Localization validation (CI enforced)
-node build/scripts/localization-check.js
+bun build/scripts/localization-check.js
 ```
+
+ローカライズ用依存は `cd build/scripts` で `bun install --frozen-lockfile --ignore-scripts` を実行する。`packageManager` で指定した Bun を使い、Node.js・pnpm は不要。Bun の真の AOT は安定版対応待ちのため、現状は Bun ランタイムで実行する。
+
+Bun 依存の脆弱性は `.github/workflows/dependency-security.yml` が毎日監査する。隔離領域で安全な修正だけを準備し、`build/scripts/package.json` と `build/scripts/bun.lock` に限定した PR を作成する。候補なしの日は prepare だけを実行し、候補がある場合だけ固定 base/head/merge の重い検証へ進む。NuGet 等は既存の Dependabot を維持する。
+
+Bun の通常バージョン更新も Dependabot が毎週月曜09:00（日本時間）に行い、minor/patch は集約し major は個別 PR にする。承認待ちの CI を重複扱いするのは、既知の検証ワークフローについて、信頼済み保守 run の同じ attempt で固定 merge の全検証ジョブが成功した証拠がある場合だけ。未知のチェック・失敗・未完了は保留する。
+
+自動マージは既定OFF。repository variable `BUN_SECURITY_NATIVE_MERGE_ACTIVATED` を明示的に `true` にするまで、日次処理は PR 作成・読取専用検証・設定待ち通知に留め、App status や merge API を書き込まない。実 GitHub App の source、ruleset bypass、draft競合を実機で確認するまで有効化しない。
+
+有効時も、main だけに適用される active・strict=true の required status `kagayoi/automation-merge-guard-v1` と、その source App・ruleset ID・更新日時が固定値と一致しなければ保留する。設定値は `DEPENDENCY_GUARD_APP_CLIENT_ID`、`DEPENDENCY_GUARD_APP_ID`、`DEPENDENCY_GUARD_APP_SLUG`、`DEPENDENCY_GUARD_APP_BOT_ID`、`DEPENDENCY_GUARD_RULESET_ID`、`DEPENDENCY_GUARD_RULESET_UPDATED_AT`、秘密は `DEPENDENCY_GUARD_PRIVATE_KEY`。専用 App の token は対象 repo の statuses:write に限定し、候補コードへ渡さない。署名前に同 token で App の ID・client ID・slug と bot の ID・login を読み、owner の固定値と照合する。GITHUB_TOKEN は merge を担当し、App・GITHUB_TOKEN に bypass がないことを導入前に owner が確認する。
+
+候補は `automation/bun-security-<UUID>` と UUID・`Bun-Security-Automation: v1` を本文に含む commit で区別する。初回 head の親は `[base]`、既存候補の更新は同じ PR・branch に ledger で準備記録を残し、二親 `[oldHead, base]` commit を GraphQL `updateRefs(beforeOid=oldHead, force=false)` で fast-forward CAS する。未知の結果は再送せず保留し、close・draft の同時変更と branch 更新の原子的な連動は保証しない。本人の auto-merge 解除は操作前後に timeline を確認するが、反映遅延や最終読取後から PUT までの同時操作は GitHub API で排除できない。head と固定 merge の tree を一致させ、merge の親 `[base, head]` を確認する。
+
+信頼済み job は同一 run/attempt の固定 merge 検証と PR・本人操作・rule を確認し、nonce と固定 snapshot を ledger に保存・再読後、専用 App で nonce 付き success status を head に発行し、再読した署名証拠を保存する。中断後は同 nonce の status を検索し、再投稿しない。reconcile で merge を確認した run は古い checkout の監査を省き、次回に現 main を監査する。全条件を再確認して PUT intent を記録し、同期 `PUT /pulls/{number}/merge` を `sha=head`・`merge_method=squash` で一度だけ要求する。200後も PR・実commitの親 `[base]`・tree・main祖先を検証する。405/409/422 は確定拒否として記録し、timeout・5xx・不明応答は intent のまま再送せず保留する。status 発行後に他 actor が同じ head を利用して native予約を行わないことは別の信頼前提であり、App source・bypass の実機確認まで activation は OFF のままとする。
+
+固定 issue の bot comment ledger に guard status proof・merge intent・proposal を記録する。管理者は導入時に対象 repository の数値 ID と issue 番号を確定し、本人または Actions bot が作成した専用 open issue の本文を以下の2段落と完全一致させ、repository variable `BUN_SECURITY_LEDGER_ISSUE` にその正整数の issue 番号を設定する。`<repo_id>` と `<issue_number>` は実数値に置き換える。作成や設定は導入承認後に別途行い、未設定・不一致・閉鎖時に自動再初期化しない。
+
+```text
+Bunの脆弱性自動修正の処理状態を保持するIssueです。自動処理のため開いたままにしてください。
+
+<!-- bun-security-ledger-v1:{"version":1,"repo":<repo_id>,"issue":<issue_number>,"state":"idle"} -->
+```
+
+ledger の `preparing` は新 branch・PR 作成前、`preparing-update` は既存 branch のCAS前に記録する。応答不明・head不一致は保留する。`proposal` は PR・branch・base・head・依存2 blob を保持し、本人が閉じた直近候補の同内容再作成を防ぐ。現 PR の candidate または base が変われば同じ PR をCAS更新し、本人の draft・auto-merge解除・予約・未解決要求があれば保留する。完全解決時は proposal だけ解除し PR は閉じない。PUT開始前の失敗だけ `aborted-before-request` として記録し、確定拒否後も同じ snapshot・CI attempt は再送しない。statusだけ存在し対応する ledger proof がない場合は孤立証拠として保留する。
+
+通常通知 issue は ledger と分けて本文を上書きせず、main の audit と未merge候補の audit を区別する。main の未対策が残る間は候補が clean でも通知を維持し、merge 後の新 main は次回実監査まで解決済みにしない。最新 main の audit が clean または正規に検証した mitigated、remaining空・followup/upstreamなし・候補変更なし、ledger idle の場合に限り state を閉じ、close 後に issue と main を再取得する。旧 PR の open は通知閉鎖を妨げない。現時点の Komorebi の承認済み mitigation は空である。ledger issue 自体は閉じない。
+
+Status API と issue comment には CAS がない。直前直後の再読と workflow concurrency を維持し、不明時は保留する。通知 close 後の再取得に失敗した場合は job を失敗させ、通知は API が利用できるときに best effort で記録する。他人の issue は自動 reopen しない。
+
+ローカライズ CLI は全 XML の読込・解析・生成が成功するまで書き込まない。書込中の障害まで原子的に復旧するものではない。
+
+`localization-check.yml` は `contents: read` で PR・再利用呼出しを検証する。main への push 時の翻訳整形・文書の自動コミットは、`contents: write` を明示した `localization-update.yml` が担当する。
 
 Test project: `tests/Komorebi.Tests/` — xUnit v3, references `src/Komorebi.csproj`.
 
@@ -71,7 +103,7 @@ Test project: `tests/Komorebi.Tests/` — xUnit v3, references `src/Komorebi.csp
 | クローン、長いパス復旧、サブモジュール認証 | `dotnet run --project tests/CloneLongPaths.E2E/CloneLongPaths.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'` | [実 Git のクローンと復旧](tests/CloneLongPaths.E2E/README.md) |
 | API キー保存、IPC のロック・転送・復旧 | `dotnet run --project tests/Recovery.E2E/Recovery.E2E.csproj -c Release -p:DisableAOT=true` | [実暗号化と別プロセス](tests/Recovery.E2E/README.md) |
 | 画像差分、View 再利用、Fetch/Pull/Push の入力、About | `dotnet run --project tests/UIWorkflow.E2E/UIWorkflow.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'` | [実 AXAML・Headless 入力と画像](tests/UIWorkflow.E2E/README.md) |
-| ローカライズ検証 CLI の失敗時終了 | `bun tests/Localization.E2E/Run.mjs` | 読込失敗時の exit 1 と書込抑止。本番 CI と同じ Node CLI を子プロセスで検証する。`--node <実行ファイル>`、`--artifacts <絶対パス>` で検証対象・成果物の親ディレクトリを指定可 |
+| ローカライズ検証 CLI の失敗時終了 | `bun tests/Localization.E2E/Run.mjs` | 読込失敗時の exit 1 と書込抑止。本番 CI と同じ Bun CLI を子プロセスで検証する。`--bun <実行ファイル>`、`--artifacts <絶対パス>` で検証対象・成果物の親ディレクトリを指定可 |
 
 ローカライズ E2E ハーネス変更時は `bun test tests/Localization.E2E/Run.test.mjs` も実行し、書込み例外を握りつぶす CLI の書込み試行が検出されることを確認する。テストの成果物の親ディレクトリは `KOMOREBI_LOCALIZATION_ARTIFACTS` で指定できる。
 

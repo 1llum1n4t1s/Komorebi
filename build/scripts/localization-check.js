@@ -2,7 +2,9 @@ const fs = require('fs-extra');
 const path = require('path');
 const xml2js = require('xml2js');
 
-const repoRoot = path.join(__dirname, '../../');
+// テストや別の作業ツリーでは --repo で対象を指定する。
+const { values } = require('node:util').parseArgs({ options: { repo: { type: 'string' } } });
+const repoRoot = values.repo ? path.resolve(values.repo) : path.join(__dirname, '../../');
 const localesDir = path.join(repoRoot, 'src/Resources/Locales');
 const enUSFile = path.join(localesDir, 'en_US.axaml');
 const outputFile = path.join(repoRoot, 'docs/TRANSLATION.md');
@@ -34,9 +36,10 @@ async function calculateTranslationRate() {
     const enUSKeys = new Set(enUSData.ResourceDictionary['x:String'].map(item => item.$['x:Key']));
     // 上流との差分: 並べ替えごとの線形検索を避け、全ロケールで同じ索引を共有する。
     const enUSKeyOrder = new Map([...enUSKeys].map((key, index) => [key, index]));
-    const files = (await fs.readdir(localesDir)).filter(file => file !== 'en_US.axaml' && file.endsWith('.axaml'));
+    const files = (await fs.readdir(localesDir)).filter(file => file !== 'en_US.axaml' && file.endsWith('.axaml')).sort();
 
     const lines = [];
+    const pendingWrites = [];
 
     lines.push('# Translation Status');
     lines.push('This document shows the translation status of each locale file in the repository.');
@@ -54,7 +57,7 @@ async function calculateTranslationRate() {
         const sortedAndCleaned = filterAndSortTranslations(localeData, enUSKeyOrder);
         localeData.ResourceDictionary['x:String'] = sortedAndCleaned;
 
-        // Save the updated file
+        // 全ロケールの読込・解析・生成が成功してからまとめて書き込む。
         const builder = new xml2js.Builder({
             headless: true,
             renderOpts: { pretty: true, indent: '  ' }
@@ -63,7 +66,7 @@ async function calculateTranslationRate() {
 
         // Add an empty line before the first x:String
         xmlStr = xmlStr.replace('  <x:String', '\n  <x:String');
-        await fs.writeFile(filePath, xmlStr + '\n', 'utf8');
+        pendingWrites.push([filePath, xmlStr + '\n']);
 
         if (missingKeys.length > 0) {
             const progress = ((enUSKeys.size - missingKeys.length) / enUSKeys.size) * 100;
@@ -78,7 +81,9 @@ async function calculateTranslationRate() {
 
     const content = lines.join('\n\n');
     console.log(content);
-    await fs.writeFile(outputFile, content, 'utf8');
+    pendingWrites.push([outputFile, content]);
+    // 書込中の障害に対する原子性は保証しない。
+    for (const [filePath, data] of pendingWrites) await fs.writeFile(filePath, data, 'utf8');
 }
 
 calculateTranslationRate().catch(err => {
