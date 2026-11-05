@@ -33,8 +33,8 @@ dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64 -p:DisableAO
 dotnet build -p:DisableUpdateDetection=true
 ```
 
-`Directory.Build.props` enforces strict build-time analysis:
-- `EnforceCodeStyleInBuild=true` — IDE diagnostics (e.g. `IDE0005` unused usings) are promoted to build errors. A failing `dotnet build` may simply be an unused `using` — fix it rather than suppressing.
+`Directory.Build.props` は厳格な build 時検査を強制する:
+- `EnforceCodeStyleInBuild=true` — IDE 診断を build error にする。未使用 `using` は抑制せず修正する。
 - `GenerateDocumentationFile=true` — required for `IDE0005` to detect unused usings; produces an XML doc next to the assembly.
 - `NoWarn=CS1591` — silences "missing XML doc comment" warnings so IDE-style analysis stays the only signal.
 - `<Version>` here is the source of truth for both packaging and Velopack.
@@ -48,12 +48,6 @@ dotnet build -p:DisableUpdateDetection=true
 # Run application tests
 dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj
 
-# Run specific test class
-dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ChangeTests"
-
-# Run specific test method
-dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj --filter "FullyQualifiedName~ParseLine_Untracked"
-
 # Localization validation (CI enforced)
 bun build/scripts/localization-check.js
 ```
@@ -62,16 +56,13 @@ bun build/scripts/localization-check.js
 
 Bun 依存の脆弱性は `.github/workflows/dependency-security.yml` が毎日監査する。隔離領域で安全な修正だけを準備し、`build/scripts/package.json` と `build/scripts/bun.lock` に限定した PR を作成する。候補なしの日は prepare だけを実行し、候補がある場合だけ固定 base/head/merge の重い検証へ進む。NuGet 等は既存の Dependabot を維持する。
 
-Bun の通常バージョン更新も Dependabot が毎週月曜09:00（日本時間）に行い、minor/patch は集約し major は個別 PR にする。承認待ちの CI を重複扱いするのは、既知の検証ワークフローについて、信頼済み保守 run の同じ attempt で固定 merge の全検証ジョブが成功した証拠がある場合だけ。未知のチェック・失敗・未完了は保留する。
+Bun の通常更新は Dependabot で行い、minor/patch は集約、major は個別 PR にする。日程は [.github/dependabot.yml](.github/dependabot.yml) を参照する。承認待ちの CI を重複扱いするのは、既知の検証ワークフローについて、信頼済み保守 run の同じ attempt で固定 merge の全検証ジョブが成功した証拠がある場合だけ。未知のチェック・失敗・未完了は保留する。
 
 自動マージは既定OFF。repository variable `BUN_SECURITY_NATIVE_MERGE_ACTIVATED` を明示的に `true` にするまで、日次処理は PR 作成・読取専用検証・設定待ち通知に留め、App status や merge API を書き込まない。実 GitHub App の source、ruleset bypass、draft競合を実機で確認するまで有効化しない。
 
 有効時も、main だけに適用される active・strict=true の required status `kagayoi/automation-merge-guard-v1` と、その source App・ruleset ID・更新日時が固定値と一致しなければ保留する。設定値は `DEPENDENCY_GUARD_APP_CLIENT_ID`、`DEPENDENCY_GUARD_APP_ID`、`DEPENDENCY_GUARD_APP_SLUG`、`DEPENDENCY_GUARD_APP_BOT_ID`、`DEPENDENCY_GUARD_RULESET_ID`、`DEPENDENCY_GUARD_RULESET_UPDATED_AT`、秘密は `DEPENDENCY_GUARD_PRIVATE_KEY`。専用 App の token は対象 repo の statuses:write に限定し、候補コードへ渡さない。署名前に同 token で App の ID・client ID・slug と bot の ID・login を読み、owner の固定値と照合する。GITHUB_TOKEN は merge を担当し、App・GITHUB_TOKEN に bypass がないことを導入前に owner が確認する。
 
-候補は `automation/bun-security-<UUID>` と UUID・`Bun-Security-Automation: v1` を本文に含む commit で区別する。初回 head の親は `[base]`、既存候補の更新は同じ PR・branch に ledger で準備記録を残し、二親 `[oldHead, base]` commit を GraphQL `updateRefs(beforeOid=oldHead, force=false)` で fast-forward CAS する。未知の結果は再送せず保留し、close・draft の同時変更と branch 更新の原子的な連動は保証しない。本人の auto-merge 解除は操作前後に timeline を確認するが、反映遅延や最終読取後から PUT までの同時操作は GitHub API で排除できない。head と固定 merge の tree を一致させ、merge の親 `[base, head]` を確認する。
-
-信頼済み job は同一 run/attempt の固定 merge 検証と PR・本人操作・rule を確認し、nonce と固定 snapshot を ledger に保存・再読後、専用 App で nonce 付き success status を head に発行し、再読した署名証拠を保存する。中断後は同 nonce の status を検索し、再投稿しない。reconcile で merge を確認した run は古い checkout の監査を省き、次回に現 main を監査する。全条件を再確認して PUT intent を記録し、同期 `PUT /pulls/{number}/merge` を `sha=head`・`merge_method=squash` で一度だけ要求する。200後も PR・実commitの親 `[base]`・tree・main祖先を検証する。405/409/422 は確定拒否として記録し、timeout・5xx・不明応答は intent のまま再送せず保留する。status 発行後に他 actor が同じ head を利用して native予約を行わないことは別の信頼前提であり、App source・bypass の実機確認まで activation は OFF のままとする。
-
+候補の識別、固定 base/head/merge の検証、CAS 更新、署名付き status と merge intent の記録・照合は [dependency-security.yml](.github/workflows/dependency-security.yml) と [Native-Merge.mjs](build/scripts/security/Native-Merge.mjs)、[Security-Pull-Request.mjs](build/scripts/security/Security-Pull-Request.mjs) を変更前に読む。専用 App の status と ledger の証拠を再読し、同じ head に対する他 actor の native 予約は防げない前提を維持する。タイムアウト・不明応答・不一致は再送せず保留し、確定拒否後も同一 snapshot・CI attempt を再送しない。merge 応答後も PR・commit の親と tree・main 祖先を確認する。
 固定 issue の bot comment ledger に guard status proof・merge intent・proposal を記録する。管理者は導入時に対象 repository の数値 ID と issue 番号を確定し、本人または Actions bot が作成した専用 open issue の本文を以下の2段落と完全一致させ、repository variable `BUN_SECURITY_LEDGER_ISSUE` にその正整数の issue 番号を設定する。`<repo_id>` と `<issue_number>` は実数値に置き換える。作成や設定は導入承認後に別途行い、未設定・不一致・閉鎖時に自動再初期化しない。
 
 ```text
@@ -80,17 +71,14 @@ Bunの脆弱性自動修正の処理状態を保持するIssueです。自動処
 <!-- bun-security-ledger-v1:{"version":1,"repo":<repo_id>,"issue":<issue_number>,"state":"idle"} -->
 ```
 
-ledger の `preparing` は新 branch・PR 作成前、`preparing-update` は既存 branch のCAS前に記録する。応答不明・head不一致は保留する。`proposal` は PR・branch・base・head・依存2 blob を保持し、本人が閉じた直近候補の同内容再作成を防ぐ。現 PR の candidate または base が変われば同じ PR をCAS更新し、本人の draft・auto-merge解除・予約・未解決要求があれば保留する。完全解決時は proposal だけ解除し PR は閉じない。PUT開始前の失敗だけ `aborted-before-request` として記録し、確定拒否後も同じ snapshot・CI attempt は再送しない。statusだけ存在し対応する ledger proof がない場合は孤立証拠として保留する。
+ledger は作成・更新前の intent、proposal、status proof と merge intent を保持し、未設定・不一致・孤立証拠・不明応答は保留する。本人の draft・auto-merge 解除・予約・未解決要求を尊重し、ledger issue は閉じない。詳細な状態遷移と復旧は [Security-Record.mjs](build/scripts/security/Security-Record.mjs)、[Security-Pull-Request.mjs](build/scripts/security/Security-Pull-Request.mjs)、[Maintain-Security.mjs](build/scripts/security/Maintain-Security.mjs) を読む。
 
-通常通知 issue は ledger と分けて本文を上書きせず、main の audit と未merge候補の audit を区別する。main の未対策が残る間は候補が clean でも通知を維持し、merge 後の新 main は次回実監査まで解決済みにしない。最新 main の audit が clean または正規に検証した mitigated、remaining空・followup/upstreamなし・候補変更なし、ledger idle の場合に限り state を閉じ、close 後に issue と main を再取得する。旧 PR の open は通知閉鎖を妨げない。現時点の Komorebi の承認済み mitigation は空である。ledger issue 自体は閉じない。
-
-Status API と issue comment には CAS がない。直前直後の再読と workflow concurrency を維持し、不明時は保留する。通知 close 後の再取得に失敗した場合は job を失敗させ、通知は API が利用できるときに best effort で記録する。他人の issue は自動 reopen しない。
-
+通常通知は ledger と分け、main と未 merge 候補の監査を区別する。main の未対策がある間や merge 後の新 main の実監査前は解決済みにしない。最新 main の監査、残件・候補と ledger の状態が解決条件を満たす場合だけ通知を閉じ、issue と main を再取得する。承認済み mitigation は現在空。Status API と issue comment に CAS はないため、前後の再読と workflow concurrency を維持し、不明時は保留する。他人の issue は自動 reopen しない。
 ローカライズ CLI は全 XML の読込・解析・生成が成功するまで書き込まない。書込中の障害まで原子的に復旧するものではない。
 
 `localization-check.yml` は `contents: read` で PR・再利用呼出しを検証する。main への push 時の翻訳整形・文書の自動コミットは、`contents: write` を明示した `localization-update.yml` が担当する。
 
-Test project: `tests/Komorebi.Tests/` — xUnit v3, references `src/Komorebi.csproj`.
+
 
 `global.json` は Microsoft.Testing.Platform を選択しているため、テスト実行では上記の `--project` 形式を使う。CI と同じ検証は `dotnet build -c Release -p:RestoreLockedMode=true` の後に `dotnet test --project tests/Komorebi.Tests/Komorebi.Tests.csproj -c Release --no-build` を実行する。
 
@@ -134,18 +122,10 @@ dotnet test --project depends/AvaloniaEdit/test/AvaloniaEdit.Tests/AvaloniaEdit.
 構造・責務・データフローは [DESIGN.md](DESIGN.md) を正本とする。以下は実装変更時に守る手順と制約である。
 
 ### Git Command Layer
-`src/Commands/` wraps git CLI invocations:
-- `Command.cs` is the base — configures `Process.StartInfo`, handles stdout/stderr capture
-- Each subclass sets `Args` and calls `Exec()` or `ExecAsync()`
-- コマンドは操作ごとに生成する。`Args`・`WorkingDirectory`・認証指定・`ErrorMessage` などの実行状態を持つため、同じインスタンスを並行実行しない。`ErrorMessage` は直近の `ExecAsync()` の秘密値除去済みエラーで、再実行ごとにリセットされる。
 
-**Base class shared utilities** (use these instead of re-implementing):
-- `ExecWithSSHKeyAsync(remote)` — fetches SSH key from git config then runs `ExecAsync()` (used by Push/Pull/Fetch)
-- `ResolveGitRelativePath(path)` — resolves a potentially-relative git output path against `WorkingDirectory`
-- `ParseNameStatusLine(line)` — parses `--name-status` output lines (M/A/D/R/C) into `(path, ChangeState)` tuples
-
+Git CLI の共通処理は [Command.cs](src/Commands/Command.cs) を変更時に読む。コマンドは操作ごとに生成し、実行状態を持つ同じインスタンスを並行実行しない。`ErrorMessage` は直近の `ExecAsync()` の秘密値除去済みエラーで、再実行ごとにリセットされる。SSH 実行・git 相対パス・`--name-status` には既存の `ExecWithSSHKeyAsync`・`ResolveGitRelativePath`・`ParseNameStatusLine` を使う。
 ### SSH Key Management
-`src/Models/SSHKeyInfo.cs` scans `~/.ssh/` for private keys and provides a unified selection model. `src/Views/SSHKeyPicker.axaml` is a reusable `UserControl` for key selection with entry types: None (global setting), Key, CustomKey, Browse.
+SSH 鍵の選択・走査を変更するときは [SSHKeyInfo.cs](src/Models/SSHKeyInfo.cs) と [SSHKeyPicker.axaml](src/Views/SSHKeyPicker.axaml) を読む。None（global）・Key・CustomKey・Browse を維持する。
 
 **3-tier fallback strategy** (in `Command.ResolveSSHKeyValue` — pure function, unit testable):
 1. Per-remote setting (`git config remote.<name>.sshkey`)
@@ -154,16 +134,11 @@ dotnet test --project depends/AvaloniaEdit/test/AvaloniaEdit.Tests/AvaloniaEdit.
 
 **Legacy `__NONE__` sentinel**: 旧バージョンで書き込まれた `__NONE__` は「グローバルフォールバックを明示的にスキップ」として読み取り時に尊重する。新 UI からは書き込まず、読み取り専用の凍結レガシーとして `LegacySSHKeyOptOutSentinel` 定数で管理する。
 
-`GIT_SSH_COMMAND` is built in `Command.CreateGitStartInfo` with platform-aware quoting — POSIX single-quote escaping (`SSHKey.Replace("'", "'\\''")`) and `-F '/dev/null'` on Unix, Windows uses double-quote escaping and `-F "NUL"`. The `.Quoted()` helper in `App.Extensions.cs` is used separately for git CLI argument paths (double-quote only) and is kept distinct here rather than reused.
+`GIT_SSH_COMMAND` は `Command.CreateGitStartInfo` の OS 別 quoting を維持する。有効な明示鍵を使う場合、Unix は POSIX single quote と `-F /dev/null`、Windows は double quote と `-F NUL` を使う。鍵が未指定または無効なら親の `GIT_SSH_COMMAND` を尊重し、なければ SSH の既定設定を使う。git CLI path 用 `.Quoted()` を SSH に流用しない。
 
 ### AWS CodeCommit Support
-Three URL formats are supported:
-- **HTTPS**: `https://git-codecommit.{region}.amazonaws.com/v1/repos/{repo}`
-- **SSH**: `ssh://git-codecommit.{region}.amazonaws.com/v1/repos/{repo}`
-- **GRC** (git-remote-codecommit): `codecommit::{region}://{profile}@{repo}`
 
-Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS()`, `TryParseCodeCommitSSH()`, `TryParseCodeCommitGRC()`. `TryGetVisitURL()` and `TryGetCreatePullRequestURL()` convert all three forms to AWS Console URLs. `RemoteProtocolSwitcher` hides for CodeCommit URLs (HTTPS↔SSH auto-conversion not applicable).
-
+CodeCommit の HTTPS・SSH・GRC URL を維持する。変更時は [Remote.cs](src/Models/Remote.cs) の各解析関数と AWS Console URL への変換を確認する。CodeCommit では `RemoteProtocolSwitcher` を表示しない。
 ### Remote Configuration
 `RepositoryConfigure` (VM + View) provides a unified dialog for managing remotes, including fetch/push URL editing, per-remote SSH key selection, and per-remote push prohibition. Push prohibition uses `git remote set-url --push <name> no_push` to set an invalid push URL. `SelectedRemotePushDisabled` detects only `no_push`; a custom push URL different from the fetch URL is valid and must survive unrelated edits.
 
@@ -195,36 +170,19 @@ Key utilities in `Remote.cs`: `IsCodeCommitProtocol()`, `TryParseCodeCommitHTTPS
 - Compile flag `DISABLE_UPDATE_DETECTION` skips update checks entirely
 
 ### Localization
-- XAML resource dictionaries in `src/Resources/Locales/` (18 languages)
-- Supported: ca_ES, de_DE, en_US, es_ES, fil_PH, fr_FR, id_ID, it_IT, ja_JP, ko_KR, la, pt_BR, ru_RU, sa, ta_IN, uk_UA, zh_CN, zh_TW
-- `en_US.axaml` is the reference locale — all other locales must match its key set
-- `build/scripts/localization-check.js` validates translations in CI
-- Keys follow `Text.Category.Name` convention (e.g., `Text.InitSetup.Message`)
-- `Models/Locales.cs` defines the `Locale.Supported` list used in UI dropdowns
-- `App.SetLocale()` swaps the active `ResourceDictionary` at runtime
-- Each locale must be registered in `App.axaml` as `<ResourceInclude x:Key="xx_YY">`
-- First-launch: `InitSetup` initializes the language from `Preferences.DetectedLocale`, then lets the user confirm or change it together with the default clone directory
 
+`src/Resources/Locales/en_US.axaml` を基準に全言語のキーを揃え、`build/scripts/localization-check.js` で検証する。キーは `Text.Category.Name` 形式。言語追加時は `Models/Locales.cs` の `Locale.Supported` と `App.axaml` の `ResourceInclude` を更新する。`App.SetLocale()` で辞書を切り替え、初回は `Preferences.DetectedLocale` を初期値として `InitSetup` で利用者が確認・変更する。
 ### Theme System
-`src/Resources/Themes.axaml` defines 5 built-in themes (Default/Light/Dark/White/OneDark) as `ResourceDictionary` entries with `ThemeVariant` keys. Each theme defines `Color.*` resources that `Brush.*` `SolidColorBrush` resources reference via `DynamicResource`. User-customizable color overrides are applied via `Models/ThemeOverrides.cs` which loads a JSON file and merges overrides into the active resource dictionary at runtime. When adding new themed colors, define both the `Color` and `Brush` in `Themes.axaml` and reference them with `{DynamicResource Brush.MyName}` in AXAML — use resources rather than hardcoding color literals.
 
+色追加時は [Themes.axaml](src/Resources/Themes.axaml) に `Color.*` と `Brush.*` を定義し、AXAML から `{DynamicResource Brush.MyName}` で参照する。色を直書きせず、`Models/ThemeOverrides.cs` による利用者の上書きを維持する。
 ### Alert Dialog for Modal-Context Errors
-`src/Views/Alert.axaml` is a small child modal dialog for displaying errors that occur **inside** an already-open modal dialog (e.g., file picker failures in the Preferences dialog). Use this instead of `App.RaiseException(...)` in modal-dialog code-behind, because the standard inline notification banner is rendered on the parent Launcher window and gets hidden behind the modal.
 
-Usage: `await new Alert().ShowAsync(this, message, isError: true);` — titles are localized via `Launcher.Error` / `Launcher.Info` keys. The dialog is resizable (`CanResize=True` + `MinWidth/MinHeight`) and wraps long messages in a `ScrollViewer`.
-
+既に開いているモーダル内のエラーは親画面のバナーに隠れるため `App.RaiseException` でなく `await new Alert().ShowAsync(this, message, isError: true)` を使う。実装・タイトルのローカライズ・長文表示は [Alert.axaml](src/Views/Alert.axaml) と code-behind を参照する。
 ### Window State Persistence Pattern
-Stand-alone windows persist width/height/position/state across sessions via `ViewModels.LayoutInfo` properties. `FileHistories` and `Blame` use this pattern:
 
-1. **Constructor**: set `Width` / `Height` from `LayoutInfo` (safe — no `Screens` dependency). Leave `Position` unset in the constructor: `App.ShowWindow(...)` will overwrite it with an active-screen-centered value before calling `Show()`, which serves as a deterministic first-launch fallback.
-2. **OnOpened**: call `TryRestoreWindowPosition(x, y, w, h)` (protected helper on `ChromelessWindow`) — returns true if the saved `PixelRect` fits entirely within a connected screen's working area, and sets `Position` accordingly, overriding the centering from step 1. Also restore `WindowState = Maximized` if previously maximized. If `TryRestoreWindowPosition` returns false (first launch, or saved coords on a disconnected monitor), no action is needed — the step-1 centering remains as fallback. Subscribe `PositionChanged` after restoring position and state, so initial centering cannot overwrite the saved position.
-3. **OnSizeChanged** / **OnPositionChanged**: save to `LayoutInfo` only when `WindowState == Normal` (avoid saving maximized/snapped sizes).
-4. **OnPropertyChanged(WindowStateProperty)**: save state only when `!= Minimized` (otherwise a taskbar-minimize would cause the next launch to start minimized).
+`FileHistories`・`Blame` は `ViewModels.LayoutInfo` に幅・高さ・位置・状態を保存する。constructor では寸法だけ復元し、`App.ShowWindow` の中央配置を初回・画面切断時の fallback にする。`OnOpened` で `TryRestoreWindowPosition` が接続中画面内と判定した位置と最大化状態を復元してから `PositionChanged` を購読する。サイズ・位置は Normal 時のみ、状態は Minimized 以外を保存する。中央表示から復元位置への一瞬の移動は許容する。
 
-This order means a returning user with a valid saved position may see a one-frame flash at the centered position before `OnOpened` snaps to the saved coordinates (Avalonia does not expose the required `Screens` state before `OnOpened` for this cross-monitor restore path). The flash is acceptable in exchange for correct fallback on first launch.
-
-`Launcher` is the exception: its constructor restores size and a valid saved position directly (or sets `WindowStartupLocation.CenterScreen`), subscribes `PositionChanged` there, and `OnOpened` restores only maximized/full-screen state. Keep that separate path when changing window persistence.
-
+`Launcher` は例外で constructor で寸法と有効な位置を復元（無効なら CenterScreen）し、位置変更を購読する。`OnOpened` は最大化・フルスクリーン状態だけを復元する。
 ### AI 資格情報の保存
 
 保存方式と復旧時の不変条件は [DESIGN.md](DESIGN.md#設定と資格情報) を参照する。`Service.ProtectedApiKey`・`ProtectedExtraHeaders` と source-generated JSON 経由の実際の保存・復号を `Recovery.E2E` で検証する。既存鍵の読込失敗を鍵の再生成で置き換えず、暗号化・移行失敗時に平文を保存しない。
@@ -251,22 +209,10 @@ This order means a returning user with a valid saved position may see a one-fram
 
 ## Code Style
 
-Enforced via `.editorconfig` and `dotnet format` in CI:
-- 4-space indent for C#, 2-space for XAML/XML/JSON
-- `var` preferred everywhere
-- Braces on new line (Allman style)
-- Private fields: `_camelCase`; private static: `s_camelCase`; constants: `PascalCase`
-- No `this.` qualifier
-- Collection expressions `[]` preferred over `new List<T>()` / `new Dictionary<K,V>()` (C# 12+). Use `List<T> x = []` instead of `var x = new List<T>()`
-
+書式は [.editorconfig](.editorconfig) と CI の `dotnet format --verify-no-changes` を正本とする。C# は Allman 形式、`var` と collection expressions を優先し、private フィールドは `_camelCase`、private static フィールドは `s_camelCase`、定数は `PascalCase` とする。
 ## CI/CD
 
-- **format-check.yml** — `dotnet format --verify-no-changes` on push/PR to `main`
-- **localization-check.yml** — validates locale files against `en_US`
-- **ci.yml** — lightweight: `dotnet build` + `dotnet test` on ubuntu-latest (single runner, no AOT publish)
-- **release.yml** — triggered by push to `release/**` branches: full AOT publish (5 platforms) → packages (zip/deb/rpm/AppImage) → Velopack (osx/linux のみ) → R2 単独配信 (GitHub Releases は作らない)
-- **build.yml** — reusable workflow for 5-platform AOT publish (used by release.yml only。win-* は `package.yml` の standalone zip 用に残置)
-- **velopack.yml** — reusable workflow creating Velopack packages。**win-x64 / win-arm64 は matrix から除外済み** — 未署名 win フィードがローカル署名リリースの成果物を R2 上で上書きしないようにするため
+CI の構成は [.github/workflows](.github/workflows) を参照する。`release/**` push で macOS / Linux と standalone を build・package・配信し、GitHub Releases は作らず R2 単独配信する。Windows の未署名フィードがローカル署名成果物を上書きしないよう `velopack.yml` の matrix に win-x64 / win-arm64 を含めない。
 ### Windows リリース (ローカル実行)
 
 - `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL の取得内容を比較し、不一致の場合だけキャッシュをパージする。全配信ファイルの SHA-256 一致まで確認してから旧版清掃へ進む。HTTP 200 だけを配信完了条件にしない。
@@ -283,33 +229,13 @@ Enforced via `.editorconfig` and `dotnet format` in CI:
 
 Linux builds run directly on `ubuntu-latest` runner (no Docker container). arm64 cross-compilation adds ports.ubuntu.com sources with dynamic codename detection. RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
 
-Version format: `Directory.Build.props` stores the semantic version in the `<Version>` tag. CI reads it directly for both packaging and Velopack.
 
 ## Key Dependencies
 
-- **Avalonia 12.1.4** — cross-platform XAML UI。`Avalonia.Controls.DataGrid` は現在 12.1.2。本体とは指定バージョンが異なるため、更新時は各パッケージの利用可能なバージョンと互換性を確認する。
-- **CommunityToolkit.Mvvm** — MVVM source generators
-- **SuperLightLogger** — logging (NLog-compatible File Target, async writer)
-- **Velopack 1.2.0** — auto-update framework (`VelopackUpdateDialog.Avalonia` 経由の推移的依存)
-- **depends/AvaloniaEdit** — vendored (directly tracked, not a git submodule), text editor for diff/blame。TextMateSharp / TextMateSharp.Grammars は 2.0.4。保守時の制約と追加検証は本書の Tests 節を参照する。
-- **OpenAI 2.14.0 / Azure.AI.OpenAI 2.9.0-beta.1** — AI commit message generation
-- **LiveChartsCore.SkiaSharpView.Avalonia 2.1.0-dev-798** — contribution statistics charts。Avalonia 12 対応版を選び、更新時は `LibraryCompatibilityTests` でチャート生成の互換性を検証する。
-- **BitMiracle.LibTiff.NET / Pfim** — TIFF / DDS image format support in ImageDiffView
-- **Tmds.DBus.Protocol** — Linux desktop DBus integration (notifications, etc.)
-- **AvaloniaUI.DiagnosticsSupport** (Debug builds only) / **CRDebugger.Avalonia** — Avalonia diagnostics helpers
-
-CJK フォントは同梱せず、`InstalledFont.GetLocaleDefaults()` のロケール別フォールバックでシステムフォントを使う。非 CJK 向けの Inter は `Avalonia.Fonts.Inter` NuGet パッケージから提供する。
-
+依存の正本は [src/Komorebi.csproj](src/Komorebi.csproj) と [Directory.Build.props](Directory.Build.props)。Avalonia 本体と DataGrid は指定バージョンが異なるため、更新時は各パッケージの提供版と互換性を確認する。Velopack の更新ではフィード互換性を検証する。LiveChartsCore は Avalonia 12 対応版を選び、更新時に `LibraryCompatibilityTests` でチャート生成を検証する。CJK フォントは同梱せず `InstalledFont.GetLocaleDefaults()` のシステムフォールバックを使い、Inter は NuGet から提供する。
 ## Upstream-Faithful Policy
 
-Komorebi tracks `sourcegit-scm/sourcegit` via periodic cherry-pick batches. To keep future merges tractable, follow these rules when reviewing AI bot suggestions or writing changes that touch files upstream also maintains:
-
-1. **Accept real bugs / regressions** even when they diverge from upstream — e.g., NPE guards (PR #14 `GetActiveWorkspace()?.DefaultCloneDir`), missed `.ToLocalTime()` in `About` (PR #16), latent conditional logic breakage. Add an inline comment noting the deviation from upstream so future sync can either import an equivalent fix or revert intentionally.
-2. **Decline byte-for-byte stylistic suggestions** that only improve the local file — e.g., "Localize this hardcoded error message", "Extract this duplicated helper", "Rename this method for consistency". These turn every cherry-pick into a 3-way merge conflict without net benefit; route them as a PR to upstream instead.
-3. **Komorebi-only architectural decisions** are preserved regardless of upstream churn: `App.RaiseException` (vs upstream's `Models.Notification.Send`), unified `WelcomeToolbar` (vs removed `RepositoryToolbar`), SSH key picker (`SSHKeyPicker` + `LegacySSHKeyOptOutSentinel`), CodeCommit URL handling, Anthropic AI provider, SuperLightLogger, file-scoped namespaces + Japanese XML doc comments, collection expressions `[]`.
-4. **Cherry-pick batches are tracked in** `plan` documents (e.g., `~/.Codex/plans/goofy-finding-ullman.md`) with SHA-level status (applied / declined / deferred). When skipping an upstream commit, record the rationale in the plan so the next sync session doesn't re-evaluate it from scratch.
-5. **When bot reviews repeat the same Decline across rounds**, post one consolidated decline comment and rely on CI-green merges. Bots regularly re-raise closed items; treat recurrence as noise rather than severity escalation.
-
+`sourcegit-scm/sourcegit` の定期 cherry-pick を維持する。実バグ・回帰は upstream との差異をコメントして修正し、単なるローカルのスタイル変更は upstream へ提案する。Komorebi 固有の設計（通知、ツールバー、SSH key picker、CodeCommit、AI provider、logger、名前空間・コメント・collection expression）は保持する。同期時は適用・却下・保留と理由を SHA 単位で記録し、繰り返す bot 指摘はまとめて回答する。同期手順は [docs/UPSTREAM-SYNC.md](docs/UPSTREAM-SYNC.md) を参照する。
 ## ドメイン移行（2026-07 開始・期限 2027/05/31）
 
 屋号を **Kagayoi** に統一したため、配信ドメインを `nephilim.jp` から `kagayoi.com` へ移行中。方針の全体像はユーザーグローバルの `AGENTS.md` §屋号とドメイン を参照する。
