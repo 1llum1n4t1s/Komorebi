@@ -1,23 +1,6 @@
 name: Dependency validation
 
 on:
-  workflow_call:
-    inputs:
-      mode:
-        type: string
-        default: bun-security
-      pr:
-        type: string
-        required: true
-      base_sha:
-        type: string
-        required: true
-      head_sha:
-        type: string
-        required: true
-      merge_sha:
-        type: string
-        required: true
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
@@ -29,8 +12,7 @@ permissions:
 jobs:
   validate:
     name: Validate dependency changes
-    needs: security-guard
-    if: always() && ((inputs.mode == 'bun-security' && needs.security-guard.result == 'success') || (inputs.mode == '' && needs.security-guard.result == 'skipped' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]'))))
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     defaults:
@@ -40,22 +22,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          ref: ${{ inputs.mode == 'bun-security' && format('refs/pull/{0}/merge', inputs.pr) || (github.sha) }}
           fetch-depth: 2
           submodules: true
-      - name: Verify security merge commit and parents
-        if: inputs.mode == 'bun-security'
-        shell: bash
-        working-directory: ${{ github.workspace }}
-        env:
-          BASE_SHA: ${{ inputs.base_sha }}
-          HEAD_SHA: ${{ inputs.head_sha }}
-          MERGE_SHA: ${{ inputs.merge_sha }}
-        run: |
-          set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$MERGE_SHA"
-          test "$(git rev-parse HEAD^1)" = "$BASE_SHA"
-          test "$(git rev-parse HEAD^2)" = "$HEAD_SHA"
       - name: Prepare native Bun build toolchain
         shell: pwsh
         run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
@@ -71,10 +39,8 @@ jobs:
           & (Join-Path $env:GITHUB_WORKSPACE 'tests/R2Transfer/Run.ps1') -WorkRoot (Join-Path $env:RUNNER_TEMP 'r2-transfer-check')
       - name: Validate dependency changes
         env:
-          BUN_SECURITY_TEST_ROOT: ${{ runner.temp }}
           KOMOREBI_LOCALIZATION_ARTIFACTS: ${{ runner.temp }}
         run: |
-          bun test build/scripts/security/*.test.mjs
           bun test tests/Localization.E2E/Run.test.mjs
           bun tests/Localization.E2E/Run.mjs --artifacts "$RUNNER_TEMP"
           dotnet build -c Release -p:RestoreLockedMode=true
@@ -85,46 +51,3 @@ jobs:
           bun build/scripts/localization-check.js
           git diff --exit-code
           test -z "$(git status --porcelain)"
-  security-guard:
-    if: inputs.mode == 'bun-security'
-    name: Validate security merge guard
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Check out trusted default branch
-        if: inputs.mode == 'bun-security'
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          persist-credentials: false
-      - name: Prepare trusted native Bun
-        if: inputs.mode == 'bun-security'
-        shell: pwsh
-        run: ./build/scripts/Initialize-BunBuild.ps1 -VersionFile build/scripts/package.json
-      - name: Validate security PR using trusted code
-        if: inputs.mode == 'bun-security'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ inputs.pr }}
-          BASE_SHA: ${{ inputs.base_sha }}
-          HEAD_SHA: ${{ inputs.head_sha }}
-          MERGE_SHA: ${{ inputs.merge_sha }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$BASE_SHA"
-          bun build/scripts/security/Validate-SecurityMerge.mjs
-  security-result:
-    name: Require validation success
-    if: always() && inputs.mode == 'bun-security'
-    needs: [security-guard, validate]
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Require every validation job to succeed
-        env:
-          RESULTS: ${{ toJSON(needs) }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "$RESULTS" | jq -e 'length > 1 and all(.[]; .result == "success")'

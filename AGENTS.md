@@ -54,26 +54,8 @@ bun build/scripts/localization-check.js
 
 ローカライズ用依存は `cd build/scripts` で `bun install --frozen-lockfile --ignore-scripts` を実行する。`packageManager` で指定した Bun を使い、Node.js・pnpm は不要。Bun の真の AOT は安定版対応待ちのため、現状は Bun ランタイムで実行する。
 
-Bun 依存の脆弱性は `.github/workflows/dependency-security.yml` が毎日監査する。隔離領域で安全な修正だけを準備し、`build/scripts/package.json` と `build/scripts/bun.lock` に限定した PR を作成する。候補なしの日は prepare だけを実行し、候補がある場合だけ固定 base/head/merge の重い検証へ進む。NuGet 等は既存の Dependabot を維持する。
+Bun と NuGet 等の通常更新は Dependabot で行う。Bun の minor/patch は集約、major は個別 PR にする。日程は [.github/dependabot.yml](.github/dependabot.yml) を参照する。依存更新の検証は `.github/workflows/dependency-validation.yml` が担当する。
 
-Bun の通常更新は Dependabot で行い、minor/patch は集約、major は個別 PR にする。日程は [.github/dependabot.yml](.github/dependabot.yml) を参照する。承認待ちの CI を重複扱いするのは、既知の検証ワークフローについて、信頼済み保守 run の同じ attempt で固定 merge の全検証ジョブが成功した証拠がある場合だけ。未知のチェック・失敗・未完了は保留する。
-
-自動マージは既定OFF。repository variable `BUN_SECURITY_NATIVE_MERGE_ACTIVATED` を明示的に `true` にするまで、日次処理は PR 作成・読取専用検証・設定待ち通知に留め、App status や merge API を書き込まない。実 GitHub App の source、ruleset bypass、draft競合を実機で確認するまで有効化しない。
-
-有効時も、main だけに適用される active・strict=true の required status `kagayoi/automation-merge-guard-v1` と、その source App・ruleset ID・更新日時が固定値と一致しなければ保留する。設定値は `DEPENDENCY_GUARD_APP_CLIENT_ID`、`DEPENDENCY_GUARD_APP_ID`、`DEPENDENCY_GUARD_APP_SLUG`、`DEPENDENCY_GUARD_APP_BOT_ID`、`DEPENDENCY_GUARD_RULESET_ID`、`DEPENDENCY_GUARD_RULESET_UPDATED_AT`、秘密は `DEPENDENCY_GUARD_PRIVATE_KEY`。専用 App の token は対象 repo の statuses:write に限定し、候補コードへ渡さない。署名前に同 token で App の ID・client ID・slug と bot の ID・login を読み、owner の固定値と照合する。GITHUB_TOKEN は merge を担当し、App・GITHUB_TOKEN に bypass がないことを導入前に owner が確認する。
-
-候補の識別、固定 base/head/merge の検証、CAS 更新、署名付き status と merge intent の記録・照合は [dependency-security.yml](.github/workflows/dependency-security.yml) と [Native-Merge.mjs](build/scripts/security/Native-Merge.mjs)、[Security-Pull-Request.mjs](build/scripts/security/Security-Pull-Request.mjs) を変更前に読む。専用 App の status と ledger の証拠を再読し、同じ head に対する他 actor の native 予約は防げない前提を維持する。タイムアウト・不明応答・不一致は再送せず保留し、確定拒否後も同一 snapshot・CI attempt を再送しない。merge 応答後も PR・commit の親と tree・main 祖先を確認する。
-固定 issue の bot comment ledger に guard status proof・merge intent・proposal を記録する。管理者は導入時に対象 repository の数値 ID と issue 番号を確定し、本人または Actions bot が作成した専用 open issue の本文を以下の2段落と完全一致させ、repository variable `BUN_SECURITY_LEDGER_ISSUE` にその正整数の issue 番号を設定する。`<repo_id>` と `<issue_number>` は実数値に置き換える。作成や設定は導入承認後に別途行い、未設定・不一致・閉鎖時に自動再初期化しない。
-
-```text
-Bunの脆弱性自動修正の処理状態を保持するIssueです。自動処理のため開いたままにしてください。
-
-<!-- bun-security-ledger-v1:{"version":1,"repo":<repo_id>,"issue":<issue_number>,"state":"idle"} -->
-```
-
-ledger は作成・更新前の intent、proposal、status proof と merge intent を保持し、未設定・不一致・孤立証拠・不明応答は保留する。本人の draft・auto-merge 解除・予約・未解決要求を尊重し、ledger issue は閉じない。詳細な状態遷移と復旧は [Security-Record.mjs](build/scripts/security/Security-Record.mjs)、[Security-Pull-Request.mjs](build/scripts/security/Security-Pull-Request.mjs)、[Maintain-Security.mjs](build/scripts/security/Maintain-Security.mjs) を読む。
-
-通常通知は ledger と分け、main と未 merge 候補の監査を区別する。main の未対策がある間や merge 後の新 main の実監査前は解決済みにしない。最新 main の監査、残件・候補と ledger の状態が解決条件を満たす場合だけ通知を閉じ、issue と main を再取得する。承認済み mitigation は現在空。Status API と issue comment に CAS はないため、前後の再読と workflow concurrency を維持し、不明時は保留する。他人の issue は自動 reopen しない。
 ローカライズ CLI は全 XML の読込・解析・生成が成功するまで書き込まない。書込中の障害まで原子的に復旧するものではない。
 
 `localization-check.yml` は `contents: read` で PR・再利用呼出しを検証する。main への push 時の翻訳整形・文書の自動コミットは、`contents: write` を明示した `localization-update.yml` が担当する。

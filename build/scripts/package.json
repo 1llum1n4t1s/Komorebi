@@ -2,8 +2,7 @@
   "private": true,
   "packageManager": "bun@1.4.4",
   "scripts": {
-    "check": "bun localization-check.js",
-    "test:security": "bun test ./security/*.test.mjs"
+    "check": "bun localization-check.js"
   },
   "dependencies": {
     "fs-extra": "^11.4.1",
