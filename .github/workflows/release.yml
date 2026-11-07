@@ -22,8 +22,9 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
   version:
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     name: Prepare version string
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, ARM64, m3mb14]
     outputs:
       version: ${{ steps.version.outputs.version }}
       tag: ${{ steps.version.outputs.tag }}
@@ -64,9 +65,10 @@ jobs:
       version: ${{ needs.version.outputs.version }}
       build-attempts: ${{ toJSON(needs.build.outputs) }}
   r2-upload:
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     needs: [build, package, velopack, version]
     name: R2 Upload
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, ARM64, m3mb14]
     # R2 が唯一の配信元 (通常リリースは /vava → R2 単独)。
     # Velopack 自動更新成果物 (nupkg/RELEASES/releases.json/Setup/AppImage/Portable.zip) と
     # standalone パッケージ (deb/rpm/独自zip) の両方を R2 にアップロードする。

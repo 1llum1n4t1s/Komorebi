@@ -18,6 +18,7 @@ on:
         type: string
 jobs:
   velopack:
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     outputs:
       osx-arm64: ${{ steps.artifact-attempt.outputs['osx-arm64'] }}
       linux-x64: ${{ steps.artifact-attempt.outputs['linux-x64'] }}
@@ -42,7 +43,7 @@ jobs:
             os: ubuntu-latest
             mainExe: komorebi
     name: Velopack ${{ matrix.label }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ fromJSON(startsWith(matrix.os, 'windows-') && format('["{0}"]', matrix.os) || startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || endsWith(matrix.os, '-arm') && '["self-hosted","Linux","ARM64","m3mb14"]' || '["self-hosted","Linux","X64","m3mb14"]') }}
     steps:
       - name: Setup .NET
         shell: pwsh
@@ -113,7 +114,10 @@ jobs:
           tar -xf publish/komorebi.${{ matrix.runtime }}.tar -C publish
           rm publish/komorebi.${{ matrix.runtime }}.tar
       - name: Install Velopack CLI
-        run: dotnet tool install --global vpk
+        shell: bash
+        run: |
+          dotnet tool install --tool-path "$RUNNER_TEMP/vpk" vpk
+          echo "$RUNNER_TEMP/vpk" >> "$GITHUB_PATH"
       - name: Create Velopack package (Linux)
         if: startsWith(matrix.runtime, 'linux-')
         run: >
