@@ -36,8 +36,11 @@ jobs:
           - name: macOS (Apple Silicon)
             os: macos-latest
             runtime: osx-arm64
+          # linux-x64 も ARM64 ランナー（vz・ネイティブ速度）でクロスコンパイルする。
+          # X64 ランナーは Apple Silicon 上の qemu による x86_64 完全エミュレーションで、
+          # 8 vCPU でも Publish に約 19 分かかる（ARM64 でのクロスビルドは復元込みで約 100 秒）。
           - name: Linux
-            os: ubuntu-24.04
+            os: ubuntu-24.04-arm
             runtime: linux-x64
           # linux-arm64 は ARM64 ランナー（-arm 接尾辞）でネイティブにビルドする。
           # 以前は X64 ランナー（Apple Silicon 上の x86_64 エミュレーション）でクロスコンパイルしており、
@@ -53,6 +56,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y clang
+          # ARM64 ホストで linux-x64 を作るときは x86-64 向けのクロスツールチェーンを入れる。
+          # gcc-x86-64-linux-gnu は ARM64 ネイティブのパッケージ（libc 等は /usr/x86_64-linux-gnu に入る）なので、
+          # dpkg に amd64 アーキテクチャを追加しない。共有ランナー VM の apt 設定を汚さないため
+          # （追加した外部アーキテクチャは VM 再起動で sources が再生成されたときに apt update を壊す）。
+          if [ "${{ matrix.runtime }}" = "linux-x64" ] && [ "$(uname -m)" = "aarch64" ]; then
+            sudo apt-get install -y llvm gcc-x86-64-linux-gnu
+          fi
       - name: Checkout sources
         shell: bash
         env:

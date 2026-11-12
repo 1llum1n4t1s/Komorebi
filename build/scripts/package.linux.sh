@@ -23,7 +23,9 @@ case "$RUNTIME" in
         exit 1;;
 esac
 
-APPIMAGETOOL_URL=https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+# appimagetool はパッケージを作るホストの CPU 用を使う（作る AppImage の CPU は ARCH 環境変数で別に指定する）。
+# CI のパッケージ作成は ARM64 ランナーで x64・arm64 の両方を作るため、x86_64 版に固定しない。
+APPIMAGETOOL_URL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$(uname -m).AppImage"
 
 cd build
 
