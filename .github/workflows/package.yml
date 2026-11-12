@@ -153,14 +153,11 @@ jobs:
         run: |
           printf '%s=%s\n' "$ARTIFACT_RUNTIME" "$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
   linux:
-    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     outputs:
       linux-x64: ${{ steps.artifact-attempt.outputs['linux-x64'] }}
       linux-arm64: ${{ steps.artifact-attempt.outputs['linux-arm64'] }}
     name: Package Linux
-    # x64・arm64 とも ARM64 ランナー（vz・ネイティブ速度）で作る。dpkg-deb・rpmbuild は対象 CPU に依存せず、
-    # appimagetool は package.linux.sh がホスト CPU 用を取得する。X64 ランナー（qemu エミュレーション）より大幅に速い。
-    runs-on: [self-hosted, Linux, ARM64, m3mb14]
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:

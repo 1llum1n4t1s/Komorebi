@@ -34,18 +34,16 @@ jobs:
             label: macos-apple-silicon
             os: macos-latest
             mainExe: Komorebi
-          # Linux は x64・arm64 とも ARM64 ランナー（-arm 接尾辞、vz・ネイティブ速度）で pack する。
-          # vpk は実行ファイルから RID を判定するため、ホスト CPU と異なる linux-x64 も正しい RID・チャンネルになる。
           - runtime: linux-x64
             label: linux-x64
-            os: ubuntu-latest-arm
+            os: ubuntu-latest
             mainExe: komorebi
           - runtime: linux-arm64
             label: linux-arm64
-            os: ubuntu-latest-arm
+            os: ubuntu-latest
             mainExe: komorebi
     name: Velopack ${{ matrix.label }}
-    runs-on: ${{ fromJSON(startsWith(matrix.os, 'windows-') && format('["{0}"]', matrix.os) || startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || endsWith(matrix.os, '-arm') && '["self-hosted","Linux","ARM64","m3mb14"]' || '["self-hosted","Linux","X64","m3mb14"]') }}
+    runs-on: ${{ fromJSON(startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || format('["{0}"]', matrix.os)) }}
     steps:
       - name: Setup .NET
         shell: pwsh

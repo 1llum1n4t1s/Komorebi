@@ -36,33 +36,20 @@ jobs:
           - name: macOS (Apple Silicon)
             os: macos-latest
             runtime: osx-arm64
-          # linux-x64 も ARM64 ランナー（vz・ネイティブ速度）でクロスコンパイルする。
-          # X64 ランナーは Apple Silicon 上の qemu による x86_64 完全エミュレーションで、
-          # 8 vCPU でも Publish に約 19 分かかる（ARM64 でのクロスビルドは復元込みで約 100 秒）。
           - name: Linux
-            os: ubuntu-24.04-arm
+            os: ubuntu-24.04
             runtime: linux-x64
-          # linux-arm64 は ARM64 ランナー（-arm 接尾辞）でネイティブにビルドする。
-          # 以前は X64 ランナー（Apple Silicon 上の x86_64 エミュレーション）でクロスコンパイルしており、
-          # Publish だけで 40 分近くかかったうえ、linux-x64 と同じランナーで直列待ちになっていた。
           - name: Linux (arm64)
-            os: ubuntu-24.04-arm
+            os: ubuntu-24.04
             runtime: linux-arm64
     name: Build ${{ matrix.name }}
-    runs-on: ${{ fromJSON(startsWith(matrix.os, 'windows-') && format('["{0}"]', matrix.os) || startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || endsWith(matrix.os, '-arm') && '["self-hosted","Linux","ARM64","m3mb14"]' || '["self-hosted","Linux","X64","m3mb14"]') }}
+    runs-on: ${{ fromJSON(startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || format('["{0}"]', matrix.os)) }}
     steps:
       - name: Install Linux build dependencies
         if: startsWith(matrix.runtime, 'linux-')
         run: |
           sudo apt-get update
           sudo apt-get install -y clang
-          # ARM64 ホストで linux-x64 を作るときは x86-64 向けのクロスツールチェーンを入れる。
-          # gcc-x86-64-linux-gnu は ARM64 ネイティブのパッケージ（libc 等は /usr/x86_64-linux-gnu に入る）なので、
-          # dpkg に amd64 アーキテクチャを追加しない。共有ランナー VM の apt 設定を汚さないため
-          # （追加した外部アーキテクチャは VM 再起動で sources が再生成されたときに apt update を壊す）。
-          if [ "${{ matrix.runtime }}" = "linux-x64" ] && [ "$(uname -m)" = "aarch64" ]; then
-            sudo apt-get install -y llvm gcc-x86-64-linux-gnu
-          fi
       - name: Checkout sources
         shell: bash
         env:
@@ -111,8 +98,7 @@ jobs:
           $install | Out-File $env:GITHUB_PATH -Append -Encoding utf8
           "DOTNET_ROOT=$install" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
       - name: Configure arm64 cross-compilation
-        # ARM64 ランナーではネイティブビルドになるので不要。x64 ホストで arm64 を作る場合だけ使う。
-        if: matrix.runtime == 'linux-arm64' && runner.arch != 'ARM64'
+        if: matrix.runtime == 'linux-arm64'
         run: |
           sudo dpkg --add-architecture arm64
           CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
