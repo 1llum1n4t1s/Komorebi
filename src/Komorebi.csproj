@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <ApplicationManifest>App.manifest</ApplicationManifest>
     <ApplicationIcon>App.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -41,6 +41,13 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release' and '$(DisableAOT)' != 'true'">
     <PublishAot>true</PublishAot>
     <PublishTrimmed>true</PublishTrimmed>
+    <!-- .NET 11 SDK は RID 未指定の PublishAot 実行ファイルへビルドホストの RID を
+         RuntimeIdentifiers として自動追加する。そのままでは RID なしの Release restore が
+         Directory.Build.targets で packages.Release.<ホストRID>.lock.json を選び、
+         packages.Release.lock.json (RID なし Release の基準) と publish 用 RID 別 lock の
+         分離が崩れるため、自動追加を止めて .NET 10 までと同じ restore グラフを維持する。
+         publish は従来どおり -r で RID を明示する。 -->
+    <AppendPublishRuntimeIdentifierToRuntimeIdentifiers>false</AppendPublishRuntimeIdentifierToRuntimeIdentifiers>
     <!-- TrimMode は指定しない。Native AOT が常に full トリムを行うため (公式に AOT 併用時は設定しない指針)。
          旧値 'link' は .NET 6 以前の名称で、現在の有効値は full / partial のみ。 -->
   </PropertyGroup>

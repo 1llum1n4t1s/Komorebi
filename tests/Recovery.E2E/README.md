@@ -1,6 +1,6 @@
 # IPC と資格情報の復旧 E2E
 
-.NET 10 の console から、製品の `Preferences.Save` / source-generated JSON、実 AES-GCM / Windows DPAPI、別プロセスのファイルロックと名前付きパイプを呼びます。既存の資格情報・設定は読みません。
+.NET 11 の console から、製品の `Preferences.Save` / source-generated JSON、実 AES-GCM / Windows DPAPI、別プロセスのファイルロックと名前付きパイプを呼びます。既存の資格情報・設定は読みません。
 
 独立した `Preferences` は実アプリの `Instance` と同じく読み込み完了状態にし、`App` と同じ `SetCanModify()` を呼んで保存を許可します。各保存で隔離ファイルの置換を確認し、保存がスキップされた場合を検出します。
 
@@ -21,7 +21,7 @@
 dotnet run --project tests/Recovery.E2E/Recovery.E2E.csproj -c Release -p:DisableAOT=true
 ```
 
-全 fixture と検証可能な `result.json` は `bin/Release/net10.0/artifacts/<run-id>/` に保存します。再現・結果の照合用成果物なので保持します。実際の API キーは使用せず、人工的な資格情報のみを保存します。子プロセスは正常終了または `finally` で終了します。
+全 fixture と検証可能な `result.json` は `bin/Release/net11.0/artifacts/<run-id>/` に保存します。再現・結果の照合用成果物なので保持します。実際の API キーは使用せず、人工的な資格情報のみを保存します。子プロセスは正常終了または `finally` で終了します。
 
 鍵移行の失敗注入は同じプロセスの private メソッド呼出しで行い、再起動相当の確認は鍵キャッシュを破棄して実 JSON を読み直します。電源断・プロセス強制終了の再現は含みません。強制終了時は保護済みステージが残る可能性がありますが、旧鍵を先に削除する経路はありません。
 

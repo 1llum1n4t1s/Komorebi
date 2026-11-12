@@ -6,7 +6,7 @@
 （`86fdebec4cff7affb0e14c7885df71d28edce777`）のソースを統合しています。
 love-linger fork の日本語 IME、描画余白、矩形選択の文字列 DataFormat と
 Komorebi の Avalonia 12 対応を維持し、製品の target framework と assembly version は変更していません。
-同梱 demo と NUnit プロジェクトも net10.0 と Avalonia 12 に揃えています。
+同梱 demo と NUnit プロジェクトも net11.0 と Avalonia 12 に揃えています。
 検索結果の文言は `SearchPanel` の `NoMatchesText` / `OneMatchText` / `MatchesText` / `MatchOfTotalText` からホスト側で指定できます。未指定時は標準リソースを使い、Komorebi ではアプリの言語切替に追従させます。
 `dotnet build depends/AvaloniaEdit/AvaloniaEdit.sln -c Release` と
 `dotnet test --project depends/AvaloniaEdit/test/AvaloniaEdit.Tests/AvaloniaEdit.Tests.csproj -c Release` で検証できます。

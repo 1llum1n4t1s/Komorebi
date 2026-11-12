@@ -1,6 +1,6 @@
 # クローンの長いパス復旧 E2E
 
-Git for Windows と .NET 10 を使い、GUI が呼ぶ `Commands.Clone.CloneAsync` から実 Git のプロセス、設定変更、ファイル展開まで検証します。
+Git for Windows と .NET 11 を使い、GUI が呼ぶ `Commands.Clone.CloneAsync` から実 Git のプロセス、設定変更、ファイル展開まで検証します。
 
 ```powershell
 dotnet run --project tests/CloneLongPaths.E2E/CloneLongPaths.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'
@@ -19,4 +19,4 @@ dotnet run --project tests/CloneLongPaths.E2E/CloneLongPaths.E2E.csproj -- 'C:\P
 
 ユーザーの Git 設定への書き込みを避けるため、`GIT_CONFIG_GLOBAL` と `GIT_CONFIG_NOSYSTEM` を検証プロセス内で指定します。ネットワークは使わず、ローカルの fixture リポジトリをクローンします。
 
-終了時に表示される `bin/<構成>/net10.0/artifacts/<実行ID>/result.json` が再現可能な検証成果物です。同じ場所に各シナリオのコマンドログと fixture を保持します。GUI 上の表示・タブ登録は検証範囲に含めません。
+終了時に表示される `bin/<構成>/net11.0/artifacts/<実行ID>/result.json` が再現可能な検証成果物です。同じ場所に各シナリオのコマンドログと fixture を保持します。GUI 上の表示・タブ登録は検証範囲に含めません。

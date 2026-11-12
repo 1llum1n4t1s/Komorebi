@@ -4,7 +4,7 @@ This file provides guidance to Codex and other coding agents working in this rep
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 10** and **Avalonia UI 12.1.4**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 11** and **Avalonia UI 12.1.4**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
 
 設計の概要・責務とデータフローは [DESIGN.md](DESIGN.md) を参照する。本ファイルは作業規約・実装時の制約・検証手順を扱う。
 
@@ -81,7 +81,7 @@ Bun と NuGet 等の通常更新は Dependabot で行う。Bun の minor/patch �
 
 ### 同梱エディタの検証
 
-同梱エディタを変更した場合は、ルートの `Komorebi.slnx` に含まれない demo と NUnit テストも別途検証する（いずれも net10.0）。
+同梱エディタを変更した場合は、ルートの `Komorebi.slnx` に含まれない demo と NUnit テストも別途検証する（いずれも net11.0）。
 
 ```bash
 dotnet build depends/AvaloniaEdit/AvaloniaEdit.sln -c Release
@@ -197,7 +197,7 @@ CodeCommit の HTTPS・SSH・GRC URL を維持する。変更時は [Remote.cs](
 CI の構成は [.github/workflows](.github/workflows) を参照する。`release/**` push で macOS / Linux と standalone を build・package・配信し、GitHub Releases は作らず R2 単独配信する。Windows の未署名フィードがローカル署名成果物を上書きしないよう `velopack.yml` の matrix に win-x64 / win-arm64 を含めない。
 ### Windows リリース (ローカル実行)
 
-- `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL の取得内容を比較し、不一致の場合だけキャッシュをパージする。全配信ファイルの SHA-256 一致まで確認してから旧版清掃へ進む。HTTP 200 だけを配信完了条件にしない。
+- `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL を全件パージし、R2 書込みとパージ API の受付成功を確認して旧版清掃へ進む。公開後の配信内容取得・ハッシュ照合・伝播待ちは行わない。清掃時の他チャンネル manifest 取得は保持対象の保護のため維持する。
 - ローカルスクリプトのアップロード前検証（manifest・nupkg・portable の版・CPU・署名・hash）を維持する。`-SkipUpload` でもこの検証を通す。
 - 製品ページの配信は兄弟リポジトリの `../vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
 

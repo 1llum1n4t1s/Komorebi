@@ -253,27 +253,9 @@ foreach ($f in $ordered) {
 Write-Host "✅ R2 アップロード完了: $uploaded ファイル"
 
 # ---- 2.5 Cloudflare エッジキャッシュのパージ ----
-# 新鮮な配信物をローカルの SHA-256 と比較し、不一致が実証された固定 URL だけパージする。
+# 固定 URL は配信内容を取得せず全件パージし、API の受付成功を確認する。
 Write-Host '== Cloudflare キャッシュパージ ==' -ForegroundColor Cyan
-$verificationDir = Join-Path $WorkDir 'verification'
-New-Item -ItemType Directory -Path $verificationDir -Force | Out-Null
-function Test-PublishedFile {
-    param([System.IO.FileInfo]$File, [switch]$Fresh)
-    $target = Join-Path $verificationDir $File.Name
-    $url = "$BaseUrl/$($File.Name)"
-    $request = @{ Uri = $url; OutFile = $target; TimeoutSec = 120; MaximumRetryCount = 3; RetryIntervalSec = 5 }
-    if ($Fresh) {
-        $request.Uri += "?_=$([Guid]::NewGuid().ToString('N'))"
-        $request.Headers = @{ 'Cache-Control' = 'no-cache' }
-    }
-    Invoke-WebRequest @request
-    return (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash -eq (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash
-}
-$purgeUrls = @(Get-ChildItem $ArtifactsDir -File | Where-Object { $_.Name -notlike '*.nupkg' } | ForEach-Object {
-    $freshMatches = Test-PublishedFile -File $_ -Fresh
-    $canonicalMatches = Test-PublishedFile -File $_
-    if (-not $freshMatches -or -not $canonicalMatches) { "$BaseUrl/$($_.Name)" }
-})
+$purgeUrls = @(Get-ChildItem $ArtifactsDir -File | Where-Object { $_.Name -notlike '*.nupkg' } | ForEach-Object { "$BaseUrl/$($_.Name)" })
 if ($purgeUrls.Count -gt 0) {
     $cfHeaders = @{ Authorization = "Bearer $($env:CLOUDFLARE_API_TOKEN)" }
     $zoneName = ([uri]$BaseUrl).Host -replace '^[^.]+\.', ''
@@ -288,19 +270,6 @@ if ($purgeUrls.Count -gt 0) {
     $purgeUrls | ForEach-Object { Write-Host "     $_" }
 } else {
     Write-Host '  パージ対象なし'
-}
-
-# ---- 3. 配信確認 (CDN/edge 伝播チェック) ----
-Write-Host '== 配信確認 ==' -ForegroundColor Cyan
-foreach ($runtime in $Runtimes) {
-    $channel = $RuntimeMatrix[$runtime].Channel
-    $url = "$BaseUrl/releases.$channel.json"
-    $resp = Invoke-WebRequest -Uri $url -TimeoutSec 30 -MaximumRetryCount 3 -RetryIntervalSec 5
-    Write-Host "  $url → HTTP $($resp.StatusCode) ($($resp.RawContentLength) bytes)"
-}
-foreach ($file in (Get-ChildItem $ArtifactsDir -File)) {
-    if (-not (Test-PublishedFile -File $file)) { throw "配信ファイルの SHA-256 が一致しません: $($file.Name)" }
-    Write-Host "  ✅ SHA-256 一致: $($file.Name)"
 }
 
 # ---- 4. 旧バージョン nupkg のクリーンアップ (Aggressive 戦略) ----

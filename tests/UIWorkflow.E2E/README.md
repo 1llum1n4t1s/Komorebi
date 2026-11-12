@@ -4,9 +4,9 @@
 dotnet run --project tests/UIWorkflow.E2E/UIWorkflow.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'
 ```
 
-.NET 10、Avalonia Headless 12.1.4、Skia、実Gitで、削除画像の差分、同型View再利用後の検索入力、Fetch/Pull/PushのEnter・Space・UIA、Ctrlクリック、Aboutのコミット表示を検証します。
+.NET 11、Avalonia Headless 12.1.4、Skia、実Gitで、削除画像の差分、同型View再利用後の検索入力、Fetch/Pull/PushのEnter・Space・UIA、Ctrlクリック、Aboutのコミット表示を検証します。
 
-実際のAXAMLと入力イベントを使い、通常操作のハンドラーへ1回だけ到達することも確認します。リポジトリ、アプリ設定、Git設定は `bin/<構成>/net10.0/artifacts/<実行ID>` に隔離します。UI状態の初期化には内部フィールドをreflectionで設定し、自動フェッチや利用者のワークスペースを読み込みません。
+実際のAXAMLと入力イベントを使い、通常操作のハンドラーへ1回だけ到達することも確認します。リポジトリ、アプリ設定、Git設定は `bin/<構成>/net11.0/artifacts/<実行ID>` に隔離します。UI状態の初期化には内部フィールドをreflectionで設定し、自動フェッチや利用者のワークスペースを読み込みません。
 
 全ロケールの実リソースについてキー・空文字・埋め込み引数も検証します。検索パネルは英語・日本語・カタルーニャ語へ同じ View のまま切り替え、検索結果・プレースホルダー・ツールチップと一致件数を確認します。
 

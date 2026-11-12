@@ -2,7 +2,7 @@
 
 [![license](https://img.shields.io/github/license/1llum1n4t1s/Komorebi.svg)](LICENSE)
 
-C# / .NET 10 と Avalonia UI で構築されたクロスプラットフォーム対応のオープンソース Git GUI クライアントです。Git CLI をラップし、日常の Git 操作をビジュアルに行えます。
+C# / .NET 11 と Avalonia UI で構築されたクロスプラットフォーム対応のオープンソース Git GUI クライアントです。Git CLI をラップし、日常の Git 操作をビジュアルに行えます。
 
 > [!NOTE]
 > 本プロジェクトは [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォークです。オリジナルの開発者および全コントリビューターに感謝いたします。

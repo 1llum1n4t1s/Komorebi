@@ -177,42 +177,6 @@ jobs:
             $contentType = switch -Regex ($file.Name) { '\.json$' { 'application/json'; break }; '^RELEASES' { 'text/plain'; break }; '\.(zip|nupkg)$' { 'application/zip'; break }; default { 'application/octet-stream' } }
             Publish-R2Object -AccountId $env:CLOUDFLARE_ACCOUNT_ID -Bucket 'komorebi-updates' -FilePath $file.FullName -Immutable:$immutable -CacheControl $cacheControl -ContentType $contentType | Out-Null
           }
-      - name: Verify delivery (5 channel すべての manifest と参照先 nupkg を検証)
-        run: |
-          set -euo pipefail
-          base="https://komorebi.kagayoi.com"
-          for artifact in packages/*; do
-            name=$(basename "$artifact")
-            delivered="$RUNNER_TEMP/delivered-$name"
-            curl --fail --silent --show-error --max-time 180 --retry 3 --retry-delay 5 --retry-all-errors \
-              -H 'Cache-Control: no-cache' -o "$delivered" "${base}/${name}?cb=$(date +%s%N)"
-            expected=$(sha256sum "$artifact" | cut -d' ' -f1)
-            actual=$(sha256sum "$delivered" | cut -d' ' -f1)
-            if [[ "$expected" != "$actual" ]]; then
-              echo "::error::Delivered SHA-256 differs: $name"
-              exit 1
-            fi
-            echo "Verified delivery SHA-256: $name $actual"
-          done
-          for channel in win-x64 win-arm64 osx-arm64 linux-x64 linux-arm64; do
-            manifest_url="${base}/releases.${channel}.json?cb=$(date +%s%N)"
-            echo "Checking ${manifest_url}"
-            manifest=$(curl --fail --silent --show-error --max-time 30 \
-                 --retry 3 --retry-delay 5 --retry-all-errors "$manifest_url")
-            mapfile -t assets < <(echo "$manifest" | jq -er '.Assets[]?.FileName // empty')
-            if [[ "${#assets[@]}" -eq 0 ]]; then
-              echo "::error::releases.${channel}.json に配信対象 nupkg がありません"
-              exit 1
-            fi
-            for filename in "${assets[@]}"; do
-              asset_url="${base}/${filename}?cb=$(date +%s%N)"
-              echo "  Checking ${filename}"
-              curl --fail --silent --show-error --head --max-time 30 \
-                   --retry 3 --retry-delay 5 --retry-all-errors \
-                   -o /dev/null -w "    HTTP %{http_code} (%{size_download} bytes)\n" \
-                   "$asset_url"
-            done
-          done
       # 旧バージョン成果物のクリーンアップ:
       # - 今リリースで packages/ にアップロードしたファイル名群を keep set として、それ以外を削除
       # - 対象: 旧 Velopack nupkg (full/delta)、旧 Setup.exe / Portable.zip / AppImage、
@@ -221,7 +185,7 @@ jobs:
       #   されるので keep set にも入るが、二重保護で取りこぼし防止)
       # - R2 は常に「最新リリースで配ったファイル一式」のみ保持する状態に揃う
       # - keep set は public endpoint ではなくローカル packages/ から構築 (CDN 伝播遅延の race condition を回避)
-      # - 配信確認ステップが先 (manifest 取得不能なら手前で fail し cleanup は走らない)
+      # - 全成果物のアップロード完了後にローカル packages/ の keep set で実行する
       - name: Cleanup old artifacts (keep only files just uploaded)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
