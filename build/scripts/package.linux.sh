@@ -57,7 +57,9 @@ mkdir -p resources/deb/opt/komorebi/
 mkdir -p resources/deb/usr/bin
 mkdir -p resources/deb/usr/share/applications
 mkdir -p resources/deb/usr/share/icons
-cp -f Komorebi/* resources/deb/opt/komorebi
+# .NET 11 以降の publish 出力にはサテライトリソースのフォルダー（例: zh-Hans/AvaloniaEdit.resources.dll）が
+# 含まれるため、ディレクトリごとコピーする（-r が無いと cp が失敗してパッケージ作成が止まる）
+cp -rf Komorebi/* resources/deb/opt/komorebi
 ln -rsf resources/deb/opt/komorebi/komorebi resources/deb/usr/bin
 cp -r resources/_common/applications resources/deb/usr/share
 cp -r resources/_common/icons resources/deb/usr/share

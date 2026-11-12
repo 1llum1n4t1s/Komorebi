@@ -118,6 +118,9 @@ jobs:
         run: |
           dotnet tool install --tool-path "$RUNNER_TEMP/vpk" vpk
           echo "$RUNNER_TEMP/vpk" >> "$GITHUB_PATH"
+          # vpk は .NET 10 ランタイム向けのツールで、CI には .NET 11 SDK だけを入れている。
+          # ローカルのリリーススクリプト（release-local.ps1）と同じく最新メジャーへロールフォワードさせる
+          echo "DOTNET_ROLL_FORWARD=Major" >> "$GITHUB_ENV"
       - name: Create Velopack package (Linux)
         if: startsWith(matrix.runtime, 'linux-')
         run: >

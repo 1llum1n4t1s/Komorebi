@@ -20,7 +20,8 @@ mkdir -p %{buildroot}/opt/komorebi
 mkdir -p %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/usr/share/applications
 mkdir -p %{buildroot}/usr/share/icons
-cp -f %{_topdir}/../../Komorebi/* %{buildroot}/opt/komorebi/
+# publish 出力のサテライトリソースのフォルダー（zh-Hans など）も含めるため -r でコピーする
+cp -rf %{_topdir}/../../Komorebi/* %{buildroot}/opt/komorebi/
 ln -rsf %{buildroot}/opt/komorebi/komorebi %{buildroot}/%{_bindir}
 cp -r %{_topdir}/../_common/applications %{buildroot}/%{_datadir}
 cp -r %{_topdir}/../_common/icons %{buildroot}/%{_datadir}
