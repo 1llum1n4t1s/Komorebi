@@ -143,6 +143,8 @@ namespace Komorebi.Tests.Commands
 
             Assert.Equal("100644", result.OldMode);
             Assert.Equal("100755", result.NewMode);
+            // モード変更だけのファイルは両側の行番号を表示する（upstream 37bd1fbd）
+            Assert.False(result.TextDiff.IsNewOrDeletedFile);
         }
 
         [Fact]
@@ -158,6 +160,9 @@ namespace Komorebi.Tests.Commands
             var result = Diff.ParseDiffOutput(output);
 
             Assert.Equal("100644", result.OldMode);
+            Assert.True(result.TextDiff.IsDeletedFile);
+            Assert.False(result.TextDiff.IsNewFile);
+            Assert.True(result.TextDiff.IsNewOrDeletedFile);
         }
 
         [Fact]
@@ -175,6 +180,9 @@ namespace Komorebi.Tests.Commands
             var result = Diff.ParseDiffOutput(output);
 
             Assert.Equal("100644", result.NewMode);
+            Assert.True(result.TextDiff.IsNewFile);
+            Assert.False(result.TextDiff.IsDeletedFile);
+            Assert.True(result.TextDiff.IsNewOrDeletedFile);
         }
 
         [Fact]

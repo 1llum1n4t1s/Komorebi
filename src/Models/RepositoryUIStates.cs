@@ -281,6 +281,15 @@ public class RepositoryUIStates
         set;
     } = string.Empty;
 
+    /// <summary>
+    /// 履歴を現在のブランチとその upstream に絞る「現在のブランチに集中」モード（upstream 26fef126）。
+    /// </summary>
+    public bool FocusOnCurrentBranch
+    {
+        get;
+        set;
+    } = false;
+
     /// <summary>履歴フィルターのリスト</summary>
     public AvaloniaList<HistoryFilter> HistoryFilters
     {
@@ -520,6 +529,37 @@ public class RepositoryUIStates
             BuildHistoryParamsForIncluded(builder);
         else
             BuildHistoryParamsForExcluded(builder, gitDir);
+
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// 「現在のブランチに集中」モード用の git log パラメータを構築する（upstream 1b080758 / 3e608dd5）。
+    /// 履歴フィルターは使わず HEAD と upstream だけを辿る。--reflog は全 ref の到達不能コミットを
+    /// 混ぜてしまうため、このモードでは常に付けない。
+    /// </summary>
+    /// <param name="upstream">現在のブランチの upstream の完全 ref 名（なければ空）</param>
+    /// <returns>git logのパラメータ文字列</returns>
+    public string BuildHistoryParamsForCurrentBranch(string upstream)
+    {
+        var builder = new StringBuilder();
+
+        if (EnableTopoOrderInHistory)
+            builder.Append("--topo-order ");
+        else
+            builder.Append("--date-order ");
+
+        if (HistoryShowFlags.HasFlag(HistoryShowFlags.FirstParentOnly))
+            builder.Append("--first-parent ");
+
+        if (HistoryShowFlags.HasFlag(HistoryShowFlags.SimplifyByDecoration))
+            builder.Append("--simplify-by-decoration ");
+
+        builder.Append("HEAD");
+
+        // upstream は rev-parse の出力をそのまま連結するが、Komorebi は他の ref 引数と同じく Quoted で境界を守る。
+        if (!string.IsNullOrEmpty(upstream))
+            builder.Append(' ').Append(upstream.Quoted());
 
         return builder.ToString();
     }

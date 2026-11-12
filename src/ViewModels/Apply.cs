@@ -20,8 +20,31 @@ public class Apply : Popup
     public string PatchFile
     {
         get => _patchFile;
-        set => SetProperty(ref _patchFile, value, true);
+        set
+        {
+            if (SetProperty(ref _patchFile, value, true))
+                CanCreateCommit = DetectMailFormatPatch(value);
+        }
     }
+
+    /// <summary>
+    /// 選択中のパッチファイルがメール形式（git format-patch の出力）で、コミットとして適用できるかどうか。
+    /// upstream ef017624。上流はバリデーター内で更新するが、Komorebi は副作用を避けて setter で判定する。
+    /// </summary>
+    public bool CanCreateCommit
+    {
+        get => _canCreateCommit;
+        private set => SetProperty(ref _canCreateCommit, value);
+    }
+
+    /// <summary>
+    /// メール形式のパッチを git apply ではなく git am でコミットとして適用するかどうか。
+    /// </summary>
+    public bool CommitChanges
+    {
+        get;
+        set;
+    } = true;
 
     /// <summary>
     /// クリップボードの内容をパッチとして適用するかどうか。
@@ -138,11 +161,25 @@ public class Apply : Popup
             var log = _repo.CreateLog("Apply Patch");
             Use(log);
 
-            // git applyコマンドを実行してパッチを適用する
             var extra = ThreeWayMerge ? "--3way" : string.Empty;
-            var succ = await new Commands.Apply(_repo.FullPath, finalPatchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
-                .Use(log)
-                .ExecAsync();
+            bool succ;
+            if (!_fromClipboard && _canCreateCommit && CommitChanges)
+            {
+                // upstream ef017624: メール形式のパッチは git am でコミットとして適用する。
+                // 入力中のコミットメッセージは am のメッセージ（rebase-apply/final-commit）と混ざらないよう消す。
+                _repo.ClearCommitMessage();
+
+                succ = await new Commands.Am(_repo.FullPath, finalPatchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
+                    .Use(log)
+                    .ExecAsync();
+            }
+            else
+            {
+                // git applyコマンドを実行してパッチを作業ツリーへ適用する
+                succ = await new Commands.Apply(_repo.FullPath, finalPatchFile, _ignoreWhiteSpace, SelectedWhiteSpaceMode.Arg, extra)
+                    .Use(log)
+                    .ExecAsync();
+            }
 
             log.Complete();
 
@@ -154,8 +191,41 @@ public class Apply : Popup
         }
     }
 
+    /// <summary>
+    /// パッチファイルの先頭 4 行が git format-patch のメールヘッダー（From / From: / Date: / Subject:）かを判定する。
+    /// 読めないファイルや存在しないファイルは false（通常の git apply を使う）。
+    /// </summary>
+    internal static bool DetectMailFormatPatch(string file)
+    {
+        if (string.IsNullOrEmpty(file) || !File.Exists(file))
+            return false;
+
+        try
+        {
+            using var reader = new StreamReader(file);
+            var lines = new string[4];
+            for (var i = 0; i < lines.Length; i++)
+            {
+                lines[i] = reader.ReadLine();
+                if (lines[i] is null)
+                    return false;
+            }
+
+            return lines[0].StartsWith("From ", StringComparison.Ordinal) &&
+                lines[1].StartsWith("From: ", StringComparison.Ordinal) &&
+                lines[2].StartsWith("Date: ", StringComparison.Ordinal) &&
+                lines[3].StartsWith("Subject: ", StringComparison.Ordinal);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     /// <summary>対象リポジトリへの参照</summary>
     private readonly Repository _repo = null;
+    /// <summary>メール形式のパッチかどうか</summary>
+    private bool _canCreateCommit = false;
     /// <summary>パッチファイルのパス</summary>
     private string _patchFile = string.Empty;
     /// <summary>クリップボードから適用するかどうか</summary>

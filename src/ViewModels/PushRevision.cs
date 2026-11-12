@@ -68,7 +68,8 @@ public class PushRevision : Popup
                 false,
                 false,
                 false,
-                Force)
+                Force,
+                localIsRevision: true)
             { CancellationToken = cancellation.Token }.Use(log).RunAsync();
         }
 

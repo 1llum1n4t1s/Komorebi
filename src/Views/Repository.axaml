@@ -26,19 +26,31 @@
                      IsVisible="{Binding CurrentBranch.IsTrackStatusVisible, FallbackValue=False}"/>
           <!-- ブランチセレクター: クリックでHEADにナビゲート -->
           <!-- HEADにナビゲート -->
-          <Button Grid.Column="0" Classes="icon_button" Width="28" Height="26" Margin="2,0,0,0" VerticalAlignment="Center" Click="NavigateToHead">
-            <ToolTip.Tip>
-              <StackPanel>
-                <TextBlock Text="{Binding CurrentBranch.FriendlyName, FallbackValue='--'}"/>
-                <TextBlock Text="{Binding CurrentBranch.TrackStatusDescription}"/>
-              </StackPanel>
-            </ToolTip.Tip>
-            <Grid>
-              <Path Width="14" Height="14" Data="{StaticResource Icons.Home}"/>
-              <Ellipse Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top"
-                       Fill="{DynamicResource Brush.Accent}" IsVisible="{Binding CurrentBranch.IsTrackStatusVisible, FallbackValue=False}"/>
-            </Grid>
-          </Button>
+          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+            <Button Classes="icon_button" Width="28" Height="26" Margin="2,0,0,0" VerticalAlignment="Center" Click="NavigateToHead">
+              <ToolTip.Tip>
+                <StackPanel>
+                  <TextBlock Text="{Binding CurrentBranch.FriendlyName, FallbackValue='--'}"/>
+                  <TextBlock Text="{Binding CurrentBranch.TrackStatusDescription}"/>
+                </StackPanel>
+              </ToolTip.Tip>
+              <Grid>
+                <Path Width="14" Height="14" Data="{StaticResource Icons.Home}"/>
+                <Ellipse Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top"
+                         Fill="{DynamicResource Brush.Accent}" IsVisible="{Binding CurrentBranch.IsTrackStatusVisible, FallbackValue=False}"/>
+              </Grid>
+            </Button>
+
+            <!-- upstream 26fef126: 履歴を現在のブランチと upstream に絞る。上流のツールバー位置ではなく、
+                 Komorebi の統一ブランチ操作バーで HEAD 移動ボタンの隣に置く -->
+            <ToggleButton Classes="line_path" Width="28" Height="26" Margin="2,0,0,0" VerticalAlignment="Center"
+                          IsChecked="{Binding FocusOnCurrentBranch, Mode=TwoWay}">
+              <ToolTip.Tip>
+                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{DynamicResource Text.Repository.FocusOnCurrentBranch}"/>
+              </ToolTip.Tip>
+              <Path Width="14" Height="14" Data="{StaticResource Icons.Magic}"/>
+            </ToggleButton>
+          </StackPanel>
 
           <!-- ブランチ作成ボタン -->
           <Button Grid.Column="1" Classes="icon_button" Width="28" Height="26" Margin="4,0,0,0" VerticalAlignment="Center"
@@ -760,6 +772,23 @@
                 <Button Grid.Column="1" Classes="flat" FontWeight="Regular" BorderThickness="0"
                         Content="{DynamicResource Text.Repository.Skip}" Padding="8,2" Click="OnSkipInProgress"
                         IsVisible="{Binding StoppedAt, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              </Grid>
+            </DataTemplate>
+
+            <!-- upstream ef017624: git am（パッチ適用）の進行中表示 -->
+            <DataTemplate DataType="vm:AmInProgress">
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                  <TextBlock FontWeight="Bold" Foreground="{DynamicResource Brush.Conflict.Foreground}" Text="{DynamicResource Text.InProgress.Am}"/>
+                  <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="DarkOrange"
+                             FontFamily="{DynamicResource Fonts.Monospace}"
+                             Text="{Binding ProgressText}"
+                             IsVisible="{Binding HasProgress}"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" Classes="flat" FontWeight="Regular" BorderThickness="0"
+                        Content="{DynamicResource Text.Repository.Skip}" Padding="8,2" Click="OnSkipInProgress"
+                        IsVisible="{Binding CanSkip}"/>
               </Grid>
             </DataTemplate>
 

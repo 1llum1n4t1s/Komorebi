@@ -671,6 +671,8 @@ public partial class Repository : UserControl
             var reflog = new MenuItem();
             reflog.Header = App.Text("Repository.ShowLostCommits");
             reflog.Tag = "--reflog";
+            // upstream 3e608dd5: 「現在のブランチに集中」中は --reflog を使わないため選べなくする。
+            reflog.IsEnabled = !repo.FocusOnCurrentBranch;
             if (repo.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.Reflog))
                 reflog.Icon = App.CreateMenuIcon("Icons.Check");
             reflog.Click += (_, ev) =>

@@ -31,12 +31,43 @@ public class DeleteBranch : Popup
     }
 
     /// <summary>
+    /// 削除対象のローカルブランチをチェックアウトしている別 worktree（なければ null）。
+    /// upstream 4e49f72d: worktree で使用中のブランチは git branch -d で削除できないため、同時削除を選べるようにする。
+    /// </summary>
+    public Worktree AttachedWorktree
+    {
+        get;
+    }
+
+    /// <summary>
+    /// ブランチより先に AttachedWorktree を削除するかどうか。
+    /// </summary>
+    public bool DeleteWorktree
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// コンストラクタ。
     /// </summary>
     public DeleteBranch(Repository repo, Models.Branch branch)
     {
         _repo = repo;
         Target = branch;
+
+        // 現在のブランチは HasWorktree が false になるため、ここでは別 worktree で使用中のものだけを探す。
+        if (branch.IsLocal && branch.HasWorktree && repo.Worktrees is { } worktrees)
+        {
+            foreach (var wt in worktrees)
+            {
+                if (wt.IsAttachedTo(branch))
+                {
+                    AttachedWorktree = wt;
+                    break;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -60,9 +91,23 @@ public class DeleteBranch : Popup
             // ローカルブランチの場合
             if (Target.IsLocal)
             {
-                succ = await new Commands.Branch(_repo.FullPath, Target.Name)
-                    .Use(log)
-                    .DeleteLocalAsync(Force);
+                // upstream 4e49f72d: worktree を先に削除し、失敗したらブランチ削除へ進まない。
+                // Force は未コミット変更を含む worktree の削除（--force）にも適用する（上流と同じ）。
+                var worktreeRemoved = true;
+                if (AttachedWorktree is not null && DeleteWorktree)
+                {
+                    worktreeRemoved = await new Commands.Worktree(_repo.FullPath)
+                        .Use(log)
+                        .RemoveAsync(AttachedWorktree.FullPath, Force);
+                }
+
+                // 失敗時もロック解除後の MarkBranchesDirtyManually まで通し、一覧を最新化する。
+                if (worktreeRemoved)
+                {
+                    succ = await new Commands.Branch(_repo.FullPath, Target.Name)
+                        .Use(log)
+                        .DeleteLocalAsync(Force);
+                }
 
                 if (succ)
                 {

@@ -1194,6 +1194,16 @@ public class CombinedTextDiffPresenter : ThemedTextDiffPresenter
             }
 
             Text = builder.ToString();
+
+            // upstream 37bd1fbd: ファイル全体の追加・削除では片側の行番号が常に空になるため、
+            // 存在する側の行番号列（と区切り線）だけを表示する。View 再利用時も毎回設定し直す。
+            // LeftMargins の並びはコンストラクターで追加した [旧行番号, 区切り, 新行番号, 区切り, 変更種別]。
+            var oldLineNumberVisible = !diff.IsNewOrDeletedFile || diff.IsDeletedFile;
+            var newLineNumberVisible = !diff.IsNewOrDeletedFile || diff.IsNewFile;
+            TextArea.LeftMargins[0].IsVisible = oldLineNumberVisible;
+            TextArea.LeftMargins[1].IsVisible = oldLineNumberVisible;
+            TextArea.LeftMargins[2].IsVisible = newLineNumberVisible;
+            TextArea.LeftMargins[3].IsVisible = newLineNumberVisible;
         }
         else
         {

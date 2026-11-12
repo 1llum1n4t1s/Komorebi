@@ -78,6 +78,42 @@ public class Repository : ObservableObject, Models.IRepository
         private set => SetProperty(ref _historyFilterMode, value);
     }
 
+    /// <summary>
+    /// 履歴を現在のブランチ（HEAD）とその upstream に属するコミットだけに絞るかどうか。
+    /// upstream 26fef126。有効化すると既存の履歴フィルターは解除する（両者は排他）。
+    /// </summary>
+    public bool FocusOnCurrentBranch
+    {
+        get => _uiStates.FocusOnCurrentBranch;
+        set
+        {
+            if (value == _uiStates.FocusOnCurrentBranch)
+                return;
+
+            _uiStates.FocusOnCurrentBranch = value;
+            OnPropertyChanged();
+
+            // ClearHistoryFilters は内部で RefreshCommits するため、二重取得しないよう分岐する。
+            if (value && _historyFilterMode != Models.FilterMode.None)
+                ClearHistoryFilters();
+            else
+                RefreshCommits();
+        }
+    }
+
+    /// <summary>
+    /// 手動でフィルターが設定されたときに「現在のブランチに集中」を解除する。
+    /// 呼び出し元がフィルター更新後に履歴を再取得するため、ここでは再取得しない。
+    /// </summary>
+    private void TurnOffFocusOnCurrentBranch()
+    {
+        if (!_uiStates.FocusOnCurrentBranch)
+            return;
+
+        _uiStates.FocusOnCurrentBranch = false;
+        OnPropertyChanged(nameof(FocusOnCurrentBranch));
+    }
+
     /// <summary>GPG SSH署名の許可済み署名者ファイルが設定されているかどうか。</summary>
     public bool HasAllowedSignersFile
     {
@@ -667,7 +703,13 @@ public class Repository : ObservableObject, Models.IRepository
         SelectedView = null;
         Logs.Clear();
 
-        _uiStates.Unload(_workingCopy.CommitMessage);
+        // upstream 4f18ef16: 進行中操作のメッセージは後続の _workingCopy.Dispose() が MERGE_MSG へ保存する。
+        // UI 状態にも残すと再オープン時に MERGE_MSG より古い値が優先されるため、その場合は保存しない。
+        // git am 中は MERGE_MSG へ保存しない（WorkingCopy.Dispose 参照）ため、従来どおり UI 状態に残す。
+        var lastCommitMessage = _workingCopy.InProgressContext is not null and not AmInProgress && !string.IsNullOrEmpty(_workingCopy.CommitMessage)
+            ? string.Empty
+            : _workingCopy.CommitMessage;
+        _uiStates.Unload(lastCommitMessage);
 
         _filterDebounceTimer?.Dispose();
         _filterDebounceTimer = null;
@@ -1187,6 +1229,9 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>指定タグの履歴フィルタモードを設定し、フィルタを更新する。</summary>
     public void SetTagFilterMode(Models.Tag tag, Models.FilterMode mode)
     {
+        // upstream 26fef126: 手動でフィルターを設定したら「現在のブランチに集中」は自動で解除する。
+        TurnOffFocusOnCurrentBranch();
+
         var changed = _uiStates.UpdateHistoryFilters(tag.Name, Models.FilterType.Tag, mode);
         if (changed)
             RefreshHistoryFilters(true);
@@ -1207,6 +1252,9 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void SetBranchFilterMode(BranchTreeNode node, Models.FilterMode mode, bool clearExists, bool refresh)
     {
+        // upstream 26fef126: 手動でフィルターを設定したら「現在のブランチに集中」は自動で解除する。
+        TurnOffFocusOnCurrentBranch();
+
         var isLocal = node.Path.StartsWith("refs/heads/", StringComparison.Ordinal);
         var tree = isLocal ? _localBranchTrees : _remoteBranchTrees;
 
@@ -1537,9 +1585,20 @@ public class Repository : ObservableObject, Models.IRepository
                     return;
 
                 var builder = new StringBuilder();
-                builder
-                    .Append('-').Append(Preferences.Instance.MaxHistoryCommits).Append(' ')
-                    .Append(_uiStates.BuildHistoryParams(GitDir));
+                builder.Append('-').Append(Preferences.Instance.MaxHistoryCommits).Append(' ');
+
+                if (_uiStates.FocusOnCurrentBranch)
+                {
+                    // upstream 26fef126 / 1b080758: 現在のブランチとその upstream に属するコミットだけを表示する。
+                    var upstream = await new Commands.QueryUpstreamOfCurrentBranch(FullPath) { CancellationToken = token }
+                        .GetResultAsync()
+                        .ConfigureAwait(false);
+                    builder.Append(_uiStates.BuildHistoryParamsForCurrentBranch(upstream));
+                }
+                else
+                {
+                    builder.Append(_uiStates.BuildHistoryParams(GitDir));
+                }
 
                 Models.Logger.Log($"RefreshCommits開始: {FullPath}", Models.LogLevel.Debug);
                 var commits = await new Commands.QueryCommits(FullPath, builder.ToString()) { CancellationToken = token }.GetResultAsync().ConfigureAwait(false);

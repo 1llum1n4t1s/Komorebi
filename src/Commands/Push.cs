@@ -21,7 +21,8 @@ public class Push : Command
     /// <param name="track">上流ブランチとして追跡設定するかどうか。</param>
     /// <param name="force">強制プッシュ（force-with-lease）するかどうか。</param>
     /// <param name="noVerify">pre-push フックを実行しないかどうか。</param>
-    public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool noVerify = false)
+    /// <param name="localIsRevision">local がブランチ名ではなくコミット SHA 等のリビジョンかどうか。</param>
+    public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool noVerify = false, bool localIsRevision = false)
     {
         _remote = remote;
 
@@ -54,7 +55,11 @@ public class Push : Command
 
         // <remote> <local>:<remoteBranch> 形式でプッシュ先を指定する。
         // refspec の "local:remoteBranch" は 1 つの引数として Quoted し、引数境界を守る。
-        builder.Append(remote.Quoted()).Append(' ').Append($"{local}:{remoteBranch}".Quoted());
+        // upstream 8189114b: 同名タグがあると短縮名の refspec が曖昧になるため、完全な ref 名で指定する。
+        // 上流は revision 用に別コンストラクターを持つが、Komorebi は単一コンストラクターで SHA も受けるため、
+        // ローカル側はブランチのときだけ refs/heads/ を付け、リモート側は常にブランチとして完全名にする。
+        var localRef = localIsRevision ? local : $"refs/heads/{local}";
+        builder.Append(remote.Quoted()).Append(' ').Append($"{localRef}:refs/heads/{remoteBranch}".Quoted());
         Args = builder.ToString();
     }
 

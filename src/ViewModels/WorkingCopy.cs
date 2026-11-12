@@ -343,8 +343,10 @@ public class WorkingCopy : ObservableObject, IDisposable
     /// </summary>
     public void Dispose()
     {
-        // 進行中の操作がある場合、コミットメッセージをMERGE_MSGに保存
-        if (_inProgressContext is not null && !string.IsNullOrEmpty(_commitMessage))
+        // 進行中の操作がある場合、コミットメッセージをMERGE_MSGに保存。
+        // git am は MERGE_MSG を使わず（rebase-apply/final-commit を使う）、完了後も消さないため、
+        // 書くと次の無関係なコミットに古い本文が読み込まれる。am 中は保存しない（実 Git で確認済み）。
+        if (_inProgressContext is not null and not AmInProgress && !string.IsNullOrEmpty(_commitMessage))
             File.WriteAllText(Path.Combine(_repo.GitDir, "MERGE_MSG"), _commitMessage);
 
         // Repository は `_workingCopy = null` を行わない方針なので、
@@ -1047,8 +1049,13 @@ public class WorkingCopy : ObservableObject, IDisposable
         // gitディレクトリ内のマーカーファイルで進行中の操作を判定
         if (File.Exists(Path.Combine(_repo.GitDir, "CHERRY_PICK_HEAD")))
             InProgressContext = new CherryPickInProgress(_repo);
-        else if (Directory.Exists(Path.Combine(_repo.GitDir, "rebase-merge")) || Directory.Exists(Path.Combine(_repo.GitDir, "rebase-apply")))
+        else if (Directory.Exists(Path.Combine(_repo.GitDir, "rebase-merge")) || File.Exists(Path.Combine(_repo.GitDir, "rebase-apply", "rebasing")))
             InProgressContext = new RebaseInProgress(_repo);
+        else if (File.Exists(Path.Combine(_repo.GitDir, "rebase-apply", "applying")))
+            // upstream ef017624 / 61e9fcc1: git am は rebase と同じ rebase-apply を使うため、マーカーで区別する。
+            // 上流はマーカーのない rebase-apply を進行なしとみなして削除するが、Komorebi は
+            // apply backend の rebase（rebasing マーカー）を Rebase として扱い、利用者の状態を消さないよう削除しない。
+            InProgressContext = new AmInProgress(_repo);
         else if (File.Exists(Path.Combine(_repo.GitDir, "REVERT_HEAD")))
             InProgressContext = new RevertInProgress(_repo);
         else if (File.Exists(Path.Combine(_repo.GitDir, "MERGE_HEAD")))
@@ -1060,22 +1067,37 @@ public class WorkingCopy : ObservableObject, IDisposable
         if (_inProgressContext is not null && _inProgressContext.GetType() == oldType && !string.IsNullOrEmpty(_commitMessage))
             return;
 
-        // 上流 0b253cc5: 外部で終了した操作の自動入力だけを消し、ユーザーの編集は保持する。
-        if (_inProgressContext is null && oldType is not null && IsAutoLoadedCommitMessage())
-            CommitMessage = string.Empty;
+        if (_inProgressContext is null)
+        {
+            // 上流 0b253cc5: 外部で終了した操作の自動入力だけを消し、ユーザーの編集は保持する。
+            if (oldType is not null && IsAutoLoadedCommitMessage())
+                CommitMessage = string.Empty;
+            // upstream 4f18ef16: cherry-pick/revert --no-commit は進行中状態を残さず MERGE_MSG だけを書く。
+            // 入力欄が空なら、その MERGE_MSG を読み込んでコミット時に使えるようにする。
+            else if (string.IsNullOrEmpty(_commitMessage))
+                LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "MERGE_MSG"));
+
+            return;
+        }
 
         // MERGE_MSGファイルからコミットメッセージを読み込み
         if (LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "MERGE_MSG")))
             return;
 
-        if (_inProgressContext is not RebaseInProgress { } rebasing)
-            return;
+        if (_inProgressContext is RebaseInProgress rebasing)
+        {
+            // リベース中: rebase-merge/messageファイルからメッセージを読み込み
+            if (LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "rebase-merge", "message")))
+                return;
 
-        // リベース中: rebase-merge/messageファイルからメッセージを読み込み
-        if (LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "rebase-merge", "message")))
-            return;
-
-        SetAutoLoadedCommitMessage(new Commands.QueryCommitFullMessage(_repo.FullPath, rebasing.StoppedAt.SHA).GetResult());
+            if (rebasing.StoppedAt is not null)
+                SetAutoLoadedCommitMessage(new Commands.QueryCommitFullMessage(_repo.FullPath, rebasing.StoppedAt.SHA).GetResult());
+        }
+        else if (_inProgressContext is AmInProgress)
+        {
+            // upstream ef017624: git am は適用中パッチのメッセージを rebase-apply/final-commit に置く。
+            LoadCommitMessageFromFile(Path.Combine(_repo.GitDir, "rebase-apply", "final-commit"));
+        }
     }
 
     /// <summary>

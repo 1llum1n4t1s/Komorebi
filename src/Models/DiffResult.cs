@@ -121,6 +121,15 @@ public partial class TextDiff
     public int AddedLines { get; set; } = 0;
     /// <summary>削除行数</summary>
     public int DeletedLines { get; set; } = 0;
+    /// <summary>新規追加ファイルの差分かどうか（"new file mode" 行あり）</summary>
+    public bool IsNewFile { get; set; } = false;
+    /// <summary>削除ファイルの差分かどうか（"deleted file mode" 行あり）</summary>
+    public bool IsDeletedFile { get; set; } = false;
+    /// <summary>
+    /// ファイル全体の追加・削除かどうか。upstream 37bd1fbd: 片側が空になるため並列表示せず、
+    /// 存在する側の行番号だけを表示する。
+    /// </summary>
+    public bool IsNewOrDeletedFile => IsNewFile || IsDeletedFile;
 
     /// <summary>
     /// 指定範囲の選択情報を生成する。パッチ生成時に選択行の統計を計算する。

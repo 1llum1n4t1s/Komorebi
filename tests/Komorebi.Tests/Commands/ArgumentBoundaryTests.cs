@@ -81,6 +81,31 @@ public class ArgumentBoundaryTests
         AssertArguments(command.Args, "lfs", "unlock", "--remote=" + remote, "file one", "file two");
     }
 
+    [Fact]
+    public void Push_Branch_UsesFullRefNamesOnBothSides()
+    {
+        // upstream 8189114b: 同名タグがあっても曖昧にならないよう、ブランチは完全な ref 名で push する。
+        var command = new Komorebi.Commands.Push(Path.GetTempPath(), "topic", "origin", "feature/x", false, false, true, false);
+        AssertArguments(command.Args, "push", "--progress", "--verbose", "-u", "origin", "refs/heads/topic:refs/heads/feature/x");
+    }
+
+    [Fact]
+    public void Push_Revision_KeepsShaAndQualifiesOnlyRemoteSide()
+    {
+        // Komorebi は revision push も同じコンストラクターを使うため、SHA に refs/heads/ を付けない。
+        const string sha = "0123456789abcdef0123456789abcdef01234567";
+        var command = new Komorebi.Commands.Push(Path.GetTempPath(), sha, "origin", "main", false, false, false, true, localIsRevision: true);
+        AssertArguments(command.Args, "push", "--progress", "--verbose", "--force-with-lease", "origin", $"{sha}:refs/heads/main");
+    }
+
+    [Fact]
+    public void Am_PreservesPatchPathAndOptions()
+    {
+        const string file = "C:\\patch folder\\0001-fix \"quote\".patch";
+        var command = new Komorebi.Commands.Am(Path.GetTempPath(), file, false, "fix", "--3way");
+        AssertArguments(command.Args, "am", "--whitespace=fix", "--3way", file);
+    }
+
     private static void AssertArguments(string arguments, params string[] expected)
     {
         // --sq-quoteは後続を実行せず表示する。LFS等の外部サービスへは接続しない。

@@ -156,7 +156,8 @@ public class DiffContext : ObservableObject
             return;
         }
 
-        if (Content is TextDiffContext ctx && ctx.IsSideBySide() != pref.UseSideBySideDiff)
+        // upstream 37bd1fbd: ファイル全体の追加・削除は常に Combined 表示とし、並列表示へ切り替えない。
+        if (Content is TextDiffContext ctx && ctx.IsSideBySide() != pref.UseSideBySideDiff && !ctx.Data.IsNewOrDeletedFile)
             Content = ctx.SwitchMode();
     }
 
@@ -351,7 +352,8 @@ public class DiffContext : ObservableObject
             IsTextDiff = true;
             IsIgnoreWhitespaceVisible = true;
 
-            if (Preferences.Instance.UseSideBySideDiff)
+            // upstream 37bd1fbd: 片側が空になる追加・削除ファイルは並列表示しない。
+            if (Preferences.Instance.UseSideBySideDiff && !cur.IsNewOrDeletedFile)
                 Content = new TwoSideTextDiff(_option, cur, _content as TextDiffContext);
             else
                 Content = new CombinedTextDiff(_option, cur, _content as TextDiffContext);

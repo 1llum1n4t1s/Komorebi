@@ -715,10 +715,35 @@ public partial class BranchTree : UserControl
     /// </summary>
     private void OnTreeKeyDown(object _, KeyEventArgs e)
     {
-        if (e.Key == Key.F && e.KeyModifiers == (OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control))
+        var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+        if (e.Key == Key.F && e.KeyModifiers == cmdKey)
         {
             RaiseEvent(new RoutedEventArgs(SearchRequestedEvent));
             e.Handled = true;
+        }
+        else if (e.Key == Key.C && e.KeyModifiers == cmdKey)
+        {
+            // upstream 7771c8ce: 選択がちょうど 1 本のブランチに解決できる場合だけ、その名前をコピーする。
+            // 複数ブランチやブランチを持たないノードでは、コピー対象が曖昧なので何もしない。
+            var selected = BranchesPresenter.SelectedItems;
+            if (selected is null)
+                return;
+
+            List<Models.Branch> branches = [];
+            foreach (var item in selected)
+            {
+                if (item is ViewModels.BranchTreeNode node)
+                    CollectBranchesInNode(branches, node);
+            }
+
+            if (branches.Count == 1)
+            {
+                // upstream は常に Name をコピーするが、右クリックメニューの「名前をコピー」は
+                // リモートブランチで FriendlyName（remote/branch）をコピーするため、表示中の操作と結果を揃える。
+                var target = branches[0];
+                _ = App.CopyTextAsync(target.IsLocal ? target.Name : target.FriendlyName);
+                e.Handled = true;
+            }
         }
         else if ((e.Key == Key.Delete || e.Key == Key.Back) && e.KeyModifiers == KeyModifiers.None)
         {
@@ -1212,6 +1237,7 @@ public partial class BranchTree : UserControl
         var copy = new MenuItem();
         copy.Header = App.Text("BranchCM.CopyName");
         copy.Icon = App.CreateMenuIcon("Icons.Copy");
+        copy.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
         copy.Click += async (_, e) =>
         {
             await App.CopyTextAsync(branch.Name);
@@ -1476,6 +1502,7 @@ public partial class BranchTree : UserControl
         var copy = new MenuItem();
         copy.Header = App.Text("BranchCM.CopyName");
         copy.Icon = App.CreateMenuIcon("Icons.Copy");
+        copy.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
         copy.Click += async (_, e) =>
         {
             await App.CopyTextAsync(name);

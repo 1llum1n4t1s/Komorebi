@@ -138,6 +138,7 @@ public class MergeConflictEditor : ObservableObject
         {
             CherryPickInProgress cherryPick => (head, cherryPick.Head),
             RebaseInProgress rebase => (rebase.Onto, rebase.StoppedAt),
+            AmInProgress => (head, (object)"Patch"),
             RevertInProgress revert => (head, revert.Head),
             MergeInProgress merge => (head, merge.Source),
             _ => (head, (object)"Stash or Patch"),

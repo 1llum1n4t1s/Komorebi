@@ -24,8 +24,6 @@ public static class NumericSort
         if (s2 is null)
             return 1;
 
-        var comparer = StringComparer.InvariantCultureIgnoreCase;
-
         int len1 = s1.Length;
         int len2 = s2.Length;
 
@@ -42,7 +40,8 @@ public static class NumericSort
             bool isDigit1 = char.IsAsciiDigit(c1);
             bool isDigit2 = char.IsAsciiDigit(c2);
             if (isDigit1 != isDigit2)
-                return comparer.Compare(c1.ToString(), c2.ToString());
+                // upstream e66cccaf: 1 文字の比較でも文字列を確保せず span で比較する。
+                return s1.AsSpan(marker1, 1).CompareTo(s2.AsSpan(marker2, 1), StringComparison.InvariantCultureIgnoreCase);
 
             // 同じ種類（数字/非数字）の連続文字チャンクの長さを算出
             int subLen1 = 1;
@@ -53,19 +52,24 @@ public static class NumericSort
             while (marker2 + subLen2 < len2 && char.IsAsciiDigit(s2[marker2 + subLen2]) == isDigit2)
                 subLen2++;
 
-            string sub1 = s1[marker1..(marker1 + subLen1)];
-            string sub2 = s2[marker2..(marker2 + subLen2)];
+            // 数字チャンクは桁数が異なれば桁数で大小が決まる（従来どおり）。
+            if (isDigit1 && subLen1 != subLen2)
+                return subLen1 - subLen2;
+
+            // upstream e66cccaf: Substring の代わりに span で比較し、ソート時の文字列確保をなくす。
+            var sub1 = s1.AsSpan(marker1, subLen1);
+            var sub2 = s2.AsSpan(marker2, subLen2);
 
             marker1 += subLen1;
             marker2 += subLen2;
 
             int result;
             if (isDigit1)
-                // 数字チャンクは桁数で比較、同桁数なら辞書順比較
-                result = (subLen1 == subLen2) ? string.CompareOrdinal(sub1, sub2) : (subLen1 - subLen2);
+                // 同桁数の数字チャンクは序数（辞書順）で比較
+                result = sub1.SequenceCompareTo(sub2);
             else
                 // 非数字チャンクは大文字小文字無視で比較
-                result = comparer.Compare(sub1, sub2);
+                result = sub1.CompareTo(sub2, StringComparison.InvariantCultureIgnoreCase);
 
             if (result != 0)
                 return result;

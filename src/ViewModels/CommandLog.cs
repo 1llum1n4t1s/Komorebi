@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -97,7 +98,16 @@ public class CommandLog : ObservableObject, Models.ICommandLog
         // UIスレッド以外からの呼び出しはUIスレッドにディスパッチする
         if (!Dispatcher.UIThread.CheckAccess())
         {
-            Dispatcher.UIThread.Invoke(() => AppendLine(line));
+            // upstream acbb2e9a: アプリ終了時に保留中の UI 更新はキャンセルされるため、
+            // TaskCanceledException はログ追記の失敗として扱わずに無視する。
+            try
+            {
+                Dispatcher.UIThread.Invoke(() => AppendLine(line));
+            }
+            catch (TaskCanceledException)
+            {
+                // 終了処理中は UI へ反映する先がないため破棄してよい。
+            }
         }
         else
         {
@@ -133,7 +143,16 @@ public class CommandLog : ObservableObject, Models.ICommandLog
         // UIスレッド以外からの呼び出しはUIスレッドにディスパッチする
         if (!Dispatcher.UIThread.CheckAccess())
         {
-            Dispatcher.UIThread.Invoke(Complete);
+            // upstream acbb2e9a: 終了処理中のディスパッチ取消は無視する。
+            try
+            {
+                Dispatcher.UIThread.Invoke(Complete);
+            }
+            catch (TaskCanceledException)
+            {
+                // 終了処理中は UI へ反映する先がないため破棄してよい。
+            }
+
             return;
         }
 

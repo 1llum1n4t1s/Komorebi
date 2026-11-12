@@ -1,7 +1,6 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
-using System.Threading;
 
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -49,15 +48,17 @@ public class CommandLogTime : TextBlock
         if (log.IsComplete)
             return;
 
-        _refreshTimer = new Timer(_ =>
+        // upstream acbb2e9a: スレッドプールの Timer から UI スレッドへ Invoke すると、
+        // 終了時に TaskCanceledException が発生する。UI スレッド上で動く DispatcherTimer を使う。
+        _refreshTimer = new DispatcherTimer();
+        _refreshTimer.Interval = TimeSpan.FromMilliseconds(100);
+        _refreshTimer.Tick += (_, _) =>
         {
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                Text = GetDisplayText(log);
-                if (log.IsComplete)
-                    StopTimer();
-            });
-        }, null, 0, 100);
+            Text = GetDisplayText(log);
+            if (log.IsComplete)
+                StopTimer();
+        };
+        _refreshTimer.Start();
     }
 
     /// <summary>
@@ -67,7 +68,7 @@ public class CommandLogTime : TextBlock
     {
         if (_refreshTimer is not null)
         {
-            _refreshTimer.Dispose();
+            _refreshTimer.Stop();
             _refreshTimer = null;
         }
     }
@@ -89,5 +90,5 @@ public class CommandLogTime : TextBlock
         return $"{duration.TotalMilliseconds:G3} ms";
     }
 
-    private Timer _refreshTimer = null;
+    private DispatcherTimer _refreshTimer = null;
 }

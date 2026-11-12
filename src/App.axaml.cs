@@ -723,8 +723,33 @@ public partial class App : Application
     /// <param name="data">コピーするテキスト（nullの場合は空文字列をセットする）</param>
     public static async Task CopyTextAsync(string data)
     {
-        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard })
+        if (Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime { MainWindow.Clipboard: { } clipboard } desktop)
+            return;
+
+        try
+        {
             await clipboard.SetTextAsync(data ?? "");
+        }
+        catch (Exception e)
+        {
+            // upstream 56dd611b: 他プロセスがクリップボードを占有していると Windows では
+            // SetDataAsync が COMException を投げ、未処理だとアプリが落ちる。失敗を利用者へ伝えて継続する。
+            // コピー操作は独立ウィンドウ（Blame・ファイル履歴等）からも呼ばれ、親画面のバナーでは
+            // 隠れてしまうため、操作中のウィンドウを親にした Alert で表示する。
+            Models.Logger.LogException("クリップボードへのコピーに失敗しました", e);
+
+            Window owner = desktop.MainWindow;
+            foreach (var window in desktop.Windows)
+            {
+                if (window.IsActive)
+                {
+                    owner = window;
+                    break;
+                }
+            }
+
+            await new Views.Alert().ShowAsync(owner, Text("Clipboard.CopyFailed", e.Message), true);
+        }
     }
 
     /// <summary>

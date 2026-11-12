@@ -34,6 +34,9 @@ fi
 
 rm -f Komorebi/*.dbg
 rm -f Komorebi/*.pdb
+# upstream 85916642: ubuntu-latest の rpmbuild では %install 内の chmod -R が失敗するため、
+# パッケージ化の前に配布物全体の権限をここで揃える（AppImage・deb・rpm 共通）。
+chmod 755 -R Komorebi
 
 mkdir -p Komorebi.AppDir/opt
 mkdir -p Komorebi.AppDir/usr/share/metainfo

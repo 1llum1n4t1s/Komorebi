@@ -48,7 +48,7 @@ public class User
     /// <returns>対応するUserインスタンス</returns>
     public static User FindOrAdd(string data)
     {
-        return _caches.GetOrAdd(data, key => new User(key));
+        return _caches.GetOrAdd(data, static key => new User(key));
     }
 
     /// <summary>「名前 &lt;メールアドレス&gt;」形式の文字列表現を返す</summary>

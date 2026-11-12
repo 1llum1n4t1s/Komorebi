@@ -24,7 +24,6 @@ cp -f %{_topdir}/../../Komorebi/* %{buildroot}/opt/komorebi/
 ln -rsf %{buildroot}/opt/komorebi/komorebi %{buildroot}/%{_bindir}
 cp -r %{_topdir}/../_common/applications %{buildroot}/%{_datadir}
 cp -r %{_topdir}/../_common/icons %{buildroot}/%{_datadir}
-chmod 755 -R %{buildroot}/opt/komorebi
 chmod 755 %{buildroot}/%{_datadir}/applications/komorebi.desktop
 
 %files

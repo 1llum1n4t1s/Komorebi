@@ -227,19 +227,32 @@ public class RebaseInProgress : InProgressContext
                 TotalSteps = last;
         }
 
+        // Komorebi 独自修正: apply backend の rebase（git rebase --apply）は rebase-merge を作らず、
+        // head-name・onto・orig-head を rebase-apply に置く。rebase-merge 固定で読むと例外になるため、
+        // 実在する状態ディレクトリから読む。
+        var stateDir = Directory.Exists(rebaseMergeDir) ? rebaseMergeDir : rebaseApplyDir;
+
         // head-nameファイルからブランチ名を取得し、refs/heads/等のプレフィックスを除去
-        HeadName = File.ReadAllText(Path.Combine(repo.GitDir, "rebase-merge", "head-name")).Trim();
+        var headNamePath = Path.Combine(stateDir, "head-name");
+        HeadName = File.Exists(headNamePath) ? File.ReadAllText(headNamePath).Trim() : string.Empty;
         if (HeadName.StartsWith("refs/heads/"))
             HeadName = HeadName["refs/heads/".Length..];
         else if (HeadName.StartsWith("refs/tags/"))
             HeadName = HeadName["refs/tags/".Length..];
 
-        var stoppedSHAPath = Path.Combine(rebaseMergeDir, "stopped-sha");
-        var originalHeadPath = Path.Combine(rebaseMergeDir, "orig-head");
+        var stoppedSHAPath = Path.Combine(stateDir, "stopped-sha");
+        var originalHeadPath = Path.Combine(stateDir, "orig-head");
         string stoppedSHA;
         if (File.Exists(stoppedSHAPath))
         {
             stoppedSHA = File.ReadAllText(stoppedSHAPath).Trim();
+        }
+        else if (stateDir == rebaseApplyDir)
+        {
+            // apply backend は stopped-sha を作らず、再適用中のコミットを original-commit に記録する。
+            // orig-head はリベース前のブランチ先端で停止位置ではないため、ここでは使わない（実 Git で確認済み）。
+            var originalCommitPath = Path.Combine(stateDir, "original-commit");
+            stoppedSHA = File.Exists(originalCommitPath) ? File.ReadAllText(originalCommitPath).Trim() : string.Empty;
         }
         else if (File.Exists(originalHeadPath))
         {
@@ -252,7 +265,8 @@ public class RebaseInProgress : InProgressContext
             stoppedSHA = new Commands.QueryRevisionByRefName(repo.FullPath, HeadName).GetResult();
         }
 
-        var ontoSHA = File.ReadAllText(Path.Combine(repo.GitDir, "rebase-merge", "onto")).Trim();
+        var ontoPath = Path.Combine(stateDir, "onto");
+        var ontoSHA = File.Exists(ontoPath) ? File.ReadAllText(ontoPath).Trim() : string.Empty;
 
         if (!string.IsNullOrEmpty(stoppedSHA))
         {
@@ -302,6 +316,80 @@ public class RebaseInProgress : InProgressContext
 
     /// <summary>リポジトリの.gitディレクトリパス。</summary>
     private readonly string _gitDir;
+}
+
+/// <summary>
+/// 進行中の git am（メール形式パッチの適用）操作のコンテキスト。
+/// upstream ef017624: rebase-apply/applying がある場合に rebase と区別して扱う。
+/// </summary>
+public class AmInProgress : InProgressContext
+{
+    /// <summary>現在のパッチ番号（rebase-apply/next）。</summary>
+    public int CurrentStep
+    {
+        get;
+    }
+
+    /// <summary>パッチの総数（rebase-apply/last）。</summary>
+    public int TotalSteps
+    {
+        get;
+    }
+
+    /// <summary>
+    /// 現在のパッチ以外にも残りがあり、スキップで次へ進めるかどうか。
+    /// 上流と同じく最後のパッチでは Skip を出さない（中止または続行で終える）。
+    /// </summary>
+    public bool CanSkip => CurrentStep < TotalSteps;
+
+    /// <summary>進捗テキスト。上流と同じく「適用済み件数/総数」で表示する。</summary>
+    public override string ProgressText => TotalSteps > 0 ? $"({CurrentStep - 1}/{TotalSteps})" : string.Empty;
+    public override bool HasProgress => TotalSteps > 0;
+
+    /// <summary>
+    /// コンストラクタ。rebase-apply の進捗を読み込み、continue/skip/abort コマンドを構成する。
+    /// </summary>
+    public AmInProgress(Repository repo)
+    {
+        Name = "Apply Patch";
+
+        _continueCmd = new Commands.Command
+        {
+            WorkingDirectory = repo.FullPath,
+            Context = repo.FullPath,
+            Editor = Commands.Command.EditorType.None,
+            Args = "am --continue",
+        };
+
+        _skipCmd = new Commands.Command
+        {
+            WorkingDirectory = repo.FullPath,
+            Context = repo.FullPath,
+            Args = "am --skip",
+        };
+
+        _abortCmd = new Commands.Command
+        {
+            WorkingDirectory = repo.FullPath,
+            Context = repo.FullPath,
+            Args = "am --abort",
+        };
+
+        var rebaseApplyDir = Path.Combine(repo.GitDir, "rebase-apply");
+        CurrentStep = ReadIntFromFile(Path.Combine(rebaseApplyDir, "next"));
+        TotalSteps = ReadIntFromFile(Path.Combine(rebaseApplyDir, "last"));
+    }
+
+    /// <summary>
+    /// 数値 1 つだけを含む状態ファイルを読む。存在しない・不正な場合は 0。
+    /// </summary>
+    private static int ReadIntFromFile(string file)
+    {
+        if (!File.Exists(file))
+            return 0;
+
+        return int.TryParse(File.ReadAllText(file).Trim(), out var value) ? value : 0;
+    }
 }
 
 /// <summary>

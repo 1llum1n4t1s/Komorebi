@@ -350,12 +350,18 @@ public partial class Diff : Command
             if (line.StartsWith("deleted file mode ", StringComparison.Ordinal))
             {
                 _result.OldMode = line[18..];
+                // upstream 37bd1fbd: ファイル全体の削除は旧側だけを表示するため記録する。
+                if (_result.TextDiff != null)
+                    _result.TextDiff.IsDeletedFile = true;
                 return true;
             }
 
             if (line.StartsWith("new file mode ", StringComparison.Ordinal))
             {
                 _result.NewMode = line[14..];
+                // upstream 37bd1fbd: ファイル全体の追加は新側だけを表示するため記録する。
+                if (_result.TextDiff != null)
+                    _result.TextDiff.IsNewFile = true;
                 return true;
             }
 
