@@ -205,6 +205,8 @@ CI の構成は [.github/workflows](.github/workflows) を参照する。`releas
 
 `release/**` ブランチへの push で `release.yml` が `build.yml` → `package.yml` → `velopack.yml` → `r2-upload` を順に呼ぶ。アップロード前に `python3 build/scripts/verify-release-artifacts.py --packages packages --version <version> --source-sha <40桁SHA>` で最終配布物を検証する（Linux 上で `rpm`・`rpm2cpio`・`squashfs-tools`・`libarchive-tools` が必要）。版・ソース SHA・CPU・manifest の hash/size と各パッケージの実体が一致しない場合は配信しない。
 
+パッケージ作成の制約: `vpk` は .NET 10 ランタイム向けで CI には .NET 11 SDK だけを入れるため、`velopack.yml` で `DOTNET_ROLL_FORWARD=Major` を設定する（ローカルの `release-local.ps1` と同じ扱い）。.NET 11 の publish 出力にはサテライトリソースのフォルダー（`zh-Hans` など）が含まれるので、deb（`package.linux.sh`）・rpm（`build.spec`）の publish 出力コピーは `cp -rf` でディレクトリごと行い、`-r` を外さない。
+
 旧版清掃は所有する配信経路に限定する。CI は Windows の全世代の nupkg・standalone zip・固定名 installer を保護し、Windows はローカル署名リリースだけが清掃する。ローカル側は未ビルドのチャンネルの manifest 参照も保持し、取得・形式検証に失敗したら清掃を中止する。並行配信中の相手の新パッケージを削除しない理由は [DESIGN.md](DESIGN.md#不変条件と採用済み設計判断) を参照する。
 
 > ℹ️ `package.yml` の win standalone zip (`komorebi_*.zip`) は引き続き CI で生成される未署名バイナリ。署名対象に含めたい場合はローカルスクリプトへの移植が必要。
