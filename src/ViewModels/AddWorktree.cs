@@ -165,10 +165,10 @@ public class AddWorktree : Popup
     public static ValidationResult ValidateWorktreePath(string path, ValidationContext ctx)
     {
         if (ctx.ObjectInstance is not AddWorktree creator)
-            return new ValidationResult(App.Text("Validation.ContextInvalid"));
+            return new ValidationResult(ValidationMessages.ContextInvalid);
 
         if (string.IsNullOrEmpty(path))
-            return new ValidationResult(App.Text("Validation.WorktreePathRequired"));
+            return new ValidationResult(ValidationMessages.WorktreePathRequired);
 
         // 相対パスの場合はリポジトリのルートと結合してフルパスにする
         var fullPath = System.IO.Path.IsPathRooted(path) ? path : System.IO.Path.Combine(creator._repo.FullPath, path);
@@ -178,11 +178,11 @@ public class AddWorktree : Popup
             // ディレクトリが空でないか確認する
             var files = info.GetFiles();
             if (files.Length > 0)
-                return new ValidationResult(App.Text("Validation.PathNotEmpty"));
+                return new ValidationResult(ValidationMessages.PathNotEmpty);
 
             var folders = info.GetDirectories();
             if (folders.Length > 0)
-                return new ValidationResult(App.Text("Validation.PathNotEmpty"));
+                return new ValidationResult(ValidationMessages.PathNotEmpty);
         }
 
         return ValidationResult.Success;
@@ -195,7 +195,7 @@ public class AddWorktree : Popup
     {
         if (ctx.ObjectInstance is AddWorktree { CreateNewBranch: true } &&
             !string.IsNullOrEmpty(name) && !Models.RefName.IsValidBranchName(name))
-            return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
+            return new ValidationResult(ValidationMessages.BranchNameInvalid);
 
         return ValidationResult.Success;
     }

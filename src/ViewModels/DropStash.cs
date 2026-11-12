@@ -26,15 +26,19 @@ public class DropStash : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.DroppingStash", Stash.Name);
 
         var log = _repo.CreateLog("Drop Stash");
         Use(log);
 
-        await new Commands.Stash(_repo.FullPath)
-            .Use(log)
-            .DropAsync(Stash.Name);
+        // Watcher ロックは git コマンド実行範囲に限定し、Mark*DirtyManually はロック解除後に呼ぶ
+        // （DeleteBranch.cs と同じ。ロック中に呼ぶと解除後に届く FS イベントが Refresh をキャンセルする。PITFALLS 参照）。
+        using (_repo.LockWatcher())
+        {
+            await new Commands.Stash(_repo.FullPath)
+                .Use(log)
+                .DropAsync(Stash.Name);
+        }
 
         log.Complete();
         _repo.MarkStashesDirtyManually();

@@ -145,15 +145,13 @@ namespace Komorebi.Tests.Commands
         [Fact]
         public void ParseLine_SingleQuoteCharAsPath_DoesNotThrow()
         {
-            // Path = "\"" (1文字) の場合、Substring(1, Length-2) = Substring(1, -1) → 例外
-            var ex = Record.Exception(() =>
-            {
-                var change = new Change { Path = "\"" };
-                change.Set(ChangeState.Modified);
-            });
-            // もしSubstringの境界チェックがないなら例外が飛ぶ
-            if (ex != null)
-                Assert.IsType<ArgumentOutOfRangeException>(ex);
+            // Path = "\"" (1文字) は Change.Set の `Path.Length > 1` ガードでクォート除去の対象外になる。
+            // 以前は「例外なし」と「ArgumentOutOfRangeException」のどちらでも通っていたため、
+            // 実装の振る舞い（例外なし・パスはそのまま）に固定する。
+            var change = new Change { Path = "\"" };
+            var ex = Record.Exception(() => change.Set(ChangeState.Modified));
+            Assert.Null(ex);
+            Assert.Equal("\"", change.Path);
         }
 
         /// <adversarial category="type" severity="high" />

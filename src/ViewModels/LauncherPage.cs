@@ -135,7 +135,8 @@ public class LauncherPage : ObservableObject
             }
             catch (Exception e)
             {
-                App.LogException(e);
+                // 旧 App.LogException は LogCrash への転送だけだったため、直接呼ぶ。
+                Models.Logger.LogCrash(e);
             }
 
             dump.InProgress = false;

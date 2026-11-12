@@ -22,6 +22,8 @@ Komorebi は [sourcegit-scm/sourcegit](https://github.com/sourcegit-scm/sourcegi
   - file-scoped namespace + 日本語 XML doc コメント
   - collection expression `[]`
   - `[DynamicDependency]` で AOT 安全な View 解決（移行中）
+  - テスト用の可視性変更: `Models.RepositorySettings.HashContent` を上流の `private` から `internal` にしている（テストが UTF-8 固定のハッシュ契約をリフレクションなしで検証するため。呼び出し元は従来どおり同クラスのみ）。上流が同メソッドを変更した場合も `internal` を維持する
+  - `Models.Commit.GetFriendlyName` の SHA 短縮: 上流は `SHA[..10]` で 10 文字未満だと例外になる。中断中の CHERRY_PICK_HEAD / REVERT_HEAD / MERGE_HEAD などが空・途中切れのとき、`InProgressContexts` がファイル内容から作る代用コミットでクラッシュするため、`Commit.ToShortSHA`（10 文字以下はそのまま返す）を使う。同じ代用コミットを表示する `Views.WorkingCopy` の revert 衝突解決メニューも同様
 
 ## 形式
 

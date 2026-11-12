@@ -9,6 +9,7 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 namespace Komorebi.AI;
 
@@ -29,9 +30,10 @@ public class Service : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
         get => _apiKey;
         set
         {
-            // キーを差し替えたら、読み込み時の暗号文は再利用できなくなる
+            // キーを差し替えたら、保持している暗号文は再利用できなくなる。
+            // （ここで消し損ねても getter が「暗号文の元の平文」と現在値を照合するので、古い暗号文は使われない）
             if (string.IsNullOrEmpty(value) || !string.Equals(_apiKey, value, StringComparison.Ordinal))
-                _storedCipher = string.Empty;
+                _storedApiKey = null;
 
             _apiKey = value ?? string.Empty;
         }
@@ -41,35 +43,24 @@ public class Service : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     /// preference.json へ保存される暗号化済み API キー。
     /// </summary>
     /// <remarks>
-    /// <see cref="ApiKeyProtector.Protect"/> は鍵ファイル破損や DPAPI 障害などで失敗すると
-    /// 空文字を返す。その値をそのまま保存すると、メモリ上には平文キーがあるのに
-    /// ディスク上のキーだけが消える（次回起動時にユーザーは再入力を強いられる）。
-    /// 暗号化に失敗した場合は、読み込み時に得た暗号文をそのまま書き戻して消失を防ぐ。
+    /// 暗号文は「その暗号文の元になった平文」と対で保持し（<see cref="StoredCipher"/>）、次の規則で保存値を決める
+    /// （詳細は <see cref="ResolveCipher"/>）。
+    /// <list type="bullet">
+    /// <item>元の平文が現在の ApiKey と一致すれば暗号文を再利用する（AES-GCM の乱数ノンスで毎回内容が変わり、
+    /// 同一内容の保存スキップが効かなくなるのを防ぐ）。一致しなければ現在値で暗号化し直す
+    /// （保存中に UI でキーを変えても、旧キーの暗号文が固定されて再起動後に巻き戻らない）。</item>
+    /// <item>読み込んだ暗号文を復号できなかった（鍵ファイルの読込失敗・破損など）ため ApiKey が空のときは、
+    /// その暗号文をそのまま書き戻す。鍵を作り直さず、ディスク上のキーを失わない。</item>
+    /// <item>利用者が明示的に空にしたときは空を保存する。暗号化に失敗したときも、平文や別の値の暗号文は保存しない。</item>
+    /// </list>
     /// </remarks>
     [JsonPropertyName("ApiKey")]
     public string ProtectedApiKey
     {
-        get
-        {
-            if (string.IsNullOrEmpty(_apiKey))
-                return _storedCipher;
-
-            var cipher = ApiKeyProtector.Protect(_apiKey);
-            if (!string.IsNullOrEmpty(cipher))
-            {
-                _storedCipher = cipher;
-                return cipher;
-            }
-
-            // 暗号化失敗。平文は絶対に書かず、直前の暗号文があればそれを維持する
-            return _storedCipher;
-        }
-        set
-        {
-            // 復号できない暗号文も保持する。旧平文の移行失敗時には平文を書き戻さない。
-            _storedCipher = ApiKeyProtector.IsProtected(value) ? value : string.Empty;
-            _apiKey = ApiKeyProtector.UnprotectOrPlainText(value);
-        }
+        // 保存（AutoFetch 等のワーカースレッド）と UI からの ApiKey 変更が並行しても、
+        // 旧キーの暗号文が新キーの保存値として固定されないよう、暗号文と元の平文を対で扱う（ResolveCipher 参照）。
+        get => ResolveCipher(ref _storedApiKey, _apiKey);
+        set => _apiKey = LoadCipher(ref _storedApiKey, value);
     }
 
     public bool ReadApiKeyFromEnv
@@ -89,7 +80,7 @@ public class Service : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
         set
         {
             if (string.IsNullOrEmpty(value) || !string.Equals(_extraHeaders, value, StringComparison.Ordinal))
-                _storedExtraHeadersCipher = string.Empty;
+                _storedExtraHeaders = null;
             _extraHeaders = value ?? string.Empty;
         }
     }
@@ -98,27 +89,62 @@ public class Service : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     [JsonPropertyName("ExtraHeaders")]
     public string ProtectedExtraHeaders
     {
-        get
-        {
-            if (string.IsNullOrEmpty(_extraHeaders))
-                return _storedExtraHeadersCipher;
-            var cipher = ApiKeyProtector.Protect(_extraHeaders);
-            if (!string.IsNullOrEmpty(cipher))
-            {
-                _storedExtraHeadersCipher = cipher;
-                return cipher;
-            }
-            return _storedExtraHeadersCipher;
-        }
-        set
-        {
-            _storedExtraHeadersCipher = ApiKeyProtector.IsProtected(value) ? value : string.Empty;
-            _extraHeaders = ApiKeyProtector.UnprotectOrPlainText(value);
-        }
+        // ProtectedApiKey と同じく、暗号文と元の平文の対で再利用を判定する
+        get => ResolveCipher(ref _storedExtraHeaders, _extraHeaders);
+        set => _extraHeaders = LoadCipher(ref _storedExtraHeaders, value);
     }
 
     private string _extraHeaders = string.Empty;
-    private string _storedExtraHeadersCipher = string.Empty;
+    /// <summary>保存用の追加ヘッダー暗号文とその元の平文（null は未保持）。</summary>
+    private StoredCipher _storedExtraHeaders;
+
+    /// <summary>
+    /// 暗号文と、その暗号文の元になった平文の組。1 つの不変オブジェクトとして参照ごと差し替えるため、
+    /// 別スレッドから読んでも「暗号文だけ新しく元の平文が古い」といった組み合わせの破れは起きない。
+    /// <see cref="Source"/> が空文字なのは、読み込んだ暗号文を復号できなかった場合だけ。
+    /// </summary>
+    private sealed record StoredCipher(string Cipher, string Source);
+
+    /// <summary>
+    /// 保存する暗号文を決める。
+    /// <list type="bullet">
+    /// <item>保持している暗号文の元の平文が現在値と一致するときだけ再利用する。AES-GCM は毎回乱数ノンスで
+    /// 暗号化するため、再暗号化すると内容が同じでも preference.json が毎回変わり、同一内容の保存スキップが効かない。</item>
+    /// <item>一致しなければ現在値を暗号化し直す。以前は「暗号文が残っていれば再利用」だったため、ワーカースレッドの
+    /// 保存中に UI でキーを変えると、旧キーの暗号文が setter の消去後に書き戻されて固定され、再起動後に巻き戻っていた。</item>
+    /// <item>現在値が空のときは、読み込んだが復号できなかった暗号文（元の平文が空）だけをそのまま返す
+    /// （鍵を作り直さない・暗号文を失わない契約）。利用者が明示的に空にした場合は空を返す。</item>
+    /// <item>暗号化に失敗しても平文は絶対に返さない。別の値の暗号文も返さない。</item>
+    /// </list>
+    /// </summary>
+    private static string ResolveCipher(ref StoredCipher slot, string plain)
+    {
+        // 判定と返却を同じスナップショットで行う（途中で別スレッドが差し替えても組は崩れない）
+        var stored = Volatile.Read(ref slot);
+        if (string.IsNullOrEmpty(plain))
+            return stored is { Source.Length: 0 } ? stored.Cipher : string.Empty;
+
+        if (stored is not null && string.Equals(stored.Source, plain, StringComparison.Ordinal))
+            return stored.Cipher;
+
+        var cipher = ApiKeyProtector.Protect(plain);
+        if (string.IsNullOrEmpty(cipher))
+            return string.Empty;
+
+        Volatile.Write(ref slot, new StoredCipher(cipher, plain));
+        return cipher;
+    }
+
+    /// <summary>
+    /// preference.json から読んだ値を復号し、平文を返す。暗号文は復号結果（失敗時は空）を元の平文として保持する。
+    /// 暗号文でない旧形式の平文は保持しない（次回保存時に暗号化して移行する。移行失敗時に平文を書き戻さない）。
+    /// </summary>
+    private static string LoadCipher(ref StoredCipher slot, string value)
+    {
+        var plain = ApiKeyProtector.UnprotectOrPlainText(value);
+        Volatile.Write(ref slot, ApiKeyProtector.IsProtected(value) ? new StoredCipher(value, plain ?? string.Empty) : null);
+        return plain ?? string.Empty;
+    }
 
 
     public ApiKeyCredential Credential
@@ -171,8 +197,8 @@ public class Service : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     }
 
     private string _apiKey = string.Empty;
-    /// <summary>読み込み時に得た暗号文。再暗号化に失敗したときの書き戻し用。</summary>
-    private string _storedCipher = string.Empty;
+    /// <summary>保存用の API キー暗号文とその元の平文（null は未保持）。<see cref="ResolveCipher"/> 参照。</summary>
+    private StoredCipher _storedApiKey;
 }
 
 /// <summary>

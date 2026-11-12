@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -96,11 +94,10 @@ public class Avatar : Control, Models.IAvatarHost
             var stepY = (Bounds.Height - offsetY * 2) / 5.0;
 
             // メールアドレスのMD5ハッシュから色とパターンを決定する。
-            // AvatarManager.GetEmailHash と同じ正規化 (Trim + ToLowerInvariant + UTF-8) を使い、
+            // AvatarManager.GetEmailHash と共通の HashEmail（Trim + ToLowerInvariant + UTF-8）を使い、
             // 取得 URL とフォールバック描画のハッシュ整合性を保つ。
             var user = User;
-            var lowered = user.Email.Trim().ToLowerInvariant();
-            var hash = MD5.HashData(Encoding.UTF8.GetBytes(lowered));
+            var hash = Models.AvatarManager.HashEmail(user.Email);
 
             var brush = new SolidColorBrush(new Color(255, hash[0], hash[1], hash[2]));
             var switches = new bool[15];

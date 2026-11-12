@@ -10,7 +10,7 @@ Komorebi はクラッシュ・エラー・主要操作をローカルログに�
 |----|---------|
 | Windows | `%LOCALAPPDATA%\Komorebi\logs\Komorebi_YYYYMMDD.log` |
 | macOS | `~/Library/Application Support/Komorebi/logs/Komorebi_YYYYMMDD.log` |
-| Linux | `~/.local/share/Komorebi/logs/Komorebi_YYYYMMDD.log` |
+| Linux | `<データディレクトリ>/logs/Komorebi_YYYYMMDD.log`（データディレクトリは既存の `~/.komorebi` または `~/.config/Komorebi`、新規環境では `$XDG_CONFIG_HOME/Komorebi`。AppImage のポータブルモードは `data`） |
 
 Windows の旧ログは起動時に新しい保存先へ移します。同名ログは別名で残し、使用中などで移動できなかったログは旧保存先に残して次回再試行します。ポータブルモードでは `data\logs` を使います。
 
@@ -66,7 +66,7 @@ Windows の旧ログは起動時に新しい保存先へ移します。同名ロ
 |---------|------|
 | `preference.json` | アプリ全体の設定 (window 位置、最近のリポジトリ、AI 設定など) |
 | `preference.json.bak` | 1 世代前のバックアップ (Save 時に自動退避) |
-| `ai-api-key.key` | AI API key の暗号化鍵 (DPAPI on Windows / AES-GCM on Linux/macOS) |
+| `ai-api-key.key` | AI API key の暗号化鍵 (API key 本体は全 OS で AES-GCM で暗号化。Windows ではこの鍵ファイル自体をさらに DPAPI で保護) |
 | `<gitdir>/komorebi.settings` | リポジトリ固有設定 (per-remote SSH key、issue tracker 等) |
 | `<gitdir>/komorebi.uistates` | リポジトリの UI 状態 (展開状態、フィルタ、選択中コミット) |
 
@@ -84,4 +84,4 @@ Windows の旧ログは起動時に新しい保存先へ移します。同名ロ
 - [`docs/UPSTREAM-SYNC.md`](UPSTREAM-SYNC.md) — upstream (SourceGit) からの cherry-pick 戦略
 - [`docs/TRANSLATION.md`](TRANSLATION.md) — 翻訳追加手順
 - [`docs/design-notes/logging-migration.md`](design-notes/logging-migration.md) — ログ・観測性の設計ノート
-- [`CLAUDE.md`](../CLAUDE.md) — 開発者向けプロジェクトガイド (Common Pitfalls など)
+- [`AGENTS.md`](../AGENTS.md) — 開発者向けプロジェクトガイド (Common Pitfalls など)

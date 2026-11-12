@@ -26,8 +26,24 @@ public class TrustRepository : Popup
     }
 
     public TrustRepository(string pageId, string reason, string safeDirectory, RepositoryNode parent, bool moveNode, bool open, int bookmark)
+        : this(pageId, reason, safeDirectory, parent, moveNode, open, bookmark, false)
+    {
+    }
+
+    /// <summary>
+    /// 信頼の追加（git config --global --add safe.directory）だけを行うモード。
+    /// エラー通知の「safe.directory に追加」から使う。既に開いているリポジトリ上の操作で起きたエラーなので、
+    /// 通常モードのようなノード登録・Welcome 更新・Open は行わない（勝手にノードを増やしたりタブを開いたりしない）。
+    /// </summary>
+    public static TrustRepository CreateTrustOnly(string pageId, string reason, string safeDirectory)
+    {
+        return new TrustRepository(pageId, reason, safeDirectory, null, false, false, 0, true);
+    }
+
+    private TrustRepository(string pageId, string reason, string safeDirectory, RepositoryNode parent, bool moveNode, bool open, int bookmark, bool trustOnly)
     {
         _pageId = pageId;
+        _trustOnly = trustOnly;
         _parent = parent;
         _moveNode = moveNode;
         _open = open;
@@ -51,6 +67,14 @@ public class TrustRepository : Popup
         {
             log.Complete();
             return false;
+        }
+
+        if (_trustOnly)
+        {
+            // 追加に成功したことだけを通知して閉じる（失敗時は AddSafeDirectory が RaiseError で通知済み）。
+            log.Complete();
+            App.SendNotification(_pageId, App.Text("GitError.DubiousOwnership.Added", SafeDirectory));
+            return true;
         }
 
         ProgressDescription = App.Text("Progress.OpeningRepository", TargetPath);
@@ -116,6 +140,7 @@ public class TrustRepository : Popup
     }
 
     private readonly string _pageId;
+    private readonly bool _trustOnly;
     private readonly RepositoryNode _parent;
     private readonly bool _moveNode;
     private readonly bool _open;

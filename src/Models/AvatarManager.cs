@@ -490,12 +490,23 @@ public partial class AvatarManager
     /// <returns>MD5ハッシュの16進数文字列</returns>
     private static string GetEmailHash(string email)
     {
+        // Convert.ToHexStringLower で中間文字列の割り当てなしに小文字16進化する
+        return Convert.ToHexStringLower(HashEmail(email));
+    }
+
+    /// <summary>
+    /// メールアドレスを正規化（Trim + ToLowerInvariant）して UTF-8 の MD5 を計算する。
+    /// Gravatar 等の取得 URL（GetEmailHash）と、Views.Avatar のフォールバック描画（5x5 パターン）の
+    /// 両方がこの 1 箇所を使うことで、正規化規則がずれてハッシュが食い違うのを防ぐ。
+    /// </summary>
+    /// <param name="email">対象のメールアドレス</param>
+    /// <returns>16 バイトの MD5 ハッシュ</returns>
+    internal static byte[] HashEmail(string email)
+    {
         // Gravatar仕様に準拠: UTF-8でエンコードしたメールアドレスのMD5ハッシュ
         // 旧: Encoding.Defaultはプラットフォーム依存で非ASCII文字のハッシュが異なる可能性あり
         var lowered = email.Trim().ToLowerInvariant();
-        var hash = MD5.HashData(Encoding.UTF8.GetBytes(lowered));
-        // Convert.ToHexStringLower で中間文字列の割り当てなしに小文字16進化する
-        return Convert.ToHexStringLower(hash);
+        return MD5.HashData(Encoding.UTF8.GetBytes(lowered));
     }
 
     /// <summary>

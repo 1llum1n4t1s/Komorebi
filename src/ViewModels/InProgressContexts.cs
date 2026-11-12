@@ -61,6 +61,28 @@ public abstract class InProgressContext
     {
     }
 
+    /// <summary>
+    /// 数値 1 つだけを含む状態ファイル（rebase-merge/msgnum・rebase-apply/next 等）を読む。
+    /// 存在しない・数値として解釈できない場合は false を返し、value は 0。
+    /// 呼び出し側が「読めなかったら既存値を上書きしない」書き方をできるよう Try 形式にしている。
+    /// </summary>
+    protected static bool TryReadIntFromFile(string file, out int value)
+    {
+        value = 0;
+        if (!File.Exists(file))
+            return false;
+
+        return int.TryParse(File.ReadAllText(file).Trim(), out value);
+    }
+
+    /// <summary>
+    /// 数値 1 つだけを含む状態ファイルを読む。存在しない・不正な場合は 0。
+    /// </summary>
+    protected static int ReadIntFromFile(string file)
+    {
+        return TryReadIntFromFile(file, out var value) ? value : 0;
+    }
+
     /// <summary>続行コマンド。</summary>
     protected Commands.Command _continueCmd = null;
     /// <summary>スキップコマンド。</summary>
@@ -211,9 +233,10 @@ public class RebaseInProgress : InProgressContext
             var msgnumPath = Path.Combine(rebaseMergeDir, "msgnum");
             var endPath = Path.Combine(rebaseMergeDir, "end");
 
-            if (File.Exists(msgnumPath) && int.TryParse(File.ReadAllText(msgnumPath).Trim(), out var msgnum))
+            // 読めない場合は既定値（0）のまま上書きしない（AmInProgress と共通の基底ヘルパー）
+            if (TryReadIntFromFile(msgnumPath, out var msgnum))
                 CurrentStep = msgnum;
-            if (File.Exists(endPath) && int.TryParse(File.ReadAllText(endPath).Trim(), out var end))
+            if (TryReadIntFromFile(endPath, out var end))
                 TotalSteps = end;
         }
         else if (Directory.Exists(rebaseApplyDir))
@@ -221,9 +244,9 @@ public class RebaseInProgress : InProgressContext
             var nextPath = Path.Combine(rebaseApplyDir, "next");
             var lastPath = Path.Combine(rebaseApplyDir, "last");
 
-            if (File.Exists(nextPath) && int.TryParse(File.ReadAllText(nextPath).Trim(), out var next))
+            if (TryReadIntFromFile(nextPath, out var next))
                 CurrentStep = next;
-            if (File.Exists(lastPath) && int.TryParse(File.ReadAllText(lastPath).Trim(), out var last))
+            if (TryReadIntFromFile(lastPath, out var last))
                 TotalSteps = last;
         }
 
@@ -378,17 +401,6 @@ public class AmInProgress : InProgressContext
         var rebaseApplyDir = Path.Combine(repo.GitDir, "rebase-apply");
         CurrentStep = ReadIntFromFile(Path.Combine(rebaseApplyDir, "next"));
         TotalSteps = ReadIntFromFile(Path.Combine(rebaseApplyDir, "last"));
-    }
-
-    /// <summary>
-    /// 数値 1 つだけを含む状態ファイルを読む。存在しない・不正な場合は 0。
-    /// </summary>
-    private static int ReadIntFromFile(string file)
-    {
-        if (!File.Exists(file))
-            return 0;
-
-        return int.TryParse(File.ReadAllText(file).Trim(), out var value) ? value : 0;
     }
 }
 

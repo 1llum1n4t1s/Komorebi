@@ -152,13 +152,12 @@ public class RepositorySettings
             var hash = HashContent(content);
             if (!hash.Equals(_orgHash, StringComparison.Ordinal))
             {
-                // upstream 50367b7e: アトミック書き込み (tmp に書いてから rename) で書き込み途中のクラッシュ・電源断で
-                // 設定ファイル破損による全設定ロストを防ぐ。
-                // 同一リポジトリを複数 Komorebi インスタンスや worktree で同時操作した際の
-                // tmp ファイル衝突を避けるため、ランダム拡張子付きにする。
-                var tmpfile = $"{_file}.tmp.{Guid.NewGuid():N}";
-                await File.WriteAllTextAsync(tmpfile, content);
-                File.Move(tmpfile, _file, true);
+                // upstream 50367b7e: tmp に書いてから rename で置換し、書き込み途中の例外・プロセスのクラッシュで
+                // 設定ファイルが途中までの内容に置き換わって全設定がロストするのを防ぐ。
+                // fsync はしないため電源断・OS クラッシュ時の永続性までは保証しない（AtomicTextFile 参照）。
+                // tmp 名は Guid 付き（並行保存時の衝突回避）で、失敗時は AtomicTextFile が tmp を削除する
+                // （upstream は失敗時に tmp が残る。Komorebi 独自の後始末）。
+                await AtomicTextFile.WriteAllTextAsync(_file, content);
                 _orgHash = hash;
             }
         }
@@ -223,7 +222,12 @@ public class RepositorySettings
     }
 
     /// <summary>文字列のMD5ハッシュを計算して16進文字列で返す</summary>
-    private static string HashContent(string source)
+    /// <remarks>
+    /// 上流との差分: upstream では private。Komorebi.Tests が UTF-8 固定のハッシュ契約を
+    /// リフレクションなしで検証できるよう internal にしている（InternalsVisibleTo の範囲内のみ公開。
+    /// アプリ内の呼び出し元は従来どおり本クラスだけ）。docs/UPSTREAM-SYNC.md の独自差分にも記録。
+    /// </remarks>
+    internal static string HashContent(string source)
     {
         // Encoding.Default はOS・カルチャ依存（日本語Windowsでは CP932 = Shift-JIS）で、
         // UTF-8 の JSON 文字列を正しく byte 化できず、非ASCII文字を含む設定で毎回ハッシュ不一致となり

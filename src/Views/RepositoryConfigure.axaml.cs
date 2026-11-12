@@ -21,6 +21,45 @@ public partial class RepositoryConfigure : ChromelessWindow
 
     private bool _saved;
     private bool _saving;
+    /// <summary>ModalErrorPresenter を接続中の VM（DataContext 差し替え・Close 時の解除用）。</summary>
+    private ViewModels.RepositoryConfigure? _attachedVM;
+
+    /// <summary>
+    /// DataContext の VM へ、このウィンドウを owner とする Alert 表示を接続する。
+    /// リモート設定の読込・切替時保存の失敗はダイアログ表示中に起きるため、親画面のバナーではなく
+    /// このダイアログ上に出す（AGENTS.md「Alert Dialog for Modal-Context Errors」）。
+    /// </summary>
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        if (_attachedVM is not null)
+        {
+            _attachedVM.ModalErrorPresenter = null;
+            _attachedVM = null;
+        }
+
+        if (DataContext is ViewModels.RepositoryConfigure vm)
+        {
+            vm.ModalErrorPresenter = message => new Alert().ShowAsync(this, message, true);
+            _attachedVM = vm;
+        }
+    }
+
+    /// <summary>
+    /// 閉じた後に完了した非同期処理が、閉じたウィンドウを owner に Alert を出さないよう接続を外す
+    /// （外した後は VM 側が従来の App.RaiseException へフォールバックする）。
+    /// </summary>
+    protected override void OnClosed(EventArgs e)
+    {
+        base.OnClosed(e);
+
+        if (_attachedVM is not null)
+        {
+            _attachedVM.ModalErrorPresenter = null;
+            _attachedVM = null;
+        }
+    }
 
     /// <summary>
     /// ウィンドウが閉じられる際の処理。

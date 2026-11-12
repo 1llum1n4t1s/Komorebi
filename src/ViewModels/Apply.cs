@@ -111,13 +111,13 @@ public class Apply : Popup
     public static ValidationResult ValidatePatchFile(string file, ValidationContext ctx)
     {
         if (ctx.ObjectInstance is not Apply apply)
-            return new ValidationResult(App.Text("Validation.ContextInvalid"));
+            return new ValidationResult(ValidationMessages.ContextInvalid);
 
         if (apply.FromClipboard)
             return ValidationResult.Success;
 
         if (string.IsNullOrEmpty(file))
-            return new ValidationResult(App.Text("Validation.PatchFileRequired"));
+            return new ValidationResult(ValidationMessages.PatchFileRequired);
 
         if (!File.Exists(file))
             return new ValidationResult(App.Text("Error.FolderNotFound", file));

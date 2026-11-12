@@ -12,22 +12,20 @@ public class CommitAdversarialV2Tests
     #region GetFriendlyName - SHAが10文字未満のバグ検出
 
     /// <summary>
-    /// @adversarial @bug
-    /// GetFriendlyName() はデコレータ無しの場合 SHA[..10] を返すが、
-    /// SHAが10文字未満だと IndexOutOfRangeException が発生するバグ。
+    /// @adversarial @boundary
+    /// GetFriendlyName() はデコレータ無しの場合 SHA の先頭 10 文字を返す。以前は SHA[..10] で
+    /// 10 文字未満だと ArgumentOutOfRangeException になっていた（中断中の HEAD ファイルが空・途中切れの
+    /// 代用コミットでクラッシュ）ため、Commit.ToShortSHA で短い SHA はそのまま返すよう修正した。
     /// </summary>
     [Theory]
     [InlineData("")]        // 空文字
     [InlineData("a")]       // 1文字
     [InlineData("abcdef")]  // 6文字
     [InlineData("123456789")] // 9文字（ギリギリ足りない）
-    public void GetFriendlyName_SHAShorterThan10Chars_ThrowsIndexOutOfRange(string shortSha)
+    public void GetFriendlyName_SHAShorterThan10Chars_ReturnsAsIs(string shortSha)
     {
-        // SHAが10文字未満の場合、SHA[..10] でクラッシュする
         var commit = new Commit { SHA = shortSha };
-
-        // バグの証明: 例外が投げられることを検証
-        Assert.ThrowsAny<ArgumentOutOfRangeException>(() => commit.GetFriendlyName());
+        Assert.Equal(shortSha, commit.GetFriendlyName());
     }
 
     /// <summary>
@@ -76,6 +74,10 @@ public class CommitAdversarialV2Tests
         // 3回目
         commit.ParseDecorators("refs/remotes/origin/develop");
         Assert.Equal(3, commit.Decorators.Count);
+
+        // Commit.adversarial_test.cs から統合: タグを続けて渡しても蓄積される
+        commit.ParseDecorators("tag: refs/tags/v2.0");
+        Assert.Equal(4, commit.Decorators.Count);
     }
 
     /// <summary>

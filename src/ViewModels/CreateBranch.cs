@@ -201,21 +201,21 @@ public class CreateBranch : Popup
         if (ctx.ObjectInstance is CreateBranch creator)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
+                return new ValidationResult(ValidationMessages.BranchNameInvalid);
 
             if (!creator._allowOverwrite)
             {
                 foreach (var b in creator._repo.Branches)
                 {
                     if (b.FriendlyName.Equals(name, StringComparison.Ordinal))
-                        return new ValidationResult(App.Text("Validation.BranchExists"));
+                        return new ValidationResult(ValidationMessages.BranchExists);
                 }
             }
 
             return ValidationResult.Success;
         }
 
-        return new ValidationResult(App.Text("Validation.ContextInvalid"));
+        return new ValidationResult(ValidationMessages.ContextInvalid);
     }
 
     /// <summary>

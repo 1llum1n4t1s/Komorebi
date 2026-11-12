@@ -64,41 +64,32 @@ namespace Komorebi.Tests.Models
         }
 
         /// <adversarial category="boundary" severity="critical" />
-        /// <summary>SHAが空のCommitでGetFriendlyNameを呼ぶとIndexOutOfRangeが発生しないこと</summary>
+        /// <summary>
+        /// SHA が空の Commit でも GetFriendlyName が例外にならず空文字を返すこと。
+        /// 中断中の操作の HEAD ファイル（CHERRY_PICK_HEAD 等）が空のとき、InProgressContexts が作る代用コミットがこの状態になる。
+        /// </summary>
         [Fact]
-        public void GetFriendlyName_EmptySHA_ThrowsOrReturnsGracefully()
+        public void GetFriendlyName_EmptySHA_ReturnsEmpty()
         {
             var commit = new Commit { SHA = "" };
-
-            // SHA[..10]で空文字列のスライスはArgumentOutOfRangeException
-            var ex = Record.Exception(() => commit.GetFriendlyName());
-
-            // デコレーターが無い場合、SHA[..10]にフォールバックする。
-            // SHAが10文字未満だとクラッシュする可能性がある。
-            if (ex != null)
-                Assert.IsType<ArgumentOutOfRangeException>(ex);
+            Assert.Equal(string.Empty, commit.GetFriendlyName());
         }
 
         /// <adversarial category="boundary" severity="high" />
-        /// <summary>SHAが10文字未満のCommitでGetFriendlyNameを呼ぶとクラッシュする可能性</summary>
+        /// <summary>
+        /// SHA が 10 文字以下なら例外にならず短いまま返し、10 文字を超えれば先頭 10 文字に短縮すること
+        /// （HEAD ファイルが途中で切れている場合の代用コミット）。
+        /// </summary>
         [Theory]
-        [InlineData("")]
-        [InlineData("abc")]
-        [InlineData("123456789")]
-        public void GetFriendlyName_ShortSHA_MayThrow(string sha)
+        [InlineData("", "")]
+        [InlineData("abc", "abc")]
+        [InlineData("123456789", "123456789")]
+        [InlineData("1234567890", "1234567890")]
+        [InlineData("1234567890a", "1234567890")]
+        public void GetFriendlyName_ShortSHA_ReturnsAsIs(string sha, string expected)
         {
             var commit = new Commit { SHA = sha };
-
-            var ex = Record.Exception(() => commit.GetFriendlyName());
-
-            // SHA[..10] は sha.Length < 10 の場合に例外をスローする
-            if (sha.Length < 10)
-            {
-                // 例外が発生するか、デコレーターにフォールバックする
-                // 現在の実装では例外が発生する（バグ）
-                if (ex != null)
-                    Assert.IsType<ArgumentOutOfRangeException>(ex);
-            }
+            Assert.Equal(expected, commit.GetFriendlyName());
         }
 
         // ===============================================================
@@ -184,18 +175,8 @@ namespace Komorebi.Tests.Models
         // ⚡ 並行性・レースコンディション（Concurrency Chaos）
         // ===============================================================
 
-        /// <adversarial category="concurrency" severity="medium" />
-        /// <summary>同一Commitインスタンスに対する連続ParseDecorators呼び出しでデコレーターが蓄積されること</summary>
-        [Fact]
-        public void ParseDecorators_CalledMultipleTimes_AccumulatesDecorators()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("tag: refs/tags/v1.0");
-            commit.ParseDecorators("tag: refs/tags/v2.0");
-
-            // Decoratorsリストはクリアされないので蓄積される
-            Assert.Equal(2, commit.Decorators.Count);
-        }
+        // ParseDecorators_CalledMultipleTimes_AccumulatesDecorators は Commit.adversarial_v2_test.cs の同名テスト
+        // （ブランチ・タグ・リモートの 3 回呼び出しで蓄積を確認）と同じ契約の重複だったため、v2 側へ統合した。
 
         // ===============================================================
         // 🔀 状態遷移の矛盾（State Machine Abuse）

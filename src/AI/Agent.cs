@@ -13,6 +13,13 @@ namespace Komorebi.AI;
 /// </summary>
 public class Agent(Service service)
 {
+    /// <summary>
+    /// tool 呼び出しループの最大反復回数（全 Strategy 共通）。AI が延々とツール呼び出しを返し続ける
+    /// （プロンプトインジェクションや API バグ等）場合の無限ループ防止。通常のコミットメッセージ生成では
+    /// 1〜3 回で収束する。以前は各 Strategy に同値の定数が重複していたため、ここへ集約した。
+    /// </summary>
+    internal const int MaxToolCallIterations = 20;
+
     public Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation, string? amendParent = null, string? currentBranch = null)
     {
         var strategy = CreateStrategy();

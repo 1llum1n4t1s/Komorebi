@@ -53,7 +53,9 @@ public partial class ConfigureWorkspace : ChromelessWindow
         }
         catch (Exception ex)
         {
-            App.RaiseException(string.Empty, App.Text("Error.FailedToSelectCloneDir", ex.Message));
+            // モーダル ダイアログ表示中のエラーは親画面のバナーに隠れるため、このウィンドウを
+            // owner とする Alert で表示する（AGENTS.md「Alert Dialog for Modal-Context Errors」。upstream も Alert）。
+            await new Alert().ShowAsync(this, App.Text("Error.FailedToSelectCloneDir", ex.Message), true);
         }
 
         e.Handled = true;

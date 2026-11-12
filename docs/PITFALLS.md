@@ -1,6 +1,6 @@
 # Common Pitfalls
 
-このファイルは [CLAUDE.md](../CLAUDE.md) から参照される、Komorebi 固有の落とし穴集です。コードに触れる前に該当項目を確認してください。
+このファイルは [AGENTS.md](../AGENTS.md) から参照される、Komorebi 固有の落とし穴集です。コードに触れる前に該当項目を確認してください。
 
 ### Repository.Close — async race ガードは `_isClosed` フラグで
 `Repository.Close()` は走行中の非同期タスク (Fetch/Pull/Refresh*) が VM 内部フィールドを参照中の可能性があるため、async から触られうるフィールド (`_uiStates`, `_watcher`, `_histories`, `_workingCopy`, `_stashesPage`, `_searchCommitContext`) には **null 代入しない**。代わりに Close 冒頭で `_isClosed = true` を立て、各 async タスク (`RefreshCommits`/`RefreshWorkingCopyChanges`/`RunAutoFetchAsync` 等) は冒頭または `await` 前後で `if (_isClosed) return;` ガードする。フィールドの解放は GC + 各 VM の `Dispose()` に任せる。

@@ -67,7 +67,9 @@ public class DeleteTag : Popup
                     new Commands.Push(_repo.FullPath, r.Name, $"refs/tags/{Target.Name}", true)
                         .Use(log)
                         .RunAsync());
-                await Task.WhenAll(pushTasks).ConfigureAwait(false);
+                // ConfigureAwait(false) にしない: 後続の RemoveHistoryFilter が UI バインドされた
+                // AvaloniaList を変更するため、UI スレッドで再開する必要がある。
+                await Task.WhenAll(pushTasks);
             }
         }
 

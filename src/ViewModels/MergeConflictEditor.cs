@@ -211,7 +211,8 @@ public class MergeConflictEditor : ObservableObject
         // 未解決コンフリクトが残っている場合は保存不可
         if (_unsolvedCount > 0)
         {
-            Error = "Cannot save: there are still unresolved conflicts.";
+            // Komorebi 独自のエディタのため、エラー文言もリソース化して利用者の言語で表示する。
+            Error = App.Text("MergeConflictEditor.CannotSaveUnresolved");
             return false;
         }
 
@@ -282,7 +283,7 @@ public class MergeConflictEditor : ObservableObject
         }
         catch (Exception ex)
         {
-            Error = $"Failed to save and stage: {ex.Message}";
+            Error = App.Text("MergeConflictEditor.SaveFailed", ex.Message);
             return false;
         }
     }

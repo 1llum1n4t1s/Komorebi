@@ -120,6 +120,8 @@ namespace Komorebi.Tests.Models
         {
             var user = new User("Alice±alice@example.com");
             Assert.False(user.Equals("not a user"));
+            // User.adversarial_test.cs の同名テストを統合: 値型（boxing された int）とも等しくならない
+            Assert.False(user.Equals(42));
         }
 
         // -----------------------------------------------------------

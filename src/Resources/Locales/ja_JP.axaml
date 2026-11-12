@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">未変更と見なしたファイルはありません</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">画像を選択...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">再読み込み</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">バイナリファイルはサポートされていません！！！</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">問題の発生源を特定</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">中止</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">問題あり</x:String>
@@ -374,7 +373,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">タグ:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">リモートリポジトリからも削除</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">バイナリの差分</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">ファイルモードが変更されました</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">最初の差分</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">空白文字の変更を無視</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">ブレンド</x:String>
@@ -604,6 +602,8 @@
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">前の衝突</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">結果</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">保存 &amp; ステージに上げる</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">保存できません: 未解決のコンフリクトが残っています。</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">保存とステージに失敗しました: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">相手</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">マージ衝突</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">保存されていない変更を破棄しますか？</x:String>
@@ -798,7 +798,6 @@
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">続行</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">カスタムアクション</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">カスタムアクションがありません</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">ダッシュボード</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">すべての変更を破棄</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">ファイルブラウザーで開く</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">ブランチ/タグ/サブモジュールを検索</x:String>
@@ -823,7 +822,6 @@
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">HEAD に移動</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">ブランチを作成</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">通知を消去</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">現在のブランチのみを強調表示</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">フォルダとして開く</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">{0} で開く</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">外部ツールで開く</x:String>
@@ -905,15 +903,13 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">親コミットにコメント結合して統合(Squash)</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">親コミットのコメントのみで統合(Fixup)</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">実行後に強制プッシュする</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">スカッシュ/フィックスアップは完了しましたが、git config から '{0}' のリモートと上流ブランチを特定できなかったため、強制プッシュは行いませんでした。</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">統合先:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH の秘密鍵:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">秘密鍵のパス（.pub ではない方）</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">指定なし（グローバル設定）</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">参照...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">公開鍵（.pub）が選択されました。秘密鍵（.pub が付かない方のファイル）を選択してください。</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">リモート固有</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">グローバル</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">システムデフォルト</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">開始</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">スタッシュ</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">未追跡のファイルを含める</x:String>
@@ -1133,7 +1129,6 @@
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">タグ '{0}' を削除中...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' をドロップ中...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">スタッシュを破棄中: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">リモート '{0}' を編集中...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">カスタムアクションを実行中...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">ファストフォワード中...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} を完了中...</x:String>
@@ -1163,6 +1158,8 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">サブモジュールのブランチを設定中...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">アップストリームを設定中...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">変更をスタッシュ中...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">スカッシュ中...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">フィックスアップ中...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">別のgitプロセスが実行中の可能性があります。実行中でなければ、.gitディレクトリ内の.lockファイルを削除してください。</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">マージコンフリクトが発生しました。各ファイルのコンフリクトを解決し、ステージしてコミットしてください。</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEADがデタッチされています。変更を保持するには新しいブランチを作成してください。</x:String>
@@ -1171,6 +1168,9 @@
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">認証に失敗しました。認証情報、SSHキー、またはパーソナルアクセストークンを確認してください。</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH秘密鍵ファイルのパーミッションが緩すぎます。鍵ファイルは所有者のみアクセス可能（chmod 600）である必要があります。</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">パーミッションを修正する（chmod 600）</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">'{0}' のパーミッションを修正しました（600）。</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">'{0}' のパーミッションを修正できませんでした: {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">'{0}' は ~/.ssh 配下の通常の鍵ファイルでも設定済みの SSH 鍵でもないため、パーミッションを自動では変更しませんでした。</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">リモートリポジトリが見つかりません。URLとネットワーク接続を確認してください。</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">同名のブランチまたはタグが既に存在します。別の名前を選択してください。</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">未追跡ファイルが上書きされます。ファイルを移動・削除するか、スタッシュで退避してください。</x:String>
@@ -1201,6 +1201,9 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG での署名に失敗しました。署名鍵 (git config user.signingkey) を確認し、gpg-agent が起動しているか確認するか、'git -c commit.gpgsign=false ...' で一時的に署名を無効化してください。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">リポジトリの所有者が異なるため git が操作を拒否しました。'git config --global --add safe.directory &lt;パス&gt;' を実行して許可してください。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory に追加</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">'{0}' を safe.directory に追加しました。</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">'{0}' は現在のリポジトリ内の未信頼リポジトリではないため、safe.directory に自動では追加しませんでした。</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">別の操作を実行中です。完了してからもう一度お試しください。</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">適用元:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">ファイル</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">クリップボード</x:String>

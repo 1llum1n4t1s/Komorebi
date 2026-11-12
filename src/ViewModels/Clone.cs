@@ -187,7 +187,7 @@ public class Clone : Popup
     public static ValidationResult ValidateRemote(string remote, ValidationContext _)
     {
         if (!Models.Remote.IsValidURL(remote))
-            return new ValidationResult(App.Text("Validation.RemoteUrlInvalid"));
+            return new ValidationResult(ValidationMessages.RemoteUrlInvalid);
         return ValidationResult.Success;
     }
 
@@ -201,7 +201,7 @@ public class Clone : Popup
     public static ValidationResult ValidateParentFolder(string folder, ValidationContext _)
     {
         if (!Directory.Exists(folder))
-            return new ValidationResult(App.Text("Validation.PathNotFound"));
+            return new ValidationResult(ValidationMessages.PathNotFound);
         return ValidationResult.Success;
     }
 
@@ -213,7 +213,7 @@ public class Clone : Popup
         if (ctx.ObjectInstance is Clone { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
         {
             if (!File.Exists(sshkey))
-                return new ValidationResult(App.Text("Validation.SSHKeyNotFound"));
+                return new ValidationResult(ValidationMessages.SSHKeyNotFound);
 
             if (sshkey.EndsWith(".pub", System.StringComparison.OrdinalIgnoreCase))
                 return new ValidationResult(App.Text("SSHKey.PublicKeySelected"));

@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">अपरिवर्तितमिति गृहीताः सञ्चिकाः नास्ति</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">चित्रं लोडयतु...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">पुनः आनयतु</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">द्विचरसञ्चिका असमर्थिता!!!</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">द्विभाजनम्</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">परित्यजतु</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">दुष्टम्</x:String>
@@ -374,7 +373,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">चिह्नम्:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">दूरस्थभण्डारेभ्यः विलोपयतु</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">द्विचरभेदः</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">सञ्चिकाप्रकारः परिवर्तितः</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">प्रथमभेदः</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">रिक्तस्थानपरिवर्तनानि उपेक्षन्ताम्</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">मिश्रणम्</x:String>
@@ -604,6 +602,8 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">पूर्वविरोधः</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">परिणामः</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">रक्षतु तथा स्थापयतु</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">रक्षितुं न शक्यते: अद्यापि असमाहिताः विरोधाः सन्ति।</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">रक्षणं स्थापनं च विफलम्: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">तदीयम्</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">विलयनविरोधाः</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">अरक्षितपरिवर्तनानि त्यजतु वा?</x:String>
@@ -798,7 +798,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">अग्रे गच्छतु</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">अभिरुचिक्रियाः</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">अभिरुचिक्रियाः नास्ति</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">नियन्त्रणफलकम्</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">सर्वपरिवर्तनानि त्यजतु</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">सञ्चिकाप्रदर्शके उद्घाटयतु</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">शाखाः/चिह्नानि/उपमॉड्यूलानि अन्विष्यतु</x:String>
@@ -823,7 +822,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">HEAD प्रति गच्छतु</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">शाखां रचयतु</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">सूचनाः मार्जयतु</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">केवलं वर्तमानशाखां प्रकाशयतु</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">पत्रिकारूपेण उद्घाटयतु</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">{0} मध्ये उद्घाटयतु</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">बाह्यसाधनेषु उद्घाटयतु</x:String>
@@ -905,15 +903,13 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">HEAD जनके संपीडयतु</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">HEAD जनके संशोधयतु</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">समाप्त्यनन्तरं बलात् प्रेषयतु</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup सम्पन्नम्, किन्तु git config तः '{0}' इत्यस्य दूरस्थं upstream शाखां च निर्धारयितुं न शक्तम्, अतः बलात् push न कृतम्।</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">मध्ये:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH गोपनकुञ्चिका:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">गोपनकुञ्चिकामार्गः (.pub न भवतु)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">किमपि नास्ति (वैश्विकसंस्थापनम्)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">अन्वेषणम्...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">सार्वजनिककुञ्चिका (.pub) चिता। गोपनकुञ्चिकां (.pub विस्तारं विना सञ्चिकाम्) चिनुत।</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">दूरस्थ</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">वैश्विक</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">प्रणालीगत पूर्वनिर्धारित</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">प्रारभतु</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">निक्षेपः</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">अननुसृतसञ्चिकाः अन्तर्गण्यन्ताम्</x:String>
@@ -1133,7 +1129,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Tag '{0}' अपनयति...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' त्यजति...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Stash त्यजति: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Remote '{0}' सम्पादयति...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">स्वकीयक्रियां चालयति...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} समापयति...</x:String>
@@ -1163,6 +1158,8 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">उपघटकस्य branch स्थापयति...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream स्थापयति...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">परिवर्तनानि संगृह्णाति...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">Squash करोति...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">Fixup करोति...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">अन्यः git प्रक्रिया चलति स्यात्। यदि न, .git निर्देशिकायां .lock सञ्चिकां विलोपयतु।</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">विलयनसङ्घर्षाः अवगताः। प्रत्येकसञ्चिकायां सङ्घर्षान् समाधत्त, ततः स्थापयत कमिट् च कुरुत।</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD विच्छिन्नम् अस्ति। परिवर्तनानि रक्षितुं नवीनं शाखां रचयतु।</x:String>
@@ -1171,6 +1168,9 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">प्रमाणीकरणं विफलम्। प्रमाणपत्राणि, SSH कुञ्चिकां, अथवा व्यक्तिगतप्रवेशचिह्नं परीक्षयतु।</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH-गोपनकुञ्चिकासञ्चिकायाः अनुमतयः अतिविवृताः सन्ति। कुञ्चिकासञ्चिका स्वामिनमात्रम् प्रवेश्या भवेत् (chmod 600)।</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">अनुमतीः समीकुरुत (chmod 600)</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">'{0}' इत्यस्य अनुमतयः संशोधिताः (600)।</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">'{0}' इत्यस्य अनुमतीनां संशोधनं विफलम्: {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">'{0}' ~/.ssh अन्तर्गतं सामान्यकुञ्जिकासञ्चिका वा विन्यस्ता SSH कुञ्जिका वा नास्ति, अतः अनुमतयः स्वयं न परिवर्तिताः।</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">दूरस्थं भण्डारं न प्राप्तम्। URL जालसम्बन्धं च परीक्षयतु।</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">तेन नाम्ना शाखा अथवा चिह्नं पूर्वमेव विद्यते। भिन्नं नाम चिनुत।</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">अननुसृतानि सञ्चिकानि अधिलेखितानि भविष्यन्ति। तानि चालयतु विलोपयतु वा, अथवा स्टैश् उपयुज्यताम्।</x:String>
@@ -1201,6 +1201,9 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG द्वारा हस्ताक्षरेण git असफलं जातम्। हस्ताक्षरकुञ्चिकां (git config user.signingkey) सत्यापयतु, gpg-agent चलति इति निश्चितं कुरुत, अथवा 'git -c commit.gpgsign=false ...' इत्यनेन तत्कालं हस्ताक्षरं निष्क्रियं कुरुत।</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">अन्यः उपयोगकर्ता अस्य कोषस्य स्वामी अस्ति इति कारणात् git अस्मिन् कार्यं कर्तुं अस्वीकरोति। अनुमतिं दातुम् 'git config --global --add safe.directory &lt;पथः&gt;' इत्येतत् चालयतु।</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory मध्ये योजयतु</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">'{0}' safe.directory इत्यत्र योजितम्।</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">'{0}' वर्तमानभाण्डारस्य अन्तः अविश्वस्तं भाण्डारं नास्ति, अतः safe.directory इत्यत्र स्वयं न योजितम्।</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">अन्या क्रिया प्रचलति। तस्याः समाप्तेः अनन्तरं पुनः प्रयतताम्।</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">स्रोतः:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">सञ्चिका</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">क्लिपबोर्ड</x:String>

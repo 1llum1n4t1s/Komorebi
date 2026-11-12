@@ -1,5 +1,9 @@
 # ログ抽象化への移行設計メモ
 
+> [!NOTE]
+> この文書は検討当時の記録です。版数・ファイル構成（`SuperLightLogger 1.0.6`、`ILog.cs` など）は現在の実装と一致しません。
+> 現在の依存は [src/Komorebi.csproj](../../src/Komorebi.csproj)、ログ実装は [src/Models/Logger.cs](../../src/Models/Logger.cs) を正本として参照してください。
+
 ## 背景
 
 現在 Komorebi は `SuperLightLogger` (NuGet 1.0.6) を直接使用している (`src/Models/Logger.cs`)。

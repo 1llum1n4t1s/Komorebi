@@ -77,7 +77,7 @@ public class SSHKeyGenerator : ObservableValidator
             return ValidationResult.Success;
 
         if (string.IsNullOrEmpty(password))
-            return new ValidationResult(App.Text("Validation.PassphraseRequired"));
+            return new ValidationResult(ValidationMessages.PassphraseRequired);
 
         return ValidationResult.Success;
     }
@@ -89,7 +89,7 @@ public class SSHKeyGenerator : ObservableValidator
             return ValidationResult.Success;
 
         if (confirmedPassword != instance.Passphrase)
-            return new ValidationResult(App.Text("Validation.PassphraseMismatch"));
+            return new ValidationResult(ValidationMessages.PassphraseMismatch);
 
         return ValidationResult.Success;
     }

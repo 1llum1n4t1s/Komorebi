@@ -216,26 +216,28 @@ namespace Komorebi.Tests.Models
         }
 
         /// <adversarial category="state" severity="high" />
-        /// <summary>不正な列挙値のWorkTreeDescでIndexOutOfRangeが飛ばないこと</summary>
+        /// <summary>
+        /// 定義外の列挙値では WorkTreeDesc が TYPE_DESCS の範囲外を参照して IndexOutOfRangeException になること。
+        /// 以前は「例外なし」と「IndexOutOfRangeException」のどちらでも通っていたため、実装の振る舞いに固定する。
+        /// ChangeState はパーサが定義済みの値だけを設定するため、アプリ上で定義外の値は発生しない。
+        /// </summary>
         [Fact]
-        public void WorkTreeDesc_InvalidEnumValue_DoesNotThrow()
+        public void WorkTreeDesc_InvalidEnumValue_ThrowsIndexOutOfRange()
         {
             var change = new Change { WorkTree = (ChangeState)999 };
-            var ex = Record.Exception(() => _ = change.WorkTreeDesc);
-            // TYPE_DESCS配列の範囲外アクセスでIndexOutOfRangeExceptionが飛ぶ可能性
-            if (ex != null)
-                Assert.IsType<IndexOutOfRangeException>(ex);
+            Assert.Throws<IndexOutOfRangeException>(() => _ = change.WorkTreeDesc);
         }
 
         /// <adversarial category="state" severity="high" />
-        /// <summary>不正なConflictReason値でConflictMarkerがクラッシュしないこと</summary>
+        /// <summary>
+        /// 定義外の ConflictReason では ConflictMarker が CONFLICT_MARKERS の範囲外を参照して
+        /// IndexOutOfRangeException になること（上と同じ理由で実装の振る舞いに固定する）。
+        /// </summary>
         [Fact]
-        public void ConflictMarker_InvalidEnumValue_DoesNotThrow()
+        public void ConflictMarker_InvalidEnumValue_ThrowsIndexOutOfRange()
         {
             var change = new Change { ConflictReason = (ConflictReason)999 };
-            var ex = Record.Exception(() => _ = change.ConflictMarker);
-            if (ex != null)
-                Assert.IsType<IndexOutOfRangeException>(ex);
+            Assert.Throws<IndexOutOfRangeException>(() => _ = change.ConflictMarker);
         }
 
         // ===============================================================

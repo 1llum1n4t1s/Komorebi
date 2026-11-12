@@ -92,8 +92,14 @@ public class CommitGraph : Control
     /// </summary>
     private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
     {
-        // パフォーマンス: 描画毎のPen生成を排除（static cacheで再利用）
-        var grayedPen = s_grayedPen ??= new Pen(new SolidColorBrush(Colors.Gray, 0.4), Models.CommitGraph.Pens[0].Thickness);
+        // パフォーマンス: 描画毎のPen生成を排除（static cacheで再利用）。
+        // テーマ上書き（SetPens/SetDefaultPens）で線の太さが変わった場合は作り直す。
+        // upstream は描画ごとに生成するため常に追従するが、キャッシュ化した Komorebi では
+        // 太さの比較を省くと最初の太さが残り続ける回帰になる。
+        var thickness = Models.CommitGraph.Pens[0].Thickness;
+        if (s_grayedPen is null || s_grayedPen.Thickness != thickness)
+            s_grayedPen = new Pen(new SolidColorBrush(Colors.Gray, 0.4), thickness);
+        var grayedPen = s_grayedPen;
         var onlyHighlightCurrentBranch = OnlyHighlightCurrentBranch;
 
         if (onlyHighlightCurrentBranch)
@@ -228,7 +234,11 @@ public class CommitGraph : Control
         if (_dotFillPen is null || _dotFillPen.Brush != dotFill)
             _dotFillPen = new Pen(dotFill, 2);
         var dotFillPen = _dotFillPen;
-        var grayedPen = s_grayedAnchorPen ??= new Pen(Brushes.Gray, Models.CommitGraph.Pens[0].Thickness);
+        // 曲線用と同じく、テーマ上書きで太さが変わったら作り直す（キャッシュの古い太さを使わない）。
+        var thickness = Models.CommitGraph.Pens[0].Thickness;
+        if (s_grayedAnchorPen is null || s_grayedAnchorPen.Thickness != thickness)
+            s_grayedAnchorPen = new Pen(Brushes.Gray, thickness);
+        var grayedPen = s_grayedAnchorPen;
         var onlyHighlightCurrentBranch = OnlyHighlightCurrentBranch;
 
         foreach (var dot in graph.Dots)

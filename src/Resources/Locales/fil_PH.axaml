@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">WALANG MGA FILE NA ITINUTURING NA HINDI NAGBAGO</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Mag-load ng Larawan...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">I-refresh</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">HINDI SINUSUPORTAHAN ANG BINARY FILE!!!</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Itigil</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Masama</x:String>
@@ -374,7 +373,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Tag:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Burahin mula sa mga remote repository</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">BINARY NA PAGKAKAIBA</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Nagbago ang File Mode</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Unang Pagkakaiba</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Huwag Pansinin ang mga Pagbabago sa Whitespace</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">PAGHALUIN</x:String>
@@ -604,6 +602,8 @@
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">Nakaraang Conflict</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">RESULTA</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">I-SAVE &amp; I-STAGE</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">Hindi ma-save: may mga conflict pa na hindi nareresolba.</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">Nabigong i-save at i-stage: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">KANILA</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Mga Merge Conflict</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">Itapon ang mga hindi na-save na pagbabago?</x:String>
@@ -798,7 +798,6 @@
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">MAGPATULOY</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">Mga Custom na Aksyon</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">Walang Custom na Aksyon</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">Pangkalahatang-ideya</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">Itapon ang lahat ng pagbabago</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">Buksan sa File Browser</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">Maghanap ng mga Branch/Tag/Submodule</x:String>
@@ -823,7 +822,6 @@ Awtomatikong mao-off ang feature na ito kapag manwal kang nagdagdag ng branch/ta
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Mag-navigate sa HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Lumikha ng Branch</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">BURAHIN ANG MGA ABISO</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">I-highlight lamang ang kasalukuyang branch</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Buksan bilang Folder</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">Buksan sa {0}</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">Buksan sa mga Panlabas na Tool</x:String>
@@ -905,15 +903,13 @@ Awtomatikong mao-off ang feature na ito kapag manwal kang nagdagdag ng branch/ta
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">I-squash ang HEAD sa Parent</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">I-fixup ang HEAD sa Parent</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">I-force push pagkatapos</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Natapos ang squash/fixup, ngunit nilaktawan ang force push dahil hindi matukoy mula sa git config ang remote at upstream branch ng '{0}'.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Sa:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Pribadong SSH key:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Path ng private key (hindi .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Wala (Global na Setting)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Mag-browse...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Pumili ka ng public key (.pub). Piliin ang private key (ang file na walang .pub extension).</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remote</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Pangkalahatan</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Paunang halaga ng sistema</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">SIMULAN</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Isama ang mga untracked na file</x:String>
@@ -1133,7 +1129,6 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Binubura ang tag '{0}'...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">Dini-drop ang HEAD '{0}'...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Dini-drop ang stash: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Ine-edit ang remote '{0}'...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Pinapatakbo ang custom action...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - Tinapos ang {0}...</x:String>
@@ -1163,6 +1158,8 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Sine-set ang branch ng submodule...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Sine-set ang upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Sine-stash ang mga pagbabago...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">Sini-squash...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">Fini-fixup...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Maaaring may ibang proseso ng git na tumatakbo. Kung wala, tanggalin ang .lock file sa .git directory.</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">May nakitang merge conflict. Ayusin ang mga conflict sa bawat file, pagkatapos i-stage at i-commit.</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">Ang HEAD ay naka-detach. Gumawa ng bagong branch para mapanatili ang iyong mga pagbabago.</x:String>
@@ -1171,6 +1168,9 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Nabigo ang authentication. Suriin ang iyong credentials, SSH key, o personal access token.</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Masyadong bukas ang permissions ng SSH private key file. Ang key file ay dapat na accessible lamang ng may-ari (chmod 600).</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Ayusin ang permissions (chmod 600)</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">Naayos ang mga pahintulot ng '{0}' (600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">Nabigong ayusin ang mga pahintulot ng '{0}': {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">Hindi awtomatikong binago ang mga pahintulot ng '{0}' dahil hindi ito karaniwang key file sa ~/.ssh o naka-configure na SSH key.</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Hindi nahanap ang remote repository. I-verify ang URL at ang iyong koneksyon sa network.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">May branch o tag na may ganitong pangalan. Pumili ng ibang pangalan.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Ang mga hindi sinusubaybayang file ay mapapatungan. Ilipat o tanggalin ang mga ito, o gamitin ang stash.</x:String>
@@ -1201,6 +1201,9 @@ Dahilan: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Nabigo ang Git na lumagda gamit ang GPG. I-verify ang iyong signing key (git config user.signingkey), tiyaking gumagana ang gpg-agent, o pansamantalang i-disable ang pag-sign gamit ang 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Tumanggi ang Git na gumana sa repository na ito dahil pag-aari ito ng ibang user. Patakbuhin ang 'git config --global --add safe.directory &lt;path&gt;' upang payagan ito.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Idagdag sa safe.directory</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">Naidagdag ang '{0}' sa safe.directory.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">Hindi awtomatikong naidagdag ang '{0}' sa safe.directory dahil hindi ito hindi-pinagkakatiwalaang repository sa loob ng kasalukuyang repository.</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">May isa pang operasyong isinasagawa. Subukang muli kapag natapos na ito.</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">Pinagmulan:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Talaksan</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Klipbord</x:String>

@@ -486,13 +486,11 @@ namespace Komorebi.Tests.Models
 
             try
             {
-                CommitGraph.Parse(commits, false);
-                // クラッシュしなければそれでよい
-            }
-            catch (InvalidOperationException)
-            {
-                // 空キューからの Dequeue による例外は期待される動作
-                // （色が0の状態は本来設定されるべきでない）
+                // ペン 0 色では ColorPicker.Next() が補充できず、空キューからの Dequeue で
+                // InvalidOperationException になる。以前は「例外なし」でも通っていたため実装の振る舞いに固定する。
+                // アプリでは App のテーマ適用が GraphColors.Count > 0 の場合だけ SetPens を呼ぶため、
+                // 0 色の状態には到達しない（CommitGraph コレクションで直列実行されるので他テストの影響も受けない）。
+                Assert.Throws<InvalidOperationException>(() => CommitGraph.Parse(commits, false));
             }
             finally
             {

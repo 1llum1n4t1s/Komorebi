@@ -58,23 +58,21 @@ public class DeleteMultipleBranches : Popup
             }
             else
             {
-                List<Task> tasks = [];
+                // リモート側の削除（ls-remote による存在確認と push --delete）は 1 件ずつ順に行う。
+                // 並列にすると、認証が必要なリモートで資格情報・SSH パスフレーズの入力プロンプトが同時に
+                // 複数表示され、さらにコマンドログに複数の push 出力が混在して読めなくなるため。
                 foreach (var target in Targets)
                 {
-                    tasks.Add(Task.Run(async () =>
-                    {
-                        var exists = await new Commands.Remote(_repo.FullPath).HasBranchAsync(target.Remote, target.Name);
-                        if (exists)
-                            await new Commands.Push(_repo.FullPath, target.Remote, $"refs/heads/{target.Name}", true)
-                                .Use(log)
-                                .RunAsync();
-                        else
-                            await new Commands.Branch(_repo.FullPath, target.Name)
-                                .Use(log)
-                                .DeleteRemoteAsync(target.Remote);
-                    }));
+                    var exists = await new Commands.Remote(_repo.FullPath).HasBranchAsync(target.Remote, target.Name);
+                    if (exists)
+                        await new Commands.Push(_repo.FullPath, target.Remote, $"refs/heads/{target.Name}", true)
+                            .Use(log)
+                            .RunAsync();
+                    else
+                        await new Commands.Branch(_repo.FullPath, target.Name)
+                            .Use(log)
+                            .DeleteRemoteAsync(target.Remote);
                 }
-                await Task.WhenAll(tasks);
             }
         }
 

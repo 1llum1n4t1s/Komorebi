@@ -88,7 +88,24 @@ public class Commit : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
             return tagDecorator.Name;
 
         // どちらもなければSHAの先頭10文字
-        return SHA[..10];
+        return ToShortSHA(SHA);
+    }
+
+    /// <summary>
+    /// SHA を表示用に先頭10文字へ短縮する。10文字以下（空を含む）はそのまま返す。
+    /// </summary>
+    /// <remarks>
+    /// 上流との差分: upstream の GetFriendlyName は <c>SHA[..10]</c> で、10文字未満だと
+    /// ArgumentOutOfRangeException になる。InProgressContexts は CHERRY_PICK_HEAD / REVERT_HEAD /
+    /// MERGE_HEAD / rebase の onto などを読み、コミットを照会できないとファイル内容をそのまま SHA にした
+    /// 代用コミットを作るため、中断中の HEAD ファイルが空・途中切れ（停電後など）だとコンストラクタ内で
+    /// 例外になりクラッシュしていた。短い値は短いまま返す（docs/UPSTREAM-SYNC.md の独自差分に記録）。
+    /// </remarks>
+    public static string ToShortSHA(string sha)
+    {
+        if (string.IsNullOrEmpty(sha))
+            return string.Empty;
+        return sha.Length > 10 ? sha[..10] : sha;
     }
 
     /// <summary>

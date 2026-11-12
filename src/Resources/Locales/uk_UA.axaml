@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">НЕМАЄ ФАЙЛІВ, ЩО ВВАЖАЮТЬСЯ НЕЗМІНЕНИМИ</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Завантажити зображення...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Оновити</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">БІНАРНИЙ ФАЙЛ НЕ ПІДТРИМУЄТЬСЯ!!!</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Скасувати</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Поганий</x:String>
@@ -374,7 +373,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Тег:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Видалити з віддалених сховищ</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">РІЗНИЦЯ ДЛЯ БІНАРНИХ ФАЙЛІВ</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Змінено режим файлу</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Перша відмінність</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Ігнорувати зміни пробілів</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">НАКЛАДЕННЯ</x:String>
@@ -604,6 +602,8 @@
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">Попередній конфлікт</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">РЕЗУЛЬТАТ</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">ЗБЕРЕГТИ &amp; ДОДАТИ</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">Неможливо зберегти: залишилися невирішені конфлікти.</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">Не вдалося зберегти та додати до індексу: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">ЇХНЄ</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Конфлікти злиття</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">Відхилити незбережені зміни?</x:String>
@@ -798,7 +798,6 @@
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">ПРОДОВЖИТИ</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">Спеціальні дії</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">Немає спеціальних дій</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">Панель</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">Скасувати всі зміни</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">Відкрити у файловому менеджері</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">Пошук гілок/тегів/підмодулів</x:String>
@@ -823,7 +822,6 @@
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Перейти до HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Створити гілку</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">ОЧИСТИТИ СПОВІЩЕННЯ</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">Виділяти лише поточну гілку</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Відкрити як теку</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">Відкрити в {0}</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">Відкрити в зовнішніх інструментах</x:String>
@@ -905,15 +903,13 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD до батьківського</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD до батьківського</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Примусово надіслати після завершення</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup виконано, але примусовий push пропущено: не вдалося визначити віддалений репозиторій і upstream-гілку '{0}' з git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">До:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватний ключ SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Шлях до приватного ключа (не .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Немає (глобальне налаштування)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Огляд...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Ви обрали відкритий ключ (.pub). Оберіть приватний ключ (файл без розширення .pub).</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Віддалений</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Глобальний</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Системний за замовчуванням</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">ПОЧАТИ</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash (Сховати)</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Включити невідстежувані файли</x:String>
@@ -1133,7 +1129,6 @@
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Видалення тегу '{0}'...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">Скидання HEAD '{0}'...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Видалення stash: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Редагування віддаленого '{0}'...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Виконання користувацької дії...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - Завершення {0}...</x:String>
@@ -1163,6 +1158,8 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Встановлення гілки підмодуля...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Встановлення upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Збереження змін у stash...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">Об’єднання (squash)...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">Виправлення (fixup)...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Можливо, запущено інший процес git. Якщо ні, видаліть файл .lock у каталозі .git.</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Виявлено конфлікти злиття. Вирішіть конфлікти в кожному файлі, потім додайте до індексу та зробіть коміт.</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD у від'єднаному стані. Створіть нову гілку, щоб зберегти зміни.</x:String>
@@ -1171,6 +1168,9 @@
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Помилка автентифікації. Перевірте облікові дані, SSH-ключ або персональний токен доступу.</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Права доступу до файлу приватного SSH-ключа занадто відкриті. Файл ключа повинен бути доступний лише власнику (chmod 600).</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Виправити права доступу (chmod 600)</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">Права доступу до '{0}' виправлено (600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">Не вдалося виправити права доступу до '{0}': {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">Права доступу до '{0}' не змінено автоматично: це не звичайний файл ключа в ~/.ssh і не налаштований SSH-ключ.</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Віддалений репозиторій не знайдено. Перевірте URL та мережеве з'єднання.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Гілка або тег з такою назвою вже існує. Оберіть іншу назву.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Невідстежувані файли будуть перезаписані. Перемістіть або видаліть їх, або використайте stash.</x:String>
@@ -1201,6 +1201,9 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git не вдалося підписати за допомогою GPG. Перевірте свій ключ підпису (git config user.signingkey), переконайтеся, що gpg-agent працює, або тимчасово вимкніть підпис за допомогою 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git відмовляється працювати з цим сховищем, оскільки воно належить іншому користувачеві. Виконайте 'git config --global --add safe.directory &lt;шлях&gt;', щоб дозволити.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Додати до safe.directory</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">'{0}' додано до safe.directory.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">'{0}' не додано до safe.directory автоматично: це не недовірений репозиторій усередині поточного репозиторію.</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">Виконується інша операція. Спробуйте ще раз після її завершення.</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">Джерело:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Файл</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Буфер обміну</x:String>

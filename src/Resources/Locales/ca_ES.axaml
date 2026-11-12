@@ -54,7 +54,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">CAP FITXER NO TÉ ELS CANVIS IGNORATS</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Carrega la imatge...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Actualitza</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">NO S'ADMETEN FITXERS BINARIS!</x:String>
   <x:String x:Key="Text.Bisect">Biseca</x:String>
   <x:String x:Key="Text.Bisect.Abort">Avorta</x:String>
   <x:String x:Key="Text.Bisect.Bad">Dolent</x:String>
@@ -371,7 +370,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Etiqueta:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Suprimeix-la dels repositoris remots</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">DIFERÈNCIA BINÀRIA</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">S'ha canviat el mode del fitxer</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Primera diferència</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Ignora els canvis d'espais en blanc</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">MESCLA</x:String>
@@ -601,6 +599,8 @@
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">Conflicte anterior</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">RESULTAT</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">DESA I PREPARA</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">No es pot desar: encara hi ha conflictes sense resoldre.</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">No s'ha pogut desar i preparar: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">EL SEU</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Conflictes de fusió</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">Voleu descartar els canvis no desats?</x:String>
@@ -795,7 +795,6 @@
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">CONTINUA</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">Accions personalitzades</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">No hi ha accions personalitzades</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">Tauler</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">Descarta tots els canvis</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">Obre al navegador de fitxers</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">Cerca branques/etiquetes/submòduls</x:String>
@@ -820,7 +819,6 @@ Afegir manualment un filtre d'historial de branca o d'etiqueta desactiva aquesta
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Vés a HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Crea una branca</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">ESBORRA LES NOTIFICACIONS</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">Ressalta només la branca actual</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Obre com a carpeta</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">Obre a {0}</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">Obre amb eines externes</x:String>
@@ -902,15 +900,13 @@ Afegir manualment un filtre d'historial de branca o d'etiqueta desactiva aquesta
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Combina HEAD amb la comissió pare</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Integra HEAD a la comissió pare sense canviar-ne el missatge</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Força l'enviament quan acabi</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">S'ha completat el squash/fixup, però s'ha omès el push forçat perquè no s'ha pogut determinar el remot i la branca upstream de «{0}» a partir de git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">A:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clau privada SSH:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Ruta de la clau privada (sense .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Cap (configuració global)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Navega...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Heu seleccionat una clau pública (.pub). Seleccioneu la clau privada (el fitxer sense l'extensió .pub).</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remot</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Global</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Per defecte del sistema</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">COMENÇA</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Desa temporalment</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Inclou els fitxers no seguits</x:String>
@@ -1130,7 +1126,6 @@ Motiu: {1}</x:String>
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">S'està eliminant l'etiqueta «{0}»...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">S'està eliminant HEAD «{0}»...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">S'està eliminant el desament temporal: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">S'està editant el remot «{0}»...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">S'està executant l'acció personalitzada...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">S'està avançant ràpidament...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow: s'està finalitzant {0}...</x:String>
@@ -1160,6 +1155,8 @@ Motiu: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">S'està establint la branca del submòdul...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">S'està establint la branca de seguiment...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">S'estan desant temporalment els canvis...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">S'està fent squash...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">S'està fent fixup...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Pot ser que hi hagi un altre procés Git en execució. Si no és així, elimineu el fitxer .lock del directori .git.</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">S'han detectat conflictes de fusió. Resoleu-los a cada fitxer, prepareu els canvis i confirmeu-los.</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD està separat d'una branca. Creeu una branca nova per conservar els canvis.</x:String>
@@ -1168,6 +1165,9 @@ Motiu: {1}</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">L'autenticació ha fallat. Comproveu les credencials, la clau SSH o el testimoni d'accés personal.</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Els permisos del fitxer de la clau SSH privada són massa oberts. Només el propietari hi ha de tenir accés (chmod 600).</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Corregeix els permisos (chmod 600)</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">S'han corregit els permisos de «{0}» (600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">No s'han pogut corregir els permisos de «{0}»: {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">No s'han canviat automàticament els permisos de «{0}» perquè no és un fitxer de clau normal a ~/.ssh ni una clau SSH configurada.</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">No s'ha trobat el repositori remot. Comproveu l'URL i la connexió de xarxa.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ja existeix una branca o etiqueta amb aquest nom. Trieu-ne un altre.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Se sobreescriurien fitxers sense seguiment. Moveu-los, elimineu-los o deseu-los temporalment.</x:String>
@@ -1198,6 +1198,9 @@ Motiu: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git no ha pogut signar amb GPG. Comproveu la clau de signatura (git config user.signingkey), que gpg-agent estigui en execució, o desactiveu temporalment la signatura amb 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git es nega a operar en aquest repositori perquè pertany a un altre usuari. Executeu 'git config --global --add safe.directory &lt;path&gt;' per permetre-ho.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Afegeix a safe.directory</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">S'ha afegit «{0}» a safe.directory.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">No s'ha afegit «{0}» a safe.directory automàticament perquè no és un repositori no fiable dins del repositori actual.</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">Hi ha una altra operació en curs. Torneu-ho a provar quan acabi.</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">Origen:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Fitxer</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Porta-retalls</x:String>

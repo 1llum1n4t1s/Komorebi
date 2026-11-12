@@ -430,7 +430,9 @@ public partial class WorkingCopy : UserControl
                         useMine.Header = App.Text("FileCM.ResolveUsing", rebase.BaseName);
                         break;
                     case ViewModels.RevertInProgress revert:
-                        useTheirs.Header = App.Text("FileCM.ResolveUsing", $"{revert.Head.SHA.AsSpan(0, 10)} (revert)");
+                        // 上流との差分: revert.Head は REVERT_HEAD の内容から作る代用コミットのことがあり、ファイルが
+                        // 空・途中切れだと SHA.AsSpan(0, 10) が例外になるため、短い SHA はそのまま表示する。
+                        useTheirs.Header = App.Text("FileCM.ResolveUsing", $"{Models.Commit.ToShortSHA(revert.Head.SHA)} (revert)");
                         useMine.Header = App.Text("FileCM.ResolveUsing", repo.CurrentBranch.Name);
                         break;
                     case ViewModels.MergeInProgress merge:
@@ -879,7 +881,9 @@ public partial class WorkingCopy : UserControl
                         useMine.Header = App.Text("FileCM.ResolveUsing", rebase.BaseName);
                         break;
                     case ViewModels.RevertInProgress revert:
-                        useTheirs.Header = App.Text("FileCM.ResolveUsing", $"{revert.Head.SHA.AsSpan(0, 10)} (revert)");
+                        // 上流との差分: revert.Head は REVERT_HEAD の内容から作る代用コミットのことがあり、ファイルが
+                        // 空・途中切れだと SHA.AsSpan(0, 10) が例外になるため、短い SHA はそのまま表示する。
+                        useTheirs.Header = App.Text("FileCM.ResolveUsing", $"{Models.Commit.ToShortSHA(revert.Head.SHA)} (revert)");
                         useMine.Header = App.Text("FileCM.ResolveUsing", repo.CurrentBranch.Name);
                         break;
                     case ViewModels.MergeInProgress merge:

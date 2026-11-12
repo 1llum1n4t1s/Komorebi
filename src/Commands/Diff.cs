@@ -260,6 +260,9 @@ public partial class Diff : Command
 
                 if (ch == '-')
                 {
+                    // DiffView の -N 表示用に削除行数を数える。upstream の ParseChunkBodyLine と同じく
+                    // LFS ポインタ行（上の ParseLFSChange で消費済み）は数えない。
+                    _result.TextDiff.DeletedLines++;
                     _last = new Models.TextDiffLine(Models.TextDiffLineType.Deleted, rawContent, _oldLine, 0);
                     _deleted.Add(_last);
                     _oldLine++;
@@ -268,6 +271,8 @@ public partial class Diff : Command
 
                 if (ch == '+')
                 {
+                    // DiffView の +N 表示用に追加行数を数える（upstream と同じ規則）。
+                    _result.TextDiff.AddedLines++;
                     _last = new Models.TextDiffLine(Models.TextDiffLineType.Added, rawContent, 0, _newLine);
                     _added.Add(_last);
                     _newLine++;

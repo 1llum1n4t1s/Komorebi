@@ -51,6 +51,46 @@ public class RepositoryConfigureRemoteTests : IDisposable
         Assert.Equal(SwitchedUrl, remote.URL);
     }
 
+    /// <summary>
+    /// SaveAsync の失敗は、モーダル内の他のエラーと同じくダイアログ上の表示（ModalErrorPresenter）へ回る。
+    /// presenter 自体が失敗しても SaveAsync から例外を漏らさない（親画面のバナーへ落とす）。
+    /// 保存失敗は komorebi.settings の保存先（Settings）が無い状態の NullReferenceException で起こす。
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task SaveAsync_Failure_IsReportedThroughModalPresenter(bool presenterFails)
+    {
+        var repo = new Komorebi.ViewModels.Repository(false, _repoDir, Path.Combine(_repoDir, ".git"));
+        SetPrivateField(repo, "_settings", new Komorebi.Models.RepositorySettings());
+        SetPrivateField(repo, "_remotes", new List<Komorebi.Models.Remote>());
+
+        var messages = new List<string>();
+        var configure = new Komorebi.ViewModels.RepositoryConfigure(repo)
+        {
+            UserName = string.Empty,
+            UserEmail = string.Empty,
+            GPGUserSigningKey = string.Empty,
+            HttpProxy = string.Empty,
+            ModalErrorPresenter = message =>
+            {
+                messages.Add(message);
+                return presenterFails ? Task.FromException(new InvalidOperationException("presenter closed")) : Task.CompletedTask;
+            },
+        };
+
+        // ダイアログ生成後に設定を外し、末尾の _repo.Settings.SaveAsync() を失敗させる
+        // （コンストラクタは設定を読むため、生成前には外せない）
+        SetPrivateField(repo, "_settings", null!);
+
+        var ex = await Record.ExceptionAsync(configure.SaveAsync);
+
+        Assert.Null(ex);
+        Assert.True(configure.HasSaveError);
+        Assert.Single(messages);
+        Assert.Contains("FailedToSaveSettings", messages[0]);
+    }
+
     public void Dispose()
     {
         try

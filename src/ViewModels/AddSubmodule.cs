@@ -60,7 +60,7 @@ public class AddSubmodule : Popup
     public static ValidationResult ValidateURL(string url, ValidationContext ctx)
     {
         if (!Models.Remote.IsValidURL(url))
-            return new ValidationResult(App.Text("Validation.RemoteUrlInvalid"));
+            return new ValidationResult(ValidationMessages.RemoteUrlInvalid);
 
         return ValidationResult.Success;
     }

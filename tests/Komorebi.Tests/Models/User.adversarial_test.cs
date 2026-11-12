@@ -154,18 +154,8 @@ namespace Komorebi.Tests.Models
         // 🎭 型パンチ・プロトコル違反（Type Punching）
         // ================================================================
 
-        /// <summary>
-        /// @adversarial @category type @severity medium
-        /// Equals（参照等価）で User 以外のオブジェクトと比較して false を返すこと
-        /// </summary>
-        [Fact]
-        public void Equals_NonUserObject_ReturnsFalse()
-        {
-            var user = new User("Test±test@test.com");
-            Assert.False(user.Equals("not a user"));
-            Assert.False(user.Equals(42));
-            Assert.False(user.Equals(null));
-        }
+        // Equals_NonUserObject_ReturnsFalse は UserTests の同名テスト（null は Equals_Null_ReturnsFalse）と
+        // 重複していたため、こちらにしか無かった int との比較を UserTests へ移して統合した。
 
         // ================================================================
         // 🔀 状態遷移の矛盾（State Machine Abuse）

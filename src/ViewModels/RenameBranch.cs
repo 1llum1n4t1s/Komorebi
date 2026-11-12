@@ -51,13 +51,13 @@ public class RenameBranch : Popup
         if (ctx.ObjectInstance is RenameBranch rename)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
+                return new ValidationResult(ValidationMessages.BranchNameInvalid);
 
             // 同名のローカルブランチが存在するかチェック（自分自身は除外）
             foreach (var b in rename._repo.Branches)
             {
                 if (b.IsLocal && b != rename.Target && b.Name.Equals(name, StringComparison.Ordinal))
-                    return new ValidationResult(App.Text("Validation.BranchExists"));
+                    return new ValidationResult(ValidationMessages.BranchExists);
             }
         }
 

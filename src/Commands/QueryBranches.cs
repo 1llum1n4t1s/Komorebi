@@ -2,6 +2,7 @@
 #nullable disable warnings
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Komorebi.Commands;
@@ -59,6 +60,11 @@ public class QueryBranches : Command
         }
 
         // ローカルブランチのupstream追跡状態を解決
+        // Komorebi 独自: ブランチ数が多いと rev-list が一斉に起動するため、WorkingCopy の競合状態照会と同じく
+        // 同時起動数を最大 4 に絞る。全タスクを WhenAll で待つので「Ahead/Behind が戻る前に埋まる」契約は変わらない。
+        // 親（QueryBranches）の CancellationToken を子にも渡し、リフレッシュ中断時に子の git も止める。
+        var maxParallel = Math.Clamp(Environment.ProcessorCount, 1, 4);
+        using var throttler = new SemaphoreSlim(maxParallel);
         List<Task> trackTasks = [];
         foreach (var b in branches)
         {
@@ -70,7 +76,7 @@ public class QueryBranches : Command
 
                     // 追跡状態が不一致の場合、詳細な追跡情報を並列取得
                     if (mismatched.Contains(b.FullName))
-                        trackTasks.Add(new QueryTrackStatus(WorkingDirectory).GetResultAsync(b, upstream));
+                        trackTasks.Add(QueryTrackStatusThrottledAsync(throttler, b, upstream));
                 }
                 else
                 {
@@ -84,6 +90,28 @@ public class QueryBranches : Command
             await Task.WhenAll(trackTasks).ConfigureAwait(false);
 
         return branches;
+    }
+
+    /// <summary>
+    /// 同時起動数の枠を取ってから QueryTrackStatus を実行する。中断済みなら起動しない
+    /// （QueryTrackStatus 内の ReadToEndAsync も中断済みトークンでは起動しないが、枠待ちの間の中断もここで拾う）。
+    /// </summary>
+    private async Task QueryTrackStatusThrottledAsync(SemaphoreSlim throttler, Models.Branch local, Models.Branch remote)
+    {
+        await throttler.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (CancellationToken.IsCancellationRequested)
+                return;
+
+            await new QueryTrackStatus(WorkingDirectory) { CancellationToken = CancellationToken }
+                .GetResultAsync(local, remote)
+                .ConfigureAwait(false);
+        }
+        finally
+        {
+            throttler.Release();
+        }
     }
 
     /// <summary>

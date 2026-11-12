@@ -9,8 +9,8 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <!-- NuGet 依存のサプライチェーン保護: lockfile を生成・検証する -->
     <!-- packages.lock.json により「リパッケージ攻撃」(既存バージョンの差し替え) を検知可能 -->
-    <!-- Condition: submodule (depends/AvaloniaEdit) では lockfile を生成しない。 -->
-    <!--            submodule は外部リポジトリで Komorebi 側から管理すべきでないため。 -->
+    <!-- Condition: 同梱依存 (depends/AvaloniaEdit。submodule ではなく直接追跡) では lockfile を生成しない。 -->
+    <!--            上流から取り込む同梱物で、Komorebi 側の lockfile 運用の対象外とするため。 -->
     <RestorePackagesWithLockFile Condition="!$(MSBuildProjectDirectory.Contains('depends'))">true</RestorePackagesWithLockFile>
     <!-- CI ビルド時の固定復元。構成・AOT・RIDによる依存グラフの差は
          Directory.Build.targetsで別lockfileへ分け、通常Debugの正本を保護する。

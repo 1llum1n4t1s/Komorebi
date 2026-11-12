@@ -113,10 +113,10 @@ public partial class InitGitFlow : Popup
         if (ctx.ObjectInstance is InitGitFlow initializer)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
+                return new ValidationResult(ValidationMessages.BranchNameInvalid);
 
             if (initializer._master == initializer._develop)
-                return new ValidationResult(App.Text("Validation.GitFlowBranchesEqual"));
+                return new ValidationResult(ValidationMessages.GitFlowBranchesEqual);
         }
 
         return ValidationResult.Success;
@@ -128,7 +128,7 @@ public partial class InitGitFlow : Popup
     public static ValidationResult ValidateTagPrefix(string tagPrefix, ValidationContext ctx)
     {
         if (!string.IsNullOrWhiteSpace(tagPrefix) && !REG_TAG_PREFIX().IsMatch(tagPrefix))
-            return new ValidationResult(App.Text("Validation.TagPrefixInvalid"));
+            return new ValidationResult(ValidationMessages.TagPrefixInvalid);
 
         return ValidationResult.Success;
     }

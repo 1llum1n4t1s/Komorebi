@@ -127,6 +127,37 @@ namespace Komorebi.Tests.Commands
             Assert.Equal("new line two", addedLines[0].Content);
         }
 
+        /// <summary>
+        /// DiffView の +N/-N 表示が使う追加・削除行数が、複数ハンクを跨いで集計されることを確認する。
+        /// ヘッダーの ---/+++ 行やコンテキスト行は数えない（upstream の ParseChunkBodyLine と同じ規則）。
+        /// </summary>
+        [Fact]
+        public void ParseDiffOutput_CountsAddedAndDeletedLines()
+        {
+            var output = "diff --git a/file.txt b/file.txt\n" +
+                         "index abcdef1..1234567 100644\n" +
+                         "--- a/file.txt\n" +
+                         "+++ b/file.txt\n" +
+                         "@@ -1,3 +1,4 @@\n" +
+                         " line one\n" +
+                         "-old line two\n" +
+                         "+new line two\n" +
+                         "+inserted line\n" +
+                         " line three\n" +
+                         "@@ -10,3 +11,2 @@\n" +
+                         " line ten\n" +
+                         "-removed eleven\n" +
+                         "-removed twelve\n" +
+                         "+--not a header\n" +
+                         "\\ No newline at end of file\n";
+
+            var result = Diff.ParseDiffOutput(output);
+
+            Assert.NotNull(result.TextDiff);
+            Assert.Equal(3, result.TextDiff.AddedLines);
+            Assert.Equal(3, result.TextDiff.DeletedLines);
+        }
+
         [Fact]
         public void ParseDiffOutput_OldMode_Parsed()
         {

@@ -59,7 +59,9 @@ public class Checkout : Popup
     public override async Task<bool> Sure()
     {
         var branchName = BranchName;
-        ProgressDescription = $"Checkout '{branchName}' ...";
+        // upstream は英語直書きだが、Komorebi では既存キー Progress.Checkout（全言語翻訳済み）へ
+        // 接続してローカライズする。ログ名（CreateLog）は upstream と同じ英語のまま維持する。
+        ProgressDescription = App.Text("Progress.Checkout", branchName);
 
         var log = _repo.CreateLog($"Checkout '{branchName}'");
         Use(log);

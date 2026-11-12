@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">NULLA DOCUMENTA IMMUTATA PUTATA</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Onera Imaginem...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Renova</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">DOCUMENTUM BINARIUM NON SUSTINETUR!!!</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">Biseca</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Abrumpe</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Malum</x:String>
@@ -374,7 +373,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Signum:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Dele e repositoriis remotis</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">DIFF BINARIUM</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Modus Documenti Mutatus</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Prima Differentia</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Ignora Mutationes Spatii Vacui</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">MISCERE</x:String>
@@ -604,6 +602,8 @@
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">Prius Conflictum</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">EVENTUS</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">SERVA &amp; PROPONE</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">Servari non potest: conflictus nondum soluti manent.</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">Servare et proponere defecit: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">EORUM</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Conflicta Merge</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">Abicere mutationes non servatas?</x:String>
@@ -798,7 +798,6 @@
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">PERGE</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">Actiones Propriae</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">Nullae Actiones Propriae</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">Tabula Instrumenti</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">Abice omnes mutationes</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">Aperi in Exploratore Documentorum</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">Quaere Ramos/Signa/Submodulos</x:String>
@@ -823,7 +822,6 @@ Filtrum historiae rami aut notae manu additum hanc facultatem sponte exstinguit.
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Naviga ad HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Crea Ramum</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">PURGA NOTIFICATIONES</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">Solum illumina ramum praesentem</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Aperi ut Fasciculum</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">Aperi in {0}</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">Aperi in Instrumentis Externis</x:String>
@@ -905,15 +903,13 @@ Filtrum historiae rami aut notae manu additum hanc facultatem sponte exstinguit.
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD in Parentem</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD in Parentem</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Vi mitte post perfectionem</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup perfectum est, sed impulsus coactus omissus est, quia remotum et ramus upstream '{0}' ex git config determinari non potuerunt.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clavis SSH Privata:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Semita clavis privatae (non .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Nulla (dispositio globalis)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Perlustra...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Clavem publicam (.pub) selegisti. Clavem privatam (archivum sine extensione .pub) selige.</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remotus</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Globalis</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Systema Default</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">INCIPE</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Repone</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Includi documenta non vestigata</x:String>
@@ -1133,7 +1129,6 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Tag '{0}' delendo...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' abiciendo...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Stash abiciendo: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Remote '{0}' emendando...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Actionem propriam exsequendo...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} perficiendo...</x:String>
@@ -1163,6 +1158,8 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Branch submoduli statuendo...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream statuendo...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Mutationes recondendo...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">Squash faciendo...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">Fixup faciendo...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Fortasse alius processus git currit. Si non, dele fasciculum .lock in directorio .git.</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Conflictus fusionum detecti sunt. Resolve conflictus in singulis fasciculis, deinde colloca et committe.</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD seiunctum est. Crea novum ramum ut mutationes tuas serves.</x:String>
@@ -1171,6 +1168,9 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Authenticatio defecit. Verifica credentialia, clavem SSH, vel signum accessus personalis.</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Permissiones archivi clavis privatae SSH nimis apertae sunt. Archivum clavis solum a domino accessibile esse debet (chmod 600).</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Permissiones corrige (chmod 600)</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">Permissiones '{0}' correctae sunt (600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">Permissiones '{0}' corrigi non potuerunt: {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">Permissiones '{0}' sponte non mutatae sunt, quia neque fasciculus clavis ordinarius sub ~/.ssh neque clavis SSH constituta est.</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Repositorium remotum non inventum. Verifica URL et conexionem retis.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ramus vel titulus eo nomine iam existit. Elige nomen diversum.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Fasciculi non vestigati superscribentur. Move vel dele eos, vel utere stash ad eos servandos.</x:String>
@@ -1201,6 +1201,9 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git cum GPG signare non potuit. Clavem signatoriam tuam (git config user.signingkey) recense, gpg-agent currere certus es, vel signaturam temporaliter cum 'git -c commit.gpgsign=false ...' inactivam redde.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git in hoc repositorio operari recusat quia alius usuarius id possidet. 'git config --global --add safe.directory &lt;semita&gt;' exsequere ut permittas.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Adde ad safe.directory</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">'{0}' ad safe.directory additum est.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">'{0}' ad safe.directory sponte non additum est, quia non est repositorium non fidum intra repositorium praesens.</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">Alia operatio in cursu est. Postquam finita erit, iterum conare.</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">Fons:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Documentum</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Charta Volatilis</x:String>

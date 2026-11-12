@@ -120,22 +120,10 @@ public class Histories : ObservableObject, IDisposable
                 foreach (var c in value)
                     _commitBySha.TryAdd(c.SHA, c);
 
-                // 親SHA→子Commit群の逆引き辞書を同時構築。
-                // OnGotoChild で親→子を辿る際、以前は vm.Commits を O(n×m) 走査していたが、
-                // ここで一度構築すれば O(1) ルックアップで済む。
-                _childrenByParentSha = new Dictionary<string, List<Models.Commit>>(value.Count);
-                foreach (var c in value)
-                {
-                    foreach (var p in c.Parents)
-                    {
-                        if (!_childrenByParentSha.TryGetValue(p, out var list))
-                        {
-                            list = [];
-                            _childrenByParentSha[p] = list;
-                        }
-                        list.Add(c);
-                    }
-                }
+                // 親SHA→子Commit群の逆引き辞書は、使うのが OnGotoChild（Alt+↑）だけなので
+                // ここでは作らず無効化だけ行い、GetChildrenBySha の初回呼び出しで構築する。
+                // コミット一覧の更新（リフレッシュ）ごとに全コミット×親の走査をしないための遅延化。
+                _childrenByParentSha = null;
 
                 _selectedCommits = [];
                 var previous = new HashSet<string>(StringComparer.Ordinal);
@@ -163,9 +151,34 @@ public class Histories : ObservableObject, IDisposable
     /// </summary>
     public IReadOnlyList<Models.Commit> GetChildrenBySha(string parentSha)
     {
+        // Commits の setter で null 化された後の初回だけ構築する（UI スレッドからのみ呼ばれる前提）。
+        _childrenByParentSha ??= BuildChildrenByParentSha(_commits);
         if (_childrenByParentSha.TryGetValue(parentSha, out var list))
             return list;
         return [];
+    }
+
+    /// <summary>
+    /// 親SHA→子Commit群の逆引き辞書を構築する。
+    /// 以前 OnGotoChild は vm.Commits を O(n×m) 走査していたが、一度構築すれば O(1) ルックアップで済む。
+    /// 子リストの順序は commits の並び順（＝従来の setter 内構築と同じ順序）を保つ。
+    /// </summary>
+    private static Dictionary<string, List<Models.Commit>> BuildChildrenByParentSha(List<Models.Commit> commits)
+    {
+        var map = new Dictionary<string, List<Models.Commit>>(commits.Count);
+        foreach (var c in commits)
+        {
+            foreach (var p in c.Parents)
+            {
+                if (!map.TryGetValue(p, out var list))
+                {
+                    list = [];
+                    map[p] = list;
+                }
+                list.Add(c);
+            }
+        }
+        return map;
     }
 
     /// <summary>
@@ -312,7 +325,7 @@ public class Histories : ObservableObject, IDisposable
         // データクリア (Commits = []) は維持し、循環参照は GC root が解けた時点で消える。
         Commits = [];
         _commitBySha = [];
-        _childrenByParentSha = [];
+        _childrenByParentSha = null;
         _graph = null;
         _selectedCommit = null;
         _detailContext?.Dispose();
@@ -829,7 +842,7 @@ public class Histories : ObservableObject, IDisposable
     private bool _isLoading = true; // 読み込み中フラグ
     private List<Models.Commit> _commits = []; // コミット一覧
     private Dictionary<string, Models.Commit> _commitBySha = [];
-    private Dictionary<string, List<Models.Commit>> _childrenByParentSha = [];
+    private Dictionary<string, List<Models.Commit>> _childrenByParentSha = null;    // GetChildrenBySha で遅延構築（null は未構築）
     private Models.CommitGraph _graph = null; // コミットグラフ描画データ
     private Models.Commit _selectedCommit = null; // 選択中のコミット
     private Models.Bisect _bisect = null; // bisect状態

@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">KEINE ALS UNVERÄNDERT ANGENOMMENEN DATEIEN</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">Bild laden…</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">Aktualisieren</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">BINÄRE DATEI WIRD NICHT UNTERSTÜTZT!!!</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">Abbrechen</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">Schlecht</x:String>
@@ -374,7 +373,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">Tag:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">Von Remote-Repositorys löschen</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">BINÄRER VERGLEICH</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">Dateimodus geändert</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">Erster Unterschied</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">Ignoriere Leerzeichen-Änderungen</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">ÜBEREINANDER</x:String>
@@ -604,6 +602,8 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">Vorheriger Konflikt</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">ERGEBNIS</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">SPEICHERN &amp; STAGEN</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">Speichern nicht möglich: Es gibt noch ungelöste Konflikte.</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">Speichern und Stagen fehlgeschlagen: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">DEREN</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Merge-Konflikte</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">Ungespeicherte Änderungen verwerfen?</x:String>
@@ -798,7 +798,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">WEITER</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">Benutzerdefinierte Aktionen</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">Keine benutzerdefinierten Aktionen</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">Dashboard</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">Alle Änderungen verwerfen</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">Öffne im Datei-Browser</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">Suche Branches / Tags / Submodule</x:String>
@@ -823,7 +822,6 @@ Das manuelle Hinzufügen eines Branch-/Tag-Verlaufsfilters deaktiviert diese Fun
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Zum HEAD wechseln</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Erstelle Branch</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">BENACHRICHTIGUNGEN LÖSCHEN</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">Nur aktuellen Branch hervorheben</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Als Ordner öffnen</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">Öffne in {0}</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">Öffne in externen Tools</x:String>
@@ -905,15 +903,13 @@ Das manuelle Hinzufügen eines Branch-/Tag-Verlaufsfilters deaktiviert diese Fun
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">Squash HEAD in Vorgänger</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">Fixup HEAD in Vorgänger</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">Nach Abschluss Force-Push durchführen</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/Fixup ist abgeschlossen, aber der Force-Push wurde übersprungen, da Remote und Upstream-Branch von '{0}' nicht aus git config ermittelt werden konnten.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Privater SSH-Schlüssel:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Pfad zum privaten Schlüssel (nicht .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Keine (Globale Einstellung)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Durchsuchen...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Sie haben einen öffentlichen Schlüssel (.pub) ausgewählt. Bitte wählen Sie den privaten Schlüssel (die Datei ohne .pub-Endung).</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">Remote</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">Global</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">Systemstandard</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">START</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">Stash</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">Nicht-verfolgte Dateien einbeziehen</x:String>
@@ -1133,7 +1129,6 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Tag '{0}' wird gelöscht...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' wird verworfen...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Stash wird verworfen: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Remote '{0}' wird bearbeitet...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">Benutzerdefinierte Aktion wird ausgeführt...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} wird abgeschlossen...</x:String>
@@ -1163,6 +1158,8 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">Submodul-Branch wird gesetzt...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream wird gesetzt...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">Änderungen werden gestasht...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">Squash wird ausgeführt...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">Fixup wird ausgeführt...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">Möglicherweise läuft ein anderer Git-Prozess. Falls nicht, löschen Sie die .lock-Datei im .git-Verzeichnis.</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">Merge-Konflikte erkannt. Lösen Sie die Konflikte in jeder Datei, dann stagen und committen Sie.</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD ist abgetrennt. Erstellen Sie einen neuen Branch, um Ihre Änderungen zu behalten.</x:String>
@@ -1171,6 +1168,9 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">Authentifizierung fehlgeschlagen. Überprüfen Sie Ihre Anmeldedaten, SSH-Schlüssel oder persönlichen Zugriffstoken.</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">Die Berechtigungen der SSH-Privatschlüsseldatei sind zu offen. Die Schlüsseldatei darf nur für den Eigentümer zugänglich sein (chmod 600).</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">Berechtigungen korrigieren (chmod 600)</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">Berechtigungen von '{0}' korrigiert (600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">Berechtigungen von '{0}' konnten nicht korrigiert werden: {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">Die Berechtigungen von '{0}' wurden nicht automatisch geändert, da es keine reguläre Schlüsseldatei unter ~/.ssh und kein konfigurierter SSH-Schlüssel ist.</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">Remote-Repository nicht gefunden. Überprüfen Sie die URL und Ihre Netzwerkverbindung.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">Ein Branch oder Tag mit diesem Namen existiert bereits. Wählen Sie einen anderen Namen.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">Nicht verfolgte Dateien würden überschrieben. Verschieben oder löschen Sie diese, oder verwenden Sie Stash.</x:String>
@@ -1201,6 +1201,9 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git konnte mit GPG nicht signieren. Überprüfen Sie Ihren Signaturschlüssel (git config user.signingkey), stellen Sie sicher, dass der gpg-agent läuft, oder deaktivieren Sie die Signatur vorübergehend mit 'git -c commit.gpgsign=false ...'.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git verweigert die Bearbeitung dieses Repositorys, da es einem anderen Benutzer gehört. Führen Sie 'git config --global --add safe.directory &lt;Pfad&gt;' aus, um es zu erlauben.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">Zu safe.directory hinzufügen</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">'{0}' wurde zu safe.directory hinzugefügt.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">'{0}' wurde nicht automatisch zu safe.directory hinzugefügt, da es kein nicht vertrauenswürdiges Repository innerhalb des aktuellen Repositorys ist.</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">Ein anderer Vorgang läuft gerade. Versuchen Sie es nach dessen Abschluss erneut.</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">Quelle:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">Datei</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">Zwischenablage</x:String>

@@ -51,14 +51,7 @@ public partial class WelcomeToolbar : UserControl
     /// </summary>
     private void UpdateWorkspaceDisplay()
     {
-        if (App.GetLauncher() is { } launcher)
-        {
-            var ws = launcher.ActiveWorkspace;
-            if (WorkspaceDot is not null)
-                WorkspaceDot.Fill = ws.Brush;
-            if (WorkspaceName is not null)
-                WorkspaceName.Text = ws.Name;
-        }
+        App.ApplyWorkspaceDisplay(WorkspaceDot, WorkspaceName);
     }
 
     /// <summary>
@@ -100,78 +93,8 @@ public partial class WelcomeToolbar : UserControl
         };
         menu.Items.Add(prefs);
 
-        var appData = new MenuItem
-        {
-            Header = App.Text("OpenAppDataDir"),
-            Icon = App.CreateMenuIcon("Icons.Explore"),
-        };
-        appData.Click += (_, ev) =>
-        {
-            App.OpenAppDataDirCommand.Execute(null);
-            ev.Handled = true;
-        };
-        menu.Items.Add(appData);
-
-        menu.Items.Add(new MenuItem
-        {
-            Header = App.Text("SSHKeyHelper"),
-            Icon = App.CreateMenuIcon("Icons.Password"),
-            Command = App.OpenSSHKeyHelperCommand,
-        });
-
-        var hotkeys = new MenuItem
-        {
-            Header = App.Text("Hotkeys"),
-            Icon = App.CreateMenuIcon("Icons.Hotkeys"),
-        };
-        hotkeys.Click += (_, ev) =>
-        {
-            App.OpenHotkeysCommand.Execute(null);
-            ev.Handled = true;
-        };
-        menu.Items.Add(hotkeys);
-
-        menu.Items.Add(new MenuItem() { Header = "-" });
-
-        if (App.IsCheckForUpdateCommandVisible)
-        {
-            var update = new MenuItem
-            {
-                Header = App.Text("SelfUpdate"),
-                Icon = App.CreateMenuIcon("Icons.SoftwareUpdate"),
-            };
-            update.Click += (_, ev) =>
-            {
-                App.CheckForUpdateCommand.Execute(null);
-                ev.Handled = true;
-            };
-            menu.Items.Add(update);
-            menu.Items.Add(new MenuItem() { Header = "-" });
-        }
-
-        var about = new MenuItem
-        {
-            Header = App.Text("About"),
-            Icon = App.CreateMenuIcon("Icons.Info"),
-        };
-        about.Click += (_, ev) =>
-        {
-            App.OpenAboutCommand.Execute(null);
-            ev.Handled = true;
-        };
-        menu.Items.Add(about);
-
-        var quit = new MenuItem
-        {
-            Header = App.Text("Quit"),
-            Icon = App.CreateMenuIcon("Icons.Quit"),
-        };
-        quit.Click += (_, ev) =>
-        {
-            App.QuitCommand.Execute(null);
-            ev.Handled = true;
-        };
-        menu.Items.Add(quit);
+        // アプリ全体の項目は Repository のオーバーフローメニューと共通（App.AddGlobalOverflowMenuItems）
+        App.AddGlobalOverflowMenuItems(menu.Items);
 
         menu.Open(btn);
         e.Handled = true;

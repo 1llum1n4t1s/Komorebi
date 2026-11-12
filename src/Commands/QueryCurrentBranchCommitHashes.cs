@@ -31,11 +31,20 @@ public class QueryCurrentBranchCommitHashes : Command
     {
         var outs = new HashSet<string>();
 
+        // Komorebi 独自: 呼び出し元（QueryCommits）から渡された CancellationToken で中断できるようにする。
+        // 中断済みなら git を起動せず、途中で中断された場合は部分的な集合を返さず空を返す
+        // （呼び出し元は中断後の結果を使わないが、部分集合で誤ったマージ済み判定をしないよう安全側に倒す）。
+        if (CancellationToken.IsCancellationRequested)
+            return outs;
+
         try
         {
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+
+            // Command.ReadToEndAsync と同じく、プロセスの実終了（WaitForExitAsync）まで Kill 登録を保持する
+            using var registration = CancellationToken.Register(() => Native.CommandCancellation.Terminate(proc, false));
             var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             // 8文字以上の行をSHAとして追加
@@ -44,10 +53,16 @@ public class QueryCurrentBranchCommitHashes : Command
 
             await proc.WaitForExitAsync().ConfigureAwait(false);
             await stderrDrain.ConfigureAwait(false);
+
+            if (CancellationToken.IsCancellationRequested)
+                outs.Clear();
         }
         catch
         {
-            // 例外は無視する
+            // 例外は無視する。ただし中断（Kill による読取失敗を含む）で例外になった場合は、
+            // 途中まで読んだ部分集合を返さない（正常終了の経路と同じく空にする）。
+            if (CancellationToken.IsCancellationRequested)
+                outs.Clear();
         }
 
         return outs;

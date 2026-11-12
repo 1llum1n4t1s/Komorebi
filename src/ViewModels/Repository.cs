@@ -220,7 +220,14 @@ public class Repository : ObservableObject, Models.IRepository
             if (SetProperty(ref _filter, value))
             {
                 if (_filterDebounceTimer is null)
-                    _filterDebounceTimer = new System.Threading.Timer(_ => Dispatcher.UIThread.Post(ApplyFilter), null, Timeout.Infinite, Timeout.Infinite);
+                    // Close で Dispose しても、既に発火済みのコールバックが Post した ApplyFilter は後から走るため、
+                    // UI スレッド側で _isClosed を確認する（Close は _visibleTags 等を null にする）。
+                    _filterDebounceTimer = new System.Threading.Timer(_ => Dispatcher.UIThread.Post(() =>
+                    {
+                        if (_isClosed)
+                            return;
+                        ApplyFilter();
+                    }), null, Timeout.Infinite, Timeout.Infinite);
 
                 _filterDebounceTimer.Change(150, Timeout.Infinite);
             }
@@ -1521,11 +1528,27 @@ public class Repository : ObservableObject, Models.IRepository
     /// <summary>ワークツリー一覧を非同期で再取得し、UIに反映する。</summary>
     public void RefreshWorktrees()
     {
+        // 他の Refresh* と同じく、Close 後に走り出した・完了したタスクは UI に触れない（PITFALLS「Repository.Close」）。
+        if (_isClosed)
+            return;
+
         Task.Run(async () =>
         {
+            if (_isClosed)
+                return;
+
             var worktrees = await new Commands.Worktree(FullPath).ReadAllAsync().ConfigureAwait(false);
+            if (_isClosed)
+                return;
+
             var cleaned = Worktree.Build(FullPath, worktrees);
-            Dispatcher.UIThread.Invoke(() => Worktrees = cleaned);
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                if (_isClosed)
+                    return;
+
+                Worktrees = cleaned;
+            });
         });
     }
 
@@ -1652,12 +1675,20 @@ public class Repository : ObservableObject, Models.IRepository
     /// </summary>
     public void RefreshSubmodules()
     {
+        // Close 後は何もしない。Close は同期 UI 経路専用の _visibleSubmodules を null にするため、
+        // BuildVisibleSubmodules を呼ぶ UI ラムダ内でも _isClosed を確認する（PITFALLS「Repository.Close」）。
+        if (_isClosed)
+            return;
+
         if (!MayHaveSubmodules())
         {
             if (_submodules.Count > 0)
             {
                 Dispatcher.UIThread.Invoke(() =>
                 {
+                    if (_isClosed)
+                        return;
+
                     Submodules = [];
                     VisibleSubmodules = BuildVisibleSubmodules();
                 });
@@ -1668,6 +1699,9 @@ public class Repository : ObservableObject, Models.IRepository
 
         Task.Run(async () =>
         {
+            if (_isClosed)
+                return;
+
             List<Models.Submodule> submodules;
             try
             {
@@ -1679,13 +1713,24 @@ public class Repository : ObservableObject, Models.IRepository
                 return;
             }
 
+            if (_isClosed)
+                return;
+
             // パフォーマンス: 差分比較のための Dictionary 構築と foreach を UI スレッドから外す。
             // 以前は UI スレッド Invoke 内で 2 ループ ＋ Dictionary 構築を行っており、
             // サブモジュールが多い（100+）リポジトリで Watcher ティック毎に UI ジャンクを誘発していた。
             // 現スレッド（Task.Run）で _submodules のスナップショットだけ UI スレッドから取り、
             // 比較処理はここで行い、最終代入のみ UI スレッドで行う。
             List<Models.Submodule> currentSnapshot = null;
-            Dispatcher.UIThread.Invoke(() => currentSnapshot = [.. _submodules]);
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                if (!_isClosed)
+                    currentSnapshot = [.. _submodules];
+            });
+
+            // Invoke 待ちの間に Close された場合はスナップショットを取らずに終える
+            if (currentSnapshot is null)
+                return;
 
             bool hasChanged = currentSnapshot.Count != submodules.Count;
             if (!hasChanged)
@@ -1718,6 +1763,9 @@ public class Repository : ObservableObject, Models.IRepository
 
             Dispatcher.UIThread.Invoke(() =>
             {
+                if (_isClosed)
+                    return;
+
                 Submodules = submodules;
                 VisibleSubmodules = BuildVisibleSubmodules();
             });
@@ -2483,7 +2531,7 @@ public class Repository : ObservableObject, Models.IRepository
     private bool _isBisectCommandRunning = false;                                      // Bisectコマンド実行中フラグ
 
     private System.Threading.Timer _filterDebounceTimer = null;                          // フィルタデバウンスタイマー
-    private readonly object _refreshLock = new();
+    private readonly System.Threading.Lock _refreshLock = new();                       // lock 文専用（Monitor.* 不使用）
     private CancellationTokenSource _cancellationRefreshBranches = null;               // ブランチ更新キャンセルトークン
     private CancellationTokenSource _cancellationRefreshTags = null;                   // タグ更新キャンセルトークン
     private CancellationTokenSource _cancellationRefreshWorkingCopyChanges = null;     // ワーキングコピー更新キャンセルトークン

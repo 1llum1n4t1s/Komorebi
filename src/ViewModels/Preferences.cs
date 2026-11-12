@@ -757,34 +757,50 @@ public class Preferences : ObservableObject
 
     /// <summary>
     /// 設定をpreference.jsonファイルに保存する。読み込み中またはリードオンリーの場合はスキップする。
-    /// アトミック書き込み: tmp に全量書き → File.Move で置換することで、書き込み途中のクラッシュ・電源断で
-    /// preference.json が破損して全設定ロストするのを防ぐ。
+    /// アトミック書き込み: tmp に全量書き → File.Move で置換することで、書き込み途中の例外・プロセスのクラッシュで
+    /// preference.json が途中までの内容に置き換わって全設定ロストするのを防ぐ。
+    /// fsync（Flush(true)）はしないため、電源断・OS クラッシュ時に内容がディスクへ届いていることまでは保証しない。
     /// </summary>
     public void Save()
     {
         // UI と AutoFetchService の同時保存で古いスナップショットが後から上書きしないよう、
         // シリアライズから置換までを 1 つのクリティカルセクションにする。
         lock (_saveLock)
-            SaveCore();
+            SaveCore(Path.Combine(Native.OS.DataDir, "preference.json"));
     }
 
-    private void SaveCore()
+    /// <summary>
+    /// 保存先を指定して Save と同じ処理を行う（単体テスト用。グローバルな Native.OS.DataDir を書き換えずに
+    /// 同一内容スキップ・.bak の挙動を検証するため）。
+    /// </summary>
+    internal void SaveTo(string file)
+    {
+        lock (_saveLock)
+            SaveCore(file);
+    }
+
+    private void SaveCore(string file)
     {
         if (_isLoading || _isReadonly)
             return;
 
         ExtensionData = null;
 
-        var file = Path.Combine(Native.OS.DataDir, "preference.json");
         // 並行プロセス (複数 Komorebi インスタンス) との tmp ファイル衝突を避けるためランダム拡張子付き
         var tmp = $"{file}.tmp.{Guid.NewGuid():N}";
         var bak = file + ".bak";
         try
         {
-            using (var stream = File.Create(tmp))
-            {
-                JsonSerializer.Serialize(stream, this, JsonCodeGen.Default.Preferences);
-            }
+            var content = JsonSerializer.SerializeToUtf8Bytes(this, JsonCodeGen.Default.Preferences);
+
+            // 前回このインスタンスが書いた内容と同一で、ディスク上のファイルも書いた直後の状態のままなら
+            // 書き直さない。PropertyChanged ごとに保存が走るため、同じ内容での置換と .bak の上書き
+            // （= 1 世代前の退避が直前と同じ内容になってしまう）を避ける。外部でファイルが置き換え・変更・削除された
+            // 場合（パス・mtime・サイズのいずれかが記録と違う）は必ず書き直す。
+            if (IsUnchangedSinceLastSave(file, content))
+                return;
+
+            File.WriteAllBytes(tmp, content);
 
             // 直前まで正常だった preference.json を .bak に退避してから上書きする。
             // OS クラッシュ・電源断で preference.json が破損した場合の復旧手段になる
@@ -802,6 +818,10 @@ public class Preferences : ObservableObject
             }
 
             File.Move(tmp, file, overwrite: true);
+
+            // 置換に成功したときだけ記録を更新する（失敗時は前回の記録のまま＝次回は必ず書き直す）。
+            var info = new FileInfo(file);
+            _lastSaved = new SavedSnapshot(file, content, info.LastWriteTimeUtc, info.Length);
         }
         catch (Exception ex)
         {
@@ -819,6 +839,23 @@ public class Preferences : ObservableObject
             }
         }
     }
+
+    /// <summary>
+    /// content が前回保存した内容と同一で、file が保存直後の状態（存在し、mtime・サイズが記録と一致）か。
+    /// _saveLock 内（SaveCore）からのみ呼ぶ。
+    /// </summary>
+    private bool IsUnchangedSinceLastSave(string file, byte[] content)
+    {
+        if (_lastSaved is not { } last || !string.Equals(last.File, file, StringComparison.Ordinal) ||
+            !content.AsSpan().SequenceEqual(last.Content))
+            return false;
+
+        var info = new FileInfo(file);
+        return info.Exists && info.LastWriteTimeUtc == last.LastWriteTimeUtc && info.Length == last.Length;
+    }
+
+    /// <summary>直前に保存した preference.json の内容とファイル状態（保存スキップ判定用）。</summary>
+    private sealed record SavedSnapshot(string File, byte[] Content, DateTime LastWriteTimeUtc, long Length);
 
     /// <summary>preference.jsonから設定を読み込む。ファイルが存在しない場合はデフォルト設定を返す。
     /// 読み込み失敗時は preference.json.bak からのフォールバックを試み、それも失敗した場合のみ
@@ -1045,6 +1082,8 @@ public class Preferences : ObservableObject
     private static readonly Lock s_instanceLock = new();
     private static readonly string s_detectedLocale = DetectDefaultLocale(); // 自動検出されたロケール
     private readonly Lock _saveLock = new();
+    // 最後に自分が書き込んだ内容と書込み直後のファイル状態。null は未保存（必ず書き込む）。_saveLock 内でのみ読み書きする。
+    private SavedSnapshot _lastSaved = null;
 
     /// <summary>システムから自動検出されたデフォルトロケール。</summary>
     internal static string DetectedLocale => s_detectedLocale;

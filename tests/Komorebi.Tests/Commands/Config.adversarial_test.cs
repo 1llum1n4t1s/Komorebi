@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace Komorebi.Tests.Commands
 {
     /// <summary>
@@ -9,16 +7,18 @@ namespace Komorebi.Tests.Commands
     public class ConfigAdversarialTests
     {
         /// <summary>
-        /// privateメソッド ParseConfigOutput をリフレクション経由で呼び出すヘルパー。
+        /// internal の ParseConfigOutput を呼び出すヘルパー。
+        /// 以前はリフレクションで private を呼んでいたが、名前変更がコンパイル時に検出されないため
+        /// internal（InternalsVisibleTo）経由の直接呼び出しに替えた。
         /// </summary>
         private static Dictionary<string, string> InvokeParseConfigOutput(
             string stdout,
             IEqualityComparer<string>? comparer = null)
         {
-            var method = typeof(Komorebi.Commands.Config)
-                .GetMethod("ParseConfigOutput", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-            return (Dictionary<string, string>)method.Invoke(null, [stdout, comparer])!;
+            // comparer 省略時は製品側の既定引数（null = 大文字小文字を区別する辞書）をそのまま使う
+            if (comparer is null)
+                return Komorebi.Commands.Config.ParseConfigOutput(stdout);
+            return Komorebi.Commands.Config.ParseConfigOutput(stdout, comparer);
         }
 
         // ===============================================================

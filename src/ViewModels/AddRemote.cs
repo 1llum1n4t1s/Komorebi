@@ -89,7 +89,7 @@ public class AddRemote : Popup
             // 同じ名前のリモートが既に存在するか確認する
             var exists = add._repo.FindRemoteByName(name);
             if (exists is not null)
-                return new ValidationResult(App.Text("Validation.RemoteNameExists"));
+                return new ValidationResult(ValidationMessages.RemoteNameExists);
         }
 
         return ValidationResult.Success;
@@ -107,12 +107,12 @@ public class AddRemote : Popup
         {
             // URL形式の妥当性を検証する
             if (!Models.Remote.IsValidURL(url))
-                return new ValidationResult(App.Text("Validation.RemoteUrlInvalid"));
+                return new ValidationResult(ValidationMessages.RemoteUrlInvalid);
 
             // 同じURLのリモートが既に存在するか確認する
             var exists = add._repo.Remotes.Find(x => x.URL == url);
             if (exists is not null)
-                return new ValidationResult(App.Text("Validation.RemoteUrlExists"));
+                return new ValidationResult(ValidationMessages.RemoteUrlExists);
         }
 
         return ValidationResult.Success;
@@ -129,7 +129,7 @@ public class AddRemote : Popup
         if (ctx.ObjectInstance is AddRemote { _useSSH: true } && !string.IsNullOrEmpty(sshkey))
         {
             if (!File.Exists(sshkey))
-                return new ValidationResult(App.Text("Validation.SSHKeyNotFound"));
+                return new ValidationResult(ValidationMessages.SSHKeyNotFound);
 
             if (sshkey.EndsWith(".pub", System.StringComparison.OrdinalIgnoreCase))
                 return new ValidationResult(App.Text("SSHKey.PublicKeySelected"));

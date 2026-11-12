@@ -82,10 +82,11 @@ namespace Komorebi.Tests.Models
         [Theory]
         [InlineData("git@github.com:../../../etc/passwd")]
         [InlineData("ssh://git@host/../../../etc/passwd")]
-        public void IsSSH_PathTraversal_ReturnsFalseOrDoesNotCrash(string url)
+        public void IsSSH_PathTraversal_ReturnsFalse(string url)
         {
-            // クラッシュしないことが重要
-            _ = Remote.IsSSH(url);
+            // パス部の先頭は英数字・~・% に限られる（REG_SSH1 / REG_SSH2）ため、"../" で始まるパスは
+            // SSH URL として認めない。例外を投げずに false を返すことを確認する。
+            Assert.False(Remote.IsSSH(url));
         }
 
         // ================================================================
@@ -115,29 +116,8 @@ namespace Komorebi.Tests.Models
             Assert.Contains(expectedEncoded, url, System.StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// @adversarial @category type @severity medium
-        /// IsValidURL で file:// プロトコルが有効として扱われること
-        /// </summary>
-        [Theory]
-        [InlineData("file:///home/user/repo", true)]
-        [InlineData("file:///C:/Users/user/repo", true)]
-        public void IsValidURL_FileProtocol_IsValid(string url, bool expected)
-        {
-            Assert.Equal(expected, Remote.IsValidURL(url));
-        }
-
-        /// <summary>
-        /// @adversarial @category type @severity medium
-        /// IsValidURL で相対パスが有効として扱われること
-        /// </summary>
-        [Theory]
-        [InlineData("./repo")]
-        [InlineData("../repo")]
-        public void IsValidURL_RelativePath_IsValid(string url)
-        {
-            Assert.True(Remote.IsValidURL(url));
-        }
+        // IsValidURL_FileProtocol_IsValid / IsValidURL_RelativePath_IsValid は RemoteTests の同名テストと
+        // 完全に重複していたため、こちらにしか無かった InlineData を RemoteTests へ移して統合した。
 
         /// <summary>
         /// @adversarial @category type @severity medium

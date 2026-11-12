@@ -424,6 +424,14 @@ public class RepositoryConfigure : ObservableObject
     /// <summary>保存中にエラーが発生したかどうか。</summary>
     public bool HasSaveError { get; set; }
 
+    /// <summary>
+    /// ダイアログ表示中のエラーを、このダイアログを owner とする Alert で表示する処理。
+    /// View（Views.RepositoryConfigure）が開いている間だけ設定し、閉じたら null に戻す。
+    /// モーダル内のエラーを App.RaiseException で出すと親画面のバナーに隠れて利用者に見えないため
+    /// （AGENTS.md「Alert Dialog for Modal-Context Errors」）。VM は View 型を参照しない方針なので委譲で受け取る。
+    /// </summary>
+    public Func<string, Task>? ModalErrorPresenter { get; set; }
+
     public async Task SaveAsync()
     {
         HasSaveError = false;
@@ -455,8 +463,36 @@ public class RepositoryConfigure : ObservableObject
         catch (Exception ex)
         {
             HasSaveError = true;
-            App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", ex.Message));
+            // モーダル内の保存失敗は親画面のバナーに隠れるため、他のエラーと同じくダイアログ上の Alert で知らせる
+            // （View 未接続時は ReportModalErrorAsync が従来どおり App.RaiseException へ回す）。
+            await ReportModalErrorAsync(App.Text("Error.FailedToSaveSettings", ex.Message));
         }
+    }
+
+    /// <summary>
+    /// ダイアログ内で起きたエラーを利用者へ通知する。View が接続中なら Alert、未接続（閉じた後・テスト）なら
+    /// 従来どおり親画面のバナーへ回す。Alert 表示中はこの await が完了しないため、後続の保存・読込は
+    /// 利用者がエラーを確認するまで進まない（モーダル内の他操作もブロックされるので整合する）。
+    /// </summary>
+    private async Task ReportModalErrorAsync(string message)
+    {
+        if (ModalErrorPresenter is { } presenter)
+        {
+            try
+            {
+                await presenter(message);
+                return;
+            }
+            catch (Exception e)
+            {
+                Models.Logger.LogException("リポジトリ設定ダイアログのエラー表示に失敗", e);
+                // Alert 自体の表示に失敗した（ダイアログが閉じる途中など）。この例外を呼び出し元へ伝えると、
+                // 読込処理の catch から再送出されて _loadTask が faulted のまま残り、後続の SaveAsync が
+                // その await で失敗し続けるため、親画面のバナーへ落として元のエラーだけを確実に通知する。
+            }
+        }
+
+        App.RaiseException(_repo.FullPath, message);
     }
 
     /// <summary>git configの値が変更されている場合のみ書き込む。</summary>
@@ -510,7 +546,7 @@ public class RepositoryConfigure : ObservableObject
         }
         catch (Exception ex)
         {
-            App.RaiseException(_repo.FullPath, App.Text("Error.FailedToLoadRemoteSettings", ex.Message));
+            await ReportModalErrorAsync(App.Text("Error.FailedToLoadRemoteSettings", ex.Message));
         }
     }
 
@@ -565,7 +601,7 @@ public class RepositoryConfigure : ObservableObject
             {
                 // リネーム失敗時はエラーを通知し、URL/SSHキーの更新も中止する
                 HasSaveError = true;
-                App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
+                await ReportModalErrorAsync(App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
                 return;
             }
         }
@@ -582,7 +618,7 @@ public class RepositoryConfigure : ObservableObject
             {
                 // URL変更失敗時はエラーを通知し、SSHキーの更新も中止する
                 HasSaveError = true;
-                App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
+                await ReportModalErrorAsync(App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
                 return;
             }
         }
@@ -597,7 +633,7 @@ public class RepositoryConfigure : ObservableObject
                 if (!await remoteCmd.DeletePushURLAsync(remoteName, currentPushUrl))
                 {
                     HasSaveError = true;
-                    App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
+                    await ReportModalErrorAsync(App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
                     return;
                 }
             }
@@ -607,7 +643,7 @@ public class RepositoryConfigure : ObservableObject
             if (!await remoteCmd.SetURLAsync(remoteName, desiredPushUrl, true))
             {
                 HasSaveError = true;
-                App.RaiseException(_repo.FullPath, App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
+                await ReportModalErrorAsync(App.Text("Error.FailedToSaveSettings", remoteCmd.ErrorMessage));
                 return;
             }
         }

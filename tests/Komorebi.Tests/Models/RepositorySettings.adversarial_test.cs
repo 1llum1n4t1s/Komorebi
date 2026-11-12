@@ -18,38 +18,43 @@ namespace Komorebi.Tests.Models
 
         public RepositorySettingsAdversarialTests()
         {
+            // GUID 付きの専用ディレクトリなので、他テストのキャッシュエントリとキーが衝突しない
             _tempDir = Path.Combine(Path.GetTempPath(), $"komorebi_test_{Guid.NewGuid():N}");
             Directory.CreateDirectory(_tempDir);
-            ClearCache();
         }
 
         public void Dispose()
         {
-            ClearCache();
-            try { Directory.Delete(_tempDir, true); } catch { /* テストクリーンアップ */ }
+            EvictCreatedEntries();
+            try
+            {
+                Directory.Delete(_tempDir, true);
+            }
+            catch
+            {
+                // テストクリーンアップは best-effort
+            }
         }
 
         /// <summary>
-        /// staticキャッシュをリフレクションでクリアする。
-        /// テスト間の分離のために必須。
+        /// このテストが Get() したディレクトリ（_tempDir とその配下）のキャッシュだけを公開 API の Evict で除去する。
+        /// 以前はリフレクションで static キャッシュ全体を Clear していたが、並行実行中の他テストの
+        /// エントリまで消してしまい、private フィールド名にも依存していたため置き換えた。
         /// </summary>
-        private static void ClearCache()
+        private void EvictCreatedEntries()
         {
-            var cacheField = typeof(Komorebi.Models.RepositorySettings)
-                .GetField("_cache", BindingFlags.NonPublic | BindingFlags.Static)!;
-            var cache = (Dictionary<string, Komorebi.Models.RepositorySettings>)cacheField.GetValue(null)!;
-            cache.Clear();
+            Komorebi.Models.RepositorySettings.Evict(_tempDir);
+            if (!Directory.Exists(_tempDir))
+                return;
+            foreach (var dir in Directory.EnumerateDirectories(_tempDir, "*", SearchOption.AllDirectories))
+                Komorebi.Models.RepositorySettings.Evict(dir);
         }
 
         /// <summary>
-        /// private static HashContent をリフレクション経由で呼び出すヘルパー。
+        /// internal static HashContent を呼び出すヘルパー（以前はリフレクションで private を呼んでいた）。
         /// </summary>
         private static string InvokeHashContent(string source)
-        {
-            var method = typeof(Komorebi.Models.RepositorySettings)
-                .GetMethod("HashContent", BindingFlags.NonPublic | BindingFlags.Static)!;
-            return (string)method.Invoke(null, [source])!;
-        }
+            => Komorebi.Models.RepositorySettings.HashContent(source);
 
         // ===============================================================
         // 🌪️ Encoding.Default バグ検証（最重要）
@@ -145,26 +150,71 @@ namespace Komorebi.Tests.Models
         }
 
         /// <adversarial category="resource" severity="high"
-        ///   description="異なるパスで大量のGet()呼び出しがメモリリークしないか確認"
-        ///   expected="各パスにつき1エントリがキャッシュに残る" />
+        ///   description="Evict() がキャッシュを除去し、次の Get() でファイルから読み直すこと（Repository.Close の契約）"
+        ///   expected="Evict 前は同一インスタンス・古い値、Evict 後は新しいインスタンス・ファイルの最新値" />
+        /// <remarks>
+        /// 以前は private の _cache をリフレクションで数えていたが、内部構造ではなく
+        /// 外から観測できる振る舞い（同一インスタンスの再利用と、Evict 後の再読込）で契約を確認する。
+        /// </remarks>
         [Fact]
-        public void Get_ManyDifferentPaths_CacheGrowsUnbounded()
+        public void Evict_DropsCachedInstanceAndNextGetReloadsFromFile()
         {
-            // 100個の異なるディレクトリを作成してGet()
-            for (var i = 0; i < 100; i++)
-            {
-                var dir = Path.Combine(_tempDir, $"repo_{i}");
-                Directory.CreateDirectory(dir);
-                Komorebi.Models.RepositorySettings.Get(dir);
-            }
+            var dir = Path.Combine(_tempDir, "evict_repo");
+            Directory.CreateDirectory(dir);
+            var settingsPath = Path.Combine(dir, "komorebi.settings");
+            File.WriteAllText(settingsPath, JsonSerializer.Serialize(
+                new Komorebi.Models.RepositorySettings { DefaultRemote = "origin" }, JsonCodeGen.Default.RepositorySettings));
 
-            // キャッシュサイズを確認
-            var cacheField = typeof(Komorebi.Models.RepositorySettings)
-                .GetField("_cache", BindingFlags.NonPublic | BindingFlags.Static)!;
-            var cache = (Dictionary<string, Komorebi.Models.RepositorySettings>)cacheField.GetValue(null)!;
+            var first = Komorebi.Models.RepositorySettings.Get(dir);
+            Assert.Equal("origin", first.DefaultRemote);
 
-            // キャッシュはクリアされない → 100エントリ全て残る
-            Assert.Equal(100, cache.Count);
+            // 外部でファイルを書き換えても、Evict するまではキャッシュ済みインスタンスが返る
+            File.WriteAllText(settingsPath, JsonSerializer.Serialize(
+                new Komorebi.Models.RepositorySettings { DefaultRemote = "upstream" }, JsonCodeGen.Default.RepositorySettings));
+            Assert.Same(first, Komorebi.Models.RepositorySettings.Get(dir));
+
+            // Evict 後は新しいインスタンスとしてファイルから読み直される
+            Komorebi.Models.RepositorySettings.Evict(dir);
+            var reloaded = Komorebi.Models.RepositorySettings.Get(dir);
+            Assert.NotSame(first, reloaded);
+            Assert.Equal("upstream", reloaded.DefaultRemote);
+
+            // 再読込したインスタンスは再びキャッシュされる
+            Assert.Same(reloaded, Komorebi.Models.RepositorySettings.Get(dir));
+        }
+
+        /// <adversarial category="resource" severity="medium"
+        ///   description="Evict() は対象のパスだけを除去し、他のリポジトリのキャッシュを巻き込まないこと"
+        ///   expected="Evict しなかったパスは同一インスタンスのまま" />
+        [Fact]
+        public void Evict_OnlyDropsTheGivenRepository()
+        {
+            var a = Path.Combine(_tempDir, "repo_a");
+            var b = Path.Combine(_tempDir, "repo_b");
+            Directory.CreateDirectory(a);
+            Directory.CreateDirectory(b);
+            var settingsA = Komorebi.Models.RepositorySettings.Get(a);
+            var settingsB = Komorebi.Models.RepositorySettings.Get(b);
+
+            // 末尾の区切り文字の有無に関係なく、Get() と同じ正規化で対象を特定する
+            Komorebi.Models.RepositorySettings.Evict(a + Path.DirectorySeparatorChar);
+
+            Assert.NotSame(settingsA, Komorebi.Models.RepositorySettings.Get(a));
+            Assert.Same(settingsB, Komorebi.Models.RepositorySettings.Get(b));
+        }
+
+        /// <adversarial category="boundary" severity="medium"
+        ///   description="空・null・未取得のパスを Evict しても例外にならないこと"
+        ///   expected="例外なし" />
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("never-loaded")]
+        public void Evict_EmptyOrUnknownPath_DoesNotThrow(string? path)
+        {
+            var target = path == "never-loaded" ? Path.Combine(_tempDir, "never_loaded") : path;
+            var ex = Record.Exception(() => Komorebi.Models.RepositorySettings.Evict(target));
+            Assert.Null(ex);
         }
 
         // ===============================================================

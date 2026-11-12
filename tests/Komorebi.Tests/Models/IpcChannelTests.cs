@@ -6,6 +6,18 @@ using Komorebi.Models;
 
 namespace Komorebi.Tests.Models
 {
+    /// <summary>
+    /// IpcChannelTests 専用の直列実行コレクション。
+    /// 一部のテストはプロセス全体の TaskScheduler.UnobservedTaskException を購読して GC を強制するため、
+    /// 他のテストと並行に走ると、他テスト由来の未観測例外を拾って誤って失敗する（逆に他テストへも GC の影響が及ぶ）。
+    /// </summary>
+    [CollectionDefinition(Name, DisableParallelization = true)]
+    public class IpcChannelCollection
+    {
+        public const string Name = "IpcChannel (isolated)";
+    }
+
+    [Collection(IpcChannelCollection.Name)]
     public class IpcChannelTests : IDisposable
     {
         [Fact]
@@ -27,12 +39,46 @@ namespace Komorebi.Tests.Models
 
         public void Dispose()
         {
-            try { Directory.Delete(_tempDir, true); }
-            catch { /* cleanup best-effort */ }
+            try
+            {
+                Directory.Delete(_tempDir, true);
+            }
+            catch
+            {
+                // cleanup best-effort
+            }
         }
 
-        private static string UniquePipeName() => $"IpcTest_{Guid.NewGuid():N}";
+        /// <summary>
+        /// テスト専用のパイプ名。実アプリの "KomorebiIPC_&lt;hash&gt;" とは接頭辞で区別し、
+        /// プロセス ID と GUID を含めて、同時に走る別のテスト実行・他テストとも衝突させない。
+        /// </summary>
+        private static string UniquePipeName() => $"KomorebiTestIpc_{Environment.ProcessId}_{Guid.NewGuid():N}";
+
+        /// <summary>
+        /// ロックファイルはテストインスタンスごとの GUID 付き一時ディレクトリに置く
+        /// （実アプリの DataDir/process.lock には触れない）。
+        /// </summary>
         private string LockPath() => Path.Combine(_tempDir, "process.lock");
+
+        /// <summary>
+        /// 未観測例外の購読前に、先行テストが残した Task のファイナライズを済ませる。
+        /// これをしないと、購読直後の GC.Collect で先行テスト由来の例外まで拾ってしまう。
+        /// </summary>
+        private static void FlushPendingFinalizers()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+        }
+
+        /// <summary>IpcChannel（名前付きパイプ）に起因する例外かどうか。</summary>
+        private static bool IsIpcRelated(Exception ex)
+        {
+            var text = (ex is AggregateException agg ? agg.Flatten() : ex).ToString();
+            return text.Contains("IpcChannel", StringComparison.Ordinal)
+                || text.Contains("System.IO.Pipes", StringComparison.Ordinal);
+        }
 
         [Fact]
         public void FirstInstance_SetsIsFirstInstance()
@@ -148,10 +194,14 @@ namespace Komorebi.Tests.Models
         {
             var ct = TestContext.Current.CancellationToken;
 
-            // Capture any unobserved exceptions on the thread pool.
+            // Capture unobserved exceptions on the thread pool that come from IpcChannel.
+            // 先行テストの残骸を先に処理し、さらに IPC 由来の例外だけを対象にして他テストとの干渉を断つ。
+            FlushPendingFinalizers();
             var unobserved = new TaskCompletionSource<Exception>();
             EventHandler<UnobservedTaskExceptionEventArgs> handler = (_, e) =>
             {
+                if (!IsIpcRelated(e.Exception))
+                    return;
                 unobserved.TrySetResult(e.Exception);
                 e.SetObserved();
             };
@@ -318,9 +368,14 @@ namespace Komorebi.Tests.Models
             // Specifically tests that Dispose does not throw InvalidOperationException
             // (which was caused by PipeOptions.CurrentUserOnly triggering
             // ValidateRemotePipeUser/NativeObjectSecurity during shutdown).
+            // 先行テストの残骸を先に処理し、IPC 由来の例外だけを集める（他テスト由来の
+            // InvalidOperationException で誤検出しないため）。
+            FlushPendingFinalizers();
             var exceptions = new System.Collections.Concurrent.ConcurrentBag<Exception>();
             EventHandler<UnobservedTaskExceptionEventArgs> handler = (_, e) =>
             {
+                if (!IsIpcRelated(e.Exception))
+                    return;
                 exceptions.Add(e.Exception);
                 e.SetObserved();
             };

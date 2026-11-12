@@ -50,17 +50,24 @@ namespace Komorebi.Tests.Models
             Assert.False(Remote.IsValidURL(null!));
         }
 
-        [Fact]
-        public void IsValidURL_FileProtocol_IsValid()
+        // Remote.adversarial_test.cs にあった同名テスト（file:// の Windows ドライブ形式、短い相対パス）を
+        // 重複統合のためここへ移した。
+        [Theory]
+        [InlineData("file:///home/user/repo")]
+        [InlineData("file:///C:/Users/user/repo")]
+        public void IsValidURL_FileProtocol_IsValid(string url)
         {
-            Assert.True(Remote.IsValidURL("file:///home/user/repo"));
+            Assert.True(Remote.IsValidURL(url));
         }
 
-        [Fact]
-        public void IsValidURL_RelativePath_IsValid()
+        [Theory]
+        [InlineData("./relative/path")]
+        [InlineData("../parent/path")]
+        [InlineData("./repo")]
+        [InlineData("../repo")]
+        public void IsValidURL_RelativePath_IsValid(string url)
         {
-            Assert.True(Remote.IsValidURL("./relative/path"));
-            Assert.True(Remote.IsValidURL("../parent/path"));
+            Assert.True(Remote.IsValidURL(url));
         }
 
         #endregion

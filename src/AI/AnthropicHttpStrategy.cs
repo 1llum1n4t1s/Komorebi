@@ -28,11 +28,78 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
     };
     private const string AnthropicApiVersion = "2023-06-01";
     private const int AnthropicMaxTokens = 4096;
+
     /// <summary>
-    /// tool_use ループの最大反復回数。AI が永続的に tool_use を返し続ける（プロンプトインジェクション
-    /// や API バグ等）場合の無限ループ防止。通常のコミットメッセージ生成では 1〜3 回で収束する。
+    /// 追加ヘッダーをリクエストへ適用する。名前・値の検証（不正な名前・制御文字を含む値の除外）は
+    /// OpenAI 経路と同じ <see cref="ExtraHeadersPolicy.Parse"/> に任せ、同名ヘッダーは後勝ちで 1 つにする
+    /// （OpenAI 経路の PipelineRequestHeaders.Set と同じ結果）。
+    /// Content-Type などの content header は HttpRequestHeaders に入れられない。.NET 11 では
+    /// HttpRequestHeaders.Remove / TryAddWithoutValidation が例外を投げずに false を返すだけなので、
+    /// 以前の「例外なら content header へ」という分岐には到達せず、指定が黙って無視されていた。
+    /// 追加できなかった Content-Type だけは content header として置き換える（旧ランタイムの例外経路も残す）。
+    /// それ以外の content header（Content-Length / Content-Encoding など）は本文と矛盾し得るので送らない。
     /// </summary>
-    private const int MaxToolCallIterations = 20;
+    internal static void ApplyExtraHeaders(HttpRequestMessage request, string extraHeaders)
+    {
+        foreach (var header in ExtraHeadersPolicy.Parse(extraHeaders))
+        {
+            bool added;
+            try
+            {
+                request.Headers.Remove(header.Key);
+                added = request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            }
+            catch (InvalidOperationException)
+            {
+                added = false;
+            }
+
+            // content header として置き換えるのは Content-Type だけにする。
+            // Content-Length・Content-Encoding・Content-MD5 などは本文（JSON）の実体と食い違うと
+            // サーバーが本文を誤って解釈する・リクエストが壊れるため、利用者の指定でも送らずに無視する。
+            if (!added && request.Content is not null &&
+                string.Equals(header.Key, "Content-Type", StringComparison.OrdinalIgnoreCase))
+            {
+                // content 側でも受け付けられない値（.NET のヘッダー分類で例外になるもの）は、
+                // 利用者の追加ヘッダー 1 件の不備で AI リクエスト全体を失敗させないよう無視する。
+                try
+                {
+                    request.Content.Headers.Remove(header.Key);
+                    request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+                catch (InvalidOperationException)
+                {
+                    // 追加できないヘッダーは送らない
+                }
+                catch (FormatException)
+                {
+                    // ヘッダー名として不正な文字列も送らない
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Anthropic Messages API の tools 配列を組み立てる。
+    /// ツールの名前・説明・入力スキーマは OpenAI 経路と同じ <see cref="ChatTools.GetDetailChangesInFile"/> を正本とし、
+    /// 以前のような JSON の手書き複製を持たない（片方だけ更新されて両経路のツール定義がずれるのを防ぐ）。
+    /// スキーマのキー順・値は旧手書き定義と同一なので、送信される JSON 文字列は変わらない（AnthropicHttpStrategyTests で固定）。
+    /// </summary>
+    internal static JsonArray BuildTools()
+    {
+        var tool = ChatTools.GetDetailChangesInFile;
+
+        // コレクション初期化子は JsonArray.Add<T>(T) を呼ぶが、これは RequiresDynamicCode 属性付きで
+        // Native AOT 警告 (IL3050) になる。JsonNode を直接受けるコンストラクタ / Add(JsonNode?) を使えば
+        // JsonValue の動的生成を経由しないので AOT 安全。string からの暗黙変換 (JsonValue.Create(string)) も AOT 安全。
+        return new JsonArray(
+            new JsonObject
+            {
+                ["name"] = tool.FunctionName,
+                ["description"] = tool.FunctionDescription,
+                ["input_schema"] = JsonNode.Parse(tool.FunctionParameters.ToString())
+            });
+    }
 
     public async Task GenerateCommitMessageAsync(string repo, string changeList, Action<string> onUpdate, CancellationToken cancellation, string? amendParent = null, string? currentBranch = null)
     {
@@ -41,26 +108,8 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
 
         var baseUrl = string.IsNullOrEmpty(service.Server) ? "https://api.anthropic.com" : service.Server.TrimEnd('/');
 
-        // コレクション初期化子は JsonArray.Add<T>(T) を呼ぶが、これは RequiresDynamicCode 属性付きで
-        // Native AOT 警告 (IL3050) になる。JsonNode を直接受けるコンストラクタ / Add(JsonNode?) を使えば
-        // JsonValue の動的生成を経由しないので AOT 安全。以下同様。
-        var tools = new JsonArray(
-            new JsonObject
-            {
-                ["name"] = "GetDetailChangesInFile",
-                ["description"] = "Get the detailed changes in the specified file in the specified repository.",
-                ["input_schema"] = JsonNode.Parse("""
-                {
-                    "type": "object",
-                    "properties": {
-                        "repo": {"type": "string", "description": "The path to the repository."},
-                        "file": {"type": "string", "description": "The path to the file."},
-                        "originalFile": {"type": "string", "description": "The path to the original file when it has been renamed or copied."}
-                    },
-                    "required": ["repo", "file"]
-                }
-                """)
-            });
+        // JsonArray/JsonObject は JsonNode を直接受けるコンストラクタで組み立てる（IL3050 回避。BuildTools 参照）。
+        var tools = BuildTools();
 
         var messages = new JsonArray(
             new JsonObject { ["role"] = "user", ["content"] = Agent.BuildUserMessage(service, repo, changeList, currentBranch) });
@@ -68,9 +117,9 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
         var iterations = 0;
         do
         {
-            if (++iterations > MaxToolCallIterations)
+            if (++iterations > Agent.MaxToolCallIterations)
                 throw new InvalidOperationException(
-                    $"Anthropic tool_use loop exceeded {MaxToolCallIterations} iterations. " +
+                    $"Anthropic tool_use loop exceeded {Agent.MaxToolCallIterations} iterations. " +
                     "This may indicate a prompt injection or model malfunction.");
 
             // messages.DeepClone() は tool_use ループの反復ごとに
@@ -95,20 +144,7 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
             request.Headers.Add("x-api-key", service.ResolvedApiKey);
             request.Headers.Add("anthropic-version", AnthropicApiVersion);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
-            foreach (var header in ExtraHeadersPolicy.Parse(service.ExtraHeaders))
-            {
-                try
-                {
-                    request.Headers.Remove(header.Key);
-                    request.Headers.TryAddWithoutValidation(header.Key, header.Value);
-                }
-                catch (InvalidOperationException)
-                {
-                    // Content-Type等はHttpRequestHeadersへ設定できない。
-                    request.Content.Headers.Remove(header.Key);
-                    request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
-                }
-            }
+            ApplyExtraHeaders(request, service.ExtraHeaders);
             using var response = await s_httpClient.SendAsync(request, cancellation);
             response.EnsureSuccessStatusCode();
 
@@ -119,8 +155,8 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
             var content = root.GetProperty("content");
 
             // end_turn: 正常終了、max_tokens: トークン上限で打ち切り（部分出力のまま終了）。
-            // max_tokens を未処理にすると InvalidOperationException で落ちるため、
-            // OpenAI 側の ChatFinishReason.Length と同等に扱って部分結果を返す。
+            // max_tokens では部分結果に打ち切りの注記を添えて返す。OpenAI 経路の ChatFinishReason.Length は
+            // 例外で失敗させるため、上限到達時の挙動は両経路で意図的に異なる（Anthropic 経路は部分結果を残す）。
             if (stopReason == "end_turn" || stopReason == "max_tokens")
             {
                 onUpdate?.Invoke(string.Empty);

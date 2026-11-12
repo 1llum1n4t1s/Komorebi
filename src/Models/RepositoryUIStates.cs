@@ -343,13 +343,11 @@ public class RepositoryUIStates
         try
         {
             LastCommitMessage = lastCommitMessage;
-            // upstream 50367b7e: アトミック書き込み (tmp に書いてから rename) で書き込み途中のクラッシュ・電源断で
-            // UI 状態ファイルが破損するのを防ぐ。
-            // 同一リポジトリ並行操作時の tmp ファイル衝突を避けるためランダム拡張子付き。
+            // upstream 50367b7e: tmp に書いてから rename で置換し、書き込み途中の例外・プロセスのクラッシュで
+            // UI 状態ファイルが途中までの内容に置き換わるのを防ぐ（fsync はしないため電源断時の永続性は保証しない）。
+            // tmp 名は Guid 付き（並行保存時の衝突回避）で、失敗時は AtomicTextFile が tmp を削除する（Komorebi 独自）。
             var content = JsonSerializer.Serialize(this, JsonCodeGen.Default.RepositoryUIStates);
-            var tmpfile = $"{_file}.tmp.{Guid.NewGuid():N}";
-            File.WriteAllText(tmpfile, content);
-            File.Move(tmpfile, _file, true);
+            AtomicTextFile.WriteAllText(_file, content);
         }
         catch
         {

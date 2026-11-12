@@ -159,8 +159,8 @@ jobs:
       # - *.nupkg (full/delta) は put のみで既存ファイルは触らない (アップロード時点)
       # - Setup/AppImage/Portable.zip と deb/rpm/独自zip は固定名/バージョン名で put
       # - リリース完了後、後段の Cleanup step が「今 upload したファイル一式」以外を全削除する
-      #   → R2 は常に最新 1 バージョンのみ保持。旧 delta は manifest からも消えているため
-      #     クライアントは最新フル nupkg を取得して追いつく
+      #   → バージョン付きファイルは直近 KEEP_VERSIONS (=2) 世代を保持する (Cleanup step 参照)。
+      #     旧 delta は manifest から消えているため、クライアントは最新フル nupkg を取得して追いつく
       - name: Publish verified artifacts to R2
         shell: pwsh
         env:

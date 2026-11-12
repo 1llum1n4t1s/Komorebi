@@ -532,5 +532,49 @@ namespace Komorebi.Tests.ViewModels
             Assert.NotNull(histories.SelectedCommit);
             Assert.Equal(commit.SHA, histories.SelectedCommit.SHA);
         }
+
+        // ================================================================
+        //  子コミット逆引き（GetChildrenBySha の遅延構築）
+        // ================================================================
+
+        /// <summary>
+        /// GetChildrenBySha が、コミット一覧を素朴に走査した結果（内容・順序とも）と一致すること。
+        /// 遅延構築後に Commits を差し替えた場合も、古い逆引きを返さず新しい一覧で作り直すこと。
+        /// </summary>
+        [Fact]
+        public void GetChildrenBySha_MatchesLinearScanIncludingOrderAndAfterReplace()
+        {
+            var histories = new Histories(_repo);
+
+            // マージ（2 親）・分岐（同じ親を持つ複数の子）・親のない root を含むグラフ
+            var root = MakeCommit("0000000000000000000000000000000000000000");
+            var a = MakeCommit("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", [root.SHA]);
+            var b = MakeCommit("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", [root.SHA]);
+            var c = MakeCommit("cccccccccccccccccccccccccccccccccccccccc", [a.SHA, b.SHA]);
+            var d = MakeCommit("dddddddddddddddddddddddddddddddddddddddd", [a.SHA]);
+            var first = new List<Commit> { d, c, b, a, root };
+            histories.Commits = first;
+
+            AssertMatchesLinearScan(histories, first);
+            Assert.Empty(histories.GetChildrenBySha("ffffffffffffffffffffffffffffffffffffffff"));
+
+            // 差し替え後は新しい一覧の関係だけを返す（a の子は e のみ、c/d は消える）
+            var e = MakeCommit("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", [a.SHA]);
+            var second = new List<Commit> { e, a, root };
+            histories.Commits = second;
+
+            AssertMatchesLinearScan(histories, second);
+            Assert.Equal(new[] { e }, histories.GetChildrenBySha(a.SHA));
+        }
+
+        /// <summary>commits の並び順で親→子を素朴に集めた結果と GetChildrenBySha を比較する。</summary>
+        private static void AssertMatchesLinearScan(Histories histories, List<Commit> commits)
+        {
+            foreach (var parent in commits)
+            {
+                var expected = commits.Where(x => x.Parents.Contains(parent.SHA)).ToList();
+                Assert.Equal(expected, histories.GetChildrenBySha(parent.SHA));
+            }
+        }
     }
 }

@@ -418,13 +418,17 @@ public class Watcher : IDisposable
             return;
         }
 
-        var dir = Directory.Exists(fullpath) ? fullpath : Path.GetDirectoryName(fullpath);
         // サブモジュールを持たないリポジトリでは IsInSubmodule による再帰 I/O を完全スキップ。
         // これで FSW バースト時の File.Exists 多発（ディレクトリ階層×イベント数）を防ぐ。
-        if (_repo.MayHaveSubmodules() && IsInSubmoduleCached(dir))
+        // dir の算出（Directory.Exists）もサブモジュール判定にしか使わないため、ガードの内側で行う。
+        if (_repo.MayHaveSubmodules())
         {
-            Interlocked.Exchange(ref _updateSubmodules, DateTime.Now.AddSeconds(1).ToFileTime());
-            return;
+            var dir = Directory.Exists(fullpath) ? fullpath : Path.GetDirectoryName(fullpath);
+            if (IsInSubmoduleCached(dir))
+            {
+                Interlocked.Exchange(ref _updateSubmodules, DateTime.Now.AddSeconds(1).ToFileTime());
+                return;
+            }
         }
 
         Interlocked.Exchange(ref _updateWC, DateTime.Now.AddSeconds(1).ToFileTime());

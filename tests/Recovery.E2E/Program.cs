@@ -196,7 +196,21 @@ async Task VerifyHeadersAsync()
                 ExtraHeaders = "X-Fixture: synthetic-first-value\nContent-Type: application/json\nX-Fixture: synthetic-last-value",
             };
             var result = new StringBuilder();
-            await new Agent(service).GenerateCommitMessageAsync(root, "fixture.txt", text => result.Append(text), timeout.Token);
+            try
+            {
+                await new Agent(service).GenerateCommitMessageAsync(root, "fixture.txt", text => result.Append(text), timeout.Token);
+            }
+            catch (Exception clientError)
+            {
+                // フィクスチャ側の Require が失敗すると応答を返さずに接続を閉じるため、クライアントには
+                // 接続リセット（Windows では SocketException 10054）しか見えない。finally はキャンセル後の
+                // receive 例外を握りつぶすので、ここで少し待ってフィクスチャの失敗理由を優先して報告する。
+                await Task.WhenAny(receive, Task.Delay(TimeSpan.FromSeconds(2)));
+                if (receive.IsFaulted)
+                    throw new InvalidOperationException($"{provider}: fixture rejected the request before responding.",
+                        new AggregateException(receive.Exception!.InnerExceptions.Prepend(clientError)));
+                throw;
+            }
             await receive;
             Require(receivedRequests == expectedRequests && result.ToString().Contains("test: header fixture", StringComparison.Ordinal),
                 $"{provider}: provider output or retry was lost.");

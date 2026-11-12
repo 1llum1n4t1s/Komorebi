@@ -77,14 +77,14 @@ public class GitFlowStart : Popup
         if (ctx.ObjectInstance is GitFlowStart starter)
         {
             if (!Models.RefName.IsValidBranchName($"{starter.Prefix}{name}"))
-                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
+                return new ValidationResult(ValidationMessages.BranchNameInvalid);
 
             // プレフィックス付きのフルネームで既存ブランチと比較
             var check = $"{starter.Prefix}{name}";
             foreach (var b in starter._repo.Branches)
             {
                 if (b.FriendlyName == check)
-                    return new ValidationResult(App.Text("Validation.BranchExists"));
+                    return new ValidationResult(ValidationMessages.BranchExists);
             }
         }
 

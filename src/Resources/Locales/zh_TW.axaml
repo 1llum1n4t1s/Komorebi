@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">沒有不追蹤變更的檔案</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">載入本機圖片...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">重新載入</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">二進位檔案不支援該操作!</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">二分搜尋 (bisect)</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">中止</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">標記為錯誤</x:String>
@@ -374,7 +373,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">標籤名稱:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">同時刪除遠端存放庫中的此標籤</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">二進位檔案</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">檔案權限已變更</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">第一個差異</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">忽略空白符號變化</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">混合對比</x:String>
@@ -604,6 +602,8 @@
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">上一個衝突</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">合併結果</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">儲存並暫存</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">無法儲存：仍有未解決的衝突。</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">儲存並暫存失敗：{0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">對方版本 (theirs)</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">解決衝突</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">捨棄未儲存的變更?</x:String>
@@ -798,7 +798,6 @@
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">下一步</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">自訂動作</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">沒有自訂的動作</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">首頁</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">捨棄所有變更</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">在檔案瀏覽器中開啟</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">快速搜尋分支/標籤/子模組</x:String>
@@ -823,7 +822,6 @@
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">回到 HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">新增分支</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">清除所有通知</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">路線圖中僅對目前分支上色</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">此存放庫 (資料夾)</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">在 {0} 中開啟</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">使用外部工具開啟</x:String>
@@ -905,15 +903,13 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">合併變更入父提交</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">修正至父提交</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">完成後強制推送</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">壓縮/修正已完成，但無法從 git config 確定 '{0}' 的遠端與上游分支，因此略過了強制推送。</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">父提交:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH 金鑰:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">私鑰路徑（不是 .pub）</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">無（全域設定）</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">瀏覽...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">您選擇了公鑰（.pub）。請選擇私鑰（沒有 .pub 副檔名的檔案）。</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">遠端</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">全域</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">系統預設</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">開  始</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">擱置變更 (stash)</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">包含未追蹤的檔案</x:String>
@@ -1133,7 +1129,6 @@
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">正在刪除標籤 '{0}'...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">丟棄 HEAD '{0}'...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">正在丟棄 stash：{0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">正在編輯遠端 '{0}'...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">正在執行自訂動作...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - 完成 {0}...</x:String>
@@ -1163,6 +1158,8 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">正在設定子模組的分支...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">正在設定 upstream...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">正在暫存變更...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">正在壓縮...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">正在修正...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">可能有其他git程序正在執行。如果沒有，請刪除.git目錄中的.lock檔案。</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">偵測到合併衝突。請解決每個檔案中的衝突，然後暫存並提交。</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD處於分離狀態。建立新分支以保留您的變更。</x:String>
@@ -1171,6 +1168,9 @@
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">驗證失敗。請檢查您的憑證、SSH金鑰或個人存取權杖。</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH私鑰檔案的權限過於開放。金鑰檔案必須僅擁有者可存取（chmod 600）。</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">修復權限（chmod 600）</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">已修正 '{0}' 的權限（600）。</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">無法修正 '{0}' 的權限：{1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">'{0}' 不是 ~/.ssh 下的一般金鑰檔案，也不是已設定的 SSH 金鑰，因此未自動變更其權限。</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">找不到遠端儲存庫。請驗證URL和網路連線。</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">同名的分支或標籤已存在。請選擇其他名稱。</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">未追蹤的檔案將被覆寫。請移動或刪除它們，或使用stash儲存。</x:String>
@@ -1201,6 +1201,9 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">Git GPG 簽署失敗。請驗證您的簽署金鑰（git config user.signingkey），確保 gpg-agent 正在執行，或使用 'git -c commit.gpgsign=false ...' 暫時停用簽署。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">Git 拒絕在此儲存庫上操作，因為它屬於其他使用者。執行 'git config --global --add safe.directory &lt;路徑&gt;' 以允許。</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">新增至 safe.directory</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">已將 '{0}' 加入 safe.directory。</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">'{0}' 不是目前存放庫內的不受信任存放庫，因此未自動加入 safe.directory。</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">另一個操作正在進行中。請在其完成後重試。</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">修補檔來源:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">檔案</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">剪貼簿</x:String>

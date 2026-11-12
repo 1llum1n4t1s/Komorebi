@@ -70,7 +70,8 @@ public static class StartupDiagnostics
     /// <summary>ブートストラップクラッシュログのファイル名（Logger のローリング対象と混ざらない名前にする）</summary>
     private const string FatalLogFileName = "Komorebi_startup_crash.log";
 
-    private static readonly object s_sync = new();
+    // lock 文専用（Monitor.* は使っていない）なので、専用の System.Threading.Lock を使う。
+    private static readonly System.Threading.Lock s_sync = new();
 
     /// <summary>マーカー・クラッシュログの出力先ディレクトリ（Bind 前は一時ディレクトリ）</summary>
     private static string s_directory;
@@ -349,15 +350,46 @@ public static class StartupDiagnostics
     }
 
     /// <summary>
+    /// ブートストラップクラッシュログのローテーション閾値。追記のみのファイルで、Logger の日付ローテーション
+    /// （{prefix}_yyyyMMdd.log の古いファイル削除）の対象外なので、ここで上限を設けないと起動失敗が続く環境で
+    /// 際限なく肥大化する。1 世代（.old）だけ残すので、ディスク使用量は最大でおよそ 2 倍に収まる。
+    /// </summary>
+    internal const long MaxFatalLogBytes = 1024 * 1024;
+
+    /// <summary>
     /// ブートストラップクラッシュログへ追記する。Bind 前は一時ディレクトリへ出力する。
     /// </summary>
     private static void Append(string text)
     {
-        string dir;
+        // 同一プロセス内の並行 WriteFatal でローテーションと追記が交錯しないよう、出力先の決定から
+        // 書き込みまでを s_sync で直列化する（System.Threading.Lock は同一スレッドの再入を許す）。
         lock (s_sync)
-            dir = s_directory ?? Path.Combine(Path.GetTempPath(), "Komorebi");
+        {
+            var dir = s_directory ?? Path.Combine(Path.GetTempPath(), "Komorebi");
+            Directory.CreateDirectory(dir);
+            AppendWithRotation(Path.Combine(dir, FatalLogFileName), text, MaxFatalLogBytes);
+        }
+    }
 
-        Directory.CreateDirectory(dir);
-        File.AppendAllText(Path.Combine(dir, FatalLogFileName), text);
+    /// <summary>
+    /// 既存ファイルが maxBytes 以上なら「ファイル名.old」へ 1 世代だけ退避（既存の .old は上書き）してから同期で追記する。
+    /// 現行ファイル名は変えないので、利用者・サポート手順が参照する場所はそのまま。
+    /// ローテーションに失敗（.old が他プロセスに開かれている等）しても、今回のクラッシュ記録は失わないよう追記は続行する。
+    /// 追記自体の例外は呼び出し元（WriteFatal）が握りつぶす。
+    /// </summary>
+    internal static void AppendWithRotation(string path, string text, long maxBytes)
+    {
+        try
+        {
+            var info = new FileInfo(path);
+            if (info.Exists && info.Length >= maxBytes)
+                File.Move(path, path + ".old", true);
+        }
+        catch
+        {
+            // ローテーション失敗は記録を優先して無視する（次回の書き込みで再試行される）
+        }
+
+        File.AppendAllText(path, text);
     }
 }

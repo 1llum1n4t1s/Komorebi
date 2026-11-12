@@ -57,7 +57,6 @@
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">எந்த கோப்புகளும் மாற்றப்படவில்லை எனக் கருதப்படுகிறது</x:String>
   <x:String x:Key="Text.Avatar.Load" xml:space="preserve">படத்தை ஏற்று...</x:String>
   <x:String x:Key="Text.Avatar.Refetch" xml:space="preserve">புதுப்பி</x:String>
-  <x:String x:Key="Text.BinaryNotSupported" xml:space="preserve">இருமம் கோப்பு ஆதரிக்கப்படவில்லை!!!</x:String>
   <x:String x:Key="Text.Bisect" xml:space="preserve">Bisect</x:String>
   <x:String x:Key="Text.Bisect.Abort" xml:space="preserve">நிறுத்து</x:String>
   <x:String x:Key="Text.Bisect.Bad" xml:space="preserve">மோசம்</x:String>
@@ -374,7 +373,6 @@
   <x:String x:Key="Text.DeleteTag.Tag" xml:space="preserve">குறிசொல்:</x:String>
   <x:String x:Key="Text.DeleteTag.WithRemote" xml:space="preserve">தொலை களஞ்சியங்களிலிருந்து நீக்கு</x:String>
   <x:String x:Key="Text.Diff.Binary" xml:space="preserve">இருமம்  வேறுபாடு</x:String>
-  <x:String x:Key="Text.Diff.FileModeChanged" xml:space="preserve">கோப்பு முறை மாற்றப்பட்டது</x:String>
   <x:String x:Key="Text.Diff.First" xml:space="preserve">முதல் வேறுபாடு</x:String>
   <x:String x:Key="Text.Diff.IgnoreWhitespace" xml:space="preserve">வெள்ளைவெளி மாற்றத்தை புறக்கணி</x:String>
   <x:String x:Key="Text.Diff.Image.Blend" xml:space="preserve">கலவை</x:String>
@@ -604,6 +602,8 @@
   <x:String x:Key="Text.MergeConflictEditor.PrevConflict" xml:space="preserve">முந்தைய முரண்பாடு</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Result" xml:space="preserve">முடிவு</x:String>
   <x:String x:Key="Text.MergeConflictEditor.SaveAndStage" xml:space="preserve">சேமி &amp; STAGE செய்</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.CannotSaveUnresolved" xml:space="preserve">சேமிக்க முடியாது: தீர்க்கப்படாத முரண்பாடுகள் இன்னும் உள்ளன.</x:String>
+  <x:String x:Key="Text.MergeConflictEditor.SaveFailed" xml:space="preserve">சேமித்து stage செய்வது தோல்வியடைந்தது: {0}</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Theirs" xml:space="preserve">அவர்களுடையது</x:String>
   <x:String x:Key="Text.MergeConflictEditor.Title" xml:space="preserve">Merge முரண்பாடுகள்</x:String>
   <x:String x:Key="Text.MergeConflictEditor.UnsavedChanges" xml:space="preserve">சேமிக்கப்படாத மாற்றங்களை நிராகரிக்கவா?</x:String>
@@ -798,7 +798,6 @@
   <x:String x:Key="Text.Repository.Continue" xml:space="preserve">தொடர்க</x:String>
   <x:String x:Key="Text.Repository.CustomActions" xml:space="preserve">தனிப்பயன் செயல்கள்</x:String>
   <x:String x:Key="Text.Repository.CustomActions.Empty" xml:space="preserve">தனிப்பயன் செயல்கள் இல்லை</x:String>
-  <x:String x:Key="Text.Repository.Dashboard" xml:space="preserve">டாஷ்போர்டு</x:String>
   <x:String x:Key="Text.Repository.DiscardAll" xml:space="preserve">எல்லா மாற்றங்களையும் நிராகரி</x:String>
   <x:String x:Key="Text.Repository.Explore" xml:space="preserve">கோப்பு உலாவியில் திற</x:String>
   <x:String x:Key="Text.Repository.Filter" xml:space="preserve">கிளைகள்/குறிச்சொற்கள்/துணைத் தொகுதிகளைத் தேடு</x:String>
@@ -823,7 +822,6 @@
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">தலைக்கு செல்</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">கிளையை உருவாக்கு</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">அறிவிப்புகளை அழி</x:String>
-  <x:String x:Key="Text.Repository.OnlyHighlightCurrentBranchInGraph" xml:space="preserve">தற்போதைய கிளையை மட்டும் தனிப்படுத்து</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">கோப்புறையாகத் திற</x:String>
   <x:String x:Key="Text.Repository.OpenIn" xml:space="preserve">{0} இல் திற</x:String>
   <x:String x:Key="Text.Repository.OpenWithExternalTools" xml:space="preserve">வெளிப்புற கருவிகளில் திற</x:String>
@@ -905,15 +903,13 @@
   <x:String x:Key="Text.SquashOrFixup.Squash" xml:space="preserve">HEAD-ஐ பெற்றோருக்குள் Squash செய்</x:String>
   <x:String x:Key="Text.SquashOrFixup.Fixup" xml:space="preserve">HEAD-ஐ பெற்றோருக்குள் Fixup செய்</x:String>
   <x:String x:Key="Text.SquashOrFixup.ForcePushAfterDone" xml:space="preserve">முடிந்த பிறகு கட்டாய புஷ்</x:String>
+  <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup முடிந்தது, ஆனால் git config இலிருந்து '{0}' இன் ரிமோட்டையும் upstream கிளையையும் கண்டறிய முடியாததால் கட்டாய push தவிர்க்கப்பட்டது.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">உள்ளே:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">பாஓடு தனியார் திறவுகோல்:</x:String>
   <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">தனிப்பட்ட விசை பாதை (.pub அல்ல)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">எதுவுமில்லை (உலகளாவிய அமைப்பு)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">உலாவு...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">நீங்கள் பொது விசையை (.pub) தேர்ந்தெடுத்தீர்கள். தனிப்பட்ட விசையை (.pub நீட்டிப்பு இல்லாத கோப்பு) தேர்ந்தெடுக்கவும்.</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Remote" xml:space="preserve">ரிமோட்</x:String>
-  <x:String x:Key="Text.SSHKey.Source.Global" xml:space="preserve">உலகளாவிய</x:String>
-  <x:String x:Key="Text.SSHKey.Source.System" xml:space="preserve">கணினி இயல்புநிலை</x:String>
   <x:String x:Key="Text.Start" xml:space="preserve">தொடங்கு</x:String>
   <x:String x:Key="Text.Stash" xml:space="preserve">பதுக்கிவை</x:String>
   <x:String x:Key="Text.Stash.IncludeUntracked" xml:space="preserve">கண்காணிக்கப்படாத கோப்புகளைச் சேர்</x:String>
@@ -1133,7 +1129,6 @@
   <x:String x:Key="Text.Progress.DeletingTag" xml:space="preserve">Tag '{0}' நீக்குகிறது...</x:String>
   <x:String x:Key="Text.Progress.DropHead" xml:space="preserve">HEAD '{0}' கைவிடுகிறது...</x:String>
   <x:String x:Key="Text.Progress.DroppingStash" xml:space="preserve">Stash கைவிடுகிறது: {0}</x:String>
-  <x:String x:Key="Text.Progress.EditingRemote" xml:space="preserve">Remote '{0}' திருத்துகிறது...</x:String>
   <x:String x:Key="Text.Progress.RunCustomAction" xml:space="preserve">தனிப்பயன் செயலை இயக்குகிறது...</x:String>
   <x:String x:Key="Text.Progress.FastForward" xml:space="preserve">Fast-Forward...</x:String>
   <x:String x:Key="Text.Progress.GitFlowFinish" xml:space="preserve">Git Flow - {0} முடிக்கிறது...</x:String>
@@ -1163,6 +1158,8 @@
   <x:String x:Key="Text.Progress.SetSubmoduleBranch" xml:space="preserve">துணைத்தொகுதி branch அமைக்கிறது...</x:String>
   <x:String x:Key="Text.Progress.SettingUpstream" xml:space="preserve">Upstream அமைக்கிறது...</x:String>
   <x:String x:Key="Text.Progress.StashingChanges" xml:space="preserve">மாற்றங்களை stash செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.Squashing" xml:space="preserve">Squash செய்கிறது...</x:String>
+  <x:String x:Key="Text.Progress.Fixup" xml:space="preserve">Fixup செய்கிறது...</x:String>
   <x:String x:Key="Text.GitError.IndexLock" xml:space="preserve">வேறு git செயல்முறை இயங்கிக்கொண்டிருக்கலாம். இல்லையென்றால், .git கோப்பகத்தில் .lock கோப்பை நீக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.MergeConflict" xml:space="preserve">இணைப்பு முரண்பாடுகள் கண்டறியப்பட்டன. ஒவ்வொரு கோப்பிலும் முரண்பாடுகளைத் தீர்த்து, நிலைப்படுத்தி உறுதிசெய்யவும்.</x:String>
   <x:String x:Key="Text.GitError.DetachedHead" xml:space="preserve">HEAD பிரிக்கப்பட்ட நிலையில் உள்ளது. மாற்றங்களை வைத்திருக்க புதிய கிளையை உருவாக்கவும்.</x:String>
@@ -1171,6 +1168,9 @@
   <x:String x:Key="Text.GitError.AuthFailed" xml:space="preserve">அங்கீகாரம் தோல்வியடைந்தது. சான்றுகள், SSH விசை அல்லது தனிப்பட்ட அணுகல் டோக்கனை சரிபார்க்கவும்.</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen" xml:space="preserve">SSH தனிப்பட்ட விசை கோப்பின் அனுமதிகள் மிகவும் திறந்தவை. விசை கோப்பு உரிமையாளருக்கு மட்டுமே அணுகக்கூடியதாக இருக்க வேண்டும் (chmod 600).</x:String>
   <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fix" xml:space="preserve">அனுமதிகளை சரிசெய் (chmod 600)</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.Fixed" xml:space="preserve">'{0}' இன் அனுமதிகள் சரிசெய்யப்பட்டன (600).</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.FixFailed" xml:space="preserve">'{0}' இன் அனுமதிகளைச் சரிசெய்ய முடியவில்லை: {1}</x:String>
+  <x:String x:Key="Text.GitError.KeyPermissionTooOpen.NotApplicable" xml:space="preserve">'{0}' என்பது ~/.ssh இல் உள்ள சாதாரண விசைக் கோப்போ அமைக்கப்பட்ட SSH விசையோ அல்ல, எனவே அனுமதிகள் தானாக மாற்றப்படவில்லை.</x:String>
   <x:String x:Key="Text.GitError.RemoteNotFound" xml:space="preserve">தொலைநிலை களஞ்சியம் கண்டறியப்படவில்லை. URL மற்றும் பிணைய இணைப்பை சரிபார்க்கவும்.</x:String>
   <x:String x:Key="Text.GitError.AlreadyExists" xml:space="preserve">அந்தப் பெயரில் ஒரு கிளை அல்லது குறிச்சொல் ஏற்கனவே உள்ளது. வேறு பெயரைத் தேர்ந்தெடுக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.UntrackedOverwritten" xml:space="preserve">கண்காணிக்கப்படாத கோப்புகள் மேலெழுதப்படும். அவற்றை நகர்த்தவும் அல்லது நீக்கவும், அல்லது stash பயன்படுத்தவும்.</x:String>
@@ -1201,6 +1201,9 @@
   <x:String x:Key="Text.GitError.GpgSignFailed" xml:space="preserve">GPG உடன் கையொப்பமிட Git தோல்வியடைந்தது. உங்கள் கையொப்ப விசையை (git config user.signingkey) சரிபார்க்கவும், gpg-agent இயங்குகிறதா என்பதை உறுதி செய்யவும், அல்லது 'git -c commit.gpgsign=false ...' மூலம் கையொப்பத்தை தற்காலிகமாக முடக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership" xml:space="preserve">வேறு பயனருக்கு சொந்தமான களஞ்சியம் என்பதால் git இதில் செயல்பட மறுக்கிறது. அனுமதிக்க 'git config --global --add safe.directory &lt;பாதை&gt;' ஐ இயக்கவும்.</x:String>
   <x:String x:Key="Text.GitError.DubiousOwnership.Fix" xml:space="preserve">safe.directory இல் சேர்</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.Added" xml:space="preserve">'{0}' safe.directory இல் சேர்க்கப்பட்டது.</x:String>
+  <x:String x:Key="Text.GitError.DubiousOwnership.NotApplicable" xml:space="preserve">'{0}' தற்போதைய களஞ்சியத்திற்குள் உள்ள நம்பகமற்ற களஞ்சியம் அல்ல, எனவே safe.directory இல் தானாகச் சேர்க்கப்படவில்லை.</x:String>
+  <x:String x:Key="Text.GitError.AutoFixBusy" xml:space="preserve">மற்றொரு செயல்பாடு நடந்துகொண்டிருக்கிறது. அது முடிந்ததும் மீண்டும் முயலவும்.</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">மூலம்:</x:String>
   <x:String x:Key="Text.Apply.Source.File" xml:space="preserve">கோப்பு</x:String>
   <x:String x:Key="Text.Apply.Source.Clipboard" xml:space="preserve">கிளிப்போர்டு</x:String>

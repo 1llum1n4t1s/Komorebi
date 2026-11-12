@@ -53,7 +53,7 @@ public class CheckoutBranchFromStash : Popup
         if (ctx.ObjectInstance is CheckoutBranchFromStash caller)
         {
             if (!Models.RefName.IsValidBranchName(name))
-                return new ValidationResult(App.Text("Validation.BranchNameInvalid"));
+                return new ValidationResult(ValidationMessages.BranchNameInvalid);
 
             var comparison = OperatingSystem.IsLinux()
                 ? StringComparison.Ordinal
@@ -62,13 +62,13 @@ public class CheckoutBranchFromStash : Popup
             foreach (var b in caller._repo.Branches)
             {
                 if (b.FriendlyName.Equals(name, comparison))
-                    return new ValidationResult(App.Text("Validation.BranchExists"));
+                    return new ValidationResult(ValidationMessages.BranchExists);
             }
 
             return ValidationResult.Success;
         }
 
-        return new ValidationResult(App.Text("Validation.ContextInvalid"));
+        return new ValidationResult(ValidationMessages.ContextInvalid);
     }
 
     /// <summary>

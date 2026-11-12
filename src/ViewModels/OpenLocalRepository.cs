@@ -86,7 +86,7 @@ public class OpenLocalRepository : Popup
     public static ValidationResult ValidateRepoPath(string folder, ValidationContext _)
     {
         if (!Directory.Exists(folder))
-            return new ValidationResult(App.Text("Validation.PathNotFound"));
+            return new ValidationResult(ValidationMessages.PathNotFound);
         return ValidationResult.Success;
     }
 

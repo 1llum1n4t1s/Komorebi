@@ -1,6 +1,7 @@
 ﻿// nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -200,14 +201,6 @@ public partial class App : Application
 
     [LibraryImport("shell32.dll", StringMarshalling = StringMarshalling.Utf16)]
     private static partial int SetCurrentProcessExplicitAppUserModelID(string appId);
-
-    /// <summary>
-    /// 後方互換性のための例外ログ出力（内部でSuperLightLoggerロガーに委譲する）
-    /// </summary>
-    public static void LogException(Exception ex, string context = null)
-    {
-        Models.Logger.LogCrash(ex, context);
-    }
     #endregion
 
     #region Utility Functions
@@ -409,51 +402,22 @@ public partial class App : Application
                 if (!string.IsNullOrEmpty(keyPath))
                 {
                     actionLabel = app.FindLocaleString("Text.GitError.KeyPermissionTooOpen.Fix");
-                    actionCallback = () =>
-                    {
-                        try
-                        {
-                            var psi = new System.Diagnostics.ProcessStartInfo("chmod", $"600 \"{keyPath}\"")
-                            {
-                                UseShellExecute = false,
-                                CreateNoWindow = true,
-                            };
-                            System.Diagnostics.Process.Start(psi)?.WaitForExit(5000);
-                            app._launcher.DispatchNotification(context, $"Fixed permissions for '{keyPath}'", false);
-                        }
-                        catch (Exception e)
-                        {
-                            Models.Logger.LogException("SSH鍵のパーミッション修正失敗", e);
-                            app._launcher.DispatchNotification(context, e.Message, true);
-                        }
-                    };
+                    // UI を止めないよう非同期で実行する（設定済み鍵の照会に git を起動するため）。
+                    actionCallback = () => _ = app.FixSSHKeyPermissionAsync(context, keyPath);
                 }
             }
             // safe.directory 未許可リポジトリの場合、自動修正アクションを提供する (全プラットフォーム対応)
             else if (hintKey == "Text.GitError.DubiousOwnership")
             {
                 var repoPath = Models.GitErrorHelper.ExtractPathFromDubiousOwnership(message);
-                if (!string.IsNullOrEmpty(repoPath))
+                // 押しても「対象外」になるだけの通知にはボタンを出さない。IsAutoFixCandidate は git を起動しない判定で、
+                // 文字列で context（リポジトリのパス）配下と確定したものだけ実在・リンクを確認するので、
+                // stderr 由来の UNC パス等で表示時に外部へ接続することもない。最終判定は押下後に TryGetAutoFixValue が行う。
+                if (!string.IsNullOrEmpty(repoPath) && Models.SafeDirectories.IsAutoFixCandidate(repoPath, context))
                 {
                     actionLabel = app.FindLocaleString("Text.GitError.DubiousOwnership.Fix");
-                    actionCallback = () =>
-                    {
-                        try
-                        {
-                            var psi = new System.Diagnostics.ProcessStartInfo("git", $"config --global --add safe.directory \"{repoPath}\"")
-                            {
-                                UseShellExecute = false,
-                                CreateNoWindow = true,
-                            };
-                            System.Diagnostics.Process.Start(psi)?.WaitForExit(5000);
-                            app._launcher.DispatchNotification(context, $"Added '{repoPath}' to safe.directory", false);
-                        }
-                        catch (Exception e)
-                        {
-                            Models.Logger.LogException("safe.directory 追加失敗", e);
-                            app._launcher.DispatchNotification(context, e.Message, true);
-                        }
-                    };
+                    // stderr 由来のパスを直接 git config へ渡さず、検証と確認ダイアログを経てから追加する。
+                    actionCallback = () => _ = app.TrustFromDubiousOwnershipAsync(context, repoPath);
                 }
             }
 
@@ -470,6 +434,118 @@ public partial class App : Application
     {
         if (Current is App { _launcher: not null } app)
             app._launcher.DispatchNotification(context, message, false);
+    }
+
+    /// <summary>
+    /// 「safe.directory に追加」通知アクションの本体。Komorebi 独自（upstream は stderr のパスをそのまま git config へ渡す）。
+    /// stderr の文字列はリポジトリ名などで細工できるため、ここではそのパスを直接信頼しない:
+    /// 実在確認 → 候補パスでローカルに QueryRepositoryRootPath を実行して所有権エラーを再現 → その stderr から
+    /// SafeDirectories.TryGetAutoFixValue で値を算出（context のリポジトリ配下に限定、'*' 不可）→
+    /// 確認ダイアログ（TrustRepository の信頼追加のみモード）で利用者が承認したときだけ追加する。
+    /// </summary>
+    private async Task TrustFromDubiousOwnershipAsync(string context, string candidate)
+    {
+        try
+        {
+            var notApplicable = Text("GitError.DubiousOwnership.NotApplicable", candidate ?? string.Empty);
+            // git を起動する前に、stderr 由来のパスが実在し context のリポジトリ配下にあることを確かめる
+            // （context 外の任意のパスで git を起動しない）。最終判定は下の TryGetAutoFixValue でも繰り返す。
+            if (!Models.SafeDirectories.IsAutoFixCandidate(candidate, context))
+            {
+                _launcher.DispatchNotification(context, notApplicable, true);
+                return;
+            }
+
+            // UI スレッドを塞がないよう非同期で git を起動する
+            var test = await new Commands.QueryRepositoryRootPath(candidate).GetResultAsync();
+            if (!Models.SafeDirectories.TryGetAutoFixValue(candidate, context, test.StdErr, out var safeDirectory))
+            {
+                _launcher.DispatchNotification(context, notApplicable, true);
+                return;
+            }
+
+            // 通知元のタブに確認ダイアログを出す。別の Popup が実行中なら上書きせず、後で再操作するよう伝える。
+            var page = FindLauncherPage(context);
+            if (page is null)
+            {
+                _launcher.DispatchNotification(context, notApplicable, true);
+                return;
+            }
+
+            if (!page.CanCreatePopup())
+            {
+                _launcher.DispatchNotification(context, Text("GitError.AutoFixBusy"), true);
+                return;
+            }
+
+            page.Popup = ViewModels.TrustRepository.CreateTrustOnly(page.Node.Id, test.StdErr, safeDirectory);
+        }
+        catch (Exception e)
+        {
+            Models.Logger.LogException("safe.directory 追加の準備に失敗", e);
+            _launcher.DispatchNotification(context, e.Message, true);
+        }
+    }
+
+    /// <summary>
+    /// 「パーミッションを修正」通知アクションの本体。Komorebi 独自（upstream は外部 chmod を起動し結果を見ない）。
+    /// 対象を ~/.ssh 配下または設定済みの鍵で、通常ファイル（ディレクトリ・シンボリックリンクでない）に限定し、
+    /// File.SetUnixFileMode で 0600 にした結果に応じて成功・失敗を通知する。
+    /// </summary>
+    private async Task FixSSHKeyPermissionAsync(string context, string keyPath)
+    {
+        if (OperatingSystem.IsWindows())
+            return;
+
+        try
+        {
+            List<string> configuredKeys = [ViewModels.Preferences.Instance.GlobalSSHKey];
+            if (!string.IsNullOrEmpty(context) && Directory.Exists(context))
+            {
+                // 通知元リポジトリのリモート別設定（remote.<name>.sshkey）も「設定済みの鍵」として扱う
+                var configs = await new Commands.Config(context).ReadAllAsync();
+                foreach (var kv in configs)
+                {
+                    if (kv.Key.StartsWith("remote.", StringComparison.Ordinal) && kv.Key.EndsWith(".sshkey", StringComparison.Ordinal))
+                        configuredKeys.Add(kv.Value);
+                }
+            }
+
+            var sshDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ssh");
+            if (!Models.SSHKeyPermissionFixer.TryGetFixableKeyFile(keyPath, sshDirectory, configuredKeys, out var verifiedPath))
+            {
+                _launcher.DispatchNotification(context, Text("GitError.KeyPermissionTooOpen.NotApplicable", keyPath), true);
+                return;
+            }
+
+            // エラー文の元のパスではなく、判定で確定したフルパスに対して設定する
+            var error = Models.SSHKeyPermissionFixer.TrySetOwnerReadWriteOnly(verifiedPath);
+            if (error is null)
+                _launcher.DispatchNotification(context, Text("GitError.KeyPermissionTooOpen.Fixed", keyPath), false);
+            else
+                _launcher.DispatchNotification(context, Text("GitError.KeyPermissionTooOpen.FixFailed", keyPath, error), true);
+        }
+        catch (Exception e)
+        {
+            Models.Logger.LogException("SSH鍵のパーミッション修正失敗", e);
+            _launcher.DispatchNotification(context, e.Message, true);
+        }
+    }
+
+    /// <summary>通知の context（ページ ID = リポジトリパス）に対応するタブを探す。DispatchNotification と同じ正規化で比較する。</summary>
+    private ViewModels.LauncherPage FindLauncherPage(string context)
+    {
+        if (string.IsNullOrEmpty(context))
+            return null;
+
+        var id = context.Replace('\\', '/').TrimEnd('/');
+        foreach (var page in _launcher.Pages)
+        {
+            if (page.Node.Id.Replace('\\', '/').TrimEnd('/') == id)
+                return page;
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -802,6 +878,67 @@ public partial class App : Application
             icon.Data = geo;
 
         return icon;
+    }
+
+    /// <summary>
+    /// オーバーフローメニュー（···）末尾のアプリ全体の項目を追加する共有ヘルパー（Komorebi 独自のツールバー用）。
+    /// WelcomeToolbar と Repository の両方で同じ項目・順序・アイコン・区切り線を保つため 1 箇所にまとめた:
+    /// データディレクトリ / SSH 鍵ヘルパー / ショートカット / ─ / [更新を確認 / ─] / バージョン情報 / 終了。
+    /// 「更新を確認」と直後の区切り線は IsCheckForUpdateCommandVisible のときだけ追加する。
+    /// Click では各コマンドを実行して ev.Handled を立てる（SSH 鍵ヘルパーは従来どおり Command 割り当て）。
+    /// </summary>
+    public static void AddGlobalOverflowMenuItems(Avalonia.Controls.ItemCollection items)
+    {
+        items.Add(CreateCommandMenuItem("OpenAppDataDir", "Icons.Explore", OpenAppDataDirCommand));
+        items.Add(new Avalonia.Controls.MenuItem
+        {
+            Header = Text("SSHKeyHelper"),
+            Icon = CreateMenuIcon("Icons.Password"),
+            Command = OpenSSHKeyHelperCommand,
+        });
+        items.Add(CreateCommandMenuItem("Hotkeys", "Icons.Hotkeys", OpenHotkeysCommand));
+        items.Add(new Avalonia.Controls.MenuItem() { Header = "-" });
+
+        if (IsCheckForUpdateCommandVisible)
+        {
+            items.Add(CreateCommandMenuItem("SelfUpdate", "Icons.SoftwareUpdate", CheckForUpdateCommand));
+            items.Add(new Avalonia.Controls.MenuItem() { Header = "-" });
+        }
+
+        items.Add(CreateCommandMenuItem("About", "Icons.Info", OpenAboutCommand));
+        items.Add(CreateCommandMenuItem("Quit", "Icons.Quit", QuitCommand));
+    }
+
+    /// <summary>Click でコマンドを実行し ev.Handled を立てるメニュー項目を作る（旧来の各ツールバーの書き方と同じ挙動）。</summary>
+    private static Avalonia.Controls.MenuItem CreateCommandMenuItem(string textKey, string iconKey, System.Windows.Input.ICommand command)
+    {
+        var item = new Avalonia.Controls.MenuItem
+        {
+            Header = Text(textKey),
+            Icon = CreateMenuIcon(iconKey),
+        };
+        item.Click += (_, ev) =>
+        {
+            command.Execute(null);
+            ev.Handled = true;
+        };
+        return item;
+    }
+
+    /// <summary>
+    /// ツールバーのワークスペースセレクター（ドット色・名前）を現在のワークスペースで更新する共有ヘルパー。
+    /// 各 View の名前付き要素は XAML 読込前に null の場合があるため、null は無視する。
+    /// </summary>
+    public static void ApplyWorkspaceDisplay(Avalonia.Controls.Shapes.Shape dot, Avalonia.Controls.TextBlock name)
+    {
+        if (GetLauncher() is not { } launcher)
+            return;
+
+        var ws = launcher.ActiveWorkspace;
+        if (dot is not null)
+            dot.Fill = ws.Brush;
+        if (name is not null)
+            name.Text = ws.Name;
     }
 
     /// <summary>
@@ -1470,230 +1607,6 @@ public partial class App : Application
         // ここで止まったままプロセスが消えた場合はレンダラー側の問題を疑える。
         Models.StartupDiagnostics.MarkStage(Models.StartupStage.WaitingFirstIdle);
     }
-
-#if DEBUG
-    /// <summary>
-    /// CRDebuggerを初期化し、メインウィンドウの四隅ダブルクリックでトグルするハンドラを登録する。
-    /// </summary>
-    private static void InitCRDebugger(Window mainWindow)
-    {
-        if (CRDebugger.Core.CRDebugger.IsInitialized)
-            return;
-
-        var options = new CRDebugger.Core.CRDebuggerOptions
-        {
-            Theme = CRDebugger.Core.Theming.CRTheme.Dark,
-            DefaultTab = CRDebugger.Core.CRTab.Console,
-            CaptureUnhandledExceptions = true,
-        };
-        CRDebugger.Avalonia.CRDebuggerAvaloniaExtensions.UseAvalonia(options);
-        CRDebugger.Core.CRDebugger.Initialize(options);
-
-        // Optionsタブにテスト用コンテナを登録する
-        CRDebugger.Core.CRDebugger.AddOptionContainer(new DebugNotificationTester());
-        CRDebugger.Core.CRDebugger.AddOptionContainer(new DebugAskpassTester());
-
-        // 画面の四隅（40x40px）のダブルクリックでデバッガーをトグルする
-        const double cornerSize = 40;
-        mainWindow.DoubleTapped += (_, e) =>
-        {
-            if (e.Source is not Avalonia.Visual visual)
-                return;
-
-            var pos = e.GetPosition(mainWindow);
-            var bounds = mainWindow.Bounds;
-
-            var isLeft = pos.X < cornerSize;
-            var isRight = pos.X > bounds.Width - cornerSize;
-            var isTop = pos.Y < cornerSize;
-            var isBottom = pos.Y > bounds.Height - cornerSize;
-
-            if ((isLeft || isRight) && (isTop || isBottom))
-                CRDebugger.Core.CRDebugger.Toggle();
-        };
-    }
-
-    /// <summary>
-    /// CRDebugger Optionsタブに表示される通知テスト用コンテナ。
-    /// 各シナリオをボタンから直接発火できる。
-    /// CRDebuggerはリフレクションでインスタンスメソッドを検出するためstaticにできない。
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822")]
-    private sealed class DebugNotificationTester
-    {
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "📢 情報通知")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(1)]
-        public void SendInfo()
-        {
-            Dispatch("テスト情報通知メッセージ", false);
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "❌ エラー通知")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(2)]
-        public void SendError()
-        {
-            Dispatch("テストエラー通知メッセージ", true);
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "📢 情報 + ヒント")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(3)]
-        public void SendInfoWithHint()
-        {
-            Dispatch("操作が完了しました", false, "ヒント: これはテスト用のヒントメッセージです");
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "❌ エラー + ヒント")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(4)]
-        public void SendErrorWithHint()
-        {
-            Dispatch("fatal: authentication failed for 'https://github.com/user/repo.git'", true, "認証に失敗しました。パスワードまたはトークンを確認してください。");
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "📢 長文通知")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(5)]
-        public void SendLongMessage()
-        {
-            Dispatch("これは非常に長い通知メッセージのテストです。実際の運用で発生しうる長文のgitエラーメッセージや、複数行にわたる詳細情報が正しく表示されるかを確認するためのものです。", false);
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "📢 長文ヒント（折り返し確認）")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(6)]
-        public void SendLongHint()
-        {
-            Dispatch(
-                "fatal: Could not read from remote repository.",
-                true,
-                "SSH秘密鍵ファイルのパーミッションが緩すぎます。鍵ファイルは所有者のみアクセス可能（chmod 600）である必要があります。この問題はmacOSやLinuxで発生し、秘密鍵ファイルのパーミッションが644や755など他のユーザーからも読み取り可能な状態になっている場合に発生します。");
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔑 鍵パーミッションエラー（アクションボタン付き）")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(7)]
-        public void SendKeyPermissionError()
-        {
-            var launcher = GetLauncher();
-            if (launcher is null)
-                return;
-
-            var errorMsg =
-                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
-                "@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @\n" +
-                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
-                "Permissions 0755 for '/Users/user/.ssh/id_rsa' are too open.\n" +
-                "It is required that your private key files are NOT accessible by others.\n" +
-                "This private key will be ignored.\n" +
-                "Load key \"/Users/user/.ssh/id_rsa\": bad permissions\n" +
-                "git@github.com: Permission denied (publickey).\n" +
-                "fatal: Could not read from remote repository.";
-
-            var hintKey = Models.GitErrorHelper.GetHintKey(errorMsg);
-            var hint = string.IsNullOrEmpty(hintKey) ? "" : Text(hintKey.Replace("Text.", ""));
-            var keyPath = Models.GitErrorHelper.ExtractKeyPathFromPermissionError(errorMsg);
-            var fixLabel = Text("GitError.KeyPermissionTooOpen.Fix");
-
-            // デバッグ用: Windows制限を外してアクションボタンを直接構築
-            launcher.DispatchNotification(
-                launcher.ActivePage?.Node.Id ?? "",
-                errorMsg,
-                true,
-                hint,
-                fixLabel,
-                () => launcher.DispatchNotification(
-                    launcher.ActivePage?.Node.Id ?? "",
-                    $"[デバッグ] chmod 600 \"{keyPath}\" を実行します（テスト環境のため実際には実行しません）",
-                    false));
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("通知テスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🗑️ 通知クリア")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(8)]
-        public void ClearNotifications()
-        {
-            GetLauncher()?.ActivePage?.ClearNotifications();
-        }
-
-        private static void Dispatch(string message, bool isError, string hint = "")
-        {
-            var launcher = GetLauncher();
-            if (launcher is null)
-                return;
-
-            launcher.DispatchNotification(
-                launcher.ActivePage?.Node.Id ?? "",
-                message,
-                isError,
-                hint);
-        }
-    }
-
-    /// <summary>
-    /// Askpassダイアログの表示確認用テスター。
-    /// 各種SSHプロンプトパターン（ホスト鍵確認、パスフレーズ、パスワード）を
-    /// Askpassダイアログとしてプレビュー表示する。
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822")]
-    private sealed class DebugAskpassTester
-    {
-        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔑 初回ホスト鍵確認")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(1)]
-        public void ShowHostKeyNew()
-        {
-            ShowAskpass(
-                "The authenticity of host 'github.com (64:ff9b::141b:b171)' can't be established.\n" +
-                "ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU\n" +
-                "This key is not known by any other names.\n" +
-                "Are you sure you want to continue connecting (yes/no/[fingerprint])?");
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "⚠️ ホスト鍵変更警告")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(2)]
-        public void ShowHostKeyChanged()
-        {
-            ShowAskpass(
-                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
-                "@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @\n" +
-                "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
-                "IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!\n" +
-                "Host key for github.com has changed and you have requested strict checking.\n" +
-                "Host key verification failed.");
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔐 パスフレーズ入力")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(3)]
-        public void ShowPassphrase()
-        {
-            ShowAskpass("Enter passphrase for key '/Users/user/.ssh/id_ed25519': ");
-        }
-
-        [CRDebugger.Core.Options.Attributes.CRCategory("Askpassテスト")]
-        [CRDebugger.Core.Options.Attributes.CRAction(Label = "🔒 パスワード入力")]
-        [CRDebugger.Core.Options.Attributes.CRSortOrder(4)]
-        public void ShowPassword()
-        {
-            ShowAskpass("Password for 'https://user@github.com': ");
-        }
-
-        private static void ShowAskpass(string message)
-        {
-            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-            {
-                var askpass = new Views.Askpass { IsPreview = true };
-                askpass.TxtDescription.Text = message;
-                askpass.SetHint(message);
-                askpass.Show();
-            });
-        }
-    }
-#endif
 
     /// <summary>
     /// 指定されたパスのリポジトリをタブで開く。

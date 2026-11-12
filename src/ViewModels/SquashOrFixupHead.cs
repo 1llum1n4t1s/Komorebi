@@ -74,7 +74,8 @@ public class SquashOrFixupHead : Popup
     public override async Task<bool> Sure()
     {
         using var lockWatcher = _repo.LockWatcher();
-        ProgressDescription = IsFixupMode ? "Fixup ..." : "Squashing ...";
+        // DropHead/Reword と同様に進捗文言をローカライズする（旧来は英語の直書きだった）。
+        ProgressDescription = App.Text(IsFixupMode ? "Progress.Fixup" : "Progress.Squashing");
 
         var log = _repo.CreateLog(IsFixupMode ? "Fixup" : "Squash");
         Use(log);
@@ -120,23 +121,53 @@ public class SquashOrFixupHead : Popup
         if (succ && ForcePushAfterDone)
         {
             var branch = _repo.CurrentBranch;
-            if (branch?.Upstream is { } upstreamRef && upstreamRef.StartsWith("refs/remotes/", System.StringComparison.Ordinal))
+            var target = branch is null ? null : await ResolveForcePushTargetAsync(_repo.FullPath, branch.Name, branch.Upstream);
+            if (branch is not null && target is { } t)
             {
-                var upstream = upstreamRef["refs/remotes/".Length..];
-                var separatorIdx = upstream.IndexOf('/');
-                if (separatorIdx > 0)
-                {
-                    var remote = upstream.Substring(0, separatorIdx);
-                    var remoteBranch = upstream.Substring(separatorIdx + 1);
-                    succ = await new Commands.Push(_repo.FullPath, branch.Name, remote, remoteBranch, false, false, false, true)
-                        .Use(log)
-                        .ExecAsync();
-                }
+                succ = await new Commands.Push(_repo.FullPath, branch.Name, t.Remote, t.Branch, false, false, false, true)
+                    .Use(log)
+                    .ExecAsync();
+            }
+            else
+            {
+                // squash/fixup 自体は完了しているので Popup は閉じる（succ は true のまま）。
+                // 推測した先へ force push しないことを利用者に伝える。
+                App.RaiseException(_repo.FullPath, App.Text("SquashOrFixup.ForcePushSkipped", branch?.Name ?? "HEAD"));
             }
         }
 
         log.Complete();
         return succ;
+    }
+
+    /// <summary>
+    /// force push の送信先 remote / ブランチ名を git config から確定する。
+    /// upstream の参照名（refs/remotes/foo/bar/baz）を最初の '/' で分割すると、remote 名に '/' を含む場合
+    /// （remote "foo/bar" のブランチ "baz"）に別の remote "foo" へ force push してしまう。
+    /// そこで Push.cs と同様に branch.&lt;name&gt;.remote と branch.&lt;name&gt;.merge を読み、
+    /// それから組み立てた refs/remotes/{remote}/{branch} が upstream と一致する場合だけ採用する。
+    /// 一致しない・読めない場合は null（push しない）。force push は破壊的なので推測では送らない。
+    /// </summary>
+    internal static async Task<(string Remote, string Branch)?> ResolveForcePushTargetAsync(string repo, string branchName, string upstreamRef)
+    {
+        if (string.IsNullOrEmpty(branchName) || string.IsNullOrEmpty(upstreamRef))
+            return null;
+
+        var remote = await new Commands.Config(repo).GetAsync($"branch.{branchName}.remote");
+        var merge = await new Commands.Config(repo).GetAsync($"branch.{branchName}.merge");
+        const string headsPrefix = "refs/heads/";
+        if (string.IsNullOrEmpty(remote) || remote == "." || string.IsNullOrEmpty(merge) ||
+            !merge.StartsWith(headsPrefix, System.StringComparison.Ordinal))
+            return null;
+
+        var remoteBranch = merge[headsPrefix.Length..];
+        if (string.IsNullOrEmpty(remoteBranch))
+            return null;
+
+        if (!string.Equals($"refs/remotes/{remote}/{remoteBranch}", upstreamRef, System.StringComparison.Ordinal))
+            return null;
+
+        return (remote, remoteBranch);
     }
 
     private readonly Repository _repo;

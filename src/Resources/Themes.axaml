@@ -33,6 +33,11 @@
       <Color x:Key="Color.InlineCode">#FFE4E4E4</Color>
       <Color x:Key="Color.InlineCodeFG">Black</Color>
       <Color x:Key="Color.DataGridHeaderBG">#FFF0F5F9</Color>
+      <!-- Welcome のリモート到達性バッジ（信号機配色）。旧来の直書き色と同じ値をテーマ上書き可能にする -->
+      <Color x:Key="Color.RemoteReachability.AllReachable">LimeGreen</Color>
+      <Color x:Key="Color.RemoteReachability.SomeUnreachable">Gold</Color>
+      <Color x:Key="Color.RemoteReachability.AllUnreachable">Red</Color>
+      <Color x:Key="Color.RemoteReachability.NoRemotes">Gray</Color>
     </ResourceDictionary>
 
     <ResourceDictionary x:Key="Dark">
@@ -67,6 +72,11 @@
       <Color x:Key="Color.InlineCode">#FF383838</Color>
       <Color x:Key="Color.InlineCodeFG">#FFF0F0F0</Color>
       <Color x:Key="Color.DataGridHeaderBG">#FF2B2B2B</Color>
+      <!-- Welcome のリモート到達性バッジ。既定ではライトと同じ信号機配色を維持する -->
+      <Color x:Key="Color.RemoteReachability.AllReachable">LimeGreen</Color>
+      <Color x:Key="Color.RemoteReachability.SomeUnreachable">Gold</Color>
+      <Color x:Key="Color.RemoteReachability.AllUnreachable">Red</Color>
+      <Color x:Key="Color.RemoteReachability.NoRemotes">Gray</Color>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
 
@@ -103,6 +113,10 @@
   <SolidColorBrush x:Key="Brush.InlineCode" Color="{DynamicResource Color.InlineCode}"/>
   <SolidColorBrush x:Key="Brush.InlineCodeFG" Color="{DynamicResource Color.InlineCodeFG}"/>
   <SolidColorBrush x:Key="Brush.DataGridHeaderBG" Color="{DynamicResource Color.DataGridHeaderBG}"/>
+  <SolidColorBrush x:Key="Brush.RemoteReachability.AllReachable" Color="{DynamicResource Color.RemoteReachability.AllReachable}"/>
+  <SolidColorBrush x:Key="Brush.RemoteReachability.SomeUnreachable" Color="{DynamicResource Color.RemoteReachability.SomeUnreachable}"/>
+  <SolidColorBrush x:Key="Brush.RemoteReachability.AllUnreachable" Color="{DynamicResource Color.RemoteReachability.AllUnreachable}"/>
+  <SolidColorBrush x:Key="Brush.RemoteReachability.NoRemotes" Color="{DynamicResource Color.RemoteReachability.NoRemotes}"/>
 
   <FontFamily x:Key="Fonts.Default">fonts:Inter#Inter</FontFamily>
   <FontFamily x:Key="Fonts.Monospace">Cascadia Mono, Consolas, Menlo, DejaVu Sans Mono, monospace</FontFamily>

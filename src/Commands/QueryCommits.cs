@@ -79,11 +79,23 @@ public class QueryCommits : Command
     public async Task<List<Models.Commit>> GetResultAsync()
     {
         List<Models.Commit> commits = [];
+
+        // Komorebi 独自: Command.ReadToEndAsync と同じ中断契約をこの独自読取にも適用する。
+        // 中断時は null ではなく空リストを返す（Repository.RefreshCommits はトークン確認より前に
+        // commits.Count をログへ出すため、null だと NRE になる）。トークン未設定の呼出元
+        // （Blame・Compare・DirHistories・SearchCommitContext）は CancellationToken.None なので挙動は変わらない。
+        if (CancellationToken.IsCancellationRequested)
+            return [];
+
         try
         {
             using var proc = new Process();
             proc.StartInfo = CreateGitStartInfo(true);
             proc.Start();
+
+            // 読み取りだけが中止されると Kill 登録を外す競合が生じるため、プロセスの実終了
+            // （下の WaitForExitAsync）まで登録を保持する（ReadToEndAsync と同じ方針）。
+            using var registration = CancellationToken.Register(() => Native.CommandCancellation.Terminate(proc, false));
             var stderrDrain = DrainReaderAsync(proc.StandardError);
 
             var findHead = false;
@@ -102,12 +114,23 @@ public class QueryCommits : Command
             await proc.WaitForExitAsync().ConfigureAwait(false);
             await stderrDrain.ConfigureAwait(false);
 
+            // Kill によって出力が途中で途切れた場合、部分的な一覧を正規の結果として返さない。
+            if (CancellationToken.IsCancellationRequested)
+                return [];
+
             // HEADが見つからなかった場合、現在ブランチのコミットハッシュと照合してマージ済みフラグを設定
             if (_markMerged && !findHead && commits.Count > 0)
             {
-                var set = await new QueryCurrentBranchCommitHashes(WorkingDirectory, commits[^1].CommitterTime)
+                // 後続の git プロセスも中断後には起動しない（上の確認と WaitForExit の間に中断された場合を含む）。
+                if (CancellationToken.IsCancellationRequested)
+                    return [];
+
+                // 中断トークンを渡し、照会中に中断されたら後続の git を待たずに終了させる
+                var set = await new QueryCurrentBranchCommitHashes(WorkingDirectory, commits[^1].CommitterTime) { CancellationToken = CancellationToken }
                     .GetResultAsync()
                     .ConfigureAwait(false);
+                if (CancellationToken.IsCancellationRequested)
+                    return [];
 
                 foreach (var c in commits)
                 {
@@ -121,6 +144,10 @@ public class QueryCommits : Command
         }
         catch (Exception e)
         {
+            // 中断に伴う読取失敗はエラーとして通知しない（利用者の操作・リフレッシュの置き換えによる正常な中断）。
+            if (CancellationToken.IsCancellationRequested)
+                return [];
+
             App.RaiseException(Context, App.Text("Error.FailedToQueryCommits", e.Message));
         }
 

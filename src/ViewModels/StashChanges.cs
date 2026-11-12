@@ -77,58 +77,62 @@ public class StashChanges : Popup
     /// </summary>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.StashingChanges");
 
         var log = _repo.CreateLog("Stash Local Changes");
         Use(log);
 
-        var mode = (DealWithChangesAfterStashing)ChangesAfterStashing;
-        var keepIndex = mode == DealWithChangesAfterStashing.KeepIndex;
         bool succ;
-
-        if (_changes is null)
+        // Watcher ロックは git コマンド実行範囲に限定し、Mark*DirtyManually はロック解除後に呼ぶ
+        // （DeleteBranch.cs と同じ。ロック中に呼ぶと解除後に届く FS イベントが Refresh をキャンセルする。PITFALLS 参照）。
+        using (_repo.LockWatcher())
         {
-            if (OnlyStaged)
+            var mode = (DealWithChangesAfterStashing)ChangesAfterStashing;
+            var keepIndex = mode == DealWithChangesAfterStashing.KeepIndex;
+
+            if (_changes is null)
             {
-                if (Native.OS.GitVersion >= Models.GitVersions.STASH_PUSH_ONLY_STAGED)
+                if (OnlyStaged)
                 {
-                    succ = await new Commands.Stash(_repo.FullPath)
-                        .Use(log)
-                        .PushOnlyStagedAsync(Message, keepIndex);
+                    if (Native.OS.GitVersion >= Models.GitVersions.STASH_PUSH_ONLY_STAGED)
+                    {
+                        succ = await new Commands.Stash(_repo.FullPath)
+                            .Use(log)
+                            .PushOnlyStagedAsync(Message, keepIndex);
+                    }
+                    else
+                    {
+                        var all = await new Commands.QueryLocalChanges(_repo.FullPath, false)
+                            .Use(log)
+                            .GetResultAsync();
+
+                        List<Models.Change> staged = [];
+                        foreach (var c in all)
+                        {
+                            if (c.Index != Models.ChangeState.None && c.Index != Models.ChangeState.Untracked)
+                                staged.Add(c);
+                        }
+
+                        succ = await StashWithChangesAsync(staged, keepIndex, log);
+                    }
                 }
                 else
                 {
-                    var all = await new Commands.QueryLocalChanges(_repo.FullPath, false)
+                    succ = await new Commands.Stash(_repo.FullPath)
                         .Use(log)
-                        .GetResultAsync();
-
-                    List<Models.Change> staged = [];
-                    foreach (var c in all)
-                    {
-                        if (c.Index != Models.ChangeState.None && c.Index != Models.ChangeState.Untracked)
-                            staged.Add(c);
-                    }
-
-                    succ = await StashWithChangesAsync(staged, keepIndex, log);
+                        .PushAsync(Message, IncludeUntracked, keepIndex);
                 }
             }
             else
             {
+                succ = await StashWithChangesAsync(_changes, keepIndex, log);
+            }
+
+            if (mode == DealWithChangesAfterStashing.KeepAll && succ)
                 succ = await new Commands.Stash(_repo.FullPath)
                     .Use(log)
-                    .PushAsync(Message, IncludeUntracked, keepIndex);
-            }
+                    .ApplyAsync("stash@{0}", true);
         }
-        else
-        {
-            succ = await StashWithChangesAsync(_changes, keepIndex, log);
-        }
-
-        if (mode == DealWithChangesAfterStashing.KeepAll && succ)
-            succ = await new Commands.Stash(_repo.FullPath)
-                .Use(log)
-                .ApplyAsync("stash@{0}", true);
 
         log.Complete();
         _repo.MarkWorkingCopyDirtyManually();

@@ -27,7 +27,7 @@ public class PushToNewBranch : ObservableValidator
     {
         return Models.RefName.IsValidBranchName(name)
             ? ValidationResult.Success
-            : new ValidationResult(App.Text("Validation.BranchNameInvalid"));
+            : new ValidationResult(ValidationMessages.BranchNameInvalid);
     }
 
     [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2026:RequiresUnreferencedCode")]

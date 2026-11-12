@@ -65,7 +65,11 @@ public class Config : Command
     /// <param name="stdout">git configの標準出力。</param>
     /// <param name="comparer">辞書のキー比較子。nullの場合はデフォルト（大文字小文字区別あり）。</param>
     /// <returns>設定キーと値の辞書。</returns>
-    private static Dictionary<string, string> ParseConfigOutput(string stdout, IEqualityComparer<string> comparer = null)
+    /// <remarks>
+    /// Komorebi 独自のヘルパー（upstream には存在しない）。Komorebi.Tests がパース境界を
+    /// リフレクションなしで検証できるよう internal にしている（InternalsVisibleTo の範囲内のみ公開）。
+    /// </remarks>
+    internal static Dictionary<string, string> ParseConfigOutput(string stdout, IEqualityComparer<string> comparer = null)
     {
         var rs = comparer is not null ? new Dictionary<string, string>(comparer) : new Dictionary<string, string>();
         var lines = stdout.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);

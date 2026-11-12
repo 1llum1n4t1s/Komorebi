@@ -4,7 +4,7 @@ This file provides guidance to Codex and other coding agents working in this rep
 
 ## Project Overview
 
-**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 11** and **Avalonia UI 12.1.4**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
+**Komorebi** is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit), an open-source, cross-platform Git GUI client built with **C#/.NET 11** and **Avalonia UI 12.1.6**. It wraps the git CLI to provide a visual interface for git operations. The fork's GitHub repository is `https://github.com/1llum1n4t1s/Komorebi`.
 
 設計の概要・責務とデータフローは [DESIGN.md](DESIGN.md) を参照する。本ファイルは作業規約・実装時の制約・検証手順を扱う。
 
@@ -24,10 +24,10 @@ dotnet run --project src/Komorebi.csproj
 dotnet format --verify-no-changes src/Komorebi.csproj
 
 # Release publish (platform-specific, AOT by default)
-dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64
+dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64 -p:RestoreLockedMode=true
 
 # Build without AOT (faster for local testing)
-dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64 -p:DisableAOT=true
+dotnet publish src/Komorebi.csproj -c Release -o publish -r win-x64 -p:DisableAOT=true -p:RestoreLockedMode=true
 
 # Build without update detection
 dotnet build -p:DisableUpdateDetection=true
@@ -58,7 +58,7 @@ Bun と NuGet 等の通常更新は Dependabot で行う。Bun の minor/patch �
 
 ローカライズ CLI は全 XML の読込・解析・生成が成功するまで書き込まない。書込中の障害まで原子的に復旧するものではない。
 
-`localization-check.yml` は `contents: read` で PR・再利用呼出しを検証する。main への push 時の翻訳整形・文書の自動コミットは、`contents: write` を明示した `localization-update.yml` が担当する。
+`localization-check.yml` は `contents: read` で PR・main への push・再利用呼出しを検証する。main への push 時の翻訳整形・文書の自動コミットは、`contents: write` を明示した `localization-update.yml` が担当する。
 
 
 
@@ -66,7 +66,7 @@ Bun と NuGet 等の通常更新は Dependabot で行う。Bun の minor/patch �
 
 ### 実行経路の E2E 検証
 
-次のプロジェクトは `Komorebi.slnx` と通常 CI の対象外なので、対応する実装を変更した場合は個別に実行する。Git を引数に取る検証では、インストール済みの実行ファイルの絶対パスを指定する。
+次のプロジェクトは `Komorebi.slnx` の対象外なので、対応する実装を変更した場合は個別に実行する（Localization.E2E だけはローカライズ系 workflow と dependency-validation でも実行される）。Git を引数に取る検証では、インストール済みの実行ファイルの絶対パスを指定する。
 
 | 変更対象 | 必須コマンド（Windows の例） | 検証範囲・詳細 |
 |---|---|---|
@@ -75,7 +75,7 @@ Bun と NuGet 等の通常更新は Dependabot で行う。Bun の minor/patch �
 | 画像差分、View 再利用、Fetch/Pull/Push の入力、About | `dotnet run --project tests/UIWorkflow.E2E/UIWorkflow.E2E.csproj -- 'C:\Program Files\Git\cmd\git.exe'` | [実 AXAML・Headless 入力と画像](tests/UIWorkflow.E2E/README.md) |
 | ローカライズ検証 CLI の失敗時終了 | `bun tests/Localization.E2E/Run.mjs` | 読込失敗時の exit 1 と書込抑止。本番 CI と同じ Bun CLI を子プロセスで検証する。`--bun <実行ファイル>`、`--artifacts <絶対パス>` で検証対象・成果物の親ディレクトリを指定可 |
 
-ローカライズ E2E ハーネス変更時は `bun test tests/Localization.E2E/Run.test.mjs` も実行し、書込み例外を握りつぶす CLI の書込み試行が検出されることを確認する。テストの成果物の親ディレクトリは `KOMOREBI_LOCALIZATION_ARTIFACTS` で指定できる。
+ローカライズ E2E ハーネス変更時は `bun test tests/Localization.E2E/Run.test.mjs` も実行し（`localization-update.yml` やそのスクリプトを変更した場合は `bash tests/Localization.E2E/Workflow.test.sh <一時ディレクトリ>` も実行する）、書込み例外を握りつぶす CLI の書込み試行が検出されることを確認する。テストの成果物の親ディレクトリは `KOMOREBI_LOCALIZATION_ARTIFACTS` で指定できる。
 
 各実行の `result.json`、ログ、fixture・画像を成果物として保持し、結果と再現手順を報告する。設定と資格情報は検証用に隔離される。GUI の起動・OS 支援技術・外部 SSH 接続まで検証したとは扱わず、必要な実デスクトップ確認は別途行う。成果物の具体的な保存先は各 README と実行出力を参照する（ローカライズ検証は `tests/CloneLongPaths.E2E/bin/localization-artifacts/<実行ID>/`）。
 

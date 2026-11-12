@@ -10,65 +10,74 @@ public class QueryRepositoryStatusTests
     public async Task GetResultAsync_PreservesWorkingTreeAndBareRepositoryStatus()
     {
         var root = Path.Combine(Path.GetTempPath(), "komorebi-status-" + Guid.NewGuid().ToString("N"));
-        var repo = Path.Combine(root, "source");
-        Directory.CreateDirectory(repo);
-        Komorebi.Native.OS.GitExecutable = Komorebi.Native.OS.FindGitExecutable();
-        Git(repo, "init", "-b", "main");
-        Git(repo, "config", "user.name", "Test");
-        Git(repo, "config", "user.email", "test@example.invalid");
-        Git(repo, "config", "commit.gpgsign", "false");
-        Git(repo, "config", "core.hooksPath", Path.Combine(root, "no-hooks"));
-
-        var unborn = await new QueryRepositoryStatus(repo).GetResultAsync();
-        Assert.NotNull(unborn);
-        Assert.Equal("main", unborn.CurrentBranch);
-        Assert.Equal(0, unborn.LocalChanges);
-
-        var trackedFile = Path.Combine(repo, "tracked.txt");
-        File.WriteAllText(trackedFile, "tracked content");
-        Git(repo, "add", ".");
-        Git(repo, "commit", "-m", "initial");
-        var initial = Git(repo, "rev-parse", "HEAD").Trim();
-        var tree = Git(repo, "rev-parse", "HEAD^{tree}").Trim();
-        Git(repo, "commit", "--allow-empty", "-m", "local");
-        var remoteCommit = Git(repo, "commit-tree", tree, "-p", initial, "-m", "remote").Trim();
-        var bare = Path.Combine(root, "bare.git");
-        Git(root, "clone", "--bare", "--no-hardlinks", repo, bare);
-
-        foreach (var directory in new[] { repo, bare })
+        try
         {
-            Git(directory, "config", "remote.origin.url", repo);
-            Git(directory, "config", "remote.origin.fetch", "+refs/heads/*:refs/remotes/origin/*");
-            Git(directory, "config", "branch.main.remote", "origin");
-            Git(directory, "config", "branch.main.merge", "refs/heads/main");
-            // clone --bare は remote-tracking ref と到達不能なコミットをコピーしない。
-            if (directory == bare)
-                Git(directory, "fetch", repo, remoteCommit);
-            Git(directory, "update-ref", "refs/remotes/origin/main", remoteCommit);
-            // stat情報が古くても、バックグラウンドのstatusはindexを更新しない。
-            var indexPath = Path.Combine(repo, ".git", "index");
-            var indexBefore = File.ReadAllBytes(indexPath);
-            if (directory == repo)
-                File.SetLastWriteTimeUtc(trackedFile, DateTime.UtcNow.AddMinutes(-3));
-            var command = new QueryRepositoryStatus(directory);
-            var status = await command.GetResultAsync();
-            Assert.NotNull(status);
-            Assert.Equal("main", status.CurrentBranch);
-            Assert.Equal(1, status.Ahead);
-            Assert.Equal(1, status.Behind);
-            Assert.Equal(0, status.LocalChanges);
-            Assert.StartsWith("--no-optional-locks status ", command.Args);
-            Assert.Equal(indexBefore, File.ReadAllBytes(indexPath));
-        }
+            var repo = Path.Combine(root, "source");
+            Directory.CreateDirectory(repo);
+            Komorebi.Native.OS.GitExecutable = Komorebi.Native.OS.FindGitExecutable();
+            Git(repo, "init", "-b", "main");
+            Git(repo, "config", "user.name", "Test");
+            Git(repo, "config", "user.email", "test@example.invalid");
+            Git(repo, "config", "commit.gpgsign", "false");
+            Git(repo, "config", "core.hooksPath", Path.Combine(root, "no-hooks"));
 
-        Git(repo, "checkout", "--detach");
-        File.WriteAllText(Path.Combine(repo, "untracked.txt"), "new");
-        var sha = Git(repo, "rev-parse", "HEAD").Trim();
-        var detached = await new QueryRepositoryStatus(repo).GetResultAsync();
-        Assert.NotNull(detached);
-        Assert.Equal($"({sha[..10]})", detached.CurrentBranch);
-        Assert.Equal(1, detached.LocalChanges);
-        Assert.Null(await new QueryRepositoryStatus(root).GetResultAsync());
+            var unborn = await new QueryRepositoryStatus(repo).GetResultAsync();
+            Assert.NotNull(unborn);
+            Assert.Equal("main", unborn.CurrentBranch);
+            Assert.Equal(0, unborn.LocalChanges);
+
+            var trackedFile = Path.Combine(repo, "tracked.txt");
+            File.WriteAllText(trackedFile, "tracked content");
+            Git(repo, "add", ".");
+            Git(repo, "commit", "-m", "initial");
+            var initial = Git(repo, "rev-parse", "HEAD").Trim();
+            var tree = Git(repo, "rev-parse", "HEAD^{tree}").Trim();
+            Git(repo, "commit", "--allow-empty", "-m", "local");
+            var remoteCommit = Git(repo, "commit-tree", tree, "-p", initial, "-m", "remote").Trim();
+            var bare = Path.Combine(root, "bare.git");
+            Git(root, "clone", "--bare", "--no-hardlinks", repo, bare);
+
+            foreach (var directory in new[] { repo, bare })
+            {
+                Git(directory, "config", "remote.origin.url", repo);
+                Git(directory, "config", "remote.origin.fetch", "+refs/heads/*:refs/remotes/origin/*");
+                Git(directory, "config", "branch.main.remote", "origin");
+                Git(directory, "config", "branch.main.merge", "refs/heads/main");
+                // clone --bare は remote-tracking ref と到達不能なコミットをコピーしない。
+                if (directory == bare)
+                    Git(directory, "fetch", repo, remoteCommit);
+                Git(directory, "update-ref", "refs/remotes/origin/main", remoteCommit);
+                // stat情報が古くても、バックグラウンドのstatusはindexを更新しない。
+                var indexPath = Path.Combine(repo, ".git", "index");
+                var indexBefore = File.ReadAllBytes(indexPath);
+                if (directory == repo)
+                    File.SetLastWriteTimeUtc(trackedFile, DateTime.UtcNow.AddMinutes(-3));
+                var command = new QueryRepositoryStatus(directory);
+                var status = await command.GetResultAsync();
+                Assert.NotNull(status);
+                Assert.Equal("main", status.CurrentBranch);
+                Assert.Equal(1, status.Ahead);
+                Assert.Equal(1, status.Behind);
+                Assert.Equal(0, status.LocalChanges);
+                Assert.StartsWith("--no-optional-locks status ", command.Args);
+                Assert.Equal(indexBefore, File.ReadAllBytes(indexPath));
+            }
+
+            Git(repo, "checkout", "--detach");
+            File.WriteAllText(Path.Combine(repo, "untracked.txt"), "new");
+            var sha = Git(repo, "rev-parse", "HEAD").Trim();
+            var detached = await new QueryRepositoryStatus(repo).GetResultAsync();
+            Assert.NotNull(detached);
+            Assert.Equal($"({sha[..10]})", detached.CurrentBranch);
+            Assert.Equal(1, detached.LocalChanges);
+            Assert.Null(await new QueryRepositoryStatus(root).GetResultAsync());
+        }
+        finally
+        {
+            // 以前は作業ディレクトリ（作業ツリー＋bare リポジトリ）を残していた。
+            // 成否にかかわらず、このテストが作った GUID 付きディレクトリだけを削除する。
+            GitFixture.DeleteDirectory(root);
+        }
     }
 
     private static string Git(string directory, params string[] args)

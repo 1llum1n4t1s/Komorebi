@@ -108,11 +108,11 @@ public class CreateTag : Popup
         if (ctx.ObjectInstance is CreateTag creator)
         {
             if (!Models.RefName.IsValidTagName(name))
-                return new ValidationResult(App.Text("Validation.TagNameInvalid"));
+                return new ValidationResult(ValidationMessages.TagNameInvalid);
 
             var found = creator._repo.Tags.Find(x => x.Name == name);
             if (found is not null)
-                return new ValidationResult(App.Text("Validation.TagExists"));
+                return new ValidationResult(ValidationMessages.TagExists);
         }
         return ValidationResult.Success;
     }

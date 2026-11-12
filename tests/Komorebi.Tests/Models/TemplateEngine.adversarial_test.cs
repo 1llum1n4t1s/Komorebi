@@ -132,12 +132,15 @@ namespace Komorebi.Tests.Models
         /// <adversarial category="type" severity="high" />
         /// <summary>スライスに0を指定した場合の動作</summary>
         [Fact]
-        public void Eval_SliceZero_ReturnsEmptyOrMinimal()
+        public void Eval_SliceZero_ListsNoFilesAndCountsTheRest()
         {
+            // count=0 の場合、ファイル名は 0 件で、残り全件が " and N other files" として数えられる
+            // （GetFilesSliced: AppendJoin の結果が空なので先頭に空白が残る）
             var result = _engine.Eval("${files:0}", _branch, MakeChanges("a.cs", "b.cs", "c.cs"));
-            // count=0の場合、0ファイル + "and 3 other files" になるはず
-            var ex = Record.Exception(() => _engine.Eval("${files:0}", _branch, MakeChanges("a.cs")));
-            Assert.Null(ex);
+            Assert.Equal(" and 3 other files", result);
+
+            var single = _engine.Eval("${files:0}", _branch, MakeChanges("a.cs"));
+            Assert.Equal(" and 1 other files", single);
         }
 
         /// <adversarial category="type" severity="medium" />

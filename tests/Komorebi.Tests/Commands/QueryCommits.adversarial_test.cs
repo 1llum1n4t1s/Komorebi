@@ -62,10 +62,10 @@ namespace Komorebi.Tests.Commands
         [InlineData("sha\0\0\0author±e\01234567890\0committer±e\0NOT_A_NUMBER\0subject")]
         public void ParseCommitLine_NonNumericTimestamp_ThrowsFormatException(string line)
         {
-            // ulong.Parseは例外をスローする - これは既知の脆弱性
-            var ex = Record.Exception(() => QueryCommits.ParseCommitLine(line));
-            if (ex != null)
-                Assert.IsType<System.FormatException>(ex);
+            // ParseCommitLine は ulong.Parse をそのまま使うため、非数値は FormatException になる。
+            // 以前は「例外なし」でも通っていたため、実装の振る舞いに固定する
+            // （git log の %at / %ct は常に数値を出力するので、通常の経路では発生しない）。
+            Assert.Throws<System.FormatException>(() => QueryCommits.ParseCommitLine(line));
         }
 
         /// <adversarial category="type" severity="high" />
@@ -73,10 +73,9 @@ namespace Komorebi.Tests.Commands
         [Fact]
         public void ParseCommitLine_NegativeTimestamp_ThrowsOverflow()
         {
+            // 符号付きの "-1" は数値としては解釈でき、ulong の範囲外なので OverflowException になる
             var line = "sha\0\0\0author±e\0-1\0committer±e\01234567890\0subject";
-            var ex = Record.Exception(() => QueryCommits.ParseCommitLine(line));
-            if (ex != null)
-                Assert.True(ex is System.FormatException or System.OverflowException);
+            Assert.Throws<System.OverflowException>(() => QueryCommits.ParseCommitLine(line));
         }
 
         /// <adversarial category="type" severity="high" />
@@ -86,9 +85,7 @@ namespace Komorebi.Tests.Commands
         {
             // ulong.MaxValue + 1 = 18446744073709551616
             var line = "sha\0\0\0author±e\018446744073709551616\0committer±e\01234567890\0subject";
-            var ex = Record.Exception(() => QueryCommits.ParseCommitLine(line));
-            if (ex != null)
-                Assert.IsType<System.OverflowException>(ex);
+            Assert.Throws<System.OverflowException>(() => QueryCommits.ParseCommitLine(line));
         }
 
         /// <adversarial category="type" severity="medium" />
@@ -97,9 +94,7 @@ namespace Komorebi.Tests.Commands
         public void ParseCommitLine_EmptyTimestamp_ThrowsFormatException()
         {
             var line = "sha\0\0\0author±e\0\0committer±e\01234567890\0subject";
-            var ex = Record.Exception(() => QueryCommits.ParseCommitLine(line));
-            if (ex != null)
-                Assert.IsType<System.FormatException>(ex);
+            Assert.Throws<System.FormatException>(() => QueryCommits.ParseCommitLine(line));
         }
 
         /// <adversarial category="type" severity="medium" />
@@ -108,9 +103,7 @@ namespace Komorebi.Tests.Commands
         public void ParseCommitLine_DecimalTimestamp_ThrowsFormatException()
         {
             var line = "sha\0\0\0author±e\01234567890.5\0committer±e\01234567890\0subject";
-            var ex = Record.Exception(() => QueryCommits.ParseCommitLine(line));
-            if (ex != null)
-                Assert.IsType<System.FormatException>(ex);
+            Assert.Throws<System.FormatException>(() => QueryCommits.ParseCommitLine(line));
         }
 
         // ===============================================================

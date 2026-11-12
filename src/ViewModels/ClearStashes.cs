@@ -25,17 +25,21 @@ public class ClearStashes : Popup
     /// <returns>常にtrue</returns>
     public override async Task<bool> Sure()
     {
-        using var lockWatcher = _repo.LockWatcher();
         ProgressDescription = App.Text("Progress.ClearAllStashes");
 
         // コマンドログを作成してスタッシュクリアを実行する
         var log = _repo.CreateLog("Clear Stashes");
         Use(log);
 
-        // git stash clearコマンドで全スタッシュを削除する
-        await new Commands.Stash(_repo.FullPath)
-            .Use(log)
-            .ClearAsync();
+        // Watcher ロックは git コマンド実行範囲に限定し、Mark*DirtyManually はロック解除後に呼ぶ
+        // （DeleteBranch.cs と同じ。ロック中に呼ぶと解除後に届く FS イベントが Refresh をキャンセルする。PITFALLS 参照）。
+        using (_repo.LockWatcher())
+        {
+            // git stash clearコマンドで全スタッシュを削除する
+            await new Commands.Stash(_repo.FullPath)
+                .Use(log)
+                .ClearAsync();
+        }
 
         log.Complete();
         // スタッシュ一覧の更新を通知する
