@@ -209,7 +209,7 @@ CI の構成は [.github/workflows](.github/workflows) を参照する。`releas
 
 > ℹ️ `package.yml` の win standalone zip (`komorebi_*.zip`) は引き続き CI で生成される未署名バイナリ。署名対象に含めたい場合はローカルスクリプトへの移植が必要。
 
-Linux builds run directly on `ubuntu-latest` runner (no Docker container). arm64 cross-compilation adds ports.ubuntu.com sources with dynamic codename detection. RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
+Linux builds run directly on the runner (no Docker container). `build.yml` の matrix は `os` の `-arm` 接尾辞で self-hosted の ARM64 ランナーへ振り分け、linux-arm64 は `ubuntu-24.04-arm` でネイティブにビルドする（X64 ランナーでのクロスコンパイルは遅く linux-x64 と直列待ちになるため戻さない）。ports.ubuntu.com を追加する arm64 クロスコンパイル設定は `runner.arch != 'ARM64'`（x64 ホストで arm64 を作る場合）に限る。RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
 
 
 ## Key Dependencies
