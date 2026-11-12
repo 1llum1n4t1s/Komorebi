@@ -24,11 +24,14 @@ jobs:
     strategy:
       matrix:
         include:
+          # Windows は VS 2026（MSVC 14.5x）を持つ windows-2025 を使う。
+          # windows-2022 の VS 2022（MSVC 14.44）リンカーは .NET 11 Native AOT の win-arm64 出力で
+          # LNK1322（Cortex-A53 erratum 843419 の回避不能）になり、リリース全体が止まるため。
           - name: Windows x64
-            os: windows-2022
+            os: windows-2025
             runtime: win-x64
           - name: Windows ARM64
-            os: windows-2022
+            os: windows-2025
             runtime: win-arm64
           - name: macOS (Apple Silicon)
             os: macos-latest
