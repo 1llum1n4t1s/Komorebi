@@ -39,8 +39,11 @@ jobs:
           - name: Linux
             os: ubuntu-24.04
             runtime: linux-x64
+          # linux-arm64 は ARM64 ランナー（-arm 接尾辞）でネイティブにビルドする。
+          # 以前は X64 ランナー（Apple Silicon 上の x86_64 エミュレーション）でクロスコンパイルしており、
+          # Publish だけで 40 分近くかかったうえ、linux-x64 と同じランナーで直列待ちになっていた。
           - name: Linux (arm64)
-            os: ubuntu-24.04
+            os: ubuntu-24.04-arm
             runtime: linux-arm64
     name: Build ${{ matrix.name }}
     runs-on: ${{ fromJSON(startsWith(matrix.os, 'windows-') && format('["{0}"]', matrix.os) || startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || endsWith(matrix.os, '-arm') && '["self-hosted","Linux","ARM64","m3mb14"]' || '["self-hosted","Linux","X64","m3mb14"]') }}
@@ -98,7 +101,8 @@ jobs:
           $install | Out-File $env:GITHUB_PATH -Append -Encoding utf8
           "DOTNET_ROOT=$install" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
       - name: Configure arm64 cross-compilation
-        if: matrix.runtime == 'linux-arm64'
+        # ARM64 ランナーではネイティブビルドになるので不要。x64 ホストで arm64 を作る場合だけ使う。
+        if: matrix.runtime == 'linux-arm64' && runner.arch != 'ARM64'
         run: |
           sudo dpkg --add-architecture arm64
           CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
