@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
-          global-json-file: global.json
+          dotnet-version: 11.0.x
 
       - name: Install dependencies
         working-directory: build/scripts
@@ -80,7 +80,7 @@ jobs:
 
       - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
-          global-json-file: global.json
+          dotnet-version: 11.0.x
 
       - name: Validate and apply generated files
         run: bash .github/scripts/localization-apply.sh "$RUNNER_TEMP/localization-generated"
