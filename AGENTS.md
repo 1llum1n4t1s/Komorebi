@@ -194,7 +194,7 @@ CodeCommit の HTTPS・SSH・GRC URL を維持する。変更時は [Remote.cs](
 書式は [.editorconfig](.editorconfig) と CI の `dotnet format --verify-no-changes` を正本とする。C# は Allman 形式、`var` と collection expressions を優先し、private フィールドは `_camelCase`、private static フィールドは `s_camelCase`、定数は `PascalCase` とする。
 ## CI/CD
 
-CI の構成は [.github/workflows](.github/workflows) を参照する。`release/**` push で macOS / Linux と standalone を build・package・配信し、GitHub Releases は作らず R2 単独配信する。Windows の未署名フィードがローカル署名成果物を上書きしないよう `velopack.yml` の matrix に win-x64 / win-arm64 を含めない。
+CI の構成は [.github/workflows](.github/workflows) を参照する。`release/**` push で macOS / Linux と standalone を build・package・配信し、GitHub Releases は作らず R2 単独配信する。Windows の未署名フィードがローカル署名成果物を上書きしないよう `velopack.yml` の matrix に win-x64 / win-arm64 を含めない。`build.yml` の Windows（Native AOT）は VS 2026（MSVC 14.5x）を持つ `windows-2025` を使う。`windows-2022` の MSVC 14.44 は win-arm64 で LNK1322 になるため戻さない。
 ### Windows リリース (ローカル実行)
 
 - `/vava` で `Directory.Build.props` のバージョンを確定した後、`pwsh scripts/release-local.ps1` で win-x64 / win-arm64 の build・署名・R2 upload・cleanup を行う。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL を全件パージし、R2 書込みとパージ API の受付成功を確認して旧版清掃へ進む。公開後の配信内容取得・ハッシュ照合・伝播待ちは行わない。清掃時の他チャンネル manifest 取得は保持対象の保護のため維持する。
