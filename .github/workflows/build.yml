@@ -39,8 +39,10 @@ jobs:
           - name: Linux
             os: ubuntu-24.04
             runtime: linux-x64
+          # linux-arm64 は GitHub 提供の ARM64 ランナーでネイティブにビルドする（公開リポジトリは無料）。
+          # x64 ランナーでのクロスコンパイルより速く、ports.ubuntu.com の追加などの設定も要らない。
           - name: Linux (arm64)
-            os: ubuntu-24.04
+            os: ubuntu-24.04-arm
             runtime: linux-arm64
     name: Build ${{ matrix.name }}
     runs-on: ${{ fromJSON(startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || format('["{0}"]', matrix.os)) }}
@@ -98,7 +100,8 @@ jobs:
           $install | Out-File $env:GITHUB_PATH -Append -Encoding utf8
           "DOTNET_ROOT=$install" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
       - name: Configure arm64 cross-compilation
-        if: matrix.runtime == 'linux-arm64'
+        # ARM64 ランナーではネイティブビルドになるので不要。x64 ホストで arm64 を作る場合だけ使う。
+        if: matrix.runtime == 'linux-arm64' && runner.arch != 'ARM64'
         run: |
           sudo dpkg --add-architecture arm64
           CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
