@@ -197,7 +197,7 @@ CodeCommit の HTTPS・SSH・GRC URL を維持する。変更時は [Remote.cs](
 CI の構成は [.github/workflows](.github/workflows) を参照する。`ci.yml` の NuGet キャッシュキーは csproj・`Directory.Build.*`・`packages*.lock.json`・`global.json` のハッシュで作るため、復元に影響する入力を増やしたらキーにも含める。`release/**` push で macOS / Linux と standalone を build・package・配信し、GitHub Releases は作らず R2 単独配信する。Windows は同じ run の `windows-release` ジョブ（`windows-2025`、Environment `release`）が `r2-upload` の後に署名・配信する。Windows の未署名フィードが署名済み成果物を上書きしないよう `velopack.yml` の matrix に win-x64 / win-arm64 を含めない。`build.yml` の Windows（Native AOT）は VS 2026（MSVC 14.5x）を持つ `windows-2025` を使う。`windows-2022` の MSVC 14.44 は win-arm64 で LNK1322 になるため戻さない。`build.yml`・`velopack.yml` の .NET インストールスクリプトは、self-hosted macOS から短縮 URL の `dot.net` が不安定なため `builds.dotnet.microsoft.com` から再試行付きで取得し、`dot.net` へ戻さない。
 ### Windows リリース (CI の `windows-release` ジョブ)
 
-- `/vava` で `Directory.Build.props` のバージョンを確定して `release/**` を push すると、`release.yml` の `windows-release` ジョブが Environment `release` の承認後に `scripts/release-local.ps1` を実行し、win-x64 / win-arm64 の build・Sigilune 署名・R2 upload・cleanup を行う。Secrets は `SIGILUNE_EMAIL` / `SIGILUNE_TOTP_URI` / `CLOUDFLARE_API_TOKEN`（Environment `release`）だけを使う。ローカル実行は配信しない検証用で、CI と重ねて配信しない。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL を全件パージし、R2 書込みとパージ API の受付成功を確認して旧版清掃へ進む。公開後の配信内容取得・ハッシュ照合・伝播待ちは行わない。清掃時の他チャンネル manifest 取得は保持対象の保護のため維持する。
+- `/vava` で `Directory.Build.props` のバージョンを確定して `release/**` を push すると、`release.yml` の `windows-release` ジョブが承認待ちなしで `scripts/release-local.ps1` を実行し、win-x64 / win-arm64 の build・Sigilune 署名・R2 upload・cleanup を行う。Secrets は `SIGILUNE_EMAIL` / `SIGILUNE_TOTP_URI` / `CLOUDFLARE_API_TOKEN`（Environment `release`）だけを使う。ローカル実行は配信しない検証用で、CI と重ねて配信しない。アップロードしない検証は `-SkipUpload` を使う。前提条件と対象を絞る `-Runtimes` はスクリプト冒頭を正本とする。`vpk pack --runtime` の明示指定を維持し、生成する CPU と更新チャンネルを一致させる。アップロード後は固定 URL を全件パージし、R2 書込みとパージ API の受付成功を確認して旧版清掃へ進む。公開後の配信内容取得・ハッシュ照合・伝播待ちは行わない。清掃時の他チャンネル manifest 取得は保持対象の保護のため維持する。
 - ローカルスクリプトのアップロード前検証（manifest・nupkg・portable の版・CPU・署名・hash）を維持する。`-SkipUpload` でもこの検証を通す。
 - 製品ページの配信は兄弟リポジトリの `../vps-web/deploy/deploy-lp.ps1` を使う。公開ホスト・更新ファイルの既存経路を維持する。
 
@@ -233,7 +233,7 @@ Linux builds run directly on the runner (no Docker container). `build.yml` の l
 
 R2 配布は PowerShell 7.2 以降と同梱の `scripts/R2Distribution.Common.ps1` を使う。配布に Node.js・pnpm・Wrangler は不要（製品の JS ビルド要件は別途維持）。署名・転送・検証の正本は同梱の `scripts/R2Transfer.Core.cs` とし、PS helper は公開関数の互換入口とする。更新時は中核と使用する入口を同じディレクトリへ同梱する。固定名は `no-cache, must-revalidate`、バージョン付き成果物は不変として 1 年キャッシュし、payload を先、assets・RELEASES・releases を最後に送信する。
 
-通常の公開は `release/**` push で起動する `release.yml` に任せ、Windows を手元から重ねて配信しない（同じ版の二重配信になる）。`windows-release` ジョブは Environment `release` の承認待ちになるので、承認して完了を確認する。
+通常の公開は `release/**` push で起動する `release.yml` に任せ、Windows を手元から重ねて配信しない（同じ版の二重配信になる）。`windows-release` ジョブは承認待ちなしで続けて走るので、完了を確認する。
 
 ローカル実行は配信しない検証（`-SkipUpload`）に使う。事前に Sigilune のクラウドログインを確認し、失敗時は `sigilune status` で登録を確認するよう案内し、ログインを自動再試行しない。
 
