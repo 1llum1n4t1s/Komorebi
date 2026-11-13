@@ -211,7 +211,7 @@ CI の構成は [.github/workflows](.github/workflows) を参照する。`releas
 
 > ℹ️ `package.yml` の win standalone zip (`komorebi_*.zip`) は引き続き CI で生成される未署名バイナリ。署名対象に含めたい場合はローカルスクリプトへの移植が必要。
 
-Linux builds run directly on the runner (no Docker container). `build.yml`・`package.yml`・`velopack.yml` の Linux ジョブは、`os` の `-arm` 接尾辞（package は `ARM64` ラベル）で self-hosted の ARM64 ランナーへ振り分け、linux-x64・linux-arm64 とも ARM64 ランナーで処理する（X64 ランナーは qemu エミュレーションで極端に遅いため戻さない）。ARM64 ホストでの linux-x64 は x86-64 クロスツールチェーン（`llvm gcc-x86-64-linux-gnu`）で作り、dpkg に amd64 アーキテクチャを追加しない（共有ランナーの apt 設定を壊すため）。ports.ubuntu.com を追加する arm64 クロスコンパイル設定は `runner.arch != 'ARM64'`（x64 ホストで arm64 を作る場合）に限る。`package.linux.sh` の appimagetool はホスト CPU 用（`uname -m`）を取得し、作る AppImage の CPU は `ARCH` で別に指定する。`vpk` は実行ファイルから RID を判定するため、ホスト CPU と異なる linux-x64 でも正しいチャンネルになる。RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
+Linux builds run directly on the runner (no Docker container). `build.yml`・`package.yml`・`velopack.yml` の Linux ジョブと検証系 workflow は GitHub 提供の x64 ランナー（`ubuntu-24.04` / `ubuntu-latest`）で処理し、linux-x64 はネイティブ、linux-arm64 は x64 ホストからのクロスコンパイルで作る。self-hosted を使うのは macOS ジョブだけで、`[self-hosted, macOS, ARM64, m3mb14]` へ振り分ける（`build.yml`・`velopack.yml` は `macos-` 判定、`package.yml` は macOS ジョブの固定ラベル）。Linux ジョブを self-hosted ランナーへ戻さない。ports.ubuntu.com を追加する arm64 クロスコンパイル設定は linux-arm64 だけに限り、既存ソースは amd64 に制限する。`package.linux.sh` の appimagetool はホスト CPU 用（`uname -m`）を取得し、作る AppImage の CPU は `ARCH` で別に指定する。`vpk` は実行ファイルから RID を判定するため、ホスト CPU と異なる linux-arm64 でも正しいチャンネルになる。RPM packaging skips `brp-strip` for cross-arch binaries (`--define "__strip /bin/true"`).
 
 
 ## Key Dependencies
