@@ -13,6 +13,12 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 
 ## [Unreleased]
 
+## [1.1.5] - 2026-11-13
+
+### 変更
+
+- Linux 版のビルド環境を GitHub 提供のランナーへ移し、ARM64 版をネイティブにビルドするようにしました（アプリの機能に変更はありません）
+
 ## [1.1.4] - 2026-11-12
 
 ### 追加
