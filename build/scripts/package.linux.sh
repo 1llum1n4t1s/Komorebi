@@ -24,7 +24,8 @@ case "$RUNTIME" in
 esac
 
 # appimagetool はパッケージを作るホストの CPU 用を使う（作る AppImage の CPU は ARCH 環境変数で別に指定する）。
-# CI のパッケージ作成は ARM64 ランナーで x64・arm64 の両方を作るため、x86_64 版に固定しない。
+# CI（package.yml）は x64 の ubuntu-latest で x64・arm64 の両方を作るが、ARM64 ホストで実行しても
+# 動くよう x86_64 版に固定しない。
 APPIMAGETOOL_URL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$(uname -m).AppImage"
 
 cd build

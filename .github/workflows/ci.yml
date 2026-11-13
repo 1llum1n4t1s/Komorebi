@@ -31,7 +31,9 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Build.props') }}
+          # 復元内容の正本はロックファイルなので、推移的な版だけが変わった場合もキャッシュを更新できるよう
+          # packages*.lock.json と global.json（SDK 基準版の変更時）もキーに含める
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Build.props', '**/Directory.Build.targets', '**/packages*.lock.json', 'global.json') }}
           restore-keys: ${{ runner.os }}-nuget-
       - name: Build
         run: dotnet build -c Release -p:RestoreLockedMode=true
