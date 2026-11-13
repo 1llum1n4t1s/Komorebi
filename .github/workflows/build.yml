@@ -79,7 +79,9 @@ jobs:
           }
           $extension = if ($windows) { 'ps1' } else { 'sh' }
           $installer = Join-Path $env:RUNNER_TEMP "dotnet-install.$extension"
-          Invoke-WebRequest "https://dot.net/v1/dotnet-install.$extension" -OutFile $installer
+          # dot.net は転送用の短縮 URL で、自前の macOS ランナーからは接続が切られたり時間切れになったりすることがあるため、
+          # Microsoft が案内する配布元の URL を直接使い、一時的な失敗に備えて再試行する
+          Invoke-WebRequest "https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.$extension" -OutFile $installer -MaximumRetryCount 3 -RetryIntervalSec 5 -TimeoutSec 60
           $install = Join-Path $env:RUNNER_TEMP 'dotnet'
           $global:LASTEXITCODE = 0
           if ($windows) {
