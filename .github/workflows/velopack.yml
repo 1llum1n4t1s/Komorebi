@@ -25,10 +25,9 @@ jobs:
       linux-arm64: ${{ steps.artifact-attempt.outputs['linux-arm64'] }}
     strategy:
       matrix:
-        # win-x64 / win-arm64 はローカル署名リリース (scripts/release-local.ps1) に移行済み。
-        # CI で未署名の win フィードを生成すると、署名済みバイナリを R2 上で上書きして
-        # しまうため matrix から除外している (コード署名は SimplySign Desktop 接続が必要で
-        # GitHub Actions からは実行できない)。
+        # win-x64 / win-arm64 は release.yml の windows-release ジョブが scripts/release-local.ps1 で
+        # Sigilune 署名して配信する。ここで未署名の win フィードを生成すると、署名済みバイナリを
+        # R2 上で上書きしてしまうため matrix から除外している。
         include:
           - runtime: osx-arm64
             label: macos-apple-silicon
