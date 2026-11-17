@@ -94,7 +94,10 @@ public class ToolCancellationTests
             cancellation.Cancel();
             await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
                 await generating.WaitAsync(TimeSpan.FromSeconds(5), timeout.Token));
-            Assert.All(children, child => Assert.True(child.HasExited));
+            // SIGTERM を送ってから OS が終了状態を反映するまでに僅かな遅れがあり（特に CI の Linux）、
+            // 即時の HasExited 判定は競合で偽陰性になる。5 秒以内に終了することを要求する。
+            foreach (var child in children)
+                Assert.True(child.WaitForExit(TimeSpan.FromSeconds(5)), $"Child process {child.Id} did not exit after cancellation.");
             Assert.Equal(expectedChildren, Directory.GetFiles(pidDirectory).Length);
             Assert.False(listener.Pending(), "A follow-up provider request was sent after cancellation.");
             if (provider == Provider.OpenAI)
