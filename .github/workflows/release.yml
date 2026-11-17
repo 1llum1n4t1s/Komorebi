@@ -24,6 +24,7 @@ jobs:
   version:
     name: Prepare version string
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       version: ${{ steps.version.outputs.version }}
       tag: ${{ steps.version.outputs.tag }}
@@ -67,6 +68,7 @@ jobs:
     needs: [build, package, velopack, version]
     name: R2 Upload
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # R2 が唯一の配信元 (通常リリースは /vava → R2 単独)。
     # Velopack 自動更新成果物 (nupkg/RELEASES/releases.json/Setup/AppImage/Portable.zip) と
     # standalone パッケージ (deb/rpm/独自zip) の両方を R2 にアップロードする。

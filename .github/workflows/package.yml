@@ -28,6 +28,7 @@ jobs:
       win-arm64: ${{ steps.artifact-attempt.outputs['win-arm64'] }}
     name: Package Windows
     runs-on: windows-2022
+    timeout-minutes: 60
     strategy:
       matrix:
         include:
@@ -93,6 +94,7 @@ jobs:
       osx-arm64: ${{ steps.artifact-attempt.outputs['osx-arm64'] }}
     name: Package macOS
     runs-on: [self-hosted, macOS, ARM64, m3mb14]
+    timeout-minutes: 60
     strategy:
       matrix:
         include:
@@ -158,6 +160,7 @@ jobs:
       linux-arm64: ${{ steps.artifact-attempt.outputs['linux-arm64'] }}
     name: Package Linux
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
       matrix:
         include:

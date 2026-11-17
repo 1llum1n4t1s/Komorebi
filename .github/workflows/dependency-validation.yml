@@ -9,6 +9,11 @@ permissions:
   contents: read
   pull-requests: read
 
+# PR は新しい push で古い実行を取り消す。main への push / 手動実行は取り消さず完走させる。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   validate:
     name: Validate dependency changes

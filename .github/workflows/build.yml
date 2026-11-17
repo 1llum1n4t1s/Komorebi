@@ -46,6 +46,8 @@ jobs:
             runtime: linux-arm64
     name: Build ${{ matrix.name }}
     runs-on: ${{ fromJSON(startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || format('["{0}"]', matrix.os)) }}
+    # Native AOT の win-arm64 リンクを含むため windows-release と同じ余裕を取る。
+    timeout-minutes: 120
     steps:
       - name: Install Linux build dependencies
         if: startsWith(matrix.runtime, 'linux-')

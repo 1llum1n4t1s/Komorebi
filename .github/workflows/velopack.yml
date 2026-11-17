@@ -43,6 +43,7 @@ jobs:
             mainExe: komorebi
     name: Velopack ${{ matrix.label }}
     runs-on: ${{ fromJSON(startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || format('["{0}"]', matrix.os)) }}
+    timeout-minutes: 60
     steps:
       - name: Setup .NET
         shell: pwsh

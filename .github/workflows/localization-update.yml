@@ -10,11 +10,17 @@ on:
       - '.github/scripts/localization-*.cs'
       - '.github/workflows/localization-update.yml'
 
+# main への自動コミットを伴うため、取り消さず直列化する (途中中断で生成物の反映が欠けるのを避ける)。
+concurrency:
+  group: localization-update
+  cancel-in-progress: false
+
 permissions: {}
 
 jobs:
   generate-localization:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
 
@@ -63,6 +69,7 @@ jobs:
   update-localization:
     needs: generate-localization
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
