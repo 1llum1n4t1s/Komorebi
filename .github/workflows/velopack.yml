@@ -42,7 +42,8 @@ jobs:
             os: ubuntu-latest
             mainExe: komorebi
     name: Velopack ${{ matrix.label }}
-    runs-on: ${{ fromJSON(startsWith(matrix.os, 'macos-') && '["self-hosted","macOS","ARM64","m3mb14"]' || format('["{0}"]', matrix.os)) }}
+    # 公開リポジトリなので全 OS を GitHub 提供ランナーで動かす（macOS は Apple Silicon の macos-latest）。
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
       - name: Setup .NET
