@@ -1,14 +1,19 @@
 name: Release
+# 起動: main のコミットに付けた軽量タグ v<x.y.z> の push (/vava が版を上げた main へタグを付けて push すると始まる)。
+# workflow_dispatch は、同じタグを指定した再実行にだけ使う (gh workflow run release.yml --ref v<x.y.z>)。
+# guard ジョブが、タグであること・厳密な版タグの形・軽量タグで同じ commit・既定ブランチの祖先・版ファイルとの一致を確かめる。
+# upstream 由来のタグが多数あるが、起動するのは v<数字>.<数字>.<数字> の形だけで、guard が版ファイルとの一致も要求する。
 on:
   push:
-    branches:
-      - 'release/**'
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
 # 通常リリースは R2 単独配信で GitHub Releases を作らないため最小権限化する。
 # 旧 GithubSource クライアント救済の "踏み台" は /transfer-cf 移行作業時に
 # GitHub Releases へ 1 バージョン (v1.0.81) だけ publish 済み (継続配信はしない)。
 permissions:
   contents: read
-# 複数 release/** push が overlap した場合、古い run の cleanup step が新しい run が
+# 複数のタグ push が overlap した場合、古い run の cleanup step が新しい run が
 # upload した object を「keep set 外」として誤削除する race condition が起き得るため、
 # release ジョブを workflow level で直列化する。cancel-in-progress: false にする理由は
 # 削除途中で中断するとオブジェクト整合性が壊れるためで、走っている run を最後まで完走させて
@@ -17,11 +22,42 @@ concurrency:
   group: release-r2
   cancel-in-progress: false
 jobs:
+  # 配信の入口検査。Environment も Secrets も持たない。タグ以外・版が合わないタグ・main の祖先でないタグはここで止め、
+  # build 以降 (secrets: inherit で呼ぶ再利用 workflow と release Environment) は guard の成功後にだけ動く。
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF_TYPE" == tag ]] || { echo "::error::タグ以外では配信しない: $GITHUB_REF"; exit 1; }
+          [[ "$GITHUB_REF_NAME" =~ ^v(0|[1-9][0-9]*).(0|[1-9][0-9]*).(0|[1-9][0-9]*)$ ]] || { echo "::error::版タグの形ではない: $GITHUB_REF_NAME"; exit 1; }
+          [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
+          version="${GITHUB_REF_NAME#v}"
+          # 軽量タグで、いまもこの commit を指すこと
+          [[ "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$GITHUB_REF_NAME" --jq '.object.type+" "+.object.sha')" == "commit $GITHUB_SHA" ]]             || { echo "::error::タグが $GITHUB_SHA を指す軽量タグではない"; exit 1; }
+          # 既定ブランチの祖先であること (depth=1 の checkout では判定できないので compare API を使う)
+          default="$(gh api "repos/$GITHUB_REPOSITORY" --jq .default_branch)"
+          cmp="$(gh api "repos/$GITHUB_REPOSITORY/compare/$GITHUB_SHA...$default?per_page=1" --jq '.status+" "+(.behind_by|tostring)')"
+          [[ "$cmp" == "ahead 0" || "$cmp" == "identical 0" ]] || { echo "::error::$default の祖先ではない ($cmp)"; exit 1; }
+          # 版ファイルとの一致
+          file="$(gh api "repos/$GITHUB_REPOSITORY/contents/Directory.Build.props?ref=$GITHUB_SHA" -H 'Accept: application/vnd.github.raw' | sed -n 's:.*<Version>([^<]*)</Version>.*::p' | head -1)"
+          [[ "$file" == "$version" ]] || { echo "::error::版ファイルの版 $file とタグの版 $version が違う"; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
   build:
+    needs: guard
     name: Build
     uses: ./.github/workflows/build.yml
     secrets: inherit
   version:
+    needs: guard
     name: Prepare version string
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -314,7 +350,7 @@ jobs:
   #   R2 から読んで保護するため、同じ run の macOS / Linux 配信が終わってから実行して取り違えを防ぐ。
   #   win フィードは CI の velopack では生成しないので、二重配信にはならない。
   # - Secrets (SIGILUNE_* / CLOUDFLARE_API_TOKEN) は Environment "release" のものだけを使い、このジョブ以外へ渡さない。
-  #   Environment のブランチ許可 (release/** を含めること) を通ったときだけ実行される (承認者は置かない)。
+  #   Environment の tag ポリシー (v[0-9]*.[0-9]*.[0-9]*) を通ったときだけ実行される (承認者は置かない)。
   # - 署名は TOTP の 30 秒窓を共有できないため 1 ジョブで全 RID を署名する (RID ごとの並列ジョブにしない)。
   windows-release:
     needs: [r2-upload]
@@ -367,7 +403,7 @@ jobs:
           $install | Out-File $env:GITHUB_PATH -Append -Encoding utf8
           "DOTNET_ROOT=$install" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
       - name: Sigilune を導入
-        uses: 1llum1n4t1s/Sigilune@b2142b4d1084ec2a5b0a18e83cea7e886406b389 # v1.1.4
+        uses: 1llum1n4t1s/Sigilune@v1
       - name: ビルド・署名・配信 (Windows)
         env:
           SIGILUNE_EMAIL: ${{ secrets.SIGILUNE_EMAIL }}
