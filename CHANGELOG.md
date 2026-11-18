@@ -13,6 +13,12 @@ Komorebi は [SourceGit](https://github.com/sourcegit-scm/sourcegit) のフォ�
 
 ## [Unreleased]
 
+## [1.1.6] - 2026-11-18
+
+### 変更
+
+- 利用者に見える変更はありません。配信の起動を release ブランチの push から、main のコミットに付けた版タグ（v1.1.6）の push へ変更しました（アプリの動作に変更なし）。
+
 ## [1.1.5] - 2026-11-13
 
 ### 変更
