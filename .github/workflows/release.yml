@@ -38,17 +38,17 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$GITHUB_REF_TYPE" == tag ]] || { echo "::error::タグ以外では配信しない: $GITHUB_REF"; exit 1; }
-          [[ "$GITHUB_REF_NAME" =~ ^v(0|[1-9][0-9]*).(0|[1-9][0-9]*).(0|[1-9][0-9]*)$ ]] || { echo "::error::版タグの形ではない: $GITHUB_REF_NAME"; exit 1; }
+          [[ "$GITHUB_REF_NAME" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || { echo "::error::版タグの形ではない: $GITHUB_REF_NAME"; exit 1; }
           [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
           version="${GITHUB_REF_NAME#v}"
           # 軽量タグで、いまもこの commit を指すこと
-          [[ "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$GITHUB_REF_NAME" --jq '.object.type+" "+.object.sha')" == "commit $GITHUB_SHA" ]]             || { echo "::error::タグが $GITHUB_SHA を指す軽量タグではない"; exit 1; }
+          [[ "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$GITHUB_REF_NAME" --jq '.object.type+" "+.object.sha')" == "commit $GITHUB_SHA" ]] || { echo "::error::タグが $GITHUB_SHA を指す軽量タグではない"; exit 1; }
           # 既定ブランチの祖先であること (depth=1 の checkout では判定できないので compare API を使う)
           default="$(gh api "repos/$GITHUB_REPOSITORY" --jq .default_branch)"
           cmp="$(gh api "repos/$GITHUB_REPOSITORY/compare/$GITHUB_SHA...$default?per_page=1" --jq '.status+" "+(.behind_by|tostring)')"
           [[ "$cmp" == "ahead 0" || "$cmp" == "identical 0" ]] || { echo "::error::$default の祖先ではない ($cmp)"; exit 1; }
           # 版ファイルとの一致
-          file="$(gh api "repos/$GITHUB_REPOSITORY/contents/Directory.Build.props?ref=$GITHUB_SHA" -H 'Accept: application/vnd.github.raw' | sed -n 's:.*<Version>([^<]*)</Version>.*::p' | head -1)"
+          file="$(gh api "repos/$GITHUB_REPOSITORY/contents/Directory.Build.props?ref=$GITHUB_SHA" -H 'Accept: application/vnd.github.raw' | sed -n 's:.*<Version>\([^<]*\)</Version>.*:\1:p' | head -1)"
           [[ "$file" == "$version" ]] || { echo "::error::版ファイルの版 $file とタグの版 $version が違う"; exit 1; }
           echo "version=$version" >> "$GITHUB_OUTPUT"
   build:
