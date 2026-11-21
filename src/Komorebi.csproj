@@ -96,15 +96,15 @@
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <!-- App.Debug.cs（ファイル全体が #if DEBUG）だけが使うため、DiagnosticsSupport と同じく Debug 構成のみ参照する -->
-    <PackageReference Include="CRDebugger.Avalonia" Version="1.0.34" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="CRDebugger.Avalonia" Version="1.0.38" Condition="'$(Configuration)' == 'Debug'" />
     <!-- Avalonia 12 対応は 2.1 系から。2.0 系は削除済みの Gestures.PinchEvent を参照する。 -->
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.1.0-dev-798" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.2.0" />
     <PackageReference Include="OpenAI" Version="2.15.0" />
     <PackageReference Include="Pfim" Version="0.11.4" />
     <PackageReference Include="StbImageSharp" Version="2.30.16" />
-    <PackageReference Include="SuperLightLogger" Version="1.0.22" />
+    <PackageReference Include="SuperLightLogger" Version="1.0.23" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.95.2" />
-    <PackageReference Include="VelopackUpdateDialog.Avalonia" Version="1.0.22" />
+    <PackageReference Include="VelopackUpdateDialog.Avalonia" Version="1.0.24" />
 
     <ProjectReference Include="../depends/AvaloniaEdit/src/AvaloniaEdit.TextMate/AvaloniaEdit.TextMate.csproj" />
   </ItemGroup>

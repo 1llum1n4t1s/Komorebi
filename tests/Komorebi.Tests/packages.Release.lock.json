@@ -4,9 +4,9 @@
     "net11.0": {
       "coverlet.collector": {
         "type": "Direct",
-        "requested": "[10.1.0, )",
-        "resolved": "10.1.0",
-        "contentHash": "SlYCIHnBYxINSUpR75SiM5JEmnx11pqT+Ac/C/fUqTTA0dLPl9eYzmFXKKuxmQhL3ZdTQl4PBD3YdAxAauaKLQ=="
+        "requested": "[10.1.1, )",
+        "resolved": "10.1.1",
+        "contentHash": "iRWGpNzKG6/pA0VzAt+WDzFAPMHvs/E4ZxeSYiEaAa7MzFhAcWcIWd7RDNLhCBenpSNdJCwm42UcQP4nGUbwJQ=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -231,27 +231,27 @@
       },
       "LiveChartsCore": {
         "type": "Transitive",
-        "resolved": "2.1.0-dev-798",
-        "contentHash": "li2dRz6KwwJvcILkqcSetiIwfEknCV40f11mhljM7Qkrrzyyy9D+i3mF+a8Oc5wWjHb90pR8WAMiGzU3bWANnQ=="
+        "resolved": "2.2.0",
+        "contentHash": "7eBSjKr9GgrOzUPe3wwOs2B50KEIpFkYxRpYW6GWdmQJYrNn9y7PzLxL/jTQk+wbhahDnNZ281yIJsoqqxzhgw=="
       },
       "LiveChartsCore.SkiaSharpView": {
         "type": "Transitive",
-        "resolved": "2.1.0-dev-798",
-        "contentHash": "AG9Bxny/7EGoZhxCwbotl3anYoV5vk300X/HQiTkOiT1w2Irism7gOPuXJInPVdxqGNmlrDyM06oVCvdFJuvVA==",
+        "resolved": "2.2.0",
+        "contentHash": "mfffHDIJfxHRiIqWa4Hwsq4NPYmwp9rThOW8TsrJrAZGAqtSigzTBWJtUAxYYGb2ZJI+Q0jd2qYpxnqGBoAGsA==",
         "dependencies": {
-          "LiveChartsCore": "2.1.0-dev-798",
+          "LiveChartsCore": "2.2.0",
           "SkiaSharp": "2.88.9",
           "SkiaSharp.HarfBuzz": "2.88.9"
         }
       },
       "LiveChartsCore.SkiaSharpView.Avalonia": {
         "type": "Transitive",
-        "resolved": "2.1.0-dev-798",
-        "contentHash": "O/fO9hcW68sbPRKe4WKCxCIYpZHBnogoN8hDS6WKhJ+nZJV9y5faTcEpiDvLQxWubdnbqumiTLDsViKeqg7i5g==",
+        "resolved": "2.2.0",
+        "contentHash": "gbKBwBhDTSx49mXLUGadQ3FppIl361Be/wNbekFTZa/RgnhqO61RW9jLRNMNNBw26UN88HOzctjUARDFhs+HKA==",
         "dependencies": {
-          "Avalonia": "12.0.0",
-          "Avalonia.Skia": "12.0.0",
-          "LiveChartsCore.SkiaSharpView": "2.1.0-dev-798"
+          "Avalonia": "11.0.0",
+          "Avalonia.Skia": "11.0.0",
+          "LiveChartsCore.SkiaSharpView": "2.2.0"
         }
       },
       "MicroCom.Runtime": {
@@ -398,8 +398,8 @@
       },
       "SuperLightLogger": {
         "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "zX7QQzDeFTa1cgppgAtHTnl119qKTyGWzALHutIzv+XE7BWPaBJzxVZAstcHpd7jK9UY7QxVObULQrMWGk3Bmw==",
+        "resolved": "1.0.23",
+        "contentHash": "G+NZ2bWONp9K9/82AF6JnAW7JGUV2nuhcVPUV73vX4jRFd0Bo332mCd6uFPqqNNgucs1N/WutqcjYW7CJmY5kg==",
         "dependencies": {
           "Microsoft.Extensions.Logging": "11.0.0"
         }
@@ -445,8 +445,8 @@
       },
       "VelopackUpdateDialog.Avalonia": {
         "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "seAmSHKNcmQM8No0Oh1t+dAXjNlerLB2foejp2zVXU9L6nRlqvzqQ0Uwwpjp0al+v0I69wTlu5YL8XkTbK36vg==",
+        "resolved": "1.0.24",
+        "contentHash": "F1XHZoDa58igk4w41v5EQsXckqQJ1tpIO4/WV2Q5aSVgi9pK/ceNbseggzZe/iCZkiUAr9zjc7GzZ+tPsNSPhQ==",
         "dependencies": {
           "Avalonia": "12.1.6",
           "CommunityToolkit.Mvvm": "8.4.2",
@@ -548,13 +548,13 @@
           "Azure.AI.OpenAI": "[2.9.0-beta.1, )",
           "BitMiracle.LibTiff.NET": "[2.4.660, )",
           "CommunityToolkit.Mvvm": "[8.4.2, )",
-          "LiveChartsCore.SkiaSharpView.Avalonia": "[2.1.0-dev-798, )",
+          "LiveChartsCore.SkiaSharpView.Avalonia": "[2.2.0, )",
           "OpenAI": "[2.15.0, )",
           "Pfim": "[0.11.4, )",
           "StbImageSharp": "[2.30.16, )",
-          "SuperLightLogger": "[1.0.22, )",
+          "SuperLightLogger": "[1.0.23, )",
           "Tmds.DBus.Protocol": "[0.95.2, )",
-          "VelopackUpdateDialog.Avalonia": "[1.0.22, )"
+          "VelopackUpdateDialog.Avalonia": "[1.0.24, )"
         }
       }
     }
