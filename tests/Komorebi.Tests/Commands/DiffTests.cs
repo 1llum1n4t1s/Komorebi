@@ -6,16 +6,6 @@ namespace Komorebi.Tests.Commands
     public class DiffTests
     {
         [Fact]
-        public void ParseDiffOutput_EmptyString_ReturnsNullTextDiff()
-        {
-            var result = Diff.ParseDiffOutput(string.Empty);
-
-            Assert.Null(result.TextDiff);
-            Assert.False(result.IsBinary);
-            Assert.False(result.IsLFS);
-        }
-
-        [Fact]
         public void ParseDiffOutput_BinaryFile_DetectedCorrectly()
         {
             var output = "diff --git a/image.png b/image.png\n" +

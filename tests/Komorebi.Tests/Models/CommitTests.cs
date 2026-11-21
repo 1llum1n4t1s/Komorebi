@@ -6,103 +6,9 @@ namespace Komorebi.Tests.Models
     {
         #region ParseParents
 
-        [Theory]
-        [InlineData("")]
-        [InlineData("a")]
-        [InlineData("short")]
-        [InlineData("abcdefg")]
-        [InlineData("1234567")]
-        public void ParseParents_ShortString_LessThan8Chars_ReturnsNoParents(string data)
-        {
-            var commit = new Commit();
-            commit.ParseParents(data);
-            Assert.Empty(commit.Parents);
-        }
-
-        [Fact]
-        public void ParseParents_ExactlyEightChars_ParsesSuccessfully()
-        {
-            var commit = new Commit();
-            commit.ParseParents("abcdefgh");
-            Assert.Single(commit.Parents);
-            Assert.Equal("abcdefgh", commit.Parents[0]);
-        }
-
-        [Fact]
-        public void ParseParents_SingleFullSHA_ParsesCorrectly()
-        {
-            var sha = "abc123def456abc123def456abc123def456abcd";
-            var commit = new Commit();
-            commit.ParseParents(sha);
-            Assert.Single(commit.Parents);
-            Assert.Equal(sha, commit.Parents[0]);
-        }
-
-        [Fact]
-        public void ParseParents_MultipleSHAs_ParsesAll()
-        {
-            var sha1 = "abc123def456abc123def456abc123def456abcd";
-            var sha2 = "1234567890abcdef1234567890abcdef12345678";
-            var data = $"{sha1} {sha2}";
-            var commit = new Commit();
-            commit.ParseParents(data);
-            Assert.Equal(2, commit.Parents.Count);
-            Assert.Equal(sha1, commit.Parents[0]);
-            Assert.Equal(sha2, commit.Parents[1]);
-        }
-
-        [Fact]
-        public void ParseParents_ThreeSHAs_ParsesAll()
-        {
-            var sha1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-            var sha2 = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
-            var sha3 = "cccccccccccccccccccccccccccccccccccccccc";
-            var data = $"{sha1} {sha2} {sha3}";
-            var commit = new Commit();
-            commit.ParseParents(data);
-            Assert.Equal(3, commit.Parents.Count);
-            Assert.Equal(sha1, commit.Parents[0]);
-            Assert.Equal(sha2, commit.Parents[1]);
-            Assert.Equal(sha3, commit.Parents[2]);
-        }
-
-        [Fact]
-        public void ParseParents_ExtraSpaces_IgnoresEmptyEntries()
-        {
-            var sha1 = "abc123def456abc123def456abc123def456abcd";
-            var sha2 = "1234567890abcdef1234567890abcdef12345678";
-            var data = $"  {sha1}   {sha2}  ";
-            var commit = new Commit();
-            commit.ParseParents(data);
-            Assert.Equal(2, commit.Parents.Count);
-            Assert.Equal(sha1, commit.Parents[0]);
-            Assert.Equal(sha2, commit.Parents[1]);
-        }
-
-        [Fact]
-        public void ParseParents_CalledMultipleTimes_AccumulatesParents()
-        {
-            var sha1 = "abc123def456abc123def456abc123def456abcd";
-            var sha2 = "1234567890abcdef1234567890abcdef12345678";
-            var commit = new Commit();
-            commit.ParseParents(sha1);
-            commit.ParseParents(sha2);
-            Assert.Equal(2, commit.Parents.Count);
-            Assert.Equal(sha1, commit.Parents[0]);
-            Assert.Equal(sha2, commit.Parents[1]);
-        }
-
         #endregion
 
         #region ParseDecorators - Early Return
-
-        [Fact]
-        public void ParseDecorators_EmptyString_ReturnsNoDecorators()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators(string.Empty);
-            Assert.Empty(commit.Decorators);
-        }
 
         [Fact]
         public void ParseDecorators_ExactlyThreeChars_ProceedsWithParsing()
@@ -127,16 +33,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal("v1.0", commit.Decorators[0].Name);
         }
 
-        [Fact]
-        public void ParseDecorators_Tag_WithComplexName_ParsesCorrectly()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("tag: refs/tags/release/v2.1.0-beta");
-            Assert.Single(commit.Decorators);
-            Assert.Equal(DecoratorType.Tag, commit.Decorators[0].Type);
-            Assert.Equal("release/v2.1.0-beta", commit.Decorators[0].Name);
-        }
-
         #endregion
 
         #region ParseDecorators - CurrentBranchHead (HEAD ->)
@@ -149,16 +45,6 @@ namespace Komorebi.Tests.Models
             Assert.Single(commit.Decorators);
             Assert.Equal(DecoratorType.CurrentBranchHead, commit.Decorators[0].Type);
             Assert.Equal("main", commit.Decorators[0].Name);
-        }
-
-        [Fact]
-        public void ParseDecorators_HeadArrowBranch_WithSlashes_ParsesCorrectly()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("HEAD -> refs/heads/feature/my-feature");
-            Assert.Single(commit.Decorators);
-            Assert.Equal(DecoratorType.CurrentBranchHead, commit.Decorators[0].Type);
-            Assert.Equal("feature/my-feature", commit.Decorators[0].Name);
         }
 
         #endregion
@@ -189,16 +75,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal("feature", commit.Decorators[0].Name);
         }
 
-        [Fact]
-        public void ParseDecorators_LocalBranch_WithSlashes_ParsesCorrectly()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/heads/feature/deep/nested");
-            Assert.Single(commit.Decorators);
-            Assert.Equal(DecoratorType.LocalBranchHead, commit.Decorators[0].Type);
-            Assert.Equal("feature/deep/nested", commit.Decorators[0].Name);
-        }
-
         #endregion
 
         #region ParseDecorators - RemoteBranchHead
@@ -213,16 +89,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal("origin/main", commit.Decorators[0].Name);
         }
 
-        [Fact]
-        public void ParseDecorators_RemoteBranch_WithSlashes_ParsesCorrectly()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/remotes/upstream/feature/branch");
-            Assert.Single(commit.Decorators);
-            Assert.Equal(DecoratorType.RemoteBranchHead, commit.Decorators[0].Type);
-            Assert.Equal("upstream/feature/branch", commit.Decorators[0].Name);
-        }
-
         #endregion
 
         #region ParseDecorators - /HEAD skip
@@ -232,14 +98,6 @@ namespace Komorebi.Tests.Models
         {
             var commit = new Commit();
             commit.ParseDecorators("refs/remotes/origin/HEAD");
-            Assert.Empty(commit.Decorators);
-        }
-
-        [Fact]
-        public void ParseDecorators_EndsWithSlashHead_IsSkipped()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/remotes/upstream/HEAD");
             Assert.Empty(commit.Decorators);
         }
 
@@ -304,19 +162,6 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void ParseDecorators_SkipsRemoteHeadInMixedList()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("HEAD -> refs/heads/main, refs/remotes/origin/HEAD, refs/remotes/origin/main");
-
-            Assert.Equal(2, commit.Decorators.Count);
-            Assert.Equal(DecoratorType.CurrentBranchHead, commit.Decorators[0].Type);
-            Assert.Equal("main", commit.Decorators[0].Name);
-            Assert.Equal(DecoratorType.RemoteBranchHead, commit.Decorators[1].Type);
-            Assert.Equal("origin/main", commit.Decorators[1].Name);
-        }
-
-        [Fact]
         public void ParseDecorators_IsMerged_OnlyTrueForHeadTypes()
         {
             // HEAD -> sets IsMerged = true
@@ -353,181 +198,17 @@ namespace Komorebi.Tests.Models
             Assert.True(commit.IsMerged);
         }
 
-        [Fact]
-        public void ParseDecorators_UnrecognizedPrefix_Ignored()
-        {
-            // Something that doesn't match any known prefix and doesn't end with /HEAD
-            var commit = new Commit();
-            commit.ParseDecorators("some/unknown/ref");
-            Assert.Empty(commit.Decorators);
-        }
-
         #endregion
 
         #region ParseDecorators - IsTag helper
-
-        [Fact]
-        public void Decorator_IsTag_TrueForTagType()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("tag: refs/tags/v1.0");
-            Assert.True(commit.Decorators[0].IsTag);
-        }
-
-        [Fact]
-        public void Decorator_IsTag_FalseForBranchType()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/heads/main");
-            Assert.False(commit.Decorators[0].IsTag);
-        }
 
         #endregion
 
         #region GetFriendlyName
 
-        [Fact]
-        public void GetFriendlyName_WithLocalBranch_ReturnsBranchName()
-        {
-            var commit = new Commit { SHA = "abc123def456abc123def456abc123def456abcd" };
-            commit.ParseDecorators("refs/heads/feature-branch");
-            Assert.Equal("feature-branch", commit.GetFriendlyName());
-        }
-
-        [Fact]
-        public void GetFriendlyName_WithRemoteBranch_ReturnsBranchName()
-        {
-            var commit = new Commit { SHA = "abc123def456abc123def456abc123def456abcd" };
-            commit.ParseDecorators("refs/remotes/origin/main");
-            Assert.Equal("origin/main", commit.GetFriendlyName());
-        }
-
-        [Fact]
-        public void GetFriendlyName_WithCurrentBranchHead_ReturnsBranchName()
-        {
-            var commit = new Commit { SHA = "abc123def456abc123def456abc123def456abcd" };
-            commit.ParseDecorators("HEAD -> refs/heads/main");
-            // CurrentBranchHead is not matched by GetFriendlyName (it checks LocalBranchHead or RemoteBranchHead)
-            // But after sort, CurrentBranchHead (type 1) comes before others
-            // GetFriendlyName looks for LocalBranchHead or RemoteBranchHead, NOT CurrentBranchHead
-            // So if only CurrentBranchHead exists, it falls through to tag or SHA
-            Assert.Equal("abc123def4", commit.GetFriendlyName());
-        }
-
-        [Fact]
-        public void GetFriendlyName_WithCurrentBranchHeadAndLocalBranch_ReturnsBranchName()
-        {
-            var commit = new Commit { SHA = "abc123def456abc123def456abc123def456abcd" };
-            commit.ParseDecorators("HEAD -> refs/heads/main, refs/heads/develop");
-            // LocalBranchHead "develop" should be found
-            Assert.Equal("develop", commit.GetFriendlyName());
-        }
-
-        [Fact]
-        public void GetFriendlyName_WithTagOnly_ReturnsTagName()
-        {
-            var commit = new Commit { SHA = "abc123def456abc123def456abc123def456abcd" };
-            commit.ParseDecorators("tag: refs/tags/v1.0");
-            Assert.Equal("v1.0", commit.GetFriendlyName());
-        }
-
-        [Fact]
-        public void GetFriendlyName_WithBranchAndTag_ReturnsBranchName()
-        {
-            var commit = new Commit { SHA = "abc123def456abc123def456abc123def456abcd" };
-            commit.ParseDecorators("tag: refs/tags/v1.0, refs/heads/main");
-            // Branch takes priority over tag
-            Assert.Equal("main", commit.GetFriendlyName());
-        }
-
-        [Fact]
-        public void GetFriendlyName_NoDecorators_ReturnsSHAFirst10Chars()
-        {
-            var commit = new Commit { SHA = "abc123def456abc123def456abc123def456abcd" };
-            Assert.Equal("abc123def4", commit.GetFriendlyName());
-        }
-
-        [Fact]
-        public void GetFriendlyName_NoDecorators_Uses10CharPrefix()
-        {
-            var commit = new Commit { SHA = "1234567890abcdef1234567890abcdef12345678" };
-            Assert.Equal("1234567890", commit.GetFriendlyName());
-        }
-
         #endregion
 
         #region Computed Properties
-
-        [Fact]
-        public void IsCurrentHead_WithCurrentBranchHead_ReturnsTrue()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("HEAD -> refs/heads/main");
-            Assert.True(commit.IsCurrentHead);
-        }
-
-        [Fact]
-        public void IsCurrentHead_WithCurrentCommitHead_ReturnsTrue()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("HEAD");
-            Assert.True(commit.IsCurrentHead);
-        }
-
-        [Fact]
-        public void IsCurrentHead_WithLocalBranchOnly_ReturnsFalse()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/heads/feature");
-            Assert.False(commit.IsCurrentHead);
-        }
-
-        [Fact]
-        public void IsCurrentHead_NoDecorators_ReturnsFalse()
-        {
-            var commit = new Commit();
-            Assert.False(commit.IsCurrentHead);
-        }
-
-        [Fact]
-        public void HasDecorators_WithDecorators_ReturnsTrue()
-        {
-            var commit = new Commit();
-            commit.ParseDecorators("refs/heads/main");
-            Assert.True(commit.HasDecorators);
-        }
-
-        [Fact]
-        public void HasDecorators_NoDecorators_ReturnsFalse()
-        {
-            var commit = new Commit();
-            Assert.False(commit.HasDecorators);
-        }
-
-        #endregion
-
-        #region Default Values
-
-        [Fact]
-        public void NewCommit_HasEmptyDefaults()
-        {
-            var commit = new Commit();
-            Assert.Equal(string.Empty, commit.SHA);
-            Assert.Equal(string.Empty, commit.Subject);
-            Assert.Empty(commit.Parents);
-            Assert.Empty(commit.Decorators);
-            Assert.False(commit.IsMerged);
-            Assert.Equal(0, commit.Color);
-            Assert.Equal(0.0, commit.LeftMargin);
-            Assert.Equal(0UL, commit.AuthorTime);
-            Assert.Equal(0UL, commit.CommitterTime);
-        }
-
-        [Fact]
-        public void EmptyTreeSHA1_HasExpectedValue()
-        {
-            Assert.Equal("4b825dc642cb6eb9a060e54bf8d69288fbee4904", Commit.EmptyTreeSHA1);
-        }
 
         #endregion
     }

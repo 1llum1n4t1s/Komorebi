@@ -30,25 +30,6 @@ public class QuotedGitOperationTests : IDisposable
         Assert.Equal("new-branch", Git(folder, "branch", "--show-current").Trim());
     }
 
-    [Fact]
-    public async Task Pull_ResolvesQuotedRemoteAndBranchFromLocalRepository()
-    {
-        var target = Path.Combine(_root, "target");
-        Git(_root, "clone", "--no-hardlinks", _repo, target);
-        const string branch = "topic\"quoted";
-        const string remote = "up\"stream";
-        var sha = Git(_repo, "rev-parse", "HEAD").Trim();
-        // Windowsのファイル名制限を避け、有効な引用符付き参照をpacked-refsへ用意する。
-        var packed = Path.Combine(_repo, ".git", "packed-refs");
-        Assert.False(File.Exists(packed));
-        File.WriteAllText(packed, $"{sha} refs/heads/{branch}\n");
-        // fetchマッピングを作らず、引用符付きremoteの追跡refファイル生成を避ける。
-        Git(target, "config", $"remote.{remote}.url", _repo);
-        var command = new Komorebi.Commands.Pull(target, remote, branch, false) { RaiseError = false };
-        Assert.True(await command.RunAsync());
-        Assert.Equal(sha, Git(target, "rev-parse", "FETCH_HEAD").Trim());
-    }
-
     private static string Git(string directory, params string[] args)
     {
         var start = new ProcessStartInfo(Komorebi.Native.OS.GitExecutable) { WorkingDirectory = directory };

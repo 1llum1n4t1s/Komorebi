@@ -368,6 +368,22 @@ namespace Komorebi.Tests.Models
         [InlineData("error: Your local changes to the following files would be overwritten by merge:\n\tfoo.txt\nPermission denied for foo.txt", "Text.GitError.UncommittedChanges")]
         // WorktreeError は PermissionDenied より優先される (refusing to update checked out branch は worktree 制約系)
         [InlineData("error: refusing to update checked out branch: refs/heads/main\nPermission denied (filesystem)", "Text.GitError.WorktreeError")]
+        // git は push 失敗の末尾に必ず "failed to push some refs" を付けるため、
+        // この汎用行が具体的なカテゴリ (FileTooLarge / RemoteRefNotFound / WorktreeError / HookFailed) を隠してはならない
+        [InlineData("remote: error: File big.bin is 120.00 MB; this exceeds GitHub's file size limit of 100.00 MB\nremote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.\nerror: failed to push some refs to 'https://github.com/foo/bar.git'", "Text.GitError.FileTooLarge")]
+        // 汎用行自身の語 (failed、URL 内の hook など) が、後ろのカテゴリの条件に当たって誤分類してはならない
+        [InlineData("error: failed to push some refs to 'github.com:acme/webhooks.git'", "Text.GitError.PushRejected")]
+        [InlineData(" ! [rejected]        cherry-pick-1a2b3c -> cherry-pick-1a2b3c (stale info)\nerror: failed to push some refs to 'https://github.com/foo/bar.git'", "Text.GitError.PushRejected")]
+        // 同じ push の出力に含まれる URL 行・参照名の語 (webhooks、webhook-fix) も、後ろのカテゴリの条件に当たってはならない
+        [InlineData(" ! [rejected]        webhook-fix -> webhook-fix (stale info)\nerror: failed to push some refs to 'origin'", "Text.GitError.PushRejected")]
+        [InlineData(" ! [rejected]        fix(webhook) -> fix(webhook) (stale info)\nerror: failed to push some refs to 'origin'", "Text.GitError.PushRejected")]
+        [InlineData("Pushing to https://example.com/webhooks.git\r\n ! [rejected]        webhook-fix -> webhook-fix (stale info)\r\nerror: failed to push some refs to 'origin'", "Text.GitError.PushRejected")]
+        [InlineData("To github.com:acme/webhooks.git\n ! [rejected]        main -> main (stale info)\nerror: failed to push some refs to 'github.com:acme/webhooks.git'", "Text.GitError.PushRejected")]
+        // 参照名を外しても、状況の行の "[状態]" と "(理由)" は分類に使われる
+        [InlineData("To github.com:acme/webhooks.git\n ! [remote rejected] main -> main (pre-receive hook declined)\nerror: failed to push some refs to 'github.com:acme/webhooks.git'", "Text.GitError.HookFailed")]
+        [InlineData("error: src refspec feature does not match any\nerror: failed to push some refs to 'origin'", "Text.GitError.RemoteRefNotFound")]
+        [InlineData("remote: error: refusing to update checked out branch: refs/heads/main\nerror: failed to push some refs to '/srv/repo'", "Text.GitError.WorktreeError")]
+        [InlineData("remote: error: hook declined to update refs/heads/main\n ! [remote rejected] main -> main (hook declined)\nerror: failed to push some refs to 'origin'", "Text.GitError.HookFailed")]
         public void GetHintKey_CategoryPriority_MoreSpecificWins(string message, string expectedKey)
         {
             Assert.Equal(expectedKey, GitErrorHelper.GetHintKey(message));

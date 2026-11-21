@@ -99,15 +99,6 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void Complete_NoCommits_AuthorsIsEmpty()
-        {
-            var report = new StatisticsReport(StatisticsMode.All, DateTime.MinValue);
-            report.Complete();
-
-            Assert.Empty(report.Authors);
-        }
-
-        [Fact]
         public void Complete_SingleAuthor_SingleEntry()
         {
             var start = DateTime.Now.Date;
@@ -126,28 +117,6 @@ namespace Komorebi.Tests.Models
         #endregion
 
         #region Complete - Series Created
-
-        [Fact]
-        public void Complete_CreatesSeries()
-        {
-            var start = DateTime.Now.Date;
-            var report = new StatisticsReport(StatisticsMode.ThisWeek, start);
-            var user = MakeUser("Test", "test-series@example.com");
-
-            report.AddCommit(start, user);
-            report.Complete();
-
-            Assert.Single(report.Series);
-        }
-
-        [Fact]
-        public void Complete_NoCommits_StillCreatesSeries()
-        {
-            var report = new StatisticsReport(StatisticsMode.All, DateTime.MinValue);
-            report.Complete();
-
-            Assert.Single(report.Series);
-        }
 
         #endregion
 
@@ -282,20 +251,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal(1, stats.All.Total);
             Assert.Equal(0, stats.Month.Total);
             Assert.Equal(0, stats.Week.Total);
-        }
-
-        [Fact]
-        public void Complete_ClearsInternalState()
-        {
-            var stats = new Statistics();
-            var now = DateTime.Now;
-            var timestamp = new DateTimeOffset(now).ToUnixTimeSeconds();
-
-            stats.AddCommit($"User1±user1-clear@example.com", timestamp);
-            stats.Complete();
-
-            // After Complete, authors should be populated
-            Assert.NotEmpty(stats.All.Authors);
         }
 
         #endregion

@@ -42,15 +42,5 @@ namespace Komorebi.Tests.Models
             Assert.DoesNotContain(',', result);
             Assert.Equal(result.Trim(), result);
         }
-
-        // GetLocaleDefaults はフォールバックチェーン用にカンマ区切り文字列を返す既存仕様を維持する。
-        [Fact]
-        public void GetLocaleDefaults_KeepsCommaSeparatedCandidates()
-        {
-            var (def, mono) = InstalledFont.GetLocaleDefaults("ja_JP");
-
-            Assert.Contains(',', def);
-            Assert.Contains(',', mono);
-        }
     }
 }

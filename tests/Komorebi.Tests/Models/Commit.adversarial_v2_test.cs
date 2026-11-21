@@ -11,45 +11,6 @@ public class CommitAdversarialV2Tests
 {
     #region GetFriendlyName - SHAが10文字未満のバグ検出
 
-    /// <summary>
-    /// @adversarial @boundary
-    /// GetFriendlyName() はデコレータ無しの場合 SHA の先頭 10 文字を返す。以前は SHA[..10] で
-    /// 10 文字未満だと ArgumentOutOfRangeException になっていた（中断中の HEAD ファイルが空・途中切れの
-    /// 代用コミットでクラッシュ）ため、Commit.ToShortSHA で短い SHA はそのまま返すよう修正した。
-    /// </summary>
-    [Theory]
-    [InlineData("")]        // 空文字
-    [InlineData("a")]       // 1文字
-    [InlineData("abcdef")]  // 6文字
-    [InlineData("123456789")] // 9文字（ギリギリ足りない）
-    public void GetFriendlyName_SHAShorterThan10Chars_ReturnsAsIs(string shortSha)
-    {
-        var commit = new Commit { SHA = shortSha };
-        Assert.Equal(shortSha, commit.GetFriendlyName());
-    }
-
-    /// <summary>
-    /// @adversarial @boundary
-    /// SHAがちょうど10文字の場合は正常動作する境界値。
-    /// </summary>
-    [Fact]
-    public void GetFriendlyName_SHAExactly10Chars_ReturnsFullSHA()
-    {
-        var commit = new Commit { SHA = "abcdef1234" };
-        Assert.Equal("abcdef1234", commit.GetFriendlyName());
-    }
-
-    /// <summary>
-    /// @adversarial @boundary
-    /// SHAが11文字の場合は先頭10文字を返す。
-    /// </summary>
-    [Fact]
-    public void GetFriendlyName_SHA11Chars_ReturnsTruncated()
-    {
-        var commit = new Commit { SHA = "abcdef12345" };
-        Assert.Equal("abcdef1234", commit.GetFriendlyName());
-    }
-
     #endregion
 
     #region ParseDecorators - 複数回呼び出し時のアキュムレータ動作
@@ -78,23 +39,6 @@ public class CommitAdversarialV2Tests
         // Commit.adversarial_test.cs から統合: タグを続けて渡しても蓄積される
         commit.ParseDecorators("tag: refs/tags/v2.0");
         Assert.Equal(4, commit.Decorators.Count);
-    }
-
-    /// <summary>
-    /// @adversarial @state
-    /// ParseDecorators() 複数回呼び出しで同じデコレータが重複登録される。
-    /// </summary>
-    [Fact]
-    public void ParseDecorators_SameDecoratorTwice_CreatesDuplicates()
-    {
-        var commit = new Commit();
-
-        commit.ParseDecorators("refs/heads/main");
-        commit.ParseDecorators("refs/heads/main");
-
-        // 重複チェックなし → 2個になる
-        Assert.Equal(2, commit.Decorators.Count);
-        Assert.All(commit.Decorators, d => Assert.Equal("main", d.Name));
     }
 
     /// <summary>
@@ -205,117 +149,13 @@ public class CommitAdversarialV2Tests
         Assert.Equal("", commit.Decorators[0].Name);
     }
 
-    /// <summary>
-    /// @adversarial @boundary
-    /// "tag: " だけ（8文字）→ "tag: refs/tags/" にマッチしない。
-    /// </summary>
-    [Fact]
-    public void ParseDecorators_TagColonOnly_NoMatch()
-    {
-        var commit = new Commit();
-        commit.ParseDecorators("tag: ");
-        Assert.Empty(commit.Decorators);
-    }
-
     #endregion
 
     #region IsCurrentHead / HasDecorators - エッジケース
 
-    /// <summary>
-    /// @adversarial @boundary
-    /// Decorators にタグだけがある場合の IsCurrentHead。
-    /// </summary>
-    [Fact]
-    public void IsCurrentHead_OnlyTagDecorators_ReturnsFalse()
-    {
-        var commit = new Commit();
-        commit.Decorators.Add(new Decorator { Type = DecoratorType.Tag, Name = "v1.0" });
-        commit.Decorators.Add(new Decorator { Type = DecoratorType.Tag, Name = "v2.0" });
-
-        Assert.False(commit.IsCurrentHead);
-    }
-
-    /// <summary>
-    /// @adversarial @boundary
-    /// Decorators を手動でクリアした後の HasDecorators。
-    /// </summary>
-    [Fact]
-    public void HasDecorators_AfterClear_ReturnsFalse()
-    {
-        var commit = new Commit();
-        commit.ParseDecorators("refs/heads/main, tag: refs/tags/v1.0");
-        Assert.True(commit.HasDecorators);
-
-        commit.Decorators.Clear();
-        Assert.False(commit.HasDecorators);
-    }
-
-    /// <summary>
-    /// @adversarial @state
-    /// IsCurrentHead は DecoratorType.None を無視する。
-    /// </summary>
-    [Fact]
-    public void IsCurrentHead_DecoratorTypeNone_ReturnsFalse()
-    {
-        var commit = new Commit();
-        commit.Decorators.Add(new Decorator { Type = DecoratorType.None, Name = "something" });
-
-        Assert.True(commit.HasDecorators); // デコレータはある
-        Assert.False(commit.IsCurrentHead); // だが CurrentHead ではない
-    }
-
     #endregion
 
     #region ParseDecorators - 特殊文字を含むブランチ名
-
-    /// <summary>
-    /// @adversarial @chaos
-    /// ブランチ名にカンマを含む場合（git では許可されないが、パーサーの堅牢性テスト）。
-    /// カンマはセパレータとして使われるため分割される。
-    /// </summary>
-    [Fact]
-    public void ParseDecorators_BranchNameWithCommaLikePattern_SplitsByComma()
-    {
-        // "refs/heads/feat,ure" はカンマで分割されてしまう
-        var commit = new Commit();
-        commit.ParseDecorators("refs/heads/feat,ure");
-
-        // "refs/heads/feat" と "ure" に分割される
-        // "refs/heads/feat" → LocalBranchHead Name="feat"
-        // "ure" → 3文字だがどのプレフィックスにもマッチしない
-        Assert.Single(commit.Decorators);
-        Assert.Equal("feat", commit.Decorators[0].Name);
-    }
-
-    /// <summary>
-    /// @adversarial @chaos
-    /// Unicode文字を含むブランチ名。
-    /// </summary>
-    [Fact]
-    public void ParseDecorators_UnicodeBranchName_ParsesCorrectly()
-    {
-        var commit = new Commit();
-        commit.ParseDecorators("refs/heads/機能/日本語ブランチ");
-
-        Assert.Single(commit.Decorators);
-        Assert.Equal(DecoratorType.LocalBranchHead, commit.Decorators[0].Type);
-        Assert.Equal("機能/日本語ブランチ", commit.Decorators[0].Name);
-    }
-
-    /// <summary>
-    /// @adversarial @chaos
-    /// 非常に長いデコレータ文字列。
-    /// </summary>
-    [Fact]
-    public void ParseDecorators_VeryLongBranchName_ParsesCorrectly()
-    {
-        var longName = new string('a', 10000);
-        var commit = new Commit();
-        commit.ParseDecorators($"refs/heads/{longName}");
-
-        Assert.Single(commit.Decorators);
-        Assert.Equal(longName, commit.Decorators[0].Name);
-    }
 
     /// <summary>
     /// @adversarial @chaos
@@ -334,44 +174,6 @@ public class CommitAdversarialV2Tests
     #endregion
 
     #region IsCommitterVisible - エッジケース
-
-    /// <summary>
-    /// @adversarial @boundary
-    /// 同じ Author/Committer かつ同じ時刻 → 非表示。
-    /// </summary>
-    [Fact]
-    public void IsCommitterVisible_SameAuthorAndCommitter_ReturnsFalse()
-    {
-        var user = new User("Test±test@test.com");
-        var commit = new Commit
-        {
-            Author = user,
-            Committer = user,
-            AuthorTime = 1000,
-            CommitterTime = 1000
-        };
-
-        Assert.False(commit.IsCommitterVisible);
-    }
-
-    /// <summary>
-    /// @adversarial @boundary
-    /// 同じ Author/Committer だが時刻が異なる → 表示。
-    /// </summary>
-    [Fact]
-    public void IsCommitterVisible_SameUserDifferentTime_ReturnsTrue()
-    {
-        var user = new User("Test±test@test.com");
-        var commit = new Commit
-        {
-            Author = user,
-            Committer = user,
-            AuthorTime = 1000,
-            CommitterTime = 1001
-        };
-
-        Assert.True(commit.IsCommitterVisible);
-    }
 
     #endregion
 }

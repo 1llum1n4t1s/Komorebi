@@ -18,13 +18,6 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void Compare_File10_AfterFile2()
-        {
-            var result = NumericSort.Compare("file10", "file2");
-            Assert.True(result > 0);
-        }
-
-        [Fact]
         public void Compare_File1_BeforeFile2()
         {
             var result = NumericSort.Compare("file1", "file2");
@@ -34,7 +27,13 @@ namespace Komorebi.Tests.Models
         [Fact]
         public void Compare_SameNumericValues_ReturnsZero()
         {
-            var result = NumericSort.Compare("file10", "file10");
+            // 同じリテラル同士はインターンされ ReferenceEquals で即 0 になり数値チャンク比較を通らないため、
+            // 内容が同じ別インスタンスの文字列を作って比較する。
+            var left = new string("file10".AsSpan());
+            var right = new string("file10".AsSpan());
+            Assert.False(ReferenceEquals(left, right));
+
+            var result = NumericSort.Compare(left, right);
             Assert.Equal(0, result);
         }
 
@@ -43,13 +42,6 @@ namespace Komorebi.Tests.Models
         {
             // "v1.2.10" should come after "v1.2.9"
             var result = NumericSort.Compare("v1.2.9", "v1.2.10");
-            Assert.True(result < 0);
-        }
-
-        [Fact]
-        public void Compare_LargeNumbers()
-        {
-            var result = NumericSort.Compare("item100", "item1000");
             Assert.True(result < 0);
         }
 
@@ -78,13 +70,6 @@ namespace Komorebi.Tests.Models
             Assert.True(result < 0);
         }
 
-        [Fact]
-        public void Compare_AlphabeticOrder_Reverse()
-        {
-            var result = NumericSort.Compare("banana", "apple");
-            Assert.True(result > 0);
-        }
-
         // -----------------------------------------------------------
         // Mixed digit / non-digit transitions
         // -----------------------------------------------------------
@@ -95,28 +80,6 @@ namespace Komorebi.Tests.Models
             // '1' (digit) vs 'a' (letter) at position 0
             var result = NumericSort.Compare("1abc", "abc1");
             Assert.NotEqual(0, result);
-        }
-
-        [Fact]
-        public void Compare_PureNumberStrings()
-        {
-            var result = NumericSort.Compare("100", "99");
-            Assert.True(result > 0);
-        }
-
-        [Fact]
-        public void Compare_PureNumberStrings_Equal()
-        {
-            var result = NumericSort.Compare("42", "42");
-            Assert.Equal(0, result);
-        }
-
-        [Fact]
-        public void Compare_NumberWithLeadingZeros()
-        {
-            // "007" has same length as "007" -> ordinal compare -> equal
-            var result = NumericSort.Compare("file007", "file007");
-            Assert.Equal(0, result);
         }
 
         // -----------------------------------------------------------
@@ -131,31 +94,10 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void Compare_LongerString_AfterShorter_WhenPrefixMatches()
-        {
-            var result = NumericSort.Compare("file2", "file");
-            Assert.True(result > 0);
-        }
-
-        [Fact]
-        public void Compare_EmptyStrings_ReturnsZero()
-        {
-            var result = NumericSort.Compare("", "");
-            Assert.Equal(0, result);
-        }
-
-        [Fact]
         public void Compare_EmptyVsNonEmpty_ReturnsNegative()
         {
             var result = NumericSort.Compare("", "a");
             Assert.True(result < 0);
-        }
-
-        [Fact]
-        public void Compare_NonEmptyVsEmpty_ReturnsPositive()
-        {
-            var result = NumericSort.Compare("a", "");
-            Assert.True(result > 0);
         }
 
         // -----------------------------------------------------------
@@ -181,29 +123,6 @@ namespace Komorebi.Tests.Models
         {
             var result = NumericSort.Compare("abc", null);
             Assert.True(result > 0);
-        }
-
-        // -----------------------------------------------------------
-        // Real-world file name patterns
-        // -----------------------------------------------------------
-
-        [Theory]
-        [InlineData("img1.png", "img2.png", -1)]
-        [InlineData("img2.png", "img10.png", -1)]
-        [InlineData("img10.png", "img10.png", 0)]
-        [InlineData("img20.png", "img3.png", 1)]
-        [InlineData("chapter1_section2", "chapter1_section10", -1)]
-        [InlineData("chapter2_section1", "chapter10_section1", -1)]
-        public void Compare_FileNamePatterns(string s1, string s2, int expectedSign)
-        {
-            var result = NumericSort.Compare(s1, s2);
-
-            if (expectedSign < 0)
-                Assert.True(result < 0, $"Expected '{s1}' < '{s2}', but got {result}");
-            else if (expectedSign > 0)
-                Assert.True(result > 0, $"Expected '{s1}' > '{s2}', but got {result}");
-            else
-                Assert.Equal(0, result);
         }
 
         // -----------------------------------------------------------

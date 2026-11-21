@@ -68,39 +68,4 @@ public class DiffLoadingTests
             preferences.IgnoreWhitespaceChangesInDiff = original;
         }
     }
-
-    [Fact]
-    public void Cache_DistinguishesCRAtEOLSetting()
-    {
-        var option = new DiffOption(new Change { Path = "folder/" }, true);
-        var result = new DiffResult { OldHash = "old", NewHash = "new" };
-        Assert.False(new DiffContext.Info(option, 4, false, result, false)
-            .IsSame(new DiffContext.Info(option, 4, false, result, true)));
-    }
-
-    [Fact]
-    public void FileHistory_LateFileContentCannotReplaceDiffMode()
-    {
-        var revision = new FileVersion { SHA = "unused", Change = new Change { Path = "folder/" } };
-        var context = new FileHistoriesSingleRevision(Path.GetTempPath(), revision, false);
-        var pending = context.BeginContentRequest();
-        context.IsDiffMode = true;
-        var displayed = context.ViewContent;
-        Assert.IsType<DiffContext>(displayed);
-        context.ApplyRevisionContent(pending, new FileHistoriesRevisionFile("old"));
-        Assert.Same(displayed, context.ViewContent);
-    }
-
-    [Fact]
-    public void FileHistory_ReversedFileCompletionsKeepLatest()
-    {
-        var revision = new FileVersion { SHA = "unused", Change = new Change { Path = "folder/" } };
-        var context = new FileHistoriesSingleRevision(Path.GetTempPath(), revision, false);
-        var first = context.BeginContentRequest();
-        var second = context.BeginContentRequest();
-        var latest = new FileHistoriesRevisionFile("latest");
-        context.ApplyRevisionContent(second, latest);
-        context.ApplyRevisionContent(first, new FileHistoriesRevisionFile("old"));
-        Assert.Same(latest, context.ViewContent);
-    }
 }

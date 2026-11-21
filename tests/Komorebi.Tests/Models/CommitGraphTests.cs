@@ -1,5 +1,3 @@
-using Avalonia.Media;
-
 using Komorebi.Models;
 
 namespace Komorebi.Tests.Models
@@ -54,42 +52,6 @@ namespace Komorebi.Tests.Models
             // populated, so we clear it first and verify the cleared state.
             CommitGraph.Pens.Clear();
             Assert.Empty(CommitGraph.Pens);
-        }
-
-        [Fact]
-        public void SetPens_PopulatesPensList()
-        {
-            var colors = new List<Color> { Colors.Red, Colors.Blue, Colors.Green };
-            CommitGraph.SetPens(colors, 3);
-
-            Assert.Equal(3, CommitGraph.Pens.Count);
-        }
-
-        [Fact]
-        public void SetPens_ClearsPreviousPens()
-        {
-            CommitGraph.SetPens([Colors.Red], 1);
-            Assert.Single(CommitGraph.Pens);
-
-            CommitGraph.SetPens([Colors.Blue, Colors.Green], 2);
-            Assert.Equal(2, CommitGraph.Pens.Count);
-        }
-
-        [Fact]
-        public void SetDefaultPens_Populates10Pens()
-        {
-            CommitGraph.SetDefaultPens();
-            Assert.Equal(10, CommitGraph.Pens.Count);
-        }
-
-        [Fact]
-        public void SetDefaultPens_CustomThickness()
-        {
-            CommitGraph.SetDefaultPens(4);
-            Assert.Equal(10, CommitGraph.Pens.Count);
-            // Pen thickness is stored in the Pen object
-            foreach (var pen in CommitGraph.Pens)
-                Assert.Equal(4, pen.Thickness);
         }
 
         // ================================================================

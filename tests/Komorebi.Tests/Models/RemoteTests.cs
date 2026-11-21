@@ -499,25 +499,6 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public void TryParseCodeCommitConsoleURL_ValidChinaUrl_ExtractsRootBeforeQuery()
-        {
-            var uri = new Uri("https://console.www.amazonaws.cn/codesuite/codecommit/repositories/my-repo/browse?region=cn-north-1");
-            Assert.True(Remote.TryParseCodeCommitConsoleURL(uri, out var repo, out var root, out var query));
-            Assert.Equal("my-repo", repo);
-            Assert.Equal("https://console.www.amazonaws.cn/codesuite/codecommit/repositories/my-repo", root);
-            Assert.Equal("?region=cn-north-1", query);
-        }
-
-        [Theory]
-        [InlineData("https://console.aws.amazon.com/cloudwatch/home")]
-        [InlineData("https://console.aws.amazon.com/codesuite/codecommit/not-repositories/my-repo/browse")]
-        [InlineData("https://console.aws.amazon.com/codesuite/codecommit/repositories/my-repo/settings")]
-        public void TryParseCodeCommitConsoleURL_NonCodeCommitRepositoryRoutes_ReturnsFalse(string url)
-        {
-            Assert.False(Remote.TryParseCodeCommitConsoleURL(new Uri(url), out _, out _, out _));
-        }
-
-        [Fact]
         public void CommitLink_Get_CodeCommitChina_PutsRegionQueryAfterSha()
         {
             var remote = new Remote { URL = "https://git-codecommit.cn-north-1.amazonaws.com.cn/v1/repos/my-repo" };

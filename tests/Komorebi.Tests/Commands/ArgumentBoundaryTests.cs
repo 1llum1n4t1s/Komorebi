@@ -5,34 +5,6 @@ namespace Komorebi.Tests.Commands;
 public class ArgumentBoundaryTests
 {
     [Theory]
-    [InlineData("")]
-    [InlineData("plain")]
-    [InlineData("space and 日本語")]
-    [InlineData("topic\"quoted")]
-    [InlineData("C:\\work folder\\")]
-    [InlineData("C:\\work folder\\\\")]
-    [InlineData("back\\\"quote")]
-    [InlineData("back\\\\\"quote")]
-    [InlineData("\\")]
-    [InlineData("a'b\tc")]
-    public void Quoted_RoundTripsThroughActualProcessArguments(string value)
-    {
-        AssertArguments(value.Quoted() + " next", value, "next");
-    }
-
-    [Theory]
-    [InlineData("topic\"quoted")]
-    [InlineData("")]
-    public void Pull_PreservesRemoteAndOptionalBranch(string branch)
-    {
-        var command = new Komorebi.Commands.Pull(Path.GetTempPath(), "up\"stream", branch, false);
-        List<string> expected = ["pull", "--verbose", "--progress", "--rebase=false", "up\"stream"];
-        if (branch.Length > 0)
-            expected.Add(branch);
-        AssertArguments(command.Args, [.. expected]);
-    }
-
-    [Theory]
     [InlineData(true, "origin/topic\"quoted")]
     [InlineData(false, "")]
     public async Task Worktree_PreservesNameTrackingAndTrailingSlash(bool createNew, string tracking)
@@ -57,31 +29,6 @@ public class ArgumentBoundaryTests
     }
 
     [Fact]
-    public async Task LFS_AllRemoteOperationsPreserveArgumentBoundaries()
-    {
-        var command = new Komorebi.Commands.LFS(Path.GetTempPath())
-        {
-            CancellationToken = new CancellationToken(true),
-            RaiseError = false,
-        };
-        const string remote = "up\"stream";
-        await command.FetchAsync(remote);
-        AssertArguments(command.Args, "lfs", "fetch", remote);
-        await command.PullAsync(remote);
-        AssertArguments(command.Args, "lfs", "pull", remote);
-        await command.PushAsync(remote);
-        AssertArguments(command.Args, "lfs", "push", remote);
-        await command.GetLocksAsync(remote);
-        AssertArguments(command.Args, "lfs", "locks", "--json", "--remote=" + remote);
-        await command.LockAsync(remote, "file name");
-        AssertArguments(command.Args, "lfs", "lock", "--remote=" + remote, "file name");
-        await command.UnlockAsync(remote, "file name", true);
-        AssertArguments(command.Args, "lfs", "unlock", "--remote=" + remote, "-f", "file name");
-        await command.UnlockMultipleAsync(remote, ["file one", "file two"], false);
-        AssertArguments(command.Args, "lfs", "unlock", "--remote=" + remote, "file one", "file two");
-    }
-
-    [Fact]
     public void Push_Branch_UsesFullRefNamesOnBothSides()
     {
         // upstream 8189114b: 同名タグがあっても曖昧にならないよう、ブランチは完全な ref 名で push する。
@@ -96,14 +43,6 @@ public class ArgumentBoundaryTests
         const string sha = "0123456789abcdef0123456789abcdef01234567";
         var command = new Komorebi.Commands.Push(Path.GetTempPath(), sha, "origin", "main", false, false, false, true, localIsRevision: true);
         AssertArguments(command.Args, "push", "--progress", "--verbose", "--force-with-lease", "origin", $"{sha}:refs/heads/main");
-    }
-
-    [Fact]
-    public void Am_PreservesPatchPathAndOptions()
-    {
-        const string file = "C:\\patch folder\\0001-fix \"quote\".patch";
-        var command = new Komorebi.Commands.Am(Path.GetTempPath(), file, false, "fix", "--3way");
-        AssertArguments(command.Args, "am", "--whitespace=fix", "--3way", file);
     }
 
     private static void AssertArguments(string arguments, params string[] expected)

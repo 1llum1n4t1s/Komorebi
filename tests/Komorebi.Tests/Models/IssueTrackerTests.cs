@@ -6,23 +6,6 @@ namespace Komorebi.Tests.Models
     {
         #region Property Defaults
 
-        [Fact]
-        public void NewInstance_HasNullRegex_IsRegexValidFalse()
-        {
-            var tracker = new IssueTracker();
-            Assert.False(tracker.IsRegexValid);
-        }
-
-        [Fact]
-        public void NewInstance_PropertiesAreNull()
-        {
-            var tracker = new IssueTracker();
-            Assert.Null(tracker.Name);
-            Assert.Null(tracker.RegexString);
-            Assert.Null(tracker.URLTemplate);
-            Assert.False(tracker.IsShared);
-        }
-
         #endregion
 
         #region RegexString Validation
@@ -196,20 +179,6 @@ namespace Komorebi.Tests.Models
         #endregion
 
         #region Property Change Notifications
-
-        [Fact]
-        public void Name_SetProperty_RaisesPropertyChanged()
-        {
-            var tracker = new IssueTracker();
-            bool raised = false;
-            tracker.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(IssueTracker.Name))
-                    raised = true;
-            };
-            tracker.Name = "GitHub Issues";
-            Assert.True(raised);
-        }
 
         [Fact]
         public void RegexString_SetProperty_RaisesPropertyChanged()

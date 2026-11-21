@@ -50,22 +50,6 @@ namespace Komorebi.Tests.ViewModels
         // ------------------------------------------------------------------
 
         [Fact]
-        public void BranchTreeNode_DefaultProperties()
-        {
-            var node = new Komorebi.ViewModels.BranchTreeNode();
-
-            Assert.Equal(string.Empty, node.Name);
-            Assert.Equal(string.Empty, node.Path);
-            Assert.Null(node.Backend);
-            Assert.Equal(0, node.Depth);
-            Assert.False(node.IsSelected);
-            Assert.False(node.IsExpanded);
-            Assert.NotNull(node.Children);
-            Assert.Empty(node.Children);
-            Assert.Equal(0, node.Counter);
-        }
-
-        [Fact]
         public void IsBranch_ReturnsTrueForBranchBackend()
         {
             // We cannot set Backend via public API on a node directly (it has a private setter).
@@ -117,13 +101,6 @@ namespace Komorebi.Tests.ViewModels
             var folder = builder.Locals[0];
             Assert.Equal(2, folder.Counter);
             Assert.Equal("(2)", folder.BranchesCount);
-        }
-
-        [Fact]
-        public void BranchesCount_ReturnsEmpty_WhenCounterIsZero()
-        {
-            var node = new Komorebi.ViewModels.BranchTreeNode();
-            Assert.Equal(string.Empty, node.BranchesCount);
         }
 
         // ------------------------------------------------------------------

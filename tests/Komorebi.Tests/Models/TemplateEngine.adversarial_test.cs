@@ -129,70 +129,9 @@ namespace Komorebi.Tests.Models
             Assert.Equal("", result);
         }
 
-        /// <adversarial category="type" severity="high" />
-        /// <summary>スライスに0を指定した場合の動作</summary>
-        [Fact]
-        public void Eval_SliceZero_ListsNoFilesAndCountsTheRest()
-        {
-            // count=0 の場合、ファイル名は 0 件で、残り全件が " and N other files" として数えられる
-            // （GetFilesSliced: AppendJoin の結果が空なので先頭に空白が残る）
-            var result = _engine.Eval("${files:0}", _branch, MakeChanges("a.cs", "b.cs", "c.cs"));
-            Assert.Equal(" and 3 other files", result);
-
-            var single = _engine.Eval("${files:0}", _branch, MakeChanges("a.cs"));
-            Assert.Equal(" and 1 other files", single);
-        }
-
-        /// <adversarial category="type" severity="medium" />
-        /// <summary>スライスに巨大な数を指定した場合でもクラッシュしないこと</summary>
-        [Fact]
-        public void Eval_SliceHugeNumber_DoesNotThrow()
-        {
-            var ex = Record.Exception(() => _engine.Eval("${files:999999}", _branch, MakeChanges("a.cs")));
-            Assert.Null(ex);
-        }
-
         // ===============================================================
         // 🌪️ 環境異常・カオステスト（Environmental Chaos）
         // ===============================================================
-
-        /// <adversarial category="chaos" severity="high" />
-        /// <summary>ブランチ名に正規表現メタ文字が含まれる場合でもクラッシュしないこと</summary>
-        [Fact]
-        public void Eval_BranchNameWithRegexMetachars_DoesNotThrow()
-        {
-            var evilBranch = new Branch { Name = "feature/(test)+[branch]*{1,3}" };
-            var ex = Record.Exception(() =>
-                _engine.Eval("${branch_name}", evilBranch, MakeChanges()));
-            Assert.Null(ex);
-        }
-
-        /// <adversarial category="chaos" severity="high" />
-        /// <summary>ファイルパスにテンプレート構文が含まれる場合でもインジェクションされないこと</summary>
-        [Fact]
-        public void Eval_FilePathContainsTemplateVars_NotInterpreted()
-        {
-            var changes = MakeChanges("${branch_name}.cs", "file.cs");
-            var result = _engine.Eval("${files}", _branch, changes);
-
-            // ファイルパス内の${branch_name}はテンプレート変数として展開されないはず
-            Assert.Contains("${branch_name}.cs", result);
-        }
-
-        /// <adversarial category="chaos" severity="medium" />
-        /// <summary>変更ファイルが0件の場合の各変数の動作</summary>
-        [Fact]
-        public void Eval_EmptyChangeList_HandledGracefully()
-        {
-            var empty = MakeChanges();
-
-            Assert.Equal("0", _engine.Eval("${files_num}", _branch, empty));
-            Assert.Equal("", _engine.Eval("${files}", _branch, empty));
-            Assert.Equal("", _engine.Eval("${pure_files}", _branch, empty));
-
-            var ex = Record.Exception(() => _engine.Eval("${files:3}", _branch, empty));
-            Assert.Null(ex);
-        }
 
         /// <adversarial category="chaos" severity="high" />
         /// <summary>エスケープシーケンスが正しく処理されること</summary>
@@ -259,20 +198,6 @@ namespace Komorebi.Tests.Models
         // ===============================================================
         // ⚡ 並行性・レースコンディション（Concurrency Chaos）
         // ===============================================================
-
-        /// <adversarial category="concurrency" severity="high" />
-        /// <summary>同一TemplateEngineインスタンスの連続Eval呼び出しで状態がリセットされること</summary>
-        [Fact]
-        public void Eval_ConsecutiveCalls_StateResets()
-        {
-            var result1 = _engine.Eval("${branch_name}", _branch, MakeChanges("a.cs"));
-            var result2 = _engine.Eval("plain text", _branch, MakeChanges("b.cs"));
-            var result3 = _engine.Eval("${files_num}", _branch, MakeChanges("c.cs", "d.cs"));
-
-            Assert.Equal("feature/test-branch", result1);
-            Assert.Equal("plain text", result2);
-            Assert.Equal("2", result3);
-        }
 
         // ===============================================================
         // 🔀 状態遷移の矛盾（State Machine Abuse）

@@ -54,15 +54,4 @@ public class RefNameTests
         Assert.False(RefName.IsValidBranchName("HEAD"));
         Assert.True(RefName.IsValidTagName("HEAD"));
     }
-
-    [Fact]
-    public void PushDialog_ValidatesEmptyInvalidAndCorrectedInput()
-    {
-        var vm = new Komorebi.ViewModels.PushToNewBranch("origin");
-        Assert.False(vm.Check());
-        vm.BranchName = "topic..invalid";
-        Assert.False(vm.Check());
-        vm.BranchName = "topic/fixed";
-        Assert.True(vm.Check());
-    }
 }

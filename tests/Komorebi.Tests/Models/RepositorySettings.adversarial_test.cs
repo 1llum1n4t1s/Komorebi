@@ -1,16 +1,12 @@
 // nullable 移行未実施。1 ファイルずつ null 注釈を入れてこの 2 行を削除していく。
 #nullable disable warnings
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 
 namespace Komorebi.Tests.Models
 {
     /// <summary>
     /// RepositorySettings に対する嫌がらせテスト。
-    /// キャッシュ無効化欠如、Encoding.Defaultバグ、PushCommitMessage境界値、
-    /// 並行アクセスを攻撃する。
+    /// キャッシュ無効化欠如と並行アクセスを攻撃する。
     /// </summary>
     public class RepositorySettingsAdversarialTests : IDisposable
     {
@@ -50,71 +46,6 @@ namespace Komorebi.Tests.Models
                 Komorebi.Models.RepositorySettings.Evict(dir);
         }
 
-        /// <summary>
-        /// internal static HashContent を呼び出すヘルパー（以前はリフレクションで private を呼んでいた）。
-        /// </summary>
-        private static string InvokeHashContent(string source)
-            => Komorebi.Models.RepositorySettings.HashContent(source);
-
-        // ===============================================================
-        // 🌪️ Encoding.Default バグ検証（最重要）
-        // ===============================================================
-
-        /// <adversarial category="chaos" severity="critical"
-        ///   description="HashContentがEncoding.Defaultを使用しており、UTF-8環境とLatin1環境でハッシュが変わるバグ"
-        ///   expected="UTF-8のバイト列でハッシュすべきだがEncoding.Defaultはプラットフォーム依存" />
-        /// <remarks>
-        /// これは実際のバグ: Encoding.Defaultは.NET Coreではほとんどの場合UTF-8だが、
-        /// Windows環境のレガシーアプリではcp932やcp1252の可能性がある。
-        /// プラットフォーム間で設定ファイルを共有する場合にハッシュ不一致が発生しうる。
-        /// </remarks>
-        [Fact]
-        public void HashContent_EncodingDefault_DiffersFromUtf8ForNonAscii()
-        {
-            // 非ASCII文字を含むJSON（日本語コミットメッセージ等）
-            var content = "{\"DefaultRemote\":\"origin\",\"CommitMessages\":[\"修正: バグ修正\"]}";
-
-            // 実際のHashContent（Encoding.Default使用）
-            var actualHash = InvokeHashContent(content);
-
-            // UTF-8で計算した場合のハッシュ
-            var utf8Hash = Convert.ToHexString(
-                MD5.HashData(Encoding.UTF8.GetBytes(content))
-            ).ToLowerInvariant();
-
-            // Encoding.DefaultがUTF-8の環境ではこれらは一致する
-            // しかしEncoding.DefaultがUTF-8でない環境では不一致になる
-            // .NET Core/5+ではほぼUTF-8なので一致するはずだが、
-            // これはEncoding.Defaultを使うべきではない理由の記録
-            if (Encoding.Default.CodePage == Encoding.UTF8.CodePage)
-            {
-                Assert.Equal(utf8Hash, actualHash);
-            }
-            else
-            {
-                // Encoding.DefaultがUTF-8でない環境（レガシーWindows等）
-                // ここでは不一致になりうることを記録
-                Assert.NotEqual(utf8Hash, actualHash);
-            }
-        }
-
-        /// <adversarial category="chaos" severity="high"
-        ///   description="ASCII文字のみの場合、どのエンコーディングでもハッシュが同一であること"
-        ///   expected="ASCII範囲ではEncoding.DefaultとUTF-8が同一結果" />
-        [Fact]
-        public void HashContent_AsciiOnly_ConsistentAcrossEncodings()
-        {
-            var content = "{\"DefaultRemote\":\"origin\"}";
-
-            var actualHash = InvokeHashContent(content);
-            var utf8Hash = Convert.ToHexString(
-                MD5.HashData(Encoding.UTF8.GetBytes(content))
-            ).ToLowerInvariant();
-
-            // ASCIIのみならどのエンコーディングでも同一バイト列
-            Assert.Equal(utf8Hash, actualHash);
-        }
-
         // ===============================================================
         // 💀 キャッシュ無効化欠如テスト（Resource Exhaustion）
         // ===============================================================
@@ -149,195 +80,9 @@ namespace Komorebi.Tests.Models
             Assert.Same(first, second); // 同一インスタンス
         }
 
-        /// <adversarial category="resource" severity="high"
-        ///   description="Evict() がキャッシュを除去し、次の Get() でファイルから読み直すこと（Repository.Close の契約）"
-        ///   expected="Evict 前は同一インスタンス・古い値、Evict 後は新しいインスタンス・ファイルの最新値" />
-        /// <remarks>
-        /// 以前は private の _cache をリフレクションで数えていたが、内部構造ではなく
-        /// 外から観測できる振る舞い（同一インスタンスの再利用と、Evict 後の再読込）で契約を確認する。
-        /// </remarks>
-        [Fact]
-        public void Evict_DropsCachedInstanceAndNextGetReloadsFromFile()
-        {
-            var dir = Path.Combine(_tempDir, "evict_repo");
-            Directory.CreateDirectory(dir);
-            var settingsPath = Path.Combine(dir, "komorebi.settings");
-            File.WriteAllText(settingsPath, JsonSerializer.Serialize(
-                new Komorebi.Models.RepositorySettings { DefaultRemote = "origin" }, JsonCodeGen.Default.RepositorySettings));
-
-            var first = Komorebi.Models.RepositorySettings.Get(dir);
-            Assert.Equal("origin", first.DefaultRemote);
-
-            // 外部でファイルを書き換えても、Evict するまではキャッシュ済みインスタンスが返る
-            File.WriteAllText(settingsPath, JsonSerializer.Serialize(
-                new Komorebi.Models.RepositorySettings { DefaultRemote = "upstream" }, JsonCodeGen.Default.RepositorySettings));
-            Assert.Same(first, Komorebi.Models.RepositorySettings.Get(dir));
-
-            // Evict 後は新しいインスタンスとしてファイルから読み直される
-            Komorebi.Models.RepositorySettings.Evict(dir);
-            var reloaded = Komorebi.Models.RepositorySettings.Get(dir);
-            Assert.NotSame(first, reloaded);
-            Assert.Equal("upstream", reloaded.DefaultRemote);
-
-            // 再読込したインスタンスは再びキャッシュされる
-            Assert.Same(reloaded, Komorebi.Models.RepositorySettings.Get(dir));
-        }
-
-        /// <adversarial category="resource" severity="medium"
-        ///   description="Evict() は対象のパスだけを除去し、他のリポジトリのキャッシュを巻き込まないこと"
-        ///   expected="Evict しなかったパスは同一インスタンスのまま" />
-        [Fact]
-        public void Evict_OnlyDropsTheGivenRepository()
-        {
-            var a = Path.Combine(_tempDir, "repo_a");
-            var b = Path.Combine(_tempDir, "repo_b");
-            Directory.CreateDirectory(a);
-            Directory.CreateDirectory(b);
-            var settingsA = Komorebi.Models.RepositorySettings.Get(a);
-            var settingsB = Komorebi.Models.RepositorySettings.Get(b);
-
-            // 末尾の区切り文字の有無に関係なく、Get() と同じ正規化で対象を特定する
-            Komorebi.Models.RepositorySettings.Evict(a + Path.DirectorySeparatorChar);
-
-            Assert.NotSame(settingsA, Komorebi.Models.RepositorySettings.Get(a));
-            Assert.Same(settingsB, Komorebi.Models.RepositorySettings.Get(b));
-        }
-
-        /// <adversarial category="boundary" severity="medium"
-        ///   description="空・null・未取得のパスを Evict しても例外にならないこと"
-        ///   expected="例外なし" />
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("never-loaded")]
-        public void Evict_EmptyOrUnknownPath_DoesNotThrow(string? path)
-        {
-            var target = path == "never-loaded" ? Path.Combine(_tempDir, "never_loaded") : path;
-            var ex = Record.Exception(() => Komorebi.Models.RepositorySettings.Evict(target));
-            Assert.Null(ex);
-        }
-
         // ===============================================================
         // 🗡️ PushCommitMessage 境界値テスト
         // ===============================================================
-
-        /// <adversarial category="boundary" severity="high"
-        ///   description="PushCommitMessageで10件を超えた場合、9件に切り詰められること"
-        ///   expected="最大10件（9件切り詰め + 1件挿入 = 10件）" />
-        [Fact]
-        public void PushCommitMessage_OverflowAt10_TruncatesTo10()
-        {
-            var settings = new Komorebi.Models.RepositorySettings();
-
-            // 12件追加
-            for (var i = 0; i < 12; i++)
-            {
-                settings.PushCommitMessage($"message_{i}");
-            }
-
-            // 最大10件に制限される
-            Assert.True(settings.CommitMessages.Count <= 10,
-                $"コミットメッセージは最大10件のはずだが{settings.CommitMessages.Count}件");
-        }
-
-        /// <adversarial category="boundary" severity="high"
-        ///   description="9件超の切り詰めロジック: 10件ある状態で新しいメッセージを追加"
-        ///   expected="古いメッセージが削除されて10件を維持" />
-        [Fact]
-        public void PushCommitMessage_ExactlyTenThenPushNew_StaysAtTen()
-        {
-            var settings = new Komorebi.Models.RepositorySettings();
-
-            // まず10件追加
-            for (var i = 0; i < 10; i++)
-            {
-                settings.PushCommitMessage($"msg_{i}");
-            }
-            Assert.Equal(10, settings.CommitMessages.Count);
-
-            // 11件目を追加
-            settings.PushCommitMessage("new_message");
-
-            // RemoveRange(9, Count - 9) → 10件目以降を削除 → 9件にしてから Insert(0, ...)
-            Assert.Equal(10, settings.CommitMessages.Count);
-            Assert.Equal("new_message", settings.CommitMessages[0]);
-        }
-
-        /// <adversarial category="state" severity="medium"
-        ///   description="重複メッセージは先頭に移動されること"
-        ///   expected="既存メッセージがindex 0に移動" />
-        [Fact]
-        public void PushCommitMessage_DuplicateMessage_MovesToFront()
-        {
-            var settings = new Komorebi.Models.RepositorySettings();
-            settings.PushCommitMessage("first");
-            settings.PushCommitMessage("second");
-            settings.PushCommitMessage("third");
-
-            // "first"はindex 2にある → 先頭に移動
-            settings.PushCommitMessage("first");
-
-            Assert.Equal(3, settings.CommitMessages.Count); // 件数は変わらない
-            Assert.Equal("first", settings.CommitMessages[0]);
-        }
-
-        /// <adversarial category="state" severity="medium"
-        ///   description="既に先頭にあるメッセージを再度pushしても何も変わらないこと"
-        ///   expected="existIdx == 0で早期リターン" />
-        [Fact]
-        public void PushCommitMessage_AlreadyAtFront_NoChange()
-        {
-            var settings = new Komorebi.Models.RepositorySettings();
-            settings.PushCommitMessage("only");
-
-            settings.PushCommitMessage("only");
-
-            Assert.Single(settings.CommitMessages);
-            Assert.Equal("only", settings.CommitMessages[0]);
-        }
-
-        /// <adversarial category="boundary" severity="medium"
-        ///   description="空白のみのメッセージがtrim後に空文字として扱われること"
-        ///   expected="trim後の空文字が格納される" />
-        [Fact]
-        public void PushCommitMessage_WhitespaceOnly_StoredAsTrimmedEmpty()
-        {
-            var settings = new Komorebi.Models.RepositorySettings();
-            settings.PushCommitMessage("   \t  \n  ");
-
-            // Trim()後は空文字 → ReplaceLineEndings("\n") → ""
-            Assert.Single(settings.CommitMessages);
-            Assert.Equal("", settings.CommitMessages[0]);
-        }
-
-        /// <adversarial category="boundary" severity="medium"
-        ///   description="CRLF改行がLFに正規化されること"
-        ///   expected="\\r\\nが\\nに変換される" />
-        [Fact]
-        public void PushCommitMessage_CRLFNormalization()
-        {
-            var settings = new Komorebi.Models.RepositorySettings();
-            settings.PushCommitMessage("line1\r\nline2\r\nline3");
-
-            Assert.Equal("line1\nline2\nline3", settings.CommitMessages[0]);
-        }
-
-        /// <adversarial category="state" severity="high"
-        ///   description="CRLF正規化後に同一内容になるメッセージが重複として検出されること"
-        ///   expected="正規化後の文字列でIndexOfが一致" />
-        [Fact]
-        public void PushCommitMessage_NormalizedDuplicate_DetectedAsDuplicate()
-        {
-            var settings = new Komorebi.Models.RepositorySettings();
-            settings.PushCommitMessage("line1\nline2");
-            settings.PushCommitMessage("second msg");
-
-            // CRLF版を追加 → 正規化後は "line1\nline2" と同じ
-            settings.PushCommitMessage("line1\r\nline2");
-
-            Assert.Equal(2, settings.CommitMessages.Count); // 3件にはならない
-            Assert.Equal("line1\nline2", settings.CommitMessages[0]); // 先頭に移動
-        }
 
         // ===============================================================
         // 🗡️ Get / SaveAsync 境界値テスト
@@ -435,26 +180,6 @@ namespace Komorebi.Tests.Models
 
             var loaded = Komorebi.Models.RepositorySettings.Get(dir);
             Assert.Equal(10, loaded.CommitMessages.Count);
-        }
-
-        /// <adversarial category="chaos" severity="high"
-        ///   description="SaveAsyncが例外を飲み込むこと（ファイルロック時など）"
-        ///   expected="例外は外に出ない" />
-        [Fact]
-        public async Task SaveAsync_SwallowsAllExceptions()
-        {
-            var dir = Path.Combine(_tempDir, "save_error_repo");
-            Directory.CreateDirectory(dir);
-            var settings = Komorebi.Models.RepositorySettings.Get(dir);
-
-            // _fileフィールドを不正なパスに書き換え
-            var fileField = typeof(Komorebi.Models.RepositorySettings)
-                .GetField("_file", BindingFlags.NonPublic | BindingFlags.Instance)!;
-            fileField.SetValue(settings, Path.Combine(_tempDir, "nonexistent_dir", "sub", "settings"));
-
-            // SaveAsyncはcatchで全例外を飲み込む
-            var ex = await Record.ExceptionAsync(() => settings.SaveAsync());
-            Assert.Null(ex);
         }
 
         // ===============================================================

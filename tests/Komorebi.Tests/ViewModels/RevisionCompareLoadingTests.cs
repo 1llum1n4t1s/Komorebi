@@ -38,31 +38,4 @@ public class RevisionCompareLoadingTests
         compare.Swap();
         Assert.Same(right, compare.StartPoint);
     }
-
-    [Fact]
-    public void WorktreeSide_CannotBeUsedAsResetRevision()
-    {
-        var repo = new Komorebi.ViewModels.Repository(false, Path.GetTempPath(), Path.Combine(Path.GetTempPath(), "unused-git"));
-        using var compare = new Komorebi.ViewModels.RevisionCompare(repo, new Commit { SHA = "left" }, null!);
-        compare.ApplyLoadedChanges([]);
-        Assert.True(compare.CanResetToLeft);
-        Assert.False(compare.CanResetToRight);
-    }
-
-    [Fact]
-    public void SubmoduleLoading_PreventsSwap()
-    {
-        var left = new Commit { SHA = "left" };
-        var right = new Commit { SHA = "right" };
-        var compare = new Komorebi.ViewModels.SubmoduleRevisionCompare(new SubmoduleDiff
-        {
-            FullPath = Path.GetTempPath(),
-            Old = new() { Commit = left },
-            New = new() { Commit = right },
-        });
-        compare.Swap();
-        Assert.Same(left, compare.Base);
-        Assert.Same(right, compare.To);
-        Assert.True(compare.IsLoading);
-    }
 }

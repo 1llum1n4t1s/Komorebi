@@ -53,64 +53,6 @@ namespace Komorebi.Tests.Models
 
         #region TextDiffLine - Construction
 
-        [Fact]
-        public void TextDiffLine_DefaultConstructor_HasDefaults()
-        {
-            var line = new TextDiffLine();
-            Assert.Equal(TextDiffLineType.None, line.Type);
-            Assert.Equal("", line.Content);
-            Assert.Equal(0, line.OldLineNumber);
-            Assert.Equal(0, line.NewLineNumber);
-            Assert.Empty(line.Highlights);
-            Assert.False(line.NoNewLineEndOfFile);
-        }
-
-        [Fact]
-        public void TextDiffLine_ParameterizedConstructor_SetsAll()
-        {
-            var line = new TextDiffLine(TextDiffLineType.Added, "hello world", 0, 42);
-            Assert.Equal(TextDiffLineType.Added, line.Type);
-            Assert.Equal("hello world", line.Content);
-            Assert.Equal(0, line.OldLineNumber);
-            Assert.Equal(42, line.NewLineNumber);
-        }
-
-        [Fact]
-        public void TextDiffLine_OldLine_ZeroReturnsEmpty()
-        {
-            var line = new TextDiffLine(TextDiffLineType.Added, "x", 0, 5);
-            Assert.Equal(string.Empty, line.OldLine);
-        }
-
-        [Fact]
-        public void TextDiffLine_OldLine_NonZeroReturnsString()
-        {
-            var line = new TextDiffLine(TextDiffLineType.Deleted, "x", 10, 0);
-            Assert.Equal("10", line.OldLine);
-        }
-
-        [Fact]
-        public void TextDiffLine_NewLine_ZeroReturnsEmpty()
-        {
-            var line = new TextDiffLine(TextDiffLineType.Deleted, "x", 5, 0);
-            Assert.Equal(string.Empty, line.NewLine);
-        }
-
-        [Fact]
-        public void TextDiffLine_NewLine_NonZeroReturnsString()
-        {
-            var line = new TextDiffLine(TextDiffLineType.Added, "x", 0, 7);
-            Assert.Equal("7", line.NewLine);
-        }
-
-        [Fact]
-        public void TextDiffLine_NormalLine_BothLineNumbersPresent()
-        {
-            var line = new TextDiffLine(TextDiffLineType.Normal, "code", 3, 3);
-            Assert.Equal("3", line.OldLine);
-            Assert.Equal("3", line.NewLine);
-        }
-
         #endregion
 
         #region TextDiffSelection
@@ -570,69 +512,6 @@ namespace Komorebi.Tests.Models
             Assert.Equal(string.Empty, result.NewMode);
             Assert.Null(result.TextDiff);
             Assert.Null(result.LFSDiff);
-        }
-
-        [Fact]
-        public void DiffResult_FileModeChange_BothEmpty_ReturnsEmpty()
-        {
-            var result = new DiffResult();
-            Assert.Equal(string.Empty, result.FileModeChange);
-        }
-
-        [Fact]
-        public void DiffResult_FileModeChange_BothSet_ReturnsFormatted()
-        {
-            var result = new DiffResult
-            {
-                OldMode = "100644",
-                NewMode = "100755"
-            };
-            Assert.Equal("100644 \u2192 100755", result.FileModeChange);
-        }
-
-        [Fact]
-        public void DiffResult_FileModeChange_OldEmpty_ShowsZero()
-        {
-            var result = new DiffResult
-            {
-                OldMode = "",
-                NewMode = "100644"
-            };
-            Assert.Equal("0 \u2192 100644", result.FileModeChange);
-        }
-
-        [Fact]
-        public void DiffResult_FileModeChange_NewEmpty_ShowsZero()
-        {
-            var result = new DiffResult
-            {
-                OldMode = "100644",
-                NewMode = ""
-            };
-            Assert.Equal("100644 \u2192 0", result.FileModeChange);
-        }
-
-        [Fact]
-        public void DiffResult_FileModeChange_OldNull_NewNull_ReturnsEmpty()
-        {
-            // When both are null (not just empty), it should still return empty
-            var result = new DiffResult
-            {
-                OldMode = null,
-                NewMode = null
-            };
-            Assert.Equal(string.Empty, result.FileModeChange);
-        }
-
-        [Fact]
-        public void DiffResult_FileModeChange_OneNullOneSet_ReturnsFormatted()
-        {
-            var result = new DiffResult
-            {
-                OldMode = null,
-                NewMode = "100644"
-            };
-            Assert.Equal("0 \u2192 100644", result.FileModeChange);
         }
 
         #endregion

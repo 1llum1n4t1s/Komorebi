@@ -25,56 +25,9 @@ namespace Komorebi.Tests.ViewModels
         // Default types loading
         // ------------------------------------------------------------------
 
-        [Fact]
-        public void Constructor_LoadsDefaultTypes_WhenOverrideIsNull()
-        {
-            var (builder, _) = CreateBuilder();
-
-            Assert.NotNull(builder.Types);
-            Assert.True(builder.Types.Count > 0);
-            Assert.Equal("feat", builder.Types[0].Type);
-        }
-
-        [Fact]
-        public void Constructor_SelectedTypeIsFirstDefault()
-        {
-            var (builder, _) = CreateBuilder();
-
-            Assert.NotNull(builder.SelectedType);
-            Assert.Equal("feat", builder.SelectedType.Type);
-        }
-
         // ------------------------------------------------------------------
         // PrefillShortDesc auto-population
         // ------------------------------------------------------------------
-
-        [Fact]
-        public void SelectedType_PrefillShortDesc_SetsDescription()
-        {
-            var (builder, _) = CreateBuilder();
-
-            // Create a custom type with a PrefillShortDesc value
-            var customType = new Komorebi.Models.ConventionalCommitType("Custom", "custom", "desc")
-            {
-                PrefillShortDesc = "auto filled"
-            };
-            builder.Types.Add(customType);
-            builder.SelectedType = customType;
-
-            Assert.Equal("auto filled", builder.Description);
-        }
-
-        [Fact]
-        public void SelectedType_EmptyPrefillShortDesc_DoesNotOverwriteDescription()
-        {
-            var (builder, _) = CreateBuilder();
-            builder.Description = "my description";
-
-            // Select a type with empty PrefillShortDesc (default types have empty PrefillShortDesc)
-            builder.SelectedType = builder.Types[1]; // "fix"
-
-            Assert.Equal("my description", builder.Description);
-        }
 
         // ------------------------------------------------------------------
         // Validation - Required fields

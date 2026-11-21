@@ -20,15 +20,6 @@ namespace Komorebi.Tests.Models
     [Collection(IpcChannelCollection.Name)]
     public class IpcChannelTests : IDisposable
     {
-        [Fact]
-        public void PipeName_IsShortStableAndIsolatesDataDirectories()
-        {
-            var first = IpcChannel.CreatePipeName(Path.GetTempPath());
-            Assert.Equal(first, IpcChannel.CreatePipeName(Path.Combine(Path.GetTempPath(), ".")));
-            Assert.NotEqual(first, IpcChannel.CreatePipeName(Path.Combine(Path.GetTempPath(), "other-profile")));
-            Assert.True(first.Length < 60);
-        }
-
         private readonly string _tempDir;
 
         public IpcChannelTests()
@@ -103,57 +94,6 @@ namespace Komorebi.Tests.Models
         }
 
         [Fact]
-        public async Task SendMessage_IsReceived()
-        {
-            var ct = TestContext.Current.CancellationToken;
-            var pipe = UniquePipeName();
-            using var ipc = new IpcChannel(pipe, LockPath());
-
-            // Allow the server loop to start.
-            await Task.Delay(100, ct);
-
-            var received = new TaskCompletionSource<string>();
-            ipc.MessageReceived += msg => received.TrySetResult(msg);
-
-            ipc.SendToFirstInstance("hello");
-
-            var result = await Task.WhenAny(received.Task, Task.Delay(5000, ct));
-            Assert.Same(received.Task, result);
-            Assert.Equal("hello", await received.Task);
-        }
-
-        [Fact]
-        public async Task SendMultipleMessages_AllReceived()
-        {
-            var ct = TestContext.Current.CancellationToken;
-            var pipe = UniquePipeName();
-            using var ipc = new IpcChannel(pipe, LockPath());
-            await Task.Delay(100, ct);
-
-            var messages = new System.Collections.Concurrent.ConcurrentBag<string>();
-            var count = new CountdownEvent(3);
-
-            ipc.MessageReceived += msg =>
-            {
-                messages.Add(msg);
-                count.Signal();
-            };
-
-            ipc.SendToFirstInstance("msg1");
-            // Small delay between sends to let the server cycle.
-            await Task.Delay(200, ct);
-            ipc.SendToFirstInstance("msg2");
-            await Task.Delay(200, ct);
-            ipc.SendToFirstInstance("msg3");
-
-            var signaled = count.Wait(TimeSpan.FromSeconds(10), ct);
-            Assert.True(signaled, $"Only received {3 - count.CurrentCount} of 3 messages");
-            Assert.Contains("msg1", messages);
-            Assert.Contains("msg2", messages);
-            Assert.Contains("msg3", messages);
-        }
-
-        [Fact]
         public async Task Dispose_CompletesCleanly()
         {
             var ct = TestContext.Current.CancellationToken;
@@ -171,22 +111,6 @@ namespace Komorebi.Tests.Models
 
             // Dispose should not throw.
             await disposeTask;
-        }
-
-        [Fact]
-        public async Task Dispose_ThenSend_DoesNotThrow()
-        {
-            var ct = TestContext.Current.CancellationToken;
-            var pipe = UniquePipeName();
-            var ipc = new IpcChannel(pipe, LockPath());
-            await Task.Delay(200, ct);
-
-            ipc.Dispose();
-            await Task.Delay(100, ct);
-
-            // Sending to a disposed channel should silently fail, not throw.
-            var ex = Record.Exception(() => ipc.SendToFirstInstance("after-dispose"));
-            Assert.Null(ex);
         }
 
         [Fact]

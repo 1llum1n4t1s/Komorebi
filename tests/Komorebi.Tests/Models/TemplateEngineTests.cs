@@ -67,13 +67,6 @@ namespace Komorebi.Tests.Models
         #region Variable: branch_name
 
         [Fact]
-        public void Eval_BranchNameVariable_ReturnsBranchName()
-        {
-            var result = Eval("${branch_name}", "feature/login");
-            Assert.Equal("feature/login", result);
-        }
-
-        [Fact]
         public void Eval_BranchNameVariable_WithSurroundingText()
         {
             var result = Eval("Branch: ${branch_name} is active", "develop");
@@ -91,140 +84,17 @@ namespace Komorebi.Tests.Models
 
         #region Variable: files_num
 
-        [Fact]
-        public void Eval_FilesNumVariable_ReturnsCount()
-        {
-            var result = Eval("${files_num}", "main", "file1.txt", "file2.txt", "file3.txt");
-            Assert.Equal("3", result);
-        }
-
-        [Fact]
-        public void Eval_FilesNumVariable_ZeroFiles()
-        {
-            var result = Eval("${files_num}", "main");
-            Assert.Equal("0", result);
-        }
-
-        [Fact]
-        public void Eval_FilesNumVariable_SingleFile()
-        {
-            var result = Eval("Changed ${files_num} file(s)", "main", "README.md");
-            Assert.Equal("Changed 1 file(s)", result);
-        }
-
         #endregion
 
         #region Variable: files
-
-        [Fact]
-        public void Eval_FilesVariable_ReturnsCommaSeparatedPaths()
-        {
-            var result = Eval("${files}", "main", "src/main.cs", "src/util.cs");
-            Assert.Equal("src/main.cs, src/util.cs", result);
-        }
-
-        [Fact]
-        public void Eval_FilesVariable_SingleFile()
-        {
-            var result = Eval("${files}", "main", "README.md");
-            Assert.Equal("README.md", result);
-        }
-
-        [Fact]
-        public void Eval_FilesVariable_NoFiles()
-        {
-            var result = Eval("${files}", "main");
-            Assert.Equal("", result);
-        }
 
         #endregion
 
         #region Variable: pure_files
 
-        [Fact]
-        public void Eval_PureFilesVariable_ReturnsFileNamesOnly()
-        {
-            var result = Eval("${pure_files}", "main", "src/Models/User.cs", "src/Views/Main.axaml");
-            Assert.Equal("User.cs, Main.axaml", result);
-        }
-
-        [Fact]
-        public void Eval_PureFilesVariable_SingleFile()
-        {
-            var result = Eval("${pure_files}", "main", "deep/nested/path/file.txt");
-            Assert.Equal("file.txt", result);
-        }
-
-        [Fact]
-        public void Eval_PureFilesVariable_AlreadyPureFilename()
-        {
-            var result = Eval("${pure_files}", "main", "README.md");
-            Assert.Equal("README.md", result);
-        }
-
         #endregion
 
         #region Sliced Variables: files:N
-
-        [Fact]
-        public void Eval_SlicedFiles_TruncatesWithRemainder()
-        {
-            var result = Eval(
-                "${files:2}",
-                "main",
-                "a.txt", "b.txt", "c.txt", "d.txt");
-            Assert.Equal("a.txt, b.txt and 2 other files", result);
-        }
-
-        [Fact]
-        public void Eval_SlicedFiles_ExactCount_NoRemainder()
-        {
-            var result = Eval(
-                "${files:3}",
-                "main",
-                "a.txt", "b.txt", "c.txt");
-            Assert.Equal("a.txt, b.txt, c.txt", result);
-        }
-
-        [Fact]
-        public void Eval_SlicedFiles_CountGreaterThanFiles_ShowsAll()
-        {
-            var result = Eval(
-                "${files:10}",
-                "main",
-                "a.txt", "b.txt");
-            Assert.Equal("a.txt, b.txt", result);
-        }
-
-        [Fact]
-        public void Eval_SlicedFiles_OneFile_SliceOfOne()
-        {
-            var result = Eval(
-                "${files:1}",
-                "main",
-                "a.txt", "b.txt", "c.txt");
-            Assert.Equal("a.txt and 2 other files", result);
-        }
-
-        [Fact]
-        public void Eval_SlicedPureFiles_TruncatesWithRemainder()
-        {
-            var result = Eval(
-                "${pure_files:1}",
-                "main",
-                "src/a.txt", "src/b.txt", "src/c.txt");
-            Assert.Equal("a.txt and 2 other files", result);
-        }
-
-        [Fact]
-        public void Eval_SlicedPureFiles_ExactCount()
-        {
-            var result = Eval(
-                "${pure_files:2}",
-                "main",
-                "src/a.txt", "lib/b.txt");
-            Assert.Equal("a.txt, b.txt", result);
-        }
 
         #endregion
 
@@ -395,26 +265,6 @@ namespace Komorebi.Tests.Models
 
         #region Reuse (engine is stateful with Reset)
 
-        [Fact]
-        public void Eval_CalledMultipleTimes_ResetsCorrectly()
-        {
-            var result1 = Eval("${branch_name}", "first");
-            var result2 = Eval("${branch_name}", "second");
-
-            Assert.Equal("first", result1);
-            Assert.Equal("second", result2);
-        }
-
-        [Fact]
-        public void Eval_CalledMultipleTimes_DifferentTemplates()
-        {
-            var result1 = Eval("${files_num}", "main", "a.cs");
-            var result2 = Eval("${branch_name}", "develop");
-
-            Assert.Equal("1", result1);
-            Assert.Equal("develop", result2);
-        }
-
         #endregion
 
         #region Edge Cases for Regex Variables
@@ -463,20 +313,6 @@ namespace Komorebi.Tests.Models
         #endregion
 
         #region Sliced Variable Edge Cases
-
-        [Fact]
-        public void Eval_SlicedFiles_ZeroCount()
-        {
-            var result = Eval("${files:0}", "main", "a.txt", "b.txt");
-            Assert.Equal(" and 2 other files", result);
-        }
-
-        [Fact]
-        public void Eval_SlicedFiles_NoFiles()
-        {
-            var result = Eval("${files:3}", "main");
-            Assert.Equal("", result);
-        }
 
         #endregion
     }

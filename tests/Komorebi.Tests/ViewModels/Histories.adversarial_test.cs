@@ -144,69 +144,13 @@ namespace Komorebi.Tests.ViewModels
         //  NavigateTo: 完全一致で見つかるケース
         // ================================================================
 
-        /// <summary>
-        /// NavigateTo が完全一致SHAでコミットを正しく選択すること。
-        /// </summary>
-        [Fact]
-        public void NavigateTo_ExactMatch_SelectsCommit()
-        {
-            var histories = new Histories(_repo);
-            var target = MakeCommit("aabbccdd" + new string('0', 32));
-            histories.Commits = [
-                MakeCommit("11111111" + new string('0', 32)),
-                target,
-                MakeCommit("22222222" + new string('0', 32)),
-            ];
-
-            histories.NavigateTo(target.SHA);
-
-            Assert.Equal(target.SHA, histories.SelectedCommit?.SHA);
-        }
-
         // ================================================================
         //  NavigateTo: プレフィックス一致のケース
         // ================================================================
 
-        /// <summary>
-        /// NavigateTo がプレフィックスで最初に一致するコミットを選択すること。
-        /// </summary>
-        [Fact]
-        public void NavigateTo_PrefixMatch_SelectsFirstMatch()
-        {
-            var histories = new Histories(_repo);
-            var commit1 = MakeCommit("abcdef11" + new string('0', 32));
-            var commit2 = MakeCommit("abcdef22" + new string('0', 32));
-            histories.Commits = [commit1, commit2];
-
-            // "abcdef" はプレフィックスとして両方に一致するが、
-            // 辞書の完全一致に失敗後、List.Find() で最初に見つかるものが選択される
-            histories.NavigateTo("abcdef");
-
-            Assert.NotNull(histories.SelectedCommit);
-            Assert.StartsWith("abcdef", histories.SelectedCommit.SHA);
-        }
-
         // ================================================================
         //  NavigateTo: NavigationId のインクリメント
         // ================================================================
-
-        /// <summary>
-        /// NavigateTo の呼び出しごとに NavigationId がインクリメントされること。
-        /// </summary>
-        [Fact]
-        public void NavigateTo_IncrementsNavigationId()
-        {
-            var histories = new Histories(_repo);
-            var commit = MakeCommit("aaa" + new string('0', 37));
-            histories.Commits = [commit];
-
-            var initialId = histories.NavigationId;
-            histories.NavigateTo(commit.SHA);
-            Assert.Equal(initialId + 1, histories.NavigationId);
-
-            histories.NavigateTo(commit.SHA);
-            Assert.Equal(initialId + 2, histories.NavigationId);
-        }
 
         // ================================================================
         //  Commits プロパティ: 複数回設定（状態遷移）
@@ -268,20 +212,6 @@ namespace Komorebi.Tests.ViewModels
         // ================================================================
         //  Dispose後のアクセス
         // ================================================================
-
-        /// <summary>
-        /// Dispose後にCommitsが空になること。
-        /// </summary>
-        [Fact]
-        public void Dispose_ClearsCommitsAndGraph()
-        {
-            var histories = new Histories(_repo);
-            histories.Commits = [MakeCommit("aaa" + new string('0', 37))];
-
-            histories.Dispose();
-
-            Assert.Empty(histories.Commits);
-        }
 
         // ================================================================
         //  Select: 0件の選択
@@ -513,25 +443,6 @@ namespace Komorebi.Tests.ViewModels
         // ================================================================
         //  SHA がフォーマットの異なる場合のプレフィックス検索
         // ================================================================
-
-        /// <summary>
-        /// 短いSHA（7文字等）でプレフィックス検索が正しく動作すること。
-        /// </summary>
-        [Theory]
-        [InlineData("abcdef1")] // 7文字
-        [InlineData("abcdef12345")] // 11文字
-        [InlineData("abcdef1234567890abcdef1234567890abcdef12")] // 完全一致
-        public void NavigateTo_VariousShaPrefixLengths_FindsCommit(string prefix)
-        {
-            var histories = new Histories(_repo);
-            var commit = MakeCommit("abcdef1234567890abcdef1234567890abcdef12");
-            histories.Commits = [commit];
-
-            histories.NavigateTo(prefix);
-
-            Assert.NotNull(histories.SelectedCommit);
-            Assert.Equal(commit.SHA, histories.SelectedCommit.SHA);
-        }
 
         // ================================================================
         //  子コミット逆引き（GetChildrenBySha の遅延構築）

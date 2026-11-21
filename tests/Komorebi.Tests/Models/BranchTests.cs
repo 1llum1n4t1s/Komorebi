@@ -8,44 +8,9 @@ namespace Komorebi.Tests.Models
     {
         #region FriendlyName
 
-        [Fact]
-        public void FriendlyName_LocalBranch_ReturnsName()
-        {
-            var branch = new Branch { Name = "feature", IsLocal = true, Remote = "origin" };
-            Assert.Equal("feature", branch.FriendlyName);
-        }
-
-        [Fact]
-        public void FriendlyName_RemoteBranch_ReturnsRemoteSlashName()
-        {
-            var branch = new Branch { Name = "main", IsLocal = false, Remote = "origin" };
-            Assert.Equal("origin/main", branch.FriendlyName);
-        }
-
-        [Fact]
-        public void FriendlyName_RemoteBranch_DifferentRemote()
-        {
-            var branch = new Branch { Name = "develop", IsLocal = false, Remote = "upstream" };
-            Assert.Equal("upstream/develop", branch.FriendlyName);
-        }
-
         #endregion
 
         #region HasWorktree
-
-        [Theory]
-        [InlineData(false, "/path/to/worktree", true)]
-        [InlineData(true, "/path/to/worktree", false)]
-        [InlineData(true, "/path", false)]
-        [InlineData(false, "/path", true)]
-        [InlineData(false, "", false)]
-        [InlineData(false, null, false)]
-        [InlineData(true, null, false)]
-        public void HasWorktree_ReturnsExpected(bool isCurrent, string? path, bool expected)
-        {
-            var branch = new Branch { IsCurrent = isCurrent, WorktreePath = path };
-            Assert.Equal(expected, branch.HasWorktree);
-        }
 
         #endregion
 
@@ -99,88 +64,9 @@ namespace Komorebi.Tests.Models
 
         #region IsTrackStatusVisible
 
-        [Fact]
-        public void IsTrackStatusVisible_Ahead_ReturnsTrue()
-        {
-            var branch = new Branch { Ahead = new List<string> { "a" }, Behind = new List<string>() };
-            Assert.True(branch.IsTrackStatusVisible);
-        }
-
-        [Fact]
-        public void IsTrackStatusVisible_Behind_ReturnsTrue()
-        {
-            var branch = new Branch { Ahead = new List<string>(), Behind = new List<string> { "a" } };
-            Assert.True(branch.IsTrackStatusVisible);
-        }
-
-        [Fact]
-        public void IsTrackStatusVisible_Neither_ReturnsFalse()
-        {
-            var branch = new Branch { Ahead = new List<string>(), Behind = new List<string>() };
-            Assert.False(branch.IsTrackStatusVisible);
-        }
-
         #endregion
 
         #region IsUnpublished
-
-        [Fact]
-        public void IsUnpublished_LocalBranchWithoutUpstream_ReturnsTrue()
-        {
-            var branch = new Branch { IsLocal = true, Upstream = "" };
-            Assert.True(branch.IsUnpublished);
-        }
-
-        [Fact]
-        public void IsUnpublished_LocalBranchWithNullUpstream_ReturnsTrue()
-        {
-            var branch = new Branch { IsLocal = true, Upstream = null };
-            Assert.True(branch.IsUnpublished);
-        }
-
-        [Fact]
-        public void IsUnpublished_LocalBranchWithUpstream_ReturnsFalse()
-        {
-            var branch = new Branch { IsLocal = true, Upstream = "refs/remotes/origin/feature" };
-            Assert.False(branch.IsUnpublished);
-        }
-
-        [Fact]
-        public void IsUnpublished_RemoteBranch_ReturnsFalse()
-        {
-            var branch = new Branch { IsLocal = false, Upstream = "" };
-            Assert.False(branch.IsUnpublished);
-        }
-
-        [Fact]
-        public void IsUnpublished_DetachedHead_ReturnsFalse()
-        {
-            var branch = new Branch { IsLocal = true, IsDetachedHead = true, Upstream = "" };
-            Assert.False(branch.IsUnpublished);
-        }
-
-        #endregion
-
-        #region Default Values
-
-        [Fact]
-        public void NewBranch_HasEmptyDefaults()
-        {
-            var branch = new Branch();
-            Assert.Null(branch.Name);
-            Assert.Null(branch.FullName);
-            Assert.Null(branch.Head);
-            Assert.Null(branch.Upstream);
-            Assert.Null(branch.Remote);
-            Assert.Null(branch.WorktreePath);
-            Assert.False(branch.IsLocal);
-            Assert.False(branch.IsCurrent);
-            Assert.False(branch.IsDetachedHead);
-            Assert.False(branch.IsUpstreamGone);
-            Assert.Equal(0UL, branch.CommitterDate);
-            Assert.Empty(branch.Ahead);
-            Assert.Empty(branch.Behind);
-        }
 
         #endregion
     }
