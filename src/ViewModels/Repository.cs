@@ -1418,7 +1418,7 @@ public class Repository : ObservableObject, Models.IRepository
 
     // Komorebi: Watcher と Close の CTS 所有権の移動だけを排他する。
     // Cancel の同期コールバックが UI 待ちや再入を伴っても、ロックを保持しない。
-    internal bool TryRenewCancellation(ref CancellationTokenSource source, out CancellationToken token)
+    private bool TryRenewCancellation(ref CancellationTokenSource source, out CancellationToken token)
     {
         CancellationTokenSource previous;
         lock (_refreshLock)
@@ -1439,7 +1439,7 @@ public class Repository : ObservableObject, Models.IRepository
         return !_isClosed && !token.IsCancellationRequested;
     }
 
-    internal void StopRefreshes()
+    private void StopRefreshes()
     {
         CancellationTokenSource[] sources;
         lock (_refreshLock)
@@ -1643,9 +1643,17 @@ public class Repository : ObservableObject, Models.IRepository
                     if (_histories is not null)
                     {
                         _histories.IsLoading = false;
-                        _histories.Commits = commits;
+                        // Graph を先に代入してから Commits を代入する。Commits の setter は SelectedCommits の
+                        // PropertyChanged を通じて View の Select → Histories.RefreshGraph を走らせ得るため、
+                        // 後から Graph を代入すると、その UI スレッド上の CommitGraph.Parse の結果を捨てて再度 Parse してしまう。
+                        // 順序を入れ替え、setter 側で Graph が差し替わった場合はその結果を残して Parse を 1 回にする。
+                        // 注意: ReferenceEquals による判定は「Graph の書き手はこのラムダと Histories.RefreshGraph だけ」
+                        // という別ファイルをまたぐ不変条件に依存する。将来 Graph の書き手が増えると、
+                        // 再解析を誤って省くおそれがある。
                         _histories.Graph = graph;
-                        if (GraphHighlighting != highlighting || GraphHighlighting >= Models.CommitGraphHighlighting.SelectedCommitsOnly)
+                        _histories.Commits = commits;
+                        if (ReferenceEquals(_histories.Graph, graph) &&
+                            (GraphHighlighting != highlighting || GraphHighlighting >= Models.CommitGraphHighlighting.SelectedCommitsOnly))
                             _histories.RefreshGraph();
 
                         BisectState = _histories.ApplyBisectInfo(bisectSnapshot);

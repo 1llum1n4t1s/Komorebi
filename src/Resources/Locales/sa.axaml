@@ -453,19 +453,16 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">विषयः</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">विकासशाखा:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">विशेषता:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">विशेषतापूर्वप्रत्ययः:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - विशेषतां समापयतु</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - तात्कालिकसंशोधनं समापयतु</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - प्रकाशनं समापयतु</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">लक्ष्यम्:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">विलयने संपीडयतु</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">तात्कालिकसंशोधनम्:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">तात्कालिकसंशोधनपूर्वप्रत्ययः:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Git-Flow आरम्भयतु</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">शाखां धारयतु</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">उत्पादनशाखा:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">प्रकाशनम्:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">प्रकाशनपूर्वप्रत्ययः:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">विशेषतां प्रारभतु...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - विशेषतां प्रारभतु</x:String>
@@ -764,7 +761,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">पुनःस्थापनपरीक्षणकाले अज्ञातदोषः अभवत्</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">पुनःस्थापनं विरोधान् जनयिष्यति</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">दूरस्थं योजयतु</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">दूरस्थं सम्पादयतु</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">नाम:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">दूरस्थनाम</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">भण्डार-URL:</x:String>
@@ -772,7 +768,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">URL प्रतिलिखतु</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">अभिरुचिक्रिया</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">विलोपयतु...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">सम्पादयतु...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">आनयतु</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">अन्तर्जाले उद्घाटयतु</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">कार्यवृक्षापसारणं सुनिश्चितं कुरुत</x:String>
@@ -819,7 +814,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">स्थलाकृतिशः</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">स्थानीयशाखाः</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">अधिकविकल्पाः...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">HEAD प्रति गच्छतु</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">शाखां रचयतु</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">सूचनाः मार्जयतु</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">पत्रिकारूपेण उद्घाटयतु</x:String>
@@ -875,7 +869,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">प्रत्यावर्तनपरिवर्तनानि प्रतिबध्नातु</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">प्रतिबद्धसन्देशं पुनर्लिखतु</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">चलति। कृपया प्रतीक्षताम्...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">रक्षतु</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">इति रक्षतु...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">पैच् सफलतया रक्षितम्!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">भण्डाराणि परीक्षतु</x:String>
@@ -906,7 +899,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup सम्पन्नम्, किन्तु git config तः '{0}' इत्यस्य दूरस्थं upstream शाखां च निर्धारयितुं न शक्तम्, अतः बलात् push न कृतम्।</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">मध्ये:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH गोपनकुञ्चिका:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">गोपनकुञ्चिकामार्गः (.pub न भवतु)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">किमपि नास्ति (वैश्विकसंस्थापनम्)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">अन्वेषणम्...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">सार्वजनिककुञ्चिका (.pub) चिता। गोपनकुञ्चिकां (.pub विस्तारं विना सञ्चिकाम्) चिनुत।</x:String>
@@ -936,7 +928,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">सप्ताहः</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">लेखकाः: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">प्रतिबद्धानि: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">उपमॉड्यूलानि</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">उपमॉड्यूलं योजयतु</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">शाखा</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">शाखा</x:String>
@@ -951,7 +942,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">विलोपयतु</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">शाखां निर्धारयतु</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">URL परिवर्तयतु</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">स्थितिः</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">परिवर्तितम्</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">अनारब्धम्</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">संशोधनं परिवर्तितम्</x:String>
@@ -1356,7 +1346,6 @@ $1, $2 ... निवेशनियन्त्रणमूल्यानि</x
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">स्थानीयशाखाचयनकम्</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">दूरस्थशाखाचयनकम्</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ कार्यवृक्षरूपेण निष्कासयतु...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">${0}$ समापयतु</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">अतिरिक्तशीर्षकाणि (प्रतिपङ्क्ति एकं `नाम: मूल्यम्`)</x:String>
   <x:String x:Key="Text.TagCM.Merge">${0}$ इत्येतत् ${1}$ मध्ये विलयतु...</x:String>
   <x:String x:Key="Text.TrustRepository">अविश्वस्तभण्डारः</x:String>

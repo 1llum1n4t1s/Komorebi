@@ -66,10 +66,9 @@ public class Config : Command
     /// <param name="comparer">辞書のキー比較子。nullの場合はデフォルト（大文字小文字区別あり）。</param>
     /// <returns>設定キーと値の辞書。</returns>
     /// <remarks>
-    /// Komorebi 独自のヘルパー（upstream には存在しない）。Komorebi.Tests がパース境界を
-    /// リフレクションなしで検証できるよう internal にしている（InternalsVisibleTo の範囲内のみ公開）。
+    /// Komorebi 独自のヘルパー（upstream には存在しない）。
     /// </remarks>
-    internal static Dictionary<string, string> ParseConfigOutput(string stdout, IEqualityComparer<string> comparer = null)
+    private static Dictionary<string, string> ParseConfigOutput(string stdout, IEqualityComparer<string> comparer = null)
     {
         var rs = comparer is not null ? new Dictionary<string, string>(comparer) : new Dictionary<string, string>();
         var lines = stdout.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);

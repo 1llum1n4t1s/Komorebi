@@ -244,6 +244,8 @@ public static partial class Logger
 
         var process = Process.GetCurrentProcess();
         var version = Assembly.GetExecutingAssembly().GetName().Version;
+        // 現在カルチャ（仏暦・和暦など）に依存しないよう InvariantCulture で書式化する（StartupDiagnostics と同じ）。
+        var startTime = process.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
 
         var message =
             $"""
@@ -256,7 +258,7 @@ public static partial class Logger
             Framework: {AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}
             スレッド名: {Thread.CurrentThread.Name ?? "Unnamed"}
             スレッドID: {Environment.CurrentManagedThreadId}
-            アプリ起動時刻: {process.StartTime}
+            アプリ起動時刻: {startTime}
             メモリ使用量: {process.PrivateMemorySize64 / 1024 / 1024} MB
             """;
 
@@ -275,10 +277,11 @@ public static partial class Logger
     public static void LogStartup()
     {
         var version = Assembly.GetExecutingAssembly().GetName().Version;
+        var startedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
         var startupMessage =
             $"""
             === Komorebi 起動ログ ===
-            起動時刻: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}
+            起動時刻: {startedAt}
             バージョン: {version}
             OS: {Environment.OSVersion}
             実行ファイルパス: {Environment.ProcessPath}
@@ -334,7 +337,8 @@ public static partial class Logger
                     var fileName = Path.GetFileNameWithoutExtension(file);
                     var parts = fileName.Split('_');
                     if (parts.Length >= 2 && parts[1].Length == 8 &&
-                        DateTime.TryParseExact(parts[1], "yyyyMMdd", null,
+                        // ファイル名の日付はグレゴリオ暦で書かれるため、現在カルチャ（仏暦・和暦など）ではなく InvariantCulture で解析する。
+                        DateTime.TryParseExact(parts[1], "yyyyMMdd", CultureInfo.InvariantCulture,
                             DateTimeStyles.None, out var fileDate))
                     {
                         if (fileDate < cutoffDate)

@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">СОДЕРЖИМОЕ</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-процесс</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Ветка разработчика:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Свойство:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Свойство префикса:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">ПРОЦЕСС - Свойства завершения</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">ПРОЦЕСС - Закончить исправление</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">ПРОЦЕСС - Завершить выпуск</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Цель:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Втиснуть при слиянии</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Исправление:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Префикс исправлений:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Создать Git-процесс</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Держать ветку</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Производственная ветка:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Выпуск:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Префикс выпуска:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Свойство запуска...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">ПРОЦЕСС - Свойство запуска</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">При проверке перебазирования произошла неизвестная ошибка</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Перебазирование вызовет конфликты</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Добавить внешний репозиторий</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Редактировать внешний репозиторий</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Имя:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Имя внешнего репозитория</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">Адрес:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Копировать адрес</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Пользовательские действия</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Удалить...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Редактировать...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Извлечь</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Открыть в браузере</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Подтвердить удаление рабочего каталога</x:String>
@@ -819,7 +814,6 @@
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Топологически</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">ЛОКАЛЬНЫЕ ВЕТКИ</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Больше опций...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Навигация по ГОЛОВЕ (HEAD)</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Создать ветку</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">ОЧИСТКА УВЕДОМЛЕНИЙ</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Открыть как каталог</x:String>
@@ -875,7 +869,6 @@
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Отмена ревизии</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Изменить комментарий ревизии</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">Запуск. Подождите пожалуйста...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">СОХРАНИТЬ</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Сохранить как...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Заплатка успешно сохранена!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Обнаружение репозиториев</x:String>
@@ -906,7 +899,6 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup выполнен, но принудительный push пропущен: не удалось определить удалённый репозиторий и upstream-ветку '{0}' по git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">В:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватный ключ SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Путь к закрытому ключу (не .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Нет (глобальная настройка)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Обзор...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Вы выбрали открытый ключ (.pub). Выберите закрытый ключ (файл без расширения .pub).</x:String>
@@ -936,7 +928,6 @@
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">НЕДЕЛЯ</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">АВТОРЫ: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">РЕВИЗИИ: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">ПОДМОДУЛИ</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Добавить подмодули</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">ВЕТКА</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Ветка</x:String>
@@ -951,7 +942,6 @@
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Удалить подмодуль</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Установить ветку</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Изменить URL-адрес</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">СОСТОЯНИЕ</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">изменён</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">не создан</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">ревизия изменена</x:String>
@@ -1356,7 +1346,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Выбор локальной ветки</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Выбор удалённой ветки</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Сделать ${0}$ рабочим деревом...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Завершение ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Дополнительные заголовки (по одному «Имя: Значение» на строку)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Влить ${0}$ в ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Недоверенный репозиторий</x:String>

@@ -396,7 +396,7 @@ public partial class App : Application
             Action actionCallback = null;
 
             // SSH秘密鍵パーミッションエラーの場合、自動修正アクションを提供する
-            if (hintKey == "Text.GitError.KeyPermissionTooOpen" && !OperatingSystem.IsWindows())
+            if (hintKey == Models.GitErrorHelper.KeyPermissionTooOpenHintKey && !OperatingSystem.IsWindows())
             {
                 var keyPath = Models.GitErrorHelper.ExtractKeyPathFromPermissionError(message);
                 if (!string.IsNullOrEmpty(keyPath))
@@ -407,7 +407,7 @@ public partial class App : Application
                 }
             }
             // safe.directory 未許可リポジトリの場合、自動修正アクションを提供する (全プラットフォーム対応)
-            else if (hintKey == "Text.GitError.DubiousOwnership")
+            else if (hintKey == Models.GitErrorHelper.DubiousOwnershipHintKey)
             {
                 var repoPath = Models.GitErrorHelper.ExtractPathFromDubiousOwnership(message);
                 // 押しても「対象外」になるだけの通知にはボタンを出さない。IsAutoFixCandidate は git を起動しない判定で、

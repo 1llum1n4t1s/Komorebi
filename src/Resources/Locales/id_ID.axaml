@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">KONTEN</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Branch Development:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Prefix Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Selesaikan Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Selesaikan Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Selesaikan Release</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Sasaran:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash saat merge</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Prefix Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Inisialisasi Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Simpan branch</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Branch Production:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Release:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Prefix Release:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Mulai Feature...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Mulai Feature</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Terjadi kesalahan tidak dikenal saat menguji rebase</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase akan menyebabkan konflik</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Tambah Remote</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Sunting Remote</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nama:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Nama remote</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL Repositori:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Salin URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Aksi Kustom</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Hapus...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Sunting...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Buka di Browser</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Konfirmasi Hapus Worktree</x:String>
@@ -819,7 +814,6 @@ Menambahkan filter riwayat branch/tag secara manual akan menonaktifkan fitur ini
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologis</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">BRANCH LOKAL</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Opsi lainnya...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Navigasi ke HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Buat Branch</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">BERSIHKAN NOTIFIKASI</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Buka sebagai Folder</x:String>
@@ -875,7 +869,6 @@ Menambahkan filter riwayat branch/tag secara manual akan menonaktifkan fitur ini
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Commit perubahan revert</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Reword Pesan Commit</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">Sedang berjalan. Harap tunggu...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">SIMPAN</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Simpan Sebagai...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Patch berhasil disimpan!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Pindai Repositori</x:String>
@@ -906,7 +899,6 @@ Menambahkan filter riwayat branch/tag secara manual akan menonaktifkan fitur ini
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup selesai, tetapi force push dilewati karena remote dan branch upstream '{0}' tidak dapat ditentukan dari git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ke:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Kunci SSH Privat:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Path kunci privat (bukan .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Tidak ada (pengaturan global)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Telusuri...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Anda memilih kunci publik (.pub). Pilih kunci privat (file tanpa ekstensi .pub).</x:String>
@@ -936,7 +928,6 @@ Menambahkan filter riwayat branch/tag secara manual akan menonaktifkan fitur ini
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">MINGGU</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTHOR: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMIT: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SUBMODULE</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Tambah Submodule</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branch</x:String>
@@ -951,7 +942,6 @@ Menambahkan filter riwayat branch/tag secara manual akan menonaktifkan fitur ini
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Hapus</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Atur Branch</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Ubah URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATUS BERKAS</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">dimodifikasi</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">tidak diinisialisasi</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revisi berubah</x:String>
@@ -1356,7 +1346,6 @@ Alasan: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Pemilih branch lokal</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Pemilih branch remote</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Checkout ${0}$ sebagai pohon kerja...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Selesaikan ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Header Tambahan (satu `Nama: Nilai` per baris)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Merge ${0}$ ke ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Repositori tidak dipercaya</x:String>

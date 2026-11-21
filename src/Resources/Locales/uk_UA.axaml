@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">ЗМІСТ</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Розробка гілки:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Функція:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Префікс функції:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Завершити функцію</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Завершити гарячу поправку</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Завершити реліз</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Ціль:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash під час злиття</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Гаряча поправка:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Префікс гарячої поправки:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Ініціалізувати Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Залишити гілку</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Гілка виробництва:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Реліз:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Префікс релізу:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Почати функцію...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Почати функцію</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Під час перевірки перебазування сталася невідома помилка</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Перебазування спричинить конфлікти</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Додати віддалене сховище</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Редагувати віддалене сховище</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Назва:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Назва віддаленого сховища</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL сховища:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Копіювати URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Довільна дія</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Видалити...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Редагувати...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch (Отримати)</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Відкрити у браузері</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Підтвердити видалення робочого дерева</x:String>
@@ -819,7 +814,6 @@
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Топологічний</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">ЛОКАЛЬНІ ГІЛКИ</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Більше параметрів...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Перейти до HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Створити гілку</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">ОЧИСТИТИ СПОВІЩЕННЯ</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Відкрити як теку</x:String>
@@ -875,7 +869,6 @@
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Закомітити зміни скасування</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Змінити повідомлення коміту</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">Виконується. Будь ласка, зачекайте...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">ЗБЕРЕГТИ</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Зберегти як...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Патч успішно збережено!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Сканувати сховища</x:String>
@@ -906,7 +899,6 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup виконано, але примусовий push пропущено: не вдалося визначити віддалений репозиторій і upstream-гілку '{0}' з git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">До:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Приватний ключ SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Шлях до приватного ключа (не .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Немає (глобальне налаштування)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Огляд...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Ви обрали відкритий ключ (.pub). Оберіть приватний ключ (файл без розширення .pub).</x:String>
@@ -936,7 +928,6 @@
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">ТИЖДЕНЬ</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">АВТОРІВ: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">КОМІТІВ: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">ПІДМОДУЛІ</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Додати підмодуль</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">ГІЛКА</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Гілка</x:String>
@@ -951,7 +942,6 @@
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Видалити підмодуль</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Встановити гілку</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Змінити URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">СТАН</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">змінено</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">не ініціалізовано</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">ревізія змінена</x:String>
@@ -1356,7 +1346,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Вибір локальної гілки</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Вибір віддаленої гілки</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Переключити ${0}$ в робоче дерево...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Завершити ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Додаткові заголовки (один `Назва: Значення` на рядок)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Злити ${0}$ у ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Недовірений репозиторій</x:String>

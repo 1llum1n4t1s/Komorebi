@@ -124,9 +124,9 @@ public class FileHistoriesSingleRevision : ObservableObject
         });
     }
 
-    internal long BeginContentRequest() => ++_contentRequest;
+    private long BeginContentRequest() => ++_contentRequest;
 
-    internal void ApplyRevisionContent(long request, object content)
+    private void ApplyRevisionContent(long request, object content)
     {
         // 上流との差分: ファイル取得中に表示モードを切り替えても古い結果で戻さない。
         if (request != _contentRequest || IsDiffMode)

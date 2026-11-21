@@ -453,19 +453,16 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">CONTENUTO</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Branch di Sviluppo:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Prefisso Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Completa Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Completa Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Completa Rilascio</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Destinazione:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Esegui squash durante il merge</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Prefisso Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Inizializza Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Mantieni branch</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Branch di Produzione:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Rilascio:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Prefisso Rilascio:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Inizia Feature...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Inizia Feature</x:String>
@@ -764,7 +761,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Si è verificato un errore sconosciuto durante il test del rebase</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Il rebase causerà conflitti</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Aggiungi Remoto</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Modifica Remoto</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nome:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Nome del remoto</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL del Repository:</x:String>
@@ -772,7 +768,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Copia URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Azione Personalizzata</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Elimina...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Modifica...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Recupera</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Apri nel Browser</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Conferma Rimozione Worktree</x:String>
@@ -819,7 +814,6 @@ Aggiungere manualmente un filtro di cronologia per branch o tag disattiva automa
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologicamente</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">BRANCH LOCALI</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Altre opzioni...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Vai a HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Crea Branch</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">CANCELLA LE NOTIFICHE</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Apri come Cartella</x:String>
@@ -875,7 +869,6 @@ Aggiungere manualmente un filtro di cronologia per branch o tag disattiva automa
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Commit delle modifiche di ripristino</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Modifica Messaggio di Commit</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">In esecuzione. Attendere...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">SALVA</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Salva come...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">La patch è stata salvata con successo!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Scansiona Repository</x:String>
@@ -906,7 +899,6 @@ Aggiungere manualmente un filtro di cronologia per branch o tag disattiva automa
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup completato, ma il push forzato è stato saltato perché non è stato possibile determinare il remoto e il branch upstream di '{0}' da git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Chiave Privata SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Percorso della chiave privata (non .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Nessuna (impostazione globale)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Sfoglia...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Hai selezionato una chiave pubblica (.pub). Seleziona la chiave privata (il file senza estensione .pub).</x:String>
@@ -936,7 +928,6 @@ Aggiungere manualmente un filtro di cronologia per branch o tag disattiva automa
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">SETTIMANA</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTORI:</x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMIT:</x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SOTTOMODULI</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Aggiungi Sottomodulo</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branch</x:String>
@@ -951,7 +942,6 @@ Aggiungere manualmente un filtro di cronologia per branch o tag disattiva automa
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Elimina Sottomodulo</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Imposta Branch</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Cambia URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATO</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">modificato</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">non inizializzato</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revisione cambiata</x:String>
@@ -1356,7 +1346,6 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Selettore ramo locale</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Selettore ramo remoto</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Esegui checkout di ${0}$ come albero di lavoro...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Completa ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Intestazioni aggiuntive (una `Nome: Valore` per riga)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Unisci ${0}$ in ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Repository non attendibile</x:String>

@@ -60,7 +60,7 @@ public class AutoFetchService
 
         Task.Run(async () =>
         {
-            // 起動直後に 1 回目が走るように _lastRun は既定の MinValue のまま
+            // 起動直後に 1 回目が走るように _lastRun は既定の NeverRun のまま
             while (!token.IsCancellationRequested)
             {
                 // 30 秒待機 or 手動トリガ（TriggerNow）で即座にワイルカップ
@@ -125,7 +125,7 @@ public class AutoFetchService
     public void TriggerNow()
     {
         // 次回インターバルチェックを回避するため最終実行時刻をリセットする
-        _lastRun = DateTime.MinValue;
+        _lastRun = NeverRun;
 
         // 実行中なら終了後に再実行を予約、非実行中ならウェイトを解除して即ティック。
         // _pendingTrigger は volatile 宣言済みのため、直接代入で acquire/release セマンティクスが保証される。
@@ -161,7 +161,7 @@ public class AutoFetchService
             if (!enabled && !forced)
             {
                 // 自動フェッチ無効 + 手動トリガ無 → 何もしない
-                _lastRun = DateTime.MinValue;
+                _lastRun = NeverRun;
                 return;
             }
 
@@ -170,7 +170,8 @@ public class AutoFetchService
             var interval = TimeSpan.FromMinutes(intervalMinutes);
 
             // 手動トリガが立っていればインターバルチェックを迂回する
-            if (!forced && _lastRun != DateTime.MinValue && DateTime.Now - _lastRun < interval)
+            // 経過時間は単調増加クロックで測る（壁時計だと夏時間の切替や手動の時刻変更で間隔がずれる）
+            if (!forced && _lastRun != NeverRun && TimeSpan.FromMilliseconds(Environment.TickCount64 - _lastRun) < interval)
                 return;
 
             // このサイクルが手動トリガ分を消費する
@@ -218,7 +219,7 @@ public class AutoFetchService
             if (enabled && !forced)
                 await FetchOpenReposAsync(token).ConfigureAwait(false);
 
-            _lastRun = DateTime.Now;
+            _lastRun = Environment.TickCount64;
         }
         finally
         {
@@ -365,7 +366,9 @@ public class AutoFetchService
     }
 
     private CancellationTokenSource _cts;
-    private DateTime _lastRun = DateTime.MinValue;
+    // 前回サイクル完了時の Environment.TickCount64（ミリ秒）。未実行は NeverRun。
+    private const long NeverRun = -1;
+    private long _lastRun = NeverRun;
     private readonly Lock _syncLock = new();
     private TaskCompletionSource _forceTrigger;
     // TOCTOU 回避のため int (0=idle, 1=running) + Interlocked.CompareExchange に変更。

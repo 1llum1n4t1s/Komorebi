@@ -449,19 +449,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">CONTENT</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Development Branch:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Feature Prefix:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Finish Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Finish Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Finish Release</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Target:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash during merge</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Hotfix Prefix:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Initialize Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Keep branch</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Production Branch:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Release:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Release Prefix:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Start Feature...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Start Feature</x:String>
@@ -760,7 +757,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Unknown error occurs while testing for rebase</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase will cause conflicts</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Add Remote</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Edit Remote</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Name:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Remote name</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">Repository URL:</x:String>
@@ -768,7 +764,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Copy URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Custom Action</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Delete...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Edit...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Open In Browser</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirm to Remove Worktree</x:String>
@@ -815,7 +810,6 @@ Manually adding a branch/tag history filter will disable this feature automatica
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologically</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">LOCAL BRANCHES</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">More options...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Navigate to HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Create Branch</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">CLEAR NOTIFICATIONS</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Open as Folder</x:String>
@@ -871,7 +865,6 @@ Manually adding a branch/tag history filter will disable this feature automatica
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Commit revert changes</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Reword Commit Message</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">Running. Please wait...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">SAVE</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Save As...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Patch has been saved successfully!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Scan Repositories</x:String>
@@ -902,7 +895,6 @@ Manually adding a branch/tag history filter will disable this feature automatica
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup completed, but force push was skipped because the remote and upstream branch of '{0}' could not be determined from git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Into:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH Private Key:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Private key path (not .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">None (Global Setting)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Browse...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">You selected a public key (.pub). Please select the private key (the file without .pub extension).</x:String>
@@ -932,7 +924,6 @@ Manually adding a branch/tag history filter will disable this feature automatica
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">WEEK</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTHORS: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMITS: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SUBMODULES</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Add Submodule</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branch</x:String>
@@ -947,7 +938,6 @@ Manually adding a branch/tag history filter will disable this feature automatica
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Delete</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Set Branch</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Change URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATUS</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">modified</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">not initialized</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revision changed</x:String>
@@ -1356,7 +1346,6 @@ Reason: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Local Branch Selector</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Remote Branch Selector</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Checkout ${0}$ as worktree...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Finish ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Extra Headers (one `Name: Value` per line)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Merge ${0}$ into ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Untrusted Repository</x:String>

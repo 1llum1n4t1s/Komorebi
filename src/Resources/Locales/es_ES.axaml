@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">CONTENIDO</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Rama de Desarrollo:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Prefijo de Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Finalizar Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Finalizar Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Finalizar Release</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Destino:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash durante el merge</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Prefijo de Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Inicializar Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Mantener rama</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Rama de Producción:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Release:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Prefijo de Release:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Iniciar Feature...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Iniciar Feature</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Se produjo un error desconocido al probar el rebase</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">El rebase causará conflictos</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Añadir Remoto</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Editar Remoto</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nombre:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Nombre remoto</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL del Repositorio:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Copiar URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Acción Personalizada</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Borrar...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Editar...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Abrir En Navegador</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirmar para Eliminar Árbol de trabajo</x:String>
@@ -819,7 +814,6 @@ Añadir manualmente un filtro de historial de rama o etiqueta desactiva esta fun
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topológicamente</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">RAMAS LOCALES</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Más opciones...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Navegar a HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Crear Rama</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">LIMPIAR NOTIFICACIONES</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Abrir como Carpeta</x:String>
@@ -875,7 +869,6 @@ Añadir manualmente un filtro de historial de rama o etiqueta desactiva esta fun
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Commit revertir cambios</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Reescribir Mensaje de Commit</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">Ejecutando. Por favor espera...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">GUARDAR</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Guardar Como...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">¡El parche se ha guardado exitosamente!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Escanear Repositorios</x:String>
@@ -906,7 +899,6 @@ Añadir manualmente un filtro de historial de rama o etiqueta desactiva esta fun
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">El squash/fixup se completó, pero se omitió el push forzado porque no se pudieron determinar el remoto y la rama upstream de '{0}' a partir de git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">En:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clave Privada SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Ruta de la clave privada (no .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Ninguna (configuración global)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Examinar...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Ha seleccionado una clave pública (.pub). Seleccione la clave privada (el archivo sin extensión .pub).</x:String>
@@ -936,7 +928,6 @@ Añadir manualmente un filtro de historial de rama o etiqueta desactiva esta fun
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">SEMANA</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTORES: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMITS: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SUBMÓDULOS</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Añadir Submódulo</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">RAMA</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Rama</x:String>
@@ -951,7 +942,6 @@ Añadir manualmente un filtro de historial de rama o etiqueta desactiva esta fun
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Eliminar Submódulo</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Establecer Rama</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Cambiar URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">ESTADO</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">modificado</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">no inicializado</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revisión cambiada</x:String>
@@ -1356,7 +1346,6 @@ Razón: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Selector de rama local</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Selector de rama remota</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Checkout a ${0}$ como árbol de trabajo...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Finalizar ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Encabezados adicionales (un `Nombre: Valor` por línea)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Hacer merge de ${0}$ a ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Repositorio No confiable</x:String>

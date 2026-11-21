@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">CONTENU</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Branche de développement :</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Préfixe Feature :</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Terminer Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Terminer Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Terminer Release</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Cible:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash lors de la fusion</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Préfixe Hotfix :</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Initialiser Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Garder la branche</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Branche de production :</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Release :</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Release Prefix :</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Commencer Feature...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Commencer Feature</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Une erreur inconnue s'est produite lors du test de rebase</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Le rebase provoquera des conflits</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Ajouter dépôt distant</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Modifier dépôt distant</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nom :</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Nom du dépôt distant</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL du dépôt :</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Copier l'URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Action personnalisée</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Supprimer...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Editer...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Ouvrir dans le navigateur</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirmer la suppression du Worktree</x:String>
@@ -819,7 +814,6 @@ L'ajout manuel d'un filtre d'historique de branche ou de tag désactive automati
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologiquement</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">BRANCHES LOCALES</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Plus d'options...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Naviguer vers le HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Créer une branche</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">EFFACER LES NOTIFICATIONS</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Ouvrir en tant que dossier</x:String>
@@ -875,7 +869,6 @@ L'ajout manuel d'un filtre d'historique de branche ou de tag désactive automati
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Commit les changements de l'annulation</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Reformuler le message de commit</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">En exécution. Veuillez patienter...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">SAUVEGARDER</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Sauvegarder en tant que...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Le patch a été sauvegardé !</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Analyser les repositories</x:String>
@@ -906,7 +899,6 @@ L'ajout manuel d'un filtre d'historique de branche ou de tag désactive automati
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Le squash/fixup est terminé, mais le push forcé a été ignoré, car le dépôt distant et la branche amont de « {0} » n'ont pas pu être déterminés à partir de git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Dans :</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clé privée SSH :</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Chemin de la clé privée (pas .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Aucune (paramètre global)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Parcourir...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Vous avez sélectionné une clé publique (.pub). Veuillez sélectionner la clé privée (le fichier sans extension .pub).</x:String>
@@ -936,7 +928,6 @@ L'ajout manuel d'un filtre d'historique de branche ou de tag désactive automati
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">SEMAINE</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTEURS : </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMITS: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SOUS-MODULES</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Ajouter un sous-module</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCHE</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branche</x:String>
@@ -951,7 +942,6 @@ L'ajout manuel d'un filtre d'historique de branche ou de tag désactive automati
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Supprimer le sous-module</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Définir la Branche</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Changer l'URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATUT</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">modifié</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">non initialisé</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">révision changée</x:String>
@@ -1356,7 +1346,6 @@ Raison : {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Sélecteur de branche locale</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Sélecteur de branche distante</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Extraire ${0}$ comme arbre de travail...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Terminer ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">En-têtes supplémentaires (un `Nom: Valeur` par ligne)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Fusionner ${0}$ dans ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Dépôt non approuvé</x:String>

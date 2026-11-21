@@ -377,7 +377,7 @@ public static class StartupDiagnostics
     /// ローテーションに失敗（.old が他プロセスに開かれている等）しても、今回のクラッシュ記録は失わないよう追記は続行する。
     /// 追記自体の例外は呼び出し元（WriteFatal）が握りつぶす。
     /// </summary>
-    internal static void AppendWithRotation(string path, string text, long maxBytes)
+    private static void AppendWithRotation(string path, string text, long maxBytes)
     {
         try
         {

@@ -54,9 +54,9 @@ public partial class Askpass : ChromelessWindow
         var hintKey = Models.GitErrorHelper.GetAskpassHintKey(sshMessage);
 
         // ホスト鍵プロンプトの場合、入力欄を隠す
-        _isHostKeyPrompt = hintKey is "Text.Askpass.Hint.HostKeyNew" or "Text.Askpass.Hint.HostKeyChanged";
+        _isHostKeyPrompt = hintKey is Models.GitErrorHelper.AskpassHostKeyNewHintKey or Models.GitErrorHelper.AskpassHostKeyChangedHintKey;
         // ホスト鍵「変更」警告は MITM の可能性があるため、いかなる経路でも yes を送ってはならない
-        _isHostKeyChangedWarning = hintKey is "Text.Askpass.Hint.HostKeyChanged";
+        _isHostKeyChangedWarning = hintKey is Models.GitErrorHelper.AskpassHostKeyChangedHintKey;
 
         // HostKeyNew (= 新規ホスト鍵プロンプト) で OK ボタンに Enter キー一発で
         // "yes" を自動承認する経路を遮断するため、HostKeyNew でも TxtPassphrase は表示したまま、明示的に

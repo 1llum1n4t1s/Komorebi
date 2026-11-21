@@ -100,29 +100,23 @@ public class SSHKeyHelper : ObservableObject
         if (key == null || IsGenerating)
             return;
 
-        try
-        {
-            if (File.Exists(key.PrivateKeyPath))
-                File.Delete(key.PrivateKeyPath);
-            if (File.Exists(key.PublicKeyPath))
-                File.Delete(key.PublicKeyPath);
+        // 上流との差分: 削除の失敗は握りつぶさず、呼び出し元 (Views/SSHKeyHelper.axaml.cs) の Alert へ伝える。
+        if (File.Exists(key.PrivateKeyPath))
+            File.Delete(key.PrivateKeyPath);
+        if (File.Exists(key.PublicKeyPath))
+            File.Delete(key.PublicKeyPath);
 
-            var idx = Keys.IndexOf(key);
-            if (idx >= 0)
-            {
-                Keys.RemoveAt(idx);
-
-                if (Keys.Count == 0)
-                    SelectedKey = null;
-                else if (idx > Keys.Count - 1)
-                    SelectedKey = Keys[Keys.Count - 1];
-                else
-                    SelectedKey = Keys[idx];
-            }
-        }
-        catch
+        var idx = Keys.IndexOf(key);
+        if (idx >= 0)
         {
-            throw;
+            Keys.RemoveAt(idx);
+
+            if (Keys.Count == 0)
+                SelectedKey = null;
+            else if (idx > Keys.Count - 1)
+                SelectedKey = Keys[Keys.Count - 1];
+            else
+                SelectedKey = Keys[idx];
         }
     }
 

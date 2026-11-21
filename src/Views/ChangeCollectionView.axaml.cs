@@ -405,10 +405,11 @@ public partial class ChangeCollectionView : UserControl
         }
         else
         {
+            var current = new HashSet<Models.Change>(selected);
             bool allEquals = true;
             foreach (var c in old)
             {
-                if (!selected.Contains(c))
+                if (!current.Contains(c))
                 {
                     allEquals = false;
                     break;

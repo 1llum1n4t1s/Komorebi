@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">ファイルの内容</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git フロー</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">開発ブランチ:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">新機能の実装:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">新機能の実装用のプレフィックス:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">フロー - 新機能の実装を完了</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">フロー - 緊急のバグ修正を完了</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">フロー - リリース作業を完了</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">対象:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">スカッシュしてマージ</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">緊急のバグ修正:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">緊急のバグ修正用のプレフィックス:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Git フローを初期化</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">ブランチを維持</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">本番ブランチ:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">リリース作業:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">リリース作業用のプレフィックス:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">新機能の実装を開始...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">フロー - 新機能の実装を開始</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">リベースのテスト中に不明なエラーが発生しました</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">リベースするとコンフリクトが発生します</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">リモートを追加</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">リモートを編集</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">名前:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">リモート名</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">リポジトリの URL:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">URL をコピー</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">カスタムアクション</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">削除...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">編集...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">フェッチ</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">ブラウザーで開く</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">作業ツリーの削除を確認</x:String>
@@ -819,7 +814,6 @@
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">トポロジカル</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">ローカルブランチ</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">その他のオプション...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">HEAD に移動</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">ブランチを作成</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">通知を消去</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">フォルダとして開く</x:String>
@@ -875,7 +869,6 @@
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">取り消しの変更をコミット</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">コミットメッセージを書き直す</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">実行しています。お待ちください...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">保存</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">名前を付けて保存...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">パッチが正常に保存されました！</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">リポジトリをスキャン</x:String>
@@ -906,7 +899,6 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">スカッシュ/フィックスアップは完了しましたが、git config から '{0}' のリモートと上流ブランチを特定できなかったため、強制プッシュは行いませんでした。</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">統合先:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH の秘密鍵:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">秘密鍵のパス（.pub ではない方）</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">指定なし（グローバル設定）</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">参照...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">公開鍵（.pub）が選択されました。秘密鍵（.pub が付かない方のファイル）を選択してください。</x:String>
@@ -936,7 +928,6 @@
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">週間</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">著者: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">コミット: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">サブモジュール</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">サブモジュールを追加</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">ブランチ</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">ブランチ</x:String>
@@ -951,7 +942,6 @@
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">ブランチを設定</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">URL を変更</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">状態</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">変更あり</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">未初期化</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">リビジョンに更新あり</x:String>
@@ -1356,7 +1346,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">ローカルブランチ選択</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">リモートブランチ選択</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ をワークツリーとしてチェックアウト...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">${0}$ を完了</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">追加のヘッダー (`名前: 値` を一行ごとに指定してください)</x:String>
   <x:String x:Key="Text.TagCM.Merge">${0}$ を ${1}$ にマージ...</x:String>
   <x:String x:Key="Text.TrustRepository">信頼されていないリポジトリ</x:String>

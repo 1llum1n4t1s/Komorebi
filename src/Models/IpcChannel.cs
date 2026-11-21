@@ -37,7 +37,7 @@ public class IpcChannel : IDisposable
     {
     }
 
-    internal static string CreatePipeName(string dataDir)
+    private static string CreatePipeName(string dataDir)
     {
         var path = Path.TrimEndingDirectorySeparator(Path.GetFullPath(dataDir));
         if (OperatingSystem.IsWindows())

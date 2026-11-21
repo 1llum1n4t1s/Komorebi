@@ -453,19 +453,16 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">INHALT</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Development-Branch:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Feature-Präfix:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW – Feature fertigstellen</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW – Hotfix fertigstellen</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW – Release fertigstellen</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash beim Merge</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Hotfix-Präfix:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Git Flow initialisieren</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Branch behalten</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Production-Branch:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Release:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Release-Präfix:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Feature beginnen…</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW – Feature beginnen</x:String>
@@ -764,7 +761,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Beim Testen des Rebases ist ein unbekannter Fehler aufgetreten</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase wird Konflikte verursachen</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Remote hinzufügen</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Remote bearbeiten</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Name:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Remote-Name</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">Repository-URL:</x:String>
@@ -772,7 +768,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">URL kopieren</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Benutzerdefinierte Aktion</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Löschen…</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Bearbeiten…</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Fetch</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Im Browser öffnen</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Bestätige das Entfernen des Worktrees</x:String>
@@ -819,7 +814,6 @@ Das manuelle Hinzufügen eines Branch-/Tag-Verlaufsfilters deaktiviert diese Fun
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologisch</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">LOKALE BRANCHES</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Mehr Optionen…</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Zum HEAD wechseln</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Erstelle Branch</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">BENACHRICHTIGUNGEN LÖSCHEN</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Als Ordner öffnen</x:String>
@@ -875,7 +869,6 @@ Das manuelle Hinzufügen eines Branch-/Tag-Verlaufsfilters deaktiviert diese Fun
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Commit-Änderungen rückgängig machen</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Commit-Nachricht umformulieren</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">In Bearbeitung. Bitte warten…</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">SPEICHERN</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Speichern als…</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Patch wurde erfolgreich gespeichert!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Durchsuche Repositorys</x:String>
@@ -906,7 +899,6 @@ Das manuelle Hinzufügen eines Branch-/Tag-Verlaufsfilters deaktiviert diese Fun
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/Fixup ist abgeschlossen, aber der Force-Push wurde übersprungen, da Remote und Upstream-Branch von '{0}' nicht aus git config ermittelt werden konnten.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Privater SSH-Schlüssel:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Pfad zum privaten Schlüssel (nicht .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Keine (Globale Einstellung)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Durchsuchen...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Sie haben einen öffentlichen Schlüssel (.pub) ausgewählt. Bitte wählen Sie den privaten Schlüssel (die Datei ohne .pub-Endung).</x:String>
@@ -936,7 +928,6 @@ Das manuelle Hinzufügen eines Branch-/Tag-Verlaufsfilters deaktiviert diese Fun
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">WOCHE</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTOREN: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMITS: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SUBMODULE</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Submodul hinzufügen</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branch</x:String>
@@ -951,7 +942,6 @@ Das manuelle Hinzufügen eines Branch-/Tag-Verlaufsfilters deaktiviert diese Fun
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Submodul löschen</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Branch setzen</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">URL ändern</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATUS</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">geändert</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">nicht initialisiert</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">Revision geändert</x:String>
@@ -1356,7 +1346,6 @@ Grund: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Auswahl lokaler Branches</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Auswahl entfernter Branches</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ als Worktree auschecken...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Abschließen ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Zusätzliche Header (ein `Name: Wert` pro Zeile)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Merge ${0}$ in ${1}$ hinein…</x:String>
   <x:String x:Key="Text.TrustRepository">Nicht vertrauenswürdiges Repository</x:String>

@@ -602,10 +602,6 @@ public class Preferences : ObservableObject
         set;
     } = [];
 
-    /// <summary>JSONデシリアライズ時の未知プロパティを保持する拡張データ。</summary>
-    [JsonExtensionData]
-    public Dictionary<string, System.Text.Json.JsonElement> ExtensionData { get; set; }
-
     /// <summary>設定の変更を許可する。初回ロード完了後に呼び出す。</summary>
     public void SetCanModify()
     {
@@ -783,8 +779,6 @@ public class Preferences : ObservableObject
     {
         if (_isLoading || _isReadonly)
             return;
-
-        ExtensionData = null;
 
         // 並行プロセス (複数 Komorebi インスタンス) との tmp ファイル衝突を避けるためランダム拡張子付き
         var tmp = $"{file}.tmp.{Guid.NewGuid():N}";

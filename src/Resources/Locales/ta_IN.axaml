@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">உள்ளடக்கம்</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">அறிவிலி-ஓட்டம்</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">மேம்பாட்டு கிளை:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">நற்பொருத்தம்:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">நற்பொருத்தம் முன்னொட்டு:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">ஓட்டம் - நற்பொருத்தம் முடி</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">ஓட்டம் - சூடானதிருத்தம் முடி</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">ஓட்டம் - வெளியீட்டை முடி</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">இலக்கு:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Merge போது Squash செய்</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">சூடானதிருத்தம்:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">சூடானதிருத்தம் முன்னொட்டு:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">அறிவிலி-ஓட்டம் துவக்கு</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">கிளையை வைத்திரு</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">உற்பத்தி கிளை:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">வெளியீடு:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">வெளியீடு முன்னொட்டு:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">நற்பொருத்தம் தொடங்கு...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">ஓட்டம் - நற்பொருத்தம் தொடங்கு</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Rebase சோதனையின் போது தெரியாத பிழை ஏற்பட்டது</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase மோதல்களை ஏற்படுத்தும்</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">தொலையைச் சேர்</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">தொலையைத் திருத்து</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">பெயர்:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">களஞ்சிய பெயர்</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">களஞ்சிய முகவரி:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">முகவரியை நகலெடு</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">தனிப்பயன் செயல்</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">நீக்கு...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">திருத்து...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">பெறு</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">உலாவியில் திற</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">பணிமரத்தை அகற்றுவதை உறுதிப்படுத்து</x:String>
@@ -819,7 +814,6 @@
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">இடவியல் மூலமாக</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">உள்ளக கிளைகள்</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">மேலும் விருப்பங்கள்...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">தலைக்கு செல்</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">கிளையை உருவாக்கு</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">அறிவிப்புகளை அழி</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">கோப்புறையாகத் திற</x:String>
@@ -875,7 +869,6 @@
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">பின்வாங்கு மாற்றங்களை உறுதிமொழி</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">மாறுசொல் உறுதிமொழி செய்தி</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">இயங்குகிறது. காத்திருக்கவும்...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">சேமி</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">எனச் சேமி...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">ஒட்டு வெற்றிகரமாக சேமிக்கப்பட்டது!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">களஞ்சியங்களை வருடு</x:String>
@@ -906,7 +899,6 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup முடிந்தது, ஆனால் git config இலிருந்து '{0}' இன் ரிமோட்டையும் upstream கிளையையும் கண்டறிய முடியாததால் கட்டாய push தவிர்க்கப்பட்டது.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">உள்ளே:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">பாஓடு தனியார் திறவுகோல்:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">தனிப்பட்ட விசை பாதை (.pub அல்ல)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">எதுவுமில்லை (உலகளாவிய அமைப்பு)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">உலாவு...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">நீங்கள் பொது விசையை (.pub) தேர்ந்தெடுத்தீர்கள். தனிப்பட்ட விசையை (.pub நீட்டிப்பு இல்லாத கோப்பு) தேர்ந்தெடுக்கவும்.</x:String>
@@ -936,7 +928,6 @@
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">வாரம்</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">ஆசிரியர்கள்: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">உறுதிமொழிகள்: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">துணைத் தொகுதி</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">துணைத் தொகுதியைச் சேர்</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">கிளை</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">கிளை</x:String>
@@ -951,7 +942,6 @@
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">துணை தொகுதியை நீக்கு</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">கிளையை அமை</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">URL-ஐ மாற்று</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">நிலை</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">மாற்றப்பட்டது</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">துவக்கப்படவில்லை</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">திருத்தம் மாற்றப்பட்டது</x:String>
@@ -1356,7 +1346,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">உள்ளூர் கிளைத் தேர்வி</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">தொலைக் கிளைத் தேர்வி</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ ஐ பணிமரமாகச் சரிபார்...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">${0}$ ஐ முடி</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">கூடுதல் தலைப்புகள் (ஒரு வரிக்கு ஒரு `பெயர்: மதிப்பு`)</x:String>
   <x:String x:Key="Text.TagCM.Merge">${0}$ ஐ ${1}$ உடன் ஒன்றிணை...</x:String>
   <x:String x:Key="Text.TrustRepository">நம்பகமற்ற களஞ்சியம்</x:String>

@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">文件内容</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">GIT工作流</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">开发分支 ：</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">特性分支 ：</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">特性分支名前缀 ：</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">结束特性分支</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">结束修复分支</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">结束版本分支</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">目标分支 ：</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">压缩变更为单一提交后合并分支</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">修复分支 ：</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">修复分支名前缀 ：</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">初始化GIT工作流</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">保留分支</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">发布分支 ：</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">版本分支 ：</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">版本分支名前缀 ：</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">开始特性分支...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">开始特性分支</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">测试变基时发生未知错误</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">变基操作将产生冲突</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">添加远程仓库</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">编辑远程仓库</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">远程名 ：</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">唯一远程名</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">远程仓库 ：</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">复制远程地址</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">自定义操作</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">删除 ...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">编辑 ...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">拉取(fetch)更新</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">在浏览器中打开</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">移除工作树操作确认</x:String>
@@ -819,7 +814,6 @@
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">按拓扑排序</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">本地分支</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">更多选项...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">定位HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">新建分支</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">清空通知列表</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">本仓库（文件夹）</x:String>
@@ -875,7 +869,6 @@
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">回滚后提交更改</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">编辑提交信息</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">执行操作中，请耐心等待...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">保    存</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">另存为...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">补丁已成功保存！</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">扫描仓库</x:String>
@@ -906,7 +899,6 @@
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">压缩/修正已完成，但无法从 git config 确定 '{0}' 的远程和上游分支，因此跳过了强制推送。</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">父提交：</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">SSH密钥 ：</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">私钥路径（不是 .pub）</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">无（全局设置）</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">浏览...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">您选择了公钥（.pub）。请选择私钥（没有 .pub 扩展名的文件）。</x:String>
@@ -936,7 +928,6 @@
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">本周</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">贡献者人数: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">提交次数: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">子模块</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">添加子模块</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">跟踪分支</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">跟踪分支</x:String>
@@ -951,7 +942,6 @@
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">删除</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">修改跟踪分支</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">修改远程地址</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">状态</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">未提交修改</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">未初始化</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">SHA变更</x:String>
@@ -1356,7 +1346,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">本地分支选择器</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">远程分支选择器</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">检出 ${0}$ 为新工作树...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">完成 ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">附加 HTTP 请求头部 (格式：每行一条 Name: Value)</x:String>
   <x:String x:Key="Text.TagCM.Merge">合并 ${0}$ 到 ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">不受信任的仓库</x:String>

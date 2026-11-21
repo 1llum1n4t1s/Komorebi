@@ -20,23 +20,30 @@ public sealed class ChangeSelection : List<Models.Change>
         if (selected is null)
             return;
 
+        // 全選択ではフォルダーとファイルの両方から同じ変更へ到達するため、重複判定は O(1) の集合で行う。
+        var seen = new HashSet<Models.Change>();
         foreach (var item in selected)
         {
-            if (item is Models.Change change && !Contains(change))
-                Add(change);
+            if (item is Models.Change change)
+            {
+                if (seen.Add(change))
+                    Add(change);
+            }
             else if (item is ChangeTreeNode node)
-                Collect(node);
+            {
+                Collect(node, seen);
+            }
         }
     }
 
-    private void Collect(ChangeTreeNode node)
+    private void Collect(ChangeTreeNode node, HashSet<Models.Change> seen)
     {
         if (node.IsFolder)
         {
             foreach (var child in node.Children)
-                Collect(child);
+                Collect(child, seen);
         }
-        else if (!Contains(node.Change))
+        else if (seen.Add(node.Change))
         {
             Add(node.Change);
         }

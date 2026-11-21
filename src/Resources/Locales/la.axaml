@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">CONTENTUM</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Ramus Evolutionis:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Proprietas:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Praefixum Proprietatis:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Perfice Proprietatem</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Perfice Correctionem Urgentem</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Perfice Editionem</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Obiectum:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash durante merge</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Correctio Urgens:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Praefixum Correctionis Urgentis:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Initia Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Serva ramum</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Ramus Productionis:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Editio:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Praefixum Editionis:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Incipe Proprietatem...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Incipe Proprietatem</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Error ignotus accidit dum rebase probatur</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">Rebase conflictus causabit</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Adde Remotum</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Recense Remotum</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nomen:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Nomen remoti</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL Repositorii:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Copia URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Actio Propria</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Dele...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Recense...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Arcessse</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Aperi In Navigatro</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirma Remotionem Arboris Operis</x:String>
@@ -819,7 +814,6 @@ Filtrum historiae rami aut notae manu additum hanc facultatem sponte exstinguit.
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologice</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">RAMI LOCALES</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Plures optiones...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Naviga ad HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Crea Ramum</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">PURGA NOTIFICATIONES</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Aperi ut Fasciculum</x:String>
@@ -875,7 +869,6 @@ Filtrum historiae rami aut notae manu additum hanc facultatem sponte exstinguit.
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Committe mutationes reversionis</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Rescribe Nuntium Committi</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">Exsequitur. Quaesumus exspecta...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">SERVA</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Serva Ut...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Emplastra feliciter servata!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Perlege Repositoria</x:String>
@@ -906,7 +899,6 @@ Filtrum historiae rami aut notae manu additum hanc facultatem sponte exstinguit.
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">Squash/fixup perfectum est, sed impulsus coactus omissus est, quia remotum et ramus upstream '{0}' ex git config determinari non potuerunt.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">In:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clavis SSH Privata:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Semita clavis privatae (non .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Nulla (dispositio globalis)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Perlustra...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Clavem publicam (.pub) selegisti. Clavem privatam (archivum sine extensione .pub) selige.</x:String>
@@ -936,7 +928,6 @@ Filtrum historiae rami aut notae manu additum hanc facultatem sponte exstinguit.
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">HEBDOMAS</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUCTORES: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMITTA: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SUBMODULI</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Adde Submodulum</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">RAMUS</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Ramus</x:String>
@@ -951,7 +942,6 @@ Filtrum historiae rami aut notae manu additum hanc facultatem sponte exstinguit.
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Dele</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Constitue Ramum</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Muta URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">CONDICIO</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">mutatum</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">non initiatum</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revisio mutata</x:String>
@@ -1356,7 +1346,6 @@ Causa: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Selector rami localis</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Selector rami remoti</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">${0}$ ut arborem operis extrahe...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">${0}$ perfice</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Tituli additi (unus `Nomen: Valor` per lineam)</x:String>
   <x:String x:Key="Text.TagCM.Merge">${0}$ in ${1}$ coniunge...</x:String>
   <x:String x:Key="Text.TrustRepository">Repositorium non fidum</x:String>

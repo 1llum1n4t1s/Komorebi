@@ -450,19 +450,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">CONTINGUT</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Branca de desenvolupament:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Funcionalitat:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Prefix de funcionalitat:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">Finalitza la funcionalitat</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">Finalitza la correcció ràpida</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">Finalitza el llançament</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Objectiu:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Fes squash durant la fusió</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Correcció ràpida:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Prefix de correcció ràpida:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Inicialitza Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Conserva la branca</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Branca de producció:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Llançament:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Prefix de llançament:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Inicia una funcionalitat...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">Inicia una funcionalitat</x:String>
@@ -761,7 +758,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">S'ha produït un error desconegut en comprovar el rebase</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">El rebase provocarà conflictes</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Afegeix un remot</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Edita el remot</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nom:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Nom del remot</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL del remot:</x:String>
@@ -769,7 +765,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Copia l'URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Acció personalitzada</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Suprimeix...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Edita...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Obtén</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Obre al navegador</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirmeu la supressió de l'arbre de treball</x:String>
@@ -816,7 +811,6 @@ Afegir manualment un filtre d'historial de branca o d'etiqueta desactiva aquesta
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Ordre topològic</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">BRANQUES LOCALS</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Més opcions...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Vés a HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Crea una branca</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">ESBORRA LES NOTIFICACIONS</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Obre com a carpeta</x:String>
@@ -872,7 +866,6 @@ Afegir manualment un filtre d'historial de branca o d'etiqueta desactiva aquesta
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Fes la comissió dels canvis de la reversió</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Edita el missatge de la comissió</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">S'està executant. Espereu...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">DESA</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Anomena i desa...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">El pedaç s'ha desat correctament!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Escaneja repositoris</x:String>
@@ -903,7 +896,6 @@ Afegir manualment un filtre d'historial de branca o d'etiqueta desactiva aquesta
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">S'ha completat el squash/fixup, però s'ha omès el push forçat perquè no s'ha pogut determinar el remot i la branca upstream de «{0}» a partir de git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">A:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Clau privada SSH:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Ruta de la clau privada (sense .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Cap (configuració global)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Navega...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Heu seleccionat una clau pública (.pub). Seleccioneu la clau privada (el fitxer sense l'extensió .pub).</x:String>
@@ -933,7 +925,6 @@ Afegir manualment un filtre d'historial de branca o d'etiqueta desactiva aquesta
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">SETMANA</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTORS: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMISSIONS: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SUBMÒDULS</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Afegeix un submòdul</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCA</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branca</x:String>
@@ -948,7 +939,6 @@ Afegir manualment un filtre d'historial de branca o d'etiqueta desactiva aquesta
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Suprimeix</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Estableix la branca</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Canvia l'URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">ESTAT</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">modificat</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">no inicialitzat</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revisió canviada</x:String>
@@ -1353,7 +1343,6 @@ Motiu: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Selector de branca local</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Selector de branca remota</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Fes «checkout» de ${0}$ com a arbre de treball...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Finalitza ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Capçaleres addicionals (una `Nom: Valor` per línia)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Fusiona ${0}$ a ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Repositori no fiable</x:String>

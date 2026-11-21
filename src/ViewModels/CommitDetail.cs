@@ -743,11 +743,15 @@ public partial class CommitDetail : ObservableObject, IDisposable
         // コミットのフルメッセージを非同期で取得する
         Task.Run(async () =>
         {
-            var message = await new Commands.QueryCommitFullMessage(_repo.FullPath, commit.SHA)
+            // 選択が切り替わったら git show / SHA 検証のプロセスを中止する（中止時は空結果が返り、例外・通知は出ない）
+            var message = await new Commands.QueryCommitFullMessage(_repo.FullPath, commit.SHA) { CancellationToken = token }
                 .GetResultAsync()
                 .ConfigureAwait(false);
+            if (token.IsCancellationRequested)
+                return;
+
             // メッセージ内のインライン要素（URL、SHA、コード）を解析する
-            var inlines = await ParseInlinesInMessageAsync(message).ConfigureAwait(false);
+            var inlines = await ParseInlinesInMessageAsync(message, token).ConfigureAwait(false);
 
             if (!token.IsCancellationRequested)
                 Dispatcher.UIThread.Post(() =>
@@ -765,7 +769,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
         // コミットの署名情報を非同期で取得する
         Task.Run(async () =>
         {
-            var signInfo = await new Commands.QueryCommitSignInfo(_repo.FullPath, commit.SHA, !_repo.HasAllowedSignersFile)
+            var signInfo = await new Commands.QueryCommitSignInfo(_repo.FullPath, commit.SHA, !_repo.HasAllowedSignersFile) { CancellationToken = token }
                 .GetResultAsync()
                 .ConfigureAwait(false);
 
@@ -830,8 +834,9 @@ public partial class CommitDetail : ObservableObject, IDisposable
     /// イシュートラッカーのルールも適用する。
     /// </summary>
     /// <param name="message">コミットメッセージ</param>
+    /// <param name="token">選択が切り替わった時に SHA 検証を中止するためのトークン</param>
     /// <returns>インライン要素のコレクション</returns>
-    private async Task<Models.InlineElementCollector> ParseInlinesInMessageAsync(string message)
+    private async Task<Models.InlineElementCollector> ParseInlinesInMessageAsync(string message, CancellationToken token)
     {
         var inlines = new Models.InlineElementCollector();
 
@@ -879,7 +884,7 @@ public partial class CommitDetail : ObservableObject, IDisposable
                 await semaphore.WaitAsync().ConfigureAwait(false);
                 try
                 {
-                    var isCommit = await new Commands.IsCommitSHA(_repo.FullPath, c.SHA).GetResultAsync().ConfigureAwait(false);
+                    var isCommit = await new Commands.IsCommitSHA(_repo.FullPath, c.SHA) { CancellationToken = token }.GetResultAsync().ConfigureAwait(false);
                     return (c.Start, c.Len, c.SHA, IsCommit: isCommit);
                 }
                 finally

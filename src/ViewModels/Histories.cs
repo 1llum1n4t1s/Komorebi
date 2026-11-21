@@ -429,10 +429,10 @@ public class Histories : ObservableObject, IDisposable
         });
     }
 
-    /// <summary>非同期照会が完了したコミットをUIスレッドで反映する。</summary>
-    internal long BeginNavigationRequest() => ++_navigationRequest;
+    private long BeginNavigationRequest() => ++_navigationRequest;
 
-    internal void ApplyNavigationResult(long request, Models.Commit c)
+    /// <summary>非同期照会が完了したコミットをUIスレッドで反映する。</summary>
+    private void ApplyNavigationResult(long request, Models.Commit c)
     {
         // upstreamとの差分: 失敗した照会や古い照会で現在の選択を消さない。
         if (_disposed || c is null || request != _navigationRequest)

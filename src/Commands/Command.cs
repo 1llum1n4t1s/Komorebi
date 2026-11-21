@@ -282,32 +282,20 @@ public partial class Command
             start.Environment.Add("DISPLAY", "required");
 
         // GIT_SSH_COMMANDを設定する。
-        // 信頼モデル方針 (SSH 信頼モデル C 案): 「企業環境配慮」を採る。
-        //   1. ContainsKey ガードで親プロセスの GIT_SSH_COMMAND を尊重する。
-        //      これによりユーザーが shell rcfile / wrapper script で GIT_SSH_COMMAND を上書きしている
-        //      環境（社内 SSH proxy 等）でも Komorebi がそれを潰さない。
-        //   2. SSHKey が未設定なら -F でユーザー config を無効化しない（~/.ssh/config の ProxyJump 等を尊重）。
-        //   3. SSHKey が明示設定された場合のみ -F /dev/null（または NUL）で config を無効化し、
-        //      per-remote SSH 鍵が確実に使われるよう厳格化する。
-        // 副作用: per-remote 鍵を厳守したいユーザーで親シェルが GIT_SSH_COMMAND を設定していると
-        //   per-remote 設定が無視される。これは C 案の意図的トレードオフ。
-        //
-        // StrictHostKeyChecking=ask: 初回ホスト鍵を自動登録せず、SSH の確認境界に委ねる。
-        // Windows の OpenSSH は /dev/null を認識せず、シングルクォートエスケープも Git for Windows の
-        // 内部 sh 呼び出しに頼れないため、プラットフォームごとに quoting と null device を切り替える。
-        // SSHKey 信頼境界の方針:
-        //  - per-remote SSHKey (`.git/config remote.<name>.sshkey`) または GlobalSSHKey が UI/設定で
-        //    明示的に設定されている場合は、親シェルの GIT_SSH_COMMAND よりも UI 設定を優先する。
-        //    旧設計では「親環境を尊重」だったが、これでは Komorebi UI の per-remote 設定が
-        //    親シェルの環境変数で silent に無視される問題があった。
-        //  - SSHKey 値はファイルパスとして実在し、かつシェルメタ文字を含まないことを検証する。
+        // SSH 信頼境界の方針:
+        //  - per-remote SSHKey (`.git/config remote.<name>.sshkey`) または GlobalSSHKey が有効なら、
+        //    親シェルの GIT_SSH_COMMAND より優先する（UI 設定が環境変数で silent に無視されるのを避ける）。
+        //    このとき -F でユーザー config を無効化し、指定した鍵が確実に使われるようにする。
+        //  - SSHKey 値はファイルパスとして実在し、かつ危険文字を含まないことを検証する。
         //    `.git/config` 経由で `key" -o ProxyCommand=...` のような細工値が混入しても引数境界を
-        //    破綻させない多層防御。検証失敗時は SSHKey を空扱いにして親環境フォールバックする。
-        //  - SSHKey 未設定で親環境にも GIT_SSH_COMMAND が無いときのみ、デフォルトの ssh コマンドを設定する。
+        //    破綻させない多層防御。検証失敗時は SSHKey を未設定扱いにして親環境へフォールバックする。
+        //  - SSHKey が未設定または無効なら、親の GIT_SSH_COMMAND（社内 SSH proxy 用の wrapper 等）を
+        //    尊重し、~/.ssh/config も無効化しない。親環境にも無いときだけ既定の ssh コマンドを設定する。
         //
         // StrictHostKeyChecking=ask: 初回ホスト鍵を自動登録せず、SSH の確認境界に委ねる。
         // Windows の OpenSSH は /dev/null を認識せず、シングルクォートエスケープも Git for Windows の
-        // 内部 sh 呼び出しに頼れないため、プラットフォームごとに quoting と null device を切り替える。
+        // 内部 sh 呼び出しに頼れないため、OS ごとに quoting と null device を切り替える
+        // （Unix: POSIX single quote + `-F /dev/null`、Windows: double quote + `-F NUL`）。
         var sshKeyValid = !string.IsNullOrEmpty(SSHKey) && IsSafeSshKeyPath(SSHKey);
         var hasParentSshCmd = start.Environment.ContainsKey("GIT_SSH_COMMAND");
 

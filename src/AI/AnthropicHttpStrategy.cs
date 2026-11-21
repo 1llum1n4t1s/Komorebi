@@ -83,9 +83,9 @@ internal sealed class AnthropicHttpStrategy(Service service) : IGenerationStrate
     /// Anthropic Messages API の tools 配列を組み立てる。
     /// ツールの名前・説明・入力スキーマは OpenAI 経路と同じ <see cref="ChatTools.GetDetailChangesInFile"/> を正本とし、
     /// 以前のような JSON の手書き複製を持たない（片方だけ更新されて両経路のツール定義がずれるのを防ぐ）。
-    /// スキーマのキー順・値は旧手書き定義と同一なので、送信される JSON 文字列は変わらない（AnthropicHttpStrategyTests で固定）。
+    /// スキーマのキー順・値は旧手書き定義と同一なので、送信される JSON 文字列は変わらない。
     /// </summary>
-    internal static JsonArray BuildTools()
+    private static JsonArray BuildTools()
     {
         var tool = ChatTools.GetDetailChangesInFile;
 

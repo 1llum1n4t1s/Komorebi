@@ -222,12 +222,7 @@ public class RepositorySettings
     }
 
     /// <summary>文字列のMD5ハッシュを計算して16進文字列で返す</summary>
-    /// <remarks>
-    /// 上流との差分: upstream では private。Komorebi.Tests が UTF-8 固定のハッシュ契約を
-    /// リフレクションなしで検証できるよう internal にしている（InternalsVisibleTo の範囲内のみ公開。
-    /// アプリ内の呼び出し元は従来どおり本クラスだけ）。docs/UPSTREAM-SYNC.md の独自差分にも記録。
-    /// </remarks>
-    internal static string HashContent(string source)
+    private static string HashContent(string source)
     {
         // Encoding.Default はOS・カルチャ依存（日本語Windowsでは CP932 = Shift-JIS）で、
         // UTF-8 の JSON 文字列を正しく byte 化できず、非ASCII文字を含む設定で毎回ハッシュ不一致となり

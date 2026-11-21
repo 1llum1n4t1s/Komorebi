@@ -10,6 +10,12 @@ namespace Komorebi.Models;
 /// </summary>
 public static partial class GitErrorHelper
 {
+    // 呼び出し側（App.axaml.cs・Askpass.axaml.cs）がこのキーとの一致で分岐するため、リテラルの重複を避けて定数で共有する。
+    internal const string KeyPermissionTooOpenHintKey = "Text.GitError.KeyPermissionTooOpen";
+    internal const string DubiousOwnershipHintKey = "Text.GitError.DubiousOwnership";
+    internal const string AskpassHostKeyNewHintKey = "Text.Askpass.Hint.HostKeyNew";
+    internal const string AskpassHostKeyChangedHintKey = "Text.Askpass.Hint.HostKeyChanged";
+
     /// <summary>
     /// gitエラーメッセージに対応するローカライズキーを返す。
     /// 該当パターンがない場合は空文字を返す。
@@ -18,6 +24,12 @@ public static partial class GitErrorHelper
     {
         if (string.IsNullOrWhiteSpace(errorMessage))
             return string.Empty;
+
+        // git が push 失敗の末尾に必ず付ける汎用行 ("error: failed to push some refs to '<url>'") は、
+        // 行自体の語 (failed など) や、同じ出力に含まれる URL・参照名の語 (webhooks、cherry-pick-x など) が
+        // 後ろのカテゴリの条件に当たって誤分類するのを避けるため、これらを分類の入力から外し、
+        // どのカテゴリにも当たらなかったときの最後の予備としてだけ使う (詳細は RemovePushSummaryLines)。
+        errorMessage = RemovePushSummaryLines(errorMessage, out var hasPushSummaryLine);
 
         // index.lock: 他のgitプロセスが実行中、またはクラッシュ後のロック残留
         if (errorMessage.Contains("index.lock", System.StringComparison.OrdinalIgnoreCase) ||
@@ -61,9 +73,11 @@ public static partial class GitErrorHelper
             errorMessage.Contains("Updates were rejected", System.StringComparison.OrdinalIgnoreCase) ||
             (errorMessage.Contains("rejected]", System.StringComparison.OrdinalIgnoreCase) &&
              errorMessage.Contains("fetch first", System.StringComparison.OrdinalIgnoreCase)) ||
-            errorMessage.Contains("failed to push some refs", System.StringComparison.OrdinalIgnoreCase) ||
             (errorMessage.Contains("tip of your current branch is behind", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.PushRejected";
+        // 注: "failed to push some refs" は汎用行なので、ここでは判定しない (冒頭で入力から外している)。
+        //     ここで返すと、後ろにあるより具体的なカテゴリ (FileTooLarge / RemoteRefNotFound / HookFailed /
+        //     WorktreeError など) に push 時は到達できなくなる。関数末尾の最後の予備として判定する。
 
         // 未コミット変更があるため操作できない
         // 代表的な git メッセージ:
@@ -98,7 +112,7 @@ public static partial class GitErrorHelper
             errorMessage.Contains("bad permissions", System.StringComparison.OrdinalIgnoreCase) ||
             (errorMessage.Contains("Permissions", System.StringComparison.Ordinal) &&
              errorMessage.Contains("are too open", System.StringComparison.OrdinalIgnoreCase)))
-            return "Text.GitError.KeyPermissionTooOpen";
+            return KeyPermissionTooOpenHintKey;
 
         // SSHホスト鍵変更警告（中間者攻撃の可能性、認証失敗より先にチェック）
         if (errorMessage.Contains("REMOTE HOST IDENTIFICATION HAS CHANGED", System.StringComparison.OrdinalIgnoreCase) ||
@@ -199,7 +213,7 @@ public static partial class GitErrorHelper
         // safe.directory 警告 (Windows / 共有ボリュームで頻発)
         if (errorMessage.Contains("dubious ownership", System.StringComparison.OrdinalIgnoreCase) ||
             errorMessage.Contains("safe.directory", System.StringComparison.OrdinalIgnoreCase))
-            return "Text.GitError.DubiousOwnership";
+            return DubiousOwnershipHintKey;
 
         // サブモジュール
         if (errorMessage.Contains("submodule", System.StringComparison.OrdinalIgnoreCase) &&
@@ -207,6 +221,15 @@ public static partial class GitErrorHelper
              errorMessage.Contains("not a git repository", System.StringComparison.OrdinalIgnoreCase) ||
              errorMessage.Contains("No url found for submodule", System.StringComparison.OrdinalIgnoreCase)))
             return "Text.GitError.SubmoduleError";
+
+        // ファイルが大きすぎる (LFS の前に判定: GitHub の GH001 の実出力は
+        // "Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com." のように
+        // git-lfs の URL を含むため、LFS を先に判定すると的外れな LfsError になる)
+        if (errorMessage.Contains("large files", System.StringComparison.OrdinalIgnoreCase) ||
+            errorMessage.Contains("file is too large", System.StringComparison.OrdinalIgnoreCase) ||
+            errorMessage.Contains("exceeds GitHub's file size limit", System.StringComparison.OrdinalIgnoreCase) ||
+            errorMessage.Contains("File size limit exceeded", System.StringComparison.OrdinalIgnoreCase))
+            return "Text.GitError.FileTooLarge";
 
         // LFS
         if (errorMessage.Contains("git-lfs", System.StringComparison.OrdinalIgnoreCase) ||
@@ -217,13 +240,6 @@ public static partial class GitErrorHelper
              (errorMessage.Contains("not found", System.StringComparison.OrdinalIgnoreCase) ||
               errorMessage.Contains("does not exist", System.StringComparison.OrdinalIgnoreCase))))
             return "Text.GitError.LfsError";
-
-        // ファイルが大きすぎる
-        if (errorMessage.Contains("large files", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("file is too large", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("exceeds GitHub's file size limit", System.StringComparison.OrdinalIgnoreCase) ||
-            errorMessage.Contains("File size limit exceeded", System.StringComparison.OrdinalIgnoreCase))
-            return "Text.GitError.FileTooLarge";
 
         // チェリーピックのコンフリクト
         if (errorMessage.Contains("cherry-pick", System.StringComparison.OrdinalIgnoreCase) &&
@@ -341,6 +357,11 @@ public static partial class GitErrorHelper
               errorMessage.Contains("already exists", System.StringComparison.OrdinalIgnoreCase))))
             return "Text.GitError.WorktreeError";
 
+        // push の汎用的な失敗行。具体的なカテゴリがどれも当たらなかったときだけ PushRejected として扱う
+        // (冒頭の注記を参照)。従来この行だけの単独メッセージは PushRejected だったので、その分類は維持する。
+        if (hasPushSummaryLine)
+            return "Text.GitError.PushRejected";
+
         // パーミッション拒否（ファイルシステム） - 最後にチェック（他カテゴリの広い "Permission denied" を上書きされないように）
         if (errorMessage.Contains("Permission denied", System.StringComparison.OrdinalIgnoreCase) &&
             !errorMessage.Contains("publickey", System.StringComparison.OrdinalIgnoreCase))
@@ -348,6 +369,45 @@ public static partial class GitErrorHelper
 
         return string.Empty;
     }
+
+    /// <summary>
+    /// git が push 失敗の末尾に付ける汎用行 ("error: failed to push some refs to '&lt;url&gt;'") を行ごと取り除く。
+    /// 取り除いたときは <paramref name="found"/> が true になり、同じ push の出力に含まれるリモートの URL 行
+    /// ("To &lt;url&gt;") と、参照の更新状況の行 (" ! [rejected] main -&gt; main (理由)") の参照名も分類の入力から外す。
+    /// リポジトリ名やブランチ名に含まれる語 (webhooks、cherry-pick-x など) が、後ろのカテゴリの条件に
+    /// 当たって誤分類するのを避けるため。更新状況の行の "[状態]" と "(理由)" は残す。行の区切りの改行は残す。
+    /// </summary>
+    private static string RemovePushSummaryLines(string message, out bool found)
+    {
+        found = false;
+        while (true)
+        {
+            var index = message.IndexOf("failed to push some refs", System.StringComparison.OrdinalIgnoreCase);
+            if (index < 0)
+                break;
+
+            found = true;
+            var lineStart = message.LastIndexOf('\n', index) + 1;
+            var lineEnd = message.IndexOf('\n', index);
+            message = lineEnd < 0
+                ? message[..lineStart]
+                : message.Remove(lineStart, lineEnd - lineStart);
+        }
+
+        if (!found)
+            return message;
+
+        message = PushRemoteUrlLineRegex().Replace(message, string.Empty);
+        return PushRefStatusLineRegex().Replace(message, "$1");
+    }
+
+    // push の出力の "To <url>" / "Pushing to <url>" 行
+    [GeneratedRegex(@"^[ \t]*(?:To|Pushing to)[ \t]+[^\r\n]*", RegexOptions.Multiline)]
+    private static partial Regex PushRemoteUrlLineRegex();
+
+    // push の出力の参照の更新状況の行 (" ! [rejected]        main -> main (non-fast-forward)")。"[状態]" の後ろの参照名の部分
+    [GeneratedRegex(@"^([ \t]*(?:[!+\-*=][ \t]*)?\[[^\]\r\n]*\])[ \t]+[^ \t\r\n]+(?:[ \t]+->[ \t]+[^ \t\r\n]+)?", RegexOptions.Multiline)]
+    private static partial Regex PushRefStatusLineRegex();
 
     /// <summary>
     /// SSHのaskpassメッセージに対応するローカライズキーを返す。
@@ -361,13 +421,13 @@ public static partial class GitErrorHelper
         // ホスト鍵変更警告（中間者攻撃の可能性）
         if (message.Contains("REMOTE HOST IDENTIFICATION HAS CHANGED", System.StringComparison.OrdinalIgnoreCase) ||
             message.Contains("Host key verification failed", System.StringComparison.OrdinalIgnoreCase))
-            return "Text.Askpass.Hint.HostKeyChanged";
+            return AskpassHostKeyChangedHintKey;
 
         // 初回接続時のホスト鍵確認
         if (message.Contains("authenticity", System.StringComparison.OrdinalIgnoreCase) &&
             (message.Contains("can't be established", System.StringComparison.OrdinalIgnoreCase) ||
              message.Contains("continue connecting", System.StringComparison.OrdinalIgnoreCase)))
-            return "Text.Askpass.Hint.HostKeyNew";
+            return AskpassHostKeyNewHintKey;
 
         // パスフレーズ入力（"Enter passphrase for key ..." のプロンプト）
         if (message.Contains("Enter passphrase", System.StringComparison.OrdinalIgnoreCase))

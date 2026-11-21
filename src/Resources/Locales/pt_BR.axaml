@@ -453,19 +453,16 @@
   <x:String x:Key="Text.FileHistory.FileContent" xml:space="preserve">CONTEUDO</x:String>
   <x:String x:Key="Text.GitFlow" xml:space="preserve">Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.DevelopBranch" xml:space="preserve">Branch de Desenvolvimento:</x:String>
-  <x:String x:Key="Text.GitFlow.Feature" xml:space="preserve">Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FeaturePrefix" xml:space="preserve">Prefixo da Feature:</x:String>
   <x:String x:Key="Text.GitFlow.FinishFeature" xml:space="preserve">FLOW - Concluir Feature</x:String>
   <x:String x:Key="Text.GitFlow.FinishHotfix" xml:space="preserve">FLOW - Concluir Hotfix</x:String>
   <x:String x:Key="Text.GitFlow.FinishRelease" xml:space="preserve">FLOW - Concluir Release</x:String>
   <x:String x:Key="Text.GitFlow.FinishTarget" xml:space="preserve">Alvo:</x:String>
   <x:String x:Key="Text.GitFlow.FinishWithSquash" xml:space="preserve">Squash durante o merge</x:String>
-  <x:String x:Key="Text.GitFlow.Hotfix" xml:space="preserve">Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.HotfixPrefix" xml:space="preserve">Prefixo do Hotfix:</x:String>
   <x:String x:Key="Text.GitFlow.Init" xml:space="preserve">Inicializar Git-Flow</x:String>
   <x:String x:Key="Text.GitFlow.KeepBranchAfterFinish" xml:space="preserve">Manter branch</x:String>
   <x:String x:Key="Text.GitFlow.ProductionBranch" xml:space="preserve">Branch de Produção:</x:String>
-  <x:String x:Key="Text.GitFlow.Release" xml:space="preserve">Release:</x:String>
   <x:String x:Key="Text.GitFlow.ReleasePrefix" xml:space="preserve">Prefixo da Release:</x:String>
   <x:String x:Key="Text.GitFlow.StartFeature" xml:space="preserve">Iniciar Feature...</x:String>
   <x:String x:Key="Text.GitFlow.StartFeatureTitle" xml:space="preserve">FLOW - Iniciar Feature</x:String>
@@ -764,7 +761,6 @@
   <x:String x:Key="Text.Rebase.Test.UnknownError" xml:space="preserve">Ocorreu um erro desconhecido ao testar o rebase</x:String>
   <x:String x:Key="Text.Rebase.Test.WillCauseConflicts" xml:space="preserve">O rebase causará conflitos</x:String>
   <x:String x:Key="Text.Remote.AddTitle" xml:space="preserve">Adicionar Remoto</x:String>
-  <x:String x:Key="Text.Remote.EditTitle" xml:space="preserve">Editar Remoto</x:String>
   <x:String x:Key="Text.Remote.Name" xml:space="preserve">Nome:</x:String>
   <x:String x:Key="Text.Remote.Name.Placeholder" xml:space="preserve">Nome do remoto</x:String>
   <x:String x:Key="Text.Remote.URL" xml:space="preserve">URL do Repositório:</x:String>
@@ -772,7 +768,6 @@
   <x:String x:Key="Text.RemoteCM.CopyURL" xml:space="preserve">Copiar URL</x:String>
   <x:String x:Key="Text.RemoteCM.CustomAction" xml:space="preserve">Ação Personalizada</x:String>
   <x:String x:Key="Text.RemoteCM.Delete" xml:space="preserve">Excluir...</x:String>
-  <x:String x:Key="Text.RemoteCM.Edit" xml:space="preserve">Editar...</x:String>
   <x:String x:Key="Text.RemoteCM.Fetch" xml:space="preserve">Buscar</x:String>
   <x:String x:Key="Text.RemoteCM.OpenInBrowser" xml:space="preserve">Abrir no Navegador</x:String>
   <x:String x:Key="Text.RemoveWorktree" xml:space="preserve">Confirmar Remoção de Worktree</x:String>
@@ -819,7 +814,6 @@ Adicionar manualmente um filtro de histórico de branch/tag desativa este recurs
   <x:String x:Key="Text.Repository.HistoriesOrder.Topo" xml:space="preserve">Topologicamente</x:String>
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">BRANCHES LOCAIS</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">Mais opções...</x:String>
-  <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">Navegar para HEAD</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">Criar Branch</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">LIMPAR NOTIFICAÇÕES</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">Abrir como Pasta</x:String>
@@ -875,7 +869,6 @@ Adicionar manualmente um filtro de histórico de branch/tag desativa este recurs
   <x:String x:Key="Text.Revert.CommitChanges" xml:space="preserve">Commitar alterações de reversão</x:String>
   <x:String x:Key="Text.Reword" xml:space="preserve">Reescrever Mensagem do Commit</x:String>
   <x:String x:Key="Text.Running" xml:space="preserve">Executando. Por favor, aguarde...</x:String>
-  <x:String x:Key="Text.Save" xml:space="preserve">SALVAR</x:String>
   <x:String x:Key="Text.SaveAs" xml:space="preserve">Salvar Como...</x:String>
   <x:String x:Key="Text.SaveAsPatchSuccess" xml:space="preserve">Patch salvo com sucesso!</x:String>
   <x:String x:Key="Text.ScanRepositories" xml:space="preserve">Escanear Repositórios</x:String>
@@ -906,7 +899,6 @@ Adicionar manualmente um filtro de histórico de branch/tag desativa este recurs
   <x:String x:Key="Text.SquashOrFixup.ForcePushSkipped" xml:space="preserve">O squash/fixup foi concluído, mas o push forçado foi ignorado porque não foi possível determinar o remoto e o branch upstream de '{0}' a partir do git config.</x:String>
   <x:String x:Key="Text.SquashOrFixup.Into" xml:space="preserve">Em:</x:String>
   <x:String x:Key="Text.SSHKey" xml:space="preserve">Chave SSH Privada:</x:String>
-  <x:String x:Key="Text.SSHKey.Placeholder" xml:space="preserve">Caminho da chave privada (não .pub)</x:String>
   <x:String x:Key="Text.SSHKey.None" xml:space="preserve">Nenhuma (configuração global)</x:String>
   <x:String x:Key="Text.SSHKey.Browse" xml:space="preserve">Procurar...</x:String>
   <x:String x:Key="Text.SSHKey.PublicKeySelected" xml:space="preserve">Você selecionou uma chave pública (.pub). Selecione a chave privada (o arquivo sem extensão .pub).</x:String>
@@ -936,7 +928,6 @@ Adicionar manualmente um filtro de histórico de branch/tag desativa este recurs
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">SEMANA</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">AUTORES: </x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">COMMITS: </x:String>
-  <x:String x:Key="Text.Submodule" xml:space="preserve">SUBMÓDULOS</x:String>
   <x:String x:Key="Text.Submodule.Add" xml:space="preserve">Adicionar Submódulo</x:String>
   <x:String x:Key="Text.Submodule.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Submodule.CopyBranch" xml:space="preserve">Branch</x:String>
@@ -951,7 +942,6 @@ Adicionar manualmente um filtro de histórico de branch/tag desativa este recurs
   <x:String x:Key="Text.Submodule.Remove" xml:space="preserve">Excluir Submódulo</x:String>
   <x:String x:Key="Text.Submodule.SetBranch" xml:space="preserve">Definir Branch</x:String>
   <x:String x:Key="Text.Submodule.SetURL" xml:space="preserve">Alterar URL</x:String>
-  <x:String x:Key="Text.Submodule.Status" xml:space="preserve">STATUS</x:String>
   <x:String x:Key="Text.Submodule.Status.Modified" xml:space="preserve">modificado</x:String>
   <x:String x:Key="Text.Submodule.Status.NotInited" xml:space="preserve">não inicializado</x:String>
   <x:String x:Key="Text.Submodule.Status.RevisionChanged" xml:space="preserve">revisão alterada</x:String>
@@ -1356,7 +1346,6 @@ Motivo: {1}</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.LocalBranch">Seletor de branch local</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type.RemoteBranch">Seletor de branch remota</x:String>
   <x:String x:Key="Text.BranchCM.CheckoutAsWorktree">Fazer checkout de ${0}$ como árvore de trabalho...</x:String>
-  <x:String x:Key="Text.GitFlow.Finish">Concluir ${0}$</x:String>
   <x:String x:Key="Text.Preferences.AI.ExtraHeaders">Cabeçalhos extras (um `Nome: Valor` por linha)</x:String>
   <x:String x:Key="Text.TagCM.Merge">Mesclar ${0}$ em ${1}$...</x:String>
   <x:String x:Key="Text.TrustRepository">Repositório não confiável</x:String>

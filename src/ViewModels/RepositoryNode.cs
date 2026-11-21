@@ -280,7 +280,9 @@ public class RepositoryNode : ObservableObject
 
         try
         {
-            File.WriteAllText(savedTo, JsonSerializer.Serialize(minimalInfo, JsonCodeGen.Default.RepositoryNodeMinimalInfo));
+            // 上流との差分: 書込み途中のクラッシュでファイルが壊れないよう、一時ファイル経由で置換する
+            // （RepositorySettings / RepositoryUIStates と同じ AtomicTextFile。失敗時は例外を戻すので下で握りつぶす）。
+            Models.AtomicTextFile.WriteAllText(savedTo, JsonSerializer.Serialize(minimalInfo, JsonCodeGen.Default.RepositoryNodeMinimalInfo));
         }
         catch
         {
