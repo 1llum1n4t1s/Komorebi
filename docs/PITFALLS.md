@@ -62,6 +62,8 @@ libSkiaSharp (SkiaSharp 3.x) では、GlyphTypeface 生成中の DirectWrite フ
 
 対策として `Models.FontWarmup` が `TryLaunchAsNormal` 冒頭（リポジトリ復元前・可能なら `GC.TryStartNoGCRegion` 区間内）で主要フォント＋代表フォールバック先を一括 GlyphTypeface 化し、危険経路の実行回数と GC 競合の確率を抑えている。**GlyphTypeface を大量生成する新規コードは追加しない**こと（過去に `ResolveMonospaceFont` が全システムフォントを開いて数百回読み取っていた前科がある — 判定対象を候補フォントだけに絞って解消済み）。Avalonia が SkiaSharp 4 系へ移行したら NoGC 区間は不要になる（ウォームアップ自体は初回描画の高速化として残してよい）。
 
+**再発（2026-11-21、v1.1.8）**: 起動約 15 秒後、pull 完了後の履歴再描画中に同じ `libSkiaSharp.DLL+0x2a0934` で落ちた。minidump の UI スレッドの native スタックに `sk_stream_read`（`libSkiaSharp+0x128a0`）があり、Avalonia 12.1.6 の唯一の呼び出し元は `FontCollectionBase.TryCreateSyntheticGlyphTypeface`（`SkiaTypeface.TryGetStream` → `SKStream.Read`）だった。ファミリに Bold / Italic の実体が無いとき、Avalonia はフォントファイル全体を読み直して合成フォントを作る。UI は Bold を約 100 か所、Italic を数か所で使うため、Normal だけを温める従来の対策の外側で、初回の太字描画（pull で先頭コミットが変わった後など）にこの経路が走り得る。対策として `FontWarmup.WarmVariants` が温め済みの各ファミリの Bold / Italic も同じ NoGC 区間で先に生成する（起動時の所要時間は約 10〜24ms から約 70ms になる）。再現はできていないため、効果の確認はクラッシュの再発有無と起動ログの `FontWarmup:` 行で行う。UI に新しい太さ（SemiBold など）やスタイルを使い始めるときは `s_variants` にも足すこと。SkiaSharp 4.x への差し替えは Avalonia 12.1.6 が 3.119.4 に依存するため不可。
+
 ### `git diff-index` の raw 形式は src/dst の 2 組 — amend 復元は必ず src 側を使う
 `git diff-index --cached -M <parent>` の 1 行は `:src-mode dst-mode src-sha dst-sha status\tpath` で、**src = 親コミット側 / dst = index 側**。amend 中のアンステージは「index エントリを親コミットの状態へ戻す」操作なので、`QueryStagedChangesWithAmend` が `ChangeDataForAmend` へ詰めるのは **src-mode と src-sha の両方**でなければならない。dst-mode を拾うと「親の内容 + 新しい mode」という壊れた index になり、`chmod +x` を amend 中にアンステージしても mode 変更だけ残る（upstream sourcegit は dst-mode を拾っている。意図的な逸脱としてコメント済み）。
 

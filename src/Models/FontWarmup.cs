@@ -45,6 +45,13 @@ public static class FontWarmup
         0x1F600, // 😀: SMP 絵文字（カラー絵文字フォント）
     ];
 
+    /// <summary>UI が実際に使う太字（Styles.axaml 等の Bold）と斜体（Italic）。</summary>
+    private static readonly (FontStyle Style, FontWeight Weight)[] s_variants =
+    [
+        (FontStyle.Normal, FontWeight.Bold),
+        (FontStyle.Italic, FontWeight.Normal),
+    ];
+
     /// <summary>
     /// 指定ロケールの既定フォント候補・追加ファミリと、代表コードポイントのフォールバック先を
     /// まとめて GlyphTypeface 化する。失敗しても起動を妨げない（記録のみで継続する）。
@@ -62,6 +69,7 @@ public static class FontWarmup
             {
                 WarmFamilies(locale, preferredFamilies, warmed);
                 WarmFallbacks(warmed);
+                WarmVariants(warmed);
             }
             finally
             {
@@ -125,6 +133,34 @@ public static class FontWarmup
             catch
             {
                 // 個別コードポイントの失敗は他のウォームアップを止めない
+            }
+        }
+    }
+
+    /// <summary>
+    /// 温め済みの各ファミリについて、UI が使う太字・斜体の GlyphTypeface も先に生成する。
+    /// ファミリにその太さ・スタイルの実体が無い場合、Avalonia は
+    /// <c>FontCollectionBase.TryCreateSyntheticGlyphTypeface</c> でフォントファイル全体を
+    /// <c>SKStream.Read</c>（native の <c>sk_stream_read</c>）で読み直して合成フォントを作る。
+    /// 実機のクラッシュダンプ（pull 後の再描画中）はこの読み取りの最中で、通常描画の初回に走ると
+    /// 起動時の対策（Normal だけの温め）の外側で GC ファイナライザと競合する。
+    /// 対象は温め済みファミリの 2 変種（Bold / Italic）に限り、大量生成にはならない。
+    /// </summary>
+    private static void WarmVariants(HashSet<string> warmed)
+    {
+        // 列挙中に変更しないよう、温め済みファミリのスナップショットに対して行う
+        foreach (var name in new List<string>(warmed))
+        {
+            foreach (var (style, weight) in s_variants)
+            {
+                try
+                {
+                    FontManager.Current.TryGetGlyphTypeface(new Typeface(name, style, weight), out _);
+                }
+                catch
+                {
+                    // 個別の失敗は他のウォームアップを止めない
+                }
             }
         }
     }
