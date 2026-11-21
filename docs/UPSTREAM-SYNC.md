@@ -11,7 +11,7 @@ Komorebi は [sourcegit-scm/sourcegit](https://github.com/sourcegit-scm/sourcegi
 
 - **期間**: 上流の master を最低 1 ヶ月に 1 回フェッチして cherry-pick batch を作る
 - **タグ運用**: `upstream/<YYYY-MM-DD>` のタグで上流時点をマーク
-- **競合の指針**: 「Komorebi 独自実装は守る、上流バグ修正は採用、純粋スタイル変更は declined」
+- **競合の指針**: 「Komorebi 独自実装は守る、上流バグ修正は採用、純粋スタイル変更は declined」。意図的な乖離と理由は [DIVERGE.md](../DIVERGE.md) を参照する
 - **Komorebi 独自実装（competing 注意）**:
   - `App.RaiseException`（vs 上流 `Notification.Send`）
   - 統合 `WelcomeToolbar`（上流 `RepositoryToolbar` は削除）
@@ -21,8 +21,8 @@ Komorebi は [sourcegit-scm/sourcegit](https://github.com/sourcegit-scm/sourcegi
   - `SuperLightLogger` 連携
   - file-scoped namespace + 日本語 XML doc コメント
   - collection expression `[]`
-  - `[DynamicDependency]` で AOT 安全な View 解決（移行中）
-  - テスト用の可視性変更: `Models.RepositorySettings.HashContent` を上流の `private` から `internal` にしている（テストが UTF-8 固定のハッシュ契約をリフレクションなしで検証するため。呼び出し元は従来どおり同クラスのみ）。上流が同メソッドを変更した場合も `internal` を維持する
+  - View 解決の置き場所: `TrimmerRootAssembly` と名前規約（`.ViewModels.` → `.Views.`）による解決方式は上流と同じだが、上流の `Views.ControlExtensions.CreateFromViewModels` ではなく `App.CreateViewForViewModel` に置き、解決に失敗したときに警告ログを出す
+  - 未使用の翻訳キーの削除: 上流の `en_US.axaml` には残るが Komorebi では参照が無くなった 11 キー（`Text.Save`、`Text.Submodule`、`Text.Submodule.Status`、`Text.GitFlow.Feature`、`Text.GitFlow.Hotfix`、`Text.GitFlow.Release`、`Text.GitFlow.Finish`、`Text.RemoteCM.Edit`、`Text.Remote.EditTitle`、`Text.SSHKey.Placeholder`、`Text.Repository.NavigateToCurrentHead`）を全言語から削除した。これらを使う上流の View（EditRemote・AddRemote・Clone・BranchTree・RepositoryToolbar など）を移植するときは、キーの欠落がビルドでも検出されず実行時に文字列がそのまま表示されるため、該当キーを再追加すること
   - `Models.Commit.GetFriendlyName` の SHA 短縮: 上流は `SHA[..10]` で 10 文字未満だと例外になる。中断中の CHERRY_PICK_HEAD / REVERT_HEAD / MERGE_HEAD などが空・途中切れのとき、`InProgressContexts` がファイル内容から作る代用コミットでクラッシュするため、`Commit.ToShortSHA`（10 文字以下はそのまま返す）を使う。同じ代用コミットを表示する `Views.WorkingCopy` の revert 衝突解決メニューも同様
 
 ## 形式

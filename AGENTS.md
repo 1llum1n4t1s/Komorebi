@@ -109,7 +109,7 @@ Git CLI の共通処理は [Command.cs](src/Commands/Command.cs) を変更時に
 ### SSH Key Management
 SSH 鍵の選択・走査を変更するときは [SSHKeyInfo.cs](src/Models/SSHKeyInfo.cs) と [SSHKeyPicker.axaml](src/Views/SSHKeyPicker.axaml) を読む。None（global）・Key・CustomKey・Browse を維持する。
 
-**3-tier fallback strategy** (in `Command.ResolveSSHKeyValue` — pure function, unit testable):
+**3-tier fallback strategy** (in `Command.ResolveSSHKeyValue` — pure function):
 1. Per-remote setting (`git config remote.<name>.sshkey`)
 2. Global SSH key (`Preferences.Instance.GlobalSSHKey`)
 3. ssh-agent / `~/.ssh/config` (when both are empty)
@@ -219,7 +219,7 @@ Linux builds run directly on the runner (no Docker container). `build.yml` の l
 依存の正本は [src/Komorebi.csproj](src/Komorebi.csproj) と [Directory.Build.props](Directory.Build.props)。Avalonia 本体と DataGrid は指定バージョンが異なるため、更新時は各パッケージの提供版と互換性を確認する。Velopack の更新ではフィード互換性を検証する。LiveChartsCore は Avalonia 12 対応版を選び、更新時に `LibraryCompatibilityTests` でチャート生成を検証する。CJK フォントは同梱せず `InstalledFont.GetLocaleDefaults()` のシステムフォールバックを使い、Inter は NuGet から提供する。
 ## Upstream-Faithful Policy
 
-`sourcegit-scm/sourcegit` の定期 cherry-pick を維持する。実バグ・回帰は upstream との差異をコメントして修正し、単なるローカルのスタイル変更は upstream へ提案する。Komorebi 固有の設計（通知、ツールバー、SSH key picker、CodeCommit、AI provider、logger、名前空間・コメント・collection expression）は保持する。同期時は適用・却下・保留と理由を SHA 単位で記録し、繰り返す bot 指摘はまとめて回答する。同期手順は [docs/UPSTREAM-SYNC.md](docs/UPSTREAM-SYNC.md) を参照する。
+`sourcegit-scm/sourcegit` の定期 cherry-pick を維持する。実バグ・回帰は upstream との差異をコメントして修正し、単なるローカルのスタイル変更は upstream へ提案する。Komorebi 固有の設計（通知、ツールバー、SSH key picker、CodeCommit、AI provider、logger、名前空間・コメント・collection expression）は保持する。同期時は適用・却下・保留と理由を SHA 単位で記録し、繰り返す bot 指摘はまとめて回答する。同期手順は [docs/UPSTREAM-SYNC.md](docs/UPSTREAM-SYNC.md)、意図的な乖離の一覧は [DIVERGE.md](DIVERGE.md) を参照する。
 ## ドメイン移行（2026-07 開始・期限 2027/05/31）
 
 屋号を **Kagayoi** に統一したため、配信ドメインを `nephilim.jp` から `kagayoi.com` へ移行中。方針の全体像はユーザーグローバルの `AGENTS.md` §屋号とドメイン を参照する。

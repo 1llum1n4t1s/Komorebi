@@ -1,7 +1,7 @@
 # DIVERGE.md — Komorebi と Upstream SourceGit との意図的乖離
 
 このドキュメントは、Komorebi が Upstream `sourcegit-scm/sourcegit` と意図的に乖離している箇所を一覧化する。
-cherry-pick による上流追従戦略 (`Upstream-Faithful Policy`、CLAUDE.md 参照) を維持する上で、
+cherry-pick による上流追従戦略 (`Upstream-Faithful Policy`、[AGENTS.md](AGENTS.md) 参照) を維持する上で、
 3-way merge 衝突発生時にどちらを優先するかの判断材料として使う。
 
 毎回のレビューや cherry-pick バッチで参照すること。新しい意図的乖離が発生したらこのファイルを更新する。
@@ -30,7 +30,7 @@ cherry-pick による上流追従戦略 (`Upstream-Faithful Policy`、CLAUDE.md 
 | UI | リモート設定ダイアログにフィールド追加 | **SSHKeyPicker 専用 UserControl** | 「None / Key / CustomKey / Browse」を一貫した UX で扱う |
 | Sentinel | なし | **`__NONE__` 凍結レガシー定数** (`LegacySSHKeyOptOutSentinel`) | 旧バージョンが書き込んだ値を尊重する後方互換 |
 | 値検証 | エスケープのみ | **`IsSafeSshKeyPath` で実在 + 危険文字チェック** | `.git/config` 経由のシェルインジェクション多層防御 |
-| GIT_SSH_COMMAND | 親環境を尊重 (C 案) | **per-remote/global 設定が明示的なら親環境より優先** | UI 設定がサイレント無視される問題の修正 |
+| GIT_SSH_COMMAND | 親環境を尊重 | **per-remote/global 設定が明示的なら親環境より優先** | UI 設定がサイレント無視される問題の修正 |
 
 ## 4. AWS CodeCommit 対応
 
@@ -61,7 +61,7 @@ cherry-pick による上流追従戦略 (`Upstream-Faithful Policy`、CLAUDE.md 
 | ファイルスコープ namespace | block-scope | **file-scoped namespace** | 1 段インデント削減 |
 | XML doc コメント | 英語 | **日本語 + WHY 中心** | 日本語チームの可読性 |
 | Collection expression | `new List<T>()` | **`[]` 構文** (C# 12+) | 短縮記法 |
-| ロック解除 → Mark*DirtyManually | 同期実装 | **ブロックスコープ + ロック解除後に Mark** | FSW バッファイベント競合の根絶（CLAUDE.md "Common Pitfalls" 参照） |
+| ロック解除 → Mark*DirtyManually | 同期実装 | **ブロックスコープ + ロック解除後に Mark** | FSW バッファイベント競合の根絶（[docs/PITFALLS.md](docs/PITFALLS.md) 参照） |
 
 ## 8. CI / サプライチェーン保護
 
@@ -80,4 +80,4 @@ cherry-pick による上流追従戦略 (`Upstream-Faithful Policy`、CLAUDE.md 
 3. **新しい意図的乖離が発生したら**: 該当行を追加（領域 / Upstream / Komorebi / 理由 の 4 列）
 4. **Upstream への提案候補**: ここに列挙した乖離のうち上流に PR で還元できそうなものは、別途 issue で議論する
 
-最終更新: 2026-05-10 (`/rere` 6 人分隊レビュー対応で全面整備)
+最終更新: 2026-11-21 (文書参照の修正: CLAUDE.md を AGENTS.md / docs/PITFALLS.md へ)
